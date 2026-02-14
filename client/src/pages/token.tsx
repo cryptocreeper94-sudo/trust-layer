@@ -70,20 +70,17 @@ export default function Token() {
                     <div className="text-lg font-bold text-amber-400">TBA</div>
                     <div className="text-[10px] text-white/50">Initial Price</div>
                   </div>
-                </GlassCard>
-                <GlassCard hover={false}>
+<GlassCard hover={false}>
                   <div className="p-3 text-center">
                     <div className="text-lg font-bold text-white">1B</div>
                     <div className="text-[10px] text-white/50">Total Supply</div>
                   </div>
-                </GlassCard>
-                <GlassCard hover={false}>
+<GlassCard hover={false}>
                   <div className="p-3 text-center">
                     <div className="text-lg font-bold text-primary">TBA</div>
                     <div className="text-[10px] text-white/50">Launch Date</div>
                   </div>
-                </GlassCard>
-              </div>
+</div>
             </div>
 
             <div className="flex justify-center relative">
@@ -250,9 +247,7 @@ export default function Token() {
                   <DistributionItem label="Community Rewards" percent="10%" color="bg-primary" desc="Presale (1%) + airdrops (9%)" />
                 </div>
               </div>
-            </GlassCard>
-             
-            <div className="order-1 lg:order-2 space-y-5">
+<div className="order-1 lg:order-2 space-y-5">
               <h2 className="text-2xl md:text-3xl font-display font-bold">Fair Launch Economics</h2>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 We designed Signal to be fair and sustainable. As your Trust Network Access, it powers governance, staking, and all transactions across the Trust Layer ecosystem.
@@ -263,14 +258,12 @@ export default function Token() {
                     <div className="text-[10px] text-white/40 uppercase tracking-wider mb-1">Total Supply</div>
                     <div className="text-lg font-bold font-mono text-white">1B SIG</div>
                   </div>
-                </GlassCard>
-                <GlassCard hover={false}>
+<GlassCard hover={false}>
                   <div className="p-4">
                     <div className="text-[10px] text-white/40 uppercase tracking-wider mb-1">Network</div>
                     <div className="text-lg font-bold font-mono text-white">Trust Layer L1</div>
                   </div>
-                </GlassCard>
-              </div>
+</div>
               <div className="flex items-center gap-2 pt-2">
                 <Badge className="bg-primary/20 text-primary border-primary/30 text-xs">
                   <Sparkles className="w-3 h-3 mr-1" />
@@ -402,26 +395,22 @@ export default function Token() {
                 <div className="text-2xl font-bold text-green-400 mb-1">0%</div>
                 <div className="text-xs text-muted-foreground">Buy Tax</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-4 text-center">
                 <div className="text-2xl font-bold text-green-400 mb-1">0%</div>
                 <div className="text-xs text-muted-foreground">Sell Tax</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-4 text-center">
                 <div className="text-2xl font-bold text-primary mb-1">0.3%</div>
                 <div className="text-xs text-muted-foreground">DEX Swap Fee</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-4 text-center">
                 <div className="text-2xl font-bold text-secondary mb-1">2.5%</div>
                 <div className="text-xs text-muted-foreground">NFT Market Fee</div>
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
             <GlassCard className="p-5">
@@ -431,24 +420,21 @@ export default function Token() {
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Minimal gas fees (0.0001 SIG) on all on-chain transactions fund network operations and validator rewards.
               </p>
-            </GlassCard>
-            <GlassCard className="p-5">
+<GlassCard className="p-5">
               <h4 className="font-bold mb-3 flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-green-400" /> No Burns
               </h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Fixed 1B supply. Protocol fees fund staking rewards and treasury, ensuring sustainable growth without artificial scarcity.
               </p>
-            </GlassCard>
-            <GlassCard className="p-5">
+<GlassCard className="p-5">
               <h4 className="font-bold mb-3 flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4 text-blue-400" /> Vesting & Lockups
               </h4>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Team allocation locked with 6-month cliff and 12-month vesting. Long-term alignment prevents early dumping.
               </p>
-            </GlassCard>
-          </div>
+</div>
 
           <GlassCard className="p-5 mt-6">
             <h4 className="font-bold mb-4 text-center">Revenue Streams</h4>
@@ -470,8 +456,7 @@ export default function Token() {
                 <div className="text-xs text-muted-foreground">0.1% crossing fee</div>
               </div>
             </div>
-          </GlassCard>
-        </div>
+</div>
       </section>
 
       <section className="py-12 px-4">
@@ -495,8 +480,7 @@ export default function Token() {
                 <div className="text-xl font-bold text-cyan-400">30%</div>
                 <div className="text-[10px] text-muted-foreground">Development</div>
               </div>
-            </GlassCard>
-            <GlassCard hover className="border border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/20 transition-all">
+<GlassCard hover className="border border-purple-500/30 hover:shadow-lg hover:shadow-purple-500/20 transition-all">
               <div className="p-4 text-center">
                 <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center mx-auto mb-2">
                   <Megaphone className="w-5 h-5 text-purple-400" />
@@ -504,8 +488,7 @@ export default function Token() {
                 <div className="text-xl font-bold text-purple-400">20%</div>
                 <div className="text-[10px] text-muted-foreground">Marketing</div>
               </div>
-            </GlassCard>
-            <GlassCard hover className="border border-green-500/30 hover:shadow-lg hover:shadow-green-500/20 transition-all">
+<GlassCard hover className="border border-green-500/30 hover:shadow-lg hover:shadow-green-500/20 transition-all">
               <div className="p-4 text-center">
                 <div className="w-10 h-10 rounded-xl bg-green-500/20 flex items-center justify-center mx-auto mb-2">
                   <TrendingUp className="w-5 h-5 text-green-400" />
@@ -513,8 +496,7 @@ export default function Token() {
                 <div className="text-xl font-bold text-green-400">20%</div>
                 <div className="text-[10px] text-muted-foreground">Staking</div>
               </div>
-            </GlassCard>
-            <GlassCard hover className="border border-amber-500/30 hover:shadow-lg hover:shadow-amber-500/20 transition-all">
+<GlassCard hover className="border border-amber-500/30 hover:shadow-lg hover:shadow-amber-500/20 transition-all">
               <div className="p-4 text-center">
                 <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center mx-auto mb-2">
                   <Users className="w-5 h-5 text-amber-400" />
@@ -522,8 +504,7 @@ export default function Token() {
                 <div className="text-xl font-bold text-amber-400">15%</div>
                 <div className="text-[10px] text-muted-foreground">Team</div>
               </div>
-            </GlassCard>
-            <GlassCard hover className="border border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/20 transition-all">
+<GlassCard hover className="border border-blue-500/30 hover:shadow-lg hover:shadow-blue-500/20 transition-all">
               <div className="p-4 text-center">
                 <div className="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center mx-auto mb-2">
                   <Settings className="w-5 h-5 text-blue-400" />
@@ -531,8 +512,7 @@ export default function Token() {
                 <div className="text-xl font-bold text-blue-400">10%</div>
                 <div className="text-[10px] text-muted-foreground">Operations</div>
               </div>
-            </GlassCard>
-            <GlassCard hover className="border border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20 transition-all">
+<GlassCard hover className="border border-pink-500/30 hover:shadow-lg hover:shadow-pink-500/20 transition-all">
               <div className="p-4 text-center">
                 <div className="w-10 h-10 rounded-xl bg-pink-500/20 flex items-center justify-center mx-auto mb-2">
                   <Shield className="w-5 h-5 text-pink-400" />
@@ -540,8 +520,7 @@ export default function Token() {
                 <div className="text-xl font-bold text-pink-400">5%</div>
                 <div className="text-[10px] text-muted-foreground">Reserve</div>
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           <div className="text-center mt-6">
             <Link href="/treasury">
@@ -574,8 +553,7 @@ export default function Token() {
                 </Button>
               </Link>
             </div>
-          </GlassCard>
-        </div>
+</div>
       </section>
 
       <section className="py-8 bg-slate-950/50">

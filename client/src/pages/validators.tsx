@@ -116,8 +116,7 @@ export default function Validators() {
                 <div className="text-2xl font-bold">{validators.length}</div>
                 <div className="text-xs text-muted-foreground">Total Validators</div>
               </div>
-            </GlassCard>
-            <GlassCard data-testid="stat-active-validators">
+<GlassCard data-testid="stat-active-validators">
               <div className="p-4 text-center">
                 <Activity className="w-6 h-6 text-green-400 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-green-400">
@@ -125,15 +124,13 @@ export default function Validators() {
                 </div>
                 <div className="text-xs text-muted-foreground">Active Validators</div>
               </div>
-            </GlassCard>
-            <GlassCard data-testid="stat-consensus">
+<GlassCard data-testid="stat-consensus">
               <div className="p-4 text-center">
                 <Shield className="w-6 h-6 text-secondary mx-auto mb-2" />
                 <div className="text-2xl font-bold">PoA</div>
                 <div className="text-xs text-muted-foreground">Consensus Mechanism</div>
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           {showAddForm && (
             <motion.div
@@ -178,8 +175,7 @@ export default function Validators() {
                     <Button variant="outline" onClick={() => setShowAddForm(false)}>Cancel</Button>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           )}
 
           <div className="space-y-4">
@@ -245,8 +241,7 @@ export default function Validators() {
                         </div>
                       </div>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))
             )}
           </div>
@@ -271,8 +266,7 @@ export default function Validators() {
                   <p>Apply to become a trusted validator by submitting your wallet address. Approved validators must stake SIG as collateral.</p>
                 </div>
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           {/* Decentralization Roadmap */}
           <motion.div 
@@ -330,8 +324,7 @@ export default function Validators() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           {/* Become a Validator - Coming Soon */}
           <motion.div 
@@ -479,8 +472,7 @@ export default function Validators() {
                     <ValidatorSignupForm />
                   </div>
                 </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         </div>
     </div>
   );
@@ -571,7 +563,6 @@ function ValidatorSignupForm() {
           className="bg-white/5 border-white/10 min-h-[80px]"
           data-testid="input-waitlist-experience"
         />
-      </div>
       <Button 
         type="submit" 
         className="w-full h-12 bg-gradient-to-r from-primary to-secondary hover:opacity-90 font-bold"
@@ -591,5 +582,7 @@ function ValidatorSignupForm() {
         By joining, you agree to be contacted about validator opportunities.
       </p>
     </form>
-  );
+    </div>
+</Input>
+);
 }

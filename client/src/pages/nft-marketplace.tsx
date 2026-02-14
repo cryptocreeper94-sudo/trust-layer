@@ -288,8 +288,7 @@ export default function NftMarketplace() {
                           </span>
                         </div>
                       </div>
-                    </GlassCard>
-                  </motion.div>
+</motion.div>
                 ))}
               </div>
               {filteredNfts.length === 0 && (
@@ -359,8 +358,7 @@ export default function NftMarketplace() {
                                 <div className="text-[11px] font-medium truncate">{nft.name}</div>
                                 <div className="text-[9px] text-muted-foreground truncate mt-0.5">{nft.description}</div>
                               </div>
-                            </GlassCard>
-                          </div>
+</div>
                         )) : (
                           <div className="flex-shrink-0 w-full py-6 text-center">
                             <ImageIcon className="w-8 h-8 text-white/20 mx-auto mb-2" />
@@ -386,8 +384,7 @@ export default function NftMarketplace() {
                   <p className="text-sm text-muted-foreground">Activity feed coming soon</p>
                   <p className="text-[10px] text-muted-foreground mt-1">Track sales, listings, and transfers</p>
                 </div>
-              </GlassCard>
-            </TabsContent>
+</TabsContent>
           </Tabs>
 
           <motion.div
@@ -403,12 +400,9 @@ export default function NftMarketplace() {
                   <strong className="text-purple-300">Testnet:</strong> This marketplace operates on Trust Layer testnet. NFTs here are for testing only.
                 </p>
               </div>
-            </div>
-          </motion.div>
-        </div>
-      </main>
 
       
     </div>
+    </motion.div>
   );
 }

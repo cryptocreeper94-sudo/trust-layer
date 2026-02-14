@@ -456,5 +456,5 @@ export default function ExploreHub() {
         )}
       </div>
     </div>
-  );
+);
 }

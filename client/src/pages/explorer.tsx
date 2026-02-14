@@ -187,8 +187,7 @@ export default function Explorer() {
                   className="border-0 bg-transparent h-10 font-mono text-xs focus-visible:ring-0 focus-visible:ring-offset-0"
                 />
               </div>
-            </GlassCard>
-          </div>
+</div>
         </div>
       </section>
 
@@ -205,8 +204,7 @@ export default function Explorer() {
                 <div className="text-lg md:text-xl font-bold text-white">{chainStats?.tps || "—"}</div>
                 <div className="text-[9px] md:text-[10px] text-white/50 uppercase">TPS</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
                 <div className="flex items-center gap-1 mb-1">
                   <Activity className="w-3 h-3 text-cyan-400/60 shrink-0" />
@@ -215,8 +213,7 @@ export default function Explorer() {
                 <div className="text-lg md:text-xl font-bold text-white">{chainStats?.finalityTime || "—"}</div>
                 <div className="text-[9px] md:text-[10px] text-white/50 uppercase">Block Time</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
                 <div className="flex items-center gap-1 mb-1 flex-wrap">
                   <Server className="w-3 h-3 text-purple-400/60 shrink-0" />
@@ -229,8 +226,7 @@ export default function Explorer() {
                 </div>
                 <div className="text-[9px] md:text-[10px] text-white/50 uppercase">Network</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-3 md:p-4 h-full flex flex-col justify-center overflow-hidden">
                 <div className="flex items-center gap-1 mb-1">
                   <Box className="w-3 h-3 text-green-400/60 shrink-0" />
@@ -239,8 +235,7 @@ export default function Explorer() {
                 <div className="text-base md:text-xl font-bold text-white truncate">{chainInfo?.blockHeight?.toLocaleString() || chainStats?.currentBlock || "—"}</div>
                 <div className="text-[9px] md:text-[10px] text-white/50 uppercase">Block Height</div>
               </div>
-            </GlassCard>
-          </div>
+</div>
         </div>
       </section>
 
@@ -281,9 +276,7 @@ export default function Explorer() {
                   )}
                 </div>
               </div>
-            </GlassCard>
-
-            <GlassCard glow className="h-full">
+<GlassCard glow className="h-full">
               <div className="p-4">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -313,8 +306,7 @@ export default function Explorer() {
                   )}
                 </div>
               </div>
-            </GlassCard>
-          </div>
+</div>
         </div>
       </section>
 
@@ -381,10 +373,9 @@ export default function Explorer() {
                 </div>
               )}
             </div>
-          </GlassCard>
-        </div>
+</div>
       </section>
 
     </div>
-  );
+);
 }

@@ -192,8 +192,7 @@ export default function ApiPlayground() {
                   </p>
                 </div>
               </div>
-            </GlassCard>
-          </section>
+</section>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             <GlassCard hover={false}>
@@ -202,26 +201,22 @@ export default function ApiPlayground() {
                 <div className="text-lg font-bold text-white">{devnetStatus?.tps || "200K+"}</div>
                 <div className="text-[10px] text-white/50">TPS</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-4 text-center">
                 <div className="text-lg font-bold text-white">{devnetStatus?.finalityTime || "400ms"}</div>
                 <div className="text-[10px] text-white/50">Block Time</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-4 text-center">
                 <div className="text-lg font-bold text-white">{devnetStatus?.blockHeight || "0"}</div>
                 <div className="text-[10px] text-white/50">Block Height</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-4 text-center">
                 <div className="text-lg font-bold text-white">{devnetStatus?.faucetLimit || "100"}</div>
                 <div className="text-[10px] text-white/50">Faucet Limit</div>
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="space-y-4">
@@ -260,9 +255,7 @@ export default function ApiPlayground() {
                     </div>
                   )}
                 </div>
-              </GlassCard>
-
-              <GlassCard>
+<GlassCard>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-4">
                     <Droplets className="w-4 h-4 text-cyan-400" />
@@ -293,9 +286,7 @@ export default function ApiPlayground() {
                     </Button>
                   </div>
                 </div>
-              </GlassCard>
-
-              <GlassCard>
+<GlassCard>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-4">
                     <Send className="w-4 h-4 text-secondary" />
@@ -325,8 +316,7 @@ export default function ApiPlayground() {
                     </Button>
                   </div>
                 </div>
-              </GlassCard>
-            </div>
+</div>
 
             <GlassCard glow className="h-fit">
               <div className="p-5">
@@ -348,12 +338,13 @@ export default function ApiPlayground() {
                   )}
                 </div>
               </div>
-            </GlassCard>
-          </div>
+</div>
         </div>
       </div>
 
       
     </div>
+</Input>
+</Input>
   );
 }

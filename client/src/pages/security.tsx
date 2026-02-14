@@ -289,8 +289,7 @@ export default function SecurityPage() {
                     </div>
                     <div className="text-2xl font-bold text-white mb-1">{stat.value}</div>
                     <div className="text-white/50 text-sm">{stat.label}</div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </div>
@@ -337,8 +336,7 @@ export default function SecurityPage() {
                   />
                 ))}
               </div>
-            </GlassCard>
-          </div>
+</div>
         </section>
 
         <section id="measures" className="py-20 px-4">
@@ -384,8 +382,7 @@ export default function SecurityPage() {
                         <p className="text-white/50 text-sm leading-relaxed">{feature.description}</p>
                       </div>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </div>
@@ -430,8 +427,7 @@ export default function SecurityPage() {
                     ))}
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
         </section>
 
@@ -471,8 +467,7 @@ export default function SecurityPage() {
                     </Link>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
         </section>
 
@@ -508,8 +503,7 @@ export default function SecurityPage() {
                     security@dwsc.io
                   </p>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
         </section>
       </main>

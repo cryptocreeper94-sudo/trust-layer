@@ -182,8 +182,7 @@ export default function InfluencerPartnershipPage() {
                   {stat.value}
                 </div>
                 <div className="text-xs text-muted-foreground">{stat.label}</div>
-              </GlassCard>
-            ))}
+))}
           </motion.div>
 
           <motion.div
@@ -237,8 +236,7 @@ export default function InfluencerPartnershipPage() {
                         </li>
                       ))}
                     </ul>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </motion.div>
@@ -402,9 +400,7 @@ export default function InfluencerPartnershipPage() {
                   </Button>
                 </form>
               )}
-            </GlassCard>
-
-            <div className="space-y-6">
+<div className="space-y-6">
               <GlassCard className="p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center">
@@ -426,9 +422,7 @@ export default function InfluencerPartnershipPage() {
                     </li>
                   ))}
                 </ul>
-              </GlassCard>
-
-              <GlassCard className="p-6 border-purple-500/20">
+<GlassCard className="p-6 border-purple-500/20">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center">
                     <Mail className="w-5 h-5 text-white" />
@@ -445,9 +439,7 @@ export default function InfluencerPartnershipPage() {
                   <span className="font-mono text-sm">partnerships@darkwavestudios.io</span>
                   <ArrowRight className="w-4 h-4" />
                 </a>
-              </GlassCard>
-
-              <GlassCard className="p-6 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border-cyan-500/20">
+<GlassCard className="p-6 bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border-cyan-500/20">
                 <div className="text-center">
                   <Badge className="mb-3 bg-cyan-500/20 text-cyan-300 border-cyan-500/30">
                     <Sparkles className="w-3 h-3 mr-1" /> Limited Time
@@ -460,8 +452,7 @@ export default function InfluencerPartnershipPage() {
                     Double Your Rewards
                   </div>
                 </div>
-              </GlassCard>
-            </div>
+</div>
           </motion.div>
 
           <motion.div
@@ -494,12 +485,12 @@ export default function InfluencerPartnershipPage() {
                   </Link>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         </div>
       </main>
 
       
     </div>
-  );
+</Input>
+);
 }

@@ -264,8 +264,7 @@ export default function TrustLayerPage() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         </div>
       </section>
 
@@ -307,9 +306,7 @@ export default function TrustLayerPage() {
                   ))}
                 </ul>
               </div>
-            </GlassCard>
-
-            <GlassCard glow>
+<GlassCard glow>
               <div className="p-6">
                 <h3 className="text-xl font-bold mb-4 text-green-400">The Solution</h3>
                 <ul className="space-y-3">
@@ -327,8 +324,7 @@ export default function TrustLayerPage() {
                   ))}
                 </ul>
               </div>
-            </GlassCard>
-          </div>
+</div>
         </div>
       </section>
 
@@ -406,8 +402,7 @@ export default function TrustLayerPage() {
                           ))}
                         </ul>
                       </div>
-                    </GlassCard>
-                  </div>
+</div>
                 </motion.div>
               ))}
             </div>
@@ -513,8 +508,7 @@ export default function TrustLayerPage() {
                       </Button>
                     </Link>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </div>
@@ -563,8 +557,7 @@ export default function TrustLayerPage() {
                 </div>
               </motion.div>
             </div>
-          </GlassCard>
-        </div>
+</div>
       </section>
 
       

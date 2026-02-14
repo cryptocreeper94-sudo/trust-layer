@@ -96,32 +96,27 @@ export default function Terms() {
                 </p>
               </div>
             </div>
-          </GlassCard>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <GlassCard className="p-4 flex items-center gap-3" data-testid="card-security-first">
               <Shield className="w-8 h-8 text-primary" />
               <div>
                 <h3 className="font-semibold">Security First</h3>
                 <p className="text-xs text-muted-foreground">Your assets are your responsibility</p>
               </div>
-            </GlassCard>
-            <GlassCard className="p-4 flex items-center gap-3" data-testid="card-fair-terms">
+<GlassCard className="p-4 flex items-center gap-3" data-testid="card-fair-terms">
               <Scale className="w-8 h-8 text-primary" />
               <div>
                 <h3 className="font-semibold">Fair Terms</h3>
                 <p className="text-xs text-muted-foreground">Clear, transparent policies</p>
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           <div className="space-y-6">
             {sections.map((section, idx) => (
               <GlassCard key={idx} className="p-6" data-testid={`card-section-${idx + 1}`}>
                 <h2 className="text-lg font-semibold mb-3 text-primary">{section.title}</h2>
                 <p className="text-muted-foreground text-sm leading-relaxed">{section.content}</p>
-              </GlassCard>
-            ))}
+))}
           </div>
 
           <div className="text-center text-sm text-muted-foreground py-8" data-testid="text-footer">

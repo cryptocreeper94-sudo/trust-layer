@@ -73,26 +73,22 @@ export default function Tokenomics() {
                 <div className="text-2xl md:text-3xl font-bold text-white">1B</div>
                 <div className="text-[10px] text-white/50 uppercase tracking-wider">Total Supply</div>
               </div>
-            </GlassCard>
-            <GlassCard glow hover={false}>
+<GlassCard glow hover={false}>
               <div className="p-4 text-center">
                 <div className="text-2xl md:text-3xl font-bold text-cyan-400">18</div>
                 <div className="text-[10px] text-white/50 uppercase tracking-wider">Decimals</div>
               </div>
-            </GlassCard>
-            <GlassCard glow hover={false}>
+<GlassCard glow hover={false}>
               <div className="p-4 text-center">
                 <div className="text-2xl md:text-3xl font-bold text-purple-400">0%</div>
                 <div className="text-[10px] text-white/50 uppercase tracking-wider">Burn Rate</div>
               </div>
-            </GlassCard>
-            <GlassCard glow hover={false}>
+<GlassCard glow hover={false}>
               <div className="p-4 text-center">
                 <div className="text-2xl md:text-3xl font-bold text-pink-400">TBA</div>
                 <div className="text-[10px] text-white/50 uppercase tracking-wider">TGE Date</div>
               </div>
-            </GlassCard>
-          </div>
+</div>
         </div>
       </section>
 
@@ -178,8 +174,7 @@ export default function Tokenomics() {
                         <p className="text-xs text-white/50 truncate">{item.description}</p>
                       </div>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </div>
@@ -240,8 +235,7 @@ export default function Tokenomics() {
                 </tbody>
               </table>
             </div>
-          </GlassCard>
-        </div>
+</div>
       </section>
 
       <section className="py-12 px-4 bg-white/[0.02]">
@@ -276,8 +270,7 @@ export default function Tokenomics() {
                     <h3 className="font-bold text-white mb-1">{item.title}</h3>
                     <p className="text-xs text-white/50">{item.description}</p>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </div>
@@ -321,12 +314,7 @@ export default function Tokenomics() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
-        </div>
-      </section>
-
-      <section className="py-12 px-4">
+<section className="py-12 px-4">
         <div className="container mx-auto max-w-6xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -353,11 +341,13 @@ export default function Tokenomics() {
                   Join Presale
                 </Button>
               </Link>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
     </div>
+    </div>
+    </section>
+    </div>
+    </section>
+    </motion.div>
+    </motion.div>
   );
 }

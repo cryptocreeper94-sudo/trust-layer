@@ -544,8 +544,7 @@ function CrashHistoryStrip({ history }: { history: number[] }) {
           </motion.div>
         ))}
       </div>
-    </GlassCard>
-  );
+);
 }
 
 function LiveLedger({ secured, riding, lost }: { secured: number; riding: number; lost: number }) {
@@ -1759,9 +1758,7 @@ export default function CrashGame() {
                       )}
                     </div>
                   </ScrollArea>
-                </GlassCard>
-
-                <GlassCard className="p-3">
+<GlassCard className="p-3">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="text-sm font-bold flex items-center gap-2">
                       <MessageCircle className="w-4 h-4 text-cyan-400" />
@@ -1793,8 +1790,7 @@ export default function CrashGame() {
                       <Send className="w-3 h-3" />
                     </Button>
                   </div>
-                </GlassCard>
-              </div>
+</div>
               
               {/* Rewards & Stats - Compact Row */}
               <div 
@@ -1809,7 +1805,6 @@ export default function CrashGame() {
                   <span className={`text-lg ${currentTier.color}`}>{currentTier.icon}</span>
                   <p className="text-[9px] text-white/50">{currentTier.name}</p>
                   <p className="text-[10px] text-green-400 font-mono">{(currentTier.rewardRate * 100).toFixed(1)}%</p>
-                </div>
                 {/* Pending */}
                 <div className="text-center">
                   <p className="text-sm font-bold text-green-400 font-mono">{pendingRewards.toFixed(1)}</p>
@@ -1823,14 +1818,11 @@ export default function CrashGame() {
                   >
                     Claim
                   </Button>
-                </div>
                 {/* Airdrop */}
                 <div className="text-center">
                   <p className="text-sm font-bold text-yellow-400 font-mono">{Math.floor(nextAirdrop / 60)}m</p>
                   <p className="text-[9px] text-white/50">Next Airdrop</p>
                   <p className="text-[10px] text-yellow-400/70 font-mono">{airdropPool.toFixed(0)} Pool</p>
-                </div>
-              </div>
               
               {/* Provably Fair Toggle - Compact */}
               <AnimatePresence>
@@ -1848,19 +1840,21 @@ export default function CrashGame() {
                     <div className="flex items-center gap-2 mb-1">
                       <Shield className="w-3 h-3 text-green-400" />
                       <span className="text-[10px] font-medium text-green-400">Provably Fair</span>
-                    </div>
                     <code className="text-[8px] font-mono text-green-400/70 break-all block">
                       {serverSeedHash.slice(0, 32)}...
                     </code>
-                  </motion.div>
                 )}
               </AnimatePresence>
-            </div>
-          </div>
-        </div>
-      </main>
 
       
     </div>
-  );
+    </div>
+    </div>
+    </div>
+    </motion.div>
+    </div>
+</Input>
+</Input>
+</div>
+);
 }

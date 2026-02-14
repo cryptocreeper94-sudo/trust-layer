@@ -143,8 +143,7 @@ function NpcCard({
           {lastMessage && (
             <p className="text-[10px] text-gray-500 mt-2 truncate">{lastMessage}</p>
           )}
-        </GlassCard>
-      </button>
+</button>
     </motion.div>
   );
 }
@@ -368,8 +367,7 @@ export default function ChroniclesNpcChat() {
                   />
                 ))}
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -414,9 +412,7 @@ export default function ChroniclesNpcChat() {
                     <div className="mt-3">
                       <RelationshipBar score={selectedScore} />
                     </div>
-                  </GlassCard>
-
-                  <GlassCard glow className="flex-1 flex flex-col overflow-hidden">
+<GlassCard glow className="flex-1 flex flex-col overflow-hidden">
                     <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4" data-testid="message-area">
                       {loadingMessages ? (
                         <div className="flex items-center justify-center py-12">
@@ -479,8 +475,7 @@ export default function ChroniclesNpcChat() {
                         <span className="text-[10px] text-gray-600">AI-powered conversation</span>
                       </div>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ) : (
                 <motion.div
                   key="empty"
@@ -525,16 +520,13 @@ export default function ChroniclesNpcChat() {
                         <div className="p-3 rounded-xl bg-white/5 border border-white/5">
                           <Star className="w-5 h-5 text-yellow-400 mx-auto mb-1.5" />
                           <p className="text-[10px] text-gray-500">Unlock Secrets</p>
-                        </div>
                         <div className="p-3 rounded-xl bg-white/5 border border-white/5">
                           <Crown className="w-5 h-5 text-purple-400 mx-auto mb-1.5" />
                           <p className="text-[10px] text-gray-500">Shape Your Story</p>
-                        </div>
-                      </div>
-                    </div>
-                  </GlassCard>
-                </motion.div>
-              )}
+)}
             </AnimatePresence>
+    </div>
+    </div>
+    </div>
   );
 }

@@ -68,8 +68,7 @@ export default function VisionPage() {
                 </p>
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -99,8 +98,7 @@ export default function VisionPage() {
                 </p>
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -130,8 +128,7 @@ export default function VisionPage() {
                 </p>
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -154,8 +151,7 @@ export default function VisionPage() {
                   Every transaction visible. Every participant verifiable. 
                   Not because we force it - because that's how the layer works.
                 </p>
-              </GlassCard>
-            </motion.div>
+</motion.div>
 
             <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.3 }}>
               <GlassCard className="p-6 h-full" glow>
@@ -167,8 +163,7 @@ export default function VisionPage() {
                   Your history travels with you. Good actors build trust that compounds. 
                   Bad actors can't escape their record.
                 </p>
-              </GlassCard>
-            </motion.div>
+</motion.div>
 
             <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.3 }}>
               <GlassCard className="p-6 h-full" glow>
@@ -180,8 +175,7 @@ export default function VisionPage() {
                   Participants choose verification. The layer confirms identity 
                   without exposing private details. Trust without intrusion.
                 </p>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
         </motion.div>
 
@@ -207,8 +201,7 @@ export default function VisionPage() {
               <span className="text-white font-medium">The wave is approaching.</span>
               <span className="text-slate-400">Will you be ready?</span>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
       </div>
     </div>
   );

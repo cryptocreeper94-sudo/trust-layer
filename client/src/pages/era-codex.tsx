@@ -267,9 +267,7 @@ export default function EraCodex() {
                     ))}
                   </ul>
                 </div>
-              </GlassCard>
-
-              {/* Era Elements */}
+{/* Era Elements */}
               <GlassCard className={era.isLocked ? "opacity-60" : ""}>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-4">
@@ -285,9 +283,7 @@ export default function EraCodex() {
                     ))}
                   </ul>
                 </div>
-              </GlassCard>
-
-              {/* Life Paths */}
+{/* Life Paths */}
               <GlassCard className={era.isLocked ? "opacity-60" : ""}>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-4">
@@ -303,9 +299,7 @@ export default function EraCodex() {
                     ))}
                   </ul>
                 </div>
-              </GlassCard>
-
-              {/* Governance */}
+{/* Governance */}
               <GlassCard className={era.isLocked ? "opacity-60" : ""}>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-4">
@@ -321,9 +315,7 @@ export default function EraCodex() {
                     ))}
                   </ul>
                 </div>
-              </GlassCard>
-
-              {/* Status */}
+{/* Status */}
               <GlassCard className={era.isLocked ? "opacity-60" : ""}>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-4">
@@ -351,8 +343,7 @@ export default function EraCodex() {
                     </div>
                   )}
                 </div>
-              </GlassCard>
-            </div>
+</div>
           </div>
         </section>
 
@@ -423,9 +414,7 @@ export default function EraCodex() {
                     Elected governing bodies run each realm. Campaign, vote, and shape policy.
                   </p>
                 </div>
-              </GlassCard>
-
-              <GlassCard>
+<GlassCard>
                 <div className="p-5 text-center">
                   <Handshake className="w-8 h-8 mx-auto mb-3 text-green-400" />
                   <h3 className="font-bold mb-2">Treaties & Alliances</h3>
@@ -433,9 +422,7 @@ export default function EraCodex() {
                     Formal agreements between factions. Trade pacts, non-aggression, or full alliance.
                   </p>
                 </div>
-              </GlassCard>
-
-              <GlassCard>
+<GlassCard>
                 <div className="p-5 text-center">
                   <Swords className="w-8 h-8 mx-auto mb-3 text-red-400" />
                   <h3 className="font-bold mb-2">Coups & Revolutions</h3>
@@ -443,9 +430,7 @@ export default function EraCodex() {
                     Overthrow corrupt leaders. Nothing is permanent. Power must be earned and defended.
                   </p>
                 </div>
-              </GlassCard>
-
-              <GlassCard>
+<GlassCard>
                 <div className="p-5 text-center">
                   <Crown className="w-8 h-8 mx-auto mb-3 text-amber-400" />
                   <h3 className="font-bold mb-2">Peace Summits</h3>
@@ -453,8 +438,7 @@ export default function EraCodex() {
                     Multi-faction negotiations. Work towards lasting peace - or plot the next war.
                   </p>
                 </div>
-              </GlassCard>
-            </div>
+</div>
 
             <div className="mt-8 text-center">
               <p className="text-sm text-gray-500">
@@ -498,8 +482,7 @@ export default function EraCodex() {
                   </Button>
                 </Link>
               </div>
-            </GlassCard>
-          </div>
+</div>
         </section>
 
         {/* AI Demo CTA */}
@@ -530,5 +513,6 @@ export default function EraCodex() {
         </p>
       </footer>
     </div>
+    </button>
   );
 }

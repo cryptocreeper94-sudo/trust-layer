@@ -221,8 +221,7 @@ function AIRecommendationBadge({ recommendation, score }: { recommendation: 'sni
             <div className="text-white/40 text-[10px] mt-0.5">Safety 30% + Technical 30% + Momentum 25% + ML 15%</div>
           </div>
         </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+</TooltipProvider>
   );
 }
 
@@ -259,8 +258,7 @@ function MLPredictionBadge({ prediction }: { prediction: MLPrediction }) {
             </div>
           </div>
         </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+</TooltipProvider>
   );
 }
 
@@ -292,8 +290,7 @@ function SafetyIndicators({ safety }: { safety: SafetyData }) {
             <TooltipContent className="bg-slate-900 border-white/10">
               <span className="text-xs text-red-400">Honeypot Risk Detected</span>
             </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+</TooltipProvider>
       )}
       {safety.liquidityLocked && (
         <TooltipProvider>
@@ -304,8 +301,7 @@ function SafetyIndicators({ safety }: { safety: SafetyData }) {
             <TooltipContent className="bg-slate-900 border-white/10">
               <span className="text-xs text-emerald-400">Liquidity Locked</span>
             </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+</TooltipProvider>
       )}
       {safety.mintAuthority && (
         <TooltipProvider>
@@ -316,8 +312,7 @@ function SafetyIndicators({ safety }: { safety: SafetyData }) {
             <TooltipContent className="bg-slate-900 border-white/10">
               <span className="text-xs text-yellow-400">Mint Authority Enabled</span>
             </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+</TooltipProvider>
       )}
       {safety.whaleConcentration > 40 && (
         <TooltipProvider>
@@ -328,8 +323,7 @@ function SafetyIndicators({ safety }: { safety: SafetyData }) {
             <TooltipContent className="bg-slate-900 border-white/10">
               <span className="text-xs text-orange-400">High Whale Concentration: {safety.whaleConcentration.toFixed(1)}%</span>
             </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+</TooltipProvider>
       )}
     </div>
   );
@@ -1662,11 +1656,14 @@ export default function GuardianScanner() {
           <span className="text-[9px] font-medium">Install</span>
         </button>
       </div>
-    </div>
 
     {/* Bottom padding spacer for mobile nav */}
     <div className="lg:hidden h-20" />
     </>
     </div>
+</QuickTradePanel>
+    </TokenRow>
+</Input>
+    </LeftSidebar>
   );
 }

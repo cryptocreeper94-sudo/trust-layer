@@ -148,9 +148,7 @@ export default function Quests() {
                   <Progress value={(currentLevelXp / nextLevelXp) * 100} className="h-2" />
                 </div>
               </div>
-            </GlassCard>
-
-            <GlassCard glow>
+<GlassCard glow>
               <div className="p-4 sm:p-6">
                 <h3 className="text-base sm:text-lg font-bold mb-4 flex items-center gap-2">
                   <Trophy className="w-5 h-5 text-amber-400 shrink-0" /> Tier Benefits
@@ -178,8 +176,7 @@ export default function Quests() {
                   })}
                 </div>
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4 sm:space-y-6">
             <TabsList className="bg-white/5 border border-white/10 w-full sm:w-auto flex-wrap" data-testid="tabs-quests">
@@ -251,8 +248,7 @@ export default function Quests() {
                         </Button>
                       )}
                     </div>
-                  </GlassCard>
-                ))}
+))}
               </div>
               )}
             </TabsContent>
@@ -313,8 +309,7 @@ export default function Quests() {
                         </Button>
                       </div>
                     </div>
-                  </GlassCard>
-                ))}
+))}
               </div>
             </TabsContent>
 
@@ -374,16 +369,12 @@ export default function Quests() {
                         <div className="text-right">
                           <div className="font-bold text-primary">{userXp.toLocaleString()}</div>
                           <div className="text-[10px] text-muted-foreground">XP</div>
-                        </div>
-                      </div>
-                    </div>
                   )}
-                </div>
-              </GlassCard>
-            </TabsContent>
+</TabsContent>
           </Tabs>
-        </div>
-      </main>
+    </div>
+    </div>
+    </div>
     </div>
   );
 }

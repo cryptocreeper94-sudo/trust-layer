@@ -316,8 +316,7 @@ export default function AIAgentMarketplace() {
                         </Link>
                       </div>
                       </div>
-                    </GlassCard>
-                  </motion.div>
+</motion.div>
                 );
               })}
             </div>
@@ -347,11 +346,7 @@ export default function AIAgentMarketplace() {
                   </Button>
                 </Link>
               </div>
-              </div>
-            </GlassCard>
-          </motion.div>
-        </div>
-
-    </div>
+</div>
+    </motion.div>
   );
 }

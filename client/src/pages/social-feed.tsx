@@ -154,9 +154,7 @@ export default function SocialFeed() {
                     </div>
                   </div>
                 </div>
-              </GlassCard>
-
-              <Tabs defaultValue="featured">
+<Tabs defaultValue="featured">
                 <TabsList className="w-full grid grid-cols-3">
                   <TabsTrigger value="featured" data-testid="tab-featured">Featured</TabsTrigger>
                   <TabsTrigger value="following" data-testid="tab-following">Following</TabsTrigger>
@@ -202,8 +200,7 @@ export default function SocialFeed() {
                           </div>
                         </div>
                       </div>
-                    </GlassCard>
-                  ))}
+))}
                 </TabsContent>
 
                 <TabsContent value="following" className="mt-4">
@@ -234,8 +231,7 @@ export default function SocialFeed() {
                         </Link>
                       </>
                     )}
-                  </GlassCard>
-                </TabsContent>
+</TabsContent>
 
                 <TabsContent value="latest" className="space-y-4 mt-4">
                   {FEATURED_POSTS.slice().reverse().map((post) => (
@@ -276,8 +272,7 @@ export default function SocialFeed() {
                           </div>
                         </div>
                       </div>
-                    </GlassCard>
-                  ))}
+))}
                 </TabsContent>
               </Tabs>
             </div>
@@ -296,9 +291,7 @@ export default function SocialFeed() {
                     </div>
                   ))}
                 </div>
-              </GlassCard>
-
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <Award className="w-4 h-4 text-amber-400" />
                   Top Creators
@@ -321,9 +314,7 @@ export default function SocialFeed() {
                     </div>
                   ))}
                 </div>
-              </GlassCard>
-
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <Users className="w-4 h-4 text-blue-400" />
                   Community Stats
@@ -346,13 +337,12 @@ export default function SocialFeed() {
                     <p className="text-[10px] text-muted-foreground">Tips Sent</p>
                   </div>
                 </div>
-              </GlassCard>
-            </div>
+</div>
           </div>
         </div>
-      </main>
 
       
+    </main>
     </div>
-  );
+);
 }

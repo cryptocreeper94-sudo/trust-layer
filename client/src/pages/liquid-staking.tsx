@@ -190,8 +190,7 @@ export default function LiquidStaking() {
                   </p>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -220,8 +219,7 @@ export default function LiquidStaking() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -308,8 +306,7 @@ export default function LiquidStaking() {
                   </Button>
                 </TabsContent>
               </Tabs>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -331,8 +328,7 @@ export default function LiquidStaking() {
                   <p>5. Use stSIG in DeFi while earning rewards</p>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <Collapsible open={historyOpen} onOpenChange={setHistoryOpen}>
             <CollapsibleTrigger asChild>
@@ -368,12 +364,12 @@ export default function LiquidStaking() {
                   ) : (
                     <p className="text-xs text-muted-foreground text-center py-4">No transactions yet</p>
                   )}
-                </div>
-              </GlassCard>
-            </CollapsibleContent>
+</CollapsibleContent>
           </Collapsible>
-        </div>
-      </div>
     </div>
+    </div>
+    </div>
+    </div>
+</Input>
   );
 }

@@ -44,9 +44,7 @@ export default function TeamMessage() {
                 your allocation coming. All we have to do is perform, pull this together, and make it real.
               </p>
             </div>
-          </GlassCard>
-
-          <GlassCard glow className="mb-8">
+<GlassCard glow className="mb-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 rounded-lg bg-purple-500/20">
                 <Users className="w-6 h-6 text-purple-400" />
@@ -88,9 +86,7 @@ export default function TeamMessage() {
                 <p className="text-slate-400">Full council active, community-driven governance</p>
               </div>
             </div>
-          </GlassCard>
-
-          <GlassCard glow className="mb-8">
+<GlassCard glow className="mb-8">
             <div className="flex items-center gap-3 mb-6">
               <div className="p-2 rounded-lg bg-cyan-500/20">
                 <TrendingUp className="w-6 h-6 text-cyan-400" />
@@ -143,9 +139,7 @@ export default function TeamMessage() {
                 </tbody>
               </table>
             </div>
-          </GlassCard>
-
-          <GlassCard glow className="bg-gradient-to-r from-cyan-500/10 to-purple-500/10">
+<GlassCard glow className="bg-gradient-to-r from-cyan-500/10 to-purple-500/10">
             <div className="flex items-center gap-3 mb-4">
               <Shield className="w-6 h-6 text-cyan-400" />
               <h2 className="text-xl font-semibold text-white">Two Separate Tracks</h2>
@@ -161,8 +155,7 @@ export default function TeamMessage() {
             <p className="text-white font-medium mt-4">
               Both happen as we build this thing together.
             </p>
-          </GlassCard>
-        </motion.div>
+</motion.div>
       </div>
     </div>
   );

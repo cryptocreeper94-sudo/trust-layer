@@ -122,8 +122,8 @@ export default function GatewayError() {
           <p className="text-xs text-slate-500 text-center mt-6">
             Trust Layer • .tlid Domain Gateway
           </p>
-        </div>
-      </div>
+    </div>
+    </div>
     </div>
   );
 }

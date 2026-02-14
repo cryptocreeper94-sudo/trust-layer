@@ -164,9 +164,7 @@ export default function WalletProfiler() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 auto-rows-[120px] mb-6">
+<div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3 auto-rows-[120px] mb-6">
               
               <GlassCard className="col-span-2 row-span-2 p-4 flex flex-col">
                 <div className="flex items-center gap-2 mb-3">
@@ -197,9 +195,7 @@ export default function WalletProfiler() {
                     ))}
                   </div>
                 </div>
-              </GlassCard>
-
-              <GlassCard className="col-span-2 row-span-2 p-4 flex flex-col">
+<GlassCard className="col-span-2 row-span-2 p-4 flex flex-col">
                 <div className="flex items-center gap-2 mb-3">
                   <TrendingUp className="w-4 h-4 text-green-400" />
                   <span className="font-bold text-sm">P/L History</span>
@@ -227,9 +223,7 @@ export default function WalletProfiler() {
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
-              </GlassCard>
-
-              <GlassCard className="col-span-2 row-span-1 p-3 flex flex-col justify-between">
+<GlassCard className="col-span-2 row-span-1 p-3 flex flex-col justify-between">
                 <span className="text-[10px] text-muted-foreground">Win Rate</span>
                 <div className="flex items-center justify-between">
                   <span className="text-2xl font-bold text-green-400">{tradingStats.winRate}%</span>
@@ -239,19 +233,13 @@ export default function WalletProfiler() {
                     <span className="text-red-400">{Math.round(tradingStats.totalTrades * (100 - tradingStats.winRate) / 100)} L</span>
                   </div>
                 </div>
-              </GlassCard>
-
-              <GlassCard className="col-span-1 row-span-1 p-3 flex flex-col justify-between">
+<GlassCard className="col-span-1 row-span-1 p-3 flex flex-col justify-between">
                 <span className="text-[10px] text-muted-foreground">Best Trade</span>
                 <span className="text-lg font-bold text-green-400">+${tradingStats.bestTrade}</span>
-              </GlassCard>
-
-              <GlassCard className="col-span-1 row-span-1 p-3 flex flex-col justify-between">
+<GlassCard className="col-span-1 row-span-1 p-3 flex flex-col justify-between">
                 <span className="text-[10px] text-muted-foreground">Worst Trade</span>
                 <span className="text-lg font-bold text-red-400">${tradingStats.worstTrade}</span>
-              </GlassCard>
-
-              <GlassCard className="col-span-2 row-span-1 p-3 flex flex-col justify-between">
+<GlassCard className="col-span-2 row-span-1 p-3 flex flex-col justify-between">
                 <span className="text-[10px] text-muted-foreground">Monthly P/L</span>
                 <div className="h-10">
                   <ResponsiveContainer width="100%" height="100%">
@@ -260,9 +248,7 @@ export default function WalletProfiler() {
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-              </GlassCard>
-
-            </div>
+</div>
 
             <GlassCard className="p-4">
               <div className="flex items-center justify-between mb-4">
@@ -317,12 +303,12 @@ export default function WalletProfiler() {
                   </motion.div>
                 ))}
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         </div>
       </main>
 
       
     </div>
+    </p>
   );
 }

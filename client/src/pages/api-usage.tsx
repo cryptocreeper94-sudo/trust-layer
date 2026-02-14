@@ -105,9 +105,7 @@ export default function ApiUsage() {
               <p className="text-xs text-muted-foreground mt-2">
                 {(MOCK_USAGE.dailyLimit - MOCK_USAGE.requestsToday).toLocaleString()} requests remaining today
               </p>
-            </GlassCard>
-
-            <GlassCard className="p-6" data-testid="card-monthly-usage">
+<GlassCard className="p-6" data-testid="card-monthly-usage">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <BarChart3 className="w-5 h-5 text-primary" />
@@ -127,8 +125,7 @@ export default function ApiUsage() {
               <p className="text-xs text-muted-foreground mt-2">
                 {(MOCK_USAGE.monthlyLimit - MOCK_USAGE.requestsThisMonth).toLocaleString()} requests remaining this month
               </p>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -177,8 +174,7 @@ export default function ApiUsage() {
                   </div>
                 ))}
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -217,8 +213,7 @@ export default function ApiUsage() {
                   ))}
                 </div>
               )}
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -157,8 +157,7 @@ export default function ChroniclesMarketplace() {
                   <span className="text-[10px] text-gray-500 uppercase tracking-wider">Shells</span>
                 </div>
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           <div className="flex gap-2 mb-4 overflow-x-auto pb-1 scrollbar-hide" data-testid="era-selector">
             {(Object.keys(ERA_CONFIG) as Era[]).map((e) => (
@@ -232,8 +231,7 @@ export default function ChroniclesMarketplace() {
                                 </div>
                               </div>
                             </div>
-                          </GlassCard>
-                        </SwiperSlide>
+</SwiperSlide>
                       );
                     })}
                   </Swiper>
@@ -276,8 +274,7 @@ export default function ChroniclesMarketplace() {
                     <p className="text-gray-400 font-medium">No items available in this era yet.</p>
                     <p className="text-gray-600 text-sm mt-1">Check back soon for new arrivals!</p>
                   </div>
-                </GlassCard>
-              ) : (
+) : (
                 <motion.div
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
                   variants={stagger.container}
@@ -341,8 +338,7 @@ export default function ChroniclesMarketplace() {
                               </Button>
                             </div>
                           </div>
-                        </GlassCard>
-                      </motion.div>
+</motion.div>
                     );
                   })}
                 </motion.div>
@@ -366,8 +362,7 @@ export default function ChroniclesMarketplace() {
                       <ShoppingBag className="w-4 h-4 mr-2" /> Browse Shop
                     </Button>
                   </div>
-                </GlassCard>
-              ) : (
+) : (
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                     <GlassCard glow hover={false}>
@@ -376,22 +371,19 @@ export default function ChroniclesMarketplace() {
                         <p className="text-2xl font-bold text-white">{invStats.total}</p>
                         <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Total Items</p>
                       </div>
-                    </GlassCard>
-                    <GlassCard glow hover={false}>
+<GlassCard glow hover={false}>
                       <div className="p-4 sm:p-6 text-center" data-testid="stat-rarest">
                         <Gem className="w-6 h-6 text-purple-400 mx-auto mb-2" />
                         <p className={`text-2xl font-bold capitalize ${getRarity(invStats.rarest).text}`}>{invStats.rarest}</p>
                         <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Rarest Item</p>
                       </div>
-                    </GlassCard>
-                    <GlassCard glow hover={false}>
+<GlassCard glow hover={false}>
                       <div className="p-4 sm:p-6 text-center" data-testid="stat-total-value">
                         <TrendingUp className="w-6 h-6 text-yellow-400 mx-auto mb-2" />
                         <p className="text-2xl font-bold text-yellow-400">🐚 {invStats.value.toLocaleString()}</p>
                         <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Est. Value</p>
                       </div>
-                    </GlassCard>
-                  </div>
+</div>
 
                   <motion.div
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
@@ -430,8 +422,7 @@ export default function ChroniclesMarketplace() {
                                 </div>
                               </div>
                             </div>
-                          </GlassCard>
-                        </motion.div>
+</motion.div>
                       );
                     })}
                   </motion.div>
@@ -453,8 +444,7 @@ export default function ChroniclesMarketplace() {
                     <p className="text-gray-400 font-semibold text-lg mb-1">No recipes available</p>
                     <p className="text-gray-600 text-sm">Recipes for {config.name} coming soon!</p>
                   </div>
-                </GlassCard>
-              ) : (
+) : (
                 <>
                   <GlassCard hover={false} className="mb-6">
                     <div className="p-4 sm:p-6">
@@ -468,9 +458,7 @@ export default function ChroniclesMarketplace() {
                         </div>
                       </div>
                     </div>
-                  </GlassCard>
-
-                  <Accordion type="single" collapsible className="space-y-3">
+<Accordion type="single" collapsible className="space-y-3">
                     {recipes.map((recipe: any, idx: number) => {
                       const cost = recipe.shellCost ?? recipe.cost ?? 0;
                       const canAfford = shells >= cost;
@@ -546,8 +534,7 @@ export default function ChroniclesMarketplace() {
                                 </Button>
                               </AccordionContent>
                             </AccordionItem>
-                          </GlassCard>
-                        </motion.div>
+</motion.div>
                       );
                     })}
                   </Accordion>
@@ -556,7 +543,5 @@ export default function ChroniclesMarketplace() {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-    </div>
   );
 }

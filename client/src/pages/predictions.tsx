@@ -191,8 +191,7 @@ function MarketCard({ market, isConnected }: { market: Market; isConnected: bool
           )}
         </>
       )}
-    </GlassCard>
-  );
+);
 }
 
 
@@ -245,23 +244,19 @@ export default function Predictions() {
               <BarChart3 className="w-5 h-5 mx-auto mb-1 text-purple-400" />
               <p className="text-xl font-bold">{GLOBAL_STATS.activeMarkets}</p>
               <p className="text-[10px] text-muted-foreground">Active Markets</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
+<GlassCard hover={false} className="p-3 text-center">
               <DollarSign className="w-5 h-5 mx-auto mb-1 text-green-400" />
               <p className="text-xl font-bold">{GLOBAL_STATS.totalVolume}</p>
               <p className="text-[10px] text-muted-foreground">Total Volume</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
+<GlassCard hover={false} className="p-3 text-center">
               <Users className="w-5 h-5 mx-auto mb-1 text-blue-400" />
               <p className="text-xl font-bold">{GLOBAL_STATS.totalTraders.toLocaleString()}</p>
               <p className="text-[10px] text-muted-foreground">Traders</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
+<GlassCard hover={false} className="p-3 text-center">
               <Trophy className="w-5 h-5 mx-auto mb-1 text-amber-400" />
               <p className="text-xl font-bold">{isConnected ? "0" : "--"}</p>
               <p className="text-[10px] text-muted-foreground">Your Bets</p>
-            </GlassCard>
-          </div>
+</div>
 
           {/* Connect prompt for non-connected users */}
           {!isConnected && (
@@ -280,8 +275,7 @@ export default function Predictions() {
                   </Button>
                 </Link>
               </div>
-            </GlassCard>
-          )}
+)}
 
           <Tabs defaultValue="all">
             <TabsList className="w-full grid grid-cols-4 mb-4">
@@ -354,8 +348,7 @@ export default function Predictions() {
                     </Link>
                   </>
                 )}
-              </GlassCard>
-            </TabsContent>
+</TabsContent>
           </Tabs>
 
           <GlassCard className="mt-6 p-4 text-center">
@@ -376,11 +369,10 @@ export default function Predictions() {
                 </Button>
               </Link>
             )}
-          </GlassCard>
-        </div>
-      </main>
+</div>
 
       
+    </main>
     </div>
   );
 }

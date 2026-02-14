@@ -306,8 +306,7 @@ export default function FAQ() {
                     onToggle={() => toggleItem(`${category.id}-${itemIndex}`)}
                   />
                 ))}
-              </GlassCard>
-            </motion.div>
+</motion.div>
           ))}
         </div>
       </section>
@@ -342,5 +341,5 @@ export default function FAQ() {
 
       
     </div>
-  );
+);
 }

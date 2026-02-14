@@ -100,7 +100,6 @@ export default function Privacy() {
               </div>
             </div>
           </GlassCard>
-
           <GlassCard className="p-6" data-testid="card-data-collected">
             <h2 className="text-lg font-semibold mb-4">Data We Collect</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -113,7 +112,6 @@ export default function Privacy() {
               ))}
             </div>
           </GlassCard>
-
           <div className="space-y-6">
             {sections.map((section, idx) => (
               <GlassCard key={idx} className="p-6" data-testid={`card-section-${idx + 1}`}>

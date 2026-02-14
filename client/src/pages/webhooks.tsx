@@ -167,8 +167,7 @@ function WebhookCard({ webhook, onEdit, onDelete, onToggle }: { webhook: Webhook
             </div>
           </div>
         </CollapsibleContent>
-      </GlassCard>
-    </Collapsible>
+</Collapsible>
   );
 }
 
@@ -311,29 +310,25 @@ export default function Webhooks() {
                 <div className="text-lg font-bold text-white">{webhooks.length}</div>
                 <div className="text-[10px] text-muted-foreground">Active Webhooks</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-3 text-center">
                 <CheckCircle className="w-5 h-5 text-green-400 mx-auto mb-1" />
                 <div className="text-lg font-bold text-white">99.9%</div>
                 <div className="text-[10px] text-muted-foreground">Delivery Rate</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-3 text-center">
                 <Clock className="w-5 h-5 text-blue-400 mx-auto mb-1" />
                 <div className="text-lg font-bold text-white">&lt;100ms</div>
                 <div className="text-[10px] text-muted-foreground">Avg Latency</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-3 text-center">
                 <RefreshCw className="w-5 h-5 text-purple-400 mx-auto mb-1" />
                 <div className="text-lg font-bold text-white">3</div>
                 <div className="text-[10px] text-muted-foreground">Auto Retries</div>
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
             <h2 className="text-xl font-bold">Your Webhooks</h2>
@@ -392,8 +387,7 @@ export default function Webhooks() {
                     <Plus className="w-4 h-4 mr-2" /> Create Your First Webhook
                   </Button>
                 </div>
-              </GlassCard>
-            ) : (
+) : (
               webhooks.map(webhook => (
                 <WebhookCard
                   key={webhook.id}
@@ -433,8 +427,7 @@ export default function Webhooks() {
                 Verify webhook signatures using the HMAC-SHA256 algorithm with your webhook secret.
               </p>
             </div>
-          </GlassCard>
-        </div>
+</div>
       </main>
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto bg-background border-white/10">
@@ -492,5 +485,5 @@ export default function Webhooks() {
       </Dialog>
       
     </div>
-  );
+);
 }

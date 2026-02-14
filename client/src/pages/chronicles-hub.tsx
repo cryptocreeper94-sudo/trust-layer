@@ -1684,9 +1684,11 @@ export default function ChroniclesHub() {
               <Link href="/chronicles-admin" className="text-slate-600 hover:text-slate-400 transition-colors" data-testid="link-chronicles-team">
                 Team
               </Link>
-            </div>
-          </div>
-        </div>
       </footer>
+    </div>
+    </div>
+    </div>
+    </div>
+    </Card>
   );
 }

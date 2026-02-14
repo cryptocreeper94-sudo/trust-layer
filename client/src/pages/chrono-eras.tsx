@@ -430,5 +430,6 @@ export default function ChronoEras() {
       
       <style>{chronoStyles}</style>
     </ChronoLayout>
-  );
+    </EraModal>
+);
 }

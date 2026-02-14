@@ -188,8 +188,7 @@ export default function Philosophy() {
                         </div>
                       </div>
                     </div>
-                  </GlassCard>
-                </Link>
+</Link>
               </motion.div>
             ))}
           </div>
@@ -214,8 +213,7 @@ export default function Philosophy() {
                       </div>
                       <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 group-hover:translate-x-1 transition-all" />
                     </div>
-                  </GlassCard>
-                </Link>
+</Link>
               </motion.div>
             ))}
           </div>
@@ -248,8 +246,7 @@ export default function Philosophy() {
                   <p className="text-slate-400 text-sm leading-relaxed">
                     {belief.description}
                   </p>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </motion.div>
@@ -283,8 +280,7 @@ export default function Philosophy() {
                 </Button>
               </Link>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
       </div>
     </div>
   );

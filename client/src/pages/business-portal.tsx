@@ -118,8 +118,7 @@ export default function BusinessPortal() {
                 Sign In
               </Button>
             </Link>
-          </GlassCard>
-        </div>
+</div>
       </div>
     );
   }
@@ -195,8 +194,7 @@ export default function BusinessPortal() {
                     <p className="text-xs text-white/60">API Calls</p>
                   </div>
                 </div>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
                     <Webhook className="w-5 h-5 text-green-400" />
@@ -206,8 +204,7 @@ export default function BusinessPortal() {
                     <p className="text-xs text-white/60">Webhooks</p>
                   </div>
                 </div>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-cyan-500/20 flex items-center justify-center">
                     <Users className="w-5 h-5 text-cyan-400" />
@@ -217,8 +214,7 @@ export default function BusinessPortal() {
                     <p className="text-xs text-white/60">Team Members</p>
                   </div>
                 </div>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
                     <Shield className="w-5 h-5 text-amber-400" />
@@ -228,8 +224,7 @@ export default function BusinessPortal() {
                     <p className="text-xs text-white/60">Trust Score</p>
                   </div>
                 </div>
-              </GlassCard>
-            </div>
+</div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <GlassCard glow className="p-6">
@@ -255,9 +250,7 @@ export default function BusinessPortal() {
                     </div>
                   ))}
                 </div>
-              </GlassCard>
-
-              <GlassCard glow className="p-6">
+<GlassCard glow className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="font-bold text-white">Business Verification</h3>
                   {(businessApplication as any)?.status === "approved" ? (
@@ -371,8 +364,7 @@ export default function BusinessPortal() {
                     </div>
                   </div>
                 )}
-              </GlassCard>
-            </div>
+</div>
 
             <GlassCard glow className="p-6">
               <h3 className="font-bold text-white mb-4">Quick Integration Guide</h3>
@@ -399,8 +391,7 @@ export default function BusinessPortal() {
                   <p className="text-sm text-white/60">Receive real-time event notifications</p>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         {activeTab === "api" && (
@@ -478,9 +469,7 @@ export default function BusinessPortal() {
                   </Link>
                 </div>
               )}
-            </GlassCard>
-
-            <GlassCard className="p-6">
+<GlassCard className="p-6">
               <h3 className="font-bold text-white mb-4">API Usage This Month</h3>
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center p-4 bg-white/5 rounded-lg">
@@ -496,8 +485,7 @@ export default function BusinessPortal() {
                   <p className="text-xs text-white/60">Avg Latency</p>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         {activeTab === "webhooks" && (
@@ -553,8 +541,7 @@ export default function BusinessPortal() {
                   ))}
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         {activeTab === "team" && (
@@ -602,9 +589,7 @@ export default function BusinessPortal() {
                   </div>
                 ))}
               </div>
-            </GlassCard>
-
-            <GlassCard className="p-6">
+<GlassCard className="p-6">
               <h3 className="font-bold text-white mb-4">Role Permissions</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="p-4 bg-white/5 rounded-lg">
@@ -634,8 +619,7 @@ export default function BusinessPortal() {
                   </ul>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         {activeTab === "settings" && (
@@ -687,9 +671,7 @@ export default function BusinessPortal() {
                   Save Changes
                 </Button>
               </div>
-            </GlassCard>
-
-            <GlassCard className="p-6 border-red-500/20">
+<GlassCard className="p-6 border-red-500/20">
               <h3 className="font-bold text-red-400 mb-4">Danger Zone</h3>
               <p className="text-sm text-white/60 mb-4">
                 These actions are irreversible. Please proceed with caution.
@@ -702,10 +684,12 @@ export default function BusinessPortal() {
                   Delete Business Account
                 </Button>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
       </div>
+    </div>
+    </p>
+    </div>
     </div>
   );
 }

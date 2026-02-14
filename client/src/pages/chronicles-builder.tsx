@@ -314,8 +314,7 @@ export default function ChroniclesBuilder() {
                 />
               </div>
             )}
-          </GlassCard>
-        )}
+)}
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="bg-white/5 border border-white/10 p-1 rounded-xl">
@@ -405,9 +404,7 @@ export default function ChroniclesBuilder() {
                       );
                     })}
                   </div>
-                </GlassCard>
-
-                <GlassCard glow className="p-6">
+<GlassCard glow className="p-6">
                   <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                     <Package className="w-5 h-5 text-cyan-400" />
                     Available Content Types
@@ -433,8 +430,7 @@ export default function ChroniclesBuilder() {
                       </motion.div>
                     ))}
                   </div>
-                </GlassCard>
-              </div>
+</div>
 
               <div className="space-y-6">
                 <GlassCard glow className="p-6">
@@ -466,9 +462,7 @@ export default function ChroniclesBuilder() {
                       </div>
                     ))}
                   </div>
-                </GlassCard>
-
-                <GlassCard glow className="p-6">
+<GlassCard glow className="p-6">
                   <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                     <Award className="w-5 h-5 text-purple-400" />
                     Badges
@@ -493,8 +487,7 @@ export default function ChroniclesBuilder() {
                       );
                     })}
                   </div>
-                </GlassCard>
-              </div>
+</div>
             </div>
           </TabsContent>
 
@@ -520,8 +513,7 @@ export default function ChroniclesBuilder() {
                 <Button className="bg-gradient-to-r from-cyan-500 to-purple-500">
                   Create Your First Contribution
                 </Button>
-              </GlassCard>
-            ) : (
+) : (
               <div className="space-y-4">
                 {contributions.map((contrib, index) => {
                   const statusInfo = STATUS_BADGES[contrib.status] || STATUS_BADGES.draft;
@@ -562,8 +554,7 @@ export default function ChroniclesBuilder() {
                           </div>
                           <ChevronRight className="w-5 h-5 text-gray-500" />
                         </div>
-                      </GlassCard>
-                    </motion.div>
+</motion.div>
                   );
                 })}
               </div>
@@ -594,8 +585,7 @@ export default function ChroniclesBuilder() {
                         <div className="text-xs text-gray-500">Experience</div>
                       </div>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </TabsContent>
@@ -642,13 +632,9 @@ export default function ChroniclesBuilder() {
                       <div className="text-right">
                         <div className="text-yellow-400 font-bold">{(entry.shellsEarned || 0).toLocaleString()}</div>
                         <div className="text-xs text-gray-500">shells earned</div>
-                      </div>
-                    </motion.div>
                   );
                 })}
-              </div>
-            </GlassCard>
-          </TabsContent>
+</TabsContent>
         </Tabs>
 
         <div className="mt-8 pt-8 border-t border-white/10">
@@ -656,5 +642,8 @@ export default function ChroniclesBuilder() {
             <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
             Back to Chronicles Hub
           </Link>
+    </div>
+    </div>
+    </motion.div>
   );
 }

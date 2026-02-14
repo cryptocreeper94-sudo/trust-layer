@@ -125,8 +125,7 @@ export default function AdminRewards() {
           <Link href="/login">
             <Button>Sign In</Button>
           </Link>
-        </GlassCard>
-      </div>
+</div>
     );
   }
 
@@ -148,29 +147,25 @@ export default function AdminRewards() {
                 <div className="text-2xl font-bold">{testers.length}</div>
                 <div className="text-xs text-muted-foreground">Beta Testers</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-4 text-center">
                 <Check className="w-6 h-6 mx-auto mb-2 text-green-400" />
                 <div className="text-2xl font-bold">{approvedTesters}</div>
                 <div className="text-xs text-muted-foreground">Approved</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-4 text-center">
                 <Gift className="w-6 h-6 mx-auto mb-2 text-purple-400" />
                 <div className="text-2xl font-bold">{pendingGifts}</div>
                 <div className="text-xs text-muted-foreground">Pending Gifts</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-4 text-center">
                 <Coins className="w-6 h-6 mx-auto mb-2 text-amber-400" />
                 <div className="text-2xl font-bold">{totalAllocated.toLocaleString()}</div>
                 <div className="text-xs text-muted-foreground">SIG Allocated</div>
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="bg-white/5 border border-white/10" data-testid="tabs-rewards">
@@ -392,8 +387,7 @@ function BetaTestersTab({ testers, tiers, queryClient, showDialog, setShowDialog
                     </Button>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           ))}
         </AnimatePresence>
         {testers.length === 0 && (
@@ -544,8 +538,7 @@ function TiersTab({ tiers, queryClient, showDialog, setShowDialog }: any) {
                   <div className="text-[10px] text-muted-foreground">Max Slots</div>
                 </div>
               </div>
-            </GlassCard>
-          );
+);
         })}
         {tiers.length === 0 && (
           <div className="col-span-2 text-center py-12 text-muted-foreground">
@@ -684,8 +677,7 @@ function GiftsTab({ gifts, queryClient, showDialog, setShowDialog }: any) {
                 </Button>
               </div>
             </div>
-          </GlassCard>
-        ))}
+))}
         {gifts.length === 0 && (
           <div className="text-center py-12 text-muted-foreground">
             No token gifts yet. Gift tokens to individuals you want to reward.
@@ -806,15 +798,12 @@ function AirdropsTab({ airdrops, queryClient, showDialog, setShowDialog }: any) 
                   />
                 </div>
               </div>
-            </GlassCard>
-          );
+);
         })}
         {airdrops.length === 0 && (
           <div className="col-span-2 text-center py-12 text-muted-foreground">
             No airdrop campaigns yet. Create one to distribute tokens to eligible users.
           </div>
         )}
-      </div>
-    </div>
   );
 }

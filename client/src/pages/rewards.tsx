@@ -266,8 +266,7 @@ export default function Rewards() {
                   )}
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         {user && rewardProfile && (
@@ -391,8 +390,7 @@ export default function Rewards() {
                   )}
                 </p>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         {/* HOW TO EARN SHELLS SECTION */}
@@ -458,8 +456,7 @@ export default function Rewards() {
                 </div>
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <motion.div
@@ -480,8 +477,7 @@ export default function Rewards() {
                 <Info className="w-4 h-4" />
                 <span>~$200 value at launch price</span>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -501,8 +497,7 @@ export default function Rewards() {
                 <Info className="w-4 h-4" />
                 <span>Buy $100, get $150 worth</span>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -522,8 +517,7 @@ export default function Rewards() {
                 <Info className="w-4 h-4" />
                 <span>Contributions stack across donations</span>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         </div>
 
         <motion.div
@@ -573,8 +567,7 @@ export default function Rewards() {
               <Info className="w-4 h-4" />
               Your tier is based on your cumulative total. Multiple donations add up!
             </p>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         {/* FAQ - TRUST BUILDING SECTION */}
         <motion.div
@@ -685,8 +678,7 @@ export default function Rewards() {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -717,12 +709,9 @@ export default function Rewards() {
                   Support Development
                 </Button>
               </Link>
-            </div>
-          </GlassCard>
-        </motion.div>
-      </main>
-
-      
+</div>
+    </main>
     </div>
+    </motion.div>
   );
 }

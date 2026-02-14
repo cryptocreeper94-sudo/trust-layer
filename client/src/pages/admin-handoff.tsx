@@ -313,9 +313,8 @@ export default function AdminHandoff() {
             <p className="text-center text-slate-500 text-sm">
               Click the "Copy All" button above to copy the entire document to your clipboard
             </p>
-          </GlassCard>
-        </motion.div>
-      </div>
+</motion.div>
+    </div>
     </div>
   );
 }

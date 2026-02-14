@@ -164,8 +164,7 @@ function AppCard({ src, alt, gradient, name, category, verified, tags, url }: {
             <ExploreButton url={url} appName={name} />
           </div>
         </div>
-      </GlassCard>
-    </div>
+</div>
   );
 }
 
@@ -297,8 +296,7 @@ export default function Ecosystem() {
                         <div className="h-3 bg-white/10 rounded w-full mb-2" />
                         <div className="h-3 bg-white/10 rounded w-3/4" />
                       </div>
-                    </GlassCard>
-                  ))}
+))}
                 </div>
               ) : filteredApps.length === 0 ? (
                 <div className="text-center py-12">
@@ -328,5 +326,5 @@ export default function Ecosystem() {
 
       
     </div>
-  );
+);
 }

@@ -535,7 +535,7 @@ export default function Veil() {
             All glory to Yahuah, the Most High. HalleluYah.
           </p>
         </motion.div>
-      </div>
+    </div>
     </div>
   );
 }

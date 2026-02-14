@@ -603,5 +603,5 @@ export default function BuildYourLegacy() {
 
       
     </div>
-  );
+);
 }

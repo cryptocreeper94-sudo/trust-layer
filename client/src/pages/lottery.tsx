@@ -145,9 +145,7 @@ export default function Lottery() {
                 </div>
               </div>
             </div>
-          </GlassCard>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
             <GlassCard className="p-4">
               <h3 className="font-bold mb-4 flex items-center gap-2">
                 <Ticket className="w-4 h-4 text-primary" />
@@ -223,9 +221,7 @@ export default function Lottery() {
                   </Button>
                 </Link>
               )}
-            </GlassCard>
-
-            <div className="space-y-4">
+<div className="space-y-4">
               <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <Trophy className="w-4 h-4 text-amber-400" />
@@ -244,9 +240,7 @@ export default function Lottery() {
                     </div>
                   ))}
                 </div>
-              </GlassCard>
-
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <History className="w-4 h-4 text-primary" />
                   Recent Winners
@@ -268,9 +262,7 @@ export default function Lottery() {
                     </div>
                   ))}
                 </div>
-              </GlassCard>
-
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <Ticket className="w-4 h-4 text-primary" />
                   Your Tickets
@@ -287,8 +279,7 @@ export default function Lottery() {
                     <p className="text-sm">Connect wallet to view tickets</p>
                   </div>
                 )}
-              </GlassCard>
-            </div>
+</div>
           </div>
 
           <GlassCard className="p-4 text-center">
@@ -304,8 +295,7 @@ export default function Lottery() {
                 Start Staking
               </Button>
             </Link>
-          </GlassCard>
-        </div>
+</div>
       </main>
 
       

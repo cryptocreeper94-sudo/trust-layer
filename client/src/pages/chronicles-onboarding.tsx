@@ -846,12 +846,8 @@ export default function ChroniclesOnboarding() {
                     >
                       Return Home
                     </Button>
-                  </div>
-                </motion.div>
               )}
             </AnimatePresence>
-          </div>
-        </div>
 
         {/* Navigation Footer */}
         {currentStep !== "complete" && (
@@ -878,8 +874,10 @@ export default function ChroniclesOnboarding() {
                 {currentStep === "portrait" ? "Create Character" : "Continue"}
                 <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
-            </div>
-          </div>
         )}
+    </div>
+    </div>
+    </div>
+    </motion.div>
   );
 }

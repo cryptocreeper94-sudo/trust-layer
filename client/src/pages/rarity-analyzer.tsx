@@ -132,9 +132,7 @@ export default function RarityAnalyzer() {
                 <ExternalLink className="w-4 h-4" />
                 View on Marketplace
               </Button>
-            </GlassCard>
-
-            <GlassCard className="p-4 lg:col-span-2">
+<GlassCard className="p-4 lg:col-span-2">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold flex items-center gap-2">
                   <Star className="w-4 h-4 text-amber-400" />
@@ -218,9 +216,7 @@ export default function RarityAnalyzer() {
                   </motion.div>
                 ))}
               </div>
-            </GlassCard>
-
-            <GlassCard className="p-4 lg:col-span-2">
+<GlassCard className="p-4 lg:col-span-2">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold flex items-center gap-2">
                   <BarChart3 className="w-4 h-4 text-primary" />
@@ -250,9 +246,7 @@ export default function RarityAnalyzer() {
                   </BarChart>
                 </ResponsiveContainer>
               </div>
-            </GlassCard>
-
-            <GlassCard className="p-4 lg:col-span-3">
+<GlassCard className="p-4 lg:col-span-3">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold flex items-center gap-2">
                   <TrendingUp className="w-4 h-4 text-green-400" />
@@ -283,16 +277,14 @@ export default function RarityAnalyzer() {
                         <p className="text-lg font-bold text-amber-400">{item.score}</p>
                         <p className="text-[10px] text-muted-foreground truncate">{item.owner}</p>
                       </div>
-                    </GlassCard>
-                  </motion.div>
+</motion.div>
                 ))}
               </div>
-            </GlassCard>
-          </div>
+</div>
         </div>
       </main>
 
       
     </div>
-  );
+);
 }

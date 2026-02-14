@@ -815,5 +815,5 @@ export default function Minesweeper() {
         </Card>
       </div>
     </div>
-  );
+);
 }

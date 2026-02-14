@@ -215,8 +215,7 @@ function TraderCard({ trader, rank }: { trader: Trader; rank: number }) {
             </ResponsiveContainer>
           </div>
         </div>
-      </GlassCard>
-    </motion.div>
+</motion.div>
   );
 }
 
@@ -276,29 +275,25 @@ export default function CopyTrading() {
                 <span className="text-[10px] text-muted-foreground">Following</span>
               </div>
               <div className="text-xl font-bold">{myStats.following}</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="flex items-center gap-2 mb-1">
                 <DollarSign className="w-4 h-4 text-primary" />
                 <span className="text-[10px] text-muted-foreground">Invested</span>
               </div>
               <div className="text-xl font-bold">${myStats.totalInvested.toLocaleString()}</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="flex items-center gap-2 mb-1">
                 <TrendingUp className="w-4 h-4 text-green-400" />
                 <span className="text-[10px] text-muted-foreground">Total P/L</span>
               </div>
               <div className="text-xl font-bold text-green-400">+${myStats.totalPnl}</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="flex items-center gap-2 mb-1">
                 <Activity className="w-4 h-4 text-blue-400" />
                 <span className="text-[10px] text-muted-foreground">Active Trades</span>
               </div>
               <div className="text-xl font-bold">{myStats.activeTrades}</div>
-            </GlassCard>
-          </div>
+</div>
 
           <Tabs defaultValue="discover" className="mb-6">
             <TabsList className="w-full grid grid-cols-3">
@@ -344,8 +339,7 @@ export default function CopyTrading() {
                 <p className="text-center text-muted-foreground py-8">
                   Trade history will appear here once you start copy trading
                 </p>
-              </GlassCard>
-            </TabsContent>
+</TabsContent>
           </Tabs>
         </div>
       </div>

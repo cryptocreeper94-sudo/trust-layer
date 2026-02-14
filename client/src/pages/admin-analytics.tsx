@@ -116,8 +116,7 @@ export default function AdminAnalytics() {
           <Link href="/">
             <Button data-testid="button-go-home">Go Home</Button>
           </Link>
-        </GlassCard>
-      </div>
+</div>
     );
   }
 
@@ -163,8 +162,7 @@ export default function AdminAnalytics() {
                   </div>
                   <p className="text-xl sm:text-2xl font-bold truncate">{stat.value}</p>
                   <p className="text-xs text-muted-foreground truncate">{stat.label}</p>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
 
@@ -201,8 +199,7 @@ export default function AdminAnalytics() {
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
-              </GlassCard>
-            </TabsContent>
+</TabsContent>
 
             <TabsContent value="users">
               <GlassCard className="p-6" glow data-testid="card-users-chart">
@@ -223,8 +220,7 @@ export default function AdminAnalytics() {
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-              </GlassCard>
-            </TabsContent>
+</TabsContent>
 
             <TabsContent value="transactions">
               <GlassCard className="p-6" glow data-testid="card-transactions-chart">
@@ -251,8 +247,7 @@ export default function AdminAnalytics() {
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
-              </GlassCard>
-            </TabsContent>
+</TabsContent>
 
             <TabsContent value="distribution">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -291,9 +286,7 @@ export default function AdminAnalytics() {
                       </div>
                     ))}
                   </div>
-                </GlassCard>
-
-                <GlassCard className="p-6" data-testid="card-staking-distribution">
+<GlassCard className="p-6" data-testid="card-staking-distribution">
                   <h3 className="font-bold mb-4 flex items-center gap-2">
                     <Coins className="w-4 h-4 text-primary" />
                     Staking Lock Periods
@@ -328,12 +321,12 @@ export default function AdminAnalytics() {
                       </div>
                     ))}
                   </div>
-                </GlassCard>
-              </div>
+</div>
             </TabsContent>
           </Tabs>
         </div>
       </main>
     </div>
+    </YAxis>
   );
 }

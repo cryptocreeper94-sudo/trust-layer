@@ -862,7 +862,7 @@ export default function Coinflip() {
         <div className="mt-6 text-center text-xs text-gray-500">
           <p>House edge: 2% • Win probability: 50% • Payout: 1.96x</p>
         </div>
-      </div>
+</div>
     </div>
   );
 }

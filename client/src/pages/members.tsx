@@ -102,8 +102,7 @@ export default function Members() {
                 />
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -189,8 +188,7 @@ export default function Members() {
                   Complete Your Profile
                 </Button>
               </Link>
-            </GlassCard>
-          )}
+)}
         </motion.div>
 
         <motion.div
@@ -219,9 +217,9 @@ export default function Members() {
                 </Badge>
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
       </div>
+</input>
   );
 }

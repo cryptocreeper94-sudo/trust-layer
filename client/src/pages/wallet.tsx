@@ -1545,17 +1545,14 @@ export default function WalletPage() {
                           </button>
                         ))}
                       </div>
-                    </div>
 
                     <div className="p-4 rounded-xl bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-500/20">
                       <div className="flex items-center gap-2 mb-2">
                         <Shield className="w-4 h-4 text-emerald-400" />
                         <span className="text-sm font-medium text-emerald-400">Powered by Stripe</span>
-                      </div>
                       <p className="text-xs text-muted-foreground">
                         Secure payment processing. Crypto will be deposited directly to your wallet address.
                       </p>
-                    </div>
 
                     <Button
                       onClick={async () => {
@@ -1618,11 +1615,14 @@ export default function WalletPage() {
                     </p>
                   </CardContent>
                 </Card>
-              </motion.div>
-            </motion.div>
           )}
         </AnimatePresence>
-      </div>
     </div>
+    </div>
+    </div>
+</motion.div>
+    </motion.div>
+</Input>
+</Input>
   );
 }

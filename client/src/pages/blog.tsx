@@ -103,8 +103,7 @@ function BlogCard({ post, featured = false }: { post: BlogPost; featured?: boole
               <ArrowRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
             </div>
           </div>
-        </GlassCard>
-      </motion.div>
+</motion.div>
     </Link>
   );
 }
@@ -245,5 +244,5 @@ export default function Blog() {
         )}
       </div>
     </div>
-  );
+);
 }

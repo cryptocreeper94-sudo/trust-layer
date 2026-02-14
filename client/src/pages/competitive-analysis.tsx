@@ -475,8 +475,7 @@ export default function CompetitiveAnalysis() {
                     </tbody>
                   </table>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
         </section>
 
@@ -532,8 +531,7 @@ export default function CompetitiveAnalysis() {
                       
                       <div className={`absolute -bottom-6 -right-6 w-24 h-24 bg-gradient-to-br ${feature.gradient} rounded-full opacity-10 blur-2xl`} />
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </div>
@@ -579,8 +577,7 @@ export default function CompetitiveAnalysis() {
                       <span className="text-emerald-400 font-medium"> $0 to audit with our AI Copilot.</span>
                     </p>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -598,8 +595,7 @@ export default function CompetitiveAnalysis() {
                       <span className="text-pink-400 font-medium"> Every AI decision is auditable on-chain.</span>
                     </p>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -617,8 +613,7 @@ export default function CompetitiveAnalysis() {
                       <span className="text-purple-400 font-medium"> Build reputation once, use it across all apps.</span>
                     </p>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             </div>
           </div>
         </section>
@@ -661,8 +656,7 @@ export default function CompetitiveAnalysis() {
                     </div>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
         </section>
       </main>

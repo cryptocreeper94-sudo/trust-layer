@@ -287,8 +287,7 @@ export default function DomainManager() {
           <Link href="/domains">
             <Button>Back to Domains</Button>
           </Link>
-        </GlassCard>
-      </div>
+</div>
     );
   }
 
@@ -363,8 +362,7 @@ export default function DomainManager() {
                 You are viewing this domain. Connect the owner wallet to make changes.
               </p>
             </div>
-          </GlassCard>
-        )}
+)}
 
         <Tabs defaultValue="dns" className="space-y-6">
           <TabsList className="bg-white/5 border border-white/10">
@@ -429,8 +427,7 @@ export default function DomainManager() {
                   <li>In Replit, go to Settings → Custom Domain and add <code className="bg-white/10 px-1 rounded">{domain.name}.tlid</code></li>
                 </ol>
               </div>
-            </GlassCard>
-          </TabsContent>
+</TabsContent>
 
           <TabsContent value="wallets">
             <GlassCard className="p-6">
@@ -495,8 +492,7 @@ export default function DomainManager() {
                   );
                 })}
               </div>
-            </GlassCard>
-          </TabsContent>
+</TabsContent>
 
           <TabsContent value="profile">
             <GlassCard className="p-6">
@@ -595,8 +591,7 @@ export default function DomainManager() {
                   </Button>
                 )}
               </form>
-            </GlassCard>
-          </TabsContent>
+</TabsContent>
         </Tabs>
       </main>
 
@@ -648,7 +643,6 @@ export default function DomainManager() {
                 placeholder={DNS_RECORD_TYPES.find(t => t.value === newRecordType)?.placeholder}
                 className="bg-white/5 border-white/20 text-white mt-1"
               />
-            </div>
 
             {newRecordType === "MX" && (
               <div>
@@ -659,7 +653,6 @@ export default function DomainManager() {
                   onChange={(e) => setNewRecordPriority(parseInt(e.target.value))}
                   className="bg-white/5 border-white/20 text-white mt-1"
                 />
-              </div>
             )}
 
             <div>
@@ -676,8 +669,6 @@ export default function DomainManager() {
                   ))}
                 </SelectContent>
               </Select>
-            </div>
-          </div>
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowAddRecord(false)}>
@@ -716,7 +707,6 @@ export default function DomainManager() {
             <p className="text-sm text-white/40 mt-2">
               Current expiry: {domain.expiresAt ? formatDate(domain.expiresAt) : "N/A"}
             </p>
-          </div>
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowRenewDialog(false)}>
@@ -749,5 +739,11 @@ export default function DomainManager() {
 
       
     </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</Input>
+</Input>
   );
 }

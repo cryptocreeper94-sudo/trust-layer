@@ -149,8 +149,7 @@ function LeaderRow({ trader, index }: { trader: Trader; index: number }) {
           <p className="font-bold text-green-400">+${(trader.pnl/1000).toFixed(1)}K</p>
           <p className="text-xs text-muted-foreground">+{trader.pnlPercent}%</p>
         </div>
-      </GlassCard>
-    </motion.div>
+</motion.div>
   );
 }
 
@@ -220,8 +219,7 @@ export default function Leaderboard() {
                 <GlassCard className={`p-3 bg-gradient-to-br ${prize.color} bg-opacity-10`}>
                   <div className="text-xs text-white/70 mb-1">{prize.rank} Place</div>
                   <div className="text-xs font-bold">{prize.prize}</div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
 
@@ -269,8 +267,7 @@ export default function Leaderboard() {
                 Start Trading to Compete
               </Button>
             </Link>
-          </GlassCard>
-        </div>
+</div>
       </main>
 
       

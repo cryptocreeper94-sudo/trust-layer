@@ -520,8 +520,7 @@ export default function DomainsPage() {
                     </div>
                   </div>
                 )}
-              </GlassCard>
-            </motion.div>
+</motion.div>
           )}
         </AnimatePresence>
 
@@ -566,18 +565,15 @@ export default function DomainsPage() {
               <Globe className="w-8 h-8 text-cyan-400 mx-auto mb-2" />
               <p className="text-3xl font-bold text-white">{stats.totalDomains.toLocaleString()}</p>
               <p className="text-white/60">Domains Registered</p>
-            </GlassCard>
-            <GlassCard className="p-6 text-center">
+<GlassCard className="p-6 text-center">
               <Users className="w-8 h-8 text-purple-400 mx-auto mb-2" />
               <p className="text-3xl font-bold text-white">{stats.totalOwners.toLocaleString()}</p>
               <p className="text-white/60">Unique Owners</p>
-            </GlassCard>
-            <GlassCard className="p-6 text-center">
+<GlassCard className="p-6 text-center">
               <Crown className="w-8 h-8 text-amber-400 mx-auto mb-2" />
               <p className="text-3xl font-bold text-white">{stats.premiumCount.toLocaleString()}</p>
               <p className="text-white/60">Premium Domains</p>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         {myDomains && myDomains.length > 0 && (
@@ -624,8 +620,7 @@ export default function DomainsPage() {
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </Button>
                   </Link>
-                </GlassCard>
-              ))}
+))}
             </div>
           </motion.div>
         )}
@@ -656,8 +651,7 @@ export default function DomainsPage() {
                       <Crown className="w-5 h-5 text-amber-400" />
                     )}
                   </div>
-                </GlassCard>
-              ))}
+))}
             </div>
           </motion.div>
         )}
@@ -678,22 +672,19 @@ export default function DomainsPage() {
               <p className="text-white/60">
                 Every domain is secured on the Trust Layer with tamper-proof ownership records.
               </p>
-            </GlassCard>
-            <GlassCard className="p-6">
+<GlassCard className="p-6">
               <Globe className="w-10 h-10 text-purple-400 mb-4" />
               <h3 className="text-lg font-bold text-white mb-2">Universal Identity</h3>
               <p className="text-white/60">
                 Link multiple wallets, websites, and social profiles to a single memorable name.
               </p>
-            </GlassCard>
-            <GlassCard className="p-6">
+<GlassCard className="p-6">
               <Zap className="w-10 h-10 text-pink-400 mb-4" />
               <h3 className="text-lg font-bold text-white mb-2">Instant Transfers</h3>
               <p className="text-white/60">
                 Send and receive tokens using human-readable names instead of complex addresses.
               </p>
-            </GlassCard>
-          </div>
+</div>
         </motion.div>
       </main>
 
@@ -766,15 +757,12 @@ export default function DomainsPage() {
                   <div className="flex items-center justify-center gap-2 mb-2">
                     <Crown className="w-5 h-5 text-amber-400" />
                     <span className="text-amber-400 font-bold">Owner Mode Active</span>
-                  </div>
                   <div className="flex items-center justify-between">
                     <span className="text-white/60">Owner Price</span>
                     <span className="text-xl font-bold text-emerald-400">FREE</span>
-                  </div>
                   <p className="text-xs text-amber-400/70 text-center mt-2">
                     Domains registered as owner are free with lifetime ownership
                   </p>
-                </div>
               ) : (
                 <div className="p-4 rounded-lg bg-white/5 border border-white/10">
                   {ownershipType === "term" ? (
@@ -789,23 +777,19 @@ export default function DomainsPage() {
                             <span className="text-emerald-400">
                               {formatPrice(searchResult.earlyAdopterPriceCents)}
                             </span>
-                          </div>
                         ) : (
                           <span className="text-white">{formatPrice(searchResult.pricePerYearCents)}</span>
                         )}
-                      </div>
                       {searchResult.isEarlyAdopterPeriod && (
                         <div className="flex items-center justify-between mb-2">
                           <span className="text-emerald-400 text-sm">Early Adopter Discount</span>
                           <span className="text-emerald-400 text-sm">-30%</span>
-                        </div>
                       )}
                       <div className="flex items-center justify-between pt-2 border-t border-white/10">
                         <span className="text-white/60">Total ({selectedYears} {selectedYears === 1 ? "year" : "years"})</span>
                         <span className="text-xl font-bold text-cyan-400">
                           {formatPrice((searchResult.isEarlyAdopterPeriod ? searchResult.earlyAdopterPriceCents : searchResult.pricePerYearCents) * selectedYears)}
                         </span>
-                      </div>
                     </>
                   ) : (
                     <>
@@ -816,13 +800,11 @@ export default function DomainsPage() {
                         <span className="text-xl font-bold text-cyan-400">
                           {formatPrice(searchResult.priceLifetimeCents)}
                         </span>
-                      </div>
                       <p className="text-xs text-white/40">
                         One-time payment. Never pay renewal fees again.
                       </p>
                     </>
                   )}
-                </div>
               )}
 
               {searchResult.isEarlyAdopterPeriod && ownershipType === "term" && (
@@ -830,7 +812,6 @@ export default function DomainsPage() {
                   <p className="text-xs text-emerald-400 text-center">
                     + FREE Chronicles Sponsorship Slot (Early Adopter Exclusive)
                   </p>
-                </div>
               )}
 
               <Button
@@ -850,12 +831,23 @@ export default function DomainsPage() {
                   )
                 )}
               </Button>
-            </div>
           )}
         </DialogContent>
       </Dialog>
 
       
     </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</Input>
   );
 }

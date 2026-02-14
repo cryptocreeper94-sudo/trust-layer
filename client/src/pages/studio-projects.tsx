@@ -351,5 +351,6 @@ export default function StudioProjects() {
         )}
       </main>
     </div>
+</Input>
   );
 }

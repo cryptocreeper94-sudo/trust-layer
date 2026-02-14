@@ -129,20 +129,16 @@ export default function Trading() {
               <GlassCard hover={false} className="p-3">
                 <div className="text-[10px] text-muted-foreground mb-1">24h High</div>
                 <div className="text-sm font-bold text-white/50">—</div>
-              </GlassCard>
-              <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
                 <div className="text-[10px] text-muted-foreground mb-1">24h Low</div>
                 <div className="text-sm font-bold text-white/50">—</div>
-              </GlassCard>
-              <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
                 <div className="text-[10px] text-muted-foreground mb-1">24h Volume</div>
                 <div className="text-sm font-bold text-white/50">—</div>
-              </GlassCard>
-              <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
                 <div className="text-[10px] text-muted-foreground mb-1">Market Cap</div>
                 <div className="text-sm font-bold text-white/50">—</div>
-              </GlassCard>
-            </div>
+</div>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
@@ -206,8 +202,7 @@ export default function Trading() {
                     </Button>
                   ))}
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -228,9 +223,7 @@ export default function Trading() {
                     <EmptyRecentTrades />
                   </TabsContent>
                 </Tabs>
-              </GlassCard>
-
-              <GlassCard className="p-3">
+<GlassCard className="p-3">
                 <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
                   <Zap className="w-4 h-4 text-yellow-400/50" />
                   Quick Trade
@@ -241,8 +234,7 @@ export default function Trading() {
                   <p className="text-sm text-muted-foreground">Trading available at mainnet</p>
                   <p className="text-xs text-muted-foreground/60 mt-1">June 1, 2026</p>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
         </div>
       </div>

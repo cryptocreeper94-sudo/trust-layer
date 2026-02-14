@@ -550,7 +550,6 @@ export default function ChronoHome() {
                 </div>
               </div>
             </motion.div>
-          </div>
 
           <div className="mt-8 text-center">
             <Link href="/team">
@@ -559,9 +558,6 @@ export default function ChronoHome() {
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
-          </div>
-        </div>
-      </section>
 
       <CTABanner
         title="Ready to Live Your Legacy?"
@@ -575,5 +571,7 @@ export default function ChronoHome() {
       
       <style>{chronoStyles}</style>
     </ChronoLayout>
+    </div>
+    </div>
   );
 }

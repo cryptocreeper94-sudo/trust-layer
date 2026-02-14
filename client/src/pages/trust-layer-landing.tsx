@@ -248,8 +248,7 @@ export default function TrustLayerLanding() {
                       <p className="text-white/60 text-sm leading-relaxed">{feature.description}</p>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
 
@@ -291,8 +290,7 @@ export default function TrustLayerLanding() {
               >
                 {isAuthenticated ? "View My Card" : "Get Your Card Now"}
               </Button>
-            </GlassCard>
-          </div>
+</div>
         </div>
       </section>
 
@@ -325,8 +323,7 @@ export default function TrustLayerLanding() {
                       <p className="text-white/60 leading-relaxed">{benefit.description}</p>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </div>
@@ -387,8 +384,7 @@ export default function TrustLayerLanding() {
                       <span className="text-[10px] text-white/50">{app.category}</span>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.a>
+</motion.a>
             ))}
           </div>
         </div>
@@ -430,9 +426,7 @@ export default function TrustLayerLanding() {
                 {isAuthenticated ? "Go to My Hub" : "Join as Individual"}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
-            </GlassCard>
-
-            <GlassCard glow className="p-6 sm:p-8 flex flex-col h-full">
+<GlassCard glow className="p-6 sm:p-8 flex flex-col h-full">
               <div className="flex items-center gap-3 mb-5">
                 <div className="p-2.5 rounded-lg bg-purple-500/20 border border-purple-500/20 flex-shrink-0">
                   <Building2 className="w-5 h-5 text-purple-400" />
@@ -478,8 +472,7 @@ export default function TrustLayerLanding() {
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
-            </GlassCard>
-          </div>
+</div>
         </div>
       </section>
 
@@ -507,5 +500,5 @@ export default function TrustLayerLanding() {
 
       <SimpleLoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
     </div>
-  );
+);
 }

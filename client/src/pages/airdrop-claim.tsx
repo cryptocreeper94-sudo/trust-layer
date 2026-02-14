@@ -129,9 +129,7 @@ export default function AirdropClaim() {
                 </Button>
               </div>
             </div>
-          </GlassCard>
-
-          <AnimatePresence mode="wait">
+<AnimatePresence mode="wait">
             {eligibility && (
               <motion.div
                 key="result"
@@ -184,8 +182,7 @@ export default function AirdropClaim() {
                     <p className="text-xs text-muted-foreground text-center mt-4">
                       Tokens will be distributed at mainnet launch
                     </p>
-                  </GlassCard>
-                ) : (
+) : (
                   <GlassCard className="p-6 border-red-500/30" data-testid="card-not-eligible">
                     <div className="text-center">
                       <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
@@ -206,8 +203,7 @@ export default function AirdropClaim() {
                         </Link>
                       </div>
                     </div>
-                  </GlassCard>
-                )}
+)}
               </motion.div>
             )}
           </AnimatePresence>
@@ -223,8 +219,7 @@ export default function AirdropClaim() {
                     <p className="text-xs text-muted-foreground">Enter your email or wallet address to see if you qualify for the airdrop.</p>
                   </div>
                 </div>
-              </GlassCard>
-              <GlassCard className="p-4" hover={false}>
+<GlassCard className="p-4" hover={false}>
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm shrink-0">2</div>
                   <div>
@@ -232,8 +227,7 @@ export default function AirdropClaim() {
                     <p className="text-xs text-muted-foreground">Link your Trust Layer wallet to receive your token allocation at launch.</p>
                   </div>
                 </div>
-              </GlassCard>
-              <GlassCard className="p-4" hover={false}>
+<GlassCard className="p-4" hover={false}>
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm shrink-0">3</div>
                   <div>
@@ -241,11 +235,13 @@ export default function AirdropClaim() {
                     <p className="text-xs text-muted-foreground">Tokens are distributed automatically at mainnet launch.</p>
                   </div>
                 </div>
-              </GlassCard>
-            </div>
+</div>
           </div>
         </div>
       </div>
+    </div>
+    </span>
+</div>
     </div>
   );
 }

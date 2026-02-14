@@ -345,10 +345,6 @@ export default function ChronoCommunity() {
                 <h3 className="text-lg font-bold text-white mb-1">GitHub</h3>
                 <p className="text-white/60 text-sm">Coming Soon</p>
               </HoloCard>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <CTABanner
         title="Ready to Make History?"
@@ -361,5 +357,9 @@ export default function ChronoCommunity() {
       
       <style>{chronoStyles}</style>
     </ChronoLayout>
+    </div>
+    </section>
+    </div>
+    </div>
   );
 }

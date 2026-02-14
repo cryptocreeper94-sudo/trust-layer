@@ -239,8 +239,7 @@ export default function ComingFeatures() {
                   <p className="text-xs text-slate-400">Completed</p>
                 </div>
               </div>
-            </GlassCard>
-            <GlassCard glow className="px-6 py-3">
+<GlassCard glow className="px-6 py-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
                   <Clock className="w-5 h-5 text-amber-400" />
@@ -250,8 +249,7 @@ export default function ComingFeatures() {
                   <p className="text-xs text-slate-400">In Progress</p>
                 </div>
               </div>
-            </GlassCard>
-            <GlassCard glow className="px-6 py-3">
+<GlassCard glow className="px-6 py-3">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
                   <Sparkles className="w-5 h-5 text-purple-400" />
@@ -261,8 +259,7 @@ export default function ComingFeatures() {
                   <p className="text-xs text-slate-400">Total Features</p>
                 </div>
               </div>
-            </GlassCard>
-          </div>
+</div>
         </motion.div>
 
         {/* Chronicles Estate Section */}
@@ -302,8 +299,7 @@ export default function ComingFeatures() {
             <p className="text-slate-400 text-sm">
               We're not just making promises - we're building in public. Every feature checked off is real, working code you can use.
             </p>
-          </GlassCard>
-        </motion.div>
+</motion.div>
       </div>
     </div>
   );
@@ -392,9 +388,7 @@ function FeatureCard({ feature, index }: { feature: typeof defaultFeatures[0]; i
                 <TooltipContent side="top" className="max-w-xs bg-slate-800 border-slate-700 p-3">
                   <p className="text-sm text-slate-200">{feature.description}</p>
                 </TooltipContent>
-              </Tooltip>
-
-              {/* Status badge */}
+{/* Status badge */}
               <span className={`text-xs px-2 py-0.5 rounded-full ${status.bg} ${status.color}`}>
                 {status.label}
               </span>
@@ -408,7 +402,6 @@ function FeatureCard({ feature, index }: { feature: typeof defaultFeatures[0]; i
             </div>
           </div>
         </div>
-      </GlassCard>
-    </motion.div>
+</motion.div>
   );
 }

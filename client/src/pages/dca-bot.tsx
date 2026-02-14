@@ -169,8 +169,7 @@ function StrategyCard({ strategy }: { strategy: DCAStrategy }) {
             </div>
           </div>
         </div>
-      </GlassCard>
-    </motion.div>
+</motion.div>
   );
 }
 
@@ -230,22 +229,19 @@ export default function DCABot() {
                 <span className="text-[10px] text-muted-foreground">Active Strategies</span>
               </div>
               <div className="text-xl font-bold">{STRATEGIES.filter(s => s.isActive).length}</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="flex items-center gap-2 mb-1">
                 <DollarSign className="w-4 h-4 text-blue-400" />
                 <span className="text-[10px] text-muted-foreground">Total Invested</span>
               </div>
               <div className="text-xl font-bold">${totalInvested.toLocaleString()}</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="flex items-center gap-2 mb-1">
                 <Target className="w-4 h-4 text-green-400" />
                 <span className="text-[10px] text-muted-foreground">Current Value</span>
               </div>
               <div className="text-xl font-bold">${totalValue.toLocaleString()}</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="flex items-center gap-2 mb-1">
                 <TrendingUp className="w-4 h-4 text-green-400" />
                 <span className="text-[10px] text-muted-foreground">Total P/L</span>
@@ -253,8 +249,7 @@ export default function DCABot() {
               <div className={`text-xl font-bold ${totalPnl >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {totalPnl >= 0 ? '+' : ''}${Math.abs(totalPnl).toLocaleString()}
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-bold">Your Strategies</h2>
@@ -356,8 +351,7 @@ export default function DCABot() {
               <Bot className="w-12 h-12 text-white/10 mx-auto mb-3" />
               <p className="text-muted-foreground mb-4">No DCA strategies yet</p>
               <Button onClick={() => setShowCreate(true)}>Create Your First Strategy</Button>
-            </GlassCard>
-          )}
+)}
         </div>
       </div>
     </div>

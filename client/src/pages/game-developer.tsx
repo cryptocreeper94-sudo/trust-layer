@@ -175,8 +175,7 @@ export default function GameDeveloper() {
                   {i < SUBMISSION_STEPS.length - 1 && (
                     <ChevronRight className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground hidden md:block" />
                   )}
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
 
@@ -284,9 +283,7 @@ export default function GameDeveloper() {
                     </Link>
                   )}
                 </form>
-              </GlassCard>
-
-              <GlassCard className="p-6">
+<GlassCard className="p-6">
                 <h3 className="font-bold mb-4 flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-purple-400" />
                   AI Review Criteria
@@ -314,8 +311,7 @@ export default function GameDeveloper() {
                     </motion.div>
                   ))}
                 </div>
-              </GlassCard>
-            </div>
+</div>
 
             <div className="space-y-6">
               <GlassCard className="p-6">
@@ -371,9 +367,7 @@ export default function GameDeveloper() {
                     ))
                   )}
                 </div>
-              </GlassCard>
-
-              <GlassCard className="p-6 bg-gradient-to-br from-pink-500/10 to-purple-500/10 border-pink-500/20">
+<GlassCard className="p-6 bg-gradient-to-br from-pink-500/10 to-purple-500/10 border-pink-500/20">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <Rocket className="w-5 h-5 text-pink-400" />
                   Developer Benefits
@@ -397,9 +391,7 @@ export default function GameDeveloper() {
                     <span>Integration with Signal payments</span>
                   </li>
                 </ul>
-              </GlassCard>
-
-              <GlassCard className="p-6">
+<GlassCard className="p-6">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <FileCode className="w-5 h-5 text-cyan-400" />
                   Resources
@@ -419,13 +411,13 @@ export default function GameDeveloper() {
                     <ExternalLink className="w-4 h-4 text-muted-foreground" />
                   </Link>
                 </div>
-              </GlassCard>
-            </div>
+</div>
           </div>
         </div>
-      </main>
 
       
+    </main>
     </div>
+</Input>
   );
 }

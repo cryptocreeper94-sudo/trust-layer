@@ -578,5 +578,5 @@ export default function Solitaire() {
       </AnimatePresence>
     </div>
     </div>
-  );
+);
 }

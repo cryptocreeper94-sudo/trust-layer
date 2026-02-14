@@ -95,9 +95,7 @@ export default function NetworkStats() {
                 </motion.div>
                 <div className="text-[10px] text-muted-foreground">transactions/sec</div>
               </div>
-            </GlassCard>
-
-            <GlassCard glow data-testid="stat-block-time">
+<GlassCard glow data-testid="stat-block-time">
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Clock className="w-4 h-4 text-secondary" />
@@ -108,9 +106,7 @@ export default function NetworkStats() {
                 </div>
                 <div className="text-[10px] text-muted-foreground">milliseconds</div>
               </div>
-            </GlassCard>
-
-            <GlassCard glow data-testid="stat-validators">
+<GlassCard glow data-testid="stat-validators">
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Server className="w-4 h-4 text-purple-400" />
@@ -121,9 +117,7 @@ export default function NetworkStats() {
                 </div>
                 <div className="text-[10px] text-muted-foreground">active nodes</div>
               </div>
-            </GlassCard>
-
-            <GlassCard glow data-testid="stat-network-load">
+<GlassCard glow data-testid="stat-network-load">
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Cpu className="w-4 h-4 text-amber-400" />
@@ -134,8 +128,7 @@ export default function NetworkStats() {
                 </div>
                 <div className="text-[10px] text-muted-foreground">capacity used</div>
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           <GlassCard glow className="mb-8" data-testid="chart-tps">
             <div className="p-4 sm:p-6">
@@ -183,9 +176,7 @@ export default function NetworkStats() {
                 </div>
               </div>
             </div>
-          </GlassCard>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <GlassCard data-testid="card-chain-info">
               <div className="p-6">
                 <h3 className="font-bold mb-4 flex items-center gap-2">
@@ -207,9 +198,7 @@ export default function NetworkStats() {
                   ))}
                 </div>
               </div>
-            </GlassCard>
-
-            <GlassCard data-testid="card-validators">
+<GlassCard data-testid="card-validators">
               <div className="p-6">
                 <h3 className="font-bold mb-4 flex items-center gap-2">
                   <Server className="w-5 h-5 text-purple-400" /> Active Validators
@@ -228,13 +217,10 @@ export default function NetworkStats() {
                         <span className="text-white">{validator.name}</span>
                       </div>
                       <span className="font-mono text-muted-foreground">{validator.uptime}</span>
-                    </div>
                   ))}
-                </div>
-              </div>
-            </GlassCard>
-          </div>
-        </div>
-      </div>
+</div>
+    </div>
+    </div>
+    </div>
   );
 }

@@ -265,8 +265,7 @@ export default function GovernanceTreasury() {
                 </div>
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -324,8 +323,7 @@ export default function GovernanceTreasury() {
                         <p className="text-xs text-slate-500 italic">No wallet assigned</p>
                       )}
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               );
             })}
           </div>
@@ -360,8 +358,7 @@ export default function GovernanceTreasury() {
                 </div>
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -381,8 +378,7 @@ export default function GovernanceTreasury() {
                 </div>
                 <ExternalLink className="w-5 h-5 text-slate-500 group-hover:text-purple-400 transition-colors" />
               </div>
-            </GlassCard>
-          </Link>
+</Link>
 
           <Link href="/governance-charter">
             <GlassCard className="p-5 cursor-pointer hover:border-cyan-500/50 transition-colors group" data-testid="link-governance-charter">
@@ -396,9 +392,7 @@ export default function GovernanceTreasury() {
                 </div>
                 <ExternalLink className="w-5 h-5 text-slate-500 group-hover:text-cyan-400 transition-colors" />
               </div>
-            </GlassCard>
-          </Link>
-        </motion.div>
+</Link>
 
         <motion.div
           initial={{ opacity: 0 }}
@@ -410,8 +404,7 @@ export default function GovernanceTreasury() {
             Treasury address verified on-chain. View transactions at{" "}
             <Link href="/explorer" className="text-cyan-400 hover:underline">dwsc.io/explorer</Link>
           </p>
-        </motion.div>
-      </div>
-    </div>
+    </motion.div>
+    </motion.div>
   );
 }

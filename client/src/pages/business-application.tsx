@@ -444,9 +444,7 @@ export default function BusinessApplication() {
               </div>
             </motion.div>
           )}
-        </GlassCard>
-
-        <motion.div
+<motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -458,11 +456,9 @@ export default function BusinessApplication() {
                 <benefit.icon className="w-6 h-6 text-amber-400 mx-auto mb-2" />
                 <p className="text-sm font-medium text-white mb-1">{benefit.title}</p>
                 <p className="text-xs text-white/50">{benefit.description}</p>
-              </GlassCard>
-            ))}
+))}
           </div>
         </motion.div>
-      </div>
       
       <SimpleLoginModal 
         isOpen={showLoginModal} 
@@ -473,5 +469,10 @@ export default function BusinessApplication() {
         }}
       />
     </div>
+    </div>
+</Textarea>
+</Input>
+</Input>
+</Input>
   );
 }

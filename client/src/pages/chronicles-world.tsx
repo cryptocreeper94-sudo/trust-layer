@@ -113,8 +113,7 @@ function WorldClock({ era }: { era: string }) {
         </div>
       </div>
       <p className="text-xs text-gray-400 italic" data-testid="era-atmosphere">{eraDesc}</p>
-    </GlassCard>
-  );
+);
 }
 
 function SituationCard({ situation, era, onRespond }: {
@@ -186,8 +185,7 @@ function SituationCard({ situation, era, onRespond }: {
             Face This <ChevronRight className="w-4 h-4 ml-1" />
           </Button>
         </div>
-      </GlassCard>
-    </motion.div>
+</motion.div>
   );
 }
 
@@ -276,8 +274,7 @@ function SituationDetail({ situation, era, onClose, onDecide }: {
               )}
             </Button>
           </div>
-        </GlassCard>
-      </motion.div>
+</motion.div>
     </motion.div>
   );
 }
@@ -322,8 +319,7 @@ function NpcEncounter({ npc, era, onTalk }: {
             <MessageSquare className="w-4 h-4" />
           </Button>
         </div>
-      </GlassCard>
-    </motion.div>
+</motion.div>
   );
 }
 
@@ -477,8 +473,7 @@ function NpcChatModal({ npc, era, onClose }: {
               </Button>
             </div>
           </div>
-        </GlassCard>
-      </motion.div>
+</motion.div>
     </motion.div>
   );
 }
@@ -516,8 +511,7 @@ function FactionCard({ faction, era, onAlign }: {
           >
             <HandshakeIcon className="w-4 h-4" />
           </Button>
-      </GlassCard>
-    </motion.div>
+</motion.div>
   );
 }
 
@@ -741,8 +735,7 @@ export default function ChroniclesWorld() {
                   <Compass className="w-10 h-10 text-gray-600 mx-auto mb-3" />
                   <p className="text-gray-400">The world is quiet right now...</p>
                   <p className="text-xs text-gray-600 mt-1">New situations emerge based on time, your actions, and what others do.</p>
-                </GlassCard>
-              ) : (
+) : (
                 <>
                   <div className="text-xs text-gray-500 mb-2">
                     These aren't missions — they're things happening around you. How you respond is entirely up to you.
@@ -775,8 +768,7 @@ export default function ChroniclesWorld() {
                 <GlassCard className="p-8 text-center">
                   <Users className="w-10 h-10 text-gray-600 mx-auto mb-3" />
                   <p className="text-gray-400">No one's around right now...</p>
-                </GlassCard>
-              ) : (
+) : (
                 <>
                   <div className="text-xs text-gray-500 mb-2">
                     These are people in your world — not quest-givers. Talk to them like real people. Build relationships over time.
@@ -791,7 +783,6 @@ export default function ChroniclesWorld() {
                   ))}
                 </>
               )}
-            </motion.div>
           )}
 
           {activeTab === "communities" && (
@@ -806,12 +797,10 @@ export default function ChroniclesWorld() {
                 <GlassCard className="p-8 text-center">
                   <Shield className="w-10 h-10 text-gray-600 mx-auto mb-3" />
                   <p className="text-gray-400">No communities to join yet...</p>
-                </GlassCard>
-              ) : (
+) : (
                 <>
                   <div className="text-xs text-gray-500 mb-2">
                     Communities reflect values, not classes. Align with people who share your beliefs — or challenge them.
-                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {factions.map((f: any) => (
                       <FactionCard
@@ -821,13 +810,10 @@ export default function ChroniclesWorld() {
                         onAlign={handleAlignFaction}
                       />
                     ))}
-                  </div>
                 </>
               )}
-            </motion.div>
           )}
         </AnimatePresence>
-      </div>
 
       <AnimatePresence>
         {activeSituation && (
@@ -847,5 +833,8 @@ export default function ChroniclesWorld() {
         )}
       </AnimatePresence>
     </div>
-  );
+    </div>
+</motion.div>
+</motion.div>
+);
 }

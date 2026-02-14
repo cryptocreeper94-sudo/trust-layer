@@ -306,5 +306,6 @@ export default function PresaleSuccess() {
         )}
       </div>
     </div>
+    </div>
   );
 }

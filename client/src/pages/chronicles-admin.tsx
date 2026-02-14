@@ -863,6 +863,6 @@ export default function ChroniclesAdmin() {
         </motion.div>
       )}
     </AnimatePresence>
-    </div>
+    </PinGate>
   );
 }

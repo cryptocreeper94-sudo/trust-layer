@@ -231,8 +231,7 @@ export default function WelcomePage() {
                   </p>
                 </>
               )}
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -263,8 +262,7 @@ export default function WelcomePage() {
                   <strong className="text-white">Joining is free.</strong> Get verified, claim your membership, and help us build your community.
                 </p>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -298,8 +296,7 @@ export default function WelcomePage() {
                         {path.linkText}
                         <ChevronRight className="w-4 h-4" />
                       </div>
-                    </GlassCard>
-                  </Link>
+</Link>
                 </motion.div>
               ))}
             </div>
@@ -353,8 +350,7 @@ export default function WelcomePage() {
                   </p>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -415,12 +411,13 @@ export default function WelcomePage() {
             </div>
           </motion.div>
         </div>
-      </div>
       <SimpleLoginModal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
         ssoApp={ssoParams}
       />
+    </div>
     </main>
+</input>
   );
 }

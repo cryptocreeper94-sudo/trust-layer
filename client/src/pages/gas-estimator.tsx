@@ -108,9 +108,7 @@ export default function GasEstimator() {
                 <div className="text-2xl font-bold text-green-400">${currentGas.low.toFixed(5)}</div>
               </div>
               <Badge className="bg-green-500/20 text-green-400">Recommended</Badge>
-            </GlassCard>
-
-            <GlassCard className="col-span-2 row-span-1 p-4 flex items-center justify-between">
+<GlassCard className="col-span-2 row-span-1 p-4 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <Fuel className="w-4 h-4 text-blue-400" />
@@ -127,9 +125,7 @@ export default function GasEstimator() {
                   <ArrowUpRight className="w-4 h-4 text-muted-foreground rotate-90" />
                 )}
               </div>
-            </GlassCard>
-
-            <GlassCard className="col-span-2 row-span-1 p-4 flex items-center justify-between">
+<GlassCard className="col-span-2 row-span-1 p-4 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <AlertTriangle className="w-4 h-4 text-orange-400" />
@@ -138,9 +134,7 @@ export default function GasEstimator() {
                 <div className="text-2xl font-bold text-orange-400">${currentGas.high.toFixed(5)}</div>
               </div>
               <Badge className="bg-orange-500/20 text-orange-400">Priority</Badge>
-            </GlassCard>
-
-            <GlassCard className="col-span-3 row-span-2 p-4 flex flex-col">
+<GlassCard className="col-span-3 row-span-2 p-4 flex flex-col">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <BarChart3 className="w-4 h-4 text-primary" />
@@ -176,9 +170,7 @@ export default function GasEstimator() {
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
-            </GlassCard>
-
-            <GlassCard className="col-span-3 row-span-2 p-4 flex flex-col">
+<GlassCard className="col-span-3 row-span-2 p-4 flex flex-col">
               <div className="flex items-center gap-2 mb-3">
                 <Clock className="w-4 h-4 text-cyan-400" />
                 <span className="font-bold text-sm">Network Status</span>
@@ -211,9 +203,7 @@ export default function GasEstimator() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-
-          </div>
+</div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <GlassCard className="p-4">
@@ -241,9 +231,7 @@ export default function GasEstimator() {
                   </motion.div>
                 ))}
               </div>
-            </GlassCard>
-
-            <GlassCard className="p-4">
+<GlassCard className="p-4">
               <div className="flex items-center gap-2 mb-4">
                 <BarChart3 className="w-4 h-4 text-primary" />
                 <span className="font-bold">Network Comparison</span>
@@ -291,10 +279,9 @@ export default function GasEstimator() {
                   </span>
                 </div>
               </div>
-            </GlassCard>
-          </div>
+</div>
         </div>
       </main>
     </div>
-  );
+);
 }

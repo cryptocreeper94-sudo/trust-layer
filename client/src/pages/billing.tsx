@@ -198,9 +198,7 @@ export default function Billing() {
                   </ul>
                   <Button variant="outline" size="sm" className="w-full mt-4 border-white/10 text-white/60 text-xs h-9" data-testid="button-plan-explorer">Current Plan</Button>
                 </div>
-              </GlassCard>
-
-              <GlassCard glow className="flex flex-col h-full border-primary/40">
+<GlassCard glow className="flex flex-col h-full border-primary/40">
                 <div className="p-5 flex flex-col h-full">
                   <div className="flex justify-center mb-2">
                     <span className="px-3 py-1 bg-primary text-background text-[9px] font-bold rounded-full uppercase tracking-wider">Most Popular</span>
@@ -224,9 +222,7 @@ export default function Billing() {
                   </ul>
                   <Button size="sm" className="w-full mt-4 bg-primary text-background hover:bg-primary/90 text-xs h-9 font-semibold" data-testid="button-plan-builder" onClick={handleUpgradeToBuilder} disabled={upgradeLoading}>{upgradeLoading ? "Loading..." : "Upgrade Now"}</Button>
                 </div>
-              </GlassCard>
-
-              <GlassCard glow className="flex flex-col h-full">
+<GlassCard glow className="flex flex-col h-full">
                 <div className="p-5 flex flex-col h-full">
                   <div className="h-[30px] mb-2"></div>
                   <div className="mb-3">
@@ -248,8 +244,7 @@ export default function Billing() {
                   </ul>
                   <Button variant="outline" size="sm" className="w-full mt-4 border-secondary/30 text-secondary hover:bg-secondary/10 text-xs h-9" data-testid="button-plan-enterprise" onClick={() => setShowContactModal(true)}>Contact Sales</Button>
                 </div>
-              </GlassCard>
-            </div>
+</div>
 
             <div className="text-center mb-6">
               <h2 className="text-xl font-display font-bold mb-1">Already a Developer?</h2>
@@ -264,8 +259,7 @@ export default function Billing() {
                   </div>
                   <p className="text-green-400 font-medium" data-testid="text-payment-success">{paymentSuccess}</p>
                 </div>
-              </GlassCard>
-            )}
+)}
 
             <GlassCard glow className="mb-6">
               <div className="p-6">
@@ -295,9 +289,7 @@ export default function Billing() {
                   </p>
                 )}
               </div>
-            </GlassCard>
-
-            {stats && (
+{stats && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <GlassCard glow className="p-5">
@@ -308,9 +300,7 @@ export default function Billing() {
                       <span className="text-sm text-muted-foreground">Total API Calls</span>
                     </div>
                     <p className="text-2xl font-bold" data-testid="text-total-calls">{stats.totalCalls.toLocaleString()}</p>
-                  </GlassCard>
-
-                  <GlassCard glow className="p-5">
+<GlassCard glow className="p-5">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="p-2 rounded-lg bg-secondary/20">
                         <DollarSign className="w-5 h-5 text-secondary" />
@@ -318,9 +308,7 @@ export default function Billing() {
                       <span className="text-sm text-muted-foreground">Cost Per Call</span>
                     </div>
                     <p className="text-2xl font-bold">${(stats.costPerCallCents / 100).toFixed(2)}</p>
-                  </GlassCard>
-
-                  <GlassCard glow className={`p-5 ${stats.outstandingBalanceCents > 0 ? 'border-amber-500/30' : 'border-green-500/30'}`}>
+<GlassCard glow className={`p-5 ${stats.outstandingBalanceCents > 0 ? 'border-amber-500/30' : 'border-green-500/30'}`}>
                     <div className="flex items-center gap-3 mb-2">
                       <div className={`p-2 rounded-lg ${stats.outstandingBalanceCents > 0 ? 'bg-amber-500/20' : 'bg-green-500/20'}`}>
                         <CreditCard className={`w-5 h-5 ${stats.outstandingBalanceCents > 0 ? 'text-amber-400' : 'text-green-400'}`} />
@@ -350,8 +338,7 @@ export default function Billing() {
                         </Button>
                       </div>
                     )}
-                  </GlassCard>
-                </div>
+</div>
 
                 <GlassCard glow>
                   <div className="p-5">
@@ -376,9 +363,7 @@ export default function Billing() {
                       <p className="text-muted-foreground text-sm">No recent activity</p>
                     )}
                   </div>
-                </GlassCard>
-
-                <div className="text-center text-sm text-muted-foreground">
+<div className="text-center text-sm text-muted-foreground">
                   <p>Pay with card (Stripe) or crypto (Coinbase Commerce - BTC, ETH, USDC)</p>
                 </div>
               </motion.div>
@@ -477,5 +462,8 @@ export default function Billing() {
         )}
       </AnimatePresence>
     </div>
+    </CreditCard>
+</Input>
+</Input>
   );
 }

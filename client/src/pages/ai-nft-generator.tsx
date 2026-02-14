@@ -174,9 +174,7 @@ export default function AINFTGenerator() {
                       <span>Wild</span>
                     </div>
                   </div>
-                </GlassCard>
-
-                <GlassCard className="p-4">
+<GlassCard className="p-4">
                   <h2 className="font-bold mb-4 flex items-center gap-2">
                     <Palette className="w-4 h-4 text-purple-400" />
                     Choose Style
@@ -202,9 +200,7 @@ export default function AINFTGenerator() {
                       </motion.button>
                     ))}
                   </div>
-                </GlassCard>
-
-                <div className="lg:col-span-2">
+<div className="lg:col-span-2">
                   <Button 
                     className="w-full h-12 bg-gradient-to-r from-pink-500 to-purple-500 text-white text-lg"
                     onClick={handleGenerate}
@@ -252,9 +248,7 @@ export default function AINFTGenerator() {
                       {generatedNFT.rarity}
                     </Badge>
                   </motion.div>
-                </GlassCard>
-
-                <div className="space-y-4">
+<div className="space-y-4">
                   <GlassCard className="p-4">
                     <h2 className="font-bold mb-3">NFT Details</h2>
                     <div className="space-y-2">
@@ -269,9 +263,7 @@ export default function AINFTGenerator() {
                         </div>
                       ))}
                     </div>
-                  </GlassCard>
-
-                  <GlassCard className="p-4">
+<GlassCard className="p-4">
                     <h2 className="font-bold mb-3">Actions</h2>
                     <div className="grid grid-cols-2 gap-2">
                       <Button variant="outline" className="gap-2">
@@ -291,9 +283,7 @@ export default function AINFTGenerator() {
                         Regenerate
                       </Button>
                     </div>
-                  </GlassCard>
-
-                  <Button 
+<Button 
                     className="w-full h-12 bg-gradient-to-r from-pink-500 to-purple-500 text-white"
                     onClick={() => setStep(3)}
                   >
@@ -341,8 +331,7 @@ export default function AINFTGenerator() {
                   <Button variant="ghost" className="w-full mt-2" onClick={() => setStep(2)}>
                     Back to Preview
                   </Button>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             )}
           </AnimatePresence>
 
@@ -371,15 +360,14 @@ export default function AINFTGenerator() {
                       <p className="text-xs font-medium truncate">{example.prompt}</p>
                       <p className="text-[10px] text-muted-foreground capitalize">{example.style}</p>
                     </div>
-                  </GlassCard>
-                ))}
+))}
               </div>
             </motion.div>
           )}
         </div>
-      </main>
 
       
+    </main>
     </div>
-  );
+);
 }

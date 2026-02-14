@@ -172,8 +172,7 @@ export default function GuardianAIRegistry() {
                 ))}
               </div>
             </div>
-          </GlassCard>
-        </motion.section>
+</motion.section>
 
         {/* Registry Stats */}
         <motion.section
@@ -186,26 +185,22 @@ export default function GuardianAIRegistry() {
             <GlassCard className="p-4 text-center">
               <div className="text-2xl font-bold text-cyan-400">{filteredAgents.length}</div>
               <div className="text-sm text-slate-400">Certified Agents</div>
-            </GlassCard>
-            <GlassCard className="p-4 text-center">
+<GlassCard className="p-4 text-center">
               <div className="text-2xl font-bold text-green-400">
                 {filteredAgents.filter((a: any) => a.overallTrustScore >= 80).length}
               </div>
               <div className="text-sm text-slate-400">High Trust Score</div>
-            </GlassCard>
-            <GlassCard className="p-4 text-center">
+<GlassCard className="p-4 text-center">
               <div className="text-2xl font-bold text-purple-400">
                 {filteredAgents.filter((a: any) => a.certificationTier === 'enterprise').length}
               </div>
               <div className="text-sm text-slate-400">Enterprise Tier</div>
-            </GlassCard>
-            <GlassCard className="p-4 text-center">
+<GlassCard className="p-4 text-center">
               <div className="text-2xl font-bold text-pink-400">
                 {new Set(filteredAgents.map((a: any) => a.chainDeployed)).size}
               </div>
               <div className="text-sm text-slate-400">Chains Covered</div>
-            </GlassCard>
-          </div>
+</div>
         </motion.section>
 
         {/* Agent Cards */}
@@ -221,8 +216,7 @@ export default function GuardianAIRegistry() {
                   <div className="h-12 bg-slate-700 rounded mb-4" />
                   <div className="h-4 bg-slate-700 rounded w-3/4 mb-2" />
                   <div className="h-4 bg-slate-700 rounded w-1/2" />
-                </GlassCard>
-              ))}
+))}
             </div>
           ) : filteredAgents.length === 0 ? (
             <GlassCard className="p-12 text-center">
@@ -236,8 +230,7 @@ export default function GuardianAIRegistry() {
                   Submit Your Agent
                 </Button>
               </Link>
-            </GlassCard>
-          ) : (
+) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredAgents.map((agent: any) => {
                 const TypeIcon = AGENT_TYPE_ICONS[agent.agentType] || Bot;
@@ -324,8 +317,7 @@ export default function GuardianAIRegistry() {
                         Visit Website
                       </a>
                     )}
-                  </GlassCard>
-                );
+);
               })}
             </div>
           )}
@@ -378,12 +370,10 @@ export default function GuardianAIRegistry() {
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </GlassCard>
-        </motion.section>
-      </main>
+</motion.section>
       
       
+    </div>
+    </div>
   );
 }

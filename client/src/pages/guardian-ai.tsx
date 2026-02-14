@@ -1005,12 +1005,19 @@ export default function GuardianAI() {
                 <Lock className="w-3 h-3" />
                 Secure payment powered by Stripe
               </p>
-            </div>
-          </motion.div>
-        </div>
       )}
       
       
     </div>
+</Input>
+</motion.div>
+    </div>
+    </div>
+</Input>
+    </p>
+    </motion.div>
+    </section>
+    </Badge>
+    </motion.div>
   );
 }

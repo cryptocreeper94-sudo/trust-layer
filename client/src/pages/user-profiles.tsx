@@ -175,29 +175,24 @@ export default function UserProfiles() {
                 </div>
                 <Progress value={(profile.xp / profile.xpToNext) * 100} className="h-2" />
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             <GlassCard hover={false} className="p-3">
               <div className="text-[10px] text-muted-foreground mb-1">Portfolio Value</div>
               <div className="text-xl font-bold">${profile.stats.totalValue.toLocaleString()}</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="text-[10px] text-muted-foreground mb-1">Total P/L</div>
               <div className="text-xl font-bold text-green-400">
                 +${profile.stats.pnl.toLocaleString()} ({profile.stats.pnlPercent}%)
               </div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="text-[10px] text-muted-foreground mb-1">Total Trades</div>
               <div className="text-xl font-bold">{profile.stats.trades}</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="text-[10px] text-muted-foreground mb-1">Win Rate</div>
               <div className="text-xl font-bold">{profile.stats.winRate}%</div>
-            </GlassCard>
-          </div>
+</div>
 
           <Tabs defaultValue="portfolio">
             <TabsList className="w-full grid grid-cols-4">
@@ -235,9 +230,7 @@ export default function UserProfiles() {
                       ))}
                     </div>
                   </div>
-                </GlassCard>
-
-                <GlassCard className="p-4">
+<GlassCard className="p-4">
                   <h3 className="font-bold mb-4">Portfolio History</h3>
                   <div className="h-40">
                     <ResponsiveContainer width="100%" height="100%">
@@ -252,8 +245,7 @@ export default function UserProfiles() {
                       </AreaChart>
                     </ResponsiveContainer>
                   </div>
-                </GlassCard>
-              </div>
+</div>
             </TabsContent>
 
             <TabsContent value="activity" className="mt-4">
@@ -278,8 +270,7 @@ export default function UserProfiles() {
                     </motion.div>
                   ))}
                 </div>
-              </GlassCard>
-            </TabsContent>
+</TabsContent>
 
             <TabsContent value="achievements" className="mt-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -305,8 +296,7 @@ export default function UserProfiles() {
                       </div>
                       <Progress value={achievement.progress} className="h-1.5" />
                       <p className="text-[10px] text-muted-foreground mt-1">{achievement.progress}% complete</p>
-                    </GlassCard>
-                  </motion.div>
+</motion.div>
                 ))}
               </div>
             </TabsContent>
@@ -318,8 +308,7 @@ export default function UserProfiles() {
                 <Link href="/nft-gallery">
                   <Button variant="outline" className="mt-4">View Gallery</Button>
                 </Link>
-              </GlassCard>
-            </TabsContent>
+</TabsContent>
           </Tabs>
         </div>
       </main>

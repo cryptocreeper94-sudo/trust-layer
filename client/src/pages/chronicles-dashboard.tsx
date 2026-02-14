@@ -231,9 +231,7 @@ export default function ChroniclesDashboard() {
               </span>
             ))}
           </div>
-        </GlassCard>
-
-        <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-6" data-testid="character-stats">
+<div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-6" data-testid="character-stats">
           <StatRing value={stats.wisdom} max={100} label="Wisdom" icon={Brain} color="text-blue-400" />
           <StatRing value={stats.courage} max={100} label="Courage" icon={Shield} color="text-red-400" />
           <StatRing value={stats.compassion} max={100} label="Heart" icon={Heart} color="text-pink-400" />
@@ -249,8 +247,7 @@ export default function ChroniclesDashboard() {
                   <action.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${action.color} mb-1.5`} />
                   <h3 className="text-white font-semibold text-xs sm:text-sm">{action.label}</h3>
                   <p className="text-[10px] sm:text-xs text-gray-500 mt-0.5">{action.desc}</p>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             </Link>
           ))}
         </div>
@@ -281,9 +278,7 @@ export default function ChroniclesDashboard() {
                 Explore Communities <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             </Link>
-          </GlassCard>
-
-          <GlassCard className="p-4" data-testid="life-timeline">
+<GlassCard className="p-4" data-testid="life-timeline">
             <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
               <Clock className="w-4 h-4 text-cyan-400" /> Your Story So Far
             </h3>
@@ -292,8 +287,7 @@ export default function ChroniclesDashboard() {
                 <LifeTimelineEvent key={i} event={event} index={i} />
               ))}
             </div>
-          </GlassCard>
-        </div>
+</div>
 
         <GlassCard className="p-4 mt-4" data-testid="world-status">
           <div className="flex items-center gap-2 mb-3">
@@ -320,8 +314,7 @@ export default function ChroniclesDashboard() {
           <p className="text-xs text-gray-500 mt-3 italic text-center">
             The world is running right now. NPCs are making decisions. Factions are shifting. Time never stops.
           </p>
-        </GlassCard>
-      </div>
+</div>
     </div>
   );
 }

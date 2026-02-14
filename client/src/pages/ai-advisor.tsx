@@ -72,8 +72,7 @@ export default function AIAdvisor() {
                 Connect Wallet to Analyze
               </Button>
             </Link>
-          </GlassCard>
-        </main>
+</main>
 
         
       </div>
@@ -176,9 +175,7 @@ export default function AIAdvisor() {
                   <><Sparkles className="w-4 h-4 mr-2" /> Analyze My Portfolio</>
                 )}
               </Button>
-            </GlassCard>
-
-            <GlassCard className="p-4">
+<GlassCard className="p-4">
               <h3 className="font-bold mb-4 flex items-center gap-2">
                 <Sparkles className="w-4 h-4 text-amber-400" />
                 AI Recommendations
@@ -223,8 +220,7 @@ export default function AIAdvisor() {
                   </motion.div>
                 )}
               </AnimatePresence>
-            </GlassCard>
-          </div>
+</div>
 
           <GlassCard className="p-4">
             <h3 className="font-bold mb-4 flex items-center gap-2">
@@ -257,11 +253,10 @@ export default function AIAdvisor() {
                 </Button>
               ))}
             </div>
-          </GlassCard>
-        </div>
-      </main>
+</div>
 
       
+    </main>
     </div>
-  );
+);
 }

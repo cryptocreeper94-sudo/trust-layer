@@ -72,8 +72,7 @@ export default function StudioDocs() {
                   </ul>
                 </div>
               </div>
-            </GlassCard>
-          </section>
+</section>
 
           <section id="creating-project" className="pt-6">
             <h3 className="text-2xl font-bold text-white mb-4">Creating Your First Project</h3>
@@ -120,29 +119,25 @@ export default function StudioDocs() {
                   <span className="text-white font-medium">Left Sidebar - File Explorer</span>
                 </div>
                 <p className="text-white/60 text-sm">Browse, create, rename, and delete files and folders in your project</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <div className="flex items-center gap-3 mb-2">
                   <Code className="w-5 h-5 text-cyan-400" />
                   <span className="text-white font-medium">Center - Code Editor</span>
                 </div>
                 <p className="text-white/60 text-sm">Write code with syntax highlighting, autocomplete, and error detection</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <div className="flex items-center gap-3 mb-2">
                   <Sparkles className="w-5 h-5 text-pink-400" />
                   <span className="text-white font-medium">Right Sidebar - AI Assistant</span>
                 </div>
                 <p className="text-white/60 text-sm">Ask questions, get code suggestions, and debug with AI help</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <div className="flex items-center gap-3 mb-2">
                   <Terminal className="w-5 h-5 text-green-400" />
                   <span className="text-white font-medium">Bottom Panel - Terminal</span>
                 </div>
                 <p className="text-white/60 text-sm">Run commands, install packages, and see output from your programs</p>
-              </GlassCard>
-            </div>
+</div>
           </section>
         </div>
       ),
@@ -195,20 +190,16 @@ export default function StudioDocs() {
               <GlassCard className="p-4">
                 <p className="text-white font-medium mb-2">Syntax Highlighting</p>
                 <p className="text-white/60 text-sm">Code is color-coded based on language - keywords, strings, functions, and comments all have distinct colors for easy reading</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <p className="text-white font-medium mb-2">IntelliSense Autocomplete</p>
                 <p className="text-white/60 text-sm">As you type, suggestions appear for functions, variables, and properties. Press Tab or Enter to accept a suggestion</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <p className="text-white font-medium mb-2">Error Detection</p>
                 <p className="text-white/60 text-sm">Red squiggly lines appear under syntax errors. Hover over them to see what's wrong and how to fix it</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <p className="text-white font-medium mb-2">Code Folding</p>
                 <p className="text-white/60 text-sm">Click the arrows in the gutter to collapse/expand code blocks. Great for navigating large files</p>
-              </GlassCard>
-            </div>
+</div>
           </section>
 
           <section id="multi-file" className="pt-6">
@@ -256,16 +247,13 @@ export default function StudioDocs() {
                     <Keyboard className="w-3 h-3 mr-1" /> Ctrl+N
                   </Badge>
                 </div>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <p className="text-white font-medium mb-2">New Folder</p>
                 <p className="text-white/60 text-sm mb-2">Click the folder+ icon in the file explorer header, or right-click and select "New Folder"</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <p className="text-white font-medium mb-2">Rename</p>
                 <p className="text-white/60 text-sm mb-2">Right-click any file or folder and select "Rename", or select it and press F2</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <p className="text-white font-medium mb-2">Delete</p>
                 <p className="text-white/60 text-sm">Right-click and select "Delete". You'll be asked to confirm before deletion</p>
                 <div className="mt-2 p-2 bg-red-500/10 rounded border border-red-500/20">
@@ -274,8 +262,7 @@ export default function StudioDocs() {
                     Deletion is permanent - make sure you want to delete!
                   </p>
                 </div>
-              </GlassCard>
-            </div>
+</div>
           </section>
 
           <section id="organizing" className="pt-6">
@@ -319,8 +306,7 @@ export default function StudioDocs() {
                 Think of it as a text-based way to talk to your computer. Instead of clicking buttons, 
                 you type commands. It's faster once you learn the basics!
               </p>
-            </GlassCard>
-          </section>
+</section>
 
           <section id="common-commands" className="pt-6">
             <h3 className="text-2xl font-bold text-white mb-4">Common Commands</h3>
@@ -331,36 +317,31 @@ export default function StudioDocs() {
                   <Badge variant="outline" className="text-xs">Node.js</Badge>
                 </div>
                 <p className="text-white/60 text-sm">Install all project dependencies listed in package.json</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <code className="text-cyan-400 font-mono">npm run dev</code>
                   <Badge variant="outline" className="text-xs">Node.js</Badge>
                 </div>
                 <p className="text-white/60 text-sm">Start your development server to preview your app</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <code className="text-cyan-400 font-mono">python main.py</code>
                   <Badge variant="outline" className="text-xs">Python</Badge>
                 </div>
                 <p className="text-white/60 text-sm">Run a Python script</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <code className="text-cyan-400 font-mono">pip install package-name</code>
                   <Badge variant="outline" className="text-xs">Python</Badge>
                 </div>
                 <p className="text-white/60 text-sm">Install a Python package</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <div className="flex items-center justify-between mb-2">
                   <code className="text-cyan-400 font-mono">git status</code>
                   <Badge variant="outline" className="text-xs">Git</Badge>
                 </div>
                 <p className="text-white/60 text-sm">See what files have changed</p>
-              </GlassCard>
-            </div>
+</div>
           </section>
         </div>
       ),
@@ -386,20 +367,16 @@ export default function StudioDocs() {
               <GlassCard className="p-4">
                 <p className="text-white font-medium mb-2">Ask Questions</p>
                 <p className="text-white/60 text-sm">"How do I create a button in React?"</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <p className="text-white font-medium mb-2">Debug Errors</p>
                 <p className="text-white/60 text-sm">"Why am I getting 'undefined is not a function'?"</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <p className="text-white font-medium mb-2">Generate Code</p>
                 <p className="text-white/60 text-sm">"Write a function to validate an email address"</p>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <p className="text-white font-medium mb-2">Explain Code</p>
                 <p className="text-white/60 text-sm">"What does this regex do: /^[a-z]+$/i"</p>
-              </GlassCard>
-            </div>
+</div>
           </section>
 
           <section id="ai-tips" className="pt-6">
@@ -446,8 +423,7 @@ export default function StudioDocs() {
                   <span className="text-white/60">Code generation: ~5 credits</span>
                 </div>
               </div>
-            </GlassCard>
-          </section>
+</section>
         </div>
       ),
     },
@@ -475,8 +451,7 @@ export default function StudioDocs() {
                 <li>• Work with others without overwriting each other's code</li>
                 <li>• Experiment safely - you can always go back</li>
               </ul>
-            </GlassCard>
-          </section>
+</section>
 
           <section id="git-basics" className="pt-6">
             <h3 className="text-2xl font-bold text-white mb-4">Basic Git Workflow</h3>
@@ -537,8 +512,7 @@ export default function StudioDocs() {
                 <li>• Your app runs even when you're not online</li>
                 <li>• Automatic updates when you deploy new versions</li>
               </ul>
-            </GlassCard>
-          </section>
+</section>
 
           <section id="deploy-how" className="pt-6">
             <h3 className="text-2xl font-bold text-white mb-4">How to Deploy</h3>
@@ -702,8 +676,7 @@ export default function StudioDocs() {
                     <Badge className="mt-2 bg-green-500/20 text-green-400 border-green-500/30">Beginner Friendly</Badge>
                   </div>
                 </div>
-              </GlassCard>
-              <GlassCard className="p-4 hover:border-cyan-500/30 transition-colors">
+<GlassCard className="p-4 hover:border-cyan-500/30 transition-colors">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center flex-shrink-0">
                     <BookOpen className="w-6 h-6 text-white" />
@@ -719,8 +692,7 @@ export default function StudioDocs() {
                     <Badge className="mt-2 bg-blue-500/20 text-blue-400 border-blue-500/30">Full Stack</Badge>
                   </div>
                 </div>
-              </GlassCard>
-              <GlassCard className="p-4 hover:border-cyan-500/30 transition-colors">
+<GlassCard className="p-4 hover:border-cyan-500/30 transition-colors">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center flex-shrink-0">
                     <Zap className="w-6 h-6 text-white" />
@@ -736,8 +708,7 @@ export default function StudioDocs() {
                     <Badge className="mt-2 bg-yellow-500/20 text-yellow-400 border-yellow-500/30">JavaScript Deep Dive</Badge>
                   </div>
                 </div>
-              </GlassCard>
-              <GlassCard className="p-4 hover:border-cyan-500/30 transition-colors">
+<GlassCard className="p-4 hover:border-cyan-500/30 transition-colors">
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center flex-shrink-0">
                     <Terminal className="w-6 h-6 text-white" />
@@ -753,8 +724,7 @@ export default function StudioDocs() {
                     <Badge className="mt-2 bg-purple-500/20 text-purple-400 border-purple-500/30">Interactive</Badge>
                   </div>
                 </div>
-              </GlassCard>
-            </div>
+</div>
           </section>
 
           <section id="recommended-reading" className="pt-6">
@@ -769,29 +739,25 @@ export default function StudioDocs() {
                 <a href="https://eloquentjavascript.net" target="_blank" rel="noopener noreferrer" className="text-cyan-400 text-sm hover:underline mt-2 inline-block">
                   Read free online →
                 </a>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <p className="text-white font-medium">"You Don't Know JS" by Kyle Simpson</p>
                 <p className="text-white/60 text-sm mt-1">A deep dive into JavaScript mechanics. Perfect for intermediate developers wanting to level up.</p>
                 <a href="https://github.com/getify/You-Dont-Know-JS" target="_blank" rel="noopener noreferrer" className="text-cyan-400 text-sm hover:underline mt-2 inline-block">
                   Read on GitHub →
                 </a>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <p className="text-white font-medium">"The Missing Semester of Your CS Education" - MIT</p>
                 <p className="text-white/60 text-sm mt-1">Learn essential developer tools: command line, Git, debugging, and more. Skills every developer needs.</p>
                 <a href="https://missing.csail.mit.edu" target="_blank" rel="noopener noreferrer" className="text-cyan-400 text-sm hover:underline mt-2 inline-block">
                   View course →
                 </a>
-              </GlassCard>
-              <GlassCard className="p-4">
+<GlassCard className="p-4">
                 <p className="text-white font-medium">"React Documentation"</p>
                 <p className="text-white/60 text-sm mt-1">The official React docs are excellent. Interactive tutorials and in-depth guides from the React team.</p>
                 <a href="https://react.dev/learn" target="_blank" rel="noopener noreferrer" className="text-cyan-400 text-sm hover:underline mt-2 inline-block">
                   Start learning React →
                 </a>
-              </GlassCard>
-            </div>
+</div>
           </section>
 
           <section id="practice-projects" className="pt-6">
@@ -807,48 +773,42 @@ export default function StudioDocs() {
                 </div>
                 <p className="text-white font-medium">Todo List App</p>
                 <p className="text-white/60 text-sm mt-1">Add, complete, and delete tasks. Learn state management basics.</p>
-              </GlassCard>
-              <GlassCard className="p-4 bg-gradient-to-br from-cyan-500/10 to-transparent">
+<GlassCard className="p-4 bg-gradient-to-br from-cyan-500/10 to-transparent">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-green-500"></div>
                   <span className="text-green-400 text-xs font-medium">BEGINNER</span>
                 </div>
                 <p className="text-white font-medium">Weather App</p>
                 <p className="text-white/60 text-sm mt-1">Fetch data from an API and display it beautifully.</p>
-              </GlassCard>
-              <GlassCard className="p-4 bg-gradient-to-br from-yellow-500/10 to-transparent">
+<GlassCard className="p-4 bg-gradient-to-br from-yellow-500/10 to-transparent">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
                   <span className="text-yellow-400 text-xs font-medium">INTERMEDIATE</span>
                 </div>
                 <p className="text-white font-medium">Blog Platform</p>
                 <p className="text-white/60 text-sm mt-1">Create, edit, and display blog posts with a database backend.</p>
-              </GlassCard>
-              <GlassCard className="p-4 bg-gradient-to-br from-yellow-500/10 to-transparent">
+<GlassCard className="p-4 bg-gradient-to-br from-yellow-500/10 to-transparent">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
                   <span className="text-yellow-400 text-xs font-medium">INTERMEDIATE</span>
                 </div>
                 <p className="text-white font-medium">E-commerce Store</p>
                 <p className="text-white/60 text-sm mt-1">Product listings, cart, and checkout flow with payments.</p>
-              </GlassCard>
-              <GlassCard className="p-4 bg-gradient-to-br from-purple-500/10 to-transparent">
+<GlassCard className="p-4 bg-gradient-to-br from-purple-500/10 to-transparent">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-purple-500"></div>
                   <span className="text-purple-400 text-xs font-medium">ADVANCED</span>
                 </div>
                 <p className="text-white font-medium">Real-time Chat App</p>
                 <p className="text-white/60 text-sm mt-1">WebSocket connections, user authentication, message history.</p>
-              </GlassCard>
-              <GlassCard className="p-4 bg-gradient-to-br from-purple-500/10 to-transparent">
+<GlassCard className="p-4 bg-gradient-to-br from-purple-500/10 to-transparent">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-2 h-2 rounded-full bg-purple-500"></div>
                   <span className="text-purple-400 text-xs font-medium">ADVANCED</span>
                 </div>
                 <p className="text-white font-medium">AI-Powered Tool</p>
                 <p className="text-white/60 text-sm mt-1">Integrate OpenAI API to build something intelligent.</p>
-              </GlassCard>
-            </div>
+</div>
 
             <GlassCard className="mt-6 p-4 bg-cyan-500/10 border-cyan-500/30">
               <div className="flex items-start gap-3">
@@ -861,8 +821,7 @@ export default function StudioDocs() {
                   </p>
                 </div>
               </div>
-            </GlassCard>
-          </section>
+</section>
         </div>
       ),
     },
@@ -984,8 +943,7 @@ export default function StudioDocs() {
                   </Button>
                 </Link>
               </div>
-            </GlassCard>
-          </motion.aside>
+</motion.aside>
 
           <motion.main
             initial={{ opacity: 0, y: 20 }}
@@ -994,9 +952,7 @@ export default function StudioDocs() {
           >
             <GlassCard className="p-6 sm:p-8" glow>
               {sections.find((s) => s.id === activeSection)?.content}
-            </GlassCard>
-
-            <div className="mt-8 flex items-center justify-between">
+<div className="mt-8 flex items-center justify-between">
               <div className="flex gap-2">
                 {sections.map((section, idx) => (
                   <button
@@ -1052,5 +1008,6 @@ export default function StudioDocs() {
         </div>
       </div>
     </div>
+    </button>
   );
 }

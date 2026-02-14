@@ -168,8 +168,7 @@ export default function NftCreator() {
                     </Button>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           )}
 
           {step === 2 && (
@@ -231,8 +230,7 @@ export default function NftCreator() {
                     </Button>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           )}
 
           {step === 3 && (
@@ -290,8 +288,7 @@ export default function NftCreator() {
                     </Button>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           )}
 
           {step === 4 && (
@@ -318,12 +315,14 @@ export default function NftCreator() {
                     </Button>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           )}
         </div>
       </main>
       
     </div>
+</Input>
+</Input>
+</Input>
   );
 }

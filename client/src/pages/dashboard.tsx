@@ -168,9 +168,7 @@ export default function Dashboard() {
                 />
               )}
             </div>
-          </GlassCard>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <Link href="/member-portal">
               <GlassCard glow className="p-5 cursor-pointer hover:border-cyan-500/30 transition-all group h-full">
                 <div className="flex items-center gap-3 mb-3">
@@ -184,8 +182,7 @@ export default function Dashboard() {
                   <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-cyan-400 transition-colors" />
                 </div>
                 <p className="text-sm text-white/50">Manage connections, view activity, track reputation</p>
-              </GlassCard>
-            </Link>
+</Link>
             
             <Link href="/business-portal">
               <GlassCard glow className="p-5 cursor-pointer hover:border-purple-500/30 transition-all group h-full">
@@ -200,8 +197,7 @@ export default function Dashboard() {
                   <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-purple-400 transition-colors" />
                 </div>
                 <p className="text-sm text-white/50">API keys, webhooks, team management</p>
-              </GlassCard>
-            </Link>
+</Link>
             
             <Link href="/membership-charter">
               <GlassCard glow className="p-5 cursor-pointer hover:border-amber-500/30 transition-all group h-full">
@@ -216,8 +212,7 @@ export default function Dashboard() {
                   <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-amber-400 transition-colors" />
                 </div>
                 <p className="text-sm text-white/50">Mission, values, tiers & pricing</p>
-              </GlassCard>
-            </Link>
+</Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
@@ -250,9 +245,7 @@ export default function Dashboard() {
                   </>
                 )}
               </div>
-            </GlassCard>
-
-            <GlassCard glow>
+<GlassCard glow>
               <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-4">
                   <Activity className="w-5 h-5 text-green-400 shrink-0" />
@@ -264,9 +257,7 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-
-            <GlassCard glow className="sm:col-span-2">
+<GlassCard glow className="sm:col-span-2">
               <div className="p-4 sm:p-5">
                 <div className="flex items-center gap-2 mb-4">
                   <Code className="w-5 h-5 text-secondary shrink-0" />
@@ -299,9 +290,7 @@ export default function Dashboard() {
                   </Link>
                 </div>
               </div>
-            </GlassCard>
-
-            <PasskeyManager />
+<PasskeyManager />
 
             <ReferralCalculator />
 
@@ -332,12 +321,11 @@ export default function Dashboard() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-          </div>
+</div>
         </div>
-      </main>
 
       
+    </main>
     </div>
-  );
+);
 }

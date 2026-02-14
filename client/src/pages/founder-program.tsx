@@ -165,8 +165,7 @@ export default function FounderProgram() {
             <GlassCard key={i} className="text-center py-4">
               <div className="text-3xl md:text-4xl font-bold text-primary">{String(item.value).padStart(2, "0")}</div>
               <div className="text-xs text-muted-foreground uppercase tracking-wider">{item.label}</div>
-            </GlassCard>
-          ))}
+))}
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
@@ -210,9 +209,7 @@ export default function FounderProgram() {
               <Users className="w-4 h-4" />
               <span><strong className="text-white">{spotsRemaining.toLocaleString()}</strong> spots remaining</span>
             </div>
-          </GlassCard>
-
-          <div className="space-y-6">
+<div className="space-y-6">
             <GlassCard className="p-6">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <Wallet className="w-5 h-5 text-primary" />
@@ -230,9 +227,7 @@ export default function FounderProgram() {
                   </div>
                 </div>
               )}
-            </GlassCard>
-
-            <GlassCard className="p-6">
+<GlassCard className="p-6">
               <h3 className="text-lg font-semibold text-white mb-4">Your Email</h3>
               <Input
                 type="email"
@@ -269,15 +264,12 @@ export default function FounderProgram() {
               <p className="text-xs text-muted-foreground mt-4 text-center">
                 Secure payment powered by Stripe &amp; Coinbase Commerce
               </p>
-            </GlassCard>
-
-            <GlassCard className="p-4">
+<GlassCard className="p-4">
               <div className="flex items-center gap-3 text-sm">
                 <Shield className="w-5 h-5 text-green-400" />
                 <span className="text-muted-foreground">256-bit SSL encryption. No recurring charges.</span>
               </div>
-            </GlassCard>
-          </div>
+</div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 mb-12">
@@ -292,8 +284,7 @@ export default function FounderProgram() {
               </div>
               <h3 className="font-semibold text-white mb-2">{item.title}</h3>
               <p className="text-sm text-muted-foreground">{item.desc}</p>
-            </GlassCard>
-          ))}
+))}
         </div>
 
         <GlassCard className="p-6 text-center max-w-2xl mx-auto">
@@ -302,10 +293,9 @@ export default function FounderProgram() {
             This program closes at mainnet launch. After that, regular pricing begins.
             Don't miss your chance to lock in lifetime access and receive 35,000 Signal.
           </p>
-        </GlassCard>
-      </main>
+</main>
 
       
     </div>
-  );
+);
 }

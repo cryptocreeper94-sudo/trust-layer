@@ -245,8 +245,7 @@ export default function InvestorPitch() {
                       <span className="text-xs text-emerald-400">Live</span>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
 
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -267,8 +266,7 @@ export default function InvestorPitch() {
                       <span className="text-xs text-purple-400">BFT Consensus</span>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
 
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -289,8 +287,7 @@ export default function InvestorPitch() {
                       <span className="text-xs text-cyan-400">67% Quorum</span>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
 
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -311,8 +308,7 @@ export default function InvestorPitch() {
                       <span className="text-xs text-amber-400">Since Feb 2025</span>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             </div>
 
             <motion.div
@@ -379,8 +375,7 @@ export default function InvestorPitch() {
                       
                       <div className={`absolute -bottom-6 -right-6 w-24 h-24 bg-gradient-to-br ${thesis.gradient} rounded-full opacity-10 blur-2xl`} />
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </div>
@@ -429,8 +424,7 @@ export default function InvestorPitch() {
                         <div className="text-sm text-white/50">{item.label}</div>
                       </div>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
 
@@ -457,8 +451,7 @@ export default function InvestorPitch() {
                     </div>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
         </section>
 
@@ -511,8 +504,7 @@ export default function InvestorPitch() {
                       <h4 className="font-bold text-white mb-1">{milestone.title}</h4>
                       <p className="text-sm text-white/50">{milestone.desc}</p>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </div>
@@ -558,8 +550,7 @@ export default function InvestorPitch() {
                       <h4 className="font-bold text-white mb-1">{item.role}</h4>
                       <p className="text-xs text-white/50">{item.desc}</p>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </div>
@@ -605,8 +596,7 @@ export default function InvestorPitch() {
                       <span className="text-emerald-400 font-medium"> no competitor has any of these.</span>
                     </p>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -624,8 +614,7 @@ export default function InvestorPitch() {
                       <span className="text-cyan-400 font-medium"> true horizontal scaling.</span>
                     </p>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -643,8 +632,7 @@ export default function InvestorPitch() {
                       <span className="text-purple-400 font-medium"> Chronicles launching at TGE.</span>
                     </p>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             </div>
           </div>
         </section>
@@ -687,8 +675,7 @@ export default function InvestorPitch() {
                     </div>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
         </section>
       </main>

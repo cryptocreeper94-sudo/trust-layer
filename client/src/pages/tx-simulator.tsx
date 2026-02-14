@@ -175,9 +175,7 @@ export default function TxSimulator() {
               {isSimulating && (
                 <Progress value={progress} className="mt-2 h-1" />
               )}
-            </GlassCard>
-
-            <AnimatePresence mode="wait">
+<AnimatePresence mode="wait">
               {result && (
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
@@ -276,8 +274,7 @@ export default function TxSimulator() {
                         {result.success ? "Execute Transaction" : "Cannot Execute"}
                       </Button>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               )}
 
               {!result && !isSimulating && (
@@ -305,15 +302,14 @@ export default function TxSimulator() {
                         Estimate gas costs
                       </div>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               )}
             </AnimatePresence>
           </div>
         </div>
-      </main>
 
       
+    </main>
     </div>
-  );
+);
 }

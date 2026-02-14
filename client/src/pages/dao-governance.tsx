@@ -162,8 +162,7 @@ function ProposalCard({ proposal }: { proposal: Proposal }) {
           </Button>
         </div>
       )}
-    </GlassCard>
-  );
+);
 }
 
 
@@ -213,20 +212,16 @@ export default function DAOGovernance() {
             <GlassCard hover={false} className="p-3">
               <div className="text-[10px] text-muted-foreground mb-1">Total Proposals</div>
               <div className="text-xl font-bold">{STATS.totalProposals}</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="text-[10px] text-muted-foreground mb-1">Active Now</div>
               <div className="text-xl font-bold text-blue-400">{STATS.activeProposals}</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="text-[10px] text-muted-foreground mb-1">Total Voters</div>
               <div className="text-xl font-bold">{STATS.totalVoters.toLocaleString()}</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="text-[10px] text-muted-foreground mb-1">Your Voting Power</div>
               <div className="text-xl font-bold text-primary">{STATS.votingPower.toLocaleString()}</div>
-            </GlassCard>
-          </div>
+</div>
 
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">

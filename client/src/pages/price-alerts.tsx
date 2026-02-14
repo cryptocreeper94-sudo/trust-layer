@@ -89,8 +89,7 @@ export default function PriceAlerts() {
                 Connect Wallet to Set Alerts
               </Button>
             </Link>
-          </GlassCard>
-        </main>
+</main>
 
         
       </div>
@@ -130,23 +129,19 @@ export default function PriceAlerts() {
               <Bell className="w-5 h-5 mx-auto mb-1 text-purple-400" />
               <p className="text-xl font-bold">{alerts.filter(a => a.active).length}</p>
               <p className="text-[10px] text-muted-foreground">Active Alerts</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
+<GlassCard hover={false} className="p-3 text-center">
               <CheckCircle2 className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
               <p className="text-xl font-bold">0</p>
               <p className="text-[10px] text-muted-foreground">Triggered Today</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
+<GlassCard hover={false} className="p-3 text-center">
               <Clock className="w-5 h-5 mx-auto mb-1 text-blue-400" />
               <p className="text-xl font-bold">24/7</p>
               <p className="text-[10px] text-muted-foreground">Monitoring</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
+<GlassCard hover={false} className="p-3 text-center">
               <Volume2 className="w-5 h-5 mx-auto mb-1 text-amber-400" />
               <p className="text-xl font-bold">3</p>
               <p className="text-[10px] text-muted-foreground">Channels</p>
-            </GlassCard>
-          </div>
+</div>
 
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-bold">Your Alerts</h2>
@@ -294,8 +289,7 @@ export default function PriceAlerts() {
                         </Button>
                       </div>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           ) : (
@@ -309,12 +303,11 @@ export default function PriceAlerts() {
                 <Plus className="w-4 h-4 mr-2" />
                 Create Alert
               </Button>
-            </GlassCard>
-          )}
+)}
         </div>
       </main>
 
       
     </div>
-  );
+);
 }

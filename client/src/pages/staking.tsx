@@ -328,8 +328,7 @@ export default function Staking() {
                     </motion.div>
                     <div className="text-[10px] md:text-xs text-white/50 uppercase tracking-wider mt-1 line-clamp-1">{stat.label}</div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </div>
@@ -428,8 +427,7 @@ export default function Staking() {
                           )}
                         </Button>
                       </div>
-                    </GlassCard>
-                  </motion.div>
+</motion.div>
                 ))}
               </div>
             </motion.div>
@@ -562,8 +560,7 @@ export default function Staking() {
                         )}
                       </Button>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           )}
@@ -632,8 +629,7 @@ export default function Staking() {
                     ))
                   )}
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
 
             {/* Quests */}
             <motion.div
@@ -679,8 +675,7 @@ export default function Staking() {
                           </div>
                         </div>
                       </div>
-                    </GlassCard>
-                  </motion.div>
+</motion.div>
                 ))}
               </div>
             </motion.div>
@@ -717,8 +712,7 @@ export default function Staking() {
                     <h3 className="font-display font-bold text-white mb-2">{feature.title}</h3>
                     <p className="text-xs text-muted-foreground">{feature.desc}</p>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </div>
@@ -781,7 +775,6 @@ export default function Staking() {
                 <p className="text-xs text-emerald-200">
                   <strong>Flexible staking</strong> - withdraw your coins anytime without penalties.
                 </p>
-              </div>
             )}
 
             <Button
@@ -807,16 +800,17 @@ export default function Staking() {
                 </>
               )}
             </Button>
-          </div>
         </DialogContent>
       </Dialog>
 
       <section className="py-8 bg-slate-950/50">
         <div className="container mx-auto px-4">
           <DYORDisclaimer variant="compact" />
-        </div>
-      </section>
 
     </div>
+    </section>
+    </div>
+    </div>
+</div>
   );
 }

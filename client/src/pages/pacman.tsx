@@ -667,9 +667,9 @@ export default function Pacman() {
                 Play Again
               </Button>
             </motion.div>
-          </motion.div>
         )}
       </AnimatePresence>
+    </motion.div>
     </div>
   );
 }

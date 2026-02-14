@@ -218,8 +218,7 @@ export default function SignalCore() {
                 </p>
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -258,8 +257,7 @@ export default function SignalCore() {
                       </p>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </motion.div>
@@ -297,8 +295,7 @@ export default function SignalCore() {
                       <span className="text-cyan-400">{seat.holder}</span>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
           
@@ -320,8 +317,7 @@ export default function SignalCore() {
                   </div>
                 ))}
               </div>
-            </GlassCard>
-          </div>
+</div>
         </motion.div>
 
         <motion.div
@@ -348,8 +344,7 @@ export default function SignalCore() {
                 </div>
               ))}
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -371,8 +366,7 @@ export default function SignalCore() {
               <Lock className="w-4 h-4" />
               <span>Permanent & Unchangeable — From Genesis Forward</span>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
       </div>
     </div>
   );

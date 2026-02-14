@@ -87,8 +87,7 @@ function TokenCard({ token }: { token: LaunchedToken }) {
           </div>
         </div>
       </div>
-    </GlassCard>
-  );
+);
 }
 
 const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
@@ -575,8 +574,7 @@ export default function Launchpad() {
                 <div className="flex items-center gap-1"><CheckCircle className="w-4 h-4 text-green-400" /> Anti-rug protection</div>
               </div>
             </div>
-          </GlassCard>
-        </div>
+</div>
 
       <AuthLoginModal 
         isOpen={authModalOpen} 
@@ -584,5 +582,11 @@ export default function Launchpad() {
         onSuccess={() => setCreateOpen(true)}
       />
     </div>
-  );
+</Input>
+</Input>
+</Input>
+</Input>
+</Input>
+    </AuthLoginModal>
+);
 }

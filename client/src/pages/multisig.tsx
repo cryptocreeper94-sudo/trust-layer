@@ -471,5 +471,5 @@ export default function MultiSigPage() {
         </Collapsible>
       </div>
     </div>
-  );
+);
 }

@@ -692,6 +692,6 @@ export default function ChronoExecutiveSummary() {
         </section>
       </main>
     </ChronoLayout>
-    </div>
+    </p>
   );
 }

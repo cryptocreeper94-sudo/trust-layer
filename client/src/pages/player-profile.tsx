@@ -707,5 +707,7 @@ export default function PlayerProfilePage() {
         }
       `}</style>
     </div>
-  );
+</TabButton>
+</TabButton>
+);
 }

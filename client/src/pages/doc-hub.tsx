@@ -173,14 +173,10 @@ export default function DocHub() {
                         </div>
                         <p className="text-[11px] text-white/50 line-clamp-3">{doc.content}</p>
                       </div>
-                    </motion.div>
                   ))}
-                </div>
               )}
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
+    </div>
+    </motion.div>
   );
 }

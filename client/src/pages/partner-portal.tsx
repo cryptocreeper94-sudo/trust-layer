@@ -1614,5 +1614,6 @@ export default function PartnerPortal() {
         </motion.div>
       )}
     </AnimatePresence>
+    </PasswordGate>
   );
 }

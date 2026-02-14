@@ -426,5 +426,7 @@ export default function DashboardPro() {
 
       
     </div>
+    </p>
+    </motion.div>
   );
 }

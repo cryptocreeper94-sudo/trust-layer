@@ -395,8 +395,7 @@ export default function Swap() {
                   </div>
                 )}
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <AnimatePresence>
             {selectingToken && (
@@ -508,8 +507,7 @@ export default function Swap() {
           </motion.div>
         </div>
       </div>
-
-      
+</Input>
     </div>
   );
 }

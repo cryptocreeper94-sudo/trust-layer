@@ -426,7 +426,5 @@ export default function RoadmapChronicles() {
         </Link>
       </div>
     </div>
-    </div>
-    </div>
-  );
+);
 }

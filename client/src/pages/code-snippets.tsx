@@ -328,8 +328,7 @@ export default function CodeSnippets() {
                 <pre className="p-4 bg-black/50 overflow-x-auto">
                   <code className="text-xs text-gray-300">{snippet.code}</code>
                 </pre>
-              </GlassCard>
-            ))}
+))}
 
             {filtered.length === 0 && (
               <div className="text-center py-12 text-muted-foreground">
@@ -344,5 +343,5 @@ export default function CodeSnippets() {
 
       
     </div>
-  );
+);
 }

@@ -101,8 +101,7 @@ function PoolCard({ pool, onAddLiquidity }: { pool: LiquidityPool; onAddLiquidit
             </Button>
           </div>
         </CollapsibleContent>
-      </GlassCard>
-    </Collapsible>
+</Collapsible>
   );
 }
 
@@ -148,8 +147,7 @@ function PositionCard({ position }: { position: Position }) {
           </Button>
         </div>
       </div>
-    </GlassCard>
-  );
+);
 }
 
 const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
@@ -269,29 +267,25 @@ export default function Liquidity() {
                 <div className="text-lg font-bold text-white/50">—</div>
                 <div className="text-[10px] text-muted-foreground">Total TVL</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-3 text-center">
                 <BarChart3 className="w-5 h-5 text-blue-400 mx-auto mb-1" />
                 <div className="text-lg font-bold text-white/50">—</div>
                 <div className="text-[10px] text-muted-foreground">24h Volume</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-3 text-center">
                 <Percent className="w-5 h-5 text-green-400 mx-auto mb-1" />
                 <div className="text-lg font-bold text-white/50">—</div>
                 <div className="text-[10px] text-muted-foreground">Avg APR</div>
               </div>
-            </GlassCard>
-            <GlassCard hover={false}>
+<GlassCard hover={false}>
               <div className="p-3 text-center">
                 <Droplets className="w-5 h-5 text-purple-400 mx-auto mb-1" />
                 <div className="text-lg font-bold text-white">{pools.length}</div>
                 <div className="text-[10px] text-muted-foreground">Active Pools</div>
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           <Tabs defaultValue="pools" className="w-full">
             <TabsList className="bg-white/5 border border-white/10 mb-6 w-full">
@@ -332,8 +326,7 @@ export default function Liquidity() {
                       <Plus className="w-4 h-4 mr-2" /> Add Liquidity
                     </Button>
                   </div>
-                </GlassCard>
-              )}
+)}
             </TabsContent>
           </Tabs>
         </div>
@@ -384,5 +377,7 @@ export default function Liquidity() {
         </DialogContent>
       </Dialog>
     </div>
+</Input>
+    </PoolCard>
   );
 }

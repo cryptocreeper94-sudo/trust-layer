@@ -333,13 +333,9 @@ export default function DevStudio() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-
-            <GlassCard>
+<GlassCard>
               <SystemHealthCarousel />
-            </GlassCard>
-
-            <GlassCard>
+<GlassCard>
               <div className="h-full p-4 flex flex-col">
                 <div className="flex items-center gap-2 mb-2">
                   <Terminal className="w-4 h-4 text-green-400" />
@@ -351,21 +347,15 @@ export default function DevStudio() {
                   <div className="text-cyan-400">✓ Deployed</div>
                 </div>
               </div>
-            </GlassCard>
-
-            <GlassCard>
+<GlassCard>
               <MiniCarousel />
-            </GlassCard>
-
-            <GlassCard>
+<GlassCard>
               <div className="h-full p-4 flex flex-col justify-center items-center text-center">
                 <Eye className="w-6 h-6 text-cyan-400 mb-2" />
                 <span className="text-xs font-bold text-white">Live Preview</span>
                 <span className="text-[10px] text-white/40 mt-1">Real-time updates</span>
               </div>
-            </GlassCard>
-
-            <GlassCard className="col-span-2">
+<GlassCard className="col-span-2">
               <div className="h-full p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <Brain className="w-4 h-4 text-purple-400" />
@@ -381,25 +371,19 @@ export default function DevStudio() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-
-            <GlassCard>
+<GlassCard>
               <div className="h-full p-4 flex flex-col justify-center">
                 <Cpu className="w-5 h-5 text-orange-400 mb-2" />
                 <div className="text-xl font-bold text-white">Unlimited</div>
                 <div className="text-[10px] text-white/40">Build minutes</div>
               </div>
-            </GlassCard>
-
-            <GlassCard>
+<GlassCard>
               <div className="h-full p-4 flex flex-col justify-center">
                 <Database className="w-5 h-5 text-blue-400 mb-2" />
                 <div className="text-xl font-bold text-white">10 GB</div>
                 <div className="text-[10px] text-white/40">Storage per project</div>
               </div>
-            </GlassCard>
-
-            {ideFeatures.map((feature, i) => (
+{ideFeatures.map((feature, i) => (
               <GlassCard key={i}>
                 <div className="h-full p-4 flex flex-col justify-center">
                   <feature.icon className={`w-5 h-5 mb-2 ${
@@ -408,8 +392,7 @@ export default function DevStudio() {
                   <div className="text-xs font-bold text-white">{feature.title}</div>
                   <div className="text-[10px] text-white/40 mt-0.5">{feature.desc}</div>
                 </div>
-              </GlassCard>
-            ))}
+))}
           </section>
 
           <section className="mt-8">
@@ -436,12 +419,11 @@ export default function DevStudio() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-          </section>
+</section>
         </div>
-      </main>
 
       
+    </main>
     </div>
-  );
+);
 }

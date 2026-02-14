@@ -690,14 +690,13 @@ export default function Spades() {
                   <div className="text-sm text-gray-400">Opponents</div>
                   <div className="text-2xl font-bold text-red-400">{gameState.team2Score}</div>
                 </div>
-              </div>
               <Button onClick={startNewGame} className="bg-white text-gray-900 hover:bg-gray-200">
                 Play Again
               </Button>
-            </motion.div>
-          </motion.div>
         )}
       </AnimatePresence>
     </div>
-  );
+    </motion.div>
+    </motion.div>
+);
 }

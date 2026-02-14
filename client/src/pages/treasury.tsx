@@ -233,8 +233,7 @@ export default function Treasury() {
                   </div>
                 ) : null}
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.section
             initial={{ opacity: 0, y: 20 }}
@@ -278,8 +277,7 @@ export default function Treasury() {
                           {alloc.description}
                         </p>
                       </div>
-                    </GlassCard>
-                  </motion.div>
+</motion.div>
                 );
               })}
             </div>
@@ -318,8 +316,7 @@ export default function Treasury() {
                         <div className={`text-xl font-bold ${colors.text} mb-1`}>{fee.fee}</div>
                         <div className="text-xs text-muted-foreground">{fee.source}</div>
                       </div>
-                    </GlassCard>
-                  </motion.div>
+</motion.div>
                 );
               })}
             </div>
@@ -351,8 +348,7 @@ export default function Treasury() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-          </motion.section>
+</motion.section>
 
           <motion.div
             initial={{ opacity: 0 }}
@@ -436,9 +432,7 @@ export default function Treasury() {
                     )}
                   </form>
                 </div>
-              </GlassCard>
-
-              {lastTx && (
+{lastTx && (
                 <GlassCard>
                   <div className="p-5">
                     <h3 className="text-sm font-bold text-green-400 mb-3 flex items-center gap-2">
@@ -461,17 +455,14 @@ export default function Treasury() {
                       <div className="flex justify-between">
                         <span className="text-white/40">New Balance</span>
                         <span className="text-white">{lastTx.new_treasury_balance}</span>
-                      </div>
-                    </div>
-                  </div>
-                </GlassCard>
-              )}
-            </motion.div>
+)}
           )}
-        </div>
-      </main>
 
       
     </div>
+    </div>
+    </div>
+</Input>
+    </motion.div>
   );
 }

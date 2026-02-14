@@ -426,13 +426,13 @@ export default function ChronoTeam() {
                     Executive Summary
                   </Button>
                 </Link>
-              </div>
-            </div>
           </HoloCard>
-        </div>
-      </section>
       
       <style>{chronoStyles}</style>
     </ChronoLayout>
+    </div>
+    </div>
+    </div>
+    </section>
   );
 }

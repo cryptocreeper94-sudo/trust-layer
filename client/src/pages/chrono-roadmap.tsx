@@ -327,12 +327,8 @@ export default function ChronoRoadmap() {
                   <Icon className="w-10 h-10 text-purple-400 mb-4" />
                   <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
                   <p className="text-white/60">{item.description}</p>
-                </motion.div>
               );
             })}
-          </div>
-        </div>
-      </section>
 
       <CTABanner
         title="Help Us Get There Faster"
@@ -346,5 +342,6 @@ export default function ChronoRoadmap() {
       
       <style>{chronoStyles}</style>
     </ChronoLayout>
+    </motion.div>
   );
 }

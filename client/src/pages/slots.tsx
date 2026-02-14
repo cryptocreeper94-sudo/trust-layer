@@ -803,8 +803,6 @@ export default function Slots() {
                 >
                   Close
                 </Button>
-              </motion.div>
-            </motion.div>
           )}
         </AnimatePresence>
 
@@ -815,8 +813,8 @@ export default function Slots() {
           <a href="/daily-bonus" className="hover:text-white transition-colors">Daily Bonus</a>
           <span>•</span>
           <a href="/sweepstakes-rules" className="hover:text-white transition-colors">Rules</a>
-        </div>
-      </div>
     </div>
+</motion.div>
+    </motion.div>
   );
 }

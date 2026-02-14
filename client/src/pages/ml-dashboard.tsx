@@ -162,8 +162,7 @@ export default function MLDashboard() {
                   <div className="mt-2 text-xs text-gray-500">
                     {stats.overview.pendingResolution} pending resolution
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -184,8 +183,7 @@ export default function MLDashboard() {
                   <div className="mt-2 text-xs text-gray-500">
                     {stats.overview.totalResolved} resolved predictions
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -206,8 +204,7 @@ export default function MLDashboard() {
                   <div className="mt-2 text-xs text-gray-500">
                     Per resolved prediction
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -228,8 +225,7 @@ export default function MLDashboard() {
                   <div className="mt-2 text-xs text-gray-500">
                     Awaiting resolution
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -279,8 +275,7 @@ export default function MLDashboard() {
                       </div>
                     )}
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
 
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
@@ -354,8 +349,7 @@ export default function MLDashboard() {
                       </span>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             </div>
 
             <motion.div
@@ -412,8 +406,7 @@ export default function MLDashboard() {
                     No token performance data available yet. Make predictions to see analytics.
                   </div>
                 )}
-              </GlassCard>
-            </motion.div>
+</motion.div>
 
             <motion.div
               initial={{ opacity: 0 }}

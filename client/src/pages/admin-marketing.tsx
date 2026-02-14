@@ -558,11 +558,7 @@ export default function AdminMarketing() {
                   <span>Discord</span>
                   <span className="text-cyan-400">2,000 chars</span>
                 </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
+    </div>
     </div>
   );
 }

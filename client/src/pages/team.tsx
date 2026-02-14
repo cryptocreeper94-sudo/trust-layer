@@ -107,9 +107,7 @@ function FinancialCalculator() {
               />
             </div>
           </div>
-        </GlassCard>
-
-        <GlassCard>
+<GlassCard>
           <div className="p-4 space-y-3">
             <h4 className="font-semibold text-white flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-secondary" />
@@ -145,9 +143,7 @@ function FinancialCalculator() {
               />
             </div>
           </div>
-        </GlassCard>
-
-        <GlassCard>
+<GlassCard>
           <div className="p-4 space-y-3">
             <h4 className="font-semibold text-white flex items-center gap-2">
               <DollarSign className="w-4 h-4 text-green-400" />
@@ -181,8 +177,7 @@ function FinancialCalculator() {
               />
             </div>
           </div>
-        </GlassCard>
-      </div>
+</div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="bg-gradient-to-br from-primary/20 to-primary/5 border-primary/30 p-4">
@@ -217,8 +212,7 @@ function FinancialCalculator() {
             Value at current price: <span className="text-white font-bold">${airdropValue.toLocaleString()}</span>
           </p>
         </div>
-      </GlassCard>
-    </div>
+</div>
   );
 }
 
@@ -440,9 +434,7 @@ function ExecutiveSummary() {
             </div>
           </div>
         </div>
-      </GlassCard>
-
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="bg-white/5 border-white/10 p-4 text-center">
           <Zap className="w-8 h-8 text-primary mx-auto mb-2" />
           <p className="text-2xl font-bold text-white">400ms</p>
@@ -507,8 +499,7 @@ function AdminLinksGrid() {
                   <p className="text-xs text-muted-foreground truncate">{link.description}</p>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         </Link>
       ))}
     </div>

@@ -120,8 +120,7 @@ function WhaleMovementCard({ movement, index }: { movement: WhaleMovement; index
             Track Wallet
           </Button>
         </div>
-      </GlassCard>
-    </motion.div>
+</motion.div>
   );
 }
 
@@ -200,15 +199,13 @@ export default function WhaleTracker() {
                 <span className="text-[10px] text-muted-foreground">Buy Volume</span>
               </div>
               <div className="text-xl font-bold text-green-400">${(buyVolume/1000).toFixed(0)}K</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-4">
+<GlassCard hover={false} className="p-4">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingDown className="w-4 h-4 text-red-400" />
                 <span className="text-[10px] text-muted-foreground">Sell Volume</span>
               </div>
               <div className="text-xl font-bold text-red-400">${(sellVolume/1000).toFixed(0)}K</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-4">
+<GlassCard hover={false} className="p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Activity className="w-4 h-4 text-primary" />
                 <span className="text-[10px] text-muted-foreground">Net Flow</span>
@@ -216,15 +213,13 @@ export default function WhaleTracker() {
               <div className={`text-xl font-bold ${netFlow >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                 {netFlow >= 0 ? '+' : '-'}${Math.abs(netFlow/1000).toFixed(0)}K
               </div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-4">
+<GlassCard hover={false} className="p-4">
               <div className="flex items-center gap-2 mb-2">
                 <Wallet className="w-4 h-4 text-amber-400" />
                 <span className="text-[10px] text-muted-foreground">Tracked Whales</span>
               </div>
               <div className="text-xl font-bold">{TOP_WHALES.length}</div>
-            </GlassCard>
-          </div>
+</div>
 
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -278,8 +273,7 @@ export default function WhaleTracker() {
                       <span className="text-muted-foreground">{(whale.balance/1000000).toFixed(2)}M SIG</span>
                       <span className="font-bold">${(whale.value/1000).toFixed(0)}K</span>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </div>

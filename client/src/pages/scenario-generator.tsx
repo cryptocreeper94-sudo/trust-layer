@@ -253,8 +253,7 @@ function ChoiceCard({ choice, index }: { choice: Choice; index: number }) {
           </motion.div>
         )}
       </AnimatePresence>
-    </GlassCard>
-    </div>
+</div>
   );
 }
 
@@ -533,7 +532,6 @@ export default function ScenarioGenerator() {
             </div>
           </div>
         </section>
-      </main>
 
       {/* Footer */}
       <footer className="py-6 px-4 border-t border-white/5 text-center">
@@ -541,6 +539,7 @@ export default function ScenarioGenerator() {
           Chronicles • AI-Driven Life Generator Demo
         </p>
       </footer>
+    </main>
     </div>
   );
 }

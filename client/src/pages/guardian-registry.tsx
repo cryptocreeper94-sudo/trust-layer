@@ -135,8 +135,7 @@ export default function GuardianRegistry() {
                 {registry.length}
               </div>
               <p className="text-white/60">Certified Projects</p>
-            </GlassCard>
-          </motion.div>
+</motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -147,8 +146,7 @@ export default function GuardianRegistry() {
                 {registry.filter(r => r.tier === "guardian_premier").length}
               </div>
               <p className="text-white/60">Premier Certifications</p>
-            </GlassCard>
-          </motion.div>
+</motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -159,8 +157,7 @@ export default function GuardianRegistry() {
                 {registry.filter(r => r.score && r.score >= 90).length}
               </div>
               <p className="text-white/60">90+ Security Scores</p>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         </div>
 
         {isLoading ? (
@@ -182,8 +179,7 @@ export default function GuardianRegistry() {
                 ? "No certified projects match your search." 
                 : "Certified projects will appear here as audits complete. Be among the first to get Guardian certified."}
             </p>
-          </GlassCard>
-        ) : (
+) : (
           <div className="space-y-4">
             {filteredRegistry.map((entry, index) => {
               const tierInfo = getTierInfo(entry.tier);
@@ -251,8 +247,7 @@ export default function GuardianRegistry() {
                         </a>
                       )}
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               );
             })}
           </div>
@@ -279,11 +274,6 @@ export default function GuardianRegistry() {
               Start Certification Process
               <ExternalLink className="w-4 h-4" />
             </a>
-          </GlassCard>
-        </motion.div>
-      </main>
-
-      
-    </div>
+</motion.div>
   );
 }

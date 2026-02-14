@@ -104,22 +104,19 @@ export default function ApiDocs() {
                 <span className="font-medium">Base URL</span>
               </div>
               <code className="text-xs bg-black/30 px-2 py-1 rounded block truncate">{baseUrl}/api</code>
-            </GlassCard>
-            <GlassCard className="p-4" data-testid="card-auth">
+<GlassCard className="p-4" data-testid="card-auth">
               <div className="flex items-center gap-3 mb-2">
                 <Shield className="w-5 h-5 text-primary" />
                 <span className="font-medium">Authentication</span>
               </div>
               <code className="text-xs bg-black/30 px-2 py-1 rounded block">X-API-Key: your_key</code>
-            </GlassCard>
-            <GlassCard className="p-4" data-testid="card-rate-limit">
+<GlassCard className="p-4" data-testid="card-rate-limit">
               <div className="flex items-center gap-3 mb-2">
                 <Zap className="w-5 h-5 text-primary" />
                 <span className="font-medium">Rate Limit</span>
               </div>
               <code className="text-xs bg-black/30 px-2 py-1 rounded block">1000 req/min</code>
-            </GlassCard>
-          </div>
+</div>
 
           <Tabs defaultValue="blockchain" className="w-full">
             <TabsList className="w-full justify-start mb-6 bg-white/5 overflow-x-auto" data-testid="tabs-api-categories">
@@ -238,9 +235,7 @@ export default function ApiDocs() {
                     </div>
                   ))}
                 </div>
-              </GlassCard>
-
-              <GlassCard className="p-6" data-testid="card-signature-verification">
+<GlassCard className="p-6" data-testid="card-signature-verification">
                 <h3 className="font-bold mb-4">Signature Verification</h3>
                 <p className="text-sm text-muted-foreground mb-4">
                   Verify webhook authenticity using HMAC-SHA256:
@@ -256,8 +251,7 @@ function verifySignature(payload, signature, secret) {
   return signature === expected;
 }`}
                 </pre>
-              </GlassCard>
-            </TabsContent>
+</TabsContent>
           </Tabs>
 
           <GlassCard className="mt-8 p-6" data-testid="card-sdk">
@@ -282,8 +276,7 @@ function verifySignature(payload, signature, secret) {
             <p className="text-xs text-muted-foreground mt-4">
               SDKs coming soon. Use the REST API in the meantime.
             </p>
-          </GlassCard>
-        </div>
+</div>
       </main>
     </div>
   );

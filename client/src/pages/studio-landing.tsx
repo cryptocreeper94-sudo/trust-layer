@@ -379,8 +379,7 @@ export default function StudioLanding() {
                 ))}
               </div>
             </div>
-          </GlassCard>
-        </section>
+</section>
 
         {/* Essential Tips Section */}
         <section className="container mx-auto px-4 mb-16">
@@ -409,8 +408,7 @@ export default function StudioLanding() {
                       <p className="text-sm text-white/60">{tip.description}</p>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </section>
@@ -489,8 +487,7 @@ export default function StudioLanding() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         </section>
 
         {/* Features Grid */}
@@ -516,8 +513,7 @@ export default function StudioLanding() {
                     <h3 className="font-bold text-lg mb-2">{feature.title}</h3>
                     <p className="text-sm text-white/60">{feature.description}</p>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </section>
@@ -550,8 +546,7 @@ export default function StudioLanding() {
                 ))}
               </div>
             </div>
-          </GlassCard>
-        </section>
+</section>
 
         {/* Help Resources */}
         <section className="container mx-auto px-4 mb-20">
@@ -582,8 +577,7 @@ export default function StudioLanding() {
                         <h3 className="font-bold mb-1">{resource.title}</h3>
                         <p className="text-sm text-white/60">{resource.description}</p>
                       </div>
-                    </GlassCard>
-                  </button>
+</button>
                 ) : (
                   <Link href={resource.link}>
                     <GlassCard className="h-full hover:border-cyan-500/30 transition-colors">
@@ -592,8 +586,7 @@ export default function StudioLanding() {
                         <h3 className="font-bold mb-1">{resource.title}</h3>
                         <p className="text-sm text-white/60">{resource.description}</p>
                       </div>
-                    </GlassCard>
-                  </Link>
+</Link>
                 )}
               </motion.div>
             ))}
@@ -631,8 +624,7 @@ export default function StudioLanding() {
                 )}
               </div>
             </div>
-          </GlassCard>
-        </section>
+</section>
       </main>
 
       
@@ -682,5 +674,5 @@ export default function StudioLanding() {
         </div>
       )}
     </div>
-  );
+);
 }

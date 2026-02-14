@@ -128,8 +128,7 @@ function FearGreedGauge({ value, label }: { value: number; label: string }) {
           <p className={`text-sm font-medium ${getColor()}`}>{label}</p>
         </div>
       </div>
-    </GlassCard>
-  );
+);
 }
 
 function AltcoinSeasonGauge({ value }: { value: number }) {
@@ -160,8 +159,7 @@ function AltcoinSeasonGauge({ value }: { value: number }) {
           <span>Altcoin Season</span>
         </div>
       </div>
-    </GlassCard>
-  );
+);
 }
 
 function MarketMetricCard({ 
@@ -200,8 +198,7 @@ function MarketMetricCard({
           </div>
         )}
       </div>
-    </GlassCard>
-  );
+);
 }
 
 function MiniSparkline({ data, color = "cyan" }: { data: number[]; color?: string }) {
@@ -398,8 +395,7 @@ function PriceChart({ coin, candles }: { coin: TopCoin | null; candles: CandleDa
           </div>
         </div>
       </div>
-    </GlassCard>
-  );
+);
 }
 
 function NewsCarousel({ news }: { news: NewsItem[] }) {
@@ -459,8 +455,7 @@ function NewsCarousel({ news }: { news: NewsItem[] }) {
           </motion.div>
         </AnimatePresence>
       </div>
-    </GlassCard>
-  );
+);
 }
 
 
@@ -724,8 +719,7 @@ export default function PulseDashboard() {
                 </div>
                 <p className="text-xl font-bold text-white">{market.btcDominance}%</p>
               </div>
-            </GlassCard>
-          </div>
+</div>
           <div className="col-span-2 md:col-span-2 lg:col-span-1">
             <GlassCard>
               <div className="p-4">
@@ -735,8 +729,7 @@ export default function PulseDashboard() {
                 </div>
                 <p className="text-xl font-bold text-white">{market.ethDominance}%</p>
               </div>
-            </GlassCard>
-          </div>
+</div>
         </motion.div>
 
         {/* Fear & Greed + Altcoin Season Row */}
@@ -769,8 +762,7 @@ export default function PulseDashboard() {
                 </div>
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         {/* Price Chart + News Carousel Row */}
         <motion.div
@@ -857,8 +849,7 @@ export default function PulseDashboard() {
                 </div>
               )}
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         {/* Recent Predictions */}
         <motion.div
@@ -949,13 +940,13 @@ export default function PulseDashboard() {
                 </div>
               )}
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
       </div>
     </div>
     </SubscriptionGate>
-  );
+    </p>
+);
 }
 
 function generateMockTopCoins(): TopCoin[] {

@@ -984,5 +984,6 @@ export default function GuardianScannerDetail() {
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </div>
+    </GuardianSwapModal>
   );
 }

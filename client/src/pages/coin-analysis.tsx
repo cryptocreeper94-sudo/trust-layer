@@ -354,9 +354,7 @@ export default function CoinAnalysisPage() {
               </p>
             </div>
           </div>
-        </GlassCard>
-
-        {/* AI Analysis */}
+{/* AI Analysis */}
         <GlassCard className="p-4" glow>
           <div className="flex items-center gap-2 mb-4">
             <Bot className="w-5 h-5 text-cyan-400" />
@@ -388,9 +386,7 @@ export default function CoinAnalysisPage() {
               <p className="text-sm text-white/60 mt-2">{token.aiReasoning}</p>
             </div>
           </div>
-        </GlassCard>
-
-        {/* Key Metrics */}
+{/* Key Metrics */}
         <div className="grid grid-cols-2 gap-3">
           <MetricCard label="Market Cap" value={formatNumber(token.marketCap)} icon={DollarSign} />
           <MetricCard label="24h Volume" value={formatNumber(token.volume24h)} icon={BarChart3} />
@@ -420,9 +416,7 @@ export default function CoinAnalysisPage() {
             <SecurityIndicator label="Liquidity Locked" safe={token.liquidityLocked} severity="medium" />
             <SecurityIndicator label="Creator Wallet" safe={!token.creatorWalletRisky} severity="medium" />
           </div>
-        </GlassCard>
-
-        {/* Holder Analysis */}
+{/* Holder Analysis */}
         <GlassCard className="p-4" glow>
           <div className="flex items-center gap-2 mb-4">
             <Users className="w-5 h-5 text-purple-400" />
@@ -475,9 +469,7 @@ export default function CoinAnalysisPage() {
               </div>
             </div>
           </div>
-        </GlassCard>
-
-        {/* Trade Button */}
+{/* Trade Button */}
         <a
           href={`https://raydium.io/swap/?inputMint=sol&outputMint=${token.address}`}
           target="_blank"
@@ -496,5 +488,6 @@ export default function CoinAnalysisPage() {
         </a>
       </main>
     </div>
-  );
+    </SparklineChart>
+);
 }

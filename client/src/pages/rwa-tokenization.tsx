@@ -379,8 +379,7 @@ export default function RWATokenization() {
                           Invest
                         </Button>
                       </div>
-                    </GlassCard>
-                  </motion.div>
+</motion.div>
                 );
               })}
             </div>
@@ -398,22 +397,19 @@ export default function RWATokenization() {
               <p className="text-slate-400 text-sm">
                 Every asset undergoes rigorous verification by our Guardian security team
               </p>
-            </GlassCard>
-            <GlassCard className="text-center" data-testid="card-feature-fractional">
+<GlassCard className="text-center" data-testid="card-feature-fractional">
               <Coins className="w-12 h-12 mx-auto mb-4 text-amber-400" />
               <h3 className="text-lg font-bold text-white mb-2">Fractional Ownership</h3>
               <p className="text-slate-400 text-sm">
                 Own a piece of premium assets starting from just $100
               </p>
-            </GlassCard>
-            <GlassCard className="text-center" data-testid="card-feature-dividends">
+<GlassCard className="text-center" data-testid="card-feature-dividends">
               <Calendar className="w-12 h-12 mx-auto mb-4 text-purple-400" />
               <h3 className="text-lg font-bold text-white mb-2">Automatic Dividends</h3>
               <p className="text-slate-400 text-sm">
                 Receive dividend payments directly to your wallet on schedule
               </p>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -435,11 +431,7 @@ export default function RWATokenization() {
                   Learn More
                   <ChevronRight className="w-4 h-4 ml-2" />
                 </Button>
-              </div>
-            </GlassCard>
-          </motion.div>
-        </div>
-
-    </div>
+</div>
+    </motion.div>
   );
 }

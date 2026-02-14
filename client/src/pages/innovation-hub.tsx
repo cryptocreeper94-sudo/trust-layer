@@ -285,8 +285,7 @@ export default function InnovationHub() {
                         
                         <div className={`absolute -bottom-8 -right-8 w-32 h-32 bg-gradient-to-br ${feature.gradient} rounded-full opacity-10 blur-2xl group-hover:opacity-20 transition-opacity`} />
                       </div>
-                    </GlassCard>
-                  </Link>
+</Link>
                 </motion.div>
               ))}
             </div>
@@ -394,8 +393,7 @@ export default function InnovationHub() {
                         </div>
                       </div>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </div>
@@ -453,8 +451,7 @@ export default function InnovationHub() {
                       </div>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             )}
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -495,8 +492,7 @@ export default function InnovationHub() {
                         )}
                       </div>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </div>
@@ -555,8 +551,7 @@ export default function InnovationHub() {
                         </span>
                       </div>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </div>
@@ -628,8 +623,7 @@ export default function InnovationHub() {
                       ))}
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
 
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
@@ -669,8 +663,7 @@ export default function InnovationHub() {
                             )}
                           </div>
                         </div>
-                      </GlassCard>
-                    </motion.div>
+</motion.div>
                   ))}
                 </div>
               </motion.div>
@@ -715,8 +708,7 @@ export default function InnovationHub() {
                     </div>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
         </section>
       </main>

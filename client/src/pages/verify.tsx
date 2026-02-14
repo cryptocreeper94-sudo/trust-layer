@@ -245,8 +245,7 @@ export default function Verify() {
                 )}
               </motion.div>
             )}
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -303,8 +302,7 @@ export default function Verify() {
                     <CheckCircle2 className="w-3 h-3 mr-2" />
                     Verify This Document
                   </Button>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </motion.div>
@@ -328,9 +326,8 @@ export default function Verify() {
                 </p>
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
       </div>
     </div>
-  );
+);
 }

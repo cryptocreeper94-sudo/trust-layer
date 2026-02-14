@@ -179,8 +179,7 @@ export default function GuardianWhitepaperPage() {
                   <div className="text-sm text-white/60">Guardian Shield Monitoring</div>
                 </div>
               </div>
-            </GlassCard>
-          </motion.section>
+</motion.section>
 
           <motion.section
             initial={{ opacity: 0, y: 20 }}
@@ -228,8 +227,7 @@ export default function GuardianWhitepaperPage() {
                         </div>
                       </div>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </motion.section>
@@ -291,8 +289,7 @@ export default function GuardianWhitepaperPage() {
                         <ChevronRight className="w-4 h-4 ml-2" />
                       </Button>
                     </Link>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </motion.section>
@@ -322,8 +319,7 @@ export default function GuardianWhitepaperPage() {
                       <h3 className="font-semibold text-white">{category.name}</h3>
                     </div>
                     <p className="text-sm text-white/60">{category.description}</p>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </motion.section>
@@ -372,8 +368,7 @@ export default function GuardianWhitepaperPage() {
                   anomaly detection, and emergency response capabilities.
                 </p>
               </div>
-            </GlassCard>
-          </motion.section>
+</motion.section>
 
           <motion.section
             initial={{ opacity: 0, y: 20 }}
@@ -401,8 +396,7 @@ export default function GuardianWhitepaperPage() {
                   </Button>
                 </Link>
               </div>
-            </GlassCard>
-          </motion.section>
+</motion.section>
         </div>
       </div>
       

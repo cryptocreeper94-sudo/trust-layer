@@ -147,27 +147,23 @@ export default function PaperTrading() {
               <Wallet className="w-5 h-5 mx-auto mb-1 text-purple-400" />
               <p className="text-xl font-bold">${portfolioValue.toLocaleString()}</p>
               <p className="text-[10px] text-muted-foreground">Portfolio Value</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
+<GlassCard hover={false} className="p-3 text-center">
               <TrendingUp className={`w-5 h-5 mx-auto mb-1 ${totalPnL >= 0 ? "text-green-400" : "text-red-400"}`} />
               <p className={`text-xl font-bold ${totalPnL >= 0 ? "text-green-400" : "text-red-400"}`}>
                 {totalPnL >= 0 ? "+" : ""}${totalPnL.toLocaleString()}
               </p>
               <p className="text-[10px] text-muted-foreground">Total P/L</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
+<GlassCard hover={false} className="p-3 text-center">
               <BarChart3 className={`w-5 h-5 mx-auto mb-1 ${totalPnL >= 0 ? "text-green-400" : "text-red-400"}`} />
               <p className={`text-xl font-bold ${totalPnL >= 0 ? "text-green-400" : "text-red-400"}`}>
                 {totalPnL >= 0 ? "+" : ""}{pnlPercent}%
               </p>
               <p className="text-[10px] text-muted-foreground">ROI</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
+<GlassCard hover={false} className="p-3 text-center">
               <Award className="w-5 h-5 mx-auto mb-1 text-amber-400" />
               <p className="text-xl font-bold">{trades.length}</p>
               <p className="text-[10px] text-muted-foreground">Trades Made</p>
-            </GlassCard>
-          </div>
+</div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
             <GlassCard className="lg:col-span-2 p-4">
@@ -206,9 +202,7 @@ export default function PaperTrading() {
                   <p className="text-xs">Make your first trade to get started!</p>
                 </div>
               )}
-            </GlassCard>
-
-            <GlassCard glow className="p-4">
+<GlassCard glow className="p-4">
               <h3 className="font-bold mb-4 flex items-center gap-2">
                 <Target className="w-4 h-4 text-primary" />
                 Quick Trade
@@ -278,8 +272,7 @@ export default function PaperTrading() {
                   {orderType === "buy" ? "Buy" : "Sell"} {token}
                 </Button>
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           <GlassCard className="p-4">
             <h3 className="font-bold mb-4 flex items-center gap-2">
@@ -310,9 +303,7 @@ export default function PaperTrading() {
                 <p className="text-xs">Your trade history will appear here</p>
               </div>
             )}
-          </GlassCard>
-
-          <GlassCard className="mt-6 p-4 text-center">
+<GlassCard className="mt-6 p-4 text-center">
             <RefreshCw className="w-8 h-8 mx-auto mb-2 text-muted-foreground" />
             <h3 className="font-bold mb-2">Reset Portfolio</h3>
             <p className="text-sm text-muted-foreground mb-3">
@@ -329,9 +320,7 @@ export default function PaperTrading() {
             >
               Reset to ${STARTING_BALANCE.toLocaleString()}
             </Button>
-          </GlassCard>
-
-          {isConnected && (
+{isConnected && (
             <GlassCard className="mt-4 p-4 text-center bg-gradient-to-r from-purple-500/10 to-pink-500/10 border-purple-500/20">
               <Sparkles className="w-8 h-8 mx-auto mb-2 text-purple-400" />
               <h3 className="font-bold mb-2">Ready for Real Trading?</h3>
@@ -343,10 +332,16 @@ export default function PaperTrading() {
                   Go to DEX
                 </Button>
               </Link>
-            </GlassCard>
-          )}
+)}
         </div>
       </div>
+    </div>
+    </BarChart3>
+    </TrendingUp>
+    </span>
+</div>
+    </div>
+    </div>
     </div>
   );
 }

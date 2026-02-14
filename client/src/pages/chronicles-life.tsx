@@ -166,8 +166,7 @@ function LocationCard({ location, isCurrentLocation, onTravel, disabled }: {
             <ChevronRight className="w-5 h-5 text-gray-600" />
           )}
         </div>
-      </GlassCard>
-    </motion.div>
+</motion.div>
   );
 }
 
@@ -236,8 +235,7 @@ function ActivityCard({ activity, onPerform, disabled, energyLow, moodLow }: {
             </div>
           </div>
         </div>
-      </GlassCard>
-    </motion.div>
+</motion.div>
   );
 }
 
@@ -426,8 +424,7 @@ export default function ChroniclesLife() {
               Create Character
             </Button>
           </Link>
-        </GlassCard>
-      </div>
+</div>
     );
   }
   
@@ -541,8 +538,7 @@ export default function ChroniclesLife() {
                 ) : (
                   <GlassCard className="p-6 text-center">
                     <p className="text-gray-400">No activities available here right now</p>
-                  </GlassCard>
-                )}
+)}
               </AnimatePresence>
             </div>
           </div>
@@ -573,11 +569,10 @@ export default function ChroniclesLife() {
                   <div className="text-xs text-gray-500">Current multiplier</div>
                 </div>
               </div>
-            </GlassCard>
-          </div>
+</div>
         )}
       </div>
     </div>
-    </div>
+</h1>
   );
 }

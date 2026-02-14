@@ -170,5 +170,6 @@ export default function ResetPassword() {
         </div>
       </motion.div>
     </div>
+</Input>
   );
 }

@@ -595,6 +595,7 @@ export default function ChroniclesAIDemo() {
           </p>
         </div>
       </div>
-    </div>
+</Input>
+</div>
   );
 }

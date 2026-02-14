@@ -175,5 +175,5 @@ export default function ChronoChatPage() {
         }} 
       />
     </div>
-  );
+);
 }

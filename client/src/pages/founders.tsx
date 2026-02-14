@@ -197,18 +197,15 @@ export default function FoundersPage() {
               <Shield className="w-10 h-10 text-cyan-400 mx-auto mb-4" />
               <h3 className="font-semibold text-white mb-3">Secure & Verified</h3>
               <p className="text-white/60 text-sm leading-relaxed">All purchases tracked on-chain with full transparency</p>
-            </GlassCard>
-            <GlassCard className="p-8 text-center">
+<GlassCard className="p-8 text-center">
               <Users className="w-10 h-10 text-purple-400 mx-auto mb-4" />
               <h3 className="font-semibold text-white mb-3">Limited to 100</h3>
               <p className="text-white/60 text-sm leading-relaxed">Once spots are filled, this offer closes permanently</p>
-            </GlassCard>
-            <GlassCard className="p-8 text-center">
+<GlassCard className="p-8 text-center">
               <Zap className="w-10 h-10 text-amber-400 mx-auto mb-4" />
               <h3 className="font-semibold text-white mb-3">Instant Confirmation</h3>
               <p className="text-white/60 text-sm leading-relaxed">Your Founders status is confirmed immediately</p>
-            </GlassCard>
-          </div>
+</div>
 
           <GlassCard className="p-8 md:p-10 mb-8">
             <h3 className="text-lg font-semibold text-white mb-5 flex items-center gap-2">
@@ -229,9 +226,7 @@ export default function FoundersPage() {
                 <Link href="/note" className="text-cyan-400 hover:underline">Read our story →</Link>
               </p>
             </div>
-          </GlassCard>
-
-          <GlassCard className="p-8 md:p-10 mb-8">
+<GlassCard className="p-8 md:p-10 mb-8">
             <h3 className="text-lg font-semibold text-white mb-5 flex items-center gap-2">
               <Send className="w-5 h-5 text-cyan-400" />
               Share on Telegram
@@ -261,9 +256,7 @@ export default function FoundersPage() {
                 )}
               </div>
             </div>
-          </GlassCard>
-
-          <div className="text-center">
+<div className="text-center">
             <p className="text-white/50 text-sm">
               Questions? Join our{" "}
               <a href="https://t.me/darkwavestudios" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">
@@ -274,7 +267,7 @@ export default function FoundersPage() {
             </p>
           </div>
         </motion.div>
-      </div>
     </div>
+</div>
   );
 }

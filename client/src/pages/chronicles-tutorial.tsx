@@ -258,8 +258,7 @@ export default function ChroniclesTutorial() {
                     </h3>
                     <p className="text-sm text-gray-400 leading-relaxed">{card.description}</p>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </motion.section>
@@ -330,8 +329,7 @@ export default function ChroniclesTutorial() {
                   ))}
                 </Accordion>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         </motion.section>
 
         <motion.section
@@ -361,8 +359,7 @@ export default function ChroniclesTutorial() {
                     </h3>
                     <p className="text-xs text-gray-400 leading-relaxed flex-1">{sys.description}</p>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </motion.section>
@@ -394,8 +391,7 @@ export default function ChroniclesTutorial() {
                     </div>
                     <p className="text-sm text-gray-400 leading-relaxed">{cur.description}</p>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </motion.section>
@@ -447,8 +443,7 @@ export default function ChroniclesTutorial() {
                   </Link>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         </motion.section>
       </div>
     </div>

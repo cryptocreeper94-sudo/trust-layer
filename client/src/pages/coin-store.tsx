@@ -455,14 +455,10 @@ export default function CoinStore() {
                 <div className="border-t border-white/10 pt-3 mt-3 flex justify-between items-center">
                   <span className="text-gray-400">Total</span>
                   <span className="text-2xl font-bold">${selectedPack.priceUsd}</span>
-                </div>
-              </div>
               
               <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
                 <Shield className="w-4 h-4 text-green-400" />
                 <span>Secure payment processed by Stripe</span>
-              </div>
-            </div>
           )}
           
           <DialogFooter className="flex gap-3">
@@ -520,14 +516,11 @@ export default function CoinStore() {
                   Attn: Free Entry Request<br/>
                   [Address TBD]
                 </p>
-              </div>
-            </div>
             
             <p className="text-xs text-gray-500">
               For immediate credit (demo only), click the button below. 
               In production, actual mail verification will be required.
             </p>
-          </div>
           
           <DialogFooter className="flex gap-3">
             <Button 
@@ -560,6 +553,12 @@ export default function CoinStore() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
     </div>
   );
 }

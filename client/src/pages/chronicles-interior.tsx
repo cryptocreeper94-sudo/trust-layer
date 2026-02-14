@@ -222,8 +222,7 @@ export default function ChroniclesInterior() {
           <Button onClick={() => setLocation("/chronicles/login")} className="bg-cyan-500 hover:bg-cyan-600">
             Go to Login
           </Button>
-        </GlassCard>
-      </div>
+</div>
     );
   }
 
@@ -338,8 +337,7 @@ export default function ChroniclesInterior() {
                   );
                 })}
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           {/* Room View */}
           <div className="lg:col-span-2">
@@ -421,8 +419,7 @@ export default function ChroniclesInterior() {
                   <p className="text-slate-500">Choose a room from the left to view and interact with it</p>
                 </div>
               )}
-            </GlassCard>
-          </div>
+</div>
 
           {/* Catalog / Object Details */}
           <div className="lg:col-span-1">
@@ -469,8 +466,7 @@ export default function ChroniclesInterior() {
                     );
                   })}
                 </div>
-              </GlassCard>
-            ) : interactingObject ? (
+) : interactingObject ? (
               <GlassCard glow className="p-4">
                 <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                   <Zap className="w-5 h-5 text-yellow-400" />
@@ -529,8 +525,7 @@ export default function ChroniclesInterior() {
                     Remove Object
                   </Button>
                 )}
-              </GlassCard>
-            ) : (
+) : (
               <GlassCard glow className="p-4">
                 <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                   <Star className="w-5 h-5 text-amber-400" />
@@ -567,16 +562,15 @@ export default function ChroniclesInterior() {
                         <p className="text-xs text-slate-400">Shells/Use</p>
                         <p className="text-lg font-bold text-white">+{currentRoom.objects?.reduce((sum, o) => sum + (o.catalog?.shellsPerUse || 0), 0) || 0}</p>
                       </div>
-                    </div>
 
                     <p className="text-slate-500 text-xs text-center">
                       Click on objects to interact and earn Shells!
                     </p>
-                  </div>
                 ) : (
                   <p className="text-slate-400 text-center">Select a room to view stats</p>
                 )}
-              </GlassCard>
-            )}
+)}
+    </div>
+    </div>
   );
 }

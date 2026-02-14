@@ -917,8 +917,7 @@ export default function ChroniclesEstate() {
                     "Begin Today's Journey"
                   )}
                 </Button>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -1009,8 +1008,7 @@ export default function ChroniclesEstate() {
                     </>
                   )}
                 </Button>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -1269,9 +1267,7 @@ export default function ChroniclesEstate() {
                   );
                 })}
               </div>
-            </GlassCard>
-
-            {/* Zones Grid */}
+{/* Zones Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {zones.length === 0 && (
                 <div className="col-span-full text-center py-8">
@@ -1315,8 +1311,7 @@ export default function ChroniclesEstate() {
                         className="w-20 h-2"
                       />
                     </div>
-                  </GlassCard>
-                </div>
+</div>
               ))}
             </div>
 
@@ -1358,8 +1353,7 @@ export default function ChroniclesEstate() {
                         </span>
                       </div>
                     ))}
-                </GlassCard>
-              </motion.div>
+</motion.div>
             )}
           </motion.div>
         )}
@@ -1379,8 +1373,7 @@ export default function ChroniclesEstate() {
               <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30">
                 Phase 2 Feature
               </Badge>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         {/* Daily Rewards Tab */}
@@ -1461,8 +1454,7 @@ export default function ChroniclesEstate() {
                   </>
                 )}
               </Button>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         {/* Builder Tab */}
@@ -1523,9 +1515,7 @@ export default function ChroniclesEstate() {
                 })}
               </div>
             </div>
-          </GlassCard>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Character Portrait & Stats */}
           <Card className="bg-slate-900/80 border-slate-700 p-6">
             <div className="text-center mb-6">
@@ -1787,15 +1777,12 @@ export default function ChroniclesEstate() {
                           );
                         })
                       )}
-                    </div>
-                  </div>
                   <p className="text-center text-xs text-slate-500 mt-4">
                     Select a building above, then tap on the grid to place it
                   </p>
                 </>
               )}
             </Card>
-          </div>
 
           {/* Era Progress & Portal Unlock */}
           <Card className="mt-6 bg-slate-900/80 border-slate-700 p-6 lg:col-span-3">
@@ -1822,11 +1809,8 @@ export default function ChroniclesEstate() {
                     <div>
                       <Progress value={(playerLevel / portal.level) * 100} className="h-2 mb-2" />
                       <span className="text-xs text-slate-400">Level {playerLevel}/{portal.level}</span>
-                    </div>
                   )}
-                </GlassCard>
-              ))}
-            </div>
+))}
           </Card>
         )}
 
@@ -1841,5 +1825,8 @@ export default function ChroniclesEstate() {
         isOpen={showNPC}
         onClose={() => setShowNPC(false)}
       />
-  );
+    </NPCChatButton>
+    </div>
+    </div>
+);
 }

@@ -120,18 +120,15 @@ export default function PortfolioRebalancer() {
             <GlassCard hover={false} className="p-3">
               <div className="text-[10px] text-muted-foreground mb-1">Total Value</div>
               <div className="text-xl font-bold">${totalValue.toLocaleString()}</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="text-[10px] text-muted-foreground mb-1">Assets</div>
               <div className="text-xl font-bold">{assets.length}</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="text-[10px] text-muted-foreground mb-1">Drift</div>
               <div className="text-xl font-bold text-yellow-400">
                 {Math.max(...assets.map(a => Math.abs(a.currentPercent - a.targetPercent))).toFixed(1)}%
               </div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3">
+<GlassCard hover={false} className="p-3">
               <div className="text-[10px] text-muted-foreground mb-1">Status</div>
               <div className="text-xl font-bold flex items-center gap-1">
                 {rebalanceActions.length === 0 ? (
@@ -140,8 +137,7 @@ export default function PortfolioRebalancer() {
                   <><AlertCircle className="w-4 h-4 text-yellow-400" /> Needs Rebalance</>
                 )}
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
             <GlassCard className="p-4">
@@ -185,9 +181,7 @@ export default function PortfolioRebalancer() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-
-            <GlassCard className="p-4">
+<GlassCard className="p-4">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-bold flex items-center gap-2">
                   <Settings className="w-4 h-4 text-primary" />
@@ -220,8 +214,7 @@ export default function PortfolioRebalancer() {
                   </p>
                 </div>
               )}
-            </GlassCard>
-          </div>
+</div>
 
           <GlassCard className="p-4 mb-6">
             <h2 className="font-bold mb-4">Target Allocation</h2>
@@ -293,10 +286,7 @@ export default function PortfolioRebalancer() {
                   <span className="text-xs ml-1">({totalTarget > 100 ? '+' : ''}{totalTarget - 100}%)</span>
                 )}
               </span>
-            </div>
-          </GlassCard>
-
-          {rebalanceActions.length > 0 && (
+{rebalanceActions.length > 0 && (
             <GlassCard className="p-4 mb-6">
               <h2 className="font-bold mb-4">Required Actions</h2>
               <div className="space-y-2">
@@ -319,13 +309,9 @@ export default function PortfolioRebalancer() {
                       <span className={action.action === "buy" ? "text-green-400" : "text-red-400"}>
                         {action.action.toUpperCase()} {action.symbol}
                       </span>
-                    </div>
                     <span className="font-mono">${action.amount.toFixed(0)}</span>
-                  </motion.div>
                 ))}
-              </div>
-            </GlassCard>
-          )}
+)}
 
           <Button 
             className="w-full h-12 bg-gradient-to-r from-blue-500 to-indigo-500 text-white text-lg"
@@ -350,10 +336,11 @@ export default function PortfolioRebalancer() {
               Total allocation must equal 100%
             </p>
           )}
-        </div>
-      </main>
 
       
     </div>
-  );
+    </div>
+    </div>
+    </motion.div>
+);
 }

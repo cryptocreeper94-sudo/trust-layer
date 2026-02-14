@@ -2453,9 +2453,8 @@ export default function TokenDetail() {
               Other pairs
             </Button>
           </div>
-        </div>
-      </main>
 
       {/* Bottom Navigation */}
-  );
+    </div>
+);
 }

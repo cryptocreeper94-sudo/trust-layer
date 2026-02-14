@@ -352,8 +352,7 @@ function StorefrontPreview({ business, era }: { business: any; era: string }) {
           />
         </Canvas>
       </div>
-    </GlassCard>
-  );
+);
 }
 
 function PlotDetailModal({ plot, era, buildings, onClose, onBuild }: {
@@ -446,8 +445,7 @@ function PlotDetailModal({ plot, era, buildings, onClose, onBuild }: {
               Non-premium plots only allow free buildings. Upgrade to a premium plot for premium storefronts.
             </p>
           )}
-        </GlassCard>
-      </motion.div>
+</motion.div>
     </motion.div>
   );
 }
@@ -609,9 +607,7 @@ export default function ChroniclesCity() {
               <p className="text-[9px] text-gray-500">Building Types</p>
             </div>
           </div>
-        </GlassCard>
-
-        <div className="flex gap-1 mb-4 bg-white/5 rounded-lg p-1" data-testid="city-tabs">
+<div className="flex gap-1 mb-4 bg-white/5 rounded-lg p-1" data-testid="city-tabs">
           {[
             { id: "map" as const, label: "3D City Map", icon: Map },
             { id: "storefront" as const, label: "Storefronts", icon: Store },
@@ -651,15 +647,13 @@ export default function ChroniclesCity() {
                     <span className="text-xs text-white font-medium">{config.townSquareName}</span>
                   </div>
                   <p className="text-[10px] text-gray-400">Premium plots with maximum visibility. All building types available.</p>
-                </GlassCard>
-                <GlassCard className="p-3">
+<GlassCard className="p-3">
                   <div className="flex items-center gap-2 mb-2">
                     <MapPin className="w-4 h-4 text-blue-400" />
                     <span className="text-xs text-white font-medium">Outer Districts</span>
                   </div>
                   <p className="text-[10px] text-gray-400">Free plots scattered across the landscape. Free buildings only.</p>
-                </GlassCard>
-              </div>
+</div>
 
               <GlassCard className="p-4">
                 <h3 className="text-white text-sm font-semibold mb-3 flex items-center gap-2">
@@ -684,8 +678,7 @@ export default function ChroniclesCity() {
                     </div>
                   ))}
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           )}
 
           {activeTab === "storefront" && (
@@ -710,9 +703,7 @@ export default function ChroniclesCity() {
                     </button>
                   ))}
                 </div>
-              </GlassCard>
-
-              {selectedBusiness && (() => {
+{selectedBusiness && (() => {
                 const biz = buildings.find(b => b.id === selectedBusiness);
                 if (!biz) return null;
 
@@ -762,23 +753,15 @@ export default function ChroniclesCity() {
                           <div className="text-right flex-shrink-0">
                             <p className="text-sm font-bold text-cyan-400">{player.buildings}</p>
                             <p className="text-[9px] text-gray-500">built</p>
-                          </div>
-                        </div>
                       );
                     })
                   )}
-                </div>
-              </GlassCard>
-
-              <GlassCard className="p-4 text-center">
+<GlassCard className="p-4 text-center">
                 <p className="text-xs text-gray-400">
                   Build more structures to climb the leaderboard. Premium town square plots earn 2x builder points.
                 </p>
-              </GlassCard>
-            </motion.div>
-          )}
+)}
         </AnimatePresence>
-      </div>
 
       <AnimatePresence>
         {selectedPlot && !selectedPlot.building && (
@@ -791,5 +774,7 @@ export default function ChroniclesCity() {
           />
         )}
       </AnimatePresence>
-  );
+    </div>
+    </div>
+);
 }

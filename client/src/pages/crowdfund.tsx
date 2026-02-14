@@ -710,8 +710,7 @@ export default function CrowdfundPage() {
                   </div>
                 )}
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, x: 20 }}
@@ -754,8 +753,7 @@ export default function CrowdfundPage() {
                   ))}
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         </div>
 
         <motion.div
@@ -770,8 +768,7 @@ export default function CrowdfundPage() {
               <span>All contributions are verified with Trust Layer transparency stamps</span>
               <ExternalLink className="w-4 h-4 ml-2" />
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
       </div>
       
       <BuyCryptoModal 
@@ -779,6 +776,6 @@ export default function CrowdfundPage() {
         onClose={() => setShowBuyCryptoModal(false)}
       />
     </div>
-    </div>
-  );
+    </DonationModal>
+);
 }

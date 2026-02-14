@@ -306,12 +306,8 @@ export default function ChronoEconomy() {
                   <Icon className="w-8 h-8 text-green-400 mb-3" />
                   <h3 className="text-lg font-bold text-white mb-2">{point.title}</h3>
                   <p className="text-white/60">{point.description}</p>
-                </motion.div>
               );
             })}
-          </div>
-        </div>
-      </section>
 
       <CTABanner
         title="Ready to Join the Economy?"
@@ -325,5 +321,6 @@ export default function ChronoEconomy() {
       
       <style>{chronoStyles}</style>
     </ChronoLayout>
+    </motion.div>
   );
 }

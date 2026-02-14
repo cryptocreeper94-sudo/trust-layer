@@ -212,9 +212,7 @@ export default function InvestmentSimulator() {
                 ))}
               </div>
             </div>
-          </HolographicCard>
-
-          <HolographicCard className="p-8">
+<HolographicCard className="p-8">
             <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-green-400" />
               Hypothetical Results
@@ -273,8 +271,7 @@ export default function InvestmentSimulator() {
                 </div>
               </div>
             </div>
-          </HolographicCard>
-        </div>
+</div>
 
         <HolographicCard className="p-6 mt-8" data-testid="card-disclaimer">
           <div className="flex items-start gap-3">
@@ -289,9 +286,7 @@ export default function InvestmentSimulator() {
               </p>
             </div>
           </div>
-        </HolographicCard>
-
-        <div className="text-center mt-8">
+<div className="text-center mt-8">
           <Link href="/presale">
             <Button 
               className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 px-8"
@@ -304,5 +299,6 @@ export default function InvestmentSimulator() {
         </div>
       </div>
     </div>
-  );
+    </ResultCard>
+);
 }

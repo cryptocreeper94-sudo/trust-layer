@@ -66,8 +66,7 @@ function NFTCard({ nft, onClick }: { nft: NFT; onClick: () => void }) {
           <p className="text-[10px] text-primary truncate">{nft.collectionName}</p>
           <h3 className="font-bold text-white text-sm truncate">{nft.name}</h3>
         </div>
-      </GlassCard>
-    </motion.div>
+</motion.div>
   );
 }
 
@@ -128,9 +127,7 @@ export default function NftGallery() {
                 </Button>
               </div>
             </div>
-          </GlassCard>
-
-          <div className="flex flex-col sm:flex-row gap-3 mb-6">
+<div className="flex flex-col sm:flex-row gap-3 mb-6">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input placeholder="Search NFTs..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-9 bg-white/5 border-white/10" data-testid="input-search-nfts" />
@@ -191,8 +188,7 @@ export default function NftGallery() {
                   {walletAddress ? "This wallet doesn't have any NFTs yet" : "Enter a wallet address to view NFTs"}
                 </p>
               </div>
-            </GlassCard>
-          )}
+)}
 
           {collections.length > 0 && (
             <div className="mt-8">
@@ -247,5 +243,7 @@ export default function NftGallery() {
         </DialogContent>
       </Dialog>
     </div>
+    </NFTCard>
+</Input>
   );
 }

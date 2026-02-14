@@ -169,8 +169,7 @@ export default function MembershipCharter() {
               their counterparts share a commitment to integrity. We believe that when people put their 
               reputation on the line, everyone benefits.
             </p>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <motion.div
           variants={staggerContainer}
@@ -198,8 +197,7 @@ export default function MembershipCharter() {
                   </div>
                   <h3 className="font-bold text-white text-lg mb-2">{value.title}</h3>
                   <p className="text-sm text-white/60">{value.description}</p>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </motion.div>
@@ -251,9 +249,7 @@ export default function MembershipCharter() {
                   </Button>
                 </Link>
               </div>
-            </GlassCard>
-
-            <GlassCard glow className="p-6 md:p-8 bg-gradient-to-br from-purple-500/5 to-pink-500/5">
+<GlassCard glow className="p-6 md:p-8 bg-gradient-to-br from-purple-500/5 to-pink-500/5">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500/30 to-pink-500/30 flex items-center justify-center shadow-lg shadow-purple-500/20">
                   <Building2 className="w-7 h-7 text-purple-400" />
@@ -291,8 +287,7 @@ export default function MembershipCharter() {
                   </Button>
                 </Link>
               </div>
-            </GlassCard>
-          </div>
+</div>
         </motion.div>
 
         <motion.div
@@ -325,8 +320,7 @@ export default function MembershipCharter() {
             <p className="text-sm text-white/40 mt-6 text-center">
               Failure to uphold these responsibilities may result in reputation penalties or membership suspension.
             </p>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -382,8 +376,7 @@ export default function MembershipCharter() {
                   >
                     Get Started
                   </Button>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </motion.div>
@@ -426,8 +419,7 @@ export default function MembershipCharter() {
                 </Link>
               )}
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
       </div>
     </div>
   );

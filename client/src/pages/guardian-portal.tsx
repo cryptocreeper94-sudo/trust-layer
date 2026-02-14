@@ -298,8 +298,7 @@ export default function GuardianPortal() {
                     })
                   )}
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -350,8 +349,7 @@ export default function GuardianPortal() {
                     ))
                   )}
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
         )}
 
         {activeTab === "assets" && (
@@ -440,8 +438,7 @@ export default function GuardianPortal() {
                   </tbody>
                 </table>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         {activeTab === "incidents" && (
@@ -514,8 +511,7 @@ export default function GuardianPortal() {
                     </div>
                   ))
                 )}
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         {activeTab === "shield" && (
@@ -550,9 +546,7 @@ export default function GuardianPortal() {
                       Email alerts
                     </li>
                   </ul>
-                </GlassCard>
-
-                <GlassCard className="p-6 border-purple-500/20 ring-1 ring-purple-500/30">
+<GlassCard className="p-6 border-purple-500/20 ring-1 ring-purple-500/30">
                   <Badge className="bg-purple-500/20 text-purple-400 mb-2">Most Popular</Badge>
                   <h3 className="text-lg font-semibold text-white mb-2">Guardian Shield</h3>
                   <div className="text-3xl font-bold text-purple-400 mb-4">$999<span className="text-lg text-white/60">/mo</span></div>
@@ -570,9 +564,7 @@ export default function GuardianPortal() {
                       Rug pull detection
                     </li>
                   </ul>
-                </GlassCard>
-
-                <GlassCard className="p-6 border-pink-500/20">
+<GlassCard className="p-6 border-pink-500/20">
                   <h3 className="text-lg font-semibold text-white mb-2">Guardian Command</h3>
                   <div className="text-3xl font-bold text-pink-400 mb-4">$2,999<span className="text-lg text-white/60">/mo</span></div>
                   <ul className="space-y-2 text-sm text-white/70">
@@ -589,8 +581,7 @@ export default function GuardianPortal() {
                       Multi-chain coverage
                     </li>
                   </ul>
-                </GlassCard>
-              </div>
+</div>
 
               <div className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center">
                 <Badge className="bg-amber-500/20 text-amber-400 mb-4">Coming Soon</Badge>
@@ -600,8 +591,7 @@ export default function GuardianPortal() {
                   Join Waitlist
                 </Button>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         {activeTab === "stamps" && (
@@ -662,8 +652,7 @@ export default function GuardianPortal() {
                       </div>
                   ))
                 )}
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         <motion.div
@@ -684,11 +673,14 @@ export default function GuardianPortal() {
                   <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
               </Link>
-          </GlassCard>
-        </motion.div>
+</motion.div>
       </main>
 
       
+    </div>
+    </div>
+    </div>
+    </div>
     </div>
   );
 }

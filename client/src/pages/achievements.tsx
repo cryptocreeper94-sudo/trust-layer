@@ -168,8 +168,7 @@ function AchievementCard({ achievement, isUnlocked = false }: { achievement: Ach
           </div>
         </div>
       </div>
-    </GlassCard>
-  );
+);
 }
 
 
@@ -223,23 +222,19 @@ export default function Achievements() {
               <Trophy className="w-5 h-5 mx-auto mb-1 text-amber-400" />
               <p className="text-xl font-bold">{isConnected ? "0" : "--"}/{GLOBAL_STATS.totalAchievements}</p>
               <p className="text-[10px] text-muted-foreground">Your Progress</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
+<GlassCard hover={false} className="p-3 text-center">
               <Users className="w-5 h-5 mx-auto mb-1 text-blue-400" />
               <p className="text-xl font-bold">{GLOBAL_STATS.totalUnlocked.toLocaleString()}</p>
               <p className="text-[10px] text-muted-foreground">Total Unlocks</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
+<GlassCard hover={false} className="p-3 text-center">
               <Coins className="w-5 h-5 mx-auto mb-1 text-green-400" />
               <p className="text-xl font-bold">{GLOBAL_STATS.totalRewardsGiven}</p>
               <p className="text-[10px] text-muted-foreground">SIG Rewarded</p>
-            </GlassCard>
-            <GlassCard hover={false} className="p-3 text-center">
+<GlassCard hover={false} className="p-3 text-center">
               <Sparkles className="w-5 h-5 mx-auto mb-1 text-purple-400" />
               <p className="text-xl font-bold">{isConnected ? "0" : "--"}</p>
               <p className="text-[10px] text-muted-foreground">NFTs Earned</p>
-            </GlassCard>
-          </div>
+</div>
 
           {/* Connect prompt */}
           {!isConnected && (
@@ -255,8 +250,7 @@ export default function Achievements() {
                   Connect Wallet
                 </Button>
               </Link>
-            </GlassCard>
-          )}
+)}
 
           <Tabs defaultValue="all">
             <TabsList className="w-full grid grid-cols-5 mb-4">

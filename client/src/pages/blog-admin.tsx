@@ -158,8 +158,7 @@ export default function BlogAdmin() {
           <BookOpen className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
           <h2 className="text-xl font-bold mb-2">Authentication Required</h2>
           <p className="text-gray-400">Please log in to access the blog admin.</p>
-        </GlassCard>
-      </div>
+</div>
     );
   }
 
@@ -245,9 +244,7 @@ export default function BlogAdmin() {
                 )}
               </Button>
             </div>
-          </GlassCard>
-
-          <GlassCard glow className="p-6">
+<GlassCard glow className="p-6">
             <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
               <Tag className="w-5 h-5 text-purple-400" />
               Quick Topics
@@ -269,8 +266,7 @@ export default function BlogAdmin() {
                 <p className="text-gray-500 text-sm">Select a category to see topic suggestions</p>
               )}
             </div>
-          </GlassCard>
-        </div>
+</div>
 
         <GlassCard glow className="p-6">
           <div className="flex items-center justify-between mb-6">
@@ -359,8 +355,7 @@ export default function BlogAdmin() {
               ))}
             </div>
           )}
-        </GlassCard>
-      </div>
-    </div>
+</div>
+</div>
   );
 }

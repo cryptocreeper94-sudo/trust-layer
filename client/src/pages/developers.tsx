@@ -191,9 +191,7 @@ export default function Developers() {
                     </div>
                   </div>
                 </div>
-              </GlassCard>
-
-              <GlassCard>
+<GlassCard>
                 <div className="overflow-hidden rounded-xl">
                   <div className="flex items-center justify-between px-3 py-2 bg-[#252526] border-b border-white/5">
                     <span className="text-[10px] text-white/60 font-mono">starship.rs</span>
@@ -217,8 +215,7 @@ export default function Developers() {
                     </pre>
                   </div>
                 </div>
-              </GlassCard>
-            </div>
+</div>
           </div>
         </div>
       </section>
@@ -274,11 +271,11 @@ export default function Developers() {
                 </div>
               </div>
             </div>
-          </GlassCard>
-        </div>
+</div>
       </section>
 
       
     </div>
+    </span>
   );
 }

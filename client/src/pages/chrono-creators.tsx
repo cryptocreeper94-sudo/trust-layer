@@ -528,7 +528,6 @@ export default function ChronoCreators() {
             </div>
           </div>
         </div>
-      </section>
 
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
@@ -548,12 +547,12 @@ export default function ChronoCreators() {
                   <ExternalLink className="w-4 h-4" />
                 </Button>
               </a>
-            </div>
           </HoloCard>
-        </div>
-      </section>
       
       <style>{chronoStyles}</style>
     </ChronoLayout>
+    </div>
+    </div>
+    </section>
   );
 }

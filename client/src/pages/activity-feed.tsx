@@ -133,8 +133,7 @@ function ActivityCard({ activity, index }: { activity: ActivityItem; index: numb
             </Button>
           </div>
         </div>
-      </GlassCard>
-    </motion.div>
+</motion.div>
   );
 }
 
@@ -213,20 +212,16 @@ export default function ActivityFeed() {
             <GlassCard hover={false} className="p-2 text-center">
               <div className="text-lg font-bold">{stats.totalTx}</div>
               <div className="text-[9px] text-muted-foreground">Total</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-2 text-center">
+<GlassCard hover={false} className="p-2 text-center">
               <div className="text-lg font-bold text-blue-400">{stats.swaps}</div>
               <div className="text-[9px] text-muted-foreground">Swaps</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-2 text-center">
+<GlassCard hover={false} className="p-2 text-center">
               <div className="text-lg font-bold text-purple-400">{stats.stakes}</div>
               <div className="text-[9px] text-muted-foreground">Stakes</div>
-            </GlassCard>
-            <GlassCard hover={false} className="p-2 text-center">
+<GlassCard hover={false} className="p-2 text-center">
               <div className="text-lg font-bold text-pink-400">{stats.mints}</div>
               <div className="text-[9px] text-muted-foreground">Mints</div>
-            </GlassCard>
-          </div>
+</div>
 
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2 overflow-x-auto pb-1">
@@ -266,8 +261,7 @@ export default function ActivityFeed() {
             <GlassCard className="p-8 text-center">
               <Activity className="w-12 h-12 text-white/10 mx-auto mb-3" />
               <p className="text-muted-foreground">No activity matching filter</p>
-            </GlassCard>
-          )}
+)}
         </div>
       </main>
 

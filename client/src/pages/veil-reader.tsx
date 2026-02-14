@@ -890,8 +890,7 @@ export default function VeilReader() {
                     Continue Reading
                   </Button>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </>
         )}
       </AnimatePresence>
@@ -1035,7 +1034,15 @@ export default function VeilReader() {
             <ChevronRight className="w-5 h-5 ml-1" />
           </Button>
         </div>
-      </div>
+    </div>
+    </motion.div>
+    </motion.div>
+    </p>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
     </div>
   );
 }

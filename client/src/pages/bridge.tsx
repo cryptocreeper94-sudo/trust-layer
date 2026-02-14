@@ -551,12 +551,9 @@ export default function Bridge() {
                     <CollapsibleContent>
                       <div className="p-4 rounded-b-xl bg-white/[0.02] border border-t-0 border-white/10 text-sm text-muted-foreground">
                         {item.a}
-                      </div>
                     </CollapsibleContent>
                   </Collapsible>
                 ))}
-              </div>
-            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -579,13 +576,14 @@ export default function Bridge() {
                 <ExternalLink className="w-4 h-4 mr-2" />
                 View Documentation
               </Button>
-            </motion.div>
             </>
             )}
             
-          </div>
-        </div>
 
     </TooltipProvider>
+    </div>
+    </motion.div>
+    </div>
+    </motion.div>
   );
 }

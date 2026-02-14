@@ -292,8 +292,7 @@ export default function GovernanceCharter() {
                 </p>
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -364,8 +363,7 @@ export default function GovernanceCharter() {
                       </div>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </motion.div>
@@ -418,8 +416,7 @@ export default function GovernanceCharter() {
                       </div>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </motion.div>
@@ -453,8 +450,7 @@ export default function GovernanceCharter() {
                       </div>
                     ))}
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             ))}
           </div>
         </motion.div>
@@ -491,8 +487,7 @@ export default function GovernanceCharter() {
                 ))}
               </tbody>
             </table>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -523,9 +518,10 @@ export default function GovernanceCharter() {
                 </Button>
               </Link>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
       </div>
+    </div>
+    </div>
     </div>
   );
 }

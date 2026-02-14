@@ -174,8 +174,7 @@ export default function SupportPage() {
                     <h3 className="text-sm font-bold text-white mb-1">{link.title}</h3>
                     <p className="text-xs text-white/50">{link.description}</p>
                   </motion.div>
-                </GlassCard>
-              </Link>
+</Link>
             ))}
           </motion.div>
         </div>
@@ -204,8 +203,7 @@ export default function SupportPage() {
                     </Button>
                   </Link>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           ) : (
             <div className="grid gap-6 lg:grid-cols-5">
               <motion.div 
@@ -294,8 +292,7 @@ export default function SupportPage() {
                       )}
                     </AnimatePresence>
                   </form>
-                </GlassCard>
-              </motion.div>
+</motion.div>
               
               <motion.div 
                 initial={{ opacity: 0, x: 20 }}
@@ -330,8 +327,7 @@ export default function SupportPage() {
                       <p className="text-sm text-white/40 mb-1">No tickets yet</p>
                       <p className="text-xs text-white/30">Submit your first ticket using the form</p>
                     </div>
-                  </GlassCard>
-                ) : (
+) : (
                   <div className="space-y-3 max-h-[500px] overflow-y-auto pr-1">
                     {tickets.map((ticket, idx) => (
                       <motion.div
@@ -407,8 +403,7 @@ export default function SupportPage() {
                               )}
                             </AnimatePresence>
                           </div>
-                        </GlassCard>
-                      </motion.div>
+</motion.div>
                     ))}
                   </div>
                 )}
@@ -420,5 +415,6 @@ export default function SupportPage() {
 
       
     </div>
+</Badge>
   );
 }

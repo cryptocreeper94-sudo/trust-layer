@@ -767,5 +767,8 @@ export default function ChroniclesDemo() {
             Guardian-verified execution
           </div>
         </motion.div>
+      </div>
+    </div>
+</Input>
   );
 }

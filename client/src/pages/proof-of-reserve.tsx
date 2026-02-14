@@ -460,5 +460,7 @@ export default function ProofOfReservePage() {
         </Collapsible>
       </div>
     </div>
+    </YAxis>
+</Tooltip>
   );
 }

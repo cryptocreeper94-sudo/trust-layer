@@ -234,8 +234,7 @@ function PricingCard({ plan, billingCycle }: { plan: SubscriptionPlan; billingCy
             2-day free trial · Cancel anytime
           </p>
         </div>
-      </GlassCard>
-    </motion.div>
+</motion.div>
   );
 }
 
@@ -349,8 +348,7 @@ export default function Pricing() {
                   </Button>
                 </Link>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           {/* Referral Program Callout */}
           <motion.div
@@ -381,8 +379,7 @@ export default function Pricing() {
                   </Button>
                 </Link>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}

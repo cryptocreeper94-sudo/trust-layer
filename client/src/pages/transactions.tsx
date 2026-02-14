@@ -282,8 +282,7 @@ export default function Transactions() {
                           </motion.div>
                         )}
                       </AnimatePresence>
-                    </GlassCard>
-                    </div>
+</div>
                   </motion.div>
                 );
               })
@@ -304,8 +303,6 @@ export default function Transactions() {
                 </p>
               </div>
             </div>
-          </motion.div>
-        </div>
-    </div>
+    </motion.div>
   );
 }

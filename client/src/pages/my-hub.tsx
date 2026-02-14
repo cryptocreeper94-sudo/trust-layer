@@ -373,8 +373,7 @@ export default function MyHub() {
               Sign In to Continue
             </Button>
           </Link>
-        </GlassCard>
-      </div>
+</div>
     );
   }
 
@@ -639,8 +638,7 @@ export default function MyHub() {
                   </Link>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             {pendingActions.length > 0 && (
@@ -669,8 +667,7 @@ export default function MyHub() {
                       </Link>
                     ))}
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             )}
 
             <motion.div
@@ -705,8 +702,7 @@ export default function MyHub() {
                     </div>
                   ))}
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -739,8 +735,7 @@ export default function MyHub() {
                     </Link>
                   ))}
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
 
           {showWelcome ? (
@@ -859,8 +854,7 @@ export default function MyHub() {
                     </Link>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           ) : (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -941,8 +935,7 @@ export default function MyHub() {
                   </Link>
                 </div>
               </div>
-            </GlassCard>
-            </motion.div>
+</motion.div>
           )}
 
           <motion.div
@@ -978,8 +971,7 @@ export default function MyHub() {
                       </Link>
                     ))}
                   </div>
-                </GlassCard>
-              ))}
+))}
             </div>
           </motion.div>
 
@@ -1086,8 +1078,7 @@ export default function MyHub() {
                   </Link>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -1120,9 +1111,7 @@ export default function MyHub() {
                   </Button>
                 </Link>
               </div>
-            </GlassCard>
-
-            <GlassCard className="p-6">
+<GlassCard className="p-6">
               <div className="flex items-center gap-3 mb-4">
                 <div className="p-2 rounded-xl bg-cyan-500/20">
                   <Activity className="w-6 h-6 text-cyan-400" />
@@ -1152,8 +1141,7 @@ export default function MyHub() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
         </div>
       </main>

@@ -112,8 +112,7 @@ export default function Feedback() {
                     </Button>
                   </Link>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
         </main>
       </div>
@@ -157,8 +156,7 @@ export default function Feedback() {
                     <Link href="/" className="underline hover:text-white">Sign in</Link> to track your submissions and receive updates on your reports.
                   </p>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           )}
 
           <motion.div
@@ -295,8 +293,7 @@ export default function Feedback() {
                   Failed to submit. Please try again.
                 </p>
               )}
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -321,10 +318,11 @@ export default function Feedback() {
                   </p>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         </div>
-      </main>
+    </main>
     </div>
-  );
+</textarea>
+</textarea>
+);
 }

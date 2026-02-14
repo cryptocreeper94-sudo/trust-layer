@@ -504,8 +504,7 @@ function VerticalCard({ vertical, isSelected, onClick }: { vertical: Vertical; i
             )}
           </div>
         </div>
-      </GlassCard>
-    </motion.div>
+</motion.div>
   );
 }
 
@@ -656,8 +655,7 @@ export default function EcosystemMapPage() {
             </div>
 
             <FlowDiagram />
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         {/* Fractal Pattern Explanation */}
         <motion.div
@@ -689,8 +687,7 @@ export default function EcosystemMapPage() {
                 <div className="absolute inset-16 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 animate-pulse" style={{ animationDelay: "2s" }} />
               </div>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
 
         {/* Verticals Grid */}
         <motion.div
@@ -779,8 +776,7 @@ export default function EcosystemMapPage() {
                     </div>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           )}
         </AnimatePresence>
 
@@ -811,9 +807,9 @@ export default function EcosystemMapPage() {
                 </Button>
               </Link>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
       </div>
     </div>
+</p>
   );
 }

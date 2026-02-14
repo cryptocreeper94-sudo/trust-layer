@@ -420,19 +420,16 @@ export default function DailyBonus() {
                   </div>
                 );
               })}
-            </div>
             
             <div className="mt-4 pt-4 border-t border-white/10 text-center text-sm text-gray-400">
               <p>Login daily to build your streak! Rewards reset if you miss a day.</p>
-            </div>
           </CardContent>
         </Card>
 
         {/* Info */}
         <div className="mt-6 text-center text-xs text-gray-500">
           <p>Daily bonus resets at midnight UTC. Streak bonuses are added on top of wheel prizes.</p>
-        </div>
-      </div>
+    </div>
     </div>
   );
 }

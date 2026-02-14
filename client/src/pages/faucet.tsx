@@ -238,8 +238,7 @@ export default function Faucet() {
                   </Button>
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -316,8 +315,7 @@ export default function Faucet() {
                     )}
                   </div>
                 </CollapsibleContent>
-              </GlassCard>
-            </Collapsible>
+</Collapsible>
           </motion.div>
 
           <motion.div
@@ -350,5 +348,5 @@ export default function Faucet() {
           </motion.div>
         </div>
     </div>
-  );
+);
 }

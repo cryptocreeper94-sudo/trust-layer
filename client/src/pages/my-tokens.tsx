@@ -217,8 +217,7 @@ export default function MyTokensPage() {
                       </Link>
                     )}
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
 
               {/* Early Adopter Status */}
               <motion.div
@@ -265,8 +264,7 @@ export default function MyTokensPage() {
                       </>
                     )}
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
 
               {/* TGE Countdown */}
               <motion.div
@@ -290,8 +288,7 @@ export default function MyTokensPage() {
                       <WalletButton />
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             </div>
 
             {/* Quick Access Cards */}
@@ -341,8 +338,7 @@ export default function MyTokensPage() {
                             <span className="text-sm font-medium text-white">{link.label}</span>
                           </div>
                         )}
-                      </GlassCard>
-                    </motion.div>
+</motion.div>
                   </Link>
                 ))}
               </div>
@@ -378,9 +374,7 @@ export default function MyTokensPage() {
                         {(bag?.sources?.presale?.tokens || 0).toLocaleString()}
                       </div>
                     </div>
-                  </GlassCard>
-
-                  {bag?.sources?.earlyAdopterBonus?.isEarlyAdopter && (
+{bag?.sources?.earlyAdopterBonus?.isEarlyAdopter && (
                     <GlassCard>
                       <div className="p-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -396,8 +390,7 @@ export default function MyTokensPage() {
                           +{(bag?.sources?.earlyAdopterBonus?.tokens || 0).toLocaleString()}
                         </div>
                       </div>
-                    </GlassCard>
-                  )}
+)}
 
                   {(bag?.sources?.shells?.balance || 0) > 0 && (
                     <GlassCard>
@@ -415,8 +408,7 @@ export default function MyTokensPage() {
                           {(bag?.sources?.shells?.convertedToDwc || 0).toLocaleString()}
                         </div>
                       </div>
-                    </GlassCard>
-                  )}
+)}
 
                   {(bag?.sources?.airdrops?.pending || 0) > 0 && (
                     <GlassCard>
@@ -434,8 +426,7 @@ export default function MyTokensPage() {
                           {(bag?.sources?.airdrops?.pending || 0).toLocaleString()}
                         </div>
                       </div>
-                    </GlassCard>
-                  )}
+)}
                 </div>
               </motion.div>
             )}
@@ -469,8 +460,7 @@ export default function MyTokensPage() {
                       </Button>
                     </Link>
                   </div>
-                </GlassCard>
-              ) : (
+) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {purchases.slice(0, 6).map((purchase, i) => (
                     <motion.div
@@ -518,8 +508,7 @@ export default function MyTokensPage() {
                             <Coins className="w-6 h-6 text-cyan-400/30" />
                           </div>
                         </div>
-                      </GlassCard>
-                    </motion.div>
+</motion.div>
                   ))}
                 </div>
               )}
@@ -591,8 +580,7 @@ export default function MyTokensPage() {
                       </div>
                     </div>
                   </div>
-                </GlassCard>
-              </motion.div>
+</motion.div>
             )}
 
             {/* Quick Actions Footer */}
@@ -608,36 +596,32 @@ export default function MyTokensPage() {
                     <ShoppingBag className="w-6 h-6 text-cyan-400 mb-2" />
                     <span className="text-xs font-medium text-white">Buy Signal</span>
                   </div>
-                </GlassCard>
-              </Link>
+</Link>
               <Link href="/rewards">
                 <GlassCard className="hover:border-purple-500/50 transition-colors cursor-pointer">
                   <div className="p-4 flex flex-col items-center text-center">
                     <Gift className="w-6 h-6 text-purple-400 mb-2" />
                     <span className="text-xs font-medium text-white">Rewards</span>
                   </div>
-                </GlassCard>
-              </Link>
+</Link>
               <Link href="/staking">
                 <GlassCard className="hover:border-emerald-500/50 transition-colors cursor-pointer">
                   <div className="p-4 flex flex-col items-center text-center">
                     <Trophy className="w-6 h-6 text-emerald-400 mb-2" />
                     <span className="text-xs font-medium text-white">Staking</span>
                   </div>
-                </GlassCard>
-              </Link>
+</Link>
               <Link href="/support">
                 <GlassCard className="hover:border-amber-500/50 transition-colors cursor-pointer">
                   <div className="p-4 flex flex-col items-center text-center">
                     <Shield className="w-6 h-6 text-amber-400 mb-2" />
                     <span className="text-xs font-medium text-white">Support</span>
                   </div>
-                </GlassCard>
-              </Link>
-            </motion.div>
+</Link>
           </>
         )}
-      </main>
+    </main>
     </div>
+    </motion.div>
   );
 }

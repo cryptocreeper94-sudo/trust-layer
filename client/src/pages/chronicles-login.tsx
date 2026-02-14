@@ -459,5 +459,10 @@ export default function ChroniclesLogin() {
             </div>
           </motion.div>
         </div>
+    </div>
+</Input>
+</Input>
+</Input>
+    </div>
   );
 }

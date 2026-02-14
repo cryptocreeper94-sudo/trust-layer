@@ -1198,8 +1198,7 @@ export default function CommunityHub() {
                       <p className="text-sm text-gray-400 mb-4">
                         Be the first to send a message in this channel!
                       </p>
-                    </GlassCard>
-                  </div>
+</div>
                 )}
                 {typingUsers.length > 0 && (
                   <div className="px-4 py-2 text-xs text-gray-400">
@@ -1426,13 +1425,10 @@ export default function CommunityHub() {
             <div className="p-3 rounded-lg bg-white/5 border border-white/10">
               <h4 className="text-sm font-medium text-white mb-2">Notifications</h4>
               <p className="text-xs text-gray-400">Notification settings coming soon</p>
-            </div>
             
             <div className="p-3 rounded-lg bg-white/5 border border-white/10">
               <h4 className="text-sm font-medium text-white mb-2">Appearance</h4>
               <p className="text-xs text-gray-400">Theme settings coming soon</p>
-            </div>
-          </div>
         </DialogContent>
       </Dialog>
 
@@ -1442,7 +1438,6 @@ export default function CommunityHub() {
             <DialogTitle className="flex items-center gap-2 text-base sm:text-lg">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center">
                 <MessageCircle className="w-5 h-5 text-white" />
-              </div>
               About ChronoChat
             </DialogTitle>
           </DialogHeader>
@@ -1474,13 +1469,11 @@ export default function CommunityHub() {
                   Explore communities
                 </li>
               </ul>
-            </div>
             
             <div className="p-3 rounded-lg bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
               <p className="text-xs sm:text-sm text-gray-300">
                 Part of the <span className="text-cyan-400 font-medium">Trust Layer</span> ecosystem
               </p>
-            </div>
             
             <Button 
               onClick={() => setAboutOpen(false)} 
@@ -1489,9 +1482,15 @@ export default function CommunityHub() {
             >
               Got it
             </Button>
-          </div>
         </DialogContent>
       </Dialog>
     </div>
-  );
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</Input>
+);
 }

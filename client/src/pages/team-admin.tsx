@@ -306,9 +306,7 @@ function TeamDashboard() {
                 </p>
               </div>
             )}
-          </GlassCard>
-
-          <GlassCard className="p-6" glow>
+<GlassCard className="p-6" glow>
             <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
               <Target className="w-5 h-5 text-purple-400" />
               Race to 200 Participants
@@ -331,9 +329,7 @@ function TeamDashboard() {
                 <p className="text-xs text-gray-400">Quests Completed</p>
               </div>
             </div>
-          </GlassCard>
-
-          <GlassCard className="p-6" glow>
+<GlassCard className="p-6" glow>
             <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
               <Coins className="w-5 h-5 text-amber-400" />
               Presale Status
@@ -373,9 +369,7 @@ function TeamDashboard() {
                 <p>• Launch price: $0.01</p>
               </div>
             </div>
-          </GlassCard>
-
-          <GlassCard className="p-6" glow>
+<GlassCard className="p-6" glow>
             <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
               <ExternalLink className="w-5 h-5 text-cyan-400" />
               Quick Links
@@ -411,8 +405,7 @@ function TeamDashboard() {
                 <ArrowRight className="w-4 h-4 text-amber-500 group-hover:text-amber-400" />
               </Link>
             </div>
-          </GlassCard>
-        </div>
+</div>
 
         <GlassCard className="p-6" glow>
           <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
@@ -455,9 +448,7 @@ function TeamDashboard() {
               ))}
             </div>
           )}
-        </GlassCard>
-
-        <div className="mt-8 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+<div className="mt-8 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
             <div>
@@ -470,7 +461,6 @@ function TeamDashboard() {
           </div>
         </div>
       </main>
-    </div>
     </div>
   );
 }

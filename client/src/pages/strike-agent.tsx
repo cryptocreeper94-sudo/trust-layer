@@ -1123,8 +1123,7 @@ export default function StrikeAgentPage() {
                   chain={analyzeAddress.startsWith('0x') ? 'Ethereum' : 'Solana'}
                 />
               )}
-            </GlassCard>
-          </div>
+</div>
         )}
         
         {mainTab === 'signals' && (
@@ -1324,7 +1323,8 @@ export default function StrikeAgentPage() {
           }}
         />
       )}
-    </div>
     </SubscriptionGate>
+</input>
+    </div>
   );
 }

@@ -466,8 +466,7 @@ function StatsBar() {
               <span className="text-lg sm:text-xl font-bold text-white">{stat.value}</span>
             </div>
             <p className="text-[10px] sm:text-xs text-slate-400 uppercase tracking-wider">{stat.label}</p>
-          </GlassCard>
-        </motion.div>
+</motion.div>
       ))}
     </div>
   );
@@ -501,8 +500,7 @@ function CurrencyExplainer() {
           <p className="text-sm text-slate-400 leading-relaxed">Receive FREE Sweeps Coins with Gold Coin purchases. SC can be redeemed for prizes!</p>
         </div>
       </div>
-    </GlassCard>
-  );
+);
 }
 
 export default function Arcade() {
@@ -584,8 +582,7 @@ export default function Arcade() {
                 </Badge>
               ))}
             </div>
-          </GlassCard>
-        </div>
+</div>
     </main>
   );
 }

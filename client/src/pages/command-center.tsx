@@ -562,5 +562,5 @@ export default function CommandCenter() {
         )}
       </div>
     </div>
-  );
+);
 }

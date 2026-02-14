@@ -227,9 +227,7 @@ export default function ReferralProgram() {
                   </div>
                 </div>
               </div>
-            </GlassCard>
-
-            <GlassCard glow>
+<GlassCard glow>
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-6">
                   <Trophy className="w-5 h-5 text-orange-400" />
@@ -269,8 +267,7 @@ export default function ReferralProgram() {
                   ))}
                 </div>
               </div>
-            </GlassCard>
-          </div>
+</div>
 
           <GlassCard glow className="mb-12">
             <div className="p-6">
@@ -420,9 +417,7 @@ export default function ReferralProgram() {
                 </div>
               </div>
             </div>
-          </GlassCard>
-
-          <GlassCard glow className="mb-12">
+<GlassCard glow className="mb-12">
             <div className="p-6">
               <div className="flex items-center gap-2 mb-4">
                 <TrendingUp className="w-5 h-5 text-green-400" />
@@ -460,9 +455,7 @@ export default function ReferralProgram() {
                 </div>
               </div>
             </div>
-          </GlassCard>
-
-          <div className="text-center">
+<div className="text-center">
             {isAuthenticated ? (
               <Link href="/dashboard">
                 <Button size="lg" className="gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600">
@@ -484,5 +477,7 @@ export default function ReferralProgram() {
       
       <SimpleLoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
     </div>
-  );
+</Input>
+</Input>
+);
 }

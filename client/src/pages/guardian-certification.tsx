@@ -530,8 +530,7 @@ function IntakeWizard() {
                 </p>
               </form>
             )}
-          </GlassCard>
-        </motion.div>
+</motion.div>
       </div>
     </section>
   );
@@ -1005,8 +1004,7 @@ export default function GuardianCertificationPage() {
                     </div>
                     <h3 className="text-white font-semibold mb-2" data-testid={`text-benefit-title-${index}`}>{item.title}</h3>
                     <p className="text-white/50 text-sm">{item.description}</p>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </div>
@@ -1075,8 +1073,7 @@ export default function GuardianCertificationPage() {
                         <p className="text-white/50 text-sm">{pillar.description}</p>
                       </div>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
 
@@ -1103,8 +1100,7 @@ export default function GuardianCertificationPage() {
                   </motion.div>
                 ))}
               </div>
-            </GlassCard>
-          </div>
+</div>
         </section>
 
         {/* Trust Center Section */}
@@ -1167,8 +1163,7 @@ export default function GuardianCertificationPage() {
                           </div>
                         </div>
                       </div>
-                    </GlassCard>
-                  </a>
+</a>
                 </motion.div>
               ))}
             </div>
@@ -1192,8 +1187,7 @@ export default function GuardianCertificationPage() {
                     </div>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
         </section>
 
@@ -1244,8 +1238,7 @@ export default function GuardianCertificationPage() {
                     </div>
                     <h4 className="text-white font-semibold mb-1 text-sm">{feature.title}</h4>
                     <p className="text-white/50 text-xs">{feature.description}</p>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
 
@@ -1333,8 +1326,7 @@ export default function GuardianCertificationPage() {
                 <p className="text-white/60 text-sm">
                   <span className="text-violet-400 font-semibold">Early Access:</span> Get 20% off your first year when you join the waitlist before launch.
                 </p>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
         </section>
 
@@ -1411,8 +1403,7 @@ export default function GuardianCertificationPage() {
                             </li>
                           ))}
                         </ul>
-                      </GlassCard>
-                    </div>
+</div>
                     
                     <div className="flex-1 hidden md:block" />
                   </motion.div>
@@ -1479,8 +1470,7 @@ export default function GuardianCertificationPage() {
                     </span>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           </div>
         </section>
 
@@ -1523,8 +1513,7 @@ export default function GuardianCertificationPage() {
                     <h3 className="text-white/50 font-semibold mb-1">{advisor.name}</h3>
                     <p className="text-purple-400 text-sm font-medium mb-3">{advisor.role}</p>
                     <p className="text-white/40 text-sm">{advisor.bio}</p>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
 
@@ -1615,8 +1604,7 @@ export default function GuardianCertificationPage() {
                         </span>
                       </div>
                     </div>
-                  </GlassCard>
-                </motion.div>
+</motion.div>
               ))}
             </div>
           </div>
@@ -1663,13 +1651,12 @@ export default function GuardianCertificationPage() {
                     </Link>
                   </div>
                 </div>
-              </GlassCard>
-            </motion.div>
-          </div>
-        </section>
-      </main>
-
-      
-    </div>
+</div>
+    </section>
+    </ContactDialog>
+    </motion.div>
+    </ContactDialog>
+    </ContactDialog>
+    </ContactDialog>
   );
 }

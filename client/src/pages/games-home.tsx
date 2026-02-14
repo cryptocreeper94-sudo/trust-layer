@@ -294,8 +294,7 @@ function LiveStats() {
                   </span>
                 </div>
                 <p className="text-[10px] sm:text-xs text-white/40 uppercase tracking-wider font-medium whitespace-nowrap">{stat.label}</p>
-              </GlassCard>
-            </motion.div>
+</motion.div>
           ))}
         </div>
       </div>
@@ -560,8 +559,7 @@ function CurrencySection() {
               </Button>
             </Link>
           </div>
-        </GlassCard>
-      </div>
+</div>
     </section>
   );
 }
@@ -619,8 +617,7 @@ function BottomCTA() {
               </Button>
             </Link>
           </div>
-        </GlassCard>
-      </div>
+</div>
     </section>
   );
 }

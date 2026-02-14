@@ -355,8 +355,7 @@ function SectionCard({ section, isExpanded, onToggle }: { section: Section; isEx
           </motion.div>
         )}
       </AnimatePresence>
-    </GlassCard>
-  );
+);
 }
 
 
@@ -484,9 +483,9 @@ export default function LearnPage() {
                 </Button>
               </Link>
             </div>
-          </GlassCard>
-        </motion.div>
+</motion.div>
       </div>
     </div>
+    </SectionCard>
   );
 }

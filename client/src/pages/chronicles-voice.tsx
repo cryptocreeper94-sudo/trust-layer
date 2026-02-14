@@ -252,9 +252,7 @@ export default function ChroniclesVoice() {
               </p>
             </div>
           </div>
-        </GlassCard>
-
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+<div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
           <GlassCard className="p-4 text-center">
             <div className={`w-10 h-10 rounded-full mx-auto mb-2 flex items-center justify-center ${
               voice?.isReady ? "bg-green-500/20" : voice?.processingCount > 0 ? "bg-yellow-500/20" : "bg-gray-500/20"
@@ -273,9 +271,7 @@ export default function ChroniclesVoice() {
             <p className="text-[10px] text-gray-500 mt-0.5">
               {voice?.totalSamples || 0} sample{(voice?.totalSamples || 0) !== 1 ? "s" : ""} recorded
             </p>
-          </GlassCard>
-
-          <GlassCard className="p-4 text-center">
+<GlassCard className="p-4 text-center">
             <div className="w-10 h-10 rounded-full mx-auto mb-2 flex items-center justify-center bg-purple-500/20">
               <Coins className="w-5 h-5 text-purple-400" />
             </div>
@@ -283,9 +279,7 @@ export default function ChroniclesVoice() {
             <p className="text-[10px] text-gray-500 mt-0.5">
               Clone: {credits?.voiceCloneCost || 50} | Message: {credits?.voiceMessageCost || 5}
             </p>
-          </GlassCard>
-
-          <GlassCard className="p-4 text-center">
+<GlassCard className="p-4 text-center">
             <div className="w-10 h-10 rounded-full mx-auto mb-2 flex items-center justify-center bg-cyan-500/20">
               <Headphones className="w-5 h-5 text-cyan-400" />
             </div>
@@ -293,8 +287,7 @@ export default function ChroniclesVoice() {
               {voice?.readyCount || 0} / 3
             </p>
             <p className="text-[10px] text-gray-500 mt-0.5">Minimum 3 samples for best quality</p>
-          </GlassCard>
-        </div>
+</div>
 
         {voice?.isReady && (
           <GlassCard className="p-4 mb-5 border border-green-500/20">
@@ -311,8 +304,7 @@ export default function ChroniclesVoice() {
               </div>
               <Badge className="bg-green-500/20 text-green-400">Active</Badge>
             </div>
-          </GlassCard>
-        )}
+)}
 
         <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
           <Waves className="w-4 h-4 text-cyan-400" /> Training Scripts
@@ -438,8 +430,7 @@ export default function ChroniclesVoice() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </GlassCard>
-              </div>
+</div>
             </motion.div>
           ))}
         </div>
@@ -466,7 +457,7 @@ export default function ChroniclesVoice() {
               <p>Voice messages cost {credits?.voiceMessageCost || 5} credits each. Your voice data is encrypted and never shared.</p>
             </div>
           </div>
-        </GlassCard>
-      </div>
+</div>
+    </div>
   );
 }

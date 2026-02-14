@@ -868,19 +868,17 @@ export default function DWSCExecutiveSummary() {
                 >
                   Support Development
                 </Link>
-              </div>
               <p className="text-white/40 text-sm">
                 DarkWave Studios • dwsc.io • yourlegacy.io
               </p>
               <p className="text-white/30 text-xs mt-2">
                 Direct inquiries: cryptocreeper94@gmail.com
               </p>
-            </motion.div>
-          </div>
-        </section>
-      </main>
 
       
     </div>
+    </div>
+    </section>
+    </motion.div>
   );
 }

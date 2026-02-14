@@ -132,8 +132,7 @@ export default function Portfolio() {
                   )}
                 </div>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -155,8 +154,7 @@ export default function Portfolio() {
                   </div>
                   <ExternalLink className="w-4 h-4 text-muted-foreground" />
                 </div>
-              </GlassCard>
-            </Link>
+</Link>
           </motion.div>
 
           <motion.div
@@ -229,8 +227,7 @@ export default function Portfolio() {
                         <div className="mt-2 pt-2 border-t border-white/5 text-[10px] text-muted-foreground">
                           Balance: {(token as any).displayBalance || formatAmount(token.balance)} {token.symbol}
                         </div>
-                      </GlassCard>
-                    </motion.div>
+</motion.div>
                   ))
                 ) : (
                   <div className="text-center py-8">
@@ -275,9 +272,7 @@ export default function Portfolio() {
                       </div>
                     </div>
                   </div>
-                </GlassCard>
-
-                {portfolio.staking.positions.length > 0 ? (
+{portfolio.staking.positions.length > 0 ? (
                   portfolio.staking.positions.map((position, index) => (
                     <GlassCard glow key={index} className="p-3" data-testid={`staking-position-${index}`}>
                       <div className="flex items-center justify-between mb-2">
@@ -288,8 +283,7 @@ export default function Portfolio() {
                         <span className="text-muted-foreground">Staked: {formatAmount(position.amount)} SIG</span>
                         <span className="text-green-400">+{formatAmount(position.rewards)} SIG</span>
                       </div>
-                    </GlassCard>
-                  ))
+))
                 ) : (
                   <div className="text-center py-4">
                     <p className="text-[10px] text-muted-foreground mb-3">No active staking positions</p>
@@ -326,8 +320,7 @@ export default function Portfolio() {
                             <div className="text-[10px] text-muted-foreground">Est. Value</div>
                           </div>
                         </div>
-                      </GlassCard>
-                    ))}
+))}
                     <Link href="/nft">
                       <Button className="w-full h-10" variant="outline">
                         View All NFTs
@@ -375,7 +368,8 @@ export default function Portfolio() {
               </div>
             </div>
           </motion.div>
-        </div>
-      </div>
+    </PortfolioAnalytics>
+    </div>
+    </div>
   );
 }

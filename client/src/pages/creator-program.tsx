@@ -407,8 +407,7 @@ export default function CreatorProgram() {
                   Submissions Opening Soon
                 </Button>
               </div>
-            </GlassCard>
-          </div>
+</div>
         </div>
       </section>
 
@@ -484,8 +483,7 @@ export default function CreatorProgram() {
                     <p className="text-xs text-gray-500">Possibilities</p>
                   </div>
                 </div>
-              </GlassCard>
-            </div>
+</div>
           </motion.div>
         </div>
       </section>
@@ -508,5 +506,8 @@ export default function CreatorProgram() {
         </div>
       </footer>
     </div>
+    </GamesComingSoonModal>
+</span>
+    </p>
   );
 }

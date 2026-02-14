@@ -543,12 +543,8 @@ export default function ChroniclesTimePortal() {
                       <span>+{selectedMission.experienceReward} XP</span>
                     </div>
                   </div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
         )}
       </AnimatePresence>
     </div>
-  );
+);
 }

@@ -256,27 +256,22 @@ export default function DevelopersRegister() {
                   </Button>
                 </div>
               )}
-            </GlassCard>
-
-            <div className="mt-8 grid grid-cols-3 gap-4">
+<div className="mt-8 grid grid-cols-3 gap-4">
               <GlassCard className="text-center p-4">
                 <Zap className="w-6 h-6 text-primary mx-auto mb-2" />
                 <p className="text-xs text-muted-foreground">200K+ TPS</p>
-              </GlassCard>
-              <GlassCard className="text-center p-4">
+<GlassCard className="text-center p-4">
                 <Shield className="w-6 h-6 text-secondary mx-auto mb-2" />
                 <p className="text-xs text-muted-foreground">Secure</p>
-              </GlassCard>
-              <GlassCard className="text-center p-4">
+<GlassCard className="text-center p-4">
                 <Code className="w-6 h-6 text-cyan-400 mx-auto mb-2" />
                 <p className="text-xs text-muted-foreground">Easy SDK</p>
-              </GlassCard>
-            </div>
+</div>
           </motion.div>
         </div>
       </main>
 
       
     </div>
-  );
+);
 }

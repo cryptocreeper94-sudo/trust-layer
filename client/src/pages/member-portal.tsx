@@ -95,8 +95,7 @@ export default function MemberPortal() {
                 Sign In
               </Button>
             </Link>
-          </GlassCard>
-        </div>
+</div>
       </div>
     );
   }
@@ -180,30 +179,24 @@ export default function MemberPortal() {
                     </div>
                   </div>
                 </div>
-              </GlassCard>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <GlassCard className="p-4 text-center">
                   <Shield className="w-6 h-6 text-cyan-400 mx-auto mb-2" />
                   <p className="text-2xl font-bold text-white">{trustScore}</p>
                   <p className="text-xs text-white/60">Trust Score</p>
-                </GlassCard>
-                <GlassCard className="p-4 text-center">
+<GlassCard className="p-4 text-center">
                   <Users className="w-6 h-6 text-purple-400 mx-auto mb-2" />
                   <p className="text-2xl font-bold text-white">{connections.length}</p>
                   <p className="text-xs text-white/60">Connections</p>
-                </GlassCard>
-                <GlassCard className="p-4 text-center">
+<GlassCard className="p-4 text-center">
                   <Wallet className="w-6 h-6 text-green-400 mx-auto mb-2" />
                   <p className="text-2xl font-bold text-white">{(shellWallet as any)?.balance?.toLocaleString() || "0"}</p>
                   <p className="text-xs text-white/60">Shells</p>
-                </GlassCard>
-                <GlassCard className="p-4 text-center">
+<GlassCard className="p-4 text-center">
                   <Star className="w-6 h-6 text-amber-400 mx-auto mb-2" />
                   <p className="text-2xl font-bold text-white">{(memberCard as any)?.rewardPoints || 0}</p>
                   <p className="text-xs text-white/60">Points</p>
-                </GlassCard>
-              </div>
+</div>
 
               <GlassCard glow className="p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -225,8 +218,7 @@ export default function MemberPortal() {
                     </div>
                   ))}
                 </div>
-              </GlassCard>
-            </div>
+</div>
 
             <div className="space-y-6">
               <GlassCard glow className="p-6">
@@ -246,9 +238,7 @@ export default function MemberPortal() {
                     </Link>
                   </div>
                 )}
-              </GlassCard>
-
-              <GlassCard glow className="p-6">
+<GlassCard glow className="p-6">
                 <h3 className="font-bold text-white mb-4">Referral Program</h3>
                 <p className="text-white/60 text-sm mb-4">
                   Earn Shells for every person you refer to the Trust Layer
@@ -279,9 +269,7 @@ export default function MemberPortal() {
                     View Details <ChevronRight className="w-4 h-4 ml-1" />
                   </Button>
                 </Link>
-              </GlassCard>
-
-              <GlassCard glow className="p-6">
+<GlassCard glow className="p-6">
                 <h3 className="font-bold text-white mb-4">Quick Actions</h3>
                 <div className="space-y-2">
                   <Link href="/directory">
@@ -303,8 +291,7 @@ export default function MemberPortal() {
                     </Button>
                   </Link>
                 </div>
-              </GlassCard>
-            </div>
+</div>
           </motion.div>
         )}
 
@@ -356,8 +343,7 @@ export default function MemberPortal() {
                   </div>
                 ))}
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         {activeTab === "activity" && (
@@ -380,8 +366,7 @@ export default function MemberPortal() {
                   </div>
                 ))}
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
 
         {activeTab === "settings" && (
@@ -425,8 +410,7 @@ export default function MemberPortal() {
                   Save Changes
                 </Button>
               </div>
-            </GlassCard>
-          </motion.div>
+</motion.div>
         )}
       </div>
     </div>
