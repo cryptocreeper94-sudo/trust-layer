@@ -685,9 +685,24 @@ function Router() {
   return <DWSCRouter />;
 }
 
+function AppShell({ appType }: { appType: string }) {
+  const [location] = useLocation();
+  const isStandalonePWA = location.startsWith("/signal-chat") || location.startsWith("/guardian-scanner");
+
+  return (
+    <>
+      {!isStandalonePWA && appType === "dwsc" && <SiteNav />}
+      {!isStandalonePWA && appType === "games" && <GamesNav />}
+      <Router />
+      {!isStandalonePWA && appType === "dwsc" && <AIAssistant />}
+      {!isStandalonePWA && <FloatingChat />}
+      {!isStandalonePWA && <GlobalSearch />}
+    </>
+  );
+}
+
 function App() {
   const appType = useMemo(() => getAppFromHost(), []);
-  const showAIAssistant = appType === "dwsc";
   
   return (
     <QueryClientProvider client={queryClient}>
@@ -697,12 +712,7 @@ function App() {
             <FavoritesProvider>
               <TooltipProvider>
                 <Toaster />
-                {appType === "dwsc" && <SiteNav />}
-                {appType === "games" && <GamesNav />}
-                <Router />
-                {showAIAssistant && <AIAssistant />}
-                <FloatingChat />
-                <GlobalSearch />
+                <AppShell appType={appType} />
               </TooltipProvider>
             </FavoritesProvider>
           </NotificationsProvider>
