@@ -1,0 +1,74 @@
+GarageBot Inbound Affiliate Program — Trust Layer Handoff
+
+What We Built:
+GarageBot now has a fully operational inbound affiliate program that allows external promoters to earn commissions by referring new users to the platform. The system is live at /affiliates and includes enrollment, referral tracking, earnings calculation, payout management, and a Trust Layer integration endpoint for cross-ecosystem tracking.
+
+Affiliate Code Format:
+
+Pattern: GB-XXXXXX (prefix "GB-" followed by 6 uppercase alphanumeric characters)
+Excluded characters: 0, O, 1, I (to avoid visual ambiguity)
+Valid character set: A B C D E F G H J K L M N P Q R S T U V W X Y Z 2 3 4 5 6 7 8 9
+Example: GB-K7HN3R
+Commission Rules:
+
+Purchase Commission: 10% of GarageBot's affiliate commission on purchases made by referred users
+Pro Conversion Bonus: One-time $5 bonus when a referred user upgrades to Pro (idempotent — only paid once per referral)
+Pro Recurring: $2/month per active Pro referral
+Qualification Threshold: Referred user must accumulate $100 in total purchases before the affiliate starts earning commission
+Minimum Payout: $20 balance required before requesting payout
+Payout Method: PayPal (admin-approved)
+Trust Layer Integration Endpoint:
+
+GET /api/affiliate-program/trustlayer/:code
+
+This is the handoff endpoint for cross-ecosystem tracking. It's publicly accessible (no auth required) and returns a full JSON payload when given a valid GB code.
+
+Response format:
+
+{
+  "affiliateCode": "GB-K7HN3R",
+  "userId": 42,
+  "status": "active",
+  "enrolledAt": "2026-02-14T...",
+  "commissionRules": {
+    "purchaseCommission": "10% of GarageBot affiliate commission",
+    "proConversionBonus": "$5 one-time",
+    "proRecurring": "$2/month per active Pro referral",
+    "qualificationThreshold": "$100 total referred purchases",
+    "minimumPayout": "$20"
+  },
+  "stats": {
+    "totalReferrals": 12,
+    "qualifiedReferrals": 5,
+    "proReferrals": 2,
+    "totalEarnings": "47.50",
+    "availableBalance": "27.50"
+  },
+  "recentEarnings": [
+    {
+      "eventType": "purchase_commission",
+      "amount": "3.20",
+      "description": "10% of $32.00 GarageBot commission (order: $189.99)",
+      "earnedAt": "2026-02-13T..."
+    }
+  ]
+}
+Returns 404 with { "error": "Affiliate not found" } for invalid codes.
+
+Database Tables:
+
+affiliate_accounts — Stores enrolled affiliates (code, user link, PayPal email, status, balances)
+affiliate_referrals — Tracks each referred user (signup date, purchase totals, Pro status, qualification)
+affiliate_earnings — Individual earning events (purchase commissions, Pro bonuses, recurring)
+affiliate_payouts_inbound — Payout requests and admin approval/payment history
+API Route Prefix: All affiliate routes live under /api/affiliate-program/*
+
+Security: All financial mutation routes (record-purchase, record-pro-conversion, admin accounts, admin payouts) require admin role. User-facing routes (enroll, dashboard, payout-request) require authentication. The Trust Layer handoff endpoint is public read-only.
+
+Let me know if you want me to adjust any of the details or add anything else to this.
+
+
+Scroll to latest
+
+Make, test, iterate…
+
