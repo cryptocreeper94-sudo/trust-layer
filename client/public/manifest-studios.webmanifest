@@ -1,8 +1,8 @@
 {
-  "id": "/darkwave-studios",
-  "name": "DarkWave Studios",
-  "short_name": "DW Studios",
-  "description": "Building the future of blockchain technology. DarkWave Studios, LLC.",
+  "id": "/darkwave-studio",
+  "name": "DarkWave Studio",
+  "short_name": "DW Studio",
+  "description": "The integrated development environment for building on DarkWave Smart Chain.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0f",
