@@ -408,6 +408,7 @@ function OrbyFlyer({ multiplier, crashed, cashedOut, hasPartialCashout }: { mult
           alt="Orby"
           className="w-full h-full object-contain"
           style={{
+            mixBlendMode: "screen",
             filter: crashed 
               ? "drop-shadow(0 0 20px rgba(239,68,68,0.8)) brightness(0.8) saturate(0.5)"
               : cashedOut
