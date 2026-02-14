@@ -20,7 +20,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/use-auth";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
-import orbyFlying from "@assets/generated_images/orby_clean_mascot.png";
+import orbyFlying from "@assets/generated_images/orby_crash_cape.png";
 
 interface SweepsBalance {
   goldCoins: string;
@@ -344,8 +344,8 @@ function OrbyFlyer({ multiplier, crashed, cashedOut, hasPartialCashout }: { mult
             boxShadow: cashedOut
               ? `0 0 ${12 - i}px rgba(74,222,128,${0.6 - i * 0.04})`
               : `0 0 ${12 - i}px rgba(76,244,255,${0.6 - i * 0.04})`,
-            left: `${-8 - i * 4}%`,
-            top: `${4 + i * 3}%`,
+            left: `${-5 - i * 3}%`,
+            top: `${50 + i * 5}%`,
           }}
           animate={{
             opacity: [0.8 - i * 0.05, 0.4 - i * 0.03, 0.8 - i * 0.05],
@@ -361,11 +361,11 @@ function OrbyFlyer({ multiplier, crashed, cashedOut, hasPartialCashout }: { mult
       
       {!crashed && (
         <motion.div
-          className="absolute -left-4 top-1/2 -translate-y-1/2 w-24 h-8 blur-md"
+          className="absolute -left-6 bottom-0 w-20 h-20 blur-md"
           style={{
             background: cashedOut
-              ? "linear-gradient(to left, rgba(74,222,128,0.6), rgba(74,222,128,0.3), transparent)"
-              : "linear-gradient(to left, rgba(76,244,255,0.6), rgba(255,79,216,0.4), transparent)",
+              ? "radial-gradient(ellipse at top right, rgba(74,222,128,0.6), rgba(74,222,128,0.3), transparent)"
+              : "radial-gradient(ellipse at top right, rgba(76,244,255,0.6), rgba(255,79,216,0.4), transparent)",
           }}
           animate={{
             opacity: [0.5, 0.8, 0.5],
@@ -378,11 +378,11 @@ function OrbyFlyer({ multiplier, crashed, cashedOut, hasPartialCashout }: { mult
       <motion.div
         className="absolute left-0 top-0 w-16 h-16 sm:w-20 sm:h-20"
         animate={{
-          rotate: crashed ? [0, 180, 360] : cashedOut ? [-15, -10, -15] : [-20, -25, -20],
-          scale: crashed ? [1, 0.5, 0] : cashedOut ? [1.1, 1.15, 1.1] : [1, 1.02, 1],
+          rotate: crashed ? [0, 180, 540] : cashedOut ? [0, -3, 0] : [0, -5, 0],
+          scale: crashed ? [1, 0.5, 0] : cashedOut ? [1.1, 1.15, 1.1] : [1, 1.04, 1],
         }}
         transition={{
-          duration: crashed ? 1 : 2,
+          duration: crashed ? 1 : 1.5,
           repeat: crashed ? 0 : Infinity,
           ease: crashed ? "easeIn" : "easeInOut",
         }}
@@ -1327,10 +1327,16 @@ export default function CrashGame() {
                   
                   <div 
                     className="absolute w-16 h-16 sm:w-20 sm:h-20 z-20 transition-all duration-100 ease-linear"
-                    style={{ 
-                      left: `${Math.min(Math.max(5, (multiplier - 1) * 12), 75)}%`,
-                      bottom: `${Math.min(20 + Math.sin((multiplier - 1) * 0.5) * 10, 35)}%`,
-                    }}
+                    style={(() => {
+                      const t = Math.min((multiplier - 1) / 8, 1);
+                      const xPos = 5 + t * 80;
+                      const yPos = 5 + Math.pow(t, 3) * 75;
+                      return {
+                        left: `${xPos}%`,
+                        bottom: `${yPos}%`,
+                        transform: `rotate(${-10 - Math.pow(t, 2) * 55}deg)`,
+                      };
+                    })()}
                   >
                     <OrbyFlyer 
                       multiplier={multiplier} 
