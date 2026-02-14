@@ -80,7 +80,6 @@ const navCategories = [
     icon: Users,
     items: [
       { href: "/signal-chat", label: "Signal Chat", icon: Users, badge: "Live" },
-      { href: "/community", label: "ChronoChat Hub", icon: Users, badge: "New" },
       { href: "/domains", label: "Domain Registry", icon: Globe, badge: "New" },
       { href: "/influencer-partnership", label: "KOL Program", icon: Users, badge: "Apply" },
     ]
@@ -454,17 +453,21 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
           <button
             onClick={onClose}
             style={{
-              background: 'transparent',
-              border: 'none',
+              background: 'rgba(255,255,255,0.1)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              borderRadius: '10px',
               color: '#ffffff',
               cursor: 'pointer',
               padding: '8px',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              minWidth: '40px',
+              minHeight: '40px',
             }}
+            data-testid="button-close-menu"
           >
-            <X style={{ width: '20px', height: '20px' }} />
+            <X style={{ width: '22px', height: '22px' }} />
           </button>
         </div>
 
