@@ -319,8 +319,8 @@ function LaunchCardComponent({ card, index }: { card: LaunchCard; index: number 
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, duration: 0.4 }}
       onClick={() => navigate(card.href)}
-      className={`group relative overflow-hidden rounded-2xl border border-white/5 cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:border-white/15 hover:${card.glowColor} ${card.featured ? "min-h-[220px]" : "min-h-[200px]"}`}
-      style={{ boxShadow: "0 4px 30px rgba(0,0,0,0.3)" }}
+      className={`group relative overflow-hidden rounded-2xl border border-white/5 cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:border-white/15 hover:${card.glowColor} ${card.featured ? "min-h-[260px]" : "min-h-[240px]"}`}
+      style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.4)" }}
       data-testid={`card-${card.label.toLowerCase().replace(/\s+/g, "-")}`}
     >
       <div className="absolute inset-0">
@@ -341,14 +341,14 @@ function LaunchCardComponent({ card, index }: { card: LaunchCard; index: number 
         </div>
       )}
 
-      <div className="relative z-10 h-full flex flex-col justify-end p-4">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-white/10 to-white/5 border border-white/10 flex items-center justify-center shrink-0 backdrop-blur-sm">
-            <span className="text-white/90">{card.icon}</span>
+      <div className="relative z-10 h-full flex flex-col justify-end p-5">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/15 to-white/5 border border-white/10 flex items-center justify-center shrink-0 backdrop-blur-sm shadow-lg">
+            <span className="text-white">{card.icon}</span>
           </div>
           <div className="min-w-0">
-            <h3 className="text-white font-semibold text-sm leading-tight truncate">{card.label}</h3>
-            <p className="text-white/50 text-xs mt-0.5 truncate">{card.description}</p>
+            <h3 className="text-white font-bold text-[15px] leading-tight truncate">{card.label}</h3>
+            <p className="text-white/50 text-xs mt-1 truncate">{card.description}</p>
           </div>
         </div>
 
@@ -371,17 +371,17 @@ function CategorySection({ category, catIndex }: { category: Category; catIndex:
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: catIndex * 0.1, duration: 0.5 }}
-      className="mb-10"
+      className="mb-16"
     >
-      <div className="mb-5 px-1">
-        <div className="flex items-center gap-3 mb-2">
-          <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${category.gradient} flex items-center justify-center shrink-0`}>
+      <div className="mb-7 px-1">
+        <div className="flex items-center gap-4 mb-3">
+          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${category.gradient} flex items-center justify-center shrink-0 shadow-lg`}>
             <span className="text-white">{category.icon}</span>
           </div>
-          <h2 className="text-lg font-bold text-white">{category.title}</h2>
-          <span className="text-white/20 text-xs ml-1">{category.cards.length} tools</span>
+          <h2 className="text-xl font-bold text-white">{category.title}</h2>
+          <span className="text-white/20 text-xs ml-1 bg-white/5 px-2 py-0.5 rounded-full">{category.cards.length} tools</span>
         </div>
-        <p className="text-white/40 text-sm leading-relaxed max-w-2xl pl-11">{category.description}</p>
+        <p className="text-white/40 text-sm leading-relaxed max-w-2xl pl-14">{category.description}</p>
       </div>
 
       <div className="relative px-1">
@@ -389,15 +389,15 @@ function CategorySection({ category, catIndex }: { category: Category; catIndex:
           opts={{ align: "start", dragFree: true, containScroll: "trimSnaps" }}
           className="w-full"
         >
-          <CarouselContent className="-ml-3">
+          <CarouselContent className="-ml-5">
             {category.cards.map((card, i) => (
-              <CarouselItem key={card.label} className="pl-3 basis-[260px] sm:basis-[280px] md:basis-[300px]">
+              <CarouselItem key={card.label} className="pl-5 basis-[280px] sm:basis-[310px] md:basis-[340px]">
                 <LaunchCardComponent card={card} index={i} />
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="hidden md:flex -left-3 bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white" />
-          <CarouselNext className="hidden md:flex -right-3 bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white" />
+          <CarouselPrevious className="hidden md:flex -left-4 w-10 h-10 bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white shadow-xl" />
+          <CarouselNext className="hidden md:flex -right-4 w-10 h-10 bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white shadow-xl" />
         </Carousel>
       </div>
     </motion.section>
