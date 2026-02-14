@@ -584,7 +584,6 @@ export default function Token() {
         </div>
       </section>
 
-      </div>
     </div>
   );
 }

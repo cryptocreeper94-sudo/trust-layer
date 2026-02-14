@@ -358,7 +358,6 @@ export default function Tokenomics() {
         </div>
       </section>
 
-      </div>
     </div>
   );
 }
