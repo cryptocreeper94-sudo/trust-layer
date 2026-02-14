@@ -195,7 +195,6 @@ function MessageBubble({ msg, npcName, index }: { msg: any; npcName: string; ind
         {time && (
           <p className={`text-[9px] text-gray-600 mt-1 ${isPlayer ? "text-right" : "text-left"}`}>{time}</p>
         )}
-      </div>
     </motion.div>
   );
 }
@@ -537,9 +536,5 @@ export default function ChroniclesNpcChat() {
                 </motion.div>
               )}
             </AnimatePresence>
-          </motion.div>
-        </div>
-      </div>
-    </div>
   );
 }

@@ -223,6 +223,5 @@ export default function Members() {
         </motion.div>
 
       </div>
-    </div>
   );
 }

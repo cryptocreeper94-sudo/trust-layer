@@ -671,6 +671,8 @@ function OperationsDashboard() {
         </div>
       </main>
     </div>
+    </div>
+    </div>
   );
 }
 

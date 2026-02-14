@@ -1507,5 +1507,10 @@ export default function Chronicles() {
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
   );
 }

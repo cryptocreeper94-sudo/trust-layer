@@ -1358,7 +1358,6 @@ export default function ChroniclesEstate() {
                         </span>
                       </div>
                     ))}
-                  </div>
                 </GlassCard>
               </motion.div>
             )}
@@ -1423,7 +1422,6 @@ export default function ChroniclesEstate() {
                     </div>
                   );
                 })}
-              </div>
 
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-sm">
@@ -1830,10 +1828,7 @@ export default function ChroniclesEstate() {
               ))}
             </div>
           </Card>
-        </div>
-        </div>
         )}
-      </div>
 
       {/* NPC Chat */}
       {!showNPC && personality?.parallelSelfName && (
@@ -1846,6 +1841,5 @@ export default function ChroniclesEstate() {
         isOpen={showNPC}
         onClose={() => setShowNPC(false)}
       />
-    </div>
   );
 }

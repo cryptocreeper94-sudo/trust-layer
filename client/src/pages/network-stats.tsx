@@ -236,6 +236,5 @@ export default function NetworkStats() {
           </div>
         </div>
       </div>
-    </div>
   );
 }

@@ -1688,6 +1688,5 @@ export default function ChroniclesHub() {
           </div>
         </div>
       </footer>
-    </div>
   );
 }

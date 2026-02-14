@@ -349,7 +349,6 @@ export default function Faucet() {
             </div>
           </motion.div>
         </div>
-      </div>
     </div>
   );
 }

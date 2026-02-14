@@ -2457,6 +2457,5 @@ export default function TokenDetail() {
       </main>
 
       {/* Bottom Navigation */}
-</div>
   );
 }

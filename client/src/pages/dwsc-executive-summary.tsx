@@ -457,7 +457,6 @@ export default function DWSCExecutiveSummary() {
                       </div>
                       <p className="text-sm text-white/60 leading-relaxed">{benefit.desc}</p>
                     </div>
-                  </div>
                 </motion.div>
               ))}
             </div>

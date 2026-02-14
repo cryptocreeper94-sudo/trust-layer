@@ -385,6 +385,5 @@ export default function GuardianAIRegistry() {
       </main>
       
       
-    </div>
   );
 }

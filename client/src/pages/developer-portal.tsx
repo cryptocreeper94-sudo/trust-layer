@@ -1334,8 +1334,6 @@ console.log('All successful:', result.allSuccessful);`}
           </BentoCard>
         </motion.div>
       </main>
-
-      
     </div>
   );
 }

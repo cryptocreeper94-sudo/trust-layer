@@ -223,6 +223,5 @@ export default function Charts() {
           </div>
         </div>
       </div>
-    </div>
   );
 }

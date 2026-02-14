@@ -779,5 +779,6 @@ export default function CrowdfundPage() {
         onClose={() => setShowBuyCryptoModal(false)}
       />
     </div>
+    </div>
   );
 }

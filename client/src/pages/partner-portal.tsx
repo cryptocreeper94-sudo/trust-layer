@@ -1586,7 +1586,6 @@ function PartnerContent() {
       </main>
 
       
-    </div>
   );
 }
 

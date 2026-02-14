@@ -516,7 +516,6 @@ function FactionCard({ faction, era, onAlign }: {
           >
             <HandshakeIcon className="w-4 h-4" />
           </Button>
-        </div>
       </GlassCard>
     </motion.div>
   );

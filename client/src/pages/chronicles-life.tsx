@@ -578,5 +578,6 @@ export default function ChroniclesLife() {
         )}
       </div>
     </div>
+    </div>
   );
 }

@@ -248,6 +248,7 @@ export default function AdminMarketing() {
                 data-testid={`platform-card-${platform.id}`}
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent" />
+                <div className="relative">
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-2xl">{platform.icon}</span>
                     {config?.isActive ? (

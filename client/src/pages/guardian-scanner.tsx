@@ -1667,5 +1667,6 @@ export default function GuardianScanner() {
     {/* Bottom padding spacer for mobile nav */}
     <div className="lg:hidden h-20" />
     </>
+    </div>
   );
 }

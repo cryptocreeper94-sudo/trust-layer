@@ -562,7 +562,7 @@ export default function Minesweeper() {
         <div className="text-center text-xs text-gray-500 pb-4">
           Click tiles to reveal • Avoid the mines • Cash out anytime
         </div>
-      </div>
+    </div>
     );
   }
 

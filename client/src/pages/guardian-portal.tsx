@@ -69,7 +69,6 @@ function StatsCard({ icon: Icon, label, value, trend, color }: { icon: any; labe
           <span className="text-2xl font-bold text-white">{value}</span>
           {trend && <span className="text-xs text-emerald-400 mb-1">{trend}</span>}
         </div>
-      </div>
     </motion.div>
   );
 }
@@ -353,7 +352,6 @@ export default function GuardianPortal() {
                 </div>
               </GlassCard>
             </motion.div>
-          </div>
         )}
 
         {activeTab === "assets" && (
@@ -516,7 +514,6 @@ export default function GuardianPortal() {
                     </div>
                   ))
                 )}
-              </div>
             </GlassCard>
           </motion.div>
         )}
@@ -663,10 +660,8 @@ export default function GuardianPortal() {
                           </Button>
                         )}
                       </div>
-                    </div>
                   ))
                 )}
-              </div>
             </GlassCard>
           </motion.div>
         )}
@@ -682,7 +677,6 @@ export default function GuardianPortal() {
               <div>
                 <h3 className="text-lg font-semibold text-white mb-1">Need Continuous Monitoring?</h3>
                 <p className="text-sm text-white/60">Guardian Shield provides 24/7 security monitoring for your blockchain assets.</p>
-              </div>
               <Link href="/security#shield">
                 <Button className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700">
                   <Shield className="w-4 h-4 mr-2" />
@@ -690,7 +684,6 @@ export default function GuardianPortal() {
                   <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
               </Link>
-            </div>
           </GlassCard>
         </motion.div>
       </main>

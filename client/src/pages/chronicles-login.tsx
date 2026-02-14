@@ -459,7 +459,5 @@ export default function ChroniclesLogin() {
             </div>
           </motion.div>
         </div>
-      </div>
-    </div>
   );
 }

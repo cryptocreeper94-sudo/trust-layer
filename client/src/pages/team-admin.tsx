@@ -471,6 +471,7 @@ function TeamDashboard() {
         </div>
       </main>
     </div>
+    </div>
   );
 }
 

@@ -791,6 +791,5 @@ export default function ChroniclesCity() {
           />
         )}
       </AnimatePresence>
-    </div>
   );
 }

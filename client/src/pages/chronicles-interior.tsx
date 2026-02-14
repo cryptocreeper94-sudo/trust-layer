@@ -578,9 +578,5 @@ export default function ChroniclesInterior() {
                 )}
               </GlassCard>
             )}
-          </div>
-        </div>
-      </div>
-    </div>
   );
 }

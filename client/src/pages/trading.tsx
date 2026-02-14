@@ -246,6 +246,5 @@ export default function Trading() {
           </div>
         </div>
       </div>
-    </div>
   );
 }

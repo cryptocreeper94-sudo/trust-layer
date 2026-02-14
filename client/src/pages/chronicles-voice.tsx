@@ -468,6 +468,5 @@ export default function ChroniclesVoice() {
           </div>
         </GlassCard>
       </div>
-    </div>
   );
 }

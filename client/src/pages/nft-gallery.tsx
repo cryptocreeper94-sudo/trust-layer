@@ -207,7 +207,6 @@ export default function NftGallery() {
             </div>
           )}
         </div>
-      </div>
 
       <Dialog open={!!selectedNft} onOpenChange={() => setSelectedNft(null)}>
         <DialogContent className="max-w-md bg-background border-white/10">

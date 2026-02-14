@@ -656,8 +656,5 @@ export default function ChroniclesBuilder() {
             <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
             Back to Chronicles Hub
           </Link>
-        </div>
-      </div>
-    </div>
   );
 }

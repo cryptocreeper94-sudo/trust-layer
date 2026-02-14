@@ -586,7 +586,6 @@ export default function Arcade() {
             </div>
           </GlassCard>
         </div>
-      </div>
     </main>
   );
 }

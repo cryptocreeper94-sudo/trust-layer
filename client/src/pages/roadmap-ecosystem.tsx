@@ -450,5 +450,6 @@ export default function RoadmapEcosystem() {
         </div>
       </div>
     </div>
+    </div>
   );
 }

@@ -517,7 +517,6 @@ export default function Solitaire() {
             </div>
           ))}
         </div>
-      </div>
 
       {/* Dragged Cards Overlay */}
       {dragState && (
@@ -577,6 +576,7 @@ export default function Solitaire() {
           </motion.div>
         )}
       </AnimatePresence>
+    </div>
     </div>
   );
 }

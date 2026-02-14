@@ -640,7 +640,6 @@ function AchievementsList({ achievements }: { achievements: any[] }) {
             <p className={`text-[10px] font-medium mt-1 ${a.earned ? "text-yellow-400" : "text-gray-500"}`}>{a.name}</p>
           </div>
         ))}
-      </div>
     </GlassCard>
   );
 }
@@ -1061,6 +1060,5 @@ export default function ChroniclesPlay() {
       </div>
 
       <ChroniclesChatPanel currentEra={selectedEra} />
-    </div>
   );
 }

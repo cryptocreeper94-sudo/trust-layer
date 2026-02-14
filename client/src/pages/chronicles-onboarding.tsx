@@ -881,7 +881,5 @@ export default function ChroniclesOnboarding() {
             </div>
           </div>
         )}
-      </div>
-    </div>
   );
 }

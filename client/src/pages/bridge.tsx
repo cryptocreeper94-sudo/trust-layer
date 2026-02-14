@@ -586,8 +586,6 @@ export default function Bridge() {
           </div>
         </div>
 
-        
-      </div>
     </TooltipProvider>
   );
 }

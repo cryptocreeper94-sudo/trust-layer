@@ -134,7 +134,6 @@ function XPProgressBar({ level, xp, xpToNextLevel }: { level: number; xp: number
             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0 animate-shimmer" />
           </motion.div>
         </div>
-      </div>
     </motion.div>
   );
 }

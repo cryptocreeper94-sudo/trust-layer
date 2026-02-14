@@ -295,8 +295,6 @@ export default function GasEstimator() {
           </div>
         </div>
       </main>
-
-      
     </div>
   );
 }
