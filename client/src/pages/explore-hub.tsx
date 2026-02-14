@@ -397,6 +397,14 @@ export default function ExploreHub() {
             >
               <Search className="w-4 h-4" />
             </button>
+            <button
+              onClick={() => navigate("/command-center")}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 text-cyan-400/80 hover:text-cyan-300 hover:border-cyan-400/40 hover:from-cyan-500/20 hover:to-purple-500/20 transition-all text-xs"
+              data-testid="button-explore-hub-admin"
+            >
+              <Zap className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Admin</span>
+            </button>
           </div>
         </div>
       </div>
