@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import {
   BarChart3, Users, Megaphone, Shield, Eye,
@@ -60,6 +60,22 @@ interface Category {
 }
 
 const categories: Category[] = [
+  {
+    title: "Home & Overview",
+    icon: <Home className="size-4" />,
+    gradient: "from-slate-400 to-cyan-500",
+    description: "Start here — your main dashboard, presale, ecosystem overview, and the full DarkWave story.",
+    cards: [
+      { label: "Home", description: "Main landing page", href: "/home", icon: <Home className="size-5" />, image: hubLearn, glowColor: "shadow-cyan-500/30", featured: true },
+      { label: "Presale", description: "Get SIG at the lowest price", href: "/presale", icon: <Rocket className="size-5" />, image: hubEarn, glowColor: "shadow-yellow-500/30", badge: "Live" },
+      { label: "Ecosystem", description: "Explore all DarkWave apps", href: "/ecosystem", icon: <Globe className="size-5" />, image: hubLearn, glowColor: "shadow-indigo-500/30" },
+      { label: "Our Story", description: "The DarkWave origin story", href: "/note", icon: <Heart className="size-5" />, image: hubCommunity, glowColor: "shadow-rose-500/30" },
+      { label: "The Transmission", description: "Executive vision summary", href: "/executive-summary", icon: <Zap className="size-5" />, image: hubLearn, glowColor: "shadow-purple-500/30" },
+      { label: "Trust Layer", description: "L1 blockchain overview", href: "/trust-layer", icon: <Shield className="size-5" />, image: ccBlockchain, glowColor: "shadow-emerald-500/30" },
+      { label: "My Hub", description: "Your personal dashboard", href: "/my-hub", icon: <LayoutGrid className="size-5" />, image: ccSettings, glowColor: "shadow-blue-500/30" },
+      { label: "Dashboard", description: "Account overview", href: "/dashboard", icon: <BarChart3 className="size-5" />, image: ccSettings, glowColor: "shadow-teal-500/30" },
+    ]
+  },
   {
     title: "DeFi & Trading",
     icon: <TrendingUp className="size-4" />,
@@ -326,9 +342,7 @@ function CategorySection({ category, catIndex }: { category: Category; catIndex:
 }
 
 export default function ExploreHub() {
-  const [, navigate] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
-  const [showSearch, setShowSearch] = useState(false);
 
   const filteredCategories = searchQuery.trim()
     ? categories.map(cat => ({
@@ -343,77 +357,17 @@ export default function ExploreHub() {
   const totalFeatures = categories.reduce((sum, cat) => sum + cat.cards.length, 0);
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+    <div className="min-h-screen pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
       <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={600} top="-5%" left="60%" />
       <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={500} top="30%" left="-10%" delay={3} />
       <GlowOrb color="linear-gradient(135deg, #f59e0b, #ef4444)" size={400} top="60%" left="80%" delay={5} />
       <GlowOrb color="linear-gradient(135deg, #10b981, #06b6d4)" size={350} top="80%" left="20%" delay={7} />
 
-      <div className="sticky top-0 z-50 backdrop-blur-xl bg-[#070b16]/80 border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-3">
-          <button
-            onClick={() => navigate("/")}
-            className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors"
-            data-testid="button-explore-hub-home"
-          >
-            <Home className="w-4 h-4" />
-          </button>
-
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
-              <Compass className="w-4 h-4 text-white" />
-            </div>
-            <div>
-              <h1 className="text-white font-bold text-sm leading-tight">Explore Everything</h1>
-              <p className="text-white/30 text-[10px]">{totalFeatures} features across {categories.length} categories</p>
-            </div>
-          </div>
-
-          <div className="ml-auto flex items-center gap-2">
-            <AnimatePresence>
-              {showSearch && (
-                <motion.div
-                  initial={{ width: 0, opacity: 0 }}
-                  animate={{ width: "min(200px, 50vw)", opacity: 1 }}
-                  exit={{ width: 0, opacity: 0 }}
-                  className="overflow-hidden"
-                >
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search features..."
-                    className="w-full px-3 py-1.5 text-xs bg-white/5 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-cyan-500/50"
-                    autoFocus
-                    data-testid="input-explore-hub-search"
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
-            <button
-              onClick={() => { setShowSearch(!showSearch); if (showSearch) setSearchQuery(""); }}
-              className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors"
-              data-testid="button-explore-hub-search"
-            >
-              <Search className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => navigate("/command-center")}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 text-cyan-400/80 hover:text-cyan-300 hover:border-cyan-400/40 hover:from-cyan-500/20 hover:to-purple-500/20 transition-all text-xs"
-              data-testid="button-explore-hub-admin"
-            >
-              <Zap className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Admin</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-16 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-10 text-center"
+          className="mb-8 text-center"
         >
           <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
             Explore{" "}
@@ -421,10 +375,25 @@ export default function ExploreHub() {
               DarkWave
             </span>
           </h2>
-          <p className="text-white/40 text-sm max-w-lg mx-auto">
+          <p className="text-white/40 text-sm max-w-lg mx-auto mb-6">
             Every feature, every tool, every experience — all in one place. Tap any card to dive in.
           </p>
+          <p className="text-white/20 text-xs">{totalFeatures} features across {categories.length} categories</p>
         </motion.div>
+
+        <div className="max-w-md mx-auto mb-10">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search all features..."
+              className="w-full pl-10 pr-4 py-2.5 text-sm bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-cyan-500/50 backdrop-blur-sm"
+              data-testid="input-explore-hub-search"
+            />
+          </div>
+        </div>
 
         {filteredCategories.length === 0 ? (
           <div className="text-center py-20">
@@ -443,22 +412,6 @@ export default function ExploreHub() {
             <CategorySection key={category.title} category={category} catIndex={i} />
           ))
         )}
-
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1 }}
-          className="mt-12 text-center"
-        >
-          <button
-            onClick={() => navigate("/")}
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/[0.04] border border-white/10 text-white/50 hover:text-white hover:bg-white/[0.08] transition-all"
-            data-testid="button-explore-hub-back-home"
-          >
-            <Home className="w-4 h-4" />
-            <span className="text-sm">Back to Homepage</span>
-          </button>
-        </motion.div>
       </div>
     </div>
   );

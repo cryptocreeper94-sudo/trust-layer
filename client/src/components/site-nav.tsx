@@ -21,7 +21,7 @@ export function SiteNav() {
   const isHidden = HIDDEN_PATHS.some(p => location.startsWith(p));
   if (isHidden) return null;
 
-  const isHome = location === "/" || location === "/home" || location === "/portal";
+  const isHome = location === "/" || location === "/home" || location === "/portal" || location === "/explore";
   const showBack = !isHome;
 
   return (
