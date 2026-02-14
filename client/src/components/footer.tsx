@@ -199,6 +199,10 @@ export function Footer() {
               Privacy
             </Link>
             <span className="text-white/30">•</span>
+            <Link href="/explore" className="hover:text-cyan-400 transition-colors" data-testid="link-explore">
+              Explore
+            </Link>
+            <span className="text-white/30">•</span>
             <button onClick={openModal} className="text-white/30 hover:text-white/50 transition-colors" data-testid="link-team">
               Team
             </button>
