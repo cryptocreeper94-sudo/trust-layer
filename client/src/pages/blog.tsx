@@ -12,6 +12,15 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/glass-card";
 
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 interface BlogPost {
   id: string;
   slug: string;
@@ -127,15 +136,11 @@ export default function Blog() {
   const regularPosts = filteredPosts.filter(p => !p.featured);
 
   return (
-    <div className="min-h-screen bg-[#080c18] text-white">
-      <div 
-        className="absolute inset-0 opacity-30"
-        style={{
-          background: "radial-gradient(circle at 30% 20%, rgba(0,200,255,0.15) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(168,85,247,0.15) 0%, transparent 50%)",
-        }}
-      />
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12 text-white" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
       
-      <div className="relative max-w-7xl mx-auto px-4 py-12">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

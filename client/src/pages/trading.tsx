@@ -1,17 +1,24 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "wouter";
 import {
   Activity, BarChart3, Layers,
-  Settings, Star, Maximize2, Clock, Zap
-, Shield , Shield } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+  Settings, Star, Maximize2, Clock, Zap,
+  Shield
+} from "lucide-react";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
 
 const TIMEFRAMES = [
   { label: "1H", value: "1h" },
@@ -66,22 +73,12 @@ export default function Trading() {
   const [activeIndicators, setActiveIndicators] = useState<string[]>(["vol"]);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-amber-500/50 text-amber-400 text-[10px]">Testnet Preview</Badge>
-            <BackButton />
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="rgba(6,182,212,0.3)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="rgba(236,72,153,0.25)" size={400} top="40%" left="-10%" delay={3} />
 
-      <main className="flex-1 pt-16 pb-4 px-2 md:px-4">
-        <div className="container mx-auto max-w-7xl">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -100,7 +97,7 @@ export default function Trading() {
                 </motion.div>
                 <div>
                   <div className="flex items-center gap-2">
-                    <h1 className="text-xl font-bold">SIG/USD</h1>
+                    <h1 className="text-xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">SIG/USD</h1>
                     <Button variant="ghost" size="icon" className="h-6 w-6">
                       <Star className="w-4 h-4" />
                     </Button>
@@ -250,9 +247,7 @@ export default function Trading() {
             </motion.div>
           </div>
         </div>
-      </main>
-
-      
+      </div>
     </div>
   );
 }

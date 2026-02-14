@@ -1,12 +1,20 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Activity, Key, Clock, TrendingUp, AlertTriangle, RefreshCw, BarChart3 , Shield } from "lucide-react";
+import { Activity, Key, Clock, TrendingUp, AlertTriangle, RefreshCw, BarChart3 } from "lucide-react";
 import { Link } from "wouter";
-import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { GlassCard } from "@/components/glass-card";
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
 
 interface UsageData {
   requestsToday: number;
@@ -51,19 +59,12 @@ export default function ApiUsage() {
   const maxEndpointCount = Math.max(...usage.endpoints.map(e => e.count));
 
   return (
-    <div className="min-h-screen flex flex-col bg-background">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-display font-bold text-lg hidden sm:inline">Trust Layer</span>
-          </Link>
-          <BackButton />
-        </div>
-      </nav>
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="rgba(120,80,255,0.3)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="rgba(0,200,255,0.25)" size={400} top="40%" left="-10%" delay={3} />
 
-      <main className="flex-1 pt-20 pb-8 px-4">
-        <div className="container mx-auto max-w-4xl">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -71,7 +72,9 @@ export default function ApiUsage() {
           >
             <div className="flex items-center justify-center gap-3 mb-3">
               <Activity className="w-8 h-8 text-primary" />
-              <h1 className="text-3xl font-display font-bold" data-testid="text-title">API Usage</h1>
+              <h1 className="text-3xl font-display font-bold" data-testid="text-title">
+                <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">API Usage</span>
+              </h1>
             </div>
             <p className="text-muted-foreground">Monitor your API usage and quotas</p>
           </motion.div>
@@ -80,7 +83,7 @@ export default function ApiUsage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6"
+            className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8"
           >
             <GlassCard className="p-6" data-testid="card-daily-usage">
               <div className="flex items-center justify-between mb-4">
@@ -132,7 +135,7 @@ export default function ApiUsage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <GlassCard className="p-6 mb-6" data-testid="card-endpoints">
+            <GlassCard className="p-6 mb-8" data-testid="card-endpoints">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-primary" />
@@ -221,7 +224,7 @@ export default function ApiUsage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="mt-6 text-center"
+            className="mt-8 text-center"
           >
             <p className="text-sm text-muted-foreground mb-4">
               Need more API requests? Upgrade your plan or contact us for enterprise pricing.
@@ -234,9 +237,7 @@ export default function ApiUsage() {
             </div>
           </motion.div>
         </div>
-      </main>
-
-      
+      </div>
     </div>
   );
 }

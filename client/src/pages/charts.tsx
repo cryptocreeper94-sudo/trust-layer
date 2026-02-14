@@ -1,18 +1,25 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Link } from "wouter";
 import {
   LineChart, TrendingUp, TrendingDown, DollarSign,
   BarChart3, Clock, ChevronDown, RefreshCw
-, Shield } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+} from "lucide-react";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
 
 interface PriceData {
   time: string;
@@ -54,22 +61,12 @@ export default function Charts() {
   const isLoading = statsLoading || historyLoading;
 
   return (
-    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-blue-500/50 text-blue-400 text-[10px]">Charts</Badge>
-            <BackButton />
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="rgba(6,182,212,0.3)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="rgba(139,92,246,0.25)" size={400} top="40%" left="-10%" delay={3} />
 
-      <main className="flex-1 pt-16 pb-8 px-4">
-        <div className="container mx-auto max-w-6xl">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div>
@@ -78,7 +75,7 @@ export default function Charts() {
                     SIG
                   </div>
                   <div>
-                    <h1 className="text-2xl font-display font-bold">Signal</h1>
+                    <h1 className="text-2xl font-display font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Signal</h1>
                     <p className="text-xs text-muted-foreground">SIG/USD</p>
                   </div>
                 </div>
@@ -188,7 +185,7 @@ export default function Charts() {
             </div>
           </GlassCard>
 
-          <GlassCard>
+          <GlassCard className="mb-16">
             <div className="p-4">
               <h2 className="font-bold text-lg mb-4">Volume Chart</h2>
               <div className="h-[200px] flex items-center justify-center">
@@ -200,7 +197,7 @@ export default function Charts() {
             </div>
           </GlassCard>
 
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <GlassCard>
               <div className="p-4 text-center">
                 <TrendingUp className="w-5 h-5 text-green-400/50 mx-auto mb-2" />
@@ -227,8 +224,7 @@ export default function Charts() {
             </GlassCard>
           </div>
         </div>
-      </main>
-      
+      </div>
     </div>
   );
 }

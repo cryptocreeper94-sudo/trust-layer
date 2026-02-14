@@ -689,7 +689,7 @@ export default function VeilReader() {
 
   return (
     <div className="min-h-screen bg-slate-950 relative">
-      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-white/[0.04] backdrop-blur-xl border-b border-white/10" style={{ boxShadow: "0 4px 30px rgba(0,0,0,0.4)" }}>
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button 
@@ -899,10 +899,11 @@ export default function VeilReader() {
               initial={{ x: -300 }}
               animate={{ x: 0 }}
               exit={{ x: -300 }}
-              className="fixed left-0 top-0 bottom-0 w-80 bg-slate-900 z-50 overflow-y-auto border-r border-slate-800"
+              className="fixed left-0 top-0 bottom-0 w-80 z-50 overflow-y-auto border-r border-white/10"
+              style={{ background: "rgba(15, 23, 42, 0.95)", backdropFilter: "blur(20px)", boxShadow: "4px 0 30px rgba(0,0,0,0.5)" }}
             >
-              <div className="p-4 border-b border-slate-800 flex items-center justify-between">
-                <h2 className="text-lg font-bold text-white">Contents</h2>
+              <div className="p-4 border-b border-white/10 flex items-center justify-between">
+                <h2 className="text-lg font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Contents</h2>
                 <Button variant="ghost" size="sm" onClick={() => setSidebarOpen(false)}>
                   <X className="w-4 h-4" />
                 </Button>
@@ -991,7 +992,7 @@ export default function VeilReader() {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-t border-slate-800 z-40">
+      <div className="fixed bottom-0 left-0 right-0 bg-white/[0.04] backdrop-blur-xl border-t border-white/10 z-40" style={{ boxShadow: "0 -4px 30px rgba(0,0,0,0.4)" }}>
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <Button
             variant="ghost"

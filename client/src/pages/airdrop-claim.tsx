@@ -1,14 +1,22 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Gift, Sparkles, Check, AlertCircle, Wallet, Mail, Crown, Star, Users, ExternalLink , Shield } from "lucide-react";
+import { Gift, Sparkles, Check, AlertCircle, Wallet, Mail, Crown, Star, Users, ExternalLink } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { BackButton } from "@/components/page-nav";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { apiRequest } from "@/lib/queryClient";
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
 
 interface EligibilityResult {
   eligible: boolean;
@@ -59,24 +67,12 @@ export default function AirdropClaim() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-primary/50 text-primary bg-primary/10 text-[10px] sm:text-xs">
-              <Gift className="w-3 h-3 mr-1" /> Airdrop
-            </Badge>
-            <BackButton />
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="rgba(0,255,200,0.3)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="rgba(0,200,255,0.25)" size={400} top="40%" left="-10%" delay={3} />
 
-      <main className="pt-20 pb-12 px-4">
-        <div className="container mx-auto max-w-2xl">
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-2xl mx-auto">
           <div className="text-center mb-8">
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -86,7 +82,7 @@ export default function AirdropClaim() {
               <Gift className="w-10 h-10 text-white" />
             </motion.div>
             <h1 className="text-3xl md:text-4xl font-display font-bold mb-3">
-              Trust Layer <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Airdrop</span>
+              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Trust Layer Airdrop</span>
             </h1>
             <p className="text-muted-foreground max-w-md mx-auto">
               Check your eligibility for the Trust Layer genesis airdrop. Early adopters and beta testers receive bonus allocations.
@@ -249,7 +245,7 @@ export default function AirdropClaim() {
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
