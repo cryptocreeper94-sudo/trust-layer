@@ -499,7 +499,8 @@ class GuardianScannerService {
         }
         
         // Step 2: Fetch pair data for boosted tokens (up to 30 per chain)
-        for (const [chainId, addresses] of chainGroups.entries()) {
+        const chainEntries = Array.from(chainGroups.entries());
+        for (const [chainId, addresses] of chainEntries) {
           try {
             const batch = addresses.slice(0, 30).join(',');
             const pairRes = await axios.get(`${DEX_SCREENER_V1}/tokens/v1/${chainId}/${batch}`, {
@@ -507,7 +508,6 @@ class GuardianScannerService {
               headers: { 'Accept': 'application/json' }
             });
             const pairs: DexScreenerPair[] = Array.isArray(pairRes.data) ? pairRes.data : (pairRes.data?.pairs || []);
-            // Deduplicate by base token address - keep the pair with highest liquidity
             const bestPairs = new Map<string, DexScreenerPair>();
             for (const p of pairs) {
               const key = `${p.chainId}:${p.baseToken?.address}`.toLowerCase();
@@ -556,7 +556,8 @@ class GuardianScannerService {
             chainGroups2.set(p.chainId, group);
           }
           
-          for (const [chainId, addresses] of chainGroups2.entries()) {
+          const chainEntries2 = Array.from(chainGroups2.entries());
+          for (const [chainId, addresses] of chainEntries2) {
             try {
               const batch = addresses.slice(0, 30).join(',');
               const pairRes = await axios.get(`${DEX_SCREENER_V1}/tokens/v1/${chainId}/${batch}`, {

@@ -17031,10 +17031,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       
       let token;
       
-      if (chain && typeof chain === 'string') {
+      token = await guardianScannerService.getTokenByAddress(address, includeSafety);
+      
+      if (!token && chain && typeof chain === 'string') {
         token = await guardianScannerService.getPairByAddress(address, chain, includeSafety);
-      } else {
-        token = await guardianScannerService.getTokenByAddress(address, includeSafety);
       }
       
       if (!token) {

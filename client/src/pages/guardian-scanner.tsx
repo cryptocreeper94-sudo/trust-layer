@@ -1,6 +1,6 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import {
@@ -47,7 +47,11 @@ import {
   Clock,
   ExternalLink,
   Info,
-  DollarSign
+  DollarSign,
+  Download,
+  Home,
+  Compass,
+  ListFilter
 } from "lucide-react";
 import { useGuardianWS } from "@/hooks/use-guardian-ws";
 import { QuickTradePanel } from "@/components/quick-trade-panel";
@@ -479,7 +483,7 @@ function ExpandedTokenDetails({ token }: { token: Token }) {
                 <span className="text-white">${formatNumber(token.liquidity)}</span>
               </div>
               <div className="flex items-center gap-2 mt-2">
-                <Link href={`/guardian-scanner/${token.chain}/${token.symbol.toLowerCase()}`}>
+                <Link href={`/guardian-scanner/${token.chain}/${token.contractAddress}`}>
                   <button className="flex items-center gap-1 px-2 py-1 bg-cyan-500/20 text-cyan-400 rounded text-[10px] hover:bg-cyan-500/30">
                     <ExternalLink className="w-3 h-3" />
                     Full Analysis
@@ -521,6 +525,7 @@ function TokenRow({ token, isExpanded, onToggleExpand, onToggleWatchlist, onTrad
   onToggleWatchlist: (id: string) => void;
   onTrade: (token: Token) => void;
 }) {
+  const [, navigate] = useLocation();
   const [copied, setCopied] = useState(false);
   const copyAddress = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -529,12 +534,21 @@ function TokenRow({ token, isExpanded, onToggleExpand, onToggleWatchlist, onTrad
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
+
+  const handleRowClick = () => {
+    const isMobile = window.innerWidth < 1024;
+    if (isMobile) {
+      navigate(`/guardian-scanner/${token.chain}/${token.contractAddress}`);
+    } else {
+      onToggleExpand();
+    }
+  };
   
   return (
     <>
       <tr 
         className={`border-b border-white/5 hover:bg-white/[0.03] transition-colors group cursor-pointer ${isExpanded ? 'bg-white/[0.02]' : ''}`} 
-        onClick={onToggleExpand}
+        onClick={handleRowClick}
         data-testid={`token-row-${token.id}`}
       >
         {/* Expand Arrow */}
@@ -547,10 +561,10 @@ function TokenRow({ token, isExpanded, onToggleExpand, onToggleWatchlist, onTrad
         
         {/* Token Info */}
         <td className="py-2 pr-3 min-w-[180px]">
-          <Link href={`/guardian-scanner/${token.chain}/${token.symbol.toLowerCase()}`} onClick={(e) => e.stopPropagation()}>
+          <Link href={`/guardian-scanner/${token.chain}/${token.contractAddress}`} onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center gap-2">
               <div className="relative flex-shrink-0">
-                <img src={token.logo} alt="" className="w-7 h-7 rounded-full bg-white/10" />
+                <img src={token.logo} alt="" className="w-7 h-7 rounded-full bg-white/10" onError={(e) => { (e.target as HTMLImageElement).src = `https://api.dicebear.com/7.x/shapes/svg?seed=${token.symbol}`; }} />
                 <span className="absolute -bottom-0.5 -right-0.5 text-[8px] bg-slate-900 rounded px-0.5">{token.chainIcon}</span>
               </div>
               <div className="flex flex-col min-w-0">
@@ -839,6 +853,37 @@ export default function GuardianScanner() {
     };
   }, []);
   
+  // PWA install state
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showInstallBanner, setShowInstallBanner] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      setShowInstallBanner(true);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstallPWA = async () => {
+    if (!deferredPrompt) {
+      const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      if (isIos) {
+        alert('To install: tap the Share button in Safari, then "Add to Home Screen"');
+      }
+      return;
+    }
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setShowInstallBanner(false);
+    }
+    setDeferredPrompt(null);
+  };
+
   // Category filter state
   const [selectedCategory, setSelectedCategory] = useState("all");
   
@@ -1498,6 +1543,117 @@ export default function GuardianScanner() {
         )}
       </AnimatePresence>
     </div>
+
+    {/* Mobile Bottom Navigation */}
+    <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#0d0d0d]/95 backdrop-blur-xl border-t border-white/10 safe-area-bottom">
+      {/* PWA Install Banner */}
+      <AnimatePresence>
+        {showInstallBanner && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="flex items-center gap-3 px-4 py-2.5 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border-b border-white/5">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center flex-shrink-0">
+                <Shield className="w-4 h-4 text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-medium text-white">Install Guardian Scanner</p>
+                <p className="text-[10px] text-white/50">Get the full app experience</p>
+              </div>
+              <button
+                onClick={handleInstallPWA}
+                className="px-3 py-1.5 bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-medium rounded-lg flex-shrink-0"
+                data-testid="install-pwa-banner-btn"
+              >
+                Install
+              </button>
+              <button onClick={() => setShowInstallBanner(false)} className="p-1 text-white/40 hover:text-white flex-shrink-0">
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Mobile Search Overlay */}
+      <AnimatePresence>
+        {mobileSearchOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden border-b border-white/5"
+          >
+            <div className="px-3 py-2.5 flex items-center gap-2">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+                <Input
+                  type="text"
+                  placeholder="Search token name, symbol, or address..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="h-10 pl-10 pr-3 text-sm bg-white/5 border-white/10 focus:border-cyan-500/50"
+                  data-testid="mobile-search-input"
+                  autoFocus
+                />
+              </div>
+              <button onClick={() => { setMobileSearchOpen(false); setSearchQuery(''); }} className="p-2 text-white/50">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="flex items-center justify-around px-2 py-1.5">
+        <button
+          onClick={() => { setActiveFilter("trending"); setRankBy("trending"); }}
+          className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg min-w-[56px] ${activeFilter === 'trending' ? 'text-cyan-400' : 'text-white/40'}`}
+          data-testid="mobile-nav-trending"
+        >
+          <Flame className="w-5 h-5" />
+          <span className="text-[9px] font-medium">Trending</span>
+        </button>
+        <button
+          onClick={() => { setActiveFilter("gainers"); setRankBy("gainers"); }}
+          className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg min-w-[56px] ${activeFilter === 'gainers' ? 'text-emerald-400' : 'text-white/40'}`}
+          data-testid="mobile-nav-gainers"
+        >
+          <TrendingUp className="w-5 h-5" />
+          <span className="text-[9px] font-medium">Gainers</span>
+        </button>
+        <button
+          onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
+          className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg min-w-[56px] ${mobileSearchOpen ? 'text-cyan-400' : 'text-white/40'}`}
+          data-testid="mobile-nav-search"
+        >
+          <Search className="w-5 h-5" />
+          <span className="text-[9px] font-medium">Search</span>
+        </button>
+        <button
+          onClick={() => { setActiveFilter("new"); setRankBy("newest"); }}
+          className={`flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg min-w-[56px] ${activeFilter === 'new' ? 'text-purple-400' : 'text-white/40'}`}
+          data-testid="mobile-nav-new"
+        >
+          <Sparkles className="w-5 h-5" />
+          <span className="text-[9px] font-medium">New</span>
+        </button>
+        <button
+          onClick={handleInstallPWA}
+          className="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-lg min-w-[56px] text-white/40 hover:text-cyan-400"
+          data-testid="mobile-nav-install"
+        >
+          <Download className="w-5 h-5" />
+          <span className="text-[9px] font-medium">Install</span>
+        </button>
+      </div>
+    </div>
+
+    {/* Bottom padding spacer for mobile nav */}
+    <div className="lg:hidden h-20" />
     </>
   );
 }

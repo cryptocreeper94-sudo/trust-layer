@@ -442,7 +442,9 @@ function MLPredictionPanel({ prediction }: { prediction: TokenDetail["mlPredicti
 export default function GuardianScannerDetail() {
   const params = useParams();
   const chain = params.chain as string || "solana";
-  const symbol = params.symbol as string || "penguin";
+  const symbolOrAddress = params.symbol as string || "";
+  const isContractAddress = symbolOrAddress.length > 20 || symbolOrAddress.startsWith('0x');
+  const symbol = symbolOrAddress;
   
   const [token, setToken] = useState<TokenDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
