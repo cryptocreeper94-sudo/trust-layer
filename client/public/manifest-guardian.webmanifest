@@ -1,5 +1,5 @@
 {
-  "id": "guardian-scanner-app",
+  "id": "/guardian-scanner",
   "name": "Guardian Scanner",
   "short_name": "Guardian",
   "description": "AI-powered token analysis scanner with Pulse predictive scoring. Real-time safety checks, multi-chain monitoring, and Strike Agent recommendations.",
