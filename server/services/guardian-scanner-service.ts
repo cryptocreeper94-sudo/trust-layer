@@ -19,6 +19,7 @@ interface SafetyData {
 }
 
 const DEX_SCREENER_API = 'https://api.dexscreener.com/latest/dex';
+const DEX_SCREENER_V1 = 'https://api.dexscreener.com';
 
 export const SUPPORTED_CHAINS = [
   'solana', 'ethereum', 'bsc', 'arbitrum', 'polygon', 
@@ -471,28 +472,139 @@ class GuardianScannerService {
     }
     
     try {
-      const chainsToFetch = chain && chain !== 'all' ? [chain] : ['solana', 'ethereum', 'bsc', 'base'];
       const allTokens: GuardianToken[] = [];
+      const iconMap = new Map<string, string>();
       
-      for (const chainId of chainsToFetch) {
+      // Step 1: Get boosted/trending token addresses with icons from token-boosts/top
+      try {
+        const boostRes = await axios.get(`${DEX_SCREENER_V1}/token-boosts/top/v1`, {
+          timeout: 10000,
+          headers: { 'Accept': 'application/json' }
+        });
+        const boosts: any[] = Array.isArray(boostRes.data) ? boostRes.data : [];
+        for (const b of boosts) {
+          if (b.tokenAddress && b.icon) {
+            iconMap.set(`${b.chainId}:${b.tokenAddress}`.toLowerCase(), b.icon);
+          }
+        }
+        
+        // Group boosted tokens by chain
+        const chainGroups = new Map<string, string[]>();
+        for (const b of boosts) {
+          if (!b.chainId || !b.tokenAddress) continue;
+          if (chain && chain !== 'all' && b.chainId !== chain) continue;
+          const group = chainGroups.get(b.chainId) || [];
+          if (!group.includes(b.tokenAddress)) group.push(b.tokenAddress);
+          chainGroups.set(b.chainId, group);
+        }
+        
+        // Step 2: Fetch pair data for boosted tokens (up to 30 per chain)
+        for (const [chainId, addresses] of chainGroups.entries()) {
+          try {
+            const batch = addresses.slice(0, 30).join(',');
+            const pairRes = await axios.get(`${DEX_SCREENER_V1}/tokens/v1/${chainId}/${batch}`, {
+              timeout: 10000,
+              headers: { 'Accept': 'application/json' }
+            });
+            const pairs: DexScreenerPair[] = Array.isArray(pairRes.data) ? pairRes.data : (pairRes.data?.pairs || []);
+            // Deduplicate by base token address - keep the pair with highest liquidity
+            const bestPairs = new Map<string, DexScreenerPair>();
+            for (const p of pairs) {
+              const key = `${p.chainId}:${p.baseToken?.address}`.toLowerCase();
+              const existing = bestPairs.get(key);
+              if (!existing || (p.liquidity?.usd || 0) > (existing.liquidity?.usd || 0)) {
+                bestPairs.set(key, p);
+              }
+            }
+            const tokens = Array.from(bestPairs.values()).map(p => {
+              const token = transformPairToToken(p);
+              const iconKey = `${p.chainId}:${p.baseToken?.address}`.toLowerCase();
+              if (iconMap.has(iconKey)) {
+                token.imageUrl = iconMap.get(iconKey);
+              }
+              return token;
+            });
+            allTokens.push(...tokens);
+          } catch (err) {
+            console.warn(`[GuardianScanner] Failed to fetch pairs for ${chainId}:`, err);
+          }
+        }
+      } catch (err) {
+        console.warn('[GuardianScanner] Boost endpoint failed, falling back to token-profiles:', err);
+      }
+      
+      // Step 3: If we got fewer than 20 tokens, supplement with token-profiles
+      if (allTokens.length < 20) {
         try {
-          const response = await axios.get(`${DEX_SCREENER_API}/search?q=trending`, {
+          const profileRes = await axios.get(`${DEX_SCREENER_V1}/token-profiles/latest/v1`, {
             timeout: 10000,
             headers: { 'Accept': 'application/json' }
           });
+          const profiles: any[] = Array.isArray(profileRes.data) ? profileRes.data : [];
           
-          const pairs: DexScreenerPair[] = response.data?.pairs || [];
-          const chainPairs = pairs.filter(p => chain === 'all' || p.chainId === chainId);
-          const tokens = chainPairs.slice(0, 50).map(transformPairToToken);
-          allTokens.push(...tokens);
+          const existingAddrs = new Set(allTokens.map(t => `${t.chain}:${t.contractAddress}`.toLowerCase()));
+          const chainGroups2 = new Map<string, string[]>();
+          
+          for (const p of profiles) {
+            if (!p.chainId || !p.tokenAddress) continue;
+            if (chain && chain !== 'all' && p.chainId !== chain) continue;
+            const key = `${p.chainId}:${p.tokenAddress}`.toLowerCase();
+            if (existingAddrs.has(key)) continue;
+            if (p.icon) iconMap.set(key, p.icon);
+            const group = chainGroups2.get(p.chainId) || [];
+            if (!group.includes(p.tokenAddress)) group.push(p.tokenAddress);
+            chainGroups2.set(p.chainId, group);
+          }
+          
+          for (const [chainId, addresses] of chainGroups2.entries()) {
+            try {
+              const batch = addresses.slice(0, 30).join(',');
+              const pairRes = await axios.get(`${DEX_SCREENER_V1}/tokens/v1/${chainId}/${batch}`, {
+                timeout: 10000,
+                headers: { 'Accept': 'application/json' }
+              });
+              const pairs: DexScreenerPair[] = Array.isArray(pairRes.data) ? pairRes.data : (pairRes.data?.pairs || []);
+              const bestPairs = new Map<string, DexScreenerPair>();
+              for (const p of pairs) {
+                const pKey = `${p.chainId}:${p.baseToken?.address}`.toLowerCase();
+                const existing = bestPairs.get(pKey);
+                if (!existing || (p.liquidity?.usd || 0) > (existing.liquidity?.usd || 0)) {
+                  bestPairs.set(pKey, p);
+                }
+              }
+              const tokens = Array.from(bestPairs.values()).map(p => {
+                const token = transformPairToToken(p);
+                const iconKey = `${p.chainId}:${p.baseToken?.address}`.toLowerCase();
+                if (iconMap.has(iconKey)) {
+                  token.imageUrl = iconMap.get(iconKey);
+                }
+                return token;
+              });
+              allTokens.push(...tokens);
+            } catch (err) {
+              console.warn(`[GuardianScanner] Profile pair lookup failed for ${chainId}:`, err);
+            }
+          }
         } catch (err) {
-          console.warn(`[GuardianScanner] Failed to fetch trending for ${chainId}:`, err);
+          console.warn('[GuardianScanner] Token profiles fallback failed:', err);
         }
       }
       
-      const sorted = allTokens.sort((a, b) => b.volume24h - a.volume24h);
+      // Deduplicate final list by contract address
+      const seen = new Set<string>();
+      const deduped = allTokens.filter(t => {
+        const key = `${t.chain}:${t.contractAddress}`.toLowerCase();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+      
+      const sorted = deduped
+        .filter(t => t.volume24h > 0 || t.liquidity > 0)
+        .sort((a, b) => b.volume24h - a.volume24h);
       tokenDataCache.set(cacheKey, sorted, CACHE_TTL.TOKEN_LIST);
       
+      console.log(`[GuardianScanner] Fetched ${sorted.length} trending tokens for ${chain || 'all'}`);
       return sorted;
     } catch (error) {
       console.error('[GuardianScanner] getTrendingTokens error:', error);
