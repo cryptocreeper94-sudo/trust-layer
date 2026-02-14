@@ -563,59 +563,38 @@ function AdminDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen text-white pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
       <div className="fixed inset-0 pointer-events-none">
         <GlowOrb color="linear-gradient(135deg, #f59e0b, #8b5cf6)" size={500} top="5%" left="5%" />
         <GlowOrb color="linear-gradient(135deg, #06b6d4, #ec4899)" size={400} top="50%" left="80%" delay={2} />
         <GlowOrb color="linear-gradient(135deg, #8b5cf6, #06b6d4)" size={350} top="70%" left="20%" delay={4} />
       </div>
-      
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500/20 to-purple-500/20 border border-amber-500/30 flex items-center justify-center">
-              <Gamepad2 className="w-5 h-5 text-amber-400" />
-            </div>
-            <div>
-              <span className="font-display font-bold text-lg">Chronicles Admin</span>
-              <Badge className="ml-2 bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">
-                BETA v0.1
-              </Badge>
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              size="sm"
-              className="border-white/10 text-white hover:bg-white/10"
-              onClick={() => { sessionStorage.removeItem("chroniclesAdminToken"); window.location.reload(); }}
-              data-testid="button-lock-portal"
-            >
-              <Lock className="w-4 h-4 mr-2" />
-              Lock Portal
-            </Button>
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
-                Exit to Main Site
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </nav>
 
-      <main className="pt-24 pb-16 px-4 relative z-10">
+      <main className="px-4 relative z-10">
         <div className="container mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-8"
+            className="mb-8 flex items-start justify-between"
           >
+            <div>
             <h1 className="text-4xl md:text-5xl font-display font-black mb-2">
               <span className="bg-gradient-to-r from-amber-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
                 Game Command Center
               </span>
             </h1>
             <p className="text-gray-400 text-lg">Manage eras, NPCs, storefronts, and the neverending world</p>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="border-amber-500/30 text-amber-400 hover:bg-amber-500/10 shrink-0 mt-2"
+              onClick={() => { sessionStorage.removeItem("chroniclesAdminToken"); window.location.reload(); }}
+              data-testid="button-lock-portal"
+            >
+              <Lock className="w-4 h-4 mr-2" />
+              Lock Portal
+            </Button>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

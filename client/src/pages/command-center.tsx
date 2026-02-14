@@ -63,6 +63,7 @@ const categories: Category[] = [
       { label: "SEO Manager", description: "Search engine optimization controls", href: "/owner-admin/seo", icon: <Search className="size-5" />, image: ccAnalytics, glowColor: "shadow-indigo-500/30" },
       { label: "Network Stats", description: "Blockchain network performance", href: "/network", icon: <Activity className="size-5" />, image: ccBlockchain, glowColor: "shadow-teal-500/30" },
       { label: "ML Dashboard", description: "Machine learning model insights", href: "/ml-dashboard", icon: <Cpu className="size-5" />, image: ccDeveloper, glowColor: "shadow-violet-500/30", badge: "Beta" },
+      { label: "API Usage", description: "Track API consumption and limits", href: "/api-usage", icon: <LineChart className="size-5" />, image: ccAnalytics, glowColor: "shadow-cyan-500/30" },
     ]
   },
   {
@@ -91,6 +92,10 @@ const categories: Category[] = [
       { label: "Messaging Center", description: "Send announcements & notifications", href: "/owner-admin/messaging", icon: <Mail className="size-5" />, image: ccMarketing, glowColor: "shadow-amber-500/30" },
       { label: "Marketing Catalog", description: "Manage marketing asset library", href: "/marketing-catalog/admin", icon: <Palette className="size-5" />, image: ccMarketing, glowColor: "shadow-pink-500/30" },
       { label: "Marketing Dev", description: "Marketing development tools", href: "/marketing-catalog/dev", icon: <Code className="size-5" />, image: ccDeveloper, glowColor: "shadow-red-500/30", badge: "Dev" },
+      { label: "Competitive Analysis", description: "Market positioning analysis", href: "/competitive-analysis", icon: <PieChart className="size-5" />, image: ccMarketing, glowColor: "shadow-violet-500/30" },
+      { label: "Investor Pitch", description: "Investor presentation materials", href: "/investor-pitch", icon: <Rocket className="size-5" />, image: ccMarketing, glowColor: "shadow-emerald-500/30" },
+      { label: "Innovation Hub", description: "Innovation features and research", href: "/innovation", icon: <Sparkles className="size-5" />, image: ccMarketing, glowColor: "shadow-cyan-500/30" },
+      { label: "Team Messaging", description: "Internal team communications", href: "/team-message", icon: <MessageSquare className="size-5" />, image: ccMarketing, glowColor: "shadow-blue-500/30" },
     ]
   },
   {
@@ -155,6 +160,8 @@ const categories: Category[] = [
       { label: "Arcade Hub", description: "Arcade and game management", href: "/arcade", icon: <Gamepad2 className="size-5" />, image: ccGames, glowColor: "shadow-purple-500/30" },
       { label: "Sweepstakes Rules", description: "Contest rules and compliance", href: "/sweepstakes-rules", icon: <ScrollText className="size-5" />, image: ccGames, glowColor: "shadow-fuchsia-500/30" },
       { label: "Daily Bonus", description: "Configure daily reward system", href: "/daily-bonus", icon: <Flame className="size-5" />, image: ccRewards, glowColor: "shadow-rose-500/30" },
+      { label: "Game Developer Portal", description: "Third-party game submission and review", href: "/game-developer", icon: <Code className="size-5" />, image: ccGames, glowColor: "shadow-indigo-500/30" },
+      { label: "Chronicles Builder", description: "Game content creation tools", href: "/chronicles/builder", icon: <Layers className="size-5" />, image: ccGames, glowColor: "shadow-violet-500/30" },
     ]
   },
   {
@@ -169,6 +176,8 @@ const categories: Category[] = [
       { label: "Webhooks", description: "Event webhook configuration", href: "/webhooks", icon: <Radio className="size-5" />, image: ccDeveloper, glowColor: "shadow-teal-500/30" },
       { label: "Studio", description: "Blockchain IDE and tools", href: "/studio", icon: <Cpu className="size-5" />, image: ccDeveloper, glowColor: "shadow-green-400/30" },
       { label: "Doc Hub", description: "System documentation hub", href: "/doc-hub", icon: <BookOpen className="size-5" />, image: ccDeveloper, glowColor: "shadow-cyan-500/30" },
+      { label: "Code Snippets", description: "Reusable code snippet library", href: "/code-snippets", icon: <FileText className="size-5" />, image: ccDeveloper, glowColor: "shadow-amber-500/30" },
+      { label: "Dev Studio", description: "Development sandbox environment", href: "/dev-studio", icon: <Server className="size-5" />, image: ccDeveloper, glowColor: "shadow-violet-500/30" },
     ]
   },
   {
@@ -182,6 +191,10 @@ const categories: Category[] = [
       { label: "Technical Roadmap", description: "Development timeline and plans", href: "/technical-roadmap", icon: <Compass className="size-5" />, image: ccSettings, glowColor: "shadow-gray-400/30" },
       { label: "System Status", description: "Service health and uptime", href: "/status", icon: <Activity className="size-5" />, image: ccSettings, glowColor: "shadow-green-500/30", badge: "Live" },
       { label: "Team Operations", description: "Internal team coordination", href: "/ops-center", icon: <UserCog className="size-5" />, image: ccUsers, glowColor: "shadow-blue-400/30" },
+      { label: "Coming Features", description: "Upcoming feature release tracker", href: "/coming-features", icon: <Rocket className="size-5" />, image: ccSettings, glowColor: "shadow-purple-500/30" },
+      { label: "Genesis", description: "Platform genesis configuration", href: "/genesis", icon: <Sparkles className="size-5" />, image: ccSettings, glowColor: "shadow-cyan-500/30" },
+      { label: "Roadmap (Chronicles)", description: "Chronicles development roadmap", href: "/roadmap-chronicles", icon: <Compass className="size-5" />, image: ccSettings, glowColor: "shadow-pink-500/30" },
+      { label: "Roadmap (Ecosystem)", description: "Ecosystem development timeline", href: "/roadmap-ecosystem", icon: <Map className="size-5" />, image: ccSettings, glowColor: "shadow-emerald-500/30" },
     ]
   },
 ];

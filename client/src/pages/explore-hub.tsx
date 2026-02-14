@@ -74,6 +74,12 @@ const categories: Category[] = [
       { label: "Trust Layer", description: "L1 blockchain overview", href: "/trust-layer", icon: <Shield className="size-5" />, image: ccBlockchain, glowColor: "shadow-emerald-500/30" },
       { label: "My Hub", description: "Your personal dashboard", href: "/my-hub", icon: <LayoutGrid className="size-5" />, image: ccSettings, glowColor: "shadow-blue-500/30" },
       { label: "Dashboard", description: "Account overview", href: "/dashboard", icon: <BarChart3 className="size-5" />, image: ccSettings, glowColor: "shadow-teal-500/30" },
+      { label: "Vision", description: "Our vision for the future", href: "/vision", icon: <Eye className="size-5" />, image: hubLearn, glowColor: "shadow-violet-500/30" },
+      { label: "Innovation Hub", description: "Cutting-edge features & research", href: "/innovation", icon: <Sparkles className="size-5" />, image: hubAI, glowColor: "shadow-pink-500/30" },
+      { label: "Investor Pitch", description: "Investment opportunity overview", href: "/investor-pitch", icon: <TrendingUp className="size-5" />, image: hubEarn, glowColor: "shadow-amber-500/30" },
+      { label: "Competitive Analysis", description: "Market positioning breakdown", href: "/competitive-analysis", icon: <Target className="size-5" />, image: hubTrading, glowColor: "shadow-orange-500/30" },
+      { label: "Coming Features", description: "Upcoming feature releases", href: "/coming-features", icon: <Rocket className="size-5" />, image: hubLearn, glowColor: "shadow-sky-500/30" },
+      { label: "Genesis", description: "The genesis of DarkWave", href: "/genesis", icon: <Flame className="size-5" />, image: ccBlockchain, glowColor: "shadow-rose-500/30" },
     ]
   },
   {
@@ -92,6 +98,13 @@ const categories: Category[] = [
       { label: "Cross-Chain Bridge", description: "Bridge SIG across blockchains", href: "/bridge", icon: <Network className="size-5" />, image: ccBlockchain, glowColor: "shadow-purple-500/30" },
       { label: "Token Launchpad", description: "Launch new tokens", href: "/launchpad", icon: <Rocket className="size-5" />, image: hubTrading, glowColor: "shadow-orange-500/30" },
       { label: "Transactions", description: "View your transaction history", href: "/transactions", icon: <ScrollText className="size-5" />, image: hubWallet, glowColor: "shadow-slate-400/30" },
+      { label: "Copy Trading", description: "Follow top traders", href: "/copy-trading", icon: <Users className="size-5" />, image: hubTrading, glowColor: "shadow-lime-500/30" },
+      { label: "DCA Bot", description: "Dollar-cost averaging automation", href: "/dca-bot", icon: <Bot className="size-5" />, image: hubAI, glowColor: "shadow-teal-500/30" },
+      { label: "Paper Trading", description: "Practice trading risk-free", href: "/paper-trading", icon: <FileText className="size-5" />, image: hubTrading, glowColor: "shadow-yellow-500/30" },
+      { label: "Trading Terminal", description: "Advanced trading interface", href: "/trading", icon: <MonitorPlay className="size-5" />, image: hubTrading, glowColor: "shadow-rose-500/30" },
+      { label: "Token Info", description: "Signal token details", href: "/token", icon: <Coins className="size-5" />, image: hubWallet, glowColor: "shadow-violet-500/30" },
+      { label: "Token Analytics", description: "Advanced token metrics", href: "/token-analytics", icon: <ChartLine className="size-5" />, image: hubTrading, glowColor: "shadow-pink-500/30" },
+      { label: "Token Compare", description: "Compare blockchain projects", href: "/token-compare", icon: <BarChart3 className="size-5" />, image: hubTrading, glowColor: "shadow-amber-500/30" },
     ]
   },
   {
@@ -107,6 +120,7 @@ const categories: Category[] = [
       { label: "NFT Creator", description: "Create your own NFTs", href: "/nft-creator", icon: <Palette className="size-5" />, image: hubAI, glowColor: "shadow-rose-500/30" },
       { label: "MultiSig Wallet", description: "Multi-signature security", href: "/multisig", icon: <Lock className="size-5" />, image: hubIdentity, glowColor: "shadow-indigo-500/30" },
       { label: "Claim Airdrop", description: "Claim your Signal airdrop", href: "/airdrop", icon: <Sparkles className="size-5" />, image: hubEarn, glowColor: "shadow-yellow-500/30", badge: "Claim" },
+      { label: "RWA Tokenization", description: "Real-world asset tokenization", href: "/rwa", icon: <Building2 className="size-5" />, image: hubWallet, glowColor: "shadow-teal-500/30" },
     ]
   },
   {
@@ -140,6 +154,13 @@ const categories: Category[] = [
       { label: "Predictions", description: "Predict market moves", href: "/predictions", icon: <Target className="size-5" />, image: hubAI, glowColor: "shadow-cyan-500/30" },
       { label: "Daily Bonus", description: "Claim your daily reward", href: "/daily-bonus", icon: <Gift className="size-5" />, image: hubEarn, glowColor: "shadow-emerald-500/30", badge: "Daily" },
       { label: "Leaderboard", description: "See top players", href: "/leaderboard", icon: <Trophy className="size-5" />, image: ccGames, glowColor: "shadow-orange-500/30" },
+      { label: "Galaga", description: "Classic space shooter", href: "/galaga", icon: <Rocket className="size-5" />, image: ccGames, glowColor: "shadow-blue-500/30" },
+      { label: "Snake", description: "Classic snake game", href: "/snake", icon: <Joystick className="size-5" />, image: ccGames, glowColor: "shadow-green-500/30" },
+      { label: "Tetris", description: "Block puzzle classic", href: "/tetris", icon: <Boxes className="size-5" />, image: ccGames, glowColor: "shadow-cyan-500/30" },
+      { label: "Solitaire", description: "Card solitaire game", href: "/solitaire", icon: <Layers className="size-5" />, image: ccGames, glowColor: "shadow-red-500/30" },
+      { label: "Spades", description: "Multiplayer spades", href: "/spades", icon: <Swords className="size-5" />, image: ccGames, glowColor: "shadow-indigo-500/30" },
+      { label: "Minesweeper", description: "Mine puzzle game", href: "/minesweeper", icon: <Crosshair className="size-5" />, image: ccGames, glowColor: "shadow-slate-400/30" },
+      { label: "Lottery", description: "Lucky number draws", href: "/lottery", icon: <Dices className="size-5" />, image: ccGames, glowColor: "shadow-yellow-500/30" },
     ]
   },
   {
@@ -172,6 +193,13 @@ const categories: Category[] = [
       { label: "Members", description: "Browse the member directory", href: "/members", icon: <Users className="size-5" />, image: hubCommunity, glowColor: "shadow-purple-500/30" },
       { label: "Blog", description: "News and articles", href: "/blog", icon: <Newspaper className="size-5" />, image: hubLearn, glowColor: "shadow-rose-500/30" },
       { label: "Feedback", description: "Share your thoughts", href: "/feedback", icon: <MessageSquare className="size-5" />, image: hubCommunity, glowColor: "shadow-green-500/30" },
+      { label: "Creators", description: "Creator community portal", href: "/creators", icon: <Palette className="size-5" />, image: hubCommunity, glowColor: "shadow-pink-500/30" },
+      { label: "Creator Program", description: "Join the creator program", href: "/creator-program", icon: <Star className="size-5" />, image: hubCommunity, glowColor: "shadow-amber-500/30" },
+      { label: "Founders", description: "Meet the founding team", href: "/founders", icon: <Crown className="size-5" />, image: hubCommunity, glowColor: "shadow-yellow-500/30" },
+      { label: "KOL Program", description: "Key opinion leader program", href: "/kol", icon: <Megaphone className="size-5" />, image: hubCommunity, glowColor: "shadow-orange-500/30" },
+      { label: "Influencer Partnership", description: "Partner with DarkWave", href: "/influencer-partnership", icon: <HandCoins className="size-5" />, image: hubCommunity, glowColor: "shadow-rose-500/30" },
+      { label: "Partners", description: "Strategic partnership network", href: "/partners", icon: <Network className="size-5" />, image: hubCommunity, glowColor: "shadow-cyan-500/30" },
+      { label: "Team", description: "Meet the team", href: "/team", icon: <Users className="size-5" />, image: hubCommunity, glowColor: "shadow-teal-500/30" },
     ]
   },
   {
@@ -186,6 +214,9 @@ const categories: Category[] = [
       { label: "Guardian Portal", description: "Security certification hub", href: "/guardian-portal", icon: <ShieldCheck className="size-5" />, image: hubIdentity, glowColor: "shadow-red-400/30" },
       { label: "Guardian Registry", description: "Certified projects", href: "/guardian-registry", icon: <ScrollText className="size-5" />, image: hubIdentity, glowColor: "shadow-rose-500/30" },
       { label: "Proof of Reserve", description: "On-chain reserve verification", href: "/proof-of-reserve", icon: <Lock className="size-5" />, image: ccBlockchain, glowColor: "shadow-emerald-500/30" },
+      { label: "Security Center", description: "Account security settings", href: "/security", icon: <Shield className="size-5" />, image: hubIdentity, glowColor: "shadow-yellow-500/30" },
+      { label: "Guardian AI", description: "AI guardian certification system", href: "/guardian-ai", icon: <BrainCircuit className="size-5" />, image: hubAI, glowColor: "shadow-cyan-500/30" },
+      { label: "Guardian Whitepaper", description: "Security framework whitepaper", href: "/guardian-whitepaper", icon: <FileText className="size-5" />, image: hubIdentity, glowColor: "shadow-indigo-500/30" },
     ]
   },
   {
@@ -202,6 +233,8 @@ const categories: Category[] = [
       { label: "TLID Domains", description: ".tlid blockchain domains", href: "/domains", icon: <Globe className="size-5" />, image: ccSettings, glowColor: "shadow-indigo-500/30" },
       { label: "Governance", description: "Vote on proposals", href: "/governance", icon: <Landmark className="size-5" />, image: ccBlockchain, glowColor: "shadow-purple-500/30" },
       { label: "Treasury", description: "DAO treasury overview", href: "/treasury", icon: <Landmark className="size-5" />, image: hubWallet, glowColor: "shadow-amber-500/30" },
+      { label: "Governance Charter", description: "DAO governance constitution", href: "/governance-charter", icon: <ScrollText className="size-5" />, image: ccBlockchain, glowColor: "shadow-rose-500/30" },
+      { label: "Governance Treasury", description: "Community treasury management", href: "/governance-treasury", icon: <HandCoins className="size-5" />, image: hubWallet, glowColor: "shadow-yellow-500/30" },
     ]
   },
   {
@@ -219,6 +252,10 @@ const categories: Category[] = [
       { label: "Roadmap", description: "Development timeline", href: "/roadmap", icon: <Target className="size-5" />, image: hubLearn, glowColor: "shadow-cyan-500/30" },
       { label: "FAQ", description: "Frequently asked questions", href: "/faq", icon: <MessageSquare className="size-5" />, image: hubLearn, glowColor: "shadow-slate-400/30" },
       { label: "Status", description: "System health & uptime", href: "/status", icon: <Activity className="size-5" />, image: ccSettings, glowColor: "shadow-green-500/30", badge: "Live" },
+      { label: "Learn Center", description: "DarkWave Academy courses", href: "/learn", icon: <GraduationCap className="size-5" />, image: hubLearn, glowColor: "shadow-amber-500/30" },
+      { label: "Legacy", description: "Build your digital legacy", href: "/legacy", icon: <Crown className="size-5" />, image: hubLearn, glowColor: "shadow-rose-500/30" },
+      { label: "Alerts", description: "Price and event alerts", href: "/alerts", icon: <Radio className="size-5" />, image: hubTrading, glowColor: "shadow-red-500/30" },
+      { label: "Economy", description: "Platform economy overview", href: "/economy", icon: <LineChart className="size-5" />, image: hubTrading, glowColor: "shadow-teal-500/30" },
     ]
   },
   {
@@ -234,6 +271,11 @@ const categories: Category[] = [
       { label: "Billing", description: "Manage subscriptions", href: "/billing", icon: <CreditCard className="size-5" />, image: ccSettings, glowColor: "shadow-emerald-500/30" },
       { label: "Pricing", description: "Plans and pricing", href: "/pricing", icon: <DollarSign className="size-5" />, image: ccSettings, glowColor: "shadow-teal-500/30" },
       { label: "Support", description: "Get help", href: "/support", icon: <MessageSquare className="size-5" />, image: ccSettings, glowColor: "shadow-indigo-500/30" },
+      { label: "Profile", description: "Edit your profile", href: "/profile", icon: <Users className="size-5" />, image: ccSettings, glowColor: "shadow-violet-500/30" },
+      { label: "Membership", description: "Membership tier details", href: "/membership", icon: <Crown className="size-5" />, image: hubEarn, glowColor: "shadow-rose-500/30" },
+      { label: "Membership Charter", description: "Membership governance rules", href: "/membership-charter", icon: <ScrollText className="size-5" />, image: ccSettings, glowColor: "shadow-purple-500/30" },
+      { label: "Business Portal", description: "Business account dashboard", href: "/business-portal", icon: <Building2 className="size-5" />, image: ccSettings, glowColor: "shadow-cyan-500/30" },
+      { label: "Business Application", description: "Apply for a business account", href: "/business-application", icon: <FileText className="size-5" />, image: ccSettings, glowColor: "shadow-sky-500/30" },
     ]
   },
 ];
