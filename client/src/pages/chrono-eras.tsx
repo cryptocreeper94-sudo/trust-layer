@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ChronoLayout, HoloCard, CTABanner, chronoStyles } from "@/components/chrono-ui";
-import { HomeButton } from "@/components/page-nav";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";

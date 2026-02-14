@@ -8,7 +8,6 @@ import {
   Trophy, Star, Clock, Zap, Gift, ArrowRight, Plus, UserPlus, Link2, ChevronDown, X, Loader2, Vote, Copy, Share2,
   Timer, Scroll, Gem, Target, Briefcase, Heart, ArrowLeft
 } from "lucide-react";
-import { BackButton, HomeButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
