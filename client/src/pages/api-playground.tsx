@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Play, Copy, Check, Wallet, Droplets, Send, Activity, RefreshCw , Shield } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -29,16 +29,6 @@ interface TestWallet {
   network: string;
   chainId: number;
 }
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function ApiPlayground() {
   usePageAnalytics();
@@ -146,10 +136,26 @@ export default function ApiPlayground() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<div className="pt-20 pb-12 px-4">
+    <div className="min-h-screen bg-background text-foreground">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center">
+          <Link href="/" className="flex items-center gap-2 mr-auto">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight">Devnet Sandbox</span>
+          </Link>
+          <div className="flex items-center gap-3">
+            {devnetStatus && (
+              <Badge variant="outline" className="border-green-500/50 text-green-400 text-[10px]">
+                <span className="w-1.5 h-1.5 bg-green-400 rounded-full mr-1.5 animate-pulse" />
+                {devnetStatus.status}
+              </Badge>
+            )}
+            <BackButton />
+          </div>
+        </div>
+      </nav>
+
+      <div className="pt-20 pb-12 px-4">
         <div className="container mx-auto max-w-6xl">
           <section className="mb-8">
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">Devnet Sandbox</h1>
@@ -192,7 +198,8 @@ export default function ApiPlayground() {
                   </p>
                 </div>
               </div>
-</section>
+            </GlassCard>
+          </section>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             <GlassCard hover={false}>
@@ -201,22 +208,26 @@ export default function ApiPlayground() {
                 <div className="text-lg font-bold text-white">{devnetStatus?.tps || "200K+"}</div>
                 <div className="text-[10px] text-white/50">TPS</div>
               </div>
-<GlassCard hover={false}>
+            </GlassCard>
+            <GlassCard hover={false}>
               <div className="p-4 text-center">
                 <div className="text-lg font-bold text-white">{devnetStatus?.finalityTime || "400ms"}</div>
                 <div className="text-[10px] text-white/50">Block Time</div>
               </div>
-<GlassCard hover={false}>
+            </GlassCard>
+            <GlassCard hover={false}>
               <div className="p-4 text-center">
                 <div className="text-lg font-bold text-white">{devnetStatus?.blockHeight || "0"}</div>
                 <div className="text-[10px] text-white/50">Block Height</div>
               </div>
-<GlassCard hover={false}>
+            </GlassCard>
+            <GlassCard hover={false}>
               <div className="p-4 text-center">
                 <div className="text-lg font-bold text-white">{devnetStatus?.faucetLimit || "100"}</div>
                 <div className="text-[10px] text-white/50">Faucet Limit</div>
               </div>
-</div>
+            </GlassCard>
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div className="space-y-4">
@@ -255,7 +266,9 @@ export default function ApiPlayground() {
                     </div>
                   )}
                 </div>
-<GlassCard>
+              </GlassCard>
+
+              <GlassCard>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-4">
                     <Droplets className="w-4 h-4 text-cyan-400" />
@@ -286,7 +299,9 @@ export default function ApiPlayground() {
                     </Button>
                   </div>
                 </div>
-<GlassCard>
+              </GlassCard>
+
+              <GlassCard>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-4">
                     <Send className="w-4 h-4 text-secondary" />
@@ -316,7 +331,8 @@ export default function ApiPlayground() {
                     </Button>
                   </div>
                 </div>
-</div>
+              </GlassCard>
+            </div>
 
             <GlassCard glow className="h-fit">
               <div className="p-5">
@@ -338,13 +354,12 @@ export default function ApiPlayground() {
                   )}
                 </div>
               </div>
-</div>
+            </GlassCard>
+          </div>
         </div>
       </div>
 
       
     </div>
-</Input>
-</Input>
   );
 }

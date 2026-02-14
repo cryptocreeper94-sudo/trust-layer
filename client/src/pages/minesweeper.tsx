@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RotateCcw, Flag, Bomb, Trophy, Skull, Clock, Target, Coins, Sparkles, DollarSign } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -168,16 +169,6 @@ function SweepsTileCell({
     </motion.button>
   );
 }
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function Minesweeper() {
   const [, navigate] = useLocation();
@@ -471,9 +462,7 @@ export default function Minesweeper() {
     const nextMultiplier = calculateMultiplier(sweepsGame.tilesRevealed + 1, sweepsGame.mineCount, sweepsGame.gridSize);
 
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-zinc-900 text-white">
         <div className="bg-black/30 backdrop-blur-sm px-4 py-2 sticky top-0 z-50">
           <div className="flex items-center justify-between max-w-4xl mx-auto">
             <div className="flex items-center gap-4">
@@ -562,7 +551,7 @@ export default function Minesweeper() {
         <div className="text-center text-xs text-gray-500 pb-4">
           Click tiles to reveal • Avoid the mines • Cash out anytime
         </div>
-    </div>
+      </div>
     );
   }
 
@@ -658,6 +647,7 @@ export default function Minesweeper() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-gray-900 to-zinc-900 text-white">
       <div className="container mx-auto px-4 py-8 max-w-2xl">
         <div className="flex items-center gap-4 mb-8">
+          <BackButton />
           <h1 className="text-3xl font-bold">Minesweeper</h1>
         </div>
 
@@ -815,5 +805,5 @@ export default function Minesweeper() {
         </Card>
       </div>
     </div>
-);
+  );
 }

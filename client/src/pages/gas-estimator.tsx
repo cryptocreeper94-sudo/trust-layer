@@ -5,6 +5,7 @@ import {
   Fuel, Zap, Clock, TrendingUp, TrendingDown,
   AlertTriangle, Info, ArrowUpRight, BarChart3, Home
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { AreaChart, Area, ResponsiveContainer, BarChart, Bar, XAxis, Tooltip } from "recharts";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -35,16 +36,6 @@ const networkComparison = [
   { network: "Polygon", avgFee: 0.01, time: "2s", color: "#8247e5" },
 ];
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function GasEstimator() {
   const [currentGas, setCurrentGas] = useState({
     low: 0.0001,
@@ -68,10 +59,22 @@ export default function GasEstimator() {
   const networkLoad = 32;
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<main className="flex-1  pb-8 px-4">
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center">
+          <div className="flex items-center gap-3">
+            <BackButton />
+            <h1 className="text-lg font-bold text-white">Gas Estimator</h1>
+          </div>
+          <Link href="/" className="ml-auto">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-white/10">
+              <Home className="w-4 h-4" />
+            </Button>
+          </Link>
+        </div>
+      </nav>
+
+      <main className="flex-1 pt-16 pb-8 px-4">
         <div className="container mx-auto max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -108,7 +111,9 @@ export default function GasEstimator() {
                 <div className="text-2xl font-bold text-green-400">${currentGas.low.toFixed(5)}</div>
               </div>
               <Badge className="bg-green-500/20 text-green-400">Recommended</Badge>
-<GlassCard className="col-span-2 row-span-1 p-4 flex items-center justify-between">
+            </GlassCard>
+
+            <GlassCard className="col-span-2 row-span-1 p-4 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <Fuel className="w-4 h-4 text-blue-400" />
@@ -125,7 +130,9 @@ export default function GasEstimator() {
                   <ArrowUpRight className="w-4 h-4 text-muted-foreground rotate-90" />
                 )}
               </div>
-<GlassCard className="col-span-2 row-span-1 p-4 flex items-center justify-between">
+            </GlassCard>
+
+            <GlassCard className="col-span-2 row-span-1 p-4 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">
                   <AlertTriangle className="w-4 h-4 text-orange-400" />
@@ -134,7 +141,9 @@ export default function GasEstimator() {
                 <div className="text-2xl font-bold text-orange-400">${currentGas.high.toFixed(5)}</div>
               </div>
               <Badge className="bg-orange-500/20 text-orange-400">Priority</Badge>
-<GlassCard className="col-span-3 row-span-2 p-4 flex flex-col">
+            </GlassCard>
+
+            <GlassCard className="col-span-3 row-span-2 p-4 flex flex-col">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <BarChart3 className="w-4 h-4 text-primary" />
@@ -170,7 +179,9 @@ export default function GasEstimator() {
                   </AreaChart>
                 </ResponsiveContainer>
               </div>
-<GlassCard className="col-span-3 row-span-2 p-4 flex flex-col">
+            </GlassCard>
+
+            <GlassCard className="col-span-3 row-span-2 p-4 flex flex-col">
               <div className="flex items-center gap-2 mb-3">
                 <Clock className="w-4 h-4 text-cyan-400" />
                 <span className="font-bold text-sm">Network Status</span>
@@ -203,7 +214,9 @@ export default function GasEstimator() {
                   </div>
                 </div>
               </div>
-</div>
+            </GlassCard>
+
+          </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <GlassCard className="p-4">
@@ -231,7 +244,9 @@ export default function GasEstimator() {
                   </motion.div>
                 ))}
               </div>
-<GlassCard className="p-4">
+            </GlassCard>
+
+            <GlassCard className="p-4">
               <div className="flex items-center gap-2 mb-4">
                 <BarChart3 className="w-4 h-4 text-primary" />
                 <span className="font-bold">Network Comparison</span>
@@ -279,9 +294,12 @@ export default function GasEstimator() {
                   </span>
                 </div>
               </div>
-</div>
+            </GlassCard>
+          </div>
         </div>
       </main>
+
+      
     </div>
-);
+  );
 }

@@ -272,16 +272,6 @@ function GroundPlane({ era }: { era: string }) {
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 function GridLines() {
   const lines = useMemo(() => {
     const pts: [number, number, number][] = [];
@@ -723,9 +713,7 @@ export default function ChroniclesEstate() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -764,7 +752,38 @@ export default function ChroniclesEstate() {
   return (
     <div className="min-h-screen bg-slate-950 relative overflow-hidden">
       {/* Navigation */}
-{/* Floating Ambient Orbs */}
+      <nav className="fixed top-0 left-0 right-0 z-40 bg-black/80 backdrop-blur-xl border-b border-white/5">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => window.history.back()}
+              className="h-8 text-xs gap-1 hover:bg-white/5 px-2 text-muted-foreground hover:text-white"
+              data-testid="button-back"
+            >
+              <ArrowLeft className="w-3 h-3" />
+              <span className="hidden sm:inline">Back</span>
+            </Button>
+            <Link href="/">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 text-xs gap-1 hover:bg-white/5 px-2 text-muted-foreground hover:text-white"
+                data-testid="button-home"
+              >
+                <Home className="w-3 h-3" />
+                <span className="hidden sm:inline">Home</span>
+              </Button>
+            </Link>
+          </div>
+          <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 text-xs">
+            Estate
+          </Badge>
+        </div>
+      </nav>
+
+      {/* Floating Ambient Orbs */}
       <div className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse pointer-events-none" />
       <div className="absolute bottom-40 right-10 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse pointer-events-none" style={{ animationDelay: "1s" }} />
 
@@ -917,7 +936,8 @@ export default function ChroniclesEstate() {
                     "Begin Today's Journey"
                   )}
                 </Button>
-</motion.div>
+              </GlassCard>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -1008,7 +1028,8 @@ export default function ChroniclesEstate() {
                     </>
                   )}
                 </Button>
-</motion.div>
+              </GlassCard>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -1267,7 +1288,9 @@ export default function ChroniclesEstate() {
                   );
                 })}
               </div>
-{/* Zones Grid */}
+            </GlassCard>
+
+            {/* Zones Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {zones.length === 0 && (
                 <div className="col-span-full text-center py-8">
@@ -1311,7 +1334,8 @@ export default function ChroniclesEstate() {
                         className="w-20 h-2"
                       />
                     </div>
-</div>
+                  </GlassCard>
+                </div>
               ))}
             </div>
 
@@ -1353,7 +1377,9 @@ export default function ChroniclesEstate() {
                         </span>
                       </div>
                     ))}
-</motion.div>
+                  </div>
+                </GlassCard>
+              </motion.div>
             )}
           </motion.div>
         )}
@@ -1373,7 +1399,8 @@ export default function ChroniclesEstate() {
               <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30">
                 Phase 2 Feature
               </Badge>
-</motion.div>
+            </GlassCard>
+          </motion.div>
         )}
 
         {/* Daily Rewards Tab */}
@@ -1415,6 +1442,7 @@ export default function ChroniclesEstate() {
                     </div>
                   );
                 })}
+              </div>
 
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between text-sm">
@@ -1454,7 +1482,8 @@ export default function ChroniclesEstate() {
                   </>
                 )}
               </Button>
-</motion.div>
+            </GlassCard>
+          </motion.div>
         )}
 
         {/* Builder Tab */}
@@ -1515,7 +1544,9 @@ export default function ChroniclesEstate() {
                 })}
               </div>
             </div>
-<div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          </GlassCard>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Character Portrait & Stats */}
           <Card className="bg-slate-900/80 border-slate-700 p-6">
             <div className="text-center mb-6">
@@ -1777,12 +1808,15 @@ export default function ChroniclesEstate() {
                           );
                         })
                       )}
+                    </div>
+                  </div>
                   <p className="text-center text-xs text-slate-500 mt-4">
                     Select a building above, then tap on the grid to place it
                   </p>
                 </>
               )}
             </Card>
+          </div>
 
           {/* Era Progress & Portal Unlock */}
           <Card className="mt-6 bg-slate-900/80 border-slate-700 p-6 lg:col-span-3">
@@ -1809,10 +1843,16 @@ export default function ChroniclesEstate() {
                     <div>
                       <Progress value={(playerLevel / portal.level) * 100} className="h-2 mb-2" />
                       <span className="text-xs text-slate-400">Level {playerLevel}/{portal.level}</span>
+                    </div>
                   )}
-))}
+                </GlassCard>
+              ))}
+            </div>
           </Card>
+        </div>
+        </div>
         )}
+      </div>
 
       {/* NPC Chat */}
       {!showNPC && personality?.parallelSelfName && (
@@ -1825,8 +1865,6 @@ export default function ChroniclesEstate() {
         isOpen={showNPC}
         onClose={() => setShowNPC(false)}
       />
-    </NPCChatButton>
     </div>
-    </div>
-);
+  );
 }

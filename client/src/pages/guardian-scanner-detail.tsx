@@ -138,16 +138,6 @@ const DETAIL_TABS = [
 ];
 
 // Mock transaction data
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 function generateMockTransactions(): Transaction[] {
   const types: Array<"buy" | "sell"> = ["buy", "sell"];
   return Array.from({ length: 20 }, (_, i) => ({
@@ -627,9 +617,7 @@ export default function GuardianScannerDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <RefreshCw className="w-8 h-8 text-cyan-400 animate-spin" />
           <p className="text-white/50 text-sm">Loading token data...</p>
@@ -984,6 +972,5 @@ export default function GuardianScannerDetail() {
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </div>
-    </GuardianSwapModal>
   );
 }

@@ -111,16 +111,6 @@ function getAppImage(appId: string): string {
   return ecosystemImages[appId] || "";
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function TrustLayerLanding() {
   const [, navigate] = useLocation();
   const { user, isAuthenticated } = useSimpleAuth();
@@ -143,10 +133,100 @@ export default function TrustLayerLanding() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<section className="pt-24 pb-16 px-4 relative overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
+            <Shield className="w-6 h-6 text-cyan-400" />
+            <span className="font-display font-bold text-base sm:text-lg tracking-tight whitespace-nowrap">Trust Layer</span>
+          </Link>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="hidden sm:flex items-center gap-2">
+              <Link href="/ecosystem">
+                <Button variant="ghost" size="sm" className="h-8 text-xs" data-testid="link-nav-apps">
+                  Apps
+                </Button>
+              </Link>
+              <Link href="/chronochat">
+                <Button variant="ghost" size="sm" className="h-8 text-xs" data-testid="link-nav-chat">
+                  Chat
+                </Button>
+              </Link>
+              <Link href="/presale">
+                <Button variant="ghost" size="sm" className="h-8 text-xs" data-testid="link-nav-presale">
+                  Presale
+                </Button>
+              </Link>
+            </div>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="h-8 w-8 p-0" data-testid="button-nav-menu">
+                  <Menu className="w-5 h-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56 bg-slate-900/95 border-white/10 backdrop-blur-xl p-2">
+                <DropdownMenuItem asChild>
+                  <Link href="/" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
+                    <Shield className="w-4 h-4 text-cyan-400" />
+                    <span className="font-medium text-sm text-white">Trust Layer Home</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/ecosystem" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
+                    <LayoutGrid className="w-4 h-4 text-purple-400" />
+                    <span className="font-medium text-sm text-white">Ecosystem Apps</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/chronochat" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
+                    <Users className="w-4 h-4 text-pink-400" />
+                    <span className="font-medium text-sm text-white">ChronoChat</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/presale" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
+                    <Coins className="w-4 h-4 text-yellow-400" />
+                    <span className="font-medium text-sm text-white">Signal Presale</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/guardian-ai" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
+                    <BadgeCheck className="w-4 h-4 text-blue-400" />
+                    <span className="font-medium text-sm text-white">Guardian AI</span>
+                  </Link>
+                </DropdownMenuItem>
+                <div className="my-2 border-t border-white/5" />
+                <DropdownMenuItem asChild>
+                  <Link href="/portal" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
+                    <Globe className="w-4 h-4 text-cyan-500" />
+                    <span className="font-medium text-sm text-white">Main Portal</span>
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {isAuthenticated ? (
+              <Link href="/my-hub">
+                <Button size="sm" className="h-8 text-xs bg-primary text-background hover:bg-primary/90" data-testid="link-nav-myhub">
+                  My Hub
+                </Button>
+              </Link>
+            ) : (
+              <Button
+                size="sm"
+                className="h-8 text-xs bg-primary text-background hover:bg-primary/90"
+                onClick={() => setShowLoginModal(true)}
+                data-testid="button-nav-signup"
+              >
+                Sign Up
+              </Button>
+            )}
+          </div>
+        </div>
+      </nav>
+
+      <section className="pt-24 pb-16 px-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-transparent to-purple-500/10" />
         <div className="absolute top-20 left-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-1/4 w-80 h-80 bg-purple-500/15 rounded-full blur-3xl" />
@@ -248,7 +328,8 @@ export default function TrustLayerLanding() {
                       <p className="text-white/60 text-sm leading-relaxed">{feature.description}</p>
                     </div>
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
 
@@ -290,7 +371,8 @@ export default function TrustLayerLanding() {
               >
                 {isAuthenticated ? "View My Card" : "Get Your Card Now"}
               </Button>
-</div>
+            </GlassCard>
+          </div>
         </div>
       </section>
 
@@ -323,7 +405,8 @@ export default function TrustLayerLanding() {
                       <p className="text-white/60 leading-relaxed">{benefit.description}</p>
                     </div>
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -384,7 +467,8 @@ export default function TrustLayerLanding() {
                       <span className="text-[10px] text-white/50">{app.category}</span>
                     </div>
                   </div>
-</motion.a>
+                </GlassCard>
+              </motion.a>
             ))}
           </div>
         </div>
@@ -426,7 +510,9 @@ export default function TrustLayerLanding() {
                 {isAuthenticated ? "Go to My Hub" : "Join as Individual"}
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
-<GlassCard glow className="p-6 sm:p-8 flex flex-col h-full">
+            </GlassCard>
+
+            <GlassCard glow className="p-6 sm:p-8 flex flex-col h-full">
               <div className="flex items-center gap-3 mb-5">
                 <div className="p-2.5 rounded-lg bg-purple-500/20 border border-purple-500/20 flex-shrink-0">
                   <Building2 className="w-5 h-5 text-purple-400" />
@@ -472,7 +558,8 @@ export default function TrustLayerLanding() {
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
-</div>
+            </GlassCard>
+          </div>
         </div>
       </section>
 
@@ -500,5 +587,5 @@ export default function TrustLayerLanding() {
 
       <SimpleLoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
     </div>
-);
+  );
 }

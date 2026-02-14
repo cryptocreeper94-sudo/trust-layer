@@ -113,16 +113,6 @@ const EXPERIENCES = [
   },
 ];
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function ChronoHome() {
   usePageAnalytics();
   
@@ -550,6 +540,7 @@ export default function ChronoHome() {
                 </div>
               </div>
             </motion.div>
+          </div>
 
           <div className="mt-8 text-center">
             <Link href="/team">
@@ -558,6 +549,9 @@ export default function ChronoHome() {
                 <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
+          </div>
+        </div>
+      </section>
 
       <CTABanner
         title="Ready to Live Your Legacy?"
@@ -571,7 +565,5 @@ export default function ChronoHome() {
       
       <style>{chronoStyles}</style>
     </ChronoLayout>
-    </div>
-    </div>
   );
 }

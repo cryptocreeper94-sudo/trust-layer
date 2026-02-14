@@ -101,16 +101,6 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
   return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { scrollY } = useScroll();
@@ -294,7 +284,8 @@ function LiveStats() {
                   </span>
                 </div>
                 <p className="text-[10px] sm:text-xs text-white/40 uppercase tracking-wider font-medium whitespace-nowrap">{stat.label}</p>
-</motion.div>
+              </GlassCard>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -507,59 +498,63 @@ function CurrencySection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <GlassCard className="p-6 sm:p-8 md:p-10 relative overflow-hidden" glow>
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-yellow-500/5 to-transparent rounded-full blur-3xl" />
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500/20 to-green-500/20 border border-yellow-500/30 flex items-center justify-center">
-              <Coins className="w-6 h-6 text-yellow-400" />
-            </div>
-            <div>
-              <h3 className="text-xl font-bold text-white">Dual Currency System</h3>
-              <p className="text-sm text-white/40">Legal sweepstakes gaming model</p>
-            </div>
-          </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="p-5 sm:p-6 rounded-xl bg-gradient-to-br from-yellow-500/5 to-amber-500/5 border border-yellow-500/15"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 flex items-center justify-center shadow-lg shadow-yellow-500/20">
-                  <Coins className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <div className="font-bold text-yellow-400">Gold Coins (GC)</div>
-                  <div className="text-[10px] text-white/40 uppercase tracking-wider">For Fun</div>
-                </div>
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500/20 to-green-500/20 border border-yellow-500/30 flex items-center justify-center">
+                <Coins className="w-6 h-6 text-yellow-400" />
               </div>
-              <p className="text-sm text-white/50 leading-relaxed">Purchase Gold Coins to play all games for fun. No real-money value attached to Gold Coins.</p>
-            </motion.div>
-
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="p-5 sm:p-6 rounded-xl bg-gradient-to-br from-green-500/5 to-emerald-500/5 border border-green-500/15"
-            >
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/20">
-                  <Sparkles className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <div className="font-bold text-green-400">Sweeps Coins (SC)</div>
-                  <div className="text-[10px] text-white/40 uppercase tracking-wider">Redeemable</div>
-                </div>
+              <div>
+                <h3 className="text-xl font-bold text-white">Dual Currency System</h3>
+                <p className="text-sm text-white/40">Legal sweepstakes gaming model</p>
               </div>
-              <p className="text-sm text-white/50 leading-relaxed">Receive FREE Sweeps Coins with every Gold Coin purchase. SC can be redeemed for real prizes!</p>
-            </motion.div>
-          </div>
+            </div>
 
-          <div className="mt-6 flex justify-center">
-            <Link href="/coin-store">
-              <Button className="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-black font-bold px-8 py-3 rounded-xl" data-testid="cta-coin-store">
-                <Store className="w-4 h-4 mr-2" />
-                Visit Coin Store
-              </Button>
-            </Link>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                className="p-5 sm:p-6 rounded-xl bg-gradient-to-br from-yellow-500/5 to-amber-500/5 border border-yellow-500/15"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 flex items-center justify-center shadow-lg shadow-yellow-500/20">
+                    <Coins className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-yellow-400">Gold Coins (GC)</div>
+                    <div className="text-[10px] text-white/40 uppercase tracking-wider">For Fun</div>
+                  </div>
+                </div>
+                <p className="text-sm text-white/50 leading-relaxed">Purchase Gold Coins to play all games for fun. No real-money value attached to Gold Coins.</p>
+              </motion.div>
+
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                className="p-5 sm:p-6 rounded-xl bg-gradient-to-br from-green-500/5 to-emerald-500/5 border border-green-500/15"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-green-500 to-emerald-500 flex items-center justify-center shadow-lg shadow-green-500/20">
+                    <Sparkles className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-bold text-green-400">Sweeps Coins (SC)</div>
+                    <div className="text-[10px] text-white/40 uppercase tracking-wider">Redeemable</div>
+                  </div>
+                </div>
+                <p className="text-sm text-white/50 leading-relaxed">Receive FREE Sweeps Coins with every Gold Coin purchase. SC can be redeemed for real prizes!</p>
+              </motion.div>
+            </div>
+
+            <div className="mt-6 flex justify-center">
+              <Link href="/coin-store">
+                <Button className="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-black font-bold px-8 py-3 rounded-xl" data-testid="cta-coin-store">
+                  <Store className="w-4 h-4 mr-2" />
+                  Visit Coin Store
+                </Button>
+              </Link>
+            </div>
           </div>
-</div>
+        </GlassCard>
+      </div>
     </section>
   );
 }
@@ -572,52 +567,56 @@ function BottomCTA() {
         <GlassCard className="px-6 py-10 sm:px-12 sm:py-14 text-center relative overflow-hidden" glow>
           <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 via-purple-500/5 to-cyan-500/5" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-b from-pink-500/10 to-transparent rounded-full blur-3xl" />
-          <div className="mb-8 flex justify-center">
-            <motion.div
-              animate={{ rotate: [0, 5, -5, 0] }}
-              transition={{ duration: 4, repeat: Infinity }}
-              className="inline-block"
-            >
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30 flex items-center justify-center shadow-xl shadow-pink-500/10">
-                <Gamepad2 className="w-10 h-10 text-pink-400" />
-              </div>
-            </motion.div>
-          </div>
 
-          <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
-            Ready to{" "}
-            <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-              Play?
-            </span>
-          </h2>
-          <p className="text-white/50 text-sm sm:text-base max-w-md mx-auto mb-8">
-            11 games available now with more launching every week. Free arcade games and premium sweepstakes await.
-          </p>
+          <div className="relative z-10">
+            <div className="mb-8 flex justify-center">
+              <motion.div
+                animate={{ rotate: [0, 5, -5, 0] }}
+                transition={{ duration: 4, repeat: Infinity }}
+                className="inline-block"
+              >
+                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-pink-500/20 to-purple-500/20 border border-pink-500/30 flex items-center justify-center shadow-xl shadow-pink-500/10">
+                  <Gamepad2 className="w-10 h-10 text-pink-400" />
+                </div>
+              </motion.div>
+            </div>
 
-          <div className="flex flex-col sm:flex-row justify-center gap-3 px-4 sm:px-0">
-            <Link href="/arcade">
-              <Button
-                size="lg"
-                className="w-full sm:w-auto bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white font-bold px-8 rounded-xl shadow-xl shadow-pink-500/20"
-                data-testid="cta-browse-arcade"
-              >
-                <Gamepad2 className="w-5 h-5 mr-2" />
-                Browse Arcade
-              </Button>
-            </Link>
-            <Link href="/coin-store">
-              <Button
-                size="lg"
-                variant="outline"
-                className="w-full sm:w-auto border-white/20 text-white hover:bg-white/10 px-8 rounded-xl"
-                data-testid="cta-get-coins"
-              >
-                <Coins className="w-5 h-5 mr-2" />
-                Get Coins
-              </Button>
-            </Link>
+            <h2 className="text-3xl sm:text-4xl font-black text-white mb-4">
+              Ready to{" "}
+              <span className="bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+                Play?
+              </span>
+            </h2>
+            <p className="text-white/50 text-sm sm:text-base max-w-md mx-auto mb-8">
+              11 games available now with more launching every week. Free arcade games and premium sweepstakes await.
+            </p>
+
+            <div className="flex flex-col sm:flex-row justify-center gap-3 px-4 sm:px-0">
+              <Link href="/arcade">
+                <Button
+                  size="lg"
+                  className="w-full sm:w-auto bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-400 hover:to-purple-400 text-white font-bold px-8 rounded-xl shadow-xl shadow-pink-500/20"
+                  data-testid="cta-browse-arcade"
+                >
+                  <Gamepad2 className="w-5 h-5 mr-2" />
+                  Browse Arcade
+                </Button>
+              </Link>
+              <Link href="/coin-store">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="w-full sm:w-auto border-white/20 text-white hover:bg-white/10 px-8 rounded-xl"
+                  data-testid="cta-get-coins"
+                >
+                  <Coins className="w-5 h-5 mr-2" />
+                  Get Coins
+                </Button>
+              </Link>
+            </div>
           </div>
-</div>
+        </GlassCard>
+      </div>
     </section>
   );
 }

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "wouter";
 import { 
   ArrowUpDown, Wallet, Settings, ChevronDown, Loader2,
   Sparkles, Zap, TrendingUp, RefreshCw, Info, AlertCircle, Target, Clock
- } from "lucide-react";
+, Shield } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,15 +19,6 @@ import blockchainImg from "@assets/generated_images/futuristic_blockchain_networ
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
 import { WalletButton } from "@/components/wallet-button";
 import { LimitOrderForm, LimitOrdersList } from "@/components/limit-orders";
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 interface TokenInfo {
   symbol: string;
@@ -167,9 +160,20 @@ export default function Swap() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="border-primary/50 text-primary text-[10px] hidden sm:flex">DEX</Badge>
+            <WalletButton />
+            <BackButton />
+          </div>
+        </div>
+      </nav>
 
       <div className="fixed top-14 left-0 right-0 z-40 bg-gradient-to-r from-cyan-500/90 via-purple-500/90 to-pink-500/90 backdrop-blur-sm border-b border-white/20">
         <div className="container mx-auto px-4 py-2 flex items-center justify-center gap-2">
@@ -178,8 +182,8 @@ export default function Swap() {
         </div>
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 pt-10">
-        <div className="max-w-lg mx-auto">
+      <main className="flex-1 pt-28 pb-8 px-4">
+        <div className="container mx-auto max-w-lg">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -195,7 +199,7 @@ export default function Swap() {
               >
                 <ArrowUpDown className="w-5 h-5 text-primary" />
               </motion.div>
-              <h1 className="text-2xl md:text-3xl font-display font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              <h1 className="text-2xl md:text-3xl font-display font-bold">
                 Trust Layer Swap
               </h1>
             </div>
@@ -395,7 +399,8 @@ export default function Swap() {
                   </div>
                 )}
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
 
           <AnimatePresence>
             {selectingToken && (
@@ -506,8 +511,9 @@ export default function Swap() {
             </div>
           </motion.div>
         </div>
-      </div>
-</Input>
+      </main>
+
+      
     </div>
   );
 }

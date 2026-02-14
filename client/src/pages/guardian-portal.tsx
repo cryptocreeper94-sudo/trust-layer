@@ -61,6 +61,7 @@ function StatsCard({ icon: Icon, label, value, trend, color }: { icon: any; labe
       className="relative overflow-hidden rounded-2xl border border-white/10 bg-slate-900/50 backdrop-blur-xl p-6"
     >
       <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-transparent" />
+      <div className="relative z-10">
         <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${color} flex items-center justify-center mb-4`}>
           <Icon className="w-6 h-6 text-white" />
         </div>
@@ -69,19 +70,10 @@ function StatsCard({ icon: Icon, label, value, trend, color }: { icon: any; labe
           <span className="text-2xl font-bold text-white">{value}</span>
           {trend && <span className="text-xs text-emerald-400 mb-1">{trend}</span>}
         </div>
+      </div>
     </motion.div>
   );
 }
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function GuardianPortal() {
   usePageAnalytics();
@@ -140,9 +132,7 @@ export default function GuardianPortal() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-slate-950">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -298,7 +288,8 @@ export default function GuardianPortal() {
                     })
                   )}
                 </div>
-</motion.div>
+              </GlassCard>
+            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -349,7 +340,9 @@ export default function GuardianPortal() {
                     ))
                   )}
                 </div>
-</motion.div>
+              </GlassCard>
+            </motion.div>
+          </div>
         )}
 
         {activeTab === "assets" && (
@@ -438,7 +431,8 @@ export default function GuardianPortal() {
                   </tbody>
                 </table>
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
         )}
 
         {activeTab === "incidents" && (
@@ -511,7 +505,9 @@ export default function GuardianPortal() {
                     </div>
                   ))
                 )}
-</motion.div>
+              </div>
+            </GlassCard>
+          </motion.div>
         )}
 
         {activeTab === "shield" && (
@@ -546,7 +542,9 @@ export default function GuardianPortal() {
                       Email alerts
                     </li>
                   </ul>
-<GlassCard className="p-6 border-purple-500/20 ring-1 ring-purple-500/30">
+                </GlassCard>
+
+                <GlassCard className="p-6 border-purple-500/20 ring-1 ring-purple-500/30">
                   <Badge className="bg-purple-500/20 text-purple-400 mb-2">Most Popular</Badge>
                   <h3 className="text-lg font-semibold text-white mb-2">Guardian Shield</h3>
                   <div className="text-3xl font-bold text-purple-400 mb-4">$999<span className="text-lg text-white/60">/mo</span></div>
@@ -564,7 +562,9 @@ export default function GuardianPortal() {
                       Rug pull detection
                     </li>
                   </ul>
-<GlassCard className="p-6 border-pink-500/20">
+                </GlassCard>
+
+                <GlassCard className="p-6 border-pink-500/20">
                   <h3 className="text-lg font-semibold text-white mb-2">Guardian Command</h3>
                   <div className="text-3xl font-bold text-pink-400 mb-4">$2,999<span className="text-lg text-white/60">/mo</span></div>
                   <ul className="space-y-2 text-sm text-white/70">
@@ -581,7 +581,8 @@ export default function GuardianPortal() {
                       Multi-chain coverage
                     </li>
                   </ul>
-</div>
+                </GlassCard>
+              </div>
 
               <div className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center">
                 <Badge className="bg-amber-500/20 text-amber-400 mb-4">Coming Soon</Badge>
@@ -591,7 +592,8 @@ export default function GuardianPortal() {
                   Join Waitlist
                 </Button>
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
         )}
 
         {activeTab === "stamps" && (
@@ -650,9 +652,12 @@ export default function GuardianPortal() {
                           </Button>
                         )}
                       </div>
+                    </div>
                   ))
                 )}
-</motion.div>
+              </div>
+            </GlassCard>
+          </motion.div>
         )}
 
         <motion.div
@@ -666,6 +671,7 @@ export default function GuardianPortal() {
               <div>
                 <h3 className="text-lg font-semibold text-white mb-1">Need Continuous Monitoring?</h3>
                 <p className="text-sm text-white/60">Guardian Shield provides 24/7 security monitoring for your blockchain assets.</p>
+              </div>
               <Link href="/security#shield">
                 <Button className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700">
                   <Shield className="w-4 h-4 mr-2" />
@@ -673,14 +679,12 @@ export default function GuardianPortal() {
                   <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
               </Link>
-</motion.div>
+            </div>
+          </GlassCard>
+        </motion.div>
       </main>
 
       
-    </div>
-    </div>
-    </div>
-    </div>
     </div>
   );
 }

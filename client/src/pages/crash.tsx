@@ -71,16 +71,6 @@ const REWARD_TIERS = [
   { name: "Diamond", minWager: 10000000, rewardRate: 0.01, color: "text-cyan-400", bg: "from-cyan-500/20", icon: "👑" },
 ];
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 function generateServerSeedHash(): string {
   const chars = "0123456789abcdef";
   let hash = "";
@@ -544,7 +534,8 @@ function CrashHistoryStrip({ history }: { history: number[] }) {
           </motion.div>
         ))}
       </div>
-);
+    </GlassCard>
+  );
 }
 
 function LiveLedger({ secured, riding, lost }: { secured: number; riding: number; lost: number }) {
@@ -1193,10 +1184,47 @@ export default function CrashGame() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<main className="flex-1  pb-2 px-2 lg:px-4 lg:h-[calc(100vh-56px)] lg:overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-8 text-xs gap-1 hover:bg-white/5 px-2 text-muted-foreground hover:text-white"
+              onClick={() => { if (window.history.length > 1) window.history.back(); else window.location.href = "/"; }}
+              data-testid="button-back"
+            >
+              <ArrowLeft className="w-3 h-3" />
+              <span className="hidden sm:inline">Back</span>
+            </Button>
+            <div className="flex items-center gap-2">
+              <Shield className="w-7 h-7 text-cyan-400" />
+              <span className="font-display font-bold">Crash</span>
+              <Badge variant="outline" className="text-[10px] hidden sm:flex">
+                Max {MAX_MULTIPLIER}x
+              </Badge>
+            </div>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <Badge className="bg-green-500/20 text-green-400 text-xs hidden sm:flex">
+              <span className="w-2 h-2 rounded-full bg-green-400 mr-1 animate-pulse" />
+              {bets.length} Players
+            </Badge>
+            <div className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30">
+              <span className="text-sm font-mono font-bold text-purple-400">
+                {isDemo ? `${formatSIG(demoBalance)} SIG` : `${formatSIG(getBalance())} ${currencyType}`}
+              </span>
+            </div>
+            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setSoundEnabled(!soundEnabled)}>
+              {soundEnabled ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+            </Button>
+          </div>
+        </div>
+      </nav>
+
+      <main className="flex-1 pt-14 pb-2 px-2 lg:px-4 lg:h-[calc(100vh-56px)] lg:overflow-hidden">
         <div className="container mx-auto max-w-[1600px] h-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-2 lg:gap-3 h-full lg:py-2">
             
@@ -1758,7 +1786,9 @@ export default function CrashGame() {
                       )}
                     </div>
                   </ScrollArea>
-<GlassCard className="p-3">
+                </GlassCard>
+
+                <GlassCard className="p-3">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="text-sm font-bold flex items-center gap-2">
                       <MessageCircle className="w-4 h-4 text-cyan-400" />
@@ -1790,7 +1820,8 @@ export default function CrashGame() {
                       <Send className="w-3 h-3" />
                     </Button>
                   </div>
-</div>
+                </GlassCard>
+              </div>
               
               {/* Rewards & Stats - Compact Row */}
               <div 
@@ -1805,6 +1836,7 @@ export default function CrashGame() {
                   <span className={`text-lg ${currentTier.color}`}>{currentTier.icon}</span>
                   <p className="text-[9px] text-white/50">{currentTier.name}</p>
                   <p className="text-[10px] text-green-400 font-mono">{(currentTier.rewardRate * 100).toFixed(1)}%</p>
+                </div>
                 {/* Pending */}
                 <div className="text-center">
                   <p className="text-sm font-bold text-green-400 font-mono">{pendingRewards.toFixed(1)}</p>
@@ -1818,11 +1850,14 @@ export default function CrashGame() {
                   >
                     Claim
                   </Button>
+                </div>
                 {/* Airdrop */}
                 <div className="text-center">
                   <p className="text-sm font-bold text-yellow-400 font-mono">{Math.floor(nextAirdrop / 60)}m</p>
                   <p className="text-[9px] text-white/50">Next Airdrop</p>
                   <p className="text-[10px] text-yellow-400/70 font-mono">{airdropPool.toFixed(0)} Pool</p>
+                </div>
+              </div>
               
               {/* Provably Fair Toggle - Compact */}
               <AnimatePresence>
@@ -1840,21 +1875,19 @@ export default function CrashGame() {
                     <div className="flex items-center gap-2 mb-1">
                       <Shield className="w-3 h-3 text-green-400" />
                       <span className="text-[10px] font-medium text-green-400">Provably Fair</span>
+                    </div>
                     <code className="text-[8px] font-mono text-green-400/70 break-all block">
                       {serverSeedHash.slice(0, 32)}...
                     </code>
+                  </motion.div>
                 )}
               </AnimatePresence>
+            </div>
+          </div>
+        </div>
+      </main>
 
       
     </div>
-    </div>
-    </div>
-    </div>
-    </motion.div>
-    </div>
-</Input>
-</Input>
-</div>
-);
+  );
 }

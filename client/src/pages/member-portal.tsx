@@ -33,16 +33,6 @@ import { GlassCard } from "@/components/glass-card";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function MemberPortal() {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -82,9 +72,7 @@ export default function MemberPortal() {
 
   if (!user) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 pt-20 pb-12">
         <div className="container mx-auto px-4 max-w-4xl">
           <GlassCard glow className="p-12 text-center">
             <User className="w-16 h-16 text-cyan-400 mx-auto mb-6" />
@@ -95,7 +83,8 @@ export default function MemberPortal() {
                 Sign In
               </Button>
             </Link>
-</div>
+          </GlassCard>
+        </div>
       </div>
     );
   }
@@ -179,24 +168,30 @@ export default function MemberPortal() {
                     </div>
                   </div>
                 </div>
-<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              </GlassCard>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <GlassCard className="p-4 text-center">
                   <Shield className="w-6 h-6 text-cyan-400 mx-auto mb-2" />
                   <p className="text-2xl font-bold text-white">{trustScore}</p>
                   <p className="text-xs text-white/60">Trust Score</p>
-<GlassCard className="p-4 text-center">
+                </GlassCard>
+                <GlassCard className="p-4 text-center">
                   <Users className="w-6 h-6 text-purple-400 mx-auto mb-2" />
                   <p className="text-2xl font-bold text-white">{connections.length}</p>
                   <p className="text-xs text-white/60">Connections</p>
-<GlassCard className="p-4 text-center">
+                </GlassCard>
+                <GlassCard className="p-4 text-center">
                   <Wallet className="w-6 h-6 text-green-400 mx-auto mb-2" />
                   <p className="text-2xl font-bold text-white">{(shellWallet as any)?.balance?.toLocaleString() || "0"}</p>
                   <p className="text-xs text-white/60">Shells</p>
-<GlassCard className="p-4 text-center">
+                </GlassCard>
+                <GlassCard className="p-4 text-center">
                   <Star className="w-6 h-6 text-amber-400 mx-auto mb-2" />
                   <p className="text-2xl font-bold text-white">{(memberCard as any)?.rewardPoints || 0}</p>
                   <p className="text-xs text-white/60">Points</p>
-</div>
+                </GlassCard>
+              </div>
 
               <GlassCard glow className="p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -218,7 +213,8 @@ export default function MemberPortal() {
                     </div>
                   ))}
                 </div>
-</div>
+              </GlassCard>
+            </div>
 
             <div className="space-y-6">
               <GlassCard glow className="p-6">
@@ -238,7 +234,9 @@ export default function MemberPortal() {
                     </Link>
                   </div>
                 )}
-<GlassCard glow className="p-6">
+              </GlassCard>
+
+              <GlassCard glow className="p-6">
                 <h3 className="font-bold text-white mb-4">Referral Program</h3>
                 <p className="text-white/60 text-sm mb-4">
                   Earn Shells for every person you refer to the Trust Layer
@@ -269,7 +267,9 @@ export default function MemberPortal() {
                     View Details <ChevronRight className="w-4 h-4 ml-1" />
                   </Button>
                 </Link>
-<GlassCard glow className="p-6">
+              </GlassCard>
+
+              <GlassCard glow className="p-6">
                 <h3 className="font-bold text-white mb-4">Quick Actions</h3>
                 <div className="space-y-2">
                   <Link href="/directory">
@@ -291,7 +291,8 @@ export default function MemberPortal() {
                     </Button>
                   </Link>
                 </div>
-</div>
+              </GlassCard>
+            </div>
           </motion.div>
         )}
 
@@ -343,7 +344,8 @@ export default function MemberPortal() {
                   </div>
                 ))}
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
         )}
 
         {activeTab === "activity" && (
@@ -366,7 +368,8 @@ export default function MemberPortal() {
                   </div>
                 ))}
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
         )}
 
         {activeTab === "settings" && (
@@ -410,7 +413,8 @@ export default function MemberPortal() {
                   Save Changes
                 </Button>
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
         )}
       </div>
     </div>

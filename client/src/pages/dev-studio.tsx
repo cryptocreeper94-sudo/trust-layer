@@ -75,16 +75,6 @@ function GlassCard({
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 function SystemHealthCarousel() {
   const [current, setCurrent] = useState(0);
 
@@ -220,9 +210,7 @@ export default function DevStudio() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-background text-foreground">
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center">
           <Link href="/" className="flex items-center gap-2 mr-auto">
@@ -333,9 +321,13 @@ export default function DevStudio() {
                   </div>
                 </div>
               </div>
-<GlassCard>
+            </GlassCard>
+
+            <GlassCard>
               <SystemHealthCarousel />
-<GlassCard>
+            </GlassCard>
+
+            <GlassCard>
               <div className="h-full p-4 flex flex-col">
                 <div className="flex items-center gap-2 mb-2">
                   <Terminal className="w-4 h-4 text-green-400" />
@@ -347,15 +339,21 @@ export default function DevStudio() {
                   <div className="text-cyan-400">✓ Deployed</div>
                 </div>
               </div>
-<GlassCard>
+            </GlassCard>
+
+            <GlassCard>
               <MiniCarousel />
-<GlassCard>
+            </GlassCard>
+
+            <GlassCard>
               <div className="h-full p-4 flex flex-col justify-center items-center text-center">
                 <Eye className="w-6 h-6 text-cyan-400 mb-2" />
                 <span className="text-xs font-bold text-white">Live Preview</span>
                 <span className="text-[10px] text-white/40 mt-1">Real-time updates</span>
               </div>
-<GlassCard className="col-span-2">
+            </GlassCard>
+
+            <GlassCard className="col-span-2">
               <div className="h-full p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <Brain className="w-4 h-4 text-purple-400" />
@@ -371,19 +369,25 @@ export default function DevStudio() {
                   </div>
                 </div>
               </div>
-<GlassCard>
+            </GlassCard>
+
+            <GlassCard>
               <div className="h-full p-4 flex flex-col justify-center">
                 <Cpu className="w-5 h-5 text-orange-400 mb-2" />
                 <div className="text-xl font-bold text-white">Unlimited</div>
                 <div className="text-[10px] text-white/40">Build minutes</div>
               </div>
-<GlassCard>
+            </GlassCard>
+
+            <GlassCard>
               <div className="h-full p-4 flex flex-col justify-center">
                 <Database className="w-5 h-5 text-blue-400 mb-2" />
                 <div className="text-xl font-bold text-white">10 GB</div>
                 <div className="text-[10px] text-white/40">Storage per project</div>
               </div>
-{ideFeatures.map((feature, i) => (
+            </GlassCard>
+
+            {ideFeatures.map((feature, i) => (
               <GlassCard key={i}>
                 <div className="h-full p-4 flex flex-col justify-center">
                   <feature.icon className={`w-5 h-5 mb-2 ${
@@ -392,7 +396,8 @@ export default function DevStudio() {
                   <div className="text-xs font-bold text-white">{feature.title}</div>
                   <div className="text-[10px] text-white/40 mt-0.5">{feature.desc}</div>
                 </div>
-))}
+              </GlassCard>
+            ))}
           </section>
 
           <section className="mt-8">
@@ -419,11 +424,12 @@ export default function DevStudio() {
                   </div>
                 </div>
               </div>
-</section>
+            </GlassCard>
+          </section>
         </div>
+      </main>
 
       
-    </main>
     </div>
-);
+  );
 }

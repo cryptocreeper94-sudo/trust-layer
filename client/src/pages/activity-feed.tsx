@@ -6,6 +6,7 @@ import {
   Gift, Sparkles, Users, Repeat, Filter, Bell, Pause, Play,
   ExternalLink, TrendingUp, Zap, Home
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -133,19 +134,10 @@ function ActivityCard({ activity, index }: { activity: ActivityItem; index: numb
             </Button>
           </div>
         </div>
-</motion.div>
+      </GlassCard>
+    </motion.div>
   );
 }
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function ActivityFeed() {
   const [activities, setActivities] = useState(INITIAL_ACTIVITIES);
@@ -179,10 +171,25 @@ export default function ActivityFeed() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<main className="flex-1  pb-8 px-4">
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center">
+          <div className="flex items-center gap-3">
+            <BackButton />
+            <h1 className="text-lg font-bold text-white">Activity Feed</h1>
+            <Badge variant="outline" className={`text-[10px] ${isLive ? 'border-green-500/50 text-green-400 animate-pulse' : 'border-gray-500/50 text-gray-400'}`}>
+              {isLive ? 'Live' : 'Paused'}
+            </Badge>
+          </div>
+          <Link href="/" className="ml-auto">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-white/10">
+              <Home className="w-4 h-4" />
+            </Button>
+          </Link>
+        </div>
+      </nav>
+
+      <main className="flex-1 pt-16 pb-8 px-4">
         <div className="container mx-auto max-w-3xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -212,16 +219,20 @@ export default function ActivityFeed() {
             <GlassCard hover={false} className="p-2 text-center">
               <div className="text-lg font-bold">{stats.totalTx}</div>
               <div className="text-[9px] text-muted-foreground">Total</div>
-<GlassCard hover={false} className="p-2 text-center">
+            </GlassCard>
+            <GlassCard hover={false} className="p-2 text-center">
               <div className="text-lg font-bold text-blue-400">{stats.swaps}</div>
               <div className="text-[9px] text-muted-foreground">Swaps</div>
-<GlassCard hover={false} className="p-2 text-center">
+            </GlassCard>
+            <GlassCard hover={false} className="p-2 text-center">
               <div className="text-lg font-bold text-purple-400">{stats.stakes}</div>
               <div className="text-[9px] text-muted-foreground">Stakes</div>
-<GlassCard hover={false} className="p-2 text-center">
+            </GlassCard>
+            <GlassCard hover={false} className="p-2 text-center">
               <div className="text-lg font-bold text-pink-400">{stats.mints}</div>
               <div className="text-[9px] text-muted-foreground">Mints</div>
-</div>
+            </GlassCard>
+          </div>
 
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2 overflow-x-auto pb-1">
@@ -261,7 +272,8 @@ export default function ActivityFeed() {
             <GlassCard className="p-8 text-center">
               <Activity className="w-12 h-12 text-white/10 mx-auto mb-3" />
               <p className="text-muted-foreground">No activity matching filter</p>
-)}
+            </GlassCard>
+          )}
         </div>
       </main>
 

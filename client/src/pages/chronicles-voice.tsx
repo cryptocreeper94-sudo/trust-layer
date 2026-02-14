@@ -77,16 +77,6 @@ function RecordingVisualizer({ isRecording }: { isRecording: boolean }) {
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function ChroniclesVoice() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -220,9 +210,7 @@ export default function ChroniclesVoice() {
   const credits = voiceStatus?.credits;
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-slate-950 pb-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <div className="flex items-center gap-3 mb-6">
           <Link href="/chronicles/play">
@@ -252,7 +240,9 @@ export default function ChroniclesVoice() {
               </p>
             </div>
           </div>
-<div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
+        </GlassCard>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-5">
           <GlassCard className="p-4 text-center">
             <div className={`w-10 h-10 rounded-full mx-auto mb-2 flex items-center justify-center ${
               voice?.isReady ? "bg-green-500/20" : voice?.processingCount > 0 ? "bg-yellow-500/20" : "bg-gray-500/20"
@@ -271,7 +261,9 @@ export default function ChroniclesVoice() {
             <p className="text-[10px] text-gray-500 mt-0.5">
               {voice?.totalSamples || 0} sample{(voice?.totalSamples || 0) !== 1 ? "s" : ""} recorded
             </p>
-<GlassCard className="p-4 text-center">
+          </GlassCard>
+
+          <GlassCard className="p-4 text-center">
             <div className="w-10 h-10 rounded-full mx-auto mb-2 flex items-center justify-center bg-purple-500/20">
               <Coins className="w-5 h-5 text-purple-400" />
             </div>
@@ -279,7 +271,9 @@ export default function ChroniclesVoice() {
             <p className="text-[10px] text-gray-500 mt-0.5">
               Clone: {credits?.voiceCloneCost || 50} | Message: {credits?.voiceMessageCost || 5}
             </p>
-<GlassCard className="p-4 text-center">
+          </GlassCard>
+
+          <GlassCard className="p-4 text-center">
             <div className="w-10 h-10 rounded-full mx-auto mb-2 flex items-center justify-center bg-cyan-500/20">
               <Headphones className="w-5 h-5 text-cyan-400" />
             </div>
@@ -287,7 +281,8 @@ export default function ChroniclesVoice() {
               {voice?.readyCount || 0} / 3
             </p>
             <p className="text-[10px] text-gray-500 mt-0.5">Minimum 3 samples for best quality</p>
-</div>
+          </GlassCard>
+        </div>
 
         {voice?.isReady && (
           <GlassCard className="p-4 mb-5 border border-green-500/20">
@@ -304,7 +299,8 @@ export default function ChroniclesVoice() {
               </div>
               <Badge className="bg-green-500/20 text-green-400">Active</Badge>
             </div>
-)}
+          </GlassCard>
+        )}
 
         <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
           <Waves className="w-4 h-4 text-cyan-400" /> Training Scripts
@@ -430,7 +426,8 @@ export default function ChroniclesVoice() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-</div>
+              </GlassCard>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -457,7 +454,8 @@ export default function ChroniclesVoice() {
               <p>Voice messages cost {credits?.voiceMessageCost || 5} credits each. Your voice data is encrypted and never shared.</p>
             </div>
           </div>
-</div>
+        </GlassCard>
+      </div>
     </div>
   );
 }

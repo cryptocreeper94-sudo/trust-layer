@@ -128,7 +128,8 @@ function FearGreedGauge({ value, label }: { value: number; label: string }) {
           <p className={`text-sm font-medium ${getColor()}`}>{label}</p>
         </div>
       </div>
-);
+    </GlassCard>
+  );
 }
 
 function AltcoinSeasonGauge({ value }: { value: number }) {
@@ -159,7 +160,8 @@ function AltcoinSeasonGauge({ value }: { value: number }) {
           <span>Altcoin Season</span>
         </div>
       </div>
-);
+    </GlassCard>
+  );
 }
 
 function MarketMetricCard({ 
@@ -198,7 +200,8 @@ function MarketMetricCard({
           </div>
         )}
       </div>
-);
+    </GlassCard>
+  );
 }
 
 function MiniSparkline({ data, color = "cyan" }: { data: number[]; color?: string }) {
@@ -395,7 +398,8 @@ function PriceChart({ coin, candles }: { coin: TopCoin | null; candles: CandleDa
           </div>
         </div>
       </div>
-);
+    </GlassCard>
+  );
 }
 
 function NewsCarousel({ news }: { news: NewsItem[] }) {
@@ -455,18 +459,9 @@ function NewsCarousel({ news }: { news: NewsItem[] }) {
           </motion.div>
         </AnimatePresence>
       </div>
-);
+    </GlassCard>
+  );
 }
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function PulseDashboard() {
   const [searchTicker, setSearchTicker] = useState('');
@@ -613,9 +608,7 @@ export default function PulseDashboard() {
       checkoutPath="/billing"
       icon={<Zap className="w-10 h-10 text-amber-400" />}
     >
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-slate-950 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl" />
         <div className="absolute bottom-40 right-20 w-80 h-80 bg-purple-500/5 rounded-full blur-3xl" />
@@ -719,7 +712,8 @@ export default function PulseDashboard() {
                 </div>
                 <p className="text-xl font-bold text-white">{market.btcDominance}%</p>
               </div>
-</div>
+            </GlassCard>
+          </div>
           <div className="col-span-2 md:col-span-2 lg:col-span-1">
             <GlassCard>
               <div className="p-4">
@@ -729,7 +723,8 @@ export default function PulseDashboard() {
                 </div>
                 <p className="text-xl font-bold text-white">{market.ethDominance}%</p>
               </div>
-</div>
+            </GlassCard>
+          </div>
         </motion.div>
 
         {/* Fear & Greed + Altcoin Season Row */}
@@ -762,7 +757,8 @@ export default function PulseDashboard() {
                 </div>
               </div>
             </div>
-</motion.div>
+          </GlassCard>
+        </motion.div>
 
         {/* Price Chart + News Carousel Row */}
         <motion.div
@@ -849,7 +845,8 @@ export default function PulseDashboard() {
                 </div>
               )}
             </div>
-</motion.div>
+          </GlassCard>
+        </motion.div>
 
         {/* Recent Predictions */}
         <motion.div
@@ -940,13 +937,13 @@ export default function PulseDashboard() {
                 </div>
               )}
             </div>
-</motion.div>
+          </GlassCard>
+        </motion.div>
 
       </div>
     </div>
     </SubscriptionGate>
-    </p>
-);
+  );
 }
 
 function generateMockTopCoins(): TopCoin[] {

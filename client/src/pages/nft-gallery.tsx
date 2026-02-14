@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import { Link } from "wouter";
 import {
   ImageIcon, Search, Filter, Grid3X3, List,
   ChevronDown, ExternalLink, User, Wallet
-} from "lucide-react";
+, Shield } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,15 +20,6 @@ import genesisNft3 from "@assets/generated_images/genesis_portal_vortex_nft.png"
 import cyberNft from "@assets/generated_images/cyber_warrior_nft_collectible.png";
 import neonNft from "@assets/generated_images/neon_dreams_nft_collectible.png";
 import goldenNft from "@assets/generated_images/golden_aura_nft_collectible.png";
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 interface NFT {
   id: string;
@@ -66,7 +59,8 @@ function NFTCard({ nft, onClick }: { nft: NFT; onClick: () => void }) {
           <p className="text-[10px] text-primary truncate">{nft.collectionName}</p>
           <h3 className="font-bold text-white text-sm truncate">{nft.name}</h3>
         </div>
-</motion.div>
+      </GlassCard>
+    </motion.div>
   );
 }
 
@@ -91,10 +85,22 @@ export default function NftGallery() {
   const collections = Array.from(new Set(displayNfts.map(n => n.collectionName)));
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="rgba(168,85,247,0.3)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="rgba(139,92,246,0.25)" size={400} top="40%" left="-10%" delay={3} />
-        <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="border-purple-500/50 text-purple-400 text-[10px]">Gallery</Badge>
+            <BackButton />
+          </div>
+        </div>
+      </nav>
+
+      <main className="flex-1 pt-16 pb-8 px-4">
+        <div className="container mx-auto max-w-6xl">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-3">
               <motion.div className="p-2 rounded-xl bg-purple-500/20 border border-purple-500/30" animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 2, repeat: Infinity }}>
@@ -102,7 +108,7 @@ export default function NftGallery() {
               </motion.div>
             </div>
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">
-              NFT <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Gallery</span>
+              NFT <span className="text-purple-400">Gallery</span>
             </h1>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
               View NFT collections by wallet address. Explore the Trust Layer NFT ecosystem.
@@ -127,7 +133,9 @@ export default function NftGallery() {
                 </Button>
               </div>
             </div>
-<div className="flex flex-col sm:flex-row gap-3 mb-6">
+          </GlassCard>
+
+          <div className="flex flex-col sm:flex-row gap-3 mb-6">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input placeholder="Search NFTs..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-9 bg-white/5 border-white/10" data-testid="input-search-nfts" />
@@ -188,7 +196,8 @@ export default function NftGallery() {
                   {walletAddress ? "This wallet doesn't have any NFTs yet" : "Enter a wallet address to view NFTs"}
                 </p>
               </div>
-)}
+            </GlassCard>
+          )}
 
           {collections.length > 0 && (
             <div className="mt-8">
@@ -203,6 +212,7 @@ export default function NftGallery() {
             </div>
           )}
         </div>
+      </main>
 
       <Dialog open={!!selectedNft} onOpenChange={() => setSelectedNft(null)}>
         <DialogContent className="max-w-md bg-background border-white/10">
@@ -242,8 +252,8 @@ export default function NftGallery() {
           )}
         </DialogContent>
       </Dialog>
+
+      
     </div>
-    </NFTCard>
-</Input>
   );
 }

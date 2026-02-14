@@ -48,16 +48,6 @@ interface MLStats {
   generatedAt: string;
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function MLDashboard() {
   const [selectedPeriod, setSelectedPeriod] = useState<"24h" | "7d" | "30d">("7d");
 
@@ -81,9 +71,7 @@ export default function MLDashboard() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 relative overflow-hidden">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
@@ -162,7 +150,8 @@ export default function MLDashboard() {
                   <div className="mt-2 text-xs text-gray-500">
                     {stats.overview.pendingResolution} pending resolution
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -183,7 +172,8 @@ export default function MLDashboard() {
                   <div className="mt-2 text-xs text-gray-500">
                     {stats.overview.totalResolved} resolved predictions
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -204,7 +194,8 @@ export default function MLDashboard() {
                   <div className="mt-2 text-xs text-gray-500">
                     Per resolved prediction
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -225,7 +216,8 @@ export default function MLDashboard() {
                   <div className="mt-2 text-xs text-gray-500">
                     Awaiting resolution
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
@@ -275,7 +267,8 @@ export default function MLDashboard() {
                       </div>
                     )}
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
@@ -349,7 +342,8 @@ export default function MLDashboard() {
                       </span>
                     </div>
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             </div>
 
             <motion.div
@@ -406,7 +400,8 @@ export default function MLDashboard() {
                     No token performance data available yet. Make predictions to see analytics.
                   </div>
                 )}
-</motion.div>
+              </GlassCard>
+            </motion.div>
 
             <motion.div
               initial={{ opacity: 0 }}

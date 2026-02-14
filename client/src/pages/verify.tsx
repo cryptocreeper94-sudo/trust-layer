@@ -52,16 +52,6 @@ const KNOWN_DOCUMENTS = [
   }
 ];
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function Verify() {
   const [searchHash, setSearchHash] = useState("");
   const [searchResult, setSearchResult] = useState<VerificationResult | null>(null);
@@ -97,9 +87,7 @@ export default function Verify() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-slate-950 pt-20 pb-12">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           className="absolute rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 blur-3xl"
@@ -245,7 +233,8 @@ export default function Verify() {
                 )}
               </motion.div>
             )}
-</motion.div>
+          </GlassCard>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -302,7 +291,8 @@ export default function Verify() {
                     <CheckCircle2 className="w-3 h-3 mr-2" />
                     Verify This Document
                   </Button>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -326,8 +316,9 @@ export default function Verify() {
                 </p>
               </div>
             </div>
-</motion.div>
+          </GlassCard>
+        </motion.div>
       </div>
     </div>
-);
+  );
 }

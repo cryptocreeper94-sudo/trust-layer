@@ -166,7 +166,8 @@ function LocationCard({ location, isCurrentLocation, onTravel, disabled }: {
             <ChevronRight className="w-5 h-5 text-gray-600" />
           )}
         </div>
-</motion.div>
+      </GlassCard>
+    </motion.div>
   );
 }
 
@@ -235,19 +236,10 @@ function ActivityCard({ activity, onPerform, disabled, energyLow, moodLow }: {
             </div>
           </div>
         </div>
-</motion.div>
+      </GlassCard>
+    </motion.div>
   );
 }
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function ChroniclesLife() {
   const queryClient = useQueryClient();
@@ -404,9 +396,7 @@ export default function ChroniclesLife() {
   
   if (loadingCharacter) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="w-10 h-10 border-3 border-cyan-400 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -424,7 +414,8 @@ export default function ChroniclesLife() {
               Create Character
             </Button>
           </Link>
-</div>
+        </GlassCard>
+      </div>
     );
   }
   
@@ -538,7 +529,8 @@ export default function ChroniclesLife() {
                 ) : (
                   <GlassCard className="p-6 text-center">
                     <p className="text-gray-400">No activities available here right now</p>
-)}
+                  </GlassCard>
+                )}
               </AnimatePresence>
             </div>
           </div>
@@ -569,10 +561,10 @@ export default function ChroniclesLife() {
                   <div className="text-xs text-gray-500">Current multiplier</div>
                 </div>
               </div>
-</div>
+            </GlassCard>
+          </div>
         )}
       </div>
     </div>
-</h1>
   );
 }

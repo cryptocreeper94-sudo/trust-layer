@@ -2,29 +2,21 @@ import { motion } from "framer-motion";
 import { GlassCard } from "@/components/glass-card";
 import { Shield, Waves, Radio, Eye, Users, Lock } from "lucide-react";
 
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function VisionPage() {
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="#06b6d4" size={450} top="5%" left="10%" delay={0} />
-      <GlowOrb color="#8b5cf6" size={400} top="40%" left="80%" delay={2} />
-      <GlowOrb color="#ec4899" size={350} top="70%" left="20%" delay={4} />
-      <GlowOrb color="#06b6d4" size={300} top="85%" left="65%" delay={6} />
+    <div className="min-h-screen bg-slate-950 relative overflow-hidden">
+      {/* Ambient orbs */}
+      <div className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-40 right-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/5 rounded-full blur-3xl" />
 
-      <div className="relative z-10 container mx-auto px-4 pt-20 pb-12">
+      <div className="relative z-10 container mx-auto px-4 py-16 md:py-24">
+        {/* Hero Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-16 md:mb-24"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 mb-8">
             <Waves className="w-4 h-4 text-cyan-400" />
@@ -43,6 +35,7 @@ export default function VisionPage() {
           </p>
         </motion.div>
 
+        {/* The Dark Wave */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -68,8 +61,10 @@ export default function VisionPage() {
                 </p>
               </div>
             </div>
-</motion.div>
+          </GlassCard>
+        </motion.div>
 
+        {/* The Trust Layer */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -98,8 +93,10 @@ export default function VisionPage() {
                 </p>
               </div>
             </div>
-</motion.div>
+          </GlassCard>
+        </motion.div>
 
+        {/* Signal, Not Coin */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -128,8 +125,10 @@ export default function VisionPage() {
                 </p>
               </div>
             </div>
-</motion.div>
+          </GlassCard>
+        </motion.div>
 
+        {/* Core Principles Grid */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -137,48 +136,46 @@ export default function VisionPage() {
           className="mb-16"
         >
           <h2 className="text-2xl md:text-3xl font-bold text-white text-center mb-8">
-            <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Core Principles</span>
+            Core Principles
           </h2>
           
           <div className="grid md:grid-cols-3 gap-6">
-            <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.3 }}>
-              <GlassCard className="p-6 h-full" glow>
-                <div className="p-3 rounded-xl bg-cyan-500/10 w-fit mb-4">
-                  <Eye className="w-6 h-6 text-cyan-400" />
-                </div>
-                <h3 className="text-lg font-semibold text-white mb-2">Transparency by Design</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">
-                  Every transaction visible. Every participant verifiable. 
-                  Not because we force it - because that's how the layer works.
-                </p>
-</motion.div>
+            <GlassCard className="p-6" glow>
+              <div className="p-3 rounded-xl bg-cyan-500/10 w-fit mb-4">
+                <Eye className="w-6 h-6 text-cyan-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Transparency by Design</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                Every transaction visible. Every participant verifiable. 
+                Not because we force it - because that's how the layer works.
+              </p>
+            </GlassCard>
 
-            <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.3 }}>
-              <GlassCard className="p-6 h-full" glow>
-                <div className="p-3 rounded-xl bg-purple-500/10 w-fit mb-4">
-                  <Users className="w-6 h-6 text-purple-400" />
-                </div>
-                <h3 className="text-lg font-semibold text-white mb-2">Reputation Follows</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">
-                  Your history travels with you. Good actors build trust that compounds. 
-                  Bad actors can't escape their record.
-                </p>
-</motion.div>
+            <GlassCard className="p-6" glow>
+              <div className="p-3 rounded-xl bg-purple-500/10 w-fit mb-4">
+                <Users className="w-6 h-6 text-purple-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Reputation Follows</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                Your history travels with you. Good actors build trust that compounds. 
+                Bad actors can't escape their record.
+              </p>
+            </GlassCard>
 
-            <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.3 }}>
-              <GlassCard className="p-6 h-full" glow>
-                <div className="p-3 rounded-xl bg-pink-500/10 w-fit mb-4">
-                  <Lock className="w-6 h-6 text-pink-400" />
-                </div>
-                <h3 className="text-lg font-semibold text-white mb-2">Verified, Not Surveilled</h3>
-                <p className="text-slate-400 text-sm leading-relaxed">
-                  Participants choose verification. The layer confirms identity 
-                  without exposing private details. Trust without intrusion.
-                </p>
-</motion.div>
+            <GlassCard className="p-6" glow>
+              <div className="p-3 rounded-xl bg-pink-500/10 w-fit mb-4">
+                <Lock className="w-6 h-6 text-pink-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-2">Verified, Not Surveilled</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                Participants choose verification. The layer confirms identity 
+                without exposing private details. Trust without intrusion.
+              </p>
+            </GlassCard>
           </div>
         </motion.div>
 
+        {/* The Vision */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
@@ -201,7 +198,8 @@ export default function VisionPage() {
               <span className="text-white font-medium">The wave is approaching.</span>
               <span className="text-slate-400">Will you be ready?</span>
             </div>
-</motion.div>
+          </GlassCard>
+        </motion.div>
       </div>
     </div>
   );

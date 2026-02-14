@@ -4,7 +4,8 @@ import { Link } from "wouter";
 import {
   Bell, Plus, Trash2, TrendingUp, TrendingDown,
   Volume2, Mail, MessageSquare, Smartphone, CheckCircle2, Clock, Lock, Wallet
-, Shield } from "lucide-react";
+, Shield , Shield } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -25,16 +26,6 @@ interface Alert {
 }
 
 const TOKENS = ["SIG", "BTC", "ETH", "SOL", "USDC"];
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function PriceAlerts() {
   const { user } = useAuth();
@@ -73,10 +64,18 @@ export default function PriceAlerts() {
 
   if (!isConnected) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<main className="flex-1  pb-8 px-4 flex items-center justify-center">
+      <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+        <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+          <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-2 shrink-0">
+              <Shield className="w-7 h-7 text-cyan-400" />
+              <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+            </Link>
+            <BackButton />
+          </div>
+        </nav>
+
+        <main className="flex-1 pt-16 pb-8 px-4 flex items-center justify-center">
           <GlassCard glow className="p-8 text-center max-w-md">
             <Bell className="w-16 h-16 mx-auto mb-4 text-orange-400" />
             <h2 className="text-2xl font-bold mb-2">Price Alerts</h2>
@@ -89,7 +88,8 @@ export default function PriceAlerts() {
                 Connect Wallet to Set Alerts
               </Button>
             </Link>
-</main>
+          </GlassCard>
+        </main>
 
         
       </div>
@@ -98,7 +98,17 @@ export default function PriceAlerts() {
 
   return (
     <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
-<main className="flex-1  pb-8 px-4">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <BackButton />
+        </div>
+      </nav>
+
+      <main className="flex-1 pt-16 pb-8 px-4">
         <div className="container mx-auto max-w-3xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -129,19 +139,23 @@ export default function PriceAlerts() {
               <Bell className="w-5 h-5 mx-auto mb-1 text-purple-400" />
               <p className="text-xl font-bold">{alerts.filter(a => a.active).length}</p>
               <p className="text-[10px] text-muted-foreground">Active Alerts</p>
-<GlassCard hover={false} className="p-3 text-center">
+            </GlassCard>
+            <GlassCard hover={false} className="p-3 text-center">
               <CheckCircle2 className="w-5 h-5 mx-auto mb-1 text-muted-foreground" />
               <p className="text-xl font-bold">0</p>
               <p className="text-[10px] text-muted-foreground">Triggered Today</p>
-<GlassCard hover={false} className="p-3 text-center">
+            </GlassCard>
+            <GlassCard hover={false} className="p-3 text-center">
               <Clock className="w-5 h-5 mx-auto mb-1 text-blue-400" />
               <p className="text-xl font-bold">24/7</p>
               <p className="text-[10px] text-muted-foreground">Monitoring</p>
-<GlassCard hover={false} className="p-3 text-center">
+            </GlassCard>
+            <GlassCard hover={false} className="p-3 text-center">
               <Volume2 className="w-5 h-5 mx-auto mb-1 text-amber-400" />
               <p className="text-xl font-bold">3</p>
               <p className="text-[10px] text-muted-foreground">Channels</p>
-</div>
+            </GlassCard>
+          </div>
 
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-bold">Your Alerts</h2>
@@ -289,7 +303,8 @@ export default function PriceAlerts() {
                         </Button>
                       </div>
                     </div>
-</motion.div>
+                  </GlassCard>
+                </motion.div>
               ))}
             </div>
           ) : (
@@ -303,11 +318,12 @@ export default function PriceAlerts() {
                 <Plus className="w-4 h-4 mr-2" />
                 Create Alert
               </Button>
-)}
+            </GlassCard>
+          )}
         </div>
       </main>
 
       
     </div>
-);
+  );
 }

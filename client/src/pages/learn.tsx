@@ -355,18 +355,9 @@ function SectionCard({ section, isExpanded, onToggle }: { section: Section; isEx
           </motion.div>
         )}
       </AnimatePresence>
-);
+    </GlassCard>
+  );
 }
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function LearnPage() {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(["trust-layer"]));
@@ -384,9 +375,7 @@ export default function LearnPage() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-slate-950 relative overflow-hidden">
       {/* Ambient orbs */}
       <div className="absolute top-20 left-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-40 right-20 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
@@ -483,9 +472,9 @@ export default function LearnPage() {
                 </Button>
               </Link>
             </div>
-</motion.div>
+          </GlassCard>
+        </motion.div>
       </div>
     </div>
-    </SectionCard>
   );
 }

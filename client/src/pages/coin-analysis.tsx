@@ -138,16 +138,6 @@ function SecurityIndicator({ label, safe, severity = 'medium' }: { label: string
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function CoinAnalysisPage() {
   const { id } = useParams<{ id: string }>();
   const [, setLocation] = useLocation();
@@ -240,9 +230,7 @@ export default function CoinAnalysisPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 border-3 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin" />
           <span className="text-white/50">Loading analysis...</span>
@@ -354,7 +342,9 @@ export default function CoinAnalysisPage() {
               </p>
             </div>
           </div>
-{/* AI Analysis */}
+        </GlassCard>
+
+        {/* AI Analysis */}
         <GlassCard className="p-4" glow>
           <div className="flex items-center gap-2 mb-4">
             <Bot className="w-5 h-5 text-cyan-400" />
@@ -386,7 +376,9 @@ export default function CoinAnalysisPage() {
               <p className="text-sm text-white/60 mt-2">{token.aiReasoning}</p>
             </div>
           </div>
-{/* Key Metrics */}
+        </GlassCard>
+
+        {/* Key Metrics */}
         <div className="grid grid-cols-2 gap-3">
           <MetricCard label="Market Cap" value={formatNumber(token.marketCap)} icon={DollarSign} />
           <MetricCard label="24h Volume" value={formatNumber(token.volume24h)} icon={BarChart3} />
@@ -416,7 +408,9 @@ export default function CoinAnalysisPage() {
             <SecurityIndicator label="Liquidity Locked" safe={token.liquidityLocked} severity="medium" />
             <SecurityIndicator label="Creator Wallet" safe={!token.creatorWalletRisky} severity="medium" />
           </div>
-{/* Holder Analysis */}
+        </GlassCard>
+
+        {/* Holder Analysis */}
         <GlassCard className="p-4" glow>
           <div className="flex items-center gap-2 mb-4">
             <Users className="w-5 h-5 text-purple-400" />
@@ -469,7 +463,9 @@ export default function CoinAnalysisPage() {
               </div>
             </div>
           </div>
-{/* Trade Button */}
+        </GlassCard>
+
+        {/* Trade Button */}
         <a
           href={`https://raydium.io/swap/?inputMint=sol&outputMint=${token.address}`}
           target="_blank"
@@ -488,6 +484,5 @@ export default function CoinAnalysisPage() {
         </a>
       </main>
     </div>
-    </SparklineChart>
-);
+  );
 }

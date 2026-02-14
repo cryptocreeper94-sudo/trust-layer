@@ -162,24 +162,12 @@ const INDIVIDUAL_TIERS = [
   },
 ];
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function TrustLayerPage() {
   const { isAuthenticated } = useAuth();
   const [activeTab, setActiveTab] = useState<"business" | "individual">("business");
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-background text-foreground">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
@@ -264,7 +252,8 @@ export default function TrustLayerPage() {
                   </div>
                 </div>
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
         </div>
       </section>
 
@@ -306,7 +295,9 @@ export default function TrustLayerPage() {
                   ))}
                 </ul>
               </div>
-<GlassCard glow>
+            </GlassCard>
+
+            <GlassCard glow>
               <div className="p-6">
                 <h3 className="text-xl font-bold mb-4 text-green-400">The Solution</h3>
                 <ul className="space-y-3">
@@ -324,7 +315,8 @@ export default function TrustLayerPage() {
                   ))}
                 </ul>
               </div>
-</div>
+            </GlassCard>
+          </div>
         </div>
       </section>
 
@@ -402,7 +394,8 @@ export default function TrustLayerPage() {
                           ))}
                         </ul>
                       </div>
-</div>
+                    </GlassCard>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -508,7 +501,8 @@ export default function TrustLayerPage() {
                       </Button>
                     </Link>
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -557,7 +551,8 @@ export default function TrustLayerPage() {
                 </div>
               </motion.div>
             </div>
-</div>
+          </GlassCard>
+        </div>
       </section>
 
       

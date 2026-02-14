@@ -7,6 +7,7 @@ import {
   Download, FileText, Mail, CheckCircle, Building, Coins, Sparkles,
   ChevronRight, ExternalLink, Play, Server, Cpu, Network, Activity, X, ArrowLeft
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -100,16 +101,6 @@ const VISION_SLIDES = [
     icon: Zap,
   },
 ];
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 function VisionShowcase() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -506,9 +497,7 @@ function AccessRequestForm({ onBack }: { onBack: () => void }) {
 
   if (submitted) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center px-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -540,6 +529,7 @@ function AccessRequestForm({ onBack }: { onBack: () => void }) {
           animate={{ opacity: 1, y: 0 }}
         >
           <div className="mb-8">
+            <BackButton />
           </div>
 
           <div className="text-center mb-8">
@@ -862,6 +852,7 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
           transition={{ delay: 0.5 }}
           className="mt-8 text-center"
         >
+          <BackButton />
         </motion.div>
       </motion.div>
     </div>
@@ -871,7 +862,26 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
 function PartnerContent() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
-<main className="pt-24 pb-16">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3 shrink-0">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight">DarkWave Studios</span>
+          </Link>
+          <div className="flex items-center gap-3">
+            <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 animate-pulse">
+              <Zap className="w-3 h-3 mr-1" />
+              BETA v0.1 LIVE
+            </Badge>
+            <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
+              <Shield className="w-3 h-3 mr-1" />
+              Owner Portal
+            </Badge>
+          </div>
+        </div>
+      </nav>
+
+      <main className="pt-24 pb-16">
         {/* Hero Section */}
         <section className="relative py-20 px-4 overflow-hidden">
           <div className="absolute inset-0">
@@ -1586,6 +1596,7 @@ function PartnerContent() {
       </main>
 
       
+    </div>
   );
 }
 
@@ -1614,6 +1625,5 @@ export default function PartnerPortal() {
         </motion.div>
       )}
     </AnimatePresence>
-    </PasswordGate>
   );
 }

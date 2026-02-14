@@ -87,16 +87,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 );` },
       { name: "src/App.jsx", content: `import { useState } from 'react';
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function App() {
   const [count, setCount] = useState(0);
   
@@ -1969,7 +1959,8 @@ console.log('Trust Layer Studio loaded!');`,
                     <TooltipContent>
                       <p className="text-xs">{u.name} is editing{u.file ? ` ${u.file}` : ""}</p>
                     </TooltipContent>
-))}
+                  </Tooltip>
+                ))}
                 {presence.length > 4 && (
                   <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold text-white bg-gray-600 border-2 border-background">
                     +{presence.length - 4}
@@ -1997,7 +1988,8 @@ console.log('Trust Layer Studio loaded!');`,
               <TooltipContent>
                 <p>{isListening ? "Stop voice input" : "Voice to text"}</p>
               </TooltipContent>
-)}
+            </Tooltip>
+          )}
           {/* AI Assistant Button */}
           <Tooltip>
             <TooltipTrigger asChild>
@@ -2014,7 +2006,8 @@ console.log('Trust Layer Studio loaded!');`,
             <TooltipContent>
               <p>AI Code Assistant</p>
             </TooltipContent>
-<Button
+          </Tooltip>
+          <Button
             size="sm"
             variant="ghost"
             onClick={handleSave}
@@ -2042,7 +2035,8 @@ console.log('Trust Layer Studio loaded!');`,
             <TooltipContent>
               <p>Live Preview</p>
             </TooltipContent>
-<Button
+          </Tooltip>
+          <Button
             size="sm"
             className="gap-2 bg-green-600 hover:bg-green-700 text-xs transition-all duration-300 hover:shadow-[0_0_15px_rgba(34,197,94,0.5)] hover:scale-105"
             onClick={handleRun}
@@ -2407,7 +2401,8 @@ console.log('Trust Layer Studio loaded!');`,
                     <TooltipContent side="right" className="max-w-xs bg-black/90 border-white/10">
                       <p className="text-xs">Browse tables, view data, and run SQL queries on your project database.</p>
                     </TooltipContent>
-</span>
+                  </Tooltip>
+                </span>
                 <Button
                   size="sm"
                   variant="ghost"
@@ -2535,7 +2530,8 @@ console.log('Trust Layer Studio loaded!');`,
                     <TooltipContent side="right" className="max-w-xs bg-black/90 border-white/10">
                       <p className="text-xs">{PROTOCOL_DEFINITIONS["Secret"]}</p>
                     </TooltipContent>
-</span>
+                  </Tooltip>
+                </span>
               </div>
               
               <div className="flex items-center gap-1 mb-3 p-1 rounded bg-black/30 border border-white/5">
@@ -2620,7 +2616,8 @@ console.log('Trust Layer Studio loaded!');`,
                     <TooltipContent side="right" className="max-w-xs bg-black/90 border-white/10">
                       <p className="text-xs">{PROTOCOL_DEFINITIONS["Config"]}</p>
                     </TooltipContent>
-</span>
+                  </Tooltip>
+                </span>
               </div>
               <p className="text-xs text-muted-foreground mb-3">
                 {envMode === "dev" 
@@ -2761,7 +2758,8 @@ console.log('Trust Layer Studio loaded!');`,
                         </Button>
                       </TooltipTrigger>
                       <TooltipContent>Refresh Preview</TooltipContent>
-<Button
+                    </Tooltip>
+                    <Button
                       size="sm"
                       variant="ghost"
                       onClick={() => setShowPreview(false)}
@@ -3588,13 +3586,5 @@ console.log('Trust Layer Studio loaded!');`,
         onClose={() => setShowLoginModal(false)} 
       />
     </div>
-</Input>
-</Input>
-</Input>
-</Input>
-</Input>
-</Input>
-</Input>
-</Input>
   );
 }

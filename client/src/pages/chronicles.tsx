@@ -6,6 +6,7 @@ import {
   Globe, Zap, History, Theater, Sword, BookOpen, Building, Rocket,
   Info, X, Play, Volume2, VolumeX, ArrowLeft, Gamepad2
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -759,16 +760,6 @@ function EpochDetailDrawer({ epoch, isOpen, onClose }: { epoch: typeof EPOCHS[0]
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function Chronicles() {
   usePageAnalytics();
   const [, setLocation] = useLocation();
@@ -878,9 +869,7 @@ export default function Chronicles() {
 
   if (checkingAuth) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
@@ -891,10 +880,31 @@ export default function Chronicles() {
   }
   
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<section className="relative min-h-screen flex items-center justify-center  overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden overflow-y-auto selection:bg-primary/20 selection:text-primary w-full max-w-full">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/80 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0" data-testid="link-home">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <a 
+              href="https://dwsc.io" 
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-cyan-500 text-black font-bold hover:bg-cyan-400 transition-all text-xs shadow-lg shadow-cyan-500/30"
+              data-testid="button-back-to-portal"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Portal</span>
+            </a>
+            <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-[10px] sm:text-xs whitespace-nowrap animate-pulse hidden sm:flex">
+              <Sparkles className="w-3 h-3 mr-1" /> Community-Driven
+            </Badge>
+            <BackButton className="hidden sm:flex" />
+          </div>
+        </div>
+      </nav>
+
+      <section className="relative min-h-screen flex items-center justify-center pt-14 overflow-hidden">
         <div className="absolute inset-0 bg-black">
           {/* Current video */}
           <video 
@@ -1507,8 +1517,5 @@ export default function Chronicles() {
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
       `}</style>
     </div>
-    </EpochCard>
-</p>
-    </button>
   );
 }

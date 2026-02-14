@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Link } from "wouter";
 import {
   Users, Trophy, TrendingUp, TrendingDown, Star,
   Copy, Settings, Bell, Shield, Zap, Target, BarChart3,
   Play, Pause, DollarSign, Percent, Activity
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -215,18 +217,10 @@ function TraderCard({ trader, rank }: { trader: Trader; rank: number }) {
             </ResponsiveContainer>
           </div>
         </div>
-</motion.div>
+      </GlassCard>
+    </motion.div>
   );
 }
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function CopyTrading() {
   const [filter, setFilter] = useState("all");
@@ -239,11 +233,22 @@ export default function CopyTrading() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="border-purple-500/50 text-purple-400 text-[10px]">Copy Trading</Badge>
+            <BackButton />
+          </div>
+        </div>
+      </nav>
+
+      <main className="flex-1 pt-16 pb-8 px-4">
+        <div className="container mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -260,8 +265,8 @@ export default function CopyTrading() {
                 <Users className="w-7 h-7 text-purple-400" />
               </motion.div>
             </div>
-            <h1 className="text-2xl md:text-3xl font-display font-bold mb-2 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Copy Trading
+            <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">
+              Copy <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">Trading</span>
             </h1>
             <p className="text-sm text-muted-foreground">
               Follow top traders and automatically mirror their trades
@@ -275,25 +280,29 @@ export default function CopyTrading() {
                 <span className="text-[10px] text-muted-foreground">Following</span>
               </div>
               <div className="text-xl font-bold">{myStats.following}</div>
-<GlassCard hover={false} className="p-3">
+            </GlassCard>
+            <GlassCard hover={false} className="p-3">
               <div className="flex items-center gap-2 mb-1">
                 <DollarSign className="w-4 h-4 text-primary" />
                 <span className="text-[10px] text-muted-foreground">Invested</span>
               </div>
               <div className="text-xl font-bold">${myStats.totalInvested.toLocaleString()}</div>
-<GlassCard hover={false} className="p-3">
+            </GlassCard>
+            <GlassCard hover={false} className="p-3">
               <div className="flex items-center gap-2 mb-1">
                 <TrendingUp className="w-4 h-4 text-green-400" />
                 <span className="text-[10px] text-muted-foreground">Total P/L</span>
               </div>
               <div className="text-xl font-bold text-green-400">+${myStats.totalPnl}</div>
-<GlassCard hover={false} className="p-3">
+            </GlassCard>
+            <GlassCard hover={false} className="p-3">
               <div className="flex items-center gap-2 mb-1">
                 <Activity className="w-4 h-4 text-blue-400" />
                 <span className="text-[10px] text-muted-foreground">Active Trades</span>
               </div>
               <div className="text-xl font-bold">{myStats.activeTrades}</div>
-</div>
+            </GlassCard>
+          </div>
 
           <Tabs defaultValue="discover" className="mb-6">
             <TabsList className="w-full grid grid-cols-3">
@@ -339,10 +348,13 @@ export default function CopyTrading() {
                 <p className="text-center text-muted-foreground py-8">
                   Trade history will appear here once you start copy trading
                 </p>
-</TabsContent>
+              </GlassCard>
+            </TabsContent>
           </Tabs>
         </div>
-      </div>
+      </main>
+
+      
     </div>
   );
 }

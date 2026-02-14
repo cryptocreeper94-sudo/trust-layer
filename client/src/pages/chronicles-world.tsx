@@ -113,7 +113,8 @@ function WorldClock({ era }: { era: string }) {
         </div>
       </div>
       <p className="text-xs text-gray-400 italic" data-testid="era-atmosphere">{eraDesc}</p>
-);
+    </GlassCard>
+  );
 }
 
 function SituationCard({ situation, era, onRespond }: {
@@ -185,7 +186,8 @@ function SituationCard({ situation, era, onRespond }: {
             Face This <ChevronRight className="w-4 h-4 ml-1" />
           </Button>
         </div>
-</motion.div>
+      </GlassCard>
+    </motion.div>
   );
 }
 
@@ -274,7 +276,8 @@ function SituationDetail({ situation, era, onClose, onDecide }: {
               )}
             </Button>
           </div>
-</motion.div>
+        </GlassCard>
+      </motion.div>
     </motion.div>
   );
 }
@@ -319,7 +322,8 @@ function NpcEncounter({ npc, era, onTalk }: {
             <MessageSquare className="w-4 h-4" />
           </Button>
         </div>
-</motion.div>
+      </GlassCard>
+    </motion.div>
   );
 }
 
@@ -473,7 +477,8 @@ function NpcChatModal({ npc, era, onClose }: {
               </Button>
             </div>
           </div>
-</motion.div>
+        </GlassCard>
+      </motion.div>
     </motion.div>
   );
 }
@@ -511,19 +516,11 @@ function FactionCard({ faction, era, onAlign }: {
           >
             <HandshakeIcon className="w-4 h-4" />
           </Button>
-</motion.div>
+        </div>
+      </GlassCard>
+    </motion.div>
   );
 }
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 function LiveWorldBar() {
   const [pulse, setPulse] = useState(0);
@@ -656,9 +653,7 @@ export default function ChroniclesWorld() {
   ];
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-slate-950 pb-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <div className="flex items-center gap-3 mb-6">
           <Link href="/chronicles/hub">
@@ -735,7 +730,8 @@ export default function ChroniclesWorld() {
                   <Compass className="w-10 h-10 text-gray-600 mx-auto mb-3" />
                   <p className="text-gray-400">The world is quiet right now...</p>
                   <p className="text-xs text-gray-600 mt-1">New situations emerge based on time, your actions, and what others do.</p>
-) : (
+                </GlassCard>
+              ) : (
                 <>
                   <div className="text-xs text-gray-500 mb-2">
                     These aren't missions — they're things happening around you. How you respond is entirely up to you.
@@ -768,7 +764,8 @@ export default function ChroniclesWorld() {
                 <GlassCard className="p-8 text-center">
                   <Users className="w-10 h-10 text-gray-600 mx-auto mb-3" />
                   <p className="text-gray-400">No one's around right now...</p>
-) : (
+                </GlassCard>
+              ) : (
                 <>
                   <div className="text-xs text-gray-500 mb-2">
                     These are people in your world — not quest-givers. Talk to them like real people. Build relationships over time.
@@ -783,6 +780,7 @@ export default function ChroniclesWorld() {
                   ))}
                 </>
               )}
+            </motion.div>
           )}
 
           {activeTab === "communities" && (
@@ -797,10 +795,12 @@ export default function ChroniclesWorld() {
                 <GlassCard className="p-8 text-center">
                   <Shield className="w-10 h-10 text-gray-600 mx-auto mb-3" />
                   <p className="text-gray-400">No communities to join yet...</p>
-) : (
+                </GlassCard>
+              ) : (
                 <>
                   <div className="text-xs text-gray-500 mb-2">
                     Communities reflect values, not classes. Align with people who share your beliefs — or challenge them.
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {factions.map((f: any) => (
                       <FactionCard
@@ -810,10 +810,13 @@ export default function ChroniclesWorld() {
                         onAlign={handleAlignFaction}
                       />
                     ))}
+                  </div>
                 </>
               )}
+            </motion.div>
           )}
         </AnimatePresence>
+      </div>
 
       <AnimatePresence>
         {activeSituation && (
@@ -833,8 +836,5 @@ export default function ChroniclesWorld() {
         )}
       </AnimatePresence>
     </div>
-    </div>
-</motion.div>
-</motion.div>
-);
+  );
 }

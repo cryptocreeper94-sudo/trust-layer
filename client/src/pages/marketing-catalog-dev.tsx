@@ -313,7 +313,8 @@ export default function MarketingCatalogDev() {
                       <Twitter className="w-3 h-3" />
                       <Facebook className="w-3 h-3" />
                     </div>
-</motion.div>
+                  </GlassCard>
+                </motion.div>
               ))}
             </div>
           </>
@@ -344,7 +345,8 @@ export default function MarketingCatalogDev() {
                   <Badge variant="outline" className="text-xs border-slate-700">
                     {img.usage}
                   </Badge>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
         )}
@@ -352,8 +354,8 @@ export default function MarketingCatalogDev() {
         <div className="mt-12 text-center text-slate-500 text-sm">
           <p>DarkWave Studios • Marketing Catalog v1.0</p>
           <p className="text-xs mt-1">X & Facebook Content • Developer Access</p>
-    </div>
-    </div>
+        </div>
+      </div>
     </div>
   );
 }

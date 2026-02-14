@@ -487,6 +487,7 @@ function EraCarousel({ eras }: { eras: Era[] }) {
           />
         ))}
       </div>
+    </div>
   );
 }
 
@@ -828,6 +829,7 @@ function AdminDashboard() {
           </div>
         </div>
       </main>
+    </div>
   );
 }
 
@@ -863,6 +865,5 @@ export default function ChroniclesAdmin() {
         </motion.div>
       )}
     </AnimatePresence>
-    </PinGate>
   );
 }

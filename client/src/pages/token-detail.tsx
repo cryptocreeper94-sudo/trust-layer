@@ -1430,16 +1430,6 @@ function CopyButton({ text, label }: { text: string; label: string }) {
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 function HelpModal() {
   return (
     <Dialog>
@@ -1701,9 +1691,7 @@ export default function TokenDetail() {
 
   if (isLoading || !token) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
         <div className="w-8 h-8 border-2 border-cyan-500 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -2453,8 +2441,46 @@ export default function TokenDetail() {
               Other pairs
             </Button>
           </div>
+        </div>
+      </main>
 
       {/* Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-[#0d0d0d] border-t border-white/10 z-50">
+        <div className="flex">
+          <button 
+            onClick={() => setActiveTab('info')}
+            className={`flex-1 py-3 flex flex-col items-center gap-0.5 ${activeTab === 'info' ? 'text-cyan-400' : 'text-white/40'}`}
+            data-testid="tab-info"
+          >
+            <Info className="w-5 h-5" />
+            <span className="text-[10px]">Info</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('chart')}
+            className={`flex-1 py-3 flex flex-col items-center gap-0.5 ${activeTab === 'chart' ? 'text-cyan-400' : 'text-white/40'}`}
+            data-testid="tab-chart"
+          >
+            <BarChart3 className="w-5 h-5" />
+            <span className="text-[10px]">Chart+Txns</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('chart')}
+            className={`flex-1 py-3 flex flex-col items-center gap-0.5 text-white/40`}
+            data-testid="tab-chart-only"
+          >
+            <Activity className="w-5 h-5" />
+            <span className="text-[10px]">Chart</span>
+          </button>
+          <button 
+            onClick={() => setActiveTab('txns')}
+            className={`flex-1 py-3 flex flex-col items-center gap-0.5 ${activeTab === 'txns' ? 'text-cyan-400' : 'text-white/40'}`}
+            data-testid="tab-txns"
+          >
+            <Users className="w-5 h-5" />
+            <span className="text-[10px]">Txns</span>
+          </button>
+        </div>
+      </nav>
     </div>
-);
+  );
 }

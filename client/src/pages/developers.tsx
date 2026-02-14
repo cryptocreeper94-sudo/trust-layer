@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Box, Check, Code, Cpu, Database, FileCode, Layers, Terminal, BookOpen, Play , Shield } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import dagViz from "@assets/generated_images/abstract_visualization_of_directed_acyclic_graph_blockchain_consensus.png";
 import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
@@ -11,23 +12,34 @@ import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 import { InfoTooltip } from "@/components/info-tooltip";
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function Developers() {
   usePageAnalytics();
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<section className="pt-20 pb-10 px-4">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center">
+          <Link href="/" className="flex items-center gap-2 mr-auto shrink-0">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <div className="flex items-center gap-1 sm:gap-2">
+            <Link href="/api-playground">
+              <Button variant="outline" size="sm" className="h-7 sm:h-8 text-[10px] sm:text-xs px-2 sm:px-3 border-green-500/30 hover:bg-green-500/10 text-green-400" data-testid="button-api-playground">
+                <Play className="w-3 h-3 sm:mr-1.5" /> <span className="hidden sm:inline">Devnet Sandbox</span>
+              </Button>
+            </Link>
+            <Link href="/doc-hub">
+              <Button variant="outline" size="sm" className="h-7 sm:h-8 text-[10px] sm:text-xs px-2 sm:px-3 border-primary/30 hover:bg-primary/10 text-primary" data-testid="button-doc-hub">
+                <BookOpen className="w-3 h-3 sm:mr-1.5" /> <span className="hidden sm:inline">Doc Hub</span>
+              </Button>
+            </Link>
+            <Badge variant="outline" className="hidden md:flex border-primary/20 text-primary bg-primary/5 font-mono text-[10px]">v1.0.0-beta</Badge>
+            <BackButton />
+          </div>
+        </div>
+      </nav>
+
+      <section className="pt-20 pb-10 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="max-w-2xl">
             <h1 className="text-3xl md:text-4xl font-display font-bold mb-4">
@@ -191,7 +203,9 @@ export default function Developers() {
                     </div>
                   </div>
                 </div>
-<GlassCard>
+              </GlassCard>
+
+              <GlassCard>
                 <div className="overflow-hidden rounded-xl">
                   <div className="flex items-center justify-between px-3 py-2 bg-[#252526] border-b border-white/5">
                     <span className="text-[10px] text-white/60 font-mono">starship.rs</span>
@@ -215,7 +229,8 @@ export default function Developers() {
                     </pre>
                   </div>
                 </div>
-</div>
+              </GlassCard>
+            </div>
           </div>
         </div>
       </section>
@@ -271,11 +286,11 @@ export default function Developers() {
                 </div>
               </div>
             </div>
-</div>
+          </GlassCard>
+        </div>
       </section>
 
       
     </div>
-    </span>
   );
 }

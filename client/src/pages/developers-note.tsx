@@ -54,16 +54,6 @@ Join the community: https://dwsc.io/community
 
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function DevelopersNote() {
   const [copied, setCopied] = useState(false);
 
@@ -74,9 +64,7 @@ export default function DevelopersNote() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
       <div className="absolute inset-0 opacity-20 pointer-events-none">
         <img src={fantasyWorld} alt="" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/90 to-slate-950" />
@@ -243,7 +231,8 @@ export default function DevelopersNote() {
               <div className="bg-slate-900/50 rounded-lg p-4 border border-white/10">
                 <pre className="text-white/70 text-sm whitespace-pre-wrap font-sans leading-relaxed">{facebookPost}</pre>
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
           
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -256,25 +245,27 @@ export default function DevelopersNote() {
                 <Users className="w-8 h-8 text-cyan-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
                 <h3 className="font-semibold text-white mb-1">Join Community</h3>
                 <p className="text-sm text-white/60">Connect with the family</p>
-</Link>
+              </GlassCard>
+            </Link>
             
             <Link href="/crowdfund">
               <GlassCard className="p-6 text-center cursor-pointer hover:border-purple-500/50 transition-all group">
                 <Heart className="w-8 h-8 text-purple-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
                 <h3 className="font-semibold text-white mb-1">Support Development</h3>
                 <p className="text-sm text-white/60">Help us build this</p>
-</Link>
+              </GlassCard>
+            </Link>
             
             <Link href="/presale">
               <GlassCard className="p-6 text-center cursor-pointer hover:border-pink-500/50 transition-all group">
                 <Shield className="w-8 h-8 text-pink-400 mx-auto mb-3 group-hover:scale-110 transition-transform" />
                 <h3 className="font-semibold text-white mb-1">Get Signal</h3>
                 <p className="text-sm text-white/60">Join the Trust Network</p>
-</Link>
+              </GlassCard>
+            </Link>
           </motion.div>
         </motion.div>
+      </div>
     </div>
-    </div>
-    </h3>
   );
 }

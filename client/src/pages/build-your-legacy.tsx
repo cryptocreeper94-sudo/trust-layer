@@ -7,6 +7,7 @@ import {
   Sparkles, Brain, Volume2, VolumeX, Coins, Zap, Eye, Shield,
   ChevronRight, Crown, User, Settings, CreditCard
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -18,16 +19,6 @@ import { apiRequest } from "@/lib/queryClient";
 import fantasyHeroes from "@assets/generated_images/fantasy_character_heroes.png";
 
 type RecordingState = "idle" | "recording" | "recorded" | "playing";
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function BuildYourLegacy() {
   usePageAnalytics();
@@ -191,9 +182,7 @@ export default function BuildYourLegacy() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
         <div className="animate-pulse text-cyan-400">Loading...</div>
       </div>
     );
@@ -236,7 +225,25 @@ export default function BuildYourLegacy() {
         <div className="absolute top-1/4 -left-32 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 -right-32 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
       </div>
-<main className="relative pt-24 pb-20 px-4">
+
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between gap-2">
+          <BackButton />
+          
+          <div className="flex items-center">
+            {creditsData && (
+              <div className="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full bg-slate-800/50 border border-amber-500/30">
+                <Coins className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-amber-400" />
+                <span className="text-amber-300 font-medium text-sm sm:text-base" data-testid="text-credit-balance">
+                  {creditsData.balance?.toLocaleString() || 0} Credits
+                </span>
+              </div>
+            )}
+          </div>
+        </div>
+      </nav>
+
+      <main className="relative pt-24 pb-20 px-4">
         <div className="max-w-6xl mx-auto space-y-12">
           <motion.header
             initial={{ opacity: 0, y: 20 }}
@@ -603,5 +610,5 @@ export default function BuildYourLegacy() {
 
       
     </div>
-);
+  );
 }

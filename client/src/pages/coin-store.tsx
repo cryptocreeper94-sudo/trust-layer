@@ -28,16 +28,6 @@ interface SweepsBalance {
   totalScRedeemed: string;
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function CoinStore() {
   const { user, isLoading: authLoading } = useAuth();
   const [, navigate] = useLocation();
@@ -188,9 +178,7 @@ export default function CoinStore() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen flex items-center justify-center">
         <div className="animate-pulse text-purple-400">Loading...</div>
       </div>
     );
@@ -455,10 +443,14 @@ export default function CoinStore() {
                 <div className="border-t border-white/10 pt-3 mt-3 flex justify-between items-center">
                   <span className="text-gray-400">Total</span>
                   <span className="text-2xl font-bold">${selectedPack.priceUsd}</span>
+                </div>
+              </div>
               
               <div className="flex items-center gap-2 text-sm text-gray-400 mb-4">
                 <Shield className="w-4 h-4 text-green-400" />
                 <span>Secure payment processed by Stripe</span>
+              </div>
+            </div>
           )}
           
           <DialogFooter className="flex gap-3">
@@ -516,11 +508,14 @@ export default function CoinStore() {
                   Attn: Free Entry Request<br/>
                   [Address TBD]
                 </p>
+              </div>
+            </div>
             
             <p className="text-xs text-gray-500">
               For immediate credit (demo only), click the button below. 
               In production, actual mail verification will be required.
             </p>
+          </div>
           
           <DialogFooter className="flex gap-3">
             <Button 
@@ -553,12 +548,6 @@ export default function CoinStore() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
     </div>
   );
 }

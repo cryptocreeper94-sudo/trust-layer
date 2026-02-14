@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Search, LayoutGrid, Rocket, ShieldCheck, CheckCircle2, ExternalLink , Shield } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
@@ -164,22 +165,13 @@ function AppCard({ src, alt, gradient, name, category, verified, tags, url }: {
             <ExploreButton url={url} appName={name} />
           </div>
         </div>
-</div>
+      </GlassCard>
+    </div>
   );
 }
 
 
 const categories = ["All Apps", "DeFi", "Enterprise", "AI", "Social", "Gaming", "Automotive", "Services"];
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function Ecosystem() {
   usePageAnalytics();
@@ -202,10 +194,25 @@ export default function Ecosystem() {
   });
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<section className="pt-20 pb-8 px-4">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center">
+          <Link href="/" className="flex items-center gap-2 mr-auto">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link href="/developers">
+              <Button size="sm" className="h-8 text-[10px] sm:text-xs bg-primary text-background hover:bg-primary/90 font-semibold px-2 sm:px-3">
+                <Rocket className="w-3 h-3 sm:mr-1.5" /> <span className="hidden sm:inline">Submit App</span>
+              </Button>
+            </Link>
+            <BackButton />
+          </div>
+        </div>
+      </nav>
+
+      <section className="pt-20 pb-8 px-4">
         <div className="container mx-auto max-w-6xl text-center">
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-display font-bold mb-3">
             The Trust Layer <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">App Store</span>
@@ -296,7 +303,8 @@ export default function Ecosystem() {
                         <div className="h-3 bg-white/10 rounded w-full mb-2" />
                         <div className="h-3 bg-white/10 rounded w-3/4" />
                       </div>
-))}
+                    </GlassCard>
+                  ))}
                 </div>
               ) : filteredApps.length === 0 ? (
                 <div className="text-center py-12">
@@ -326,5 +334,5 @@ export default function Ecosystem() {
 
       
     </div>
-);
+  );
 }

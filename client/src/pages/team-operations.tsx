@@ -398,7 +398,9 @@ function OperationsDashboard() {
                   <p className="text-xs text-gray-400">Manage campaigns</p>
                 </button>
               </div>
-{/* Recent Activity */}
+            </GlassCard>
+
+            {/* Recent Activity */}
             <GlassCard className="p-6" glow>
               <h3 className="text-lg font-bold text-white flex items-center gap-2 mb-4">
                 <Activity className="w-5 h-5 text-cyan-400" />
@@ -432,7 +434,8 @@ function OperationsDashboard() {
                   ))}
                 </div>
               )}
-</>
+            </GlassCard>
+          </>
         )}
 
         {/* Daily Report Tab */}
@@ -515,7 +518,8 @@ function OperationsDashboard() {
                   <li>• Airdrops are executed on-chain within 24 hours</li>
                 </ul>
               </div>
-</div>
+            </GlassCard>
+          </div>
         )}
 
         {/* Airdrop Queue Tab */}
@@ -578,7 +582,8 @@ function OperationsDashboard() {
                 </div>
               </div>
             </div>
-)}
+          </GlassCard>
+        )}
 
         {/* Analytics Tab */}
         {activeTab === "analytics" && (
@@ -607,7 +612,9 @@ function OperationsDashboard() {
                   </div>
                 </div>
               </div>
-<GlassCard className="p-6" glow>
+            </GlassCard>
+
+            <GlassCard className="p-6" glow>
               <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
                 <Users className="w-5 h-5 text-purple-400" />
                 Community Growth
@@ -631,7 +638,8 @@ function OperationsDashboard() {
                   </div>
                 </div>
               </div>
-</div>
+            </GlassCard>
+          </div>
         )}
 
         {/* Navigation Links */}
@@ -660,8 +668,8 @@ function OperationsDashboard() {
               <ArrowRight className="w-4 h-4 text-gray-500 group-hover:text-cyan-400" />
             </button>
           </Link>
-    </div>
-    </main>
+        </div>
+      </main>
     </div>
   );
 }

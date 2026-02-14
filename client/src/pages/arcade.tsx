@@ -369,16 +369,6 @@ function GameCard({ game, index, accentColor }: { game: GameItem; index: number;
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 function FeaturedBanner() {
   return (
     <motion.div
@@ -466,7 +456,8 @@ function StatsBar() {
               <span className="text-lg sm:text-xl font-bold text-white">{stat.value}</span>
             </div>
             <p className="text-[10px] sm:text-xs text-slate-400 uppercase tracking-wider">{stat.label}</p>
-</motion.div>
+          </GlassCard>
+        </motion.div>
       ))}
     </div>
   );
@@ -500,7 +491,8 @@ function CurrencyExplainer() {
           <p className="text-sm text-slate-400 leading-relaxed">Receive FREE Sweeps Coins with Gold Coin purchases. SC can be redeemed for prizes!</p>
         </div>
       </div>
-);
+    </GlassCard>
+  );
 }
 
 export default function Arcade() {
@@ -511,6 +503,8 @@ export default function Arcade() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-[120px]" />
         <div className="absolute top-1/2 left-1/2 w-96 h-96 bg-pink-500/3 rounded-full blur-[120px]" />
       </div>
+
+      <div className="relative z-10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -582,7 +576,9 @@ export default function Arcade() {
                 </Badge>
               ))}
             </div>
-</div>
+          </GlassCard>
+        </div>
+      </div>
     </main>
   );
 }

@@ -125,16 +125,6 @@ const CHRONICLES_ERAS = [
   { img: steampunkImg, era: "Iron Age", desc: "Industrial Revolution", color: "from-zinc-500/30 to-stone-600/30" },
 ];
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 function ChroniclesCarousel() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -421,7 +411,8 @@ function EcosystemCarousel({ apps }: { apps: EcosystemApp[] }) {
                     <ExploreButton url={app.url} appName={app.name} />
                   </div>
                 </div>
-</motion.div>
+              </GlassCard>
+            </motion.div>
           );
         })}
       </div>
@@ -458,9 +449,7 @@ export default function Home() {
   const favoriteApps = apps.filter(app => preferences.favorites.includes(app.id));
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
       <OnboardingTour />
       <SimpleLoginModal 
         isOpen={showLoginModal} 
@@ -469,7 +458,7 @@ export default function Home() {
       
       
 
-      <section className="relative min-h-[85vh] flex items-center justify-center pt-20 md: overflow-hidden">
+      <section className="relative min-h-[85vh] flex items-center justify-center pt-20 md:pt-14 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img src={heroBg} alt="" className="w-full h-full object-cover opacity-30" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/80 to-background" />
@@ -982,7 +971,8 @@ export default function Home() {
                     </Button>
                   </div>
                 </div>
-</Link>
+              </GlassCard>
+            </Link>
             
             <Link href="/launchpad">
               <GlassCard glow hover={false} className="h-full overflow-hidden">
@@ -1007,7 +997,8 @@ export default function Home() {
                     </Button>
                   </div>
                 </div>
-</Link>
+              </GlassCard>
+            </Link>
           </div>
         </div>
       </section>
@@ -1141,7 +1132,8 @@ export default function Home() {
                 <div className="text-2xl font-bold text-white">{stats?.tps || "200K+"}</div>
                 <div className="text-[10px] text-white/50 uppercase">TPS</div>
               </div>
-<GlassCard hover={false}>
+            </GlassCard>
+            <GlassCard hover={false}>
               <div className="p-4 text-center">
                 <div className="flex items-center justify-center gap-1 mb-2">
                   <Activity className="w-4 h-4 text-cyan-400" />
@@ -1150,13 +1142,15 @@ export default function Home() {
                 <div className="text-2xl font-bold text-white">{stats?.finalityTime || "0.4s"}</div>
                 <div className="text-[10px] text-white/50 uppercase">Finality</div>
               </div>
-<GlassCard hover={false}>
+            </GlassCard>
+            <GlassCard hover={false}>
               <div className="p-4 text-center">
                 <Cpu className="w-4 h-4 text-purple-400 mx-auto mb-2" />
                 <div className="text-2xl font-bold text-white">{stats?.avgCost || "$0.0001"}</div>
                 <div className="text-[10px] text-white/50 uppercase">Avg Cost</div>
               </div>
-<GlassCard hover={false}>
+            </GlassCard>
+            <GlassCard hover={false}>
               <div className="p-4 text-center">
                 <div className="flex items-center justify-center gap-1 mb-2">
                   <Server className="w-4 h-4 text-cyan-400" />
@@ -1166,7 +1160,8 @@ export default function Home() {
                 <div className="text-lg font-bold text-white">Founders</div>
                 <div className="text-[10px] text-white/50 uppercase">Validator</div>
               </div>
-</div>
+            </GlassCard>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <GlassCard>
@@ -1179,7 +1174,8 @@ export default function Home() {
                   <p className="text-xs text-white/50">Advanced DAG protocols for sub-second finality</p>
                 </div>
               </div>
-<GlassCard>
+            </GlassCard>
+            <GlassCard>
               <div className="p-4 flex items-start gap-3">
                 <div className="p-2 rounded-lg bg-cyan-500/20 text-cyan-400 shrink-0">
                   <Shield className="w-4 h-4" />
@@ -1192,7 +1188,8 @@ export default function Home() {
                   <p className="text-xs text-white/50">Manage assets across chains from one account</p>
                 </div>
               </div>
-<GlassCard>
+            </GlassCard>
+            <GlassCard>
               <div className="p-4 flex items-start gap-3">
                 <div className="p-2 rounded-lg bg-purple-500/20 text-purple-400 shrink-0">
                   <Layers className="w-4 h-4" />
@@ -1205,7 +1202,8 @@ export default function Home() {
                   <p className="text-xs text-white/50">Native protocols for secure asset transfers</p>
                 </div>
               </div>
-</div>
+            </GlassCard>
+          </div>
 
           <div className="mt-6 flex justify-center">
             <Link href="/network">
@@ -1286,6 +1284,7 @@ function AppCard({ id, name, category, desc, gradient, showFavorite, url }: { id
             <ExploreButton url={url} appName={name} />
           </div>
         </div>
-</div>
-);
+      </GlassCard>
+    </div>
+  );
 }

@@ -423,16 +423,6 @@ function ContributionRow({ contribution }: { contribution: Contribution }) {
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function CrowdfundPage() {
   const searchString = useSearch();
   const queryClient = useQueryClient();
@@ -518,9 +508,7 @@ export default function CrowdfundPage() {
   });
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950">
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
@@ -710,7 +698,8 @@ export default function CrowdfundPage() {
                   </div>
                 )}
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, x: 20 }}
@@ -753,7 +742,8 @@ export default function CrowdfundPage() {
                   ))}
                 </div>
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
         </div>
 
         <motion.div
@@ -768,7 +758,8 @@ export default function CrowdfundPage() {
               <span>All contributions are verified with Trust Layer transparency stamps</span>
               <ExternalLink className="w-4 h-4 ml-2" />
             </div>
-</motion.div>
+          </GlassCard>
+        </motion.div>
       </div>
       
       <BuyCryptoModal 
@@ -776,6 +767,5 @@ export default function CrowdfundPage() {
         onClose={() => setShowBuyCryptoModal(false)}
       />
     </div>
-    </DonationModal>
-);
+  );
 }

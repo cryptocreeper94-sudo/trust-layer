@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import { Link } from "wouter";
 import {
   Droplets, Plus, TrendingUp, Percent, DollarSign,
-  ArrowUpDown, ChevronDown, Loader2, Info, Minus, BarChart3
+  ArrowUpDown, ChevronDown, Loader2, Info, Minus, BarChart3, Home
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -101,7 +103,8 @@ function PoolCard({ pool, onAddLiquidity }: { pool: LiquidityPool; onAddLiquidit
             </Button>
           </div>
         </CollapsibleContent>
-</Collapsible>
+      </GlassCard>
+    </Collapsible>
   );
 }
 
@@ -147,17 +150,9 @@ function PositionCard({ position }: { position: Position }) {
           </Button>
         </div>
       </div>
-);
+    </GlassCard>
+  );
 }
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function Liquidity() {
   const { toast } = useToast();
@@ -231,19 +226,31 @@ export default function Liquidity() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center">
+          <div className="flex items-center gap-3">
+            <BackButton />
+            <h1 className="text-lg font-bold text-white">Liquidity Pools</h1>
+          </div>
+          <Link href="/" className="ml-auto">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-white/10">
+              <Home className="w-4 h-4" />
+            </Button>
+          </Link>
+        </div>
+      </nav>
+
+      <main className="flex-1 pt-16 pb-8 px-4">
+        <div className="container mx-auto max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-3">
               <motion.div className="p-2 rounded-xl bg-green-500/20 border border-green-500/30" animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 2, repeat: Infinity }}>
                 <Droplets className="w-6 h-6 text-green-400" />
               </motion.div>
             </div>
-            <h1 className="text-2xl md:text-3xl font-display font-bold mb-2 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Liquidity Pools
+            <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">
+              Liquidity <span className="text-green-400">Pools</span>
             </h1>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
               Provide liquidity to earn trading fees. Add to pools and earn passive income.
@@ -267,25 +274,29 @@ export default function Liquidity() {
                 <div className="text-lg font-bold text-white/50">—</div>
                 <div className="text-[10px] text-muted-foreground">Total TVL</div>
               </div>
-<GlassCard hover={false}>
+            </GlassCard>
+            <GlassCard hover={false}>
               <div className="p-3 text-center">
                 <BarChart3 className="w-5 h-5 text-blue-400 mx-auto mb-1" />
                 <div className="text-lg font-bold text-white/50">—</div>
                 <div className="text-[10px] text-muted-foreground">24h Volume</div>
               </div>
-<GlassCard hover={false}>
+            </GlassCard>
+            <GlassCard hover={false}>
               <div className="p-3 text-center">
                 <Percent className="w-5 h-5 text-green-400 mx-auto mb-1" />
                 <div className="text-lg font-bold text-white/50">—</div>
                 <div className="text-[10px] text-muted-foreground">Avg APR</div>
               </div>
-<GlassCard hover={false}>
+            </GlassCard>
+            <GlassCard hover={false}>
               <div className="p-3 text-center">
                 <Droplets className="w-5 h-5 text-purple-400 mx-auto mb-1" />
                 <div className="text-lg font-bold text-white">{pools.length}</div>
                 <div className="text-[10px] text-muted-foreground">Active Pools</div>
               </div>
-</div>
+            </GlassCard>
+          </div>
 
           <Tabs defaultValue="pools" className="w-full">
             <TabsList className="bg-white/5 border border-white/10 mb-6 w-full">
@@ -326,11 +337,12 @@ export default function Liquidity() {
                       <Plus className="w-4 h-4 mr-2" /> Add Liquidity
                     </Button>
                   </div>
-)}
+                </GlassCard>
+              )}
             </TabsContent>
           </Tabs>
         </div>
-      </div>
+      </main>
 
       <Dialog open={addOpen} onOpenChange={setAddOpen}>
         <DialogContent className="max-w-sm bg-background border-white/10">
@@ -376,8 +388,8 @@ export default function Liquidity() {
           )}
         </DialogContent>
       </Dialog>
+
+      
     </div>
-</Input>
-    </PoolCard>
   );
 }

@@ -98,16 +98,6 @@ const ERA_THEMES: Record<string, { bg: string; accent: string; glow: string }> =
   post_singularity: { bg: "from-fuchsia-950 to-violet-950", accent: "fuchsia", glow: "rgba(192,38,211,0.3)" },
 };
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function ChroniclesInterior() {
   const [, setLocation] = useLocation();
   const queryClient = useQueryClient();
@@ -212,9 +202,7 @@ export default function ChroniclesInterior() {
 
   if (!session?.token) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
         <GlassCard glow className="max-w-md w-full p-8 text-center">
           <DoorOpen className="w-16 h-16 text-cyan-400 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-white mb-2">Access Denied</h2>
@@ -222,7 +210,8 @@ export default function ChroniclesInterior() {
           <Button onClick={() => setLocation("/chronicles/login")} className="bg-cyan-500 hover:bg-cyan-600">
             Go to Login
           </Button>
-</div>
+        </GlassCard>
+      </div>
     );
   }
 
@@ -337,7 +326,8 @@ export default function ChroniclesInterior() {
                   );
                 })}
               </div>
-</div>
+            </GlassCard>
+          </div>
 
           {/* Room View */}
           <div className="lg:col-span-2">
@@ -419,7 +409,8 @@ export default function ChroniclesInterior() {
                   <p className="text-slate-500">Choose a room from the left to view and interact with it</p>
                 </div>
               )}
-</div>
+            </GlassCard>
+          </div>
 
           {/* Catalog / Object Details */}
           <div className="lg:col-span-1">
@@ -466,7 +457,8 @@ export default function ChroniclesInterior() {
                     );
                   })}
                 </div>
-) : interactingObject ? (
+              </GlassCard>
+            ) : interactingObject ? (
               <GlassCard glow className="p-4">
                 <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                   <Zap className="w-5 h-5 text-yellow-400" />
@@ -525,7 +517,8 @@ export default function ChroniclesInterior() {
                     Remove Object
                   </Button>
                 )}
-) : (
+              </GlassCard>
+            ) : (
               <GlassCard glow className="p-4">
                 <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                   <Star className="w-5 h-5 text-amber-400" />
@@ -562,15 +555,20 @@ export default function ChroniclesInterior() {
                         <p className="text-xs text-slate-400">Shells/Use</p>
                         <p className="text-lg font-bold text-white">+{currentRoom.objects?.reduce((sum, o) => sum + (o.catalog?.shellsPerUse || 0), 0) || 0}</p>
                       </div>
+                    </div>
 
                     <p className="text-slate-500 text-xs text-center">
                       Click on objects to interact and earn Shells!
                     </p>
+                  </div>
                 ) : (
                   <p className="text-slate-400 text-center">Select a room to view stats</p>
                 )}
-)}
-    </div>
+              </GlassCard>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

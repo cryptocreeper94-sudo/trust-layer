@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { TrendingUp, Users, Coins, Activity, BarChart3, PieChart, DollarSign, ArrowUpRight, ArrowDownRight, Wallet , Shield } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -28,16 +29,6 @@ interface ChartData {
 }
 
 const COLORS = ['#00FFFF', '#FFD700', '#00ff88', '#ff6b6b', '#a855f7'];
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function AdminAnalytics() {
   const { user, isLoading: authLoading } = useAuth();
@@ -99,9 +90,7 @@ export default function AdminAnalytics() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
       </div>
     );
@@ -116,13 +105,34 @@ export default function AdminAnalytics() {
           <Link href="/">
             <Button data-testid="button-go-home">Go Home</Button>
           </Link>
-</div>
+        </GlassCard>
+      </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-<main className="pt-20 pb-12 px-4">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0" data-testid="link-home">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-[10px] sm:text-xs">
+              Admin
+            </Badge>
+            <Link href="/admin/rewards">
+              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2" data-testid="link-admin-rewards">
+                Rewards
+              </Button>
+            </Link>
+            <BackButton />
+          </div>
+        </div>
+      </nav>
+
+      <main className="pt-20 pb-12 px-4">
         <div className="container mx-auto max-w-7xl">
           <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
             <div>
@@ -162,7 +172,8 @@ export default function AdminAnalytics() {
                   </div>
                   <p className="text-xl sm:text-2xl font-bold truncate">{stat.value}</p>
                   <p className="text-xs text-muted-foreground truncate">{stat.label}</p>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
 
@@ -199,7 +210,8 @@ export default function AdminAnalytics() {
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
-</TabsContent>
+              </GlassCard>
+            </TabsContent>
 
             <TabsContent value="users">
               <GlassCard className="p-6" glow data-testid="card-users-chart">
@@ -220,7 +232,8 @@ export default function AdminAnalytics() {
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-</TabsContent>
+              </GlassCard>
+            </TabsContent>
 
             <TabsContent value="transactions">
               <GlassCard className="p-6" glow data-testid="card-transactions-chart">
@@ -247,7 +260,8 @@ export default function AdminAnalytics() {
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
-</TabsContent>
+              </GlassCard>
+            </TabsContent>
 
             <TabsContent value="distribution">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -286,7 +300,9 @@ export default function AdminAnalytics() {
                       </div>
                     ))}
                   </div>
-<GlassCard className="p-6" data-testid="card-staking-distribution">
+                </GlassCard>
+
+                <GlassCard className="p-6" data-testid="card-staking-distribution">
                   <h3 className="font-bold mb-4 flex items-center gap-2">
                     <Coins className="w-4 h-4 text-primary" />
                     Staking Lock Periods
@@ -321,12 +337,12 @@ export default function AdminAnalytics() {
                       </div>
                     ))}
                   </div>
-</div>
+                </GlassCard>
+              </div>
             </TabsContent>
           </Tabs>
         </div>
       </main>
     </div>
-    </YAxis>
   );
 }

@@ -6,6 +6,7 @@ import {
   Webhook, Plus, Trash2, Edit2, CheckCircle, XCircle,
   Clock, RefreshCw, Copy, Eye, EyeOff, ChevronDown, Loader2, Zap
 , Shield } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -167,19 +168,10 @@ function WebhookCard({ webhook, onEdit, onDelete, onToggle }: { webhook: Webhook
             </div>
           </div>
         </CollapsibleContent>
-</Collapsible>
+      </GlassCard>
+    </Collapsible>
   );
 }
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function Webhooks() {
   const { toast } = useToast();
@@ -284,10 +276,21 @@ export default function Webhooks() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<main className="flex-1  pb-8 px-4">
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="border-yellow-500/50 text-yellow-400 text-[10px]">API</Badge>
+            <BackButton />
+          </div>
+        </div>
+      </nav>
+
+      <main className="flex-1 pt-16 pb-8 px-4">
         <div className="container mx-auto max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-3">
@@ -310,25 +313,29 @@ export default function Webhooks() {
                 <div className="text-lg font-bold text-white">{webhooks.length}</div>
                 <div className="text-[10px] text-muted-foreground">Active Webhooks</div>
               </div>
-<GlassCard hover={false}>
+            </GlassCard>
+            <GlassCard hover={false}>
               <div className="p-3 text-center">
                 <CheckCircle className="w-5 h-5 text-green-400 mx-auto mb-1" />
                 <div className="text-lg font-bold text-white">99.9%</div>
                 <div className="text-[10px] text-muted-foreground">Delivery Rate</div>
               </div>
-<GlassCard hover={false}>
+            </GlassCard>
+            <GlassCard hover={false}>
               <div className="p-3 text-center">
                 <Clock className="w-5 h-5 text-blue-400 mx-auto mb-1" />
                 <div className="text-lg font-bold text-white">&lt;100ms</div>
                 <div className="text-[10px] text-muted-foreground">Avg Latency</div>
               </div>
-<GlassCard hover={false}>
+            </GlassCard>
+            <GlassCard hover={false}>
               <div className="p-3 text-center">
                 <RefreshCw className="w-5 h-5 text-purple-400 mx-auto mb-1" />
                 <div className="text-lg font-bold text-white">3</div>
                 <div className="text-[10px] text-muted-foreground">Auto Retries</div>
               </div>
-</div>
+            </GlassCard>
+          </div>
 
           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
             <h2 className="text-xl font-bold">Your Webhooks</h2>
@@ -387,7 +394,8 @@ export default function Webhooks() {
                     <Plus className="w-4 h-4 mr-2" /> Create Your First Webhook
                   </Button>
                 </div>
-) : (
+              </GlassCard>
+            ) : (
               webhooks.map(webhook => (
                 <WebhookCard
                   key={webhook.id}
@@ -427,7 +435,8 @@ export default function Webhooks() {
                 Verify webhook signatures using the HMAC-SHA256 algorithm with your webhook secret.
               </p>
             </div>
-</div>
+          </GlassCard>
+        </div>
       </main>
       <Dialog open={editOpen} onOpenChange={setEditOpen}>
         <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto bg-background border-white/10">
@@ -485,5 +494,5 @@ export default function Webhooks() {
       </Dialog>
       
     </div>
-);
+  );
 }

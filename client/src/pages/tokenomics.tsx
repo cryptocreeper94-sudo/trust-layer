@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Coins, Lock, Users, Building, Rocket, Gift, BarChart3, Calendar, CheckCircle, Clock, Sparkles, Shield, TrendingUp } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { usePageAnalytics } from "@/hooks/use-analytics";
@@ -32,24 +33,27 @@ const UTILITY_CASES = [
   { title: "NFT Marketplace", description: "Buy, sell, and mint NFTs using Signal", icon: Gift },
 ];
 
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function Tokenomics() {
   usePageAnalytics();
   
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-[10px] sm:text-xs whitespace-nowrap">
+              <Coins className="w-3 h-3 mr-1" /> Tokenomics
+            </Badge>
+            <BackButton />
+          </div>
+        </div>
+      </nav>
 
-      <section className="pb-8 px-4">
+      <section className="pt-20 pb-8 px-4">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -59,8 +63,8 @@ export default function Tokenomics() {
             <Badge variant="outline" className="px-3 py-1 border-purple-500/50 text-purple-400 bg-purple-500/10 rounded-full text-xs tracking-wider uppercase mb-4">
               Signal Economics
             </Badge>
-            <h1 className="text-4xl md:text-5xl font-display font-bold mb-4 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Signal Tokenomics
+            <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">Signal Tokenomics</span>
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Designed for sustainability, utility, and long-term value. No burn mechanics, no inflation traps.
@@ -73,22 +77,26 @@ export default function Tokenomics() {
                 <div className="text-2xl md:text-3xl font-bold text-white">1B</div>
                 <div className="text-[10px] text-white/50 uppercase tracking-wider">Total Supply</div>
               </div>
-<GlassCard glow hover={false}>
+            </GlassCard>
+            <GlassCard glow hover={false}>
               <div className="p-4 text-center">
                 <div className="text-2xl md:text-3xl font-bold text-cyan-400">18</div>
                 <div className="text-[10px] text-white/50 uppercase tracking-wider">Decimals</div>
               </div>
-<GlassCard glow hover={false}>
+            </GlassCard>
+            <GlassCard glow hover={false}>
               <div className="p-4 text-center">
                 <div className="text-2xl md:text-3xl font-bold text-purple-400">0%</div>
                 <div className="text-[10px] text-white/50 uppercase tracking-wider">Burn Rate</div>
               </div>
-<GlassCard glow hover={false}>
+            </GlassCard>
+            <GlassCard glow hover={false}>
               <div className="p-4 text-center">
                 <div className="text-2xl md:text-3xl font-bold text-pink-400">TBA</div>
                 <div className="text-[10px] text-white/50 uppercase tracking-wider">TGE Date</div>
               </div>
-</div>
+            </GlassCard>
+          </div>
         </div>
       </section>
 
@@ -174,7 +182,8 @@ export default function Tokenomics() {
                         <p className="text-xs text-white/50 truncate">{item.description}</p>
                       </div>
                     </div>
-</motion.div>
+                  </GlassCard>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -235,7 +244,8 @@ export default function Tokenomics() {
                 </tbody>
               </table>
             </div>
-</div>
+          </GlassCard>
+        </div>
       </section>
 
       <section className="py-12 px-4 bg-white/[0.02]">
@@ -270,7 +280,8 @@ export default function Tokenomics() {
                     <h3 className="font-bold text-white mb-1">{item.title}</h3>
                     <p className="text-xs text-white/50">{item.description}</p>
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -314,7 +325,12 @@ export default function Tokenomics() {
                   </div>
                 </div>
               </div>
-<section className="py-12 px-4">
+            </GlassCard>
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="py-12 px-4">
         <div className="container mx-auto max-w-6xl text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -341,13 +357,12 @@ export default function Tokenomics() {
                   Join Presale
                 </Button>
               </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
 
+      
     </div>
-    </div>
-    </section>
-    </div>
-    </section>
-    </motion.div>
-    </motion.div>
   );
 }

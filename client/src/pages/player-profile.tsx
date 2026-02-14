@@ -97,6 +97,8 @@ function XPProgressBar({ level, xp, xpToNextLevel }: { level: number; xp: number
     >
       {/* Animated border glow */}
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-500/20 via-pink-500/20 to-cyan-500/20 blur-xl opacity-50" />
+      
+      <div className="relative z-10">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -134,6 +136,7 @@ function XPProgressBar({ level, xp, xpToNextLevel }: { level: number; xp: number
             <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/30 to-white/0 animate-shimmer" />
           </motion.div>
         </div>
+      </div>
     </motion.div>
   );
 }
@@ -317,16 +320,6 @@ function TabButton({
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function PlayerProfilePage() {
   const { user } = useAuth();
   const [, params] = useRoute("/arcade/profile/:userId");
@@ -398,9 +391,7 @@ export default function PlayerProfilePage() {
   const isProfit = netProfit >= 0;
   
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-[#0a0a0f] pb-24">
       {/* Animated background */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-purple-900/10 via-transparent to-transparent" />
@@ -707,7 +698,5 @@ export default function PlayerProfilePage() {
         }
       `}</style>
     </div>
-</TabButton>
-</TabButton>
-);
+  );
 }

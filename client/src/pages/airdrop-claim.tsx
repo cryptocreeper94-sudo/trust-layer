@@ -1,22 +1,14 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation } from "@tanstack/react-query";
-import { Gift, Sparkles, Check, AlertCircle, Wallet, Mail, Crown, Star, Users, ExternalLink } from "lucide-react";
+import { Gift, Sparkles, Check, AlertCircle, Wallet, Mail, Crown, Star, Users, ExternalLink , Shield } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/page-nav";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { apiRequest } from "@/lib/queryClient";
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 interface EligibilityResult {
   eligible: boolean;
@@ -67,12 +59,24 @@ export default function AirdropClaim() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="rgba(0,255,200,0.3)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="rgba(0,200,255,0.25)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-background text-foreground">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="border-primary/50 text-primary bg-primary/10 text-[10px] sm:text-xs">
+              <Gift className="w-3 h-3 mr-1" /> Airdrop
+            </Badge>
+            <BackButton />
+          </div>
+        </div>
+      </nav>
 
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-2xl mx-auto">
+      <main className="pt-20 pb-12 px-4">
+        <div className="container mx-auto max-w-2xl">
           <div className="text-center mb-8">
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
@@ -82,7 +86,7 @@ export default function AirdropClaim() {
               <Gift className="w-10 h-10 text-white" />
             </motion.div>
             <h1 className="text-3xl md:text-4xl font-display font-bold mb-3">
-              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Trust Layer Airdrop</span>
+              Trust Layer <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Airdrop</span>
             </h1>
             <p className="text-muted-foreground max-w-md mx-auto">
               Check your eligibility for the Trust Layer genesis airdrop. Early adopters and beta testers receive bonus allocations.
@@ -129,7 +133,9 @@ export default function AirdropClaim() {
                 </Button>
               </div>
             </div>
-<AnimatePresence mode="wait">
+          </GlassCard>
+
+          <AnimatePresence mode="wait">
             {eligibility && (
               <motion.div
                 key="result"
@@ -182,7 +188,8 @@ export default function AirdropClaim() {
                     <p className="text-xs text-muted-foreground text-center mt-4">
                       Tokens will be distributed at mainnet launch
                     </p>
-) : (
+                  </GlassCard>
+                ) : (
                   <GlassCard className="p-6 border-red-500/30" data-testid="card-not-eligible">
                     <div className="text-center">
                       <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
@@ -203,7 +210,8 @@ export default function AirdropClaim() {
                         </Link>
                       </div>
                     </div>
-)}
+                  </GlassCard>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
@@ -219,7 +227,8 @@ export default function AirdropClaim() {
                     <p className="text-xs text-muted-foreground">Enter your email or wallet address to see if you qualify for the airdrop.</p>
                   </div>
                 </div>
-<GlassCard className="p-4" hover={false}>
+              </GlassCard>
+              <GlassCard className="p-4" hover={false}>
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm shrink-0">2</div>
                   <div>
@@ -227,7 +236,8 @@ export default function AirdropClaim() {
                     <p className="text-xs text-muted-foreground">Link your Trust Layer wallet to receive your token allocation at launch.</p>
                   </div>
                 </div>
-<GlassCard className="p-4" hover={false}>
+              </GlassCard>
+              <GlassCard className="p-4" hover={false}>
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-sm shrink-0">3</div>
                   <div>
@@ -235,13 +245,11 @@ export default function AirdropClaim() {
                     <p className="text-xs text-muted-foreground">Tokens are distributed automatically at mainnet launch.</p>
                   </div>
                 </div>
-</div>
+              </GlassCard>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    </span>
-</div>
+      </main>
     </div>
   );
 }

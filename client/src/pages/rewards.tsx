@@ -27,16 +27,6 @@ function getTierFromAmount(cents: number): typeof CROWDFUND_TIERS[0] | null {
   return null;
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function Rewards() {
   const { user } = useSimpleAuth();
   
@@ -108,9 +98,7 @@ export default function Rewards() {
   const spotsRemaining = counters?.signupPosition ? Math.max(0, 500 - parseInt(counters.signupPosition)) : 500;
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-slate-950 text-white">
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-cyan-900/20 pointer-events-none" />
       
       <header className="sticky top-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-white/5">
@@ -266,7 +254,8 @@ export default function Rewards() {
                   )}
                 </div>
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
         )}
 
         {user && rewardProfile && (
@@ -390,7 +379,8 @@ export default function Rewards() {
                   )}
                 </p>
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
         )}
 
         {/* HOW TO EARN SHELLS SECTION */}
@@ -456,7 +446,8 @@ export default function Rewards() {
                 </div>
               </div>
             </div>
-</motion.div>
+          </GlassCard>
+        </motion.div>
 
         <div className="grid md:grid-cols-3 gap-6 mb-12">
           <motion.div
@@ -477,7 +468,8 @@ export default function Rewards() {
                 <Info className="w-4 h-4" />
                 <span>~$200 value at launch price</span>
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -497,7 +489,8 @@ export default function Rewards() {
                 <Info className="w-4 h-4" />
                 <span>Buy $100, get $150 worth</span>
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -517,7 +510,8 @@ export default function Rewards() {
                 <Info className="w-4 h-4" />
                 <span>Contributions stack across donations</span>
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
         </div>
 
         <motion.div
@@ -567,7 +561,8 @@ export default function Rewards() {
               <Info className="w-4 h-4" />
               Your tier is based on your cumulative total. Multiple donations add up!
             </p>
-</motion.div>
+          </GlassCard>
+        </motion.div>
 
         {/* FAQ - TRUST BUILDING SECTION */}
         <motion.div
@@ -678,7 +673,8 @@ export default function Rewards() {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
-</motion.div>
+          </GlassCard>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -709,9 +705,12 @@ export default function Rewards() {
                   Support Development
                 </Button>
               </Link>
-</div>
-    </main>
+            </div>
+          </GlassCard>
+        </motion.div>
+      </main>
+
+      
     </div>
-    </motion.div>
   );
 }

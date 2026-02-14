@@ -745,16 +745,6 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
 
 type MainTab = 'discover' | 'live' | 'signals' | 'strategy' | 'watchlist' | 'analyze' | 'history';
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function StrikeAgentPage() {
   const [filter, setFilter] = useState<'all' | 'snipe' | 'watch' | 'avoid' | 'favorites'>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -877,9 +867,7 @@ export default function StrikeAgentPage() {
       checkoutPath="/billing"
       icon={<Target className="w-10 h-10 text-red-400" />}
     >
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-slate-950">
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-0 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl" />
@@ -1123,7 +1111,8 @@ export default function StrikeAgentPage() {
                   chain={analyzeAddress.startsWith('0x') ? 'Ethereum' : 'Solana'}
                 />
               )}
-</div>
+            </GlassCard>
+          </div>
         )}
         
         {mainTab === 'signals' && (
@@ -1294,7 +1283,39 @@ export default function StrikeAgentPage() {
         </>
         )}
       </main>
-<AnimatePresence>
+      
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-slate-950/90 backdrop-blur-xl border-t border-white/10 safe-area-bottom">
+        <div className="flex items-center justify-around py-3">
+          <div className="flex flex-col items-center gap-1">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+              <Target className="w-5 h-5 text-emerald-400" />
+            </div>
+            <span className="text-[10px] text-emerald-400 font-medium">{counts.snipe} Snipe</span>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
+              <Eye className="w-5 h-5 text-amber-400" />
+            </div>
+            <span className="text-[10px] text-amber-400 font-medium">{counts.watch} Watch</span>
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">
+              <AlertTriangle className="w-5 h-5 text-red-400" />
+            </div>
+            <span className="text-[10px] text-red-400 font-medium">{counts.avoid} Avoid</span>
+          </div>
+          <Link href="/pulse">
+            <a className="flex flex-col items-center gap-1" data-testid="link-pulse">
+              <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                <Zap className="w-5 h-5 text-purple-400" />
+              </div>
+              <span className="text-[10px] text-purple-400 font-medium">Pulse AI</span>
+            </a>
+          </Link>
+        </div>
+      </nav>
+      
+      <AnimatePresence>
         <SettingsModal 
           open={settingsOpen} 
           onClose={() => setSettingsOpen(false)}
@@ -1323,8 +1344,7 @@ export default function StrikeAgentPage() {
           }}
         />
       )}
-    </SubscriptionGate>
-</input>
     </div>
+    </SubscriptionGate>
   );
 }

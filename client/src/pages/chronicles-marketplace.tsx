@@ -62,16 +62,6 @@ const stagger = {
   item: { hidden: { opacity: 0, y: 16 }, visible: { opacity: 1, y: 0, transition: { duration: 0.35 } } },
 };
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function ChroniclesMarketplace() {
   const { toast } = useToast();
   const qc = useQueryClient();
@@ -127,9 +117,7 @@ export default function ChroniclesMarketplace() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-slate-950 pt-20 pb-12">
       <div className="relative overflow-hidden mb-8">
         <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 via-purple-500/5 to-transparent pointer-events-none" />
         <div className="absolute top-4 left-1/4 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
@@ -157,7 +145,8 @@ export default function ChroniclesMarketplace() {
                   <span className="text-[10px] text-gray-500 uppercase tracking-wider">Shells</span>
                 </div>
               </div>
-</div>
+            </GlassCard>
+          </div>
 
           <div className="flex gap-2 mb-4 overflow-x-auto pb-1 scrollbar-hide" data-testid="era-selector">
             {(Object.keys(ERA_CONFIG) as Era[]).map((e) => (
@@ -231,7 +220,8 @@ export default function ChroniclesMarketplace() {
                                 </div>
                               </div>
                             </div>
-</SwiperSlide>
+                          </GlassCard>
+                        </SwiperSlide>
                       );
                     })}
                   </Swiper>
@@ -274,7 +264,8 @@ export default function ChroniclesMarketplace() {
                     <p className="text-gray-400 font-medium">No items available in this era yet.</p>
                     <p className="text-gray-600 text-sm mt-1">Check back soon for new arrivals!</p>
                   </div>
-) : (
+                </GlassCard>
+              ) : (
                 <motion.div
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
                   variants={stagger.container}
@@ -338,7 +329,8 @@ export default function ChroniclesMarketplace() {
                               </Button>
                             </div>
                           </div>
-</motion.div>
+                        </GlassCard>
+                      </motion.div>
                     );
                   })}
                 </motion.div>
@@ -362,7 +354,8 @@ export default function ChroniclesMarketplace() {
                       <ShoppingBag className="w-4 h-4 mr-2" /> Browse Shop
                     </Button>
                   </div>
-) : (
+                </GlassCard>
+              ) : (
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                     <GlassCard glow hover={false}>
@@ -371,19 +364,22 @@ export default function ChroniclesMarketplace() {
                         <p className="text-2xl font-bold text-white">{invStats.total}</p>
                         <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Total Items</p>
                       </div>
-<GlassCard glow hover={false}>
+                    </GlassCard>
+                    <GlassCard glow hover={false}>
                       <div className="p-4 sm:p-6 text-center" data-testid="stat-rarest">
                         <Gem className="w-6 h-6 text-purple-400 mx-auto mb-2" />
                         <p className={`text-2xl font-bold capitalize ${getRarity(invStats.rarest).text}`}>{invStats.rarest}</p>
                         <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Rarest Item</p>
                       </div>
-<GlassCard glow hover={false}>
+                    </GlassCard>
+                    <GlassCard glow hover={false}>
                       <div className="p-4 sm:p-6 text-center" data-testid="stat-total-value">
                         <TrendingUp className="w-6 h-6 text-yellow-400 mx-auto mb-2" />
                         <p className="text-2xl font-bold text-yellow-400">🐚 {invStats.value.toLocaleString()}</p>
                         <p className="text-xs text-gray-500 uppercase tracking-wider mt-1">Est. Value</p>
                       </div>
-</div>
+                    </GlassCard>
+                  </div>
 
                   <motion.div
                     className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
@@ -422,7 +418,8 @@ export default function ChroniclesMarketplace() {
                                 </div>
                               </div>
                             </div>
-</motion.div>
+                          </GlassCard>
+                        </motion.div>
                       );
                     })}
                   </motion.div>
@@ -444,7 +441,8 @@ export default function ChroniclesMarketplace() {
                     <p className="text-gray-400 font-semibold text-lg mb-1">No recipes available</p>
                     <p className="text-gray-600 text-sm">Recipes for {config.name} coming soon!</p>
                   </div>
-) : (
+                </GlassCard>
+              ) : (
                 <>
                   <GlassCard hover={false} className="mb-6">
                     <div className="p-4 sm:p-6">
@@ -458,7 +456,9 @@ export default function ChroniclesMarketplace() {
                         </div>
                       </div>
                     </div>
-<Accordion type="single" collapsible className="space-y-3">
+                  </GlassCard>
+
+                  <Accordion type="single" collapsible className="space-y-3">
                     {recipes.map((recipe: any, idx: number) => {
                       const cost = recipe.shellCost ?? recipe.cost ?? 0;
                       const canAfford = shells >= cost;
@@ -534,7 +534,8 @@ export default function ChroniclesMarketplace() {
                                 </Button>
                               </AccordionContent>
                             </AccordionItem>
-</motion.div>
+                          </GlassCard>
+                        </motion.div>
                       );
                     })}
                   </Accordion>
@@ -543,5 +544,7 @@ export default function ChroniclesMarketplace() {
             </motion.div>
           )}
         </AnimatePresence>
+      </div>
+    </div>
   );
 }

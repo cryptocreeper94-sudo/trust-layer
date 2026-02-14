@@ -29,17 +29,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { BackButton } from "@/components/page-nav";
 import { GlassCard, StatCard, FeatureCard } from "@/components/glass-card";
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function InnovationHub() {
   const { data: shards } = useQuery({
@@ -164,9 +155,7 @@ export default function InnovationHub() {
   ];
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-black text-white relative overflow-hidden">
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-cyan-900/20 via-black to-black pointer-events-none" />
       <div className="fixed inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-purple-900/15 via-transparent to-transparent pointer-events-none" />
       
@@ -174,7 +163,28 @@ export default function InnovationHub() {
       <div className="fixed top-64 right-24 w-80 h-80 rounded-full bg-purple-500/10 blur-[100px] animate-pulse pointer-events-none" style={{ animationDelay: '1s' }} />
       <div className="fixed bottom-32 left-1/3 w-72 h-72 rounded-full bg-pink-500/8 blur-[90px] animate-pulse pointer-events-none" style={{ animationDelay: '2s' }} />
       <div className="fixed bottom-48 right-1/4 w-64 h-64 rounded-full bg-emerald-500/6 blur-[80px] animate-pulse pointer-events-none" style={{ animationDelay: '3s' }} />
-<main className="pt-20 pb-12 relative">
+      
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-black/80 backdrop-blur-2xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0 group">
+            <div className="relative">
+              <Sparkles className="w-6 h-6 text-cyan-400 group-hover:scale-110 transition-transform" />
+              <div className="absolute inset-0 bg-cyan-400/30 blur-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <span className="font-display font-bold text-lg tracking-tight bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+              Innovation Hub
+            </span>
+          </Link>
+          <div className="flex items-center gap-3">
+            <Badge className="border border-cyan-500/50 text-cyan-400 bg-cyan-500/10 text-xs shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+              v1.3.0
+            </Badge>
+            <BackButton />
+          </div>
+        </div>
+      </nav>
+
+      <main className="pt-20 pb-12 relative">
         <section className="py-16 px-4 relative">
           <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 via-purple-500/3 to-transparent" />
           
@@ -285,7 +295,8 @@ export default function InnovationHub() {
                         
                         <div className={`absolute -bottom-8 -right-8 w-32 h-32 bg-gradient-to-br ${feature.gradient} rounded-full opacity-10 blur-2xl group-hover:opacity-20 transition-opacity`} />
                       </div>
-</Link>
+                    </GlassCard>
+                  </Link>
                 </motion.div>
               ))}
             </div>
@@ -393,7 +404,8 @@ export default function InnovationHub() {
                         </div>
                       </div>
                     </div>
-</motion.div>
+                  </GlassCard>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -451,7 +463,8 @@ export default function InnovationHub() {
                       </div>
                     </div>
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             )}
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -492,7 +505,8 @@ export default function InnovationHub() {
                         )}
                       </div>
                     </div>
-</motion.div>
+                  </GlassCard>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -551,7 +565,8 @@ export default function InnovationHub() {
                         </span>
                       </div>
                     </div>
-</motion.div>
+                  </GlassCard>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -623,7 +638,8 @@ export default function InnovationHub() {
                       ))}
                     </div>
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
@@ -663,7 +679,8 @@ export default function InnovationHub() {
                             )}
                           </div>
                         </div>
-</motion.div>
+                      </GlassCard>
+                    </motion.div>
                   ))}
                 </div>
               </motion.div>
@@ -708,7 +725,8 @@ export default function InnovationHub() {
                     </div>
                   </div>
                 </div>
-</motion.div>
+              </GlassCard>
+            </motion.div>
           </div>
         </section>
       </main>

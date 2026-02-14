@@ -49,16 +49,6 @@ function getRelBarColor(score: number): string {
   return "bg-cyan-400";
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 function getHeaders(): Record<string, string> {
   const session = getChroniclesSession();
   const headers: Record<string, string> = { "Content-Type": "application/json" };
@@ -143,7 +133,8 @@ function NpcCard({
           {lastMessage && (
             <p className="text-[10px] text-gray-500 mt-2 truncate">{lastMessage}</p>
           )}
-</button>
+        </GlassCard>
+      </button>
     </motion.div>
   );
 }
@@ -194,6 +185,7 @@ function MessageBubble({ msg, npcName, index }: { msg: any; npcName: string; ind
         {time && (
           <p className={`text-[9px] text-gray-600 mt-1 ${isPlayer ? "text-right" : "text-left"}`}>{time}</p>
         )}
+      </div>
     </motion.div>
   );
 }
@@ -367,7 +359,8 @@ export default function ChroniclesNpcChat() {
                   />
                 ))}
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -412,7 +405,9 @@ export default function ChroniclesNpcChat() {
                     <div className="mt-3">
                       <RelationshipBar score={selectedScore} />
                     </div>
-<GlassCard glow className="flex-1 flex flex-col overflow-hidden">
+                  </GlassCard>
+
+                  <GlassCard glow className="flex-1 flex flex-col overflow-hidden">
                     <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4" data-testid="message-area">
                       {loadingMessages ? (
                         <div className="flex items-center justify-center py-12">
@@ -475,7 +470,8 @@ export default function ChroniclesNpcChat() {
                         <span className="text-[10px] text-gray-600">AI-powered conversation</span>
                       </div>
                     </div>
-</motion.div>
+                  </GlassCard>
+                </motion.div>
               ) : (
                 <motion.div
                   key="empty"
@@ -520,13 +516,20 @@ export default function ChroniclesNpcChat() {
                         <div className="p-3 rounded-xl bg-white/5 border border-white/5">
                           <Star className="w-5 h-5 text-yellow-400 mx-auto mb-1.5" />
                           <p className="text-[10px] text-gray-500">Unlock Secrets</p>
+                        </div>
                         <div className="p-3 rounded-xl bg-white/5 border border-white/5">
                           <Crown className="w-5 h-5 text-purple-400 mx-auto mb-1.5" />
                           <p className="text-[10px] text-gray-500">Shape Your Story</p>
-)}
+                        </div>
+                      </div>
+                    </div>
+                  </GlassCard>
+                </motion.div>
+              )}
             </AnimatePresence>
-    </div>
-    </div>
+          </motion.div>
+        </div>
+      </div>
     </div>
   );
 }

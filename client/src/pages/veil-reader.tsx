@@ -60,16 +60,6 @@ const EBOOK_CHANGELOG: ChangelogEntry[] = [
 const CURRENT_VERSION = "3.0.0";
 const STORAGE_KEY = 'veil-reader-user-data';
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 function useVeilPWA() {
   useEffect(() => {
     document.title = "Through The Veil | The Greatest Story Ever Stole?";
@@ -638,9 +628,7 @@ export default function VeilReader() {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-cyan-400 animate-spin mx-auto mb-4" />
           <p className="text-slate-400">Loading Through The Veil...</p>
@@ -701,7 +689,7 @@ export default function VeilReader() {
 
   return (
     <div className="min-h-screen bg-slate-950 relative">
-      <div className="fixed top-0 left-0 right-0 z-50 bg-white/[0.04] backdrop-blur-xl border-b border-white/10" style={{ boxShadow: "0 4px 30px rgba(0,0,0,0.4)" }}>
+      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button 
@@ -890,7 +878,8 @@ export default function VeilReader() {
                     Continue Reading
                   </Button>
                 </div>
-</motion.div>
+              </GlassCard>
+            </motion.div>
           </>
         )}
       </AnimatePresence>
@@ -910,11 +899,10 @@ export default function VeilReader() {
               initial={{ x: -300 }}
               animate={{ x: 0 }}
               exit={{ x: -300 }}
-              className="fixed left-0 top-0 bottom-0 w-80 z-50 overflow-y-auto border-r border-white/10"
-              style={{ background: "rgba(15, 23, 42, 0.95)", backdropFilter: "blur(20px)", boxShadow: "4px 0 30px rgba(0,0,0,0.5)" }}
+              className="fixed left-0 top-0 bottom-0 w-80 bg-slate-900 z-50 overflow-y-auto border-r border-slate-800"
             >
-              <div className="p-4 border-b border-white/10 flex items-center justify-between">
-                <h2 className="text-lg font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Contents</h2>
+              <div className="p-4 border-b border-slate-800 flex items-center justify-between">
+                <h2 className="text-lg font-bold text-white">Contents</h2>
                 <Button variant="ghost" size="sm" onClick={() => setSidebarOpen(false)}>
                   <X className="w-4 h-4" />
                 </Button>
@@ -1003,7 +991,7 @@ export default function VeilReader() {
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/[0.04] backdrop-blur-xl border-t border-white/10 z-40" style={{ boxShadow: "0 -4px 30px rgba(0,0,0,0.4)" }}>
+      <div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-t border-slate-800 z-40">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <Button
             variant="ghost"
@@ -1034,15 +1022,7 @@ export default function VeilReader() {
             <ChevronRight className="w-5 h-5 ml-1" />
           </Button>
         </div>
-    </div>
-    </motion.div>
-    </motion.div>
-    </p>
-    </div>
-    </div>
-    </div>
-    </div>
-    </div>
+      </div>
     </div>
   );
 }

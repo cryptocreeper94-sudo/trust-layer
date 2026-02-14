@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { 
-  Bot, ShieldCheck, Award, CheckCircle, Search,
+  Bot, Shield, ShieldCheck, Award, CheckCircle, Search,
   ExternalLink, Clock, TrendingUp, Filter, Layers,
   Sparkles, Users, BarChart3, Eye, Lock, Activity, AlertTriangle
 } from "lucide-react";
@@ -61,16 +61,6 @@ function TrustScoreBar({ score, label }: { score: number; label: string }) {
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function GuardianAIRegistry() {
   usePageAnalytics();
   const [searchQuery, setSearchQuery] = useState('');
@@ -94,9 +84,7 @@ export default function GuardianAIRegistry() {
   });
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-slate-950 text-white">
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
         {/* Header */}
         <motion.section 
@@ -172,7 +160,8 @@ export default function GuardianAIRegistry() {
                 ))}
               </div>
             </div>
-</motion.section>
+          </GlassCard>
+        </motion.section>
 
         {/* Registry Stats */}
         <motion.section
@@ -185,22 +174,26 @@ export default function GuardianAIRegistry() {
             <GlassCard className="p-4 text-center">
               <div className="text-2xl font-bold text-cyan-400">{filteredAgents.length}</div>
               <div className="text-sm text-slate-400">Certified Agents</div>
-<GlassCard className="p-4 text-center">
+            </GlassCard>
+            <GlassCard className="p-4 text-center">
               <div className="text-2xl font-bold text-green-400">
                 {filteredAgents.filter((a: any) => a.overallTrustScore >= 80).length}
               </div>
               <div className="text-sm text-slate-400">High Trust Score</div>
-<GlassCard className="p-4 text-center">
+            </GlassCard>
+            <GlassCard className="p-4 text-center">
               <div className="text-2xl font-bold text-purple-400">
                 {filteredAgents.filter((a: any) => a.certificationTier === 'enterprise').length}
               </div>
               <div className="text-sm text-slate-400">Enterprise Tier</div>
-<GlassCard className="p-4 text-center">
+            </GlassCard>
+            <GlassCard className="p-4 text-center">
               <div className="text-2xl font-bold text-pink-400">
                 {new Set(filteredAgents.map((a: any) => a.chainDeployed)).size}
               </div>
               <div className="text-sm text-slate-400">Chains Covered</div>
-</div>
+            </GlassCard>
+          </div>
         </motion.section>
 
         {/* Agent Cards */}
@@ -216,7 +209,8 @@ export default function GuardianAIRegistry() {
                   <div className="h-12 bg-slate-700 rounded mb-4" />
                   <div className="h-4 bg-slate-700 rounded w-3/4 mb-2" />
                   <div className="h-4 bg-slate-700 rounded w-1/2" />
-))}
+                </GlassCard>
+              ))}
             </div>
           ) : filteredAgents.length === 0 ? (
             <GlassCard className="p-12 text-center">
@@ -230,7 +224,8 @@ export default function GuardianAIRegistry() {
                   Submit Your Agent
                 </Button>
               </Link>
-) : (
+            </GlassCard>
+          ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredAgents.map((agent: any) => {
                 const TypeIcon = AGENT_TYPE_ICONS[agent.agentType] || Bot;
@@ -317,7 +312,8 @@ export default function GuardianAIRegistry() {
                         Visit Website
                       </a>
                     )}
-);
+                  </GlassCard>
+                );
               })}
             </div>
           )}
@@ -370,10 +366,13 @@ export default function GuardianAIRegistry() {
                     </div>
                   </div>
                 </div>
-</motion.section>
+              </div>
+            </div>
+          </GlassCard>
+        </motion.section>
+      </main>
       
       
-    </div>
     </div>
   );
 }

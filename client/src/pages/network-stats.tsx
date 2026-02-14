@@ -1,19 +1,12 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Activity, Cpu, HardDrive, Zap, Globe, Server, Clock, TrendingUp, BarChart3 } from "lucide-react";
+import { Activity, Cpu, HardDrive, Zap, Globe, Server, Clock, TrendingUp, BarChart3 , Shield } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { InfoButton } from "@/components/info-button";
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 interface LiveStat {
   value: number;
@@ -56,14 +49,26 @@ export default function NetworkStats() {
   const minTps = Math.min(...tps.history.filter(v => v > 0));
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="rgba(0,255,150,0.3)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="rgba(0,200,255,0.25)" size={400} top="40%" left="-10%" delay={3} />
-        <div className="max-w-6xl mx-auto">
+    <div className="min-h-screen bg-background text-foreground">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="border-green-500/50 text-green-400 bg-green-500/10 text-[10px] sm:text-xs animate-pulse">
+              <div className="w-1.5 h-1.5 rounded-full bg-green-400 mr-1.5" /> Mainnet Live
+            </Badge>
+            <BackButton />
+          </div>
+        </div>
+      </nav>
+
+      <main className="pt-20 pb-12 px-4">
+        <div className="container mx-auto max-w-6xl">
           <div className="flex items-center gap-3 mb-8">
-            <h1 className="text-2xl md:text-3xl font-display font-bold">
-              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Network Performance</span>
-            </h1>
+            <h1 className="text-2xl md:text-3xl font-display font-bold">Network Performance</h1>
             <InfoButton 
               title="Real-Time Stats" 
               content="This dashboard shows live network performance metrics updated every 2 seconds. TPS (Transactions Per Second) represents the chain's throughput capacity." 
@@ -72,7 +77,7 @@ export default function NetworkStats() {
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
             <GlassCard glow data-testid="stat-tps">
               <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
@@ -95,7 +100,9 @@ export default function NetworkStats() {
                 </motion.div>
                 <div className="text-[10px] text-muted-foreground">transactions/sec</div>
               </div>
-<GlassCard glow data-testid="stat-block-time">
+            </GlassCard>
+
+            <GlassCard glow data-testid="stat-block-time">
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Clock className="w-4 h-4 text-secondary" />
@@ -106,7 +113,9 @@ export default function NetworkStats() {
                 </div>
                 <div className="text-[10px] text-muted-foreground">milliseconds</div>
               </div>
-<GlassCard glow data-testid="stat-validators">
+            </GlassCard>
+
+            <GlassCard glow data-testid="stat-validators">
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Server className="w-4 h-4 text-purple-400" />
@@ -117,7 +126,9 @@ export default function NetworkStats() {
                 </div>
                 <div className="text-[10px] text-muted-foreground">active nodes</div>
               </div>
-<GlassCard glow data-testid="stat-network-load">
+            </GlassCard>
+
+            <GlassCard glow data-testid="stat-network-load">
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Cpu className="w-4 h-4 text-amber-400" />
@@ -128,9 +139,10 @@ export default function NetworkStats() {
                 </div>
                 <div className="text-[10px] text-muted-foreground">capacity used</div>
               </div>
-</div>
+            </GlassCard>
+          </div>
 
-          <GlassCard glow className="mb-8" data-testid="chart-tps">
+          <GlassCard glow className="mb-6" data-testid="chart-tps">
             <div className="p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
                 <div className="flex items-center gap-2">
@@ -176,7 +188,9 @@ export default function NetworkStats() {
                 </div>
               </div>
             </div>
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          </GlassCard>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <GlassCard data-testid="card-chain-info">
               <div className="p-6">
                 <h3 className="font-bold mb-4 flex items-center gap-2">
@@ -198,7 +212,9 @@ export default function NetworkStats() {
                   ))}
                 </div>
               </div>
-<GlassCard data-testid="card-validators">
+            </GlassCard>
+
+            <GlassCard data-testid="card-validators">
               <div className="p-6">
                 <h3 className="font-bold mb-4 flex items-center gap-2">
                   <Server className="w-5 h-5 text-purple-400" /> Active Validators
@@ -217,10 +233,14 @@ export default function NetworkStats() {
                         <span className="text-white">{validator.name}</span>
                       </div>
                       <span className="font-mono text-muted-foreground">{validator.uptime}</span>
+                    </div>
                   ))}
-</div>
-    </div>
-    </div>
+                </div>
+              </div>
+            </GlassCard>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }

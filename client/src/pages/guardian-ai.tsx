@@ -2,7 +2,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "wouter";
 import { useState, useRef, type FormEvent } from "react";
 import { 
-  Bot, ShieldCheck, Award, CheckCircle, Star, Zap,
+  Bot, Shield, ShieldCheck, Award, CheckCircle, Star, Zap,
   ExternalLink, Clock, Users, Target, Lock, Eye, Brain,
   Sparkles, TrendingUp, Building, Code, Server, Database,
   BadgeCheck, Layers, Activity, FileCheck, AlertTriangle,
@@ -148,16 +148,6 @@ function AnimatedCounter({ value, suffix = "" }: { value: string; suffix?: strin
     <span className="tabular-nums font-bold">{value}{suffix}</span>
   );
 }
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function GuardianAI() {
   usePageAnalytics();
@@ -1005,19 +995,12 @@ export default function GuardianAI() {
                 <Lock className="w-3 h-3" />
                 Secure payment powered by Stripe
               </p>
+            </div>
+          </motion.div>
+        </div>
       )}
       
       
     </div>
-</Input>
-</motion.div>
-    </div>
-    </div>
-</Input>
-    </p>
-    </motion.div>
-    </section>
-    </Badge>
-    </motion.div>
   );
 }

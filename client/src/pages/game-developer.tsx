@@ -6,6 +6,7 @@ import {
   Shield, Zap, FileCode, Github, ExternalLink, Bot, AlertTriangle,
   Trophy, Users, Coins, Play, ChevronRight, Lock, Rocket
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -58,16 +59,6 @@ const SUBMISSION_STEPS = [
   { step: 4, title: "Go Live", description: "Your game joins the ecosystem" },
 ];
 
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function GameDeveloper() {
   const { user } = useAuth();
@@ -132,10 +123,20 @@ export default function GameDeveloper() {
     : recentSubmissions?.submissions || [];
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<main className="flex-1  pb-8 px-4">
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight">
+              The <span className="text-pink-400">Arcade</span>
+            </span>
+          </Link>
+          <BackButton />
+        </div>
+      </nav>
+
+      <main className="flex-1 pt-16 pb-8 px-4">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -175,7 +176,8 @@ export default function GameDeveloper() {
                   {i < SUBMISSION_STEPS.length - 1 && (
                     <ChevronRight className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground hidden md:block" />
                   )}
-</motion.div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
 
@@ -283,7 +285,9 @@ export default function GameDeveloper() {
                     </Link>
                   )}
                 </form>
-<GlassCard className="p-6">
+              </GlassCard>
+
+              <GlassCard className="p-6">
                 <h3 className="font-bold mb-4 flex items-center gap-2">
                   <Sparkles className="w-5 h-5 text-purple-400" />
                   AI Review Criteria
@@ -311,7 +315,8 @@ export default function GameDeveloper() {
                     </motion.div>
                   ))}
                 </div>
-</div>
+              </GlassCard>
+            </div>
 
             <div className="space-y-6">
               <GlassCard className="p-6">
@@ -367,7 +372,9 @@ export default function GameDeveloper() {
                     ))
                   )}
                 </div>
-<GlassCard className="p-6 bg-gradient-to-br from-pink-500/10 to-purple-500/10 border-pink-500/20">
+              </GlassCard>
+
+              <GlassCard className="p-6 bg-gradient-to-br from-pink-500/10 to-purple-500/10 border-pink-500/20">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <Rocket className="w-5 h-5 text-pink-400" />
                   Developer Benefits
@@ -391,7 +398,9 @@ export default function GameDeveloper() {
                     <span>Integration with Signal payments</span>
                   </li>
                 </ul>
-<GlassCard className="p-6">
+              </GlassCard>
+
+              <GlassCard className="p-6">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <FileCode className="w-5 h-5 text-cyan-400" />
                   Resources
@@ -411,13 +420,13 @@ export default function GameDeveloper() {
                     <ExternalLink className="w-4 h-4 text-muted-foreground" />
                   </Link>
                 </div>
-</div>
+              </GlassCard>
+            </div>
           </div>
         </div>
+      </main>
 
       
-    </main>
     </div>
-</Input>
   );
 }

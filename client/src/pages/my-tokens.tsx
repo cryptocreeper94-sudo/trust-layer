@@ -60,16 +60,6 @@ const QUICK_LINKS = [
   { href: "/strike-agent", icon: Zap, label: "Strike Agent", color: "red" },
 ];
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function MyTokensPage() {
   const { user, isLoading: authLoading, isAuthenticated } = useAuth();
 
@@ -111,9 +101,7 @@ export default function MyTokensPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="animate-pulse text-cyan-400">Loading...</div>
       </div>
     );
@@ -217,7 +205,8 @@ export default function MyTokensPage() {
                       </Link>
                     )}
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
 
               {/* Early Adopter Status */}
               <motion.div
@@ -264,7 +253,8 @@ export default function MyTokensPage() {
                       </>
                     )}
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
 
               {/* TGE Countdown */}
               <motion.div
@@ -288,7 +278,8 @@ export default function MyTokensPage() {
                       <WalletButton />
                     </div>
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             </div>
 
             {/* Quick Access Cards */}
@@ -338,7 +329,8 @@ export default function MyTokensPage() {
                             <span className="text-sm font-medium text-white">{link.label}</span>
                           </div>
                         )}
-</motion.div>
+                      </GlassCard>
+                    </motion.div>
                   </Link>
                 ))}
               </div>
@@ -374,7 +366,9 @@ export default function MyTokensPage() {
                         {(bag?.sources?.presale?.tokens || 0).toLocaleString()}
                       </div>
                     </div>
-{bag?.sources?.earlyAdopterBonus?.isEarlyAdopter && (
+                  </GlassCard>
+
+                  {bag?.sources?.earlyAdopterBonus?.isEarlyAdopter && (
                     <GlassCard>
                       <div className="p-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -390,7 +384,8 @@ export default function MyTokensPage() {
                           +{(bag?.sources?.earlyAdopterBonus?.tokens || 0).toLocaleString()}
                         </div>
                       </div>
-)}
+                    </GlassCard>
+                  )}
 
                   {(bag?.sources?.shells?.balance || 0) > 0 && (
                     <GlassCard>
@@ -408,7 +403,8 @@ export default function MyTokensPage() {
                           {(bag?.sources?.shells?.convertedToDwc || 0).toLocaleString()}
                         </div>
                       </div>
-)}
+                    </GlassCard>
+                  )}
 
                   {(bag?.sources?.airdrops?.pending || 0) > 0 && (
                     <GlassCard>
@@ -426,7 +422,8 @@ export default function MyTokensPage() {
                           {(bag?.sources?.airdrops?.pending || 0).toLocaleString()}
                         </div>
                       </div>
-)}
+                    </GlassCard>
+                  )}
                 </div>
               </motion.div>
             )}
@@ -460,7 +457,8 @@ export default function MyTokensPage() {
                       </Button>
                     </Link>
                   </div>
-) : (
+                </GlassCard>
+              ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {purchases.slice(0, 6).map((purchase, i) => (
                     <motion.div
@@ -508,7 +506,8 @@ export default function MyTokensPage() {
                             <Coins className="w-6 h-6 text-cyan-400/30" />
                           </div>
                         </div>
-</motion.div>
+                      </GlassCard>
+                    </motion.div>
                   ))}
                 </div>
               )}
@@ -580,7 +579,8 @@ export default function MyTokensPage() {
                       </div>
                     </div>
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             )}
 
             {/* Quick Actions Footer */}
@@ -596,32 +596,36 @@ export default function MyTokensPage() {
                     <ShoppingBag className="w-6 h-6 text-cyan-400 mb-2" />
                     <span className="text-xs font-medium text-white">Buy Signal</span>
                   </div>
-</Link>
+                </GlassCard>
+              </Link>
               <Link href="/rewards">
                 <GlassCard className="hover:border-purple-500/50 transition-colors cursor-pointer">
                   <div className="p-4 flex flex-col items-center text-center">
                     <Gift className="w-6 h-6 text-purple-400 mb-2" />
                     <span className="text-xs font-medium text-white">Rewards</span>
                   </div>
-</Link>
+                </GlassCard>
+              </Link>
               <Link href="/staking">
                 <GlassCard className="hover:border-emerald-500/50 transition-colors cursor-pointer">
                   <div className="p-4 flex flex-col items-center text-center">
                     <Trophy className="w-6 h-6 text-emerald-400 mb-2" />
                     <span className="text-xs font-medium text-white">Staking</span>
                   </div>
-</Link>
+                </GlassCard>
+              </Link>
               <Link href="/support">
                 <GlassCard className="hover:border-amber-500/50 transition-colors cursor-pointer">
                   <div className="p-4 flex flex-col items-center text-center">
                     <Shield className="w-6 h-6 text-amber-400 mb-2" />
                     <span className="text-xs font-medium text-white">Support</span>
                   </div>
-</Link>
+                </GlassCard>
+              </Link>
+            </motion.div>
           </>
         )}
-    </main>
+      </main>
     </div>
-    </motion.div>
   );
 }

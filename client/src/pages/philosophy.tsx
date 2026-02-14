@@ -18,16 +18,6 @@ import {
   Sparkles
 } from "lucide-react";
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function Philosophy() {
   const documents = [
     {
@@ -104,9 +94,7 @@ export default function Philosophy() {
   ];
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-slate-950 pt-20 pb-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -188,7 +176,8 @@ export default function Philosophy() {
                         </div>
                       </div>
                     </div>
-</Link>
+                  </GlassCard>
+                </Link>
               </motion.div>
             ))}
           </div>
@@ -213,7 +202,8 @@ export default function Philosophy() {
                       </div>
                       <ArrowRight className="w-4 h-4 text-slate-500 group-hover:text-cyan-400 group-hover:translate-x-1 transition-all" />
                     </div>
-</Link>
+                  </GlassCard>
+                </Link>
               </motion.div>
             ))}
           </div>
@@ -246,7 +236,8 @@ export default function Philosophy() {
                   <p className="text-slate-400 text-sm leading-relaxed">
                     {belief.description}
                   </p>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -280,7 +271,8 @@ export default function Philosophy() {
                 </Button>
               </Link>
             </div>
-</motion.div>
+          </GlassCard>
+        </motion.div>
       </div>
     </div>
   );

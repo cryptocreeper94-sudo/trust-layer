@@ -3,6 +3,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { BackButton, HomeButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -160,9 +161,8 @@ export default function ChroniclesDemo() {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Link href="/" className="text-white hover:text-cyan-400 transition-colors">
-              <Crown className="w-5 h-5" />
-            </Link>
+            <BackButton />
+            <HomeButton />
           </div>
           <Badge variant="outline" className="border-purple-500/50 text-purple-400 text-xs">
             Chronicles Demo
@@ -486,16 +486,20 @@ export default function ChroniclesDemo() {
                     data-testid={`card-npc-${npc.id}`}
                   >
                     <CardContent className="p-8 text-center relative">
+                      {/* Glow effect */}
                       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-pink-500/10 to-purple-500/10" />
-                      <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-pink-500/30 to-purple-500/30 border-2 border-pink-500/50 flex items-center justify-center shadow-lg shadow-pink-500/20">
-                        <User className="w-10 h-10 text-pink-300" />
+                      
+                      <div className="relative z-10">
+                        <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-pink-500/30 to-purple-500/30 border-2 border-pink-500/50 flex items-center justify-center shadow-lg shadow-pink-500/20">
+                          <User className="w-10 h-10 text-pink-300" />
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-1">{npc.name}</h3>
+                        <p className="text-pink-400 text-sm font-medium mb-3">{npc.title}</p>
+                        <Badge variant="outline" className="text-xs border-slate-600 text-gray-400">
+                          <MapPin className="w-3 h-3 mr-1" />
+                          {npc.factionId.replace(/_/g, " ")}
+                        </Badge>
                       </div>
-                      <h3 className="text-xl font-bold text-white mb-1">{npc.name}</h3>
-                      <p className="text-pink-400 text-sm font-medium mb-3">{npc.title}</p>
-                      <Badge variant="outline" className="text-xs border-slate-600 text-gray-400">
-                        <MapPin className="w-3 h-3 mr-1" />
-                        {npc.factionId.replace(/_/g, " ")}
-                      </Badge>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -769,6 +773,5 @@ export default function ChroniclesDemo() {
         </motion.div>
       </div>
     </div>
-</Input>
   );
 }

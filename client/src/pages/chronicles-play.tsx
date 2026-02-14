@@ -63,7 +63,8 @@ function WorldClockBanner({ era }: { era: string }) {
             {isDaytime ? "Day" : "Night"}
           </Badge>
         </div>
-</motion.div>
+      </GlassCard>
+    </motion.div>
   );
 }
 
@@ -341,7 +342,8 @@ function AchievementPopup({ achievement, onClose }: { achievement: { name: strin
         <Button variant="ghost" size="sm" onClick={onClose} className="mt-3 text-yellow-400" data-testid="dismiss-achievement">
           <Sparkles className="w-4 h-4 mr-1" /> Nice!
         </Button>
-</motion.div>
+      </GlassCard>
+    </motion.div>
   );
 }
 
@@ -381,7 +383,8 @@ function LevelUpPopup({ level, onClose }: { level: number; onClose: () => void }
             </motion.span>
           ))}
         </motion.div>
-</motion.div>
+      </GlassCard>
+    </motion.div>
   );
 }
 
@@ -450,7 +453,9 @@ function SituationScreen({
             </p>
           </div>
         )}
-<div className="space-y-2">
+      </GlassCard>
+
+      <div className="space-y-2">
         <p className={`text-xs ${config.textColor} font-medium`}>How do you respond?</p>
         {scenario.choices?.map((choice: any, i: number) => (
           <motion.button
@@ -509,16 +514,20 @@ function ConsequencesScreen({
           <h3 className="text-white font-bold">What Happened</h3>
         </div>
         <p className="text-sm text-gray-300 leading-relaxed">{result.consequences}</p>
-<div className="grid grid-cols-2 gap-3">
+      </GlassCard>
+
+      <div className="grid grid-cols-2 gap-3">
         <GlassCard className="p-4 text-center border border-cyan-500/20">
           <Zap className="w-6 h-6 text-cyan-400 mx-auto mb-1" />
           <p className="text-xl font-bold text-cyan-400">+{result.xpEarned || 0}</p>
           <p className="text-[10px] text-gray-500">Experience</p>
-<GlassCard className="p-4 text-center border border-yellow-500/20">
+        </GlassCard>
+        <GlassCard className="p-4 text-center border border-yellow-500/20">
           <span className="text-2xl">🐚</span>
           <p className="text-xl font-bold text-yellow-400">+{result.shellsEarned || 0}</p>
           <p className="text-[10px] text-gray-500">Shells</p>
-</div>
+        </GlassCard>
+      </div>
 
       {result.statChanges && Object.keys(result.statChanges).some((k: string) => result.statChanges[k] !== 0) && (
         <GlassCard className="p-4">
@@ -528,7 +537,8 @@ function ConsequencesScreen({
               <StatChange key={stat} stat={stat} change={change as number} />
             ))}
           </div>
-)}
+        </GlassCard>
+      )}
 
       {result.npcRelChanges && Object.keys(result.npcRelChanges).length > 0 && (
         <GlassCard className="p-4 border border-purple-500/20">
@@ -550,7 +560,8 @@ function ConsequencesScreen({
               );
             })}
           </div>
-)}
+        </GlassCard>
+      )}
 
       {result.educationalInsight && (
         <GlassCard className="p-4 border border-amber-500/20">
@@ -561,7 +572,8 @@ function ConsequencesScreen({
               <p className="text-xs text-gray-400 leading-relaxed">{result.educationalInsight}</p>
             </div>
           </div>
-)}
+        </GlassCard>
+      )}
 
       <Button
         onClick={onContinue}
@@ -605,7 +617,8 @@ function GameLog({ log }: { log: any[] }) {
           </motion.div>
         ))}
       </div>
-);
+    </GlassCard>
+  );
 }
 
 function AchievementsList({ achievements }: { achievements: any[] }) {
@@ -627,18 +640,10 @@ function AchievementsList({ achievements }: { achievements: any[] }) {
             <p className={`text-[10px] font-medium mt-1 ${a.earned ? "text-yellow-400" : "text-gray-500"}`}>{a.name}</p>
           </div>
         ))}
-);
+      </div>
+    </GlassCard>
+  );
 }
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function ChroniclesPlay() {
   const queryClient = useQueryClient();
@@ -769,9 +774,7 @@ export default function ChroniclesPlay() {
   const isEraLocked = !eraUnlocks[selectedEra]?.unlocked;
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-slate-950 pb-20">
       <AnimatePresence>
         {showLevelUp && <LevelUpPopup level={showLevelUp} onClose={() => setShowLevelUp(null)} />}
         {showAchievement && <AchievementPopup achievement={showAchievement} onClose={() => setShowAchievement(null)} />}
@@ -959,55 +962,65 @@ export default function ChroniclesPlay() {
                     </Button>
                   </>
                 )}
-<div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3">
+              </GlassCard>
+
+              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3">
                 <Link href="/chronicles/npc-chat">
                   <GlassCard glow className="p-3 cursor-pointer hover:border-cyan-500/30 transition-all h-full">
                     <MessageCircle className="w-5 h-5 text-cyan-400 mb-1" />
                     <p className="text-xs text-white font-medium">Talk to NPCs</p>
                     <p className="text-[10px] text-gray-500">AI conversations</p>
-</Link>
+                  </GlassCard>
+                </Link>
                 <Link href="/chronicles/marketplace">
                   <GlassCard glow className="p-3 cursor-pointer hover:border-purple-500/30 transition-all h-full">
                     <ShoppingBag className="w-5 h-5 text-purple-400 mb-1" />
                     <p className="text-xs text-white font-medium">Marketplace</p>
                     <p className="text-[10px] text-gray-500">Shop & craft</p>
-</Link>
+                  </GlassCard>
+                </Link>
                 <Link href="/chronicles/estate">
                   <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
                     <Building className="w-5 h-5 text-amber-400 mb-1" />
                     <p className="text-xs text-white font-medium">Your Estate</p>
                     <p className="text-[10px] text-gray-500">Build & expand</p>
-</Link>
+                  </GlassCard>
+                </Link>
                 <Link href="/chronicles/world">
                   <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
                     <Globe className="w-5 h-5 text-green-400 mb-1" />
                     <p className="text-xs text-white font-medium">Your World</p>
                     <p className="text-[10px] text-gray-500">People & places</p>
-</Link>
+                  </GlassCard>
+                </Link>
                 <Link href="/chronicles/city">
                   <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
                     <Home className="w-5 h-5 text-blue-400 mb-1" />
                     <p className="text-xs text-white font-medium">City</p>
                     <p className="text-[10px] text-gray-500">Build together</p>
-</Link>
+                  </GlassCard>
+                </Link>
                 <Link href="/chronicles/voice">
                   <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
                     <Volume2 className="w-5 h-5 text-pink-400 mb-1" />
                     <p className="text-xs text-white font-medium">Voice</p>
                     <p className="text-[10px] text-gray-500">Train your voice</p>
-</Link>
+                  </GlassCard>
+                </Link>
                 <Link href="/chronicles/tutorial">
                   <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
                     <BookOpen className="w-5 h-5 text-emerald-400 mb-1" />
                     <p className="text-xs text-white font-medium">How to Play</p>
                     <p className="text-[10px] text-gray-500">Tutorial guide</p>
-</Link>
+                  </GlassCard>
+                </Link>
                 <Link href="/chronicles/dashboard">
                   <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
                     <TrendingUp className="w-5 h-5 text-yellow-400 mb-1" />
                     <p className="text-xs text-white font-medium">Dashboard</p>
                     <p className="text-[10px] text-gray-500">Your progress</p>
-</Link>
+                  </GlassCard>
+                </Link>
               </div>
 
               <GameLog log={recentLog} />
@@ -1036,5 +1049,6 @@ export default function ChroniclesPlay() {
       </div>
 
       <ChroniclesChatPanel currentEra={selectedEra} />
+    </div>
   );
 }

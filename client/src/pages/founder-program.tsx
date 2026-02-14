@@ -5,6 +5,7 @@ import {
   Crown, Sparkles, Check, Wallet, CreditCard, 
   Clock, Users, Gift, Shield, Zap, Star, Bitcoin
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -13,16 +14,6 @@ import { useToast } from "@/hooks/use-toast";
 import { useWallet } from "@/hooks/use-wallet";
 import { WalletButton } from "@/components/wallet-button";
 import { LEGACY_FOUNDER_CONFIG } from "@shared/schema";
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function FounderProgram() {
   const { toast } = useToast();
@@ -116,10 +107,19 @@ export default function FounderProgram() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<main className="container mx-auto px-4 pt-24 pb-12">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <WalletButton />
+        </div>
+      </nav>
+
+      <main className="container mx-auto px-4 pt-24 pb-12">
+        <BackButton />
 
         <div className="text-center mb-12">
           <motion.div
@@ -165,7 +165,8 @@ export default function FounderProgram() {
             <GlassCard key={i} className="text-center py-4">
               <div className="text-3xl md:text-4xl font-bold text-primary">{String(item.value).padStart(2, "0")}</div>
               <div className="text-xs text-muted-foreground uppercase tracking-wider">{item.label}</div>
-))}
+            </GlassCard>
+          ))}
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
@@ -209,7 +210,9 @@ export default function FounderProgram() {
               <Users className="w-4 h-4" />
               <span><strong className="text-white">{spotsRemaining.toLocaleString()}</strong> spots remaining</span>
             </div>
-<div className="space-y-6">
+          </GlassCard>
+
+          <div className="space-y-6">
             <GlassCard className="p-6">
               <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
                 <Wallet className="w-5 h-5 text-primary" />
@@ -227,7 +230,9 @@ export default function FounderProgram() {
                   </div>
                 </div>
               )}
-<GlassCard className="p-6">
+            </GlassCard>
+
+            <GlassCard className="p-6">
               <h3 className="text-lg font-semibold text-white mb-4">Your Email</h3>
               <Input
                 type="email"
@@ -264,12 +269,15 @@ export default function FounderProgram() {
               <p className="text-xs text-muted-foreground mt-4 text-center">
                 Secure payment powered by Stripe &amp; Coinbase Commerce
               </p>
-<GlassCard className="p-4">
+            </GlassCard>
+
+            <GlassCard className="p-4">
               <div className="flex items-center gap-3 text-sm">
                 <Shield className="w-5 h-5 text-green-400" />
                 <span className="text-muted-foreground">256-bit SSL encryption. No recurring charges.</span>
               </div>
-</div>
+            </GlassCard>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6 mb-12">
@@ -284,7 +292,8 @@ export default function FounderProgram() {
               </div>
               <h3 className="font-semibold text-white mb-2">{item.title}</h3>
               <p className="text-sm text-muted-foreground">{item.desc}</p>
-))}
+            </GlassCard>
+          ))}
         </div>
 
         <GlassCard className="p-6 text-center max-w-2xl mx-auto">
@@ -293,9 +302,10 @@ export default function FounderProgram() {
             This program closes at mainnet launch. After that, regular pricing begins.
             Don't miss your chance to lock in lifetime access and receive 35,000 Signal.
           </p>
-</main>
+        </GlassCard>
+      </main>
 
       
     </div>
-);
+  );
 }

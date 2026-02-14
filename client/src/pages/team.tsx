@@ -7,6 +7,7 @@ import {
   ChevronDown, ChevronRight, Copy, Check, ExternalLink, Calculator,
   PieChart, Target, Zap, Layers, Globe
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -43,16 +44,6 @@ const defaultModel: FinancialModel = {
   txFeePercent: 0.3,
   avgDailyTxVolume: 1000000,
 };
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 function FinancialCalculator() {
   const [model, setModel] = useState<FinancialModel>(defaultModel);
@@ -107,7 +98,9 @@ function FinancialCalculator() {
               />
             </div>
           </div>
-<GlassCard>
+        </GlassCard>
+
+        <GlassCard>
           <div className="p-4 space-y-3">
             <h4 className="font-semibold text-white flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-secondary" />
@@ -143,7 +136,9 @@ function FinancialCalculator() {
               />
             </div>
           </div>
-<GlassCard>
+        </GlassCard>
+
+        <GlassCard>
           <div className="p-4 space-y-3">
             <h4 className="font-semibold text-white flex items-center gap-2">
               <DollarSign className="w-4 h-4 text-green-400" />
@@ -177,7 +172,8 @@ function FinancialCalculator() {
               />
             </div>
           </div>
-</div>
+        </GlassCard>
+      </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="bg-gradient-to-br from-primary/20 to-primary/5 border-primary/30 p-4">
@@ -212,7 +208,8 @@ function FinancialCalculator() {
             Value at current price: <span className="text-white font-bold">${airdropValue.toLocaleString()}</span>
           </p>
         </div>
-</div>
+      </GlassCard>
+    </div>
   );
 }
 
@@ -434,7 +431,9 @@ function ExecutiveSummary() {
             </div>
           </div>
         </div>
-<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      </GlassCard>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card className="bg-white/5 border-white/10 p-4 text-center">
           <Zap className="w-8 h-8 text-primary mx-auto mb-2" />
           <p className="text-2xl font-bold text-white">400ms</p>
@@ -499,7 +498,8 @@ function AdminLinksGrid() {
                   <p className="text-xs text-muted-foreground truncate">{link.description}</p>
                 </div>
               </div>
-</motion.div>
+            </GlassCard>
+          </motion.div>
         </Link>
       ))}
     </div>
@@ -508,10 +508,18 @@ function AdminLinksGrid() {
 
 export default function Team() {
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<main className="pt-20 pb-12 px-4 flex-1">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight">Trust Layer</span>
+          </Link>
+          <BackButton />
+        </div>
+      </nav>
+
+      <main className="pt-20 pb-12 px-4 flex-1">
         <div className="container max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="text-center mb-8">

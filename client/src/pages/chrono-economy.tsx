@@ -105,16 +105,6 @@ const TOKEN_UTILITY = [
   { use: "Creator rewards", desc: "Monetize your creations" },
 ];
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function ChronoEconomy() {
   usePageAnalytics();
   
@@ -306,8 +296,12 @@ export default function ChronoEconomy() {
                   <Icon className="w-8 h-8 text-green-400 mb-3" />
                   <h3 className="text-lg font-bold text-white mb-2">{point.title}</h3>
                   <p className="text-white/60">{point.description}</p>
+                </motion.div>
               );
             })}
+          </div>
+        </div>
+      </section>
 
       <CTABanner
         title="Ready to Join the Economy?"
@@ -321,6 +315,5 @@ export default function ChronoEconomy() {
       
       <style>{chronoStyles}</style>
     </ChronoLayout>
-    </motion.div>
   );
 }

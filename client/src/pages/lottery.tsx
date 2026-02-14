@@ -4,7 +4,8 @@ import { Link } from "wouter";
 import {
   Ticket, Trophy, Clock, Users, Coins,
   Sparkles, Gift, Star, History, Zap, Lock, Wallet
-, Shield } from "lucide-react";
+, Shield , Shield } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -45,16 +46,6 @@ function LotteryBall({ number, delay = 0 }: { number: number; delay?: number }) 
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function Lottery() {
   const { user } = useAuth();
   const isConnected = !!user;
@@ -78,10 +69,18 @@ export default function Lottery() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<main className="flex-1  pb-8 px-4">
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <BackButton />
+        </div>
+      </nav>
+
+      <main className="flex-1 pt-16 pb-8 px-4">
         <div className="container mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -145,7 +144,9 @@ export default function Lottery() {
                 </div>
               </div>
             </div>
-<div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+          </GlassCard>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
             <GlassCard className="p-4">
               <h3 className="font-bold mb-4 flex items-center gap-2">
                 <Ticket className="w-4 h-4 text-primary" />
@@ -221,7 +222,9 @@ export default function Lottery() {
                   </Button>
                 </Link>
               )}
-<div className="space-y-4">
+            </GlassCard>
+
+            <div className="space-y-4">
               <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <Trophy className="w-4 h-4 text-amber-400" />
@@ -240,7 +243,9 @@ export default function Lottery() {
                     </div>
                   ))}
                 </div>
-<GlassCard className="p-4">
+              </GlassCard>
+
+              <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <History className="w-4 h-4 text-primary" />
                   Recent Winners
@@ -262,7 +267,9 @@ export default function Lottery() {
                     </div>
                   ))}
                 </div>
-<GlassCard className="p-4">
+              </GlassCard>
+
+              <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <Ticket className="w-4 h-4 text-primary" />
                   Your Tickets
@@ -279,7 +286,8 @@ export default function Lottery() {
                     <p className="text-sm">Connect wallet to view tickets</p>
                   </div>
                 )}
-</div>
+              </GlassCard>
+            </div>
           </div>
 
           <GlassCard className="p-4 text-center">
@@ -295,7 +303,8 @@ export default function Lottery() {
                 Start Staking
               </Button>
             </Link>
-</div>
+          </GlassCard>
+        </div>
       </main>
 
       

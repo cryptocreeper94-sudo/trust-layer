@@ -156,16 +156,6 @@ function RecordRow({
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function DomainManager() {
   const { name } = useParams<{ name: string }>();
   const queryClient = useQueryClient();
@@ -269,9 +259,7 @@ export default function DomainManager() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="animate-spin w-8 h-8 border-2 border-cyan-400 border-t-transparent rounded-full" />
       </div>
     );
@@ -287,7 +275,8 @@ export default function DomainManager() {
           <Link href="/domains">
             <Button>Back to Domains</Button>
           </Link>
-</div>
+        </GlassCard>
+      </div>
     );
   }
 
@@ -362,7 +351,8 @@ export default function DomainManager() {
                 You are viewing this domain. Connect the owner wallet to make changes.
               </p>
             </div>
-)}
+          </GlassCard>
+        )}
 
         <Tabs defaultValue="dns" className="space-y-6">
           <TabsList className="bg-white/5 border border-white/10">
@@ -427,7 +417,8 @@ export default function DomainManager() {
                   <li>In Replit, go to Settings → Custom Domain and add <code className="bg-white/10 px-1 rounded">{domain.name}.tlid</code></li>
                 </ol>
               </div>
-</TabsContent>
+            </GlassCard>
+          </TabsContent>
 
           <TabsContent value="wallets">
             <GlassCard className="p-6">
@@ -492,7 +483,8 @@ export default function DomainManager() {
                   );
                 })}
               </div>
-</TabsContent>
+            </GlassCard>
+          </TabsContent>
 
           <TabsContent value="profile">
             <GlassCard className="p-6">
@@ -591,7 +583,8 @@ export default function DomainManager() {
                   </Button>
                 )}
               </form>
-</TabsContent>
+            </GlassCard>
+          </TabsContent>
         </Tabs>
       </main>
 
@@ -643,6 +636,7 @@ export default function DomainManager() {
                 placeholder={DNS_RECORD_TYPES.find(t => t.value === newRecordType)?.placeholder}
                 className="bg-white/5 border-white/20 text-white mt-1"
               />
+            </div>
 
             {newRecordType === "MX" && (
               <div>
@@ -653,6 +647,7 @@ export default function DomainManager() {
                   onChange={(e) => setNewRecordPriority(parseInt(e.target.value))}
                   className="bg-white/5 border-white/20 text-white mt-1"
                 />
+              </div>
             )}
 
             <div>
@@ -669,6 +664,8 @@ export default function DomainManager() {
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+          </div>
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowAddRecord(false)}>
@@ -707,6 +704,7 @@ export default function DomainManager() {
             <p className="text-sm text-white/40 mt-2">
               Current expiry: {domain.expiresAt ? formatDate(domain.expiresAt) : "N/A"}
             </p>
+          </div>
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowRenewDialog(false)}>
@@ -739,11 +737,5 @@ export default function DomainManager() {
 
       
     </div>
-    </div>
-    </div>
-    </div>
-    </div>
-</Input>
-</Input>
   );
 }

@@ -52,16 +52,6 @@ const statusColors: Record<string, string> = {
   archived: "bg-red-500/20 text-red-300 border-red-500/30",
 };
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function BlogAdmin() {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -151,14 +141,13 @@ export default function BlogAdmin() {
 
   if (!user) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-[#080c18] flex items-center justify-center text-white">
         <GlassCard glow className="p-8 text-center">
           <BookOpen className="w-12 h-12 text-cyan-400 mx-auto mb-4" />
           <h2 className="text-xl font-bold mb-2">Authentication Required</h2>
           <p className="text-gray-400">Please log in to access the blog admin.</p>
-</div>
+        </GlassCard>
+      </div>
     );
   }
 
@@ -244,7 +233,9 @@ export default function BlogAdmin() {
                 )}
               </Button>
             </div>
-<GlassCard glow className="p-6">
+          </GlassCard>
+
+          <GlassCard glow className="p-6">
             <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
               <Tag className="w-5 h-5 text-purple-400" />
               Quick Topics
@@ -266,7 +257,8 @@ export default function BlogAdmin() {
                 <p className="text-gray-500 text-sm">Select a category to see topic suggestions</p>
               )}
             </div>
-</div>
+          </GlassCard>
+        </div>
 
         <GlassCard glow className="p-6">
           <div className="flex items-center justify-between mb-6">
@@ -355,7 +347,8 @@ export default function BlogAdmin() {
               ))}
             </div>
           )}
-</div>
-</div>
+        </GlassCard>
+      </div>
+    </div>
   );
 }

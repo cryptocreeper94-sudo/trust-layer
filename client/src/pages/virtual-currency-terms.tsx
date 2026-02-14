@@ -96,7 +96,9 @@ export default function VirtualCurrencyTerms() {
                 </p>
               </div>
             </div>
-<GlassCard className="p-6 border-yellow-500/30 bg-yellow-500/5" data-testid="card-risk-warning">
+          </GlassCard>
+
+          <GlassCard className="p-6 border-yellow-500/30 bg-yellow-500/5" data-testid="card-risk-warning">
             <div className="flex items-start gap-3">
               <AlertTriangle className="w-6 h-6 text-yellow-500 flex-shrink-0 mt-0.5" />
               <div>
@@ -108,26 +110,31 @@ export default function VirtualCurrencyTerms() {
                 </p>
               </div>
             </div>
-<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          </GlassCard>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <GlassCard className="p-4 flex items-center gap-3" data-testid="card-stripe-secure">
               <Shield className="w-8 h-8 text-cyan-400" />
               <div>
                 <h3 className="font-semibold text-white">Stripe Secure</h3>
                 <p className="text-xs text-gray-400">PCI-compliant payments</p>
               </div>
-<GlassCard className="p-4 flex items-center gap-3" data-testid="card-conversion-tracked">
+            </GlassCard>
+            <GlassCard className="p-4 flex items-center gap-3" data-testid="card-conversion-tracked">
               <FileText className="w-8 h-8 text-purple-400" />
               <div>
                 <h3 className="font-semibold text-white">Tracked Forever</h3>
                 <p className="text-xs text-gray-400">Full audit trail on purchases</p>
               </div>
-<GlassCard className="p-4 flex items-center gap-3" data-testid="card-guaranteed-rate">
+            </GlassCard>
+            <GlassCard className="p-4 flex items-center gap-3" data-testid="card-guaranteed-rate">
               <Coins className="w-8 h-8 text-pink-400" />
               <div>
                 <h3 className="font-semibold text-white">Guaranteed Rate</h3>
                 <p className="text-xs text-gray-400">100 Shells = 1 SIG</p>
               </div>
-</div>
+            </GlassCard>
+          </div>
 
           <div className="space-y-6">
             {sections.map((section, idx) => (
@@ -147,7 +154,8 @@ export default function VirtualCurrencyTerms() {
                       <p className="text-gray-300 text-sm leading-relaxed">{section.content}</p>
                     </div>
                   </div>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
 
@@ -157,7 +165,9 @@ export default function VirtualCurrencyTerms() {
               For questions about virtual currency purchases, SIG conversion, or these terms, 
               please contact us at <a href="mailto:legal@darkwavestudios.io" className="text-cyan-400 hover:underline">legal@darkwavestudios.io</a>
             </p>
-<div className="text-center text-gray-500 text-xs pb-8">
+          </GlassCard>
+
+          <div className="text-center text-gray-500 text-xs pb-8">
             <p>By purchasing Shells or using our virtual currency services, you agree to these terms.</p>
             <p className="mt-1">DarkWave Studios © 2024-2026. All rights reserved.</p>
           </div>

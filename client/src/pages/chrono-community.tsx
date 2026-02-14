@@ -98,16 +98,6 @@ const BENEFITS = [
   },
 ];
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function ChronoCommunity() {
   usePageAnalytics();
   const [email, setEmail] = useState("");
@@ -345,6 +335,10 @@ export default function ChronoCommunity() {
                 <h3 className="text-lg font-bold text-white mb-1">GitHub</h3>
                 <p className="text-white/60 text-sm">Coming Soon</p>
               </HoloCard>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <CTABanner
         title="Ready to Make History?"
@@ -357,9 +351,5 @@ export default function ChronoCommunity() {
       
       <style>{chronoStyles}</style>
     </ChronoLayout>
-    </div>
-    </section>
-    </div>
-    </div>
   );
 }

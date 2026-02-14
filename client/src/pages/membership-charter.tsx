@@ -48,16 +48,6 @@ const staggerItem = {
   show: { opacity: 1, y: 0 }
 };
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function MembershipCharter() {
   const { user } = useAuth();
 
@@ -129,9 +119,7 @@ export default function MembershipCharter() {
   ];
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 pt-20 pb-12">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         
         <motion.div
@@ -169,7 +157,8 @@ export default function MembershipCharter() {
               their counterparts share a commitment to integrity. We believe that when people put their 
               reputation on the line, everyone benefits.
             </p>
-</motion.div>
+          </GlassCard>
+        </motion.div>
 
         <motion.div
           variants={staggerContainer}
@@ -197,7 +186,8 @@ export default function MembershipCharter() {
                   </div>
                   <h3 className="font-bold text-white text-lg mb-2">{value.title}</h3>
                   <p className="text-sm text-white/60">{value.description}</p>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -249,7 +239,9 @@ export default function MembershipCharter() {
                   </Button>
                 </Link>
               </div>
-<GlassCard glow className="p-6 md:p-8 bg-gradient-to-br from-purple-500/5 to-pink-500/5">
+            </GlassCard>
+
+            <GlassCard glow className="p-6 md:p-8 bg-gradient-to-br from-purple-500/5 to-pink-500/5">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500/30 to-pink-500/30 flex items-center justify-center shadow-lg shadow-purple-500/20">
                   <Building2 className="w-7 h-7 text-purple-400" />
@@ -287,7 +279,8 @@ export default function MembershipCharter() {
                   </Button>
                 </Link>
               </div>
-</div>
+            </GlassCard>
+          </div>
         </motion.div>
 
         <motion.div
@@ -320,7 +313,8 @@ export default function MembershipCharter() {
             <p className="text-sm text-white/40 mt-6 text-center">
               Failure to uphold these responsibilities may result in reputation penalties or membership suspension.
             </p>
-</motion.div>
+          </GlassCard>
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -376,7 +370,8 @@ export default function MembershipCharter() {
                   >
                     Get Started
                   </Button>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -419,7 +414,8 @@ export default function MembershipCharter() {
                 </Link>
               )}
             </div>
-</motion.div>
+          </GlassCard>
+        </motion.div>
       </div>
     </div>
   );

@@ -75,16 +75,6 @@ const RECENT_ACTIVITY = [
   { action: "Formed alliance with House Valdren", time: "2d ago", icon: Crown },
 ];
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function ChronoDashboard() {
   usePageAnalytics();
   const { user } = useAuth();
@@ -316,6 +306,8 @@ export default function ChronoDashboard() {
                   })}
                 </div>
               </div>
+            </motion.div>
+          </div>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -327,6 +319,7 @@ export default function ChronoDashboard() {
               <div className="p-8 h-full flex flex-col items-center justify-center text-center">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-4 shadow-xl">
                   <Map className="w-8 h-8 text-white" />
+                </div>
                 <h3 className="text-2xl font-bold text-white mb-2">World View</h3>
                 <p className="text-white/60 mb-4 max-w-md">
                   Interactive map of your current era. See territories, track NPCs, and plan your next move.
@@ -334,12 +327,13 @@ export default function ChronoDashboard() {
                 <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 animate-pulse">
                   <Sparkles className="w-3 h-3 mr-1" /> Coming Soon
                 </Badge>
+              </div>
             </HoloCard>
+          </motion.div>
+        </div>
+      </section>
       
       <style>{chronoStyles}</style>
     </ChronoLayout>
-    </div>
-    </div>
-    </motion.div>
   );
 }

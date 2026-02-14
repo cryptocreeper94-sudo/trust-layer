@@ -8,6 +8,7 @@ import {
   Trophy, Star, Clock, Zap, Gift, ArrowRight, Plus, UserPlus, Link2, ChevronDown, X, Loader2, Vote, Copy, Share2,
   Timer, Scroll, Gem, Target, Briefcase, Heart, ArrowLeft
 } from "lucide-react";
+import { BackButton, HomeButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -120,16 +121,6 @@ const UPCOMING_FEATURES = [
   { id: "voice", title: "Voice Cloning", season: "Season 2", icon: Volume2 },
   { id: "trading", title: "Estate Trading", season: "Season 2", icon: Coins },
 ];
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function ChroniclesHub() {
   const [, setLocation] = useLocation();
@@ -414,9 +405,7 @@ export default function ChroniclesHub() {
 
   if (authLoading || personalityLoading) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
@@ -453,7 +442,19 @@ export default function ChroniclesHub() {
   return (
     <div className="min-h-screen bg-slate-950 text-white relative overflow-hidden">
       {/* Navigation */}
-<AnimatePresence>
+      <nav className="fixed top-0 left-0 right-0 z-40 bg-black/80 backdrop-blur-xl border-b border-white/5">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <BackButton />
+            <HomeButton />
+          </div>
+          <Badge variant="outline" className="border-purple-500/50 text-purple-400 text-xs">
+            Chronicles Hub
+          </Badge>
+        </div>
+      </nav>
+
+      <AnimatePresence>
         {showWelcome && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -1684,11 +1685,10 @@ export default function ChroniclesHub() {
               <Link href="/chronicles-admin" className="text-slate-600 hover:text-slate-400 transition-colors" data-testid="link-chronicles-team">
                 Team
               </Link>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
-    </div>
-    </div>
-    </div>
-    </Card>
   );
 }

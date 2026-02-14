@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Code2, Key, Zap, Shield, Globe, Copy, Check, ChevronDown, ChevronRight } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -53,16 +54,6 @@ const webhookEvents = [
   { event: "bridge.released", description: "SIG released from bridge" },
 ];
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function ApiDocs() {
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
   const [expandedEndpoint, setExpandedEndpoint] = useState<string | null>(null);
@@ -85,10 +76,26 @@ export default function ApiDocs() {
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://darkwave.app';
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<main className="pt-20 pb-12 px-4">
+    <div className="min-h-screen bg-background text-foreground">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0" data-testid="link-home">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/developers">
+              <Button variant="ghost" size="sm" className="h-8 text-xs gap-1 hover:bg-white/5 px-2" data-testid="link-get-api-key">
+                <Key className="w-3 h-3" />
+                <span className="hidden sm:inline">Get API Key</span>
+              </Button>
+            </Link>
+            <BackButton />
+          </div>
+        </div>
+      </nav>
+
+      <main className="pt-20 pb-12 px-4">
         <div className="container mx-auto max-w-5xl">
           <div className="mb-8">
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2" data-testid="text-api-docs-title">API Documentation</h1>
@@ -104,19 +111,22 @@ export default function ApiDocs() {
                 <span className="font-medium">Base URL</span>
               </div>
               <code className="text-xs bg-black/30 px-2 py-1 rounded block truncate">{baseUrl}/api</code>
-<GlassCard className="p-4" data-testid="card-auth">
+            </GlassCard>
+            <GlassCard className="p-4" data-testid="card-auth">
               <div className="flex items-center gap-3 mb-2">
                 <Shield className="w-5 h-5 text-primary" />
                 <span className="font-medium">Authentication</span>
               </div>
               <code className="text-xs bg-black/30 px-2 py-1 rounded block">X-API-Key: your_key</code>
-<GlassCard className="p-4" data-testid="card-rate-limit">
+            </GlassCard>
+            <GlassCard className="p-4" data-testid="card-rate-limit">
               <div className="flex items-center gap-3 mb-2">
                 <Zap className="w-5 h-5 text-primary" />
                 <span className="font-medium">Rate Limit</span>
               </div>
               <code className="text-xs bg-black/30 px-2 py-1 rounded block">1000 req/min</code>
-</div>
+            </GlassCard>
+          </div>
 
           <Tabs defaultValue="blockchain" className="w-full">
             <TabsList className="w-full justify-start mb-6 bg-white/5 overflow-x-auto" data-testid="tabs-api-categories">
@@ -235,7 +245,9 @@ export default function ApiDocs() {
                     </div>
                   ))}
                 </div>
-<GlassCard className="p-6" data-testid="card-signature-verification">
+              </GlassCard>
+
+              <GlassCard className="p-6" data-testid="card-signature-verification">
                 <h3 className="font-bold mb-4">Signature Verification</h3>
                 <p className="text-sm text-muted-foreground mb-4">
                   Verify webhook authenticity using HMAC-SHA256:
@@ -251,7 +263,8 @@ function verifySignature(payload, signature, secret) {
   return signature === expected;
 }`}
                 </pre>
-</TabsContent>
+              </GlassCard>
+            </TabsContent>
           </Tabs>
 
           <GlassCard className="mt-8 p-6" data-testid="card-sdk">
@@ -276,7 +289,8 @@ function verifySignature(payload, signature, secret) {
             <p className="text-xs text-muted-foreground mt-4">
               SDKs coming soon. Use the REST API in the meantime.
             </p>
-</div>
+          </GlassCard>
+        </div>
       </main>
     </div>
   );

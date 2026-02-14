@@ -125,16 +125,6 @@ const TEMPLATES = [
   { name: "Event Script", type: "JSON", icon: Sparkles, description: "Triggered event or festival structure" },
 ];
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function ChronoCreators() {
   usePageAnalytics();
   
@@ -528,6 +518,7 @@ export default function ChronoCreators() {
             </div>
           </div>
         </div>
+      </section>
 
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
@@ -547,12 +538,12 @@ export default function ChronoCreators() {
                   <ExternalLink className="w-4 h-4" />
                 </Button>
               </a>
+            </div>
           </HoloCard>
+        </div>
+      </section>
       
       <style>{chronoStyles}</style>
     </ChronoLayout>
-    </div>
-    </div>
-    </section>
   );
 }

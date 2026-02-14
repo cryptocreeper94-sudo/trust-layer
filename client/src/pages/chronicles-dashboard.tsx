@@ -78,16 +78,6 @@ function LifeTimelineEvent({ event, index }: { event: any; index: number }) {
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function ChroniclesDashboard() {
   const [now, setNow] = useState(new Date());
 
@@ -182,9 +172,7 @@ export default function ChroniclesDashboard() {
   ];
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-slate-950 pb-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <div className="flex items-center gap-3 mb-6">
           <Link href="/chronicles/hub">
@@ -231,7 +219,9 @@ export default function ChroniclesDashboard() {
               </span>
             ))}
           </div>
-<div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-6" data-testid="character-stats">
+        </GlassCard>
+
+        <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-6" data-testid="character-stats">
           <StatRing value={stats.wisdom} max={100} label="Wisdom" icon={Brain} color="text-blue-400" />
           <StatRing value={stats.courage} max={100} label="Courage" icon={Shield} color="text-red-400" />
           <StatRing value={stats.compassion} max={100} label="Heart" icon={Heart} color="text-pink-400" />
@@ -247,7 +237,8 @@ export default function ChroniclesDashboard() {
                   <action.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${action.color} mb-1.5`} />
                   <h3 className="text-white font-semibold text-xs sm:text-sm">{action.label}</h3>
                   <p className="text-[10px] sm:text-xs text-gray-500 mt-0.5">{action.desc}</p>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             </Link>
           ))}
         </div>
@@ -278,7 +269,9 @@ export default function ChroniclesDashboard() {
                 Explore Communities <ChevronRight className="w-4 h-4 ml-1" />
               </Button>
             </Link>
-<GlassCard className="p-4" data-testid="life-timeline">
+          </GlassCard>
+
+          <GlassCard className="p-4" data-testid="life-timeline">
             <h3 className="text-white font-semibold mb-3 flex items-center gap-2">
               <Clock className="w-4 h-4 text-cyan-400" /> Your Story So Far
             </h3>
@@ -287,7 +280,8 @@ export default function ChroniclesDashboard() {
                 <LifeTimelineEvent key={i} event={event} index={i} />
               ))}
             </div>
-</div>
+          </GlassCard>
+        </div>
 
         <GlassCard className="p-4 mt-4" data-testid="world-status">
           <div className="flex items-center gap-2 mb-3">
@@ -314,7 +308,8 @@ export default function ChroniclesDashboard() {
           <p className="text-xs text-gray-500 mt-3 italic text-center">
             The world is running right now. NPCs are making decisions. Factions are shifting. Time never stops.
           </p>
-</div>
+        </GlassCard>
+      </div>
     </div>
   );
 }

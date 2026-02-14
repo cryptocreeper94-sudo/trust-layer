@@ -510,16 +510,6 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 function PresaleProgress() {
   const [showBuyModal, setShowBuyModal] = useState(false);
   const { data: stats, isLoading } = useQuery<PresaleStats>({
@@ -678,7 +668,8 @@ function PresaleProgress() {
             Enter the Trust Layer
           </Button>
         </a>
-</>
+      </HolographicCard>
+    </>
   );
 }
 
@@ -1029,7 +1020,8 @@ function EcosystemCard({ feature, index }: { feature: typeof ECOSYSTEM_FEATURES[
               Learn More <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
-</motion.div>
+        </HolographicCard>
+      </motion.div>
 
       <Dialog open={showModal} onOpenChange={setShowModal}>
         <DialogContent className="bg-slate-900 border-white/10 w-[95vw] max-w-lg max-h-[85vh] overflow-y-auto p-4 sm:p-6 rounded-xl">
@@ -1148,7 +1140,8 @@ function PurchaseCalculator() {
           This calculator shows potential token allocation. Actual amounts determined at checkout.
         </p>
       </div>
-);
+    </HolographicCard>
+  );
 }
 
 interface Purchase {
@@ -1230,7 +1223,8 @@ function MyPurchases({ userEmail, walletAddress }: { userEmail?: string; walletA
           </div>
         ))}
       </div>
-);
+    </HolographicCard>
+  );
 }
 
 interface RecentTransaction {
@@ -1310,7 +1304,8 @@ function LiveTransactionFeed() {
           ))}
         </AnimatePresence>
       </div>
-);
+    </HolographicCard>
+  );
 }
 
 function ReferralBanner({ referrer }: { referrer: string }) {
@@ -1341,9 +1336,7 @@ export default function Presale() {
   const purchaseWallet = evmAddress || solanaAddress || walletParam;
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-[#080c18] text-white">
       
       
       <div 
@@ -1428,22 +1421,29 @@ export default function Presale() {
                   <CreditCard className="w-8 h-8 text-cyan-400 mx-auto mb-4" />
                   <h3 className="text-lg font-bold text-white mb-2">Get Crypto</h3>
                   <p className="text-gray-400 text-sm">Use existing crypto or buy with card via Stripe's secure onramp</p>
-<HolographicCard className="p-6 pt-4 text-center w-64 lg:w-auto flex-shrink-0" glow="purple">
+                </HolographicCard>
+                
+                <HolographicCard className="p-6 pt-4 text-center w-64 lg:w-auto flex-shrink-0" glow="purple">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-sm shadow-lg mx-auto mb-3">2</div>
                   <Wallet className="w-8 h-8 text-purple-400 mx-auto mb-4" />
                   <h3 className="text-lg font-bold text-white mb-2">Pay with Crypto</h3>
                   <p className="text-gray-400 text-sm">Complete checkout via Coinbase - BTC, ETH, USDC accepted</p>
-<HolographicCard className="p-6 pt-4 text-center w-64 lg:w-auto flex-shrink-0" glow="pink">
+                </HolographicCard>
+                
+                <HolographicCard className="p-6 pt-4 text-center w-64 lg:w-auto flex-shrink-0" glow="pink">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm shadow-lg mx-auto mb-3">3</div>
                   <Users className="w-8 h-8 text-pink-400 mx-auto mb-4" />
                   <h3 className="text-lg font-bold text-white mb-2">Create Wallet</h3>
                   <p className="text-gray-400 text-sm">Before launch, create your Trust Layer wallet to claim tokens</p>
-<HolographicCard className="p-6 pt-4 text-center w-64 lg:w-auto flex-shrink-0" glow="amber">
+                </HolographicCard>
+                
+                <HolographicCard className="p-6 pt-4 text-center w-64 lg:w-auto flex-shrink-0" glow="amber">
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm shadow-lg mx-auto mb-3">4</div>
                   <Coins className="w-8 h-8 text-amber-400 mx-auto mb-4" />
                   <h3 className="text-lg font-bold text-white mb-2">Receive Signal</h3>
                   <p className="text-gray-400 text-sm">Signal + converted Shells airdropped to your wallet</p>
-</div>
+                </HolographicCard>
+              </div>
             </div>
             <p className="text-center text-gray-500 text-xs mt-3 lg:hidden">Swipe to see all steps →</p>
           </div>
@@ -1471,15 +1471,18 @@ export default function Presale() {
             <Lock className="w-8 h-8 text-cyan-400 mx-auto mb-4" />
             <h3 className="text-lg font-bold text-white mb-2">Secure & Audited</h3>
             <p className="text-gray-400 text-sm">Smart contracts verified by leading security firms</p>
-<HolographicCard className="p-6 text-center">
+          </HolographicCard>
+          <HolographicCard className="p-6 text-center">
             <Clock className="w-8 h-8 text-purple-400 mx-auto mb-4" />
             <h3 className="text-lg font-bold text-white mb-2">Vesting Schedule</h3>
             <p className="text-gray-400 text-sm">20% at launch, 80% vested</p>
-<HolographicCard className="p-6 text-center">
+          </HolographicCard>
+          <HolographicCard className="p-6 text-center">
             <Gift className="w-8 h-8 text-pink-400 mx-auto mb-4" />
             <h3 className="text-lg font-bold text-white mb-2">Referral Rewards</h3>
             <p className="text-gray-400 text-sm">Earn 5% on every referred purchase</p>
-</div>
+          </HolographicCard>
+        </div>
 
         <div className="mb-16">
           <div className="text-center mb-8">
@@ -1500,7 +1503,8 @@ export default function Presale() {
                 <h3 className="text-lg font-bold text-white mb-2">Membership Charter</h3>
                 <p className="text-gray-400 text-sm mb-4">Learn about our mission, values, and member benefits</p>
                 <span className="text-cyan-400 text-sm font-medium">Read Charter →</span>
-</Link>
+              </HolographicCard>
+            </Link>
             
             <Link href="/member-portal" data-testid="link-individual-signup">
               <HolographicCard className="p-6 text-center cursor-pointer hover:scale-105 transition-transform" glow="purple">
@@ -1508,7 +1512,8 @@ export default function Presale() {
                 <h3 className="text-lg font-bold text-white mb-2">Individual Member</h3>
                 <p className="text-gray-400 text-sm mb-4">Sign up instantly and start building your trust profile</p>
                 <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">Instant Access</Badge>
-</Link>
+              </HolographicCard>
+            </Link>
             
             <Link href="/business-application" data-testid="link-business-signup">
               <HolographicCard className="p-6 text-center cursor-pointer hover:scale-105 transition-transform" glow="amber">
@@ -1516,7 +1521,8 @@ export default function Presale() {
                 <h3 className="text-lg font-bold text-white mb-2">Business Member</h3>
                 <p className="text-gray-400 text-sm mb-4">Verified business accounts with API access</p>
                 <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">Requires Verification</Badge>
-</Link>
+              </HolographicCard>
+            </Link>
           </div>
         </div>
 
@@ -1542,5 +1548,5 @@ export default function Presale() {
       </div>
       
     </div>
-);
+  );
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, Trophy, Settings, RotateCcw, Play, Info, Volume2, VolumeX, Star, Crown } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -175,16 +176,6 @@ function PlayerArea({
     </>
   );
 }
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function Spades() {
   const { user } = useAuth();
@@ -452,11 +443,10 @@ export default function Spades() {
 
   if (!gameState) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-emerald-900 text-white">
         <div className="container mx-auto px-4 py-8 max-w-2xl">
           <div className="flex items-center gap-4 mb-8">
+            <BackButton />
             <h1 className="text-3xl font-bold">Spades</h1>
           </div>
 
@@ -550,7 +540,7 @@ export default function Spades() {
       </div>
 
       {/* Game Table */}
-      <div className="relative w-full h-screen ">
+      <div className="relative w-full h-screen pt-16">
         <div className="absolute inset-8 md:inset-16 rounded-[50%] bg-green-700/50 border-8 border-amber-900/50 shadow-inner" />
         
         {/* Players */}
@@ -690,13 +680,14 @@ export default function Spades() {
                   <div className="text-sm text-gray-400">Opponents</div>
                   <div className="text-2xl font-bold text-red-400">{gameState.team2Score}</div>
                 </div>
+              </div>
               <Button onClick={startNewGame} className="bg-white text-gray-900 hover:bg-gray-200">
                 Play Again
               </Button>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
-    </motion.div>
-    </motion.div>
-);
+  );
 }

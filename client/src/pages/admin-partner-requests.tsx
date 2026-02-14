@@ -1,25 +1,17 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
+import { Link } from "wouter";
 import { 
   Users, CheckCircle, XCircle, Clock, 
   Mail, Building2, User, Globe, FileText, Shield
-} from "lucide-react";
+, Shield , Shield } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 import type { PartnerAccessRequest } from "@shared/schema";
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function AdminPartnerRequests() {
   const { toast } = useToast();
@@ -108,18 +100,13 @@ export default function AdminPartnerRequests() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="#06b6d4" size={500} top="-5%" left="60%" />
-      <GlowOrb color="#8b5cf6" size={400} top="40%" left="-10%" delay={3} />
-
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 max-w-6xl">
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white p-6">
+      <div className="container mx-auto max-w-6xl">
         <div className="flex items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-display font-bold flex items-center gap-3">
+            <h1 className="text-3xl font-display font-bold text-white flex items-center gap-3">
               <Shield className="w-8 h-8 text-cyan-400" />
-              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                Partner Access Requests
-              </span>
+              Partner Access Requests
             </h1>
             <p className="text-white/60 mt-1">Review and manage partnership inquiries</p>
           </div>

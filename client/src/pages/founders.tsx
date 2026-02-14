@@ -26,16 +26,6 @@ This keeps it fair for everyone - no whales, just believers.
 
 Only 100 spots. First come, first served.`;
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function FoundersPage() {
   const [spotsRemaining, setSpotsRemaining] = useState(100);
   const [copied, setCopied] = useState(false);
@@ -67,9 +57,7 @@ export default function FoundersPage() {
   }, [foundersData]);
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
       <div className="absolute top-20 left-10 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-40 right-10 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-3xl" />
@@ -197,15 +185,18 @@ export default function FoundersPage() {
               <Shield className="w-10 h-10 text-cyan-400 mx-auto mb-4" />
               <h3 className="font-semibold text-white mb-3">Secure & Verified</h3>
               <p className="text-white/60 text-sm leading-relaxed">All purchases tracked on-chain with full transparency</p>
-<GlassCard className="p-8 text-center">
+            </GlassCard>
+            <GlassCard className="p-8 text-center">
               <Users className="w-10 h-10 text-purple-400 mx-auto mb-4" />
               <h3 className="font-semibold text-white mb-3">Limited to 100</h3>
               <p className="text-white/60 text-sm leading-relaxed">Once spots are filled, this offer closes permanently</p>
-<GlassCard className="p-8 text-center">
+            </GlassCard>
+            <GlassCard className="p-8 text-center">
               <Zap className="w-10 h-10 text-amber-400 mx-auto mb-4" />
               <h3 className="font-semibold text-white mb-3">Instant Confirmation</h3>
               <p className="text-white/60 text-sm leading-relaxed">Your Founders status is confirmed immediately</p>
-</div>
+            </GlassCard>
+          </div>
 
           <GlassCard className="p-8 md:p-10 mb-8">
             <h3 className="text-lg font-semibold text-white mb-5 flex items-center gap-2">
@@ -226,7 +217,9 @@ export default function FoundersPage() {
                 <Link href="/note" className="text-cyan-400 hover:underline">Read our story →</Link>
               </p>
             </div>
-<GlassCard className="p-8 md:p-10 mb-8">
+          </GlassCard>
+
+          <GlassCard className="p-8 md:p-10 mb-8">
             <h3 className="text-lg font-semibold text-white mb-5 flex items-center gap-2">
               <Send className="w-5 h-5 text-cyan-400" />
               Share on Telegram
@@ -256,7 +249,9 @@ export default function FoundersPage() {
                 )}
               </div>
             </div>
-<div className="text-center">
+          </GlassCard>
+
+          <div className="text-center">
             <p className="text-white/50 text-sm">
               Questions? Join our{" "}
               <a href="https://t.me/darkwavestudios" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">
@@ -267,7 +262,7 @@ export default function FoundersPage() {
             </p>
           </div>
         </motion.div>
+      </div>
     </div>
-</div>
   );
 }

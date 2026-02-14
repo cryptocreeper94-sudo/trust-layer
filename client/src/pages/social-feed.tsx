@@ -5,7 +5,8 @@ import {
   MessageSquare, Heart, Share2, Repeat2, Send,
   Image, Smile, TrendingUp, Users, Flame,
   Award, Coins, UserPlus, PenSquare, Sparkles
-, Shield } from "lucide-react";
+, Shield , Shield } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -62,26 +63,24 @@ const FEATURED_POSTS = [
   },
 ];
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function SocialFeed() {
   const { user } = useAuth();
   const isConnected = !!user;
   const [newPost, setNewPost] = useState("");
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<main className="flex-1  pb-8 px-4">
+    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2 shrink-0">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
+          </Link>
+          <BackButton />
+        </div>
+      </nav>
+
+      <main className="flex-1 pt-16 pb-8 px-4">
         <div className="container mx-auto max-w-5xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -154,7 +153,9 @@ export default function SocialFeed() {
                     </div>
                   </div>
                 </div>
-<Tabs defaultValue="featured">
+              </GlassCard>
+
+              <Tabs defaultValue="featured">
                 <TabsList className="w-full grid grid-cols-3">
                   <TabsTrigger value="featured" data-testid="tab-featured">Featured</TabsTrigger>
                   <TabsTrigger value="following" data-testid="tab-following">Following</TabsTrigger>
@@ -200,7 +201,8 @@ export default function SocialFeed() {
                           </div>
                         </div>
                       </div>
-))}
+                    </GlassCard>
+                  ))}
                 </TabsContent>
 
                 <TabsContent value="following" className="mt-4">
@@ -231,7 +233,8 @@ export default function SocialFeed() {
                         </Link>
                       </>
                     )}
-</TabsContent>
+                  </GlassCard>
+                </TabsContent>
 
                 <TabsContent value="latest" className="space-y-4 mt-4">
                   {FEATURED_POSTS.slice().reverse().map((post) => (
@@ -272,7 +275,8 @@ export default function SocialFeed() {
                           </div>
                         </div>
                       </div>
-))}
+                    </GlassCard>
+                  ))}
                 </TabsContent>
               </Tabs>
             </div>
@@ -291,7 +295,9 @@ export default function SocialFeed() {
                     </div>
                   ))}
                 </div>
-<GlassCard className="p-4">
+              </GlassCard>
+
+              <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <Award className="w-4 h-4 text-amber-400" />
                   Top Creators
@@ -314,7 +320,9 @@ export default function SocialFeed() {
                     </div>
                   ))}
                 </div>
-<GlassCard className="p-4">
+              </GlassCard>
+
+              <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
                   <Users className="w-4 h-4 text-blue-400" />
                   Community Stats
@@ -337,12 +345,13 @@ export default function SocialFeed() {
                     <p className="text-[10px] text-muted-foreground">Tips Sent</p>
                   </div>
                 </div>
-</div>
+              </GlassCard>
+            </div>
           </div>
         </div>
+      </main>
 
       
-    </main>
     </div>
-);
+  );
 }

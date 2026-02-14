@@ -522,7 +522,8 @@ export default function MarketingCatalogAdmin() {
                       <Hash className="w-3 h-3" />
                       <Send className="w-3 h-3" />
                     </div>
-</motion.div>
+                  </GlassCard>
+                </motion.div>
               ))}
             </div>
           </>
@@ -553,7 +554,8 @@ export default function MarketingCatalogAdmin() {
                   <Badge variant="outline" className="text-xs border-slate-700">
                     {img.usage}
                   </Badge>
-</motion.div>
+                </GlassCard>
+              </motion.div>
             ))}
           </div>
         )}
@@ -561,8 +563,8 @@ export default function MarketingCatalogAdmin() {
         <div className="mt-12 text-center text-slate-500 text-sm">
           <p>DarkWave Studios • Marketing Catalog v1.0</p>
           <p className="text-xs mt-1">Discord & Telegram Content • Operations Access</p>
-    </div>
-    </div>
+        </div>
+      </div>
     </div>
   );
 }

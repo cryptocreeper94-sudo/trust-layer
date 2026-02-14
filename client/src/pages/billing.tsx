@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Check, X, Shield, CreditCard, Activity, DollarSign, Clock, ExternalLink, AlertCircle, Mail } from "lucide-react";
 import { Link } from "wouter";
 import { motion, AnimatePresence } from "framer-motion";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,16 +20,6 @@ interface UsageStats {
     timestamp: string;
   }>;
 }
-
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
 
 export default function Billing() {
   const [apiKey, setApiKey] = useState("");
@@ -165,10 +156,18 @@ export default function Billing() {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
-<main className="pt-24 pb-12 px-4">
+    <div className="min-h-screen bg-background text-foreground">
+      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
+        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-2">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-lg tracking-tight">Trust Layer</span>
+          </Link>
+          <BackButton />
+        </div>
+      </nav>
+
+      <main className="pt-24 pb-12 px-4">
         <div className="container max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <div className="text-center mb-8">
@@ -198,7 +197,9 @@ export default function Billing() {
                   </ul>
                   <Button variant="outline" size="sm" className="w-full mt-4 border-white/10 text-white/60 text-xs h-9" data-testid="button-plan-explorer">Current Plan</Button>
                 </div>
-<GlassCard glow className="flex flex-col h-full border-primary/40">
+              </GlassCard>
+
+              <GlassCard glow className="flex flex-col h-full border-primary/40">
                 <div className="p-5 flex flex-col h-full">
                   <div className="flex justify-center mb-2">
                     <span className="px-3 py-1 bg-primary text-background text-[9px] font-bold rounded-full uppercase tracking-wider">Most Popular</span>
@@ -222,7 +223,9 @@ export default function Billing() {
                   </ul>
                   <Button size="sm" className="w-full mt-4 bg-primary text-background hover:bg-primary/90 text-xs h-9 font-semibold" data-testid="button-plan-builder" onClick={handleUpgradeToBuilder} disabled={upgradeLoading}>{upgradeLoading ? "Loading..." : "Upgrade Now"}</Button>
                 </div>
-<GlassCard glow className="flex flex-col h-full">
+              </GlassCard>
+
+              <GlassCard glow className="flex flex-col h-full">
                 <div className="p-5 flex flex-col h-full">
                   <div className="h-[30px] mb-2"></div>
                   <div className="mb-3">
@@ -244,7 +247,8 @@ export default function Billing() {
                   </ul>
                   <Button variant="outline" size="sm" className="w-full mt-4 border-secondary/30 text-secondary hover:bg-secondary/10 text-xs h-9" data-testid="button-plan-enterprise" onClick={() => setShowContactModal(true)}>Contact Sales</Button>
                 </div>
-</div>
+              </GlassCard>
+            </div>
 
             <div className="text-center mb-6">
               <h2 className="text-xl font-display font-bold mb-1">Already a Developer?</h2>
@@ -259,7 +263,8 @@ export default function Billing() {
                   </div>
                   <p className="text-green-400 font-medium" data-testid="text-payment-success">{paymentSuccess}</p>
                 </div>
-)}
+              </GlassCard>
+            )}
 
             <GlassCard glow className="mb-6">
               <div className="p-6">
@@ -289,7 +294,9 @@ export default function Billing() {
                   </p>
                 )}
               </div>
-{stats && (
+            </GlassCard>
+
+            {stats && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <GlassCard glow className="p-5">
@@ -300,7 +307,9 @@ export default function Billing() {
                       <span className="text-sm text-muted-foreground">Total API Calls</span>
                     </div>
                     <p className="text-2xl font-bold" data-testid="text-total-calls">{stats.totalCalls.toLocaleString()}</p>
-<GlassCard glow className="p-5">
+                  </GlassCard>
+
+                  <GlassCard glow className="p-5">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="p-2 rounded-lg bg-secondary/20">
                         <DollarSign className="w-5 h-5 text-secondary" />
@@ -308,7 +317,9 @@ export default function Billing() {
                       <span className="text-sm text-muted-foreground">Cost Per Call</span>
                     </div>
                     <p className="text-2xl font-bold">${(stats.costPerCallCents / 100).toFixed(2)}</p>
-<GlassCard glow className={`p-5 ${stats.outstandingBalanceCents > 0 ? 'border-amber-500/30' : 'border-green-500/30'}`}>
+                  </GlassCard>
+
+                  <GlassCard glow className={`p-5 ${stats.outstandingBalanceCents > 0 ? 'border-amber-500/30' : 'border-green-500/30'}`}>
                     <div className="flex items-center gap-3 mb-2">
                       <div className={`p-2 rounded-lg ${stats.outstandingBalanceCents > 0 ? 'bg-amber-500/20' : 'bg-green-500/20'}`}>
                         <CreditCard className={`w-5 h-5 ${stats.outstandingBalanceCents > 0 ? 'text-amber-400' : 'text-green-400'}`} />
@@ -338,7 +349,8 @@ export default function Billing() {
                         </Button>
                       </div>
                     )}
-</div>
+                  </GlassCard>
+                </div>
 
                 <GlassCard glow>
                   <div className="p-5">
@@ -363,7 +375,9 @@ export default function Billing() {
                       <p className="text-muted-foreground text-sm">No recent activity</p>
                     )}
                   </div>
-<div className="text-center text-sm text-muted-foreground">
+                </GlassCard>
+
+                <div className="text-center text-sm text-muted-foreground">
                   <p>Pay with card (Stripe) or crypto (Coinbase Commerce - BTC, ETH, USDC)</p>
                 </div>
               </motion.div>
@@ -462,8 +476,5 @@ export default function Billing() {
         )}
       </AnimatePresence>
     </div>
-    </CreditCard>
-</Input>
-</Input>
   );
 }

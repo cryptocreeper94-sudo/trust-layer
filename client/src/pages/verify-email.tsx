@@ -79,7 +79,8 @@ export default function VerifyEmail() {
               <span className="text-xl font-bold">+1,000 Shells</span>
             </div>
             <p className="text-white/40 text-sm mt-4">Redirecting to your hub...</p>
-</motion.div>
+          </GlassCard>
+        </motion.div>
       </div>
     );
   }
@@ -147,7 +148,8 @@ export default function VerifyEmail() {
             </div>
             <p className="text-white/60 text-sm">Verify your email to receive 1,000 Shells!</p>
           </div>
-</motion.div>
+        </GlassCard>
+      </motion.div>
     </div>
-);
+  );
 }

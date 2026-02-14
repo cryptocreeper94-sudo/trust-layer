@@ -5,6 +5,7 @@ import {
   Sparkles, Clock, Map, Users, Sword, Wand2, Cog, Cpu, Rocket, Atom,
   ChevronLeft, ChevronRight, Lock, Unlock, Star, Zap, Shield, Crown, Scale, Vote, Handshake, Swords
 } from "lucide-react";
+import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
@@ -84,16 +85,6 @@ const ERAS: Era[] = [
   },
 ];
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function EraCodex() {
   const [selectedEra, setSelectedEra] = useState(0);
   const [touchStart, setTouchStart] = useState<number | null>(null);
@@ -130,12 +121,24 @@ export default function EraCodex() {
   const era = ERAS[selectedEra];
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-black text-white overflow-x-hidden">
       {/* Nav */}
-{/* Main Content */}
-      <main className="">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5">
+        <div className="container mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2">
+          <BackButton />
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+            <Shield className="w-7 h-7 text-cyan-400" />
+            <span className="font-display font-bold text-sm sm:text-base">Era Codex</span>
+          </div>
+          <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 text-[10px] sm:text-xs shrink-0">
+            <Clock className="w-3 h-3 mr-1" />
+            {ERAS.length} Eras
+          </Badge>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <main className="pt-14">
         {/* Era Display */}
         <div 
           className="relative h-[70vh] min-h-[500px]"
@@ -267,7 +270,9 @@ export default function EraCodex() {
                     ))}
                   </ul>
                 </div>
-{/* Era Elements */}
+              </GlassCard>
+
+              {/* Era Elements */}
               <GlassCard className={era.isLocked ? "opacity-60" : ""}>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-4">
@@ -283,7 +288,9 @@ export default function EraCodex() {
                     ))}
                   </ul>
                 </div>
-{/* Life Paths */}
+              </GlassCard>
+
+              {/* Life Paths */}
               <GlassCard className={era.isLocked ? "opacity-60" : ""}>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-4">
@@ -299,7 +306,9 @@ export default function EraCodex() {
                     ))}
                   </ul>
                 </div>
-{/* Governance */}
+              </GlassCard>
+
+              {/* Governance */}
               <GlassCard className={era.isLocked ? "opacity-60" : ""}>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-4">
@@ -315,7 +324,9 @@ export default function EraCodex() {
                     ))}
                   </ul>
                 </div>
-{/* Status */}
+              </GlassCard>
+
+              {/* Status */}
               <GlassCard className={era.isLocked ? "opacity-60" : ""}>
                 <div className="p-5">
                   <div className="flex items-center gap-2 mb-4">
@@ -343,7 +354,8 @@ export default function EraCodex() {
                     </div>
                   )}
                 </div>
-</div>
+              </GlassCard>
+            </div>
           </div>
         </section>
 
@@ -414,7 +426,9 @@ export default function EraCodex() {
                     Elected governing bodies run each realm. Campaign, vote, and shape policy.
                   </p>
                 </div>
-<GlassCard>
+              </GlassCard>
+
+              <GlassCard>
                 <div className="p-5 text-center">
                   <Handshake className="w-8 h-8 mx-auto mb-3 text-green-400" />
                   <h3 className="font-bold mb-2">Treaties & Alliances</h3>
@@ -422,7 +436,9 @@ export default function EraCodex() {
                     Formal agreements between factions. Trade pacts, non-aggression, or full alliance.
                   </p>
                 </div>
-<GlassCard>
+              </GlassCard>
+
+              <GlassCard>
                 <div className="p-5 text-center">
                   <Swords className="w-8 h-8 mx-auto mb-3 text-red-400" />
                   <h3 className="font-bold mb-2">Coups & Revolutions</h3>
@@ -430,7 +446,9 @@ export default function EraCodex() {
                     Overthrow corrupt leaders. Nothing is permanent. Power must be earned and defended.
                   </p>
                 </div>
-<GlassCard>
+              </GlassCard>
+
+              <GlassCard>
                 <div className="p-5 text-center">
                   <Crown className="w-8 h-8 mx-auto mb-3 text-amber-400" />
                   <h3 className="font-bold mb-2">Peace Summits</h3>
@@ -438,7 +456,8 @@ export default function EraCodex() {
                     Multi-faction negotiations. Work towards lasting peace - or plot the next war.
                   </p>
                 </div>
-</div>
+              </GlassCard>
+            </div>
 
             <div className="mt-8 text-center">
               <p className="text-sm text-gray-500">
@@ -482,7 +501,8 @@ export default function EraCodex() {
                   </Button>
                 </Link>
               </div>
-</div>
+            </GlassCard>
+          </div>
         </section>
 
         {/* AI Demo CTA */}
@@ -513,6 +533,5 @@ export default function EraCodex() {
         </p>
       </footer>
     </div>
-    </button>
   );
 }

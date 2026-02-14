@@ -94,16 +94,6 @@ const STATUS_BADGES: Record<string, { color: string; icon: typeof Clock }> = {
   live: { color: "bg-cyan-500/20 text-cyan-400", icon: Sparkles },
 };
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 export default function ChroniclesBuilder() {
   const [, setLocation] = useLocation();
   const [authLoading, setAuthLoading] = useState(true);
@@ -206,9 +196,7 @@ export default function ChroniclesBuilder() {
 
   if (authLoading || builderLoading) {
     return (
-      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <motion.div
           animate={{ rotate: 360 }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
@@ -314,7 +302,8 @@ export default function ChroniclesBuilder() {
                 />
               </div>
             )}
-)}
+          </GlassCard>
+        )}
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
           <TabsList className="bg-white/5 border border-white/10 p-1 rounded-xl">
@@ -404,7 +393,9 @@ export default function ChroniclesBuilder() {
                       );
                     })}
                   </div>
-<GlassCard glow className="p-6">
+                </GlassCard>
+
+                <GlassCard glow className="p-6">
                   <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                     <Package className="w-5 h-5 text-cyan-400" />
                     Available Content Types
@@ -430,7 +421,8 @@ export default function ChroniclesBuilder() {
                       </motion.div>
                     ))}
                   </div>
-</div>
+                </GlassCard>
+              </div>
 
               <div className="space-y-6">
                 <GlassCard glow className="p-6">
@@ -462,7 +454,9 @@ export default function ChroniclesBuilder() {
                       </div>
                     ))}
                   </div>
-<GlassCard glow className="p-6">
+                </GlassCard>
+
+                <GlassCard glow className="p-6">
                   <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
                     <Award className="w-5 h-5 text-purple-400" />
                     Badges
@@ -487,7 +481,8 @@ export default function ChroniclesBuilder() {
                       );
                     })}
                   </div>
-</div>
+                </GlassCard>
+              </div>
             </div>
           </TabsContent>
 
@@ -513,7 +508,8 @@ export default function ChroniclesBuilder() {
                 <Button className="bg-gradient-to-r from-cyan-500 to-purple-500">
                   Create Your First Contribution
                 </Button>
-) : (
+              </GlassCard>
+            ) : (
               <div className="space-y-4">
                 {contributions.map((contrib, index) => {
                   const statusInfo = STATUS_BADGES[contrib.status] || STATUS_BADGES.draft;
@@ -554,7 +550,8 @@ export default function ChroniclesBuilder() {
                           </div>
                           <ChevronRight className="w-5 h-5 text-gray-500" />
                         </div>
-</motion.div>
+                      </GlassCard>
+                    </motion.div>
                   );
                 })}
               </div>
@@ -585,7 +582,8 @@ export default function ChroniclesBuilder() {
                         <div className="text-xs text-gray-500">Experience</div>
                       </div>
                     </div>
-</motion.div>
+                  </GlassCard>
+                </motion.div>
               ))}
             </div>
           </TabsContent>
@@ -632,9 +630,13 @@ export default function ChroniclesBuilder() {
                       <div className="text-right">
                         <div className="text-yellow-400 font-bold">{(entry.shellsEarned || 0).toLocaleString()}</div>
                         <div className="text-xs text-gray-500">shells earned</div>
+                      </div>
+                    </motion.div>
                   );
                 })}
-</TabsContent>
+              </div>
+            </GlassCard>
+          </TabsContent>
         </Tabs>
 
         <div className="mt-8 pt-8 border-t border-white/10">
@@ -642,8 +644,8 @@ export default function ChroniclesBuilder() {
             <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
             Back to Chronicles Hub
           </Link>
+        </div>
+      </div>
     </div>
-    </div>
-    </motion.div>
   );
 }

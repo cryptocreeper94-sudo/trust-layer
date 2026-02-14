@@ -355,16 +355,6 @@ function GuardianBadge({ tier, size = "lg" }: { tier: string; size?: "sm" | "lg"
   );
 }
 
-
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
-    style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
-  />
-);
-
 function IntakeWizard() {
   const [formData, setFormData] = useState({
     projectName: "",
@@ -530,7 +520,8 @@ function IntakeWizard() {
                 </p>
               </form>
             )}
-</motion.div>
+          </GlassCard>
+        </motion.div>
       </div>
     </section>
   );
@@ -944,9 +935,7 @@ export default function GuardianCertificationPage() {
   usePageAnalytics();
 
   return (
-    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
-      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+    <div className="min-h-screen bg-slate-950 text-white overflow-hidden">
       <PaymentSuccessBanner />
       
       <div className="fixed inset-0 pointer-events-none">
@@ -1004,7 +993,8 @@ export default function GuardianCertificationPage() {
                     </div>
                     <h3 className="text-white font-semibold mb-2" data-testid={`text-benefit-title-${index}`}>{item.title}</h3>
                     <p className="text-white/50 text-sm">{item.description}</p>
-</motion.div>
+                  </GlassCard>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -1073,7 +1063,8 @@ export default function GuardianCertificationPage() {
                         <p className="text-white/50 text-sm">{pillar.description}</p>
                       </div>
                     </div>
-</motion.div>
+                  </GlassCard>
+                </motion.div>
               ))}
             </div>
 
@@ -1100,7 +1091,8 @@ export default function GuardianCertificationPage() {
                   </motion.div>
                 ))}
               </div>
-</div>
+            </GlassCard>
+          </div>
         </section>
 
         {/* Trust Center Section */}
@@ -1163,7 +1155,8 @@ export default function GuardianCertificationPage() {
                           </div>
                         </div>
                       </div>
-</a>
+                    </GlassCard>
+                  </a>
                 </motion.div>
               ))}
             </div>
@@ -1187,7 +1180,8 @@ export default function GuardianCertificationPage() {
                     </div>
                   </div>
                 </div>
-</motion.div>
+              </GlassCard>
+            </motion.div>
           </div>
         </section>
 
@@ -1238,7 +1232,8 @@ export default function GuardianCertificationPage() {
                     </div>
                     <h4 className="text-white font-semibold mb-1 text-sm">{feature.title}</h4>
                     <p className="text-white/50 text-xs">{feature.description}</p>
-</motion.div>
+                  </GlassCard>
+                </motion.div>
               ))}
             </div>
 
@@ -1326,7 +1321,8 @@ export default function GuardianCertificationPage() {
                 <p className="text-white/60 text-sm">
                   <span className="text-violet-400 font-semibold">Early Access:</span> Get 20% off your first year when you join the waitlist before launch.
                 </p>
-</motion.div>
+              </GlassCard>
+            </motion.div>
           </div>
         </section>
 
@@ -1403,7 +1399,8 @@ export default function GuardianCertificationPage() {
                             </li>
                           ))}
                         </ul>
-</div>
+                      </GlassCard>
+                    </div>
                     
                     <div className="flex-1 hidden md:block" />
                   </motion.div>
@@ -1470,7 +1467,8 @@ export default function GuardianCertificationPage() {
                     </span>
                   </div>
                 </div>
-</motion.div>
+              </GlassCard>
+            </motion.div>
           </div>
         </section>
 
@@ -1513,7 +1511,8 @@ export default function GuardianCertificationPage() {
                     <h3 className="text-white/50 font-semibold mb-1">{advisor.name}</h3>
                     <p className="text-purple-400 text-sm font-medium mb-3">{advisor.role}</p>
                     <p className="text-white/40 text-sm">{advisor.bio}</p>
-</motion.div>
+                  </GlassCard>
+                </motion.div>
               ))}
             </div>
 
@@ -1604,7 +1603,8 @@ export default function GuardianCertificationPage() {
                         </span>
                       </div>
                     </div>
-</motion.div>
+                  </GlassCard>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -1651,12 +1651,13 @@ export default function GuardianCertificationPage() {
                     </Link>
                   </div>
                 </div>
-</div>
-    </section>
-    </ContactDialog>
-    </motion.div>
-    </ContactDialog>
-    </ContactDialog>
-    </ContactDialog>
+              </GlassCard>
+            </motion.div>
+          </div>
+        </section>
+      </main>
+
+      
+    </div>
   );
 }
