@@ -4,8 +4,7 @@ import { Link } from "wouter";
 import {
   Trophy, Medal, Crown, TrendingUp, TrendingDown,
   Star, Users, Activity, Flame, Target, Award, ChevronDown
-, Shield , Shield } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+, Shield } from "lucide-react";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -46,6 +45,16 @@ const PRIZES = [
   { rank: "3rd", prize: "2,500 SIG + Bronze NFT", color: "from-amber-600 to-amber-700" },
   { rank: "4-10", prize: "500 SIG each", color: "from-purple-400 to-pink-500" },
 ];
+
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
 
 function TopThreePodium() {
   const top3 = WEEKLY_LEADERS.slice(0, 3);
@@ -151,18 +160,10 @@ export default function Leaderboard() {
   const timeLeft = { days: 3, hours: 14, minutes: 27 };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
-          </Link>
-          <BackButton />
-        </div>
-      </nav>
-
-      <main className="flex-1 pt-16 pb-8 px-4">
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+<main className="flex-1  pb-8 px-4">
         <div className="container mx-auto max-w-4xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

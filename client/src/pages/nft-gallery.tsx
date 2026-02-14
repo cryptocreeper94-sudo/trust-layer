@@ -95,8 +95,6 @@ export default function NftGallery() {
     <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
       <GlowOrb color="rgba(168,85,247,0.3)" size={500} top="-5%" left="60%" />
       <GlowOrb color="rgba(139,92,246,0.25)" size={400} top="40%" left="-10%" delay={3} />
-
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-3">

@@ -1,11 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "wouter";
 import {
   Bot, Play, Pause, Settings, TrendingUp, Clock,
-  Calendar, DollarSign, Target, Repeat, ChevronDown, Plus, Trash2
-, Shield , Shield , Shield } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+  Calendar, DollarSign, Target, Repeat, ChevronDown, Plus, Trash2,
+  Shield
+} from "lucide-react";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -175,6 +174,15 @@ function StrategyCard({ strategy }: { strategy: DCAStrategy }) {
   );
 }
 
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 export default function DCABot() {
   const [showCreate, setShowCreate] = useState(false);
   const [selectedToken, setSelectedToken] = useState("SIG");
@@ -186,19 +194,11 @@ export default function DCABot() {
   const totalPnl = totalValue - totalInvested;
 
   return (
-    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
-          </Link>
-          <BackButton />
-        </div>
-      </nav>
-
-      <main className="flex-1 pt-16 pb-8 px-4">
-        <div className="container mx-auto max-w-4xl">
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -215,8 +215,8 @@ export default function DCABot() {
                 <Bot className="w-7 h-7 text-primary" />
               </motion.div>
             </div>
-            <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">
-              DCA <span className="text-primary">Bot</span>
+            <h1 className="text-2xl md:text-3xl font-display font-bold mb-2 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              DCA Bot
             </h1>
             <p className="text-sm text-muted-foreground">
               Automate your dollar-cost averaging strategy
@@ -359,9 +359,7 @@ export default function DCABot() {
             </GlassCard>
           )}
         </div>
-      </main>
-
-      
+      </div>
     </div>
   );
 }

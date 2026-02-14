@@ -1,13 +1,11 @@
 import { useState, useRef } from "react";
 import { motion } from "framer-motion";
-import { Link } from "wouter";
 import { 
   ArrowLeftRight, Lock, Sparkles, Zap, Shield, 
   ChevronDown, ChevronLeft, ChevronRight, Clock, Flame,
   BookOpen, ExternalLink, Bell, HelpCircle, Rocket
 } from "lucide-react";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -15,6 +13,15 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { WalletButton } from "@/components/wallet-button";
 import { FeatureBadge } from "@/components/feature-badge";
 import { BridgeInterface } from "@/components/bridge/bridge-interface";
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
 
 import ethereumImg from "@assets/generated_images/ethereum_smart_city_network.png";
 import solanaImg from "@assets/generated_images/solana_speed_lightning_tunnel.png";
@@ -226,22 +233,10 @@ export default function Bridge() {
 
   return (
     <TooltipProvider>
-      <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
-        <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-          <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 shrink-0">
-              <Shield className="w-7 h-7 text-cyan-400" />
-              <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
-            </Link>
-            <div className="flex items-center gap-2">
-              <WalletButton />
-              <BackButton />
-            </div>
-          </div>
-        </nav>
-
-        <main className="flex-1 pt-20 pb-12 px-4">
-          <div className="container mx-auto max-w-6xl">
+      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+        <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+        <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+          <div className="max-w-6xl mx-auto">
             
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -268,7 +263,7 @@ export default function Bridge() {
                         <ArrowLeftRight className="w-6 h-6 text-primary" />
                       </div>
                       <div>
-                        <h1 className="text-2xl md:text-4xl font-display font-bold bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
+                        <h1 className="text-2xl md:text-4xl font-display font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                           Cross-Chain Bridge
                         </h1>
                         <p className="text-sm text-muted-foreground mt-1">
@@ -589,7 +584,7 @@ export default function Bridge() {
             )}
             
           </div>
-        </main>
+        </div>
 
         
       </div>

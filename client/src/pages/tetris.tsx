@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { RotateCcw, Play, Trophy, Pause, ArrowDown, RotateCw } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +30,16 @@ const PIECES = {
 };
 
 const PIECE_NAMES = Object.keys(PIECES) as (keyof typeof PIECES)[];
+
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
 
 function createEmptyBoard(): Board {
   return Array.from({ length: BOARD_HEIGHT }, () => Array(BOARD_WIDTH).fill(null));
@@ -406,10 +415,11 @@ export default function Tetris() {
 
   if (gameState.status === "menu") {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900 text-white">
+      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
         <div className="container mx-auto px-4 py-8 max-w-2xl">
           <div className="flex items-center gap-4 mb-8">
-            <BackButton />
             <h1 className="text-3xl font-bold">Tetris</h1>
           </div>
 

@@ -125,6 +125,16 @@ const CHRONICLES_ERAS = [
   { img: steampunkImg, era: "Iron Age", desc: "Industrial Revolution", color: "from-zinc-500/30 to-stone-600/30" },
 ];
 
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 function ChroniclesCarousel() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -449,7 +459,9 @@ export default function Home() {
   const favoriteApps = apps.filter(app => preferences.favorites.includes(app.id));
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
       <OnboardingTour />
       <SimpleLoginModal 
         isOpen={showLoginModal} 
@@ -458,7 +470,7 @@ export default function Home() {
       
       
 
-      <section className="relative min-h-[85vh] flex items-center justify-center pt-20 md:pt-14 overflow-hidden">
+      <section className="relative min-h-[85vh] flex items-center justify-center pt-20 md: overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img src={heroBg} alt="" className="w-full h-full object-cover opacity-30" />
           <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/80 to-background" />

@@ -78,6 +78,16 @@ function LifeTimelineEvent({ event, index }: { event: any; index: number }) {
   );
 }
 
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 export default function ChroniclesDashboard() {
   const [now, setNow] = useState(new Date());
 
@@ -172,7 +182,9 @@ export default function ChroniclesDashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 pb-20">
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6">
         <div className="flex items-center gap-3 mb-6">
           <Link href="/chronicles/hub">

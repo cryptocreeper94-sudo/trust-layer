@@ -75,6 +75,16 @@ const RECENT_ACTIVITY = [
   { action: "Formed alliance with House Valdren", time: "2d ago", icon: Crown },
 ];
 
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 export default function ChronoDashboard() {
   usePageAnalytics();
   const { user } = useAuth();

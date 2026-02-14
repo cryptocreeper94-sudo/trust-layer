@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { HelpCircle, Send, Clock, CheckCircle, AlertCircle, MessageSquare, ChevronDown, ChevronUp, Sparkles, Shield, Zap, HeartHandshake, Home } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -41,6 +40,16 @@ interface SupportTicket {
   created_at: string;
   updated_at: string;
 }
+
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
 
 export default function SupportPage() {
   usePageAnalytics();
@@ -109,7 +118,9 @@ export default function SupportPage() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
         <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
       </div>
     );
@@ -122,22 +133,7 @@ export default function SupportPage() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
         <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-pink-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "0.5s" }} />
       </div>
-
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center">
-          <div className="flex items-center gap-3">
-            <BackButton />
-            <h1 className="text-lg font-bold text-white">Support Center</h1>
-          </div>
-          <Link href="/" className="ml-auto">
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-white/10">
-              <Home className="w-4 h-4" />
-            </Button>
-          </Link>
-        </div>
-      </nav>
-
-      <section className="relative pt-24 pb-12 px-4">
+<section className="relative pt-24 pb-12 px-4">
         <div className="container mx-auto max-w-6xl">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}

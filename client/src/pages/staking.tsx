@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Coins, Lock, Unlock, TrendingUp, Trophy, Zap, Gift, Clock, ChevronRight, Sparkles, Shield, Star, LogIn, Crown, Medal, Award, Flame, Wallet, ArrowUpRight, Home } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+import { Coins, Lock, Unlock, TrendingUp, Trophy, Zap, Gift, Clock, ChevronRight, Sparkles, Shield, Star, LogIn, Crown, Medal, Award, Flame, Wallet, ArrowUpRight } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +18,15 @@ import stakingImg from "@assets/generated_images/darkwave_staking_rewards_visual
 import defiImg from "@assets/generated_images/darkwave_defi_trading_visual.png";
 import networkImg from "@assets/generated_images/darkwave_blockchain_network_visual.png";
 import { WalletButton } from "@/components/wallet-button";
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
 
 const poolBackgrounds = [stakingImg, defiImg, networkImg, blockchainImg];
 const featureBackgrounds = [stakingImg, networkImg, dashboardImg];
@@ -242,23 +250,12 @@ export default function Staking() {
   const totalPendingRewards = userStakes.reduce((acc, stake) => acc + parseFloat(stake.pendingRewards || "0"), 0);
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center">
-          <div className="flex items-center gap-3">
-            <BackButton />
-            <h1 className="text-lg font-bold text-white">Staking</h1>
-          </div>
-          <Link href="/" className="ml-auto">
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-white/10">
-              <Home className="w-4 h-4" />
-            </Button>
-          </Link>
-        </div>
-      </nav>
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
 
       {/* Hero Section with Premium Effects */}
-      <section className="pt-20 pb-12 px-4 relative overflow-hidden">
+      <section className="pb-12 relative overflow-hidden">
         {/* Animated Background */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 left-1/4 w-96 h-96 bg-primary/20 rounded-full blur-[120px] animate-pulse" />
@@ -282,7 +279,7 @@ export default function Staking() {
               Earn Up to 38% APY
             </Badge>
             <h1 className="text-4xl md:text-6xl font-display font-bold mb-4">
-              Staking{" "}
+              <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Staking</span>{" "}
               <span className="relative">
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-purple-400 to-secondary">Nexus</span>
                 <motion.span 
@@ -820,7 +817,7 @@ export default function Staking() {
         </div>
       </section>
 
-      
+      </div>
     </div>
   );
 }

@@ -22,7 +22,6 @@ import {
   MessageSquare, Swords, Map, Users, Send, RefreshCw,
   ChevronRight, Loader2, User, Crown, Zap
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -250,7 +249,6 @@ export default function ChroniclesAIDemo() {
       <div className="min-h-screen bg-slate-950 text-white flex flex-col">
         <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800">
           <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
-            <BackButton />
           </div>
         </nav>
         <div className="flex-1 flex items-center justify-center pt-20 px-4">
@@ -280,7 +278,6 @@ export default function ChroniclesAIDemo() {
 
       <nav className="fixed top-0 left-0 right-0 z-50 bg-slate-950/80 backdrop-blur-xl border-b border-slate-800">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between">
-          <BackButton />
         </div>
       </nav>
 

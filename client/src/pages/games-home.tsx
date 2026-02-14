@@ -101,6 +101,16 @@ function AnimatedCounter({ target, suffix = "" }: { target: number; suffix?: str
   return <span ref={ref}>{count.toLocaleString()}{suffix}</span>;
 }
 
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { scrollY } = useScroll();
@@ -498,8 +508,6 @@ function CurrencySection() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <GlassCard className="p-6 sm:p-8 md:p-10 relative overflow-hidden" glow>
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-yellow-500/5 to-transparent rounded-full blur-3xl" />
-
-          <div className="relative z-10">
             <div className="flex items-center gap-3 mb-8">
               <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500/20 to-green-500/20 border border-yellow-500/30 flex items-center justify-center">
                 <Coins className="w-6 h-6 text-yellow-400" />
@@ -567,8 +575,6 @@ function BottomCTA() {
         <GlassCard className="px-6 py-10 sm:px-12 sm:py-14 text-center relative overflow-hidden" glow>
           <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 via-purple-500/5 to-cyan-500/5" />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 bg-gradient-to-b from-pink-500/10 to-transparent rounded-full blur-3xl" />
-
-          <div className="relative z-10">
             <div className="mb-8 flex justify-center">
               <motion.div
                 animate={{ rotate: [0, 5, -5, 0] }}

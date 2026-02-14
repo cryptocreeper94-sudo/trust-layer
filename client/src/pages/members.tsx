@@ -54,8 +54,6 @@ export default function Members() {
     <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
       <GlowOrb color="#10b981" size={500} top="-5%" left="60%" />
       <GlowOrb color="#06b6d4" size={400} top="40%" left="-10%" delay={3} />
-
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
           
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -21,6 +21,16 @@ import { Progress } from "@/components/ui/progress";
 import { MemberBadge } from "@/components/member-badge";
 import { WalletButton } from "@/components/wallet-button";
 
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 export default function MyHub() {
   const { user, isAuthenticated } = useSimpleAuth();
 
@@ -351,7 +361,9 @@ export default function MyHub() {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
+      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
         <GlassCard className="p-8 text-center max-w-md">
           <Shield className="w-16 h-16 text-cyan-400 mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2">Welcome to Your Hub</h1>
@@ -370,71 +382,7 @@ export default function MyHub() {
     <div className="min-h-screen bg-slate-950 text-white">
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-cyan-900/20 pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(6,182,212,0.15)_0%,_transparent_50%)] pointer-events-none" />
-      
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="w-full px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center">
-            <span className="font-display font-bold text-xl tracking-tight">Trust Layer</span>
-          </Link>
-          <div className="flex items-center gap-2 sm:gap-3">
-            <div className="relative">
-              <button 
-                onClick={() => setShowNotifications(!showNotifications)}
-                className="p-2 rounded-lg hover:bg-white/10 transition-colors relative"
-                data-testid="button-notifications"
-              >
-                <Bell className="w-5 h-5 text-white/70" />
-                {notifications.filter(n => !n.read).length > 0 && (
-                  <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
-                )}
-              </button>
-              {showNotifications && (
-                <div className="fixed sm:absolute right-4 sm:right-0 left-4 sm:left-auto top-16 sm:top-12 sm:w-80 bg-slate-900 border border-white/10 rounded-xl shadow-2xl z-50 overflow-hidden">
-                  <div className="p-3 border-b border-white/10 flex items-center justify-between">
-                    <span className="font-semibold text-sm">Notifications</span>
-                    <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-xs">
-                      {notifications.filter(n => !n.read).length} new
-                    </Badge>
-                  </div>
-                  <div className="max-h-64 overflow-y-auto">
-                    {notifications.map(notif => (
-                      <div key={notif.id} className={`p-3 border-b border-white/5 hover:bg-white/5 transition-colors ${!notif.read ? 'bg-cyan-500/5' : ''}`}>
-                        <div className="flex items-start gap-2">
-                          <div className={`p-1.5 rounded-lg ${notif.type === 'reward' ? 'bg-emerald-500/20' : notif.type === 'quest' ? 'bg-amber-500/20' : 'bg-cyan-500/20'}`}>
-                            {notif.type === 'reward' ? <Gift className="w-3 h-3 text-emerald-400" /> : 
-                             notif.type === 'quest' ? <Target className="w-3 h-3 text-amber-400" /> : 
-                             <Bell className="w-3 h-3 text-cyan-400" />}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-medium truncate">{notif.title}</p>
-                            <p className="text-xs text-white/50 truncate">{notif.message}</p>
-                            <p className="text-[10px] text-white/30 mt-1">{notif.time}</p>
-                          </div>
-                          {!notif.read && <div className="w-2 h-2 bg-cyan-400 rounded-full mt-1" />}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="p-2 border-t border-white/10">
-                    <Button variant="ghost" size="sm" className="w-full text-xs text-white/60">
-                      View all notifications
-                    </Button>
-                  </div>
-                </div>
-              )}
-            </div>
-            <Link href="/feedback">
-              <button className="p-2 rounded-lg hover:bg-white/10 transition-colors" data-testid="button-help">
-                <Headphones className="w-5 h-5 text-white/70" />
-              </button>
-            </Link>
-            {user?.id && <MemberBadge userId={user.id.toString()} />}
-            <WalletButton />
-          </div>
-        </div>
-      </nav>
-
-      <div className="fixed top-14 left-0 right-0 z-40 bg-slate-900/80 backdrop-blur-sm border-b border-white/5">
+<div className="fixed top-14 left-0 right-0 z-40 bg-slate-900/80 backdrop-blur-sm border-b border-white/5">
           <div className="container mx-auto px-4 py-2 flex items-center justify-between text-sm">
             <div className="flex items-center gap-6 overflow-x-auto">
               <div className="flex items-center gap-2 whitespace-nowrap">

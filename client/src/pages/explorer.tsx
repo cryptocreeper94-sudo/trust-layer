@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Home, Box, Clock, QrCode, AlertCircle, CheckCircle2, Search, Zap, Activity, Database, Server, Hash } from "lucide-react";
-import { Link } from "wouter";
+import { Box, Clock, QrCode, AlertCircle, CheckCircle2, Search, Zap, Activity, Database, Server, Hash } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { usePageAnalytics } from "@/hooks/use-analytics";
@@ -69,6 +67,15 @@ interface HallmarkData {
   message: string;
   createdAt: string;
 }
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
 
 export default function Explorer() {
   usePageAnalytics();
@@ -158,34 +165,15 @@ export default function Explorer() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/20 selection:text-primary">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center">
-          <div className="flex items-center gap-3">
-            <BackButton />
-            <div>
-              <h1 className="text-lg font-bold text-white">TrustLayerScan</h1>
-              <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                <span className="text-[10px] text-amber-400">Testnet</span>
-              </div>
-            </div>
-          </div>
-          <div className="ml-auto flex items-center gap-2">
-            <Link href="/">
-              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-white/10">
-                <Home className="w-4 h-4" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </nav>
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
 
-      <section className="pt-20 pb-8 px-4">
+      <section className="pb-8 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-4xl font-display font-bold mb-2">
-              TrustLayer<span className="text-primary">Scan</span>
+            <h1 className="text-3xl md:text-4xl font-display font-bold mb-2 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              TrustLayerScan
             </h1>
             <p className="text-sm text-muted-foreground">Track every block, transaction, and contract in real-time</p>
           </div>
@@ -397,7 +385,7 @@ export default function Explorer() {
         </div>
       </section>
 
-      
+      </div>
     </div>
   );
 }

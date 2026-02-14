@@ -4,9 +4,7 @@ import { Link } from "wouter";
 import { 
   Sparkles, Users, MapPin, Palette, Scroll, Crown, 
   ChevronRight, Zap, Globe, Heart, Star, Lock, Mail, Wallet,
-  Swords, Wand2, Target, Shield
-, Shield , Shield } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+  Swords, Wand2, Target, Shield , Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -63,6 +61,16 @@ const CHARACTER_CLASSES = [
   { img: rogueImg, name: "Shadow", role: "Stealth / DPS", icon: Target },
 ];
 
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 export default function CreatorProgram() {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -77,7 +85,9 @@ export default function CreatorProgram() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white overflow-x-hidden">
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
       {showGamesModal && <GamesComingSoonModal onClose={() => setShowGamesModal(false)} />}
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -113,20 +123,7 @@ export default function CreatorProgram() {
         </div>
 
         {/* Nav */}
-        <nav className="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-xl border-b border-white/5">
-          <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2">
-              <Shield className="w-7 h-7 text-cyan-400" />
-              <span className="font-display font-bold hidden sm:inline">Trust Layer</span>
-            </Link>
-            <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30 animate-pulse">
-              <Sparkles className="w-3 h-3 mr-1" />
-              Genesis Phase
-            </Badge>
-          </div>
-        </nav>
-
-        {/* Hero Content */}
+{/* Hero Content */}
         <div className="relative z-10 text-center px-4 max-w-5xl mx-auto pt-20">
           <motion.div
             initial={{ opacity: 0, y: 30 }}

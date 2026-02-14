@@ -10,7 +10,6 @@ import {
   Activity, TrendingUp, Reply, Edit2, Trash2, Coins, Paperclip, ImageIcon,
   Pin, Mail, BarChart2, Clock, Forward, MessageSquare, BellOff, Calendar, LogOut
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
 import { useUpload } from "@/hooks/use-upload";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { GlassCard } from "@/components/glass-card";
@@ -390,6 +389,16 @@ function MessageBubble({ message, currentUserId, onReply, onReaction, onDelete, 
   );
 }
 
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 export default function CommunityHub() {
   const queryClient = useQueryClient();
   const [selectedCommunityId, setSelectedCommunityId] = useState<string | null>(null);
@@ -704,55 +713,10 @@ export default function CommunityHub() {
   const isMember = myCommunities?.communities?.some((c: any) => c.id === selectedCommunityId);
 
   return (
-    <div className="min-h-screen flex flex-col bg-background overflow-hidden">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <button 
-              className="lg:hidden p-2 hover:bg-white/10 rounded-lg"
-              onClick={() => setShowSidebar(!showSidebar)}
-              data-testid="toggle-sidebar"
-            >
-              {showSidebar ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-            <button 
-              onClick={() => setAboutOpen(true)}
-              className="flex items-center gap-2 shrink-0 hover:opacity-80 transition-opacity"
-              data-testid="button-about-chronochat"
-            >
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center">
-                <MessageCircle className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-display font-bold text-lg tracking-tight hidden sm:inline bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Chronochat</span>
-            </button>
-          </div>
-          <div className="flex items-center gap-2">
-            {!isAuthenticated ? (
-              <Button 
-                size="sm" 
-                className="bg-cyan-500 hover:bg-cyan-600"
-                onClick={() => window.location.href = '/?login=true'}
-                disabled={authLoading}
-              >
-                {authLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Sign In"}
-              </Button>
-            ) : (
-              <Button 
-                size="sm" 
-                variant="ghost"
-                className="text-gray-400 hover:text-white"
-                onClick={() => logout()}
-              >
-                <LogOut className="w-4 h-4 mr-1" />
-                Sign Out
-              </Button>
-            )}
-            <BackButton />
-          </div>
-        </div>
-      </nav>
-
-      <div className="flex-1 pt-14 flex">
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+<div className="flex-1  flex">
         <AnimatePresence>
           {(showSidebar || typeof window !== "undefined" && window.innerWidth >= 1024) && (
             <motion.div

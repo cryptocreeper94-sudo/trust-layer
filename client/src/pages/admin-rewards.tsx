@@ -4,7 +4,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Users, Gift, Coins, Plus, Trash2, Edit2, Check, X, Crown, Star, Sparkles, Award , Shield } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { BackButton } from "@/components/page-nav";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
@@ -63,6 +62,16 @@ interface AirdropAllocation {
   createdAt: string;
 }
 
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 export default function AdminRewards() {
   const { user, isLoading: authLoading } = useAuth();
   const queryClient = useQueryClient();
@@ -99,7 +108,9 @@ export default function AdminRewards() {
 
   if (authLoading) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
         <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full" />
       </div>
     );
@@ -121,22 +132,7 @@ export default function AdminRewards() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10">
-              <Crown className="w-3 h-3 mr-1" /> Admin
-            </Badge>
-            <BackButton />
-          </div>
-        </div>
-      </nav>
-
-      <main className="pt-20 pb-12 px-4">
+<main className="pt-20 pb-12 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="mb-8">
             <h1 className="text-3xl font-display font-bold mb-2">

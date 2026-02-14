@@ -48,6 +48,16 @@ const assetTypeGradients: Record<string, string> = {
   ip_rights: "from-purple-500 to-violet-600"
 };
 
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 export default function RWATokenization() {
   const { data: assets } = useQuery({
     queryKey: ["/api/rwa/assets"],
@@ -181,15 +191,15 @@ export default function RWATokenization() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
         <div className="absolute top-1/2 right-1/3 w-[400px] h-[400px] bg-amber-500/8 rounded-full blur-3xl animate-pulse delay-500" />
         <div className="absolute bottom-1/3 left-1/3 w-[350px] h-[350px] bg-emerald-500/8 rounded-full blur-3xl animate-pulse delay-700" />
       </div>
-
-      <div className="relative z-10">
         <div className="container mx-auto px-4 pt-8 pb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

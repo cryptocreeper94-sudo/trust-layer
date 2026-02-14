@@ -5,7 +5,6 @@ import {
   Fish, AlertTriangle, TrendingUp, TrendingDown, ExternalLink,
   Bell, BellOff, Filter, RefreshCw, Activity, Wallet, ArrowUpRight, ArrowDownRight, Home
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -126,6 +125,16 @@ function WhaleMovementCard({ movement, index }: { movement: WhaleMovement; index
   );
 }
 
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 export default function WhaleTracker() {
   const [movements, setMovements] = useState(WHALE_MOVEMENTS);
   const [alertsEnabled, setAlertsEnabled] = useState(true);
@@ -155,23 +164,10 @@ export default function WhaleTracker() {
   const netFlow = buyVolume - sellVolume;
 
   return (
-    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-slate-950/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center">
-          <div className="flex items-center gap-3">
-            <BackButton />
-            <h1 className="text-lg font-bold text-white">Whale Tracker</h1>
-            <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 text-[10px] animate-pulse">Live</Badge>
-          </div>
-          <Link href="/" className="ml-auto">
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-white/10">
-              <Home className="w-4 h-4" />
-            </Button>
-          </Link>
-        </div>
-      </nav>
-
-      <main className="flex-1 pt-16 pb-8 px-4">
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+<main className="flex-1  pb-8 px-4">
         <div className="container mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 20 }}

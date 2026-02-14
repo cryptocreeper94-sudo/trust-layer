@@ -5,7 +5,6 @@ import {
   Sparkles, Brain, Users, Zap, AlertTriangle, 
   ChevronRight, RefreshCw, Play, Heart, Shield, Flame, Crown, Target
 } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
@@ -259,6 +258,16 @@ function ChoiceCard({ choice, index }: { choice: Choice; index: number }) {
   );
 }
 
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 export default function ScenarioGenerator() {
   const [era, setEra] = useState("Dawn Age");
   const [tone, setTone] = useState("tense");
@@ -291,23 +300,11 @@ export default function ScenarioGenerator() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
       {/* Nav */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-xl border-b border-white/5">
-        <div className="container mx-auto px-3 sm:px-4 h-14 flex items-center justify-between gap-2">
-          <BackButton />
-          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
-            <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-display font-bold text-sm sm:text-base truncate max-w-[120px] sm:max-w-none">Scenario Generator</span>
-          </div>
-          <Badge className="bg-pink-500/20 text-pink-300 border-pink-500/30 text-[10px] sm:text-xs shrink-0">
-            <Brain className="w-3 h-3 mr-1" />
-            <span className="hidden sm:inline">AI </span>Demo
-          </Badge>
-        </div>
-      </nav>
-
-      <main className="pt-14">
+<main className="">
         {/* Hero */}
         <section className="relative py-16 px-4 overflow-hidden">
           <img 

@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Link } from "wouter";
 import { 
   Droplets, Wallet, TrendingUp, Info, Loader2,
   ArrowRightLeft, Sparkles, ChevronDown, Clock, CheckCircle
-, Shield } from "lucide-react";
-import { BackButton } from "@/components/page-nav";
+} from "lucide-react";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -60,6 +58,15 @@ const convertToWei = (amount: string): string => {
     return "0";
   }
 };
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
 
 export default function LiquidStaking() {
   const { toast } = useToast();
@@ -121,22 +128,11 @@ export default function LiquidStaking() {
   });
 
   return (
-    <div className="min-h-screen flex flex-col bg-background overflow-x-hidden">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 shrink-0">
-            <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
-          </Link>
-          <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 text-[10px]">Liquid Staking</Badge>
-            <BackButton />
-          </div>
-        </div>
-      </nav>
-
-      <main className="flex-1 pt-16 pb-8 px-4">
-        <div className="container mx-auto max-w-lg">
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-lg mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -152,7 +148,7 @@ export default function LiquidStaking() {
               >
                 <Droplets className="w-5 h-5 text-cyan-400" />
               </motion.div>
-              <h1 className="text-2xl md:text-3xl font-display font-bold" data-testid="text-title">
+              <h1 className="text-2xl md:text-3xl font-display font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent" data-testid="text-title">
                 Liquid Staking
               </h1>
             </div>
@@ -377,9 +373,7 @@ export default function LiquidStaking() {
             </CollapsibleContent>
           </Collapsible>
         </div>
-      </main>
-
-      
+      </div>
     </div>
   );
 }

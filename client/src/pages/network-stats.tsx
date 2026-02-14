@@ -59,8 +59,6 @@ export default function NetworkStats() {
     <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
       <GlowOrb color="rgba(0,255,150,0.3)" size={500} top="-5%" left="60%" />
       <GlowOrb color="rgba(0,200,255,0.25)" size={400} top="40%" left="-10%" delay={3} />
-
-      <div className="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center gap-3 mb-8">
             <h1 className="text-2xl md:text-3xl font-display font-bold">

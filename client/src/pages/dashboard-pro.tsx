@@ -92,6 +92,16 @@ function BentoCard({
   return content;
 }
 
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 export default function DashboardPro() {
   const [currentPrice, setCurrentPrice] = useState(0.1523);
   const [priceChange, setPriceChange] = useState(5.24);
@@ -104,28 +114,10 @@ export default function DashboardPro() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/80 backdrop-blur-xl">
-        <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <Shield className="w-7 h-7 text-cyan-400" />
-            <span className="font-display font-bold text-lg">Trust Layer</span>
-            <Badge className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-0 text-[9px]">PRO</Badge>
-          </Link>
-          <div className="flex items-center gap-3">
-            <Button variant="ghost" size="icon" className="relative">
-              <Bell className="w-4 h-4" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
-            </Button>
-            <Button variant="ghost" size="sm" className="gap-2">
-              <Wallet className="w-4 h-4" />
-              <span className="hidden sm:inline font-mono">0x7a23...f8d1</span>
-            </Button>
-          </div>
-        </div>
-      </nav>
-
-      <main className="pt-20 pb-8 px-4">
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
+<main className="pt-20 pb-8 px-4">
         <div className="container mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: -20 }}

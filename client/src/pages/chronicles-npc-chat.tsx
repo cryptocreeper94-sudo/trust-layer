@@ -49,6 +49,16 @@ function getRelBarColor(score: number): string {
   return "bg-cyan-400";
 }
 
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 function getHeaders(): Record<string, string> {
   const session = getChroniclesSession();
   const headers: Record<string, string> = { "Content-Type": "application/json" };

@@ -3,7 +3,7 @@ import { Link } from "wouter";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { 
-  Bot, Shield, ShieldCheck, Award, CheckCircle, Search,
+  Bot, ShieldCheck, Award, CheckCircle, Search,
   ExternalLink, Clock, TrendingUp, Filter, Layers,
   Sparkles, Users, BarChart3, Eye, Lock, Activity, AlertTriangle
 } from "lucide-react";
@@ -61,6 +61,16 @@ function TrustScoreBar({ score, label }: { score: number; label: string }) {
   );
 }
 
+
+const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <motion.div
+    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+    style={{ background: color, width: size, height: size, top, left }}
+    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
+    transition={{ duration: 8, repeat: Infinity, delay }}
+  />
+);
+
 export default function GuardianAIRegistry() {
   usePageAnalytics();
   const [searchQuery, setSearchQuery] = useState('');
@@ -84,7 +94,9 @@ export default function GuardianAIRegistry() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen relative overflow-hidden pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={500} top="-5%" left="60%" />
+      <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={400} top="40%" left="-10%" delay={3} />
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
         {/* Header */}
         <motion.section 
