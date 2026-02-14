@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   MessageSquare, Send, Hash, Users, LogIn, UserPlus, Eye, EyeOff,
-  Wifi, WifiOff, ChevronLeft, Shield, Loader2, LogOut, AtSign
+  Wifi, WifiOff, ChevronLeft, Shield, Loader2, LogOut, AtSign,
+  Download, X, Share2
 } from 'lucide-react';
 
 interface ChatUser {
@@ -711,19 +712,57 @@ function ChannelSidebar({
 export default function SignalChatPage() {
   const [authState, setAuthState] = useState<{ token: string | null; user: ChatUser | null }>(getStoredAuth);
   const [verifying, setVerifying] = useState(!!authState.token);
+  const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+  const [showInstallBanner, setShowInstallBanner] = useState(false);
+  const [installDismissed, setInstallDismissed] = useState(false);
 
   useEffect(() => {
     const existingManifest = document.querySelector('link[rel="manifest"]');
     if (existingManifest) existingManifest.remove();
     const manifestLink = document.createElement('link');
     manifestLink.rel = 'manifest';
-    manifestLink.href = '/signal-chat-manifest.json';
+    manifestLink.href = '/manifest-signal-chat.webmanifest';
     document.head.appendChild(manifestLink);
     const themeColor = document.querySelector('meta[name="theme-color"]');
-    if (themeColor) themeColor.setAttribute('content', '#0891b2');
-    document.title = 'Signal Chat | Trust Layer';
-    return () => { manifestLink.remove(); };
+    if (themeColor) themeColor.setAttribute('content', '#8b5cf6');
+    document.title = 'Signal Chat | DarkWave';
+
+    const appleTouchIcon = document.createElement('link');
+    appleTouchIcon.rel = 'apple-touch-icon';
+    appleTouchIcon.href = '/icons/signal-chat-icon-512.png';
+    document.head.appendChild(appleTouchIcon);
+
+    return () => {
+      manifestLink.remove();
+      appleTouchIcon.remove();
+    };
   }, []);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      if (!installDismissed) setShowInstallBanner(true);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, [installDismissed]);
+
+  const handleInstallPWA = async () => {
+    if (!deferredPrompt) {
+      const isIos = /iPad|iPhone|iPod/.test(navigator.userAgent);
+      if (isIos) {
+        alert('To install: tap the Share button in Safari, then "Add to Home Screen"');
+      }
+      return;
+    }
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      setShowInstallBanner(false);
+    }
+    setDeferredPrompt(null);
+  };
 
   useEffect(() => {
     if (!authState.token) {
@@ -759,9 +798,65 @@ export default function SignalChatPage() {
 
   if (!authState.token || !authState.user) {
     return (
-      <AuthScreen onAuth={(token, user) => setAuthState({ token, user })} />
+      <>
+        <SignalChatInstallBanner 
+          show={showInstallBanner} 
+          onInstall={handleInstallPWA} 
+          onDismiss={() => { setShowInstallBanner(false); setInstallDismissed(true); }} 
+        />
+        <AuthScreen onAuth={(token, user) => setAuthState({ token, user })} />
+      </>
     );
   }
 
-  return <ChatApp initialToken={authState.token} initialUser={authState.user} />;
+  return (
+    <>
+      <SignalChatInstallBanner 
+        show={showInstallBanner} 
+        onInstall={handleInstallPWA} 
+        onDismiss={() => { setShowInstallBanner(false); setInstallDismissed(true); }} 
+      />
+      <ChatApp initialToken={authState.token} initialUser={authState.user} />
+    </>
+  );
+}
+
+function SignalChatInstallBanner({ show, onInstall, onDismiss }: { show: boolean; onInstall: () => void; onDismiss: () => void }) {
+  if (!show) return null;
+  return (
+    <motion.div
+      initial={{ y: -60, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: -60, opacity: 0 }}
+      className="fixed top-0 left-0 right-0 z-[100] bg-gradient-to-r from-purple-600/95 to-cyan-600/95 backdrop-blur-xl border-b border-white/10 px-4 py-3 flex items-center justify-between gap-3"
+      data-testid="signal-chat-install-banner"
+    >
+      <div className="flex items-center gap-3 min-w-0">
+        <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center flex-shrink-0">
+          <MessageSquare className="w-5 h-5 text-white" />
+        </div>
+        <div className="min-w-0">
+          <p className="text-white font-semibold text-sm truncate">Install Signal Chat</p>
+          <p className="text-white/70 text-xs truncate">Add to home screen for instant access</p>
+        </div>
+      </div>
+      <div className="flex items-center gap-2 flex-shrink-0">
+        <button
+          onClick={onInstall}
+          className="bg-white text-purple-700 px-4 py-1.5 rounded-lg text-sm font-semibold hover:bg-white/90 transition-colors flex items-center gap-1.5"
+          data-testid="button-install-signal-chat"
+        >
+          <Download className="w-4 h-4" />
+          Install
+        </button>
+        <button
+          onClick={onDismiss}
+          className="text-white/60 hover:text-white p-1"
+          data-testid="button-dismiss-signal-chat-install"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      </div>
+    </motion.div>
+  );
 }
