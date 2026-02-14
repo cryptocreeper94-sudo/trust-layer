@@ -7,7 +7,6 @@ import {
   Heart, Eye, Tag, Plus, ImageIcon, Loader2, CheckCircle2, X
 , Shield } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -411,7 +410,7 @@ export default function NftMarketplace() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

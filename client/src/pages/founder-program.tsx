@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
-import { Footer } from "@/components/footer";
 import { useToast } from "@/hooks/use-toast";
 import { useWallet } from "@/hooks/use-wallet";
 import { WalletButton } from "@/components/wallet-button";
@@ -306,7 +305,7 @@ export default function FounderProgram() {
         </GlassCard>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

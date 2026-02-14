@@ -9,7 +9,6 @@ import {
   Download, Calendar, Rocket, UserCheck, Mail, Send, ChevronRight,
   Trophy, Gift, Percent, FileSearch, Globe, Bug, Handshake, Copy, Check
 } from "lucide-react";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
@@ -1658,7 +1657,7 @@ export default function GuardianCertificationPage() {
         </section>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

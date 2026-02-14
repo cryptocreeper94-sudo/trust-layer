@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { AreaChart, Area, ResponsiveContainer } from "recharts";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -355,7 +354,7 @@ export default function CopyTrading() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

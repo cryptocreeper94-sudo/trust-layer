@@ -16,7 +16,6 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { apiRequest } from "@/lib/queryClient";
 import { WalletButton } from "@/components/wallet-button";
@@ -736,7 +735,7 @@ export default function DomainManager() {
         </DialogContent>
       </Dialog>
 
-      <Footer />
+      
     </div>
   );
 }

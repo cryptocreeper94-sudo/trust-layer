@@ -8,7 +8,6 @@ import {
 } from "lucide-react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BackButton } from "@/components/page-nav";
-import { Footer } from "@/components/footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -592,7 +591,7 @@ export default function Bridge() {
           </div>
         </main>
 
-        <Footer />
+        
       </div>
     </TooltipProvider>
   );

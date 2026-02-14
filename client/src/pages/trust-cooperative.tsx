@@ -5,7 +5,6 @@ import {
   Network, Handshake, MapPin, GitBranch, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Footer } from "@/components/footer";
 
 
 const containerVariants = {
@@ -261,7 +260,7 @@ export default function TrustCooperative() {
         </motion.div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

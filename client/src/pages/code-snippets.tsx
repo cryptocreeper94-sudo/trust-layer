@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { GlassCard } from "@/components/glass-card";
-import { Footer } from "@/components/footer";
 import { useToast } from "@/hooks/use-toast";
 
 interface CodeSnippet {
@@ -342,7 +341,7 @@ export default function CodeSnippets() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

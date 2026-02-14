@@ -9,7 +9,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Footer } from "@/components/footer";
 import { ChronoLayout, HoloCard, CTABanner, chronoStyles } from "@/components/chrono-ui";
 import { HomeButton } from "@/components/page-nav";
 import { usePageAnalytics } from "@/hooks/use-analytics";
@@ -418,7 +417,7 @@ export default function ChronoEras() {
         backgroundImage={quantumRealm}
       />
 
-      <Footer />
+      
       
       <style>{chronoStyles}</style>
     </ChronoLayout>

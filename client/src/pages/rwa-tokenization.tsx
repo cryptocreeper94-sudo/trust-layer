@@ -26,7 +26,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 
-import { Footer } from "@/components/footer";
 import { GlassCard, StatCard } from "@/components/glass-card";
 
 const assetTypeIcons: Record<string, any> = {
@@ -431,7 +430,7 @@ export default function RWATokenization() {
           </motion.div>
         </div>
 
-        <Footer />
+        
       </div>
     </div>
   );

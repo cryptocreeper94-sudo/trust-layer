@@ -11,7 +11,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
-import { Footer } from "@/components/footer";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { SimpleLoginModal } from "@/components/simple-login";
 
@@ -624,7 +623,7 @@ export default function StudioLanding() {
         </section>
       </main>
 
-      <Footer />
+      
 
       {/* Login Modal */}
       <SimpleLoginModal 

@@ -29,7 +29,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BackButton } from "@/components/page-nav";
-import { Footer } from "@/components/footer";
 import { GlassCard, StatCard } from "@/components/glass-card";
 
 const competitors = [
@@ -678,7 +677,7 @@ export default function CompetitiveAnalysis() {
         </section>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

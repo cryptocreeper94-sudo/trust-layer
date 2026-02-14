@@ -7,7 +7,6 @@ import {
   ArrowUpDown, ChevronDown, Loader2, Info, Minus, BarChart3, Home
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -390,7 +389,7 @@ export default function Liquidity() {
         </DialogContent>
       </Dialog>
 
-      <Footer />
+      
     </div>
   );
 }

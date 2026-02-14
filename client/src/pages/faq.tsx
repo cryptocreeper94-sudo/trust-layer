@@ -5,7 +5,6 @@ import { BackButton } from "@/components/page-nav";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 
@@ -345,7 +344,7 @@ export default function FAQ() {
         </div>
       </section>
 
-      <Footer />
+      
     </div>
   );
 }

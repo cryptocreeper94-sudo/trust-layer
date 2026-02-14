@@ -4,7 +4,6 @@ import { ArrowLeft, Gift, Users, Coins, Heart, Trophy, Sparkles, Check, Info, Wa
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
-import { Footer } from "@/components/footer";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { authFetch } from "@/hooks/use-firebase-auth";
 import { useQuery } from "@tanstack/react-query";
@@ -711,7 +710,7 @@ export default function Rewards() {
         </motion.div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

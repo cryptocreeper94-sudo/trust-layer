@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 
@@ -360,7 +359,7 @@ export default function ApiPlayground() {
         </div>
       </div>
 
-      <Footer />
+      
     </div>
   );
 }

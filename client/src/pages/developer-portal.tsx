@@ -14,7 +14,6 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
-import { Footer } from "@/components/footer";
 import { APP_VERSION } from "@shared/schema";
 import {
   Accordion,
@@ -1348,7 +1347,7 @@ console.log('All successful:', result.allSuccessful);`}
         </motion.div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

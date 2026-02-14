@@ -6,7 +6,6 @@ import {
   Shield, Zap, FileCode, Github, ExternalLink, Bot, AlertTriangle,
   Trophy, Users, Coins, Play, ChevronRight, Lock, Rocket
 } from "lucide-react";
-import { Footer } from "@/components/footer";
 import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -427,7 +426,7 @@ export default function GameDeveloper() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

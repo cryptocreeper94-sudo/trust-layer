@@ -8,7 +8,6 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { useQuery } from "@tanstack/react-query";
 import { fetchDocuments } from "@/lib/api";
-import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 
@@ -167,7 +166,7 @@ export default function DocHub() {
         </div>
       </section>
 
-      <Footer />
+      
     </div>
   );
 }

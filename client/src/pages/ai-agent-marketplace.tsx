@@ -25,7 +25,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
-import { Footer } from "@/components/footer";
 import { GlassCard, StatCard } from "@/components/glass-card";
 
 const categoryIcons: Record<string, any> = {
@@ -343,7 +342,7 @@ export default function AIAgentMarketplace() {
           </motion.div>
         </div>
 
-        <Footer />
+        
       </div>
     </div>
   );

@@ -9,7 +9,6 @@ import {
   Wallet, ChevronRight, Zap, Lock, Server, Database, Globe,
   Bell, TrendingUp, BarChart3, FileText, RefreshCw, Loader, Sparkles
 } from "lucide-react";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -685,7 +684,7 @@ export default function GuardianPortal() {
         </motion.div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

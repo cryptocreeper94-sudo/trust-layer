@@ -12,7 +12,6 @@ import governanceImg from "@assets/generated_images/medieval_fantasy_kingdom.png
 import spaceImg from "@assets/generated_images/deep_space_station.png";
 import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
 import quantumImg from "@assets/generated_images/quantum_dimension_realm.png";
-import { Footer } from "@/components/footer";
 import { DYORDisclaimer } from "@/components/dyor-disclaimer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
@@ -589,7 +588,7 @@ export default function Token() {
         </div>
       </section>
 
-      <Footer />
+      
     </div>
   );
 }

@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { GenesisHallmarkCard } from "@/components/genesis-hallmark";
-import { Footer } from "@/components/footer";
 
 const BLOCKCHAIN_SPECS = [
   { icon: Zap, label: "Block Time", value: "400ms", desc: "Ultra-fast finality" },
@@ -190,7 +189,7 @@ export default function GenesisBlock() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

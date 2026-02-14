@@ -5,7 +5,6 @@ import { Link } from "wouter";
 
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
-import { Footer } from "@/components/footer";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 
@@ -388,7 +387,7 @@ export default function Pricing() {
           </motion.div>
         </div>
 
-        <Footer />
+        
       </div>
     </div>
   );

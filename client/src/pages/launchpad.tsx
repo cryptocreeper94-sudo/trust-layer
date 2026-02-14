@@ -8,7 +8,6 @@ import {
   Twitter, Globe, Send, CheckCircle, Clock, Lock, Droplets, Info, ShieldCheck, AlertTriangle, Home
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -585,7 +584,7 @@ export default function Launchpad() {
           </GlassCard>
         </div>
       </main>
-      <Footer />
+      
       
       <AuthLoginModal 
         isOpen={authModalOpen} 

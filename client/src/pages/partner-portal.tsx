@@ -11,7 +11,6 @@ import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Footer } from "@/components/footer";
 import { toast } from "sonner";
 
 import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
@@ -1596,7 +1595,7 @@ function PartnerContent() {
         </section>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

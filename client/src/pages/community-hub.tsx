@@ -13,7 +13,6 @@ import {
 import { BackButton } from "@/components/page-nav";
 import { useUpload } from "@/hooks/use-upload";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

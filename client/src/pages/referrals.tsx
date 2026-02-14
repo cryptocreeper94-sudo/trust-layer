@@ -3,7 +3,6 @@ import { Link } from "wouter";
 import { Users, Coins , Shield , Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";
-import { Footer } from "@/components/footer";
 import { ReferralTracker } from "@/components/referral-tracker";
 import { AirdropDashboard } from "@/components/airdrop-dashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -84,7 +83,7 @@ export default function Referrals() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

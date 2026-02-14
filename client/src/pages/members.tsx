@@ -8,7 +8,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
-import { Footer } from "@/components/footer";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { useQuery } from "@tanstack/react-query";
 import { WalletButton } from "@/components/wallet-button";
@@ -232,7 +231,7 @@ export default function Members() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

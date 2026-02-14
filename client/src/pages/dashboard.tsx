@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { useAuth } from "@/hooks/use-auth";
 import { PasskeyManager } from "@/components/passkey-manager";
@@ -343,7 +342,7 @@ export default function Dashboard() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

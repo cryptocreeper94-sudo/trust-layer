@@ -6,7 +6,6 @@ import {
   LineChart, TrendingUp, TrendingDown, DollarSign,
   BarChart3, Clock, ChevronDown, RefreshCw
 , Shield } from "lucide-react";
-import { Footer } from "@/components/footer";
 import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -229,7 +228,7 @@ export default function Charts() {
           </div>
         </div>
       </main>
-      <Footer />
+      
     </div>
   );
 }

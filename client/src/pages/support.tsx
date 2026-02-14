@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 import { useAuth } from "@/hooks/use-auth";
@@ -423,7 +422,7 @@ export default function SupportPage() {
         </div>
       </section>
 
-      <Footer />
+      
     </div>
   );
 }

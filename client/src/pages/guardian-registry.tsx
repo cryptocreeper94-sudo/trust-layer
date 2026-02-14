@@ -4,7 +4,6 @@ import {
   Shield, ShieldCheck, Award, CheckCircle2, ExternalLink, 
   Calendar, Star, Sparkles, Search, Globe
 } from "lucide-react";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { Badge } from "@/components/ui/badge";
@@ -272,7 +271,7 @@ export default function GuardianRegistry() {
         </motion.div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

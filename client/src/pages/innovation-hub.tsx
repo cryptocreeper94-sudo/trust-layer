@@ -30,7 +30,6 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { BackButton } from "@/components/page-nav";
-import { Footer } from "@/components/footer";
 import { GlassCard, StatCard, FeatureCard } from "@/components/glass-card";
 
 export default function InnovationHub() {
@@ -732,7 +731,7 @@ export default function InnovationHub() {
         </section>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

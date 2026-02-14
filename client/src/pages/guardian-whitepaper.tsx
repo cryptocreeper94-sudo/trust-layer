@@ -6,7 +6,6 @@ import {
   ChevronRight, ExternalLink, Download, BookOpen
 } from "lucide-react";
 
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -395,7 +394,7 @@ export default function GuardianWhitepaperPage() {
         </div>
       </div>
       
-      <Footer />
+      
     </div>
   );
 }

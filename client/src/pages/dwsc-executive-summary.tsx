@@ -36,7 +36,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
-import { Footer } from "@/components/footer";
 import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
 import { useState, useRef } from "react";
 import pulseImg from "@assets/generated_images/pulse_ai_trading_dashboard.png";
@@ -892,7 +891,7 @@ export default function DWSCExecutiveSummary() {
         </section>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

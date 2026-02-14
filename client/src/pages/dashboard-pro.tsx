@@ -12,7 +12,6 @@ import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Footer } from "@/components/footer";
 
 const miniChartData = Array.from({ length: 20 }, (_, i) => ({
   value: 100 + Math.random() * 50 + i * 2,
@@ -433,7 +432,7 @@ export default function DashboardPro() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

@@ -13,7 +13,6 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { GlassCard } from "@/components/glass-card";
-import { Footer } from "@/components/footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Accordion,
@@ -578,7 +577,7 @@ export default function Team() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

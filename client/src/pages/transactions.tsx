@@ -7,7 +7,6 @@ import {
   Filter, Search, ChevronDown, ExternalLink, Clock, CheckCircle2, Download
 , Shield } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -313,7 +312,7 @@ export default function Transactions() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

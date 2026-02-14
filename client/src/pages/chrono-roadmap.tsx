@@ -6,7 +6,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Footer } from "@/components/footer";
 import { ChronoLayout, HoloCard, CTABanner, chronoStyles } from "@/components/chrono-ui";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 
@@ -333,7 +332,7 @@ export default function ChronoRoadmap() {
         backgroundImage={deepSpace}
       />
 
-      <Footer />
+      
       
       <style>{chronoStyles}</style>
     </ChronoLayout>

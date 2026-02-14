@@ -7,7 +7,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { SimpleLoginModal } from "@/components/simple-login";
 
@@ -276,7 +275,7 @@ export default function DevelopersRegister() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

@@ -10,7 +10,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
-import { Footer } from "@/components/footer";
 import { useAuth } from "@/hooks/use-auth";
 import { SimpleLoginModal } from "@/components/simple-login";
 import {
@@ -488,7 +487,7 @@ export default function ReferralProgram() {
         </div>
       </main>
 
-      <Footer />
+      
       <SimpleLoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
     </div>
   );

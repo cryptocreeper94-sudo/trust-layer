@@ -9,7 +9,6 @@ import {
   Calendar, Rocket, UserCheck, Mail, Send, ChevronRight,
   Cpu, Network, BarChart3, Fingerprint, Globe, Bug, ArrowRight
 } from "lucide-react";
-import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -1001,7 +1000,7 @@ export default function GuardianAI() {
         </div>
       )}
       
-      <Footer />
+      
     </div>
   );
 }

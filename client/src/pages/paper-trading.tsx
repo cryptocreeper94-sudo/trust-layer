@@ -7,7 +7,6 @@ import {
 , Shield , Shield } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from "recharts";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -349,7 +348,7 @@ export default function PaperTrading() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

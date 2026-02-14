@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { BarChart, Bar, ResponsiveContainer, XAxis, YAxis, Tooltip, Cell } from "recharts";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -296,7 +295,7 @@ export default function RarityAnalyzer() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

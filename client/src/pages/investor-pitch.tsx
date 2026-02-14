@@ -38,7 +38,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { BackButton } from "@/components/page-nav";
-import { Footer } from "@/components/footer";
 import { GlassCard, StatCard } from "@/components/glass-card";
 
 const keyMetrics = [
@@ -704,7 +703,7 @@ export default function InvestorPitch() {
         </section>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
-import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 
@@ -363,7 +362,7 @@ export default function Tokenomics() {
         </div>
       </section>
 
-      <Footer />
+      
     </div>
   );
 }

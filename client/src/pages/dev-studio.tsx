@@ -10,7 +10,6 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Footer } from "@/components/footer";
 
 const systemStats = [
   { label: "Block Time", value: "400ms", icon: Activity },
@@ -430,7 +429,7 @@ export default function DevStudio() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

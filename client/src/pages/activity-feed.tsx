@@ -7,7 +7,6 @@ import {
   ExternalLink, TrendingUp, Zap, Home
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -278,7 +277,7 @@ export default function ActivityFeed() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

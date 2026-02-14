@@ -14,7 +14,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
-import { Footer } from "@/components/footer";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { authFetch } from "@/hooks/use-firebase-auth";
 import { useQuery } from "@tanstack/react-query";
@@ -1211,7 +1210,7 @@ export default function MyHub() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

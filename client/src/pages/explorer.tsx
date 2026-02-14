@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 import { InfoTooltip } from "@/components/info-tooltip";
@@ -398,7 +397,7 @@ export default function Explorer() {
         </div>
       </section>
 
-      <Footer />
+      
     </div>
   );
 }

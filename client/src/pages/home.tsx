@@ -12,7 +12,6 @@ import { fetchEcosystemApps, fetchBlockchainStats } from "@/lib/api";
 import { FavoriteButton } from "@/components/favorite-button";
 import { SkeletonCard } from "@/components/ui/skeleton-card";
 import { usePreferences } from "@/lib/store";
-import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
@@ -1218,7 +1217,7 @@ export default function Home() {
       </section>
 
 
-      <Footer />
+      
     </div>
   );
 }

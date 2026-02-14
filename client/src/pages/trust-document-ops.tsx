@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import { Shield, CheckCircle, FileText, Hash, Calendar, User, Award } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Footer } from "@/components/footer";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -298,7 +297,7 @@ export default function TrustDocumentOps() {
         </motion.div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

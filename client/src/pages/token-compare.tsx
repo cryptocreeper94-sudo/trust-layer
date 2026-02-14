@@ -3,7 +3,6 @@ import { ArrowLeftRight, Clock , Shield , Shield } from "lucide-react";
 import { Link } from "wouter";
 import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
-import { Footer } from "@/components/footer";
 
 export default function TokenCompare() {
   return (
@@ -83,7 +82,7 @@ export default function TokenCompare() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

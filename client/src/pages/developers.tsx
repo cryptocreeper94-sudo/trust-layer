@@ -8,7 +8,6 @@ import dagViz from "@assets/generated_images/abstract_visualization_of_directed_
 import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
 import cyberpunkImg from "@assets/generated_images/cyberpunk_neon_city.png";
-import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 import { InfoTooltip } from "@/components/info-tooltip";
@@ -291,7 +290,7 @@ export default function Developers() {
         </div>
       </section>
 
-      <Footer />
+      
     </div>
   );
 }

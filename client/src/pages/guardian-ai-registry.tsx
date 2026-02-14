@@ -7,7 +7,6 @@ import {
   ExternalLink, Clock, TrendingUp, Filter, Layers,
   Sparkles, Users, BarChart3, Eye, Lock, Activity, AlertTriangle
 } from "lucide-react";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { Button } from "@/components/ui/button";
@@ -373,7 +372,7 @@ export default function GuardianAIRegistry() {
         </motion.section>
       </main>
       
-      <Footer />
+      
     </div>
   );
 }

@@ -25,7 +25,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GlassCard } from "@/components/glass-card";
-import { Footer } from "@/components/footer";
 import { useAuth } from "@/hooks/use-auth";
 
 const ROADMAP_PHASES = [
@@ -556,7 +555,7 @@ export default function TrustLayerPage() {
         </div>
       </section>
 
-      <Footer />
+      
     </div>
   );
 }

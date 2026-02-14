@@ -7,7 +7,6 @@ import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { GlassCard } from "@/components/glass-card";
-import { Footer } from "@/components/footer";
 
 interface UsageData {
   requestsToday: number;
@@ -237,7 +236,7 @@ export default function ApiUsage() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

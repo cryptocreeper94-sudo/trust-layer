@@ -10,7 +10,6 @@ import { BackButton } from "@/components/page-nav";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { getChroniclesSession } from "@/pages/chronicles-login";
 
@@ -1501,7 +1500,7 @@ export default function Chronicles() {
         </div>
       </section>
 
-      <Footer />
+      
       
       <EpochDetailDrawer 
         epoch={selectedEpoch} 

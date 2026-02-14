@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { GlassCard } from "@/components/glass-card";
-import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { useMutation } from "@tanstack/react-query";
 
@@ -505,7 +504,7 @@ export default function InfluencerPartnershipPage() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { PieChart as RechartsPie, Pie, Cell, ResponsiveContainer } from "recharts";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -75,7 +74,7 @@ export default function AIAdvisor() {
           </GlassCard>
         </main>
 
-        <Footer />
+        
       </div>
     );
   }
@@ -271,7 +270,7 @@ export default function AIAdvisor() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

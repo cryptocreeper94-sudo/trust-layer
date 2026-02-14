@@ -26,7 +26,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
-import { Footer } from "@/components/footer";
 import { SimpleLoginModal } from "@/components/simple-login";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { fetchEcosystemApps } from "@/lib/api";
@@ -584,7 +583,7 @@ export default function TrustLayerLanding() {
         </div>
       </section>
 
-      <Footer />
+      
 
       <SimpleLoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
     </div>

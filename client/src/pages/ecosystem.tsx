@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
 import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
 import fantasyImg from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
-import { Footer } from "@/components/footer";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 import { useQuery } from "@tanstack/react-query";
@@ -333,7 +332,7 @@ export default function Ecosystem() {
         </div>
       </section>
 
-      <Footer />
+      
     </div>
   );
 }

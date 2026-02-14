@@ -5,7 +5,6 @@ import {
   Fish, AlertTriangle, TrendingUp, TrendingDown, ExternalLink,
   Bell, BellOff, Filter, RefreshCw, Activity, Wallet, ArrowUpRight, ArrowDownRight, Home
 } from "lucide-react";
-import { Footer } from "@/components/footer";
 import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -291,7 +290,7 @@ export default function WhaleTracker() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

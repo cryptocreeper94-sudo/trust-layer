@@ -5,7 +5,6 @@ import {
   Wallet, Shield, Activity, Info, Zap, Clock
 } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
-import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
 
 function BentoCard({ children, className = "", colSpan = 1, rowSpan = 1, delay = 0 }: {
@@ -129,7 +128,7 @@ export default function TokenAnalytics() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

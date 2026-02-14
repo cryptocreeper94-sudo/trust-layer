@@ -8,7 +8,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { GlassCard } from "@/components/glass-card";
-import { Footer } from "@/components/footer";
 
 interface UsageStats {
   totalCalls: number;
@@ -387,7 +386,7 @@ export default function Billing() {
         </div>
       </main>
 
-      <Footer />
+      
 
       <AnimatePresence>
         {showContactModal && (

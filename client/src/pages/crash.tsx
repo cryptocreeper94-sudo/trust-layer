@@ -7,7 +7,6 @@ import {
   Info, ExternalLink, Wallet, Volume2, VolumeX, Settings, History, Rocket,
   Target, Percent, Layers, Lock, Unlock, BarChart3, Sparkles, Crown
 } from "lucide-react";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -1888,7 +1887,7 @@ export default function CrashGame() {
         </div>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

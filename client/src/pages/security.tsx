@@ -6,7 +6,6 @@ import {
   ShieldCheck, Fingerprint, Ban, Activity, Award, TrendingUp,
   Users, Clock, Sparkles
 } from "lucide-react";
-import { Footer } from "@/components/footer";
 import { GlassCard } from "@/components/glass-card";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 
@@ -503,7 +502,7 @@ export default function SecurityPage() {
         </section>
       </main>
 
-      <Footer />
+      
     </div>
   );
 }

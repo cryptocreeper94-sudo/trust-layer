@@ -13,6 +13,7 @@ import { FloatingChat } from "@/components/floating-chat";
 import { GlobalSearch } from "@/components/global-search";
 import { SiteNav } from "@/components/site-nav";
 import { GamesNav } from "@/components/games-nav";
+import { Footer } from "@/components/footer";
 
 // Critical pages - load immediately
 import Home from "@/pages/home";
@@ -692,12 +693,15 @@ function Router() {
 function AppShell({ appType }: { appType: string }) {
   const [location] = useLocation();
   const isStandalonePWA = location.startsWith("/signal-chat") || location.startsWith("/guardian-scanner");
+  const noFooterPaths = ["/chronicles/play", "/chronicles/interior", "/chronicles/city", "/chronicles/npc-chat", "/studio/editor"];
+  const hideFooter = isStandalonePWA || noFooterPaths.some(p => location.startsWith(p));
 
   return (
     <>
       {!isStandalonePWA && appType === "dwsc" && <SiteNav />}
       {!isStandalonePWA && appType === "games" && <GamesNav />}
       <Router />
+      {!hideFooter && <Footer />}
       {!isStandalonePWA && appType === "dwsc" && <AIAssistant />}
       {!isStandalonePWA && <FloatingChat />}
       {!isStandalonePWA && <GlobalSearch />}
