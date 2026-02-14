@@ -817,7 +817,6 @@ export default function Staking() {
         </div>
       </section>
 
-      </div>
     </div>
   );
 }

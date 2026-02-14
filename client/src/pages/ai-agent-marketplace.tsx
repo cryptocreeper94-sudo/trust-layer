@@ -352,8 +352,6 @@ export default function AIAgentMarketplace() {
           </motion.div>
         </div>
 
-        
-      </div>
     </div>
   );
 }

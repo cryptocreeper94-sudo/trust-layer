@@ -440,8 +440,6 @@ export default function RWATokenization() {
           </motion.div>
         </div>
 
-        
-      </div>
     </div>
   );
 }

@@ -385,7 +385,6 @@ export default function Explorer() {
         </div>
       </section>
 
-      </div>
     </div>
   );
 }
