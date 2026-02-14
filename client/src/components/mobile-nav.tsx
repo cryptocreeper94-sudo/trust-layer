@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, ArrowRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap, Globe, ChevronDown, ChevronRight, Layers, Gift, Users, LogIn, User, Wallet, Target } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, ArrowRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap, Globe, ChevronDown, ChevronRight, Layers, Gift, Users, LogIn, User, Wallet, Target, Dice1, Trophy, Crown, BarChart3, BookOpen, Building2, Bell, Vote, Activity, Crosshair, Copy, Bot, Fuel, Eye, RefreshCw, Award, MessageCircle, Lock, BookText, Compass } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -20,47 +20,118 @@ const navCategories = [
     items: [
       { href: "/", label: "Home", icon: Home },
       { href: "/note", label: "Our Story", icon: Heart },
-      { href: "/ecosystem", label: "Ecosystem", icon: Box },
-      { href: "/chronicles", label: "Chronicles", icon: Gamepad2, badge: "Play" },
-      { href: "/innovation", label: "Innovation Hub", icon: Sparkles, badge: "New" },
+      { href: "/ecosystem", label: "Ecosystem", icon: Compass },
       { href: "/executive-summary", label: "The Transmission", icon: Zap },
+      { href: "/innovation", label: "Innovation Hub", icon: Sparkles, badge: "New" },
+      { href: "/vision", label: "Vision", icon: Eye },
+      { href: "/token-compare", label: "Token Compare", icon: BarChart3 },
+      { href: "/investor-pitch", label: "Investor Pitch", icon: TrendingUp },
+      { href: "/status", label: "Network Status", icon: Activity },
     ]
   },
   {
-    label: "AI & Trading",
+    label: "Games & Arcade",
+    icon: Gamepad2,
+    items: [
+      { href: "/arcade", label: "The Arcade", icon: Gamepad2, badge: "Play" },
+      { href: "/crash", label: "Orbit Crash", icon: Rocket, badge: "Hot" },
+      { href: "/slots", label: "Dragon's Fortune Slots", icon: Crown },
+      { href: "/coinflip", label: "Royal Coin Flip", icon: Dice1 },
+      { href: "/predictions", label: "Predictions", icon: Target },
+      { href: "/lottery", label: "Lottery", icon: Star },
+      { href: "/spades", label: "Spades", icon: Gamepad2 },
+      { href: "/solitaire", label: "Solitaire", icon: Gamepad2 },
+      { href: "/minesweeper", label: "Minesweeper", icon: Gamepad2 },
+      { href: "/galaga", label: "Galaga", icon: Gamepad2 },
+      { href: "/tetris", label: "Tetris", icon: Gamepad2 },
+      { href: "/snake", label: "Snake", icon: Gamepad2 },
+      { href: "/pacman", label: "Pac-Man", icon: Gamepad2 },
+      { href: "/coin-store", label: "Coin Store", icon: Coins },
+      { href: "/daily-bonus", label: "Daily Bonus", icon: Gift },
+      { href: "/leaderboard", label: "Leaderboard", icon: Trophy },
+      { href: "/achievements", label: "Achievements", icon: Award },
+      { href: "/sweepstakes-rules", label: "Sweepstakes Rules", icon: FileText },
+    ]
+  },
+  {
+    label: "Chronicles",
+    icon: BookOpen,
+    items: [
+      { href: "/chronicles", label: "Enter Chronicles", icon: BookOpen, badge: "Play" },
+      { href: "/legacy", label: "Build Your Legacy", icon: Star },
+      { href: "/era-codex", label: "Era Codex", icon: BookText },
+      { href: "/scenario-generator", label: "Scenario Generator", icon: Sparkles },
+      { href: "/creator-program", label: "Creator Program", icon: Palette },
+      { href: "/veil", label: "Through The Veil", icon: BookText, badge: "Read" },
+    ]
+  },
+  {
+    label: "AI & Intelligence",
     icon: Zap,
     items: [
       { href: "/guardian-scanner", label: "Guardian Scanner", icon: Shield, badge: "New" },
       { href: "/pulse", label: "Pulse AI", icon: Zap, badge: "Live" },
       { href: "/strike-agent", label: "Strike Agent", icon: Target, badge: "New" },
-      { href: "/ai-agents", label: "AI Agent Builder", icon: Sparkles, badge: "Create" },
+      { href: "/ai-agents", label: "AI Agent Marketplace", icon: Bot, badge: "Create" },
+      { href: "/ai-advisor", label: "AI Advisor", icon: Bot },
+      { href: "/ai-nft", label: "AI NFT Generator", icon: ImageIcon },
     ]
   },
   {
-    label: "DeFi & Assets",
-    icon: TrendingUp,
+    label: "Trading & Markets",
+    icon: BarChart3,
+    items: [
+      { href: "/trading", label: "Trading Terminal", icon: BarChart3 },
+      { href: "/markets", label: "Markets", icon: TrendingUp },
+      { href: "/charts", label: "Price Charts", icon: LineChart },
+      { href: "/whale-tracker", label: "Whale Tracker", icon: Eye },
+      { href: "/copy-trading", label: "Copy Trading", icon: Copy },
+      { href: "/dca-bot", label: "DCA Bot", icon: Bot },
+      { href: "/paper-trading", label: "Paper Trading", icon: FileText },
+      { href: "/token-analytics", label: "Token Analytics", icon: BarChart3 },
+      { href: "/alerts", label: "Price Alerts", icon: Bell },
+      { href: "/gas-estimator", label: "Gas Estimator", icon: Fuel },
+      { href: "/simulate", label: "TX Simulator", icon: Crosshair },
+    ]
+  },
+  {
+    label: "DeFi",
+    icon: ArrowUpDown,
     items: [
       { href: "/swap", label: "Swap", icon: ArrowUpDown },
       { href: "/staking", label: "Staking", icon: TrendingUp },
-      { href: "/liquid-staking", label: "Liquid Staking", icon: TrendingUp },
+      { href: "/liquid-staking", label: "Liquid Staking", icon: Droplets },
       { href: "/liquidity", label: "Liquidity Pools", icon: Droplets },
-      { href: "/bridge", label: "Bridge", icon: ArrowLeftRight },
-      { href: "/launchpad", label: "Launchpad", icon: Rocket },
+      { href: "/bridge", label: "Cross-Chain Bridge", icon: ArrowLeftRight },
+      { href: "/launchpad", label: "Token Launchpad", icon: Rocket },
+      { href: "/governance", label: "DAO Governance", icon: Vote },
+      { href: "/proof-of-reserve", label: "Proof of Reserve", icon: Lock },
+    ]
+  },
+  {
+    label: "NFTs & Digital Assets",
+    icon: ImageIcon,
+    items: [
       { href: "/nft", label: "NFT Marketplace", icon: ImageIcon },
       { href: "/nft-gallery", label: "NFT Gallery", icon: Layers },
       { href: "/nft-creator", label: "NFT Creator", icon: Palette },
+      { href: "/rarity", label: "Rarity Analyzer", icon: Star },
       { href: "/rwa", label: "Real World Assets", icon: Globe, badge: "RWA" },
     ]
   },
   {
     label: "Wallet & Portfolio",
-    icon: Coins,
+    icon: Wallet,
     items: [
       { href: "/my-hub", label: "My Hub", icon: User, badge: "You" },
-      { href: "/wallet", label: "Wallet", icon: Coins },
+      { href: "/wallet", label: "Wallet", icon: Wallet },
+      { href: "/multisig", label: "MultiSig Wallet", icon: Lock },
       { href: "/portfolio", label: "Portfolio Dashboard", icon: PieChart },
+      { href: "/rebalancer", label: "Portfolio Rebalancer", icon: RefreshCw },
+      { href: "/dashboard-pro", label: "Dashboard Pro", icon: BarChart3 },
       { href: "/transactions", label: "Transaction History", icon: History },
-      { href: "/charts", label: "Price Charts", icon: LineChart },
+      { href: "/wallet-profiler", label: "Wallet Profiler", icon: Eye },
+      { href: "/profile", label: "Profile", icon: User },
     ]
   },
   {
@@ -73,22 +144,30 @@ const navCategories = [
       { href: "/quests", label: "Quests", icon: Rocket },
       { href: "/airdrop", label: "Airdrop Claim", icon: Coins },
       { href: "/validators", label: "Become a Validator", icon: Shield, badge: "Earn" },
+      { href: "/crowdfund", label: "Crowdfund", icon: Heart },
+      { href: "/presale", label: "Token Presale", icon: Coins, badge: "Live" },
+      { href: "/investment-simulator", label: "Investment Simulator", icon: BarChart3 },
     ]
   },
   {
-    label: "Community",
+    label: "Community & Social",
     icon: Users,
     items: [
-      { href: "/signal-chat", label: "Signal Chat", icon: Users, badge: "Live" },
+      { href: "/signal-chat", label: "Signal Chat", icon: MessageCircle, badge: "Live" },
+      { href: "/community", label: "Community Hub", icon: Users },
+      { href: "/social", label: "Social Feed", icon: Activity },
+      { href: "/activity", label: "Activity Feed", icon: Activity },
       { href: "/domains", label: "Domain Registry", icon: Globe, badge: "New" },
       { href: "/influencer-partnership", label: "KOL Program", icon: Users, badge: "Apply" },
+      { href: "/partners", label: "Partner Portal", icon: Building2 },
+      { href: "/game-developer", label: "Game Developer", icon: Code },
     ]
   },
   {
     label: "Blockchain",
     icon: Box,
     items: [
-      { href: "/token", label: "Signal", icon: Coins },
+      { href: "/token", label: "Signal (SIG)", icon: Coins },
       { href: "/genesis", label: "Genesis Block", icon: Star },
       { href: "/explorer", label: "Block Explorer", icon: SearchIcon },
       { href: "/network", label: "Network Stats", icon: TrendingUp },
@@ -96,28 +175,50 @@ const navCategories = [
     ]
   },
   {
-    label: "Resources",
-    icon: FileText,
+    label: "Security & Trust",
+    icon: Shield,
     items: [
-      { href: "/developers", label: "Developer Docs", icon: Code },
-      { href: "/studio", label: "Dev Studio", icon: Sparkles },
-      { href: "/webhooks", label: "Webhooks API", icon: Webhook },
-      { href: "/security", label: "Security Overview", icon: Shield },
+      { href: "/guardian-ai", label: "Guardian AI", icon: Shield, badge: "New" },
       { href: "/guardian-certification", label: "Guardian Certification", icon: Shield },
-      { href: "/roadmap", label: "Roadmap", icon: Star },
-      { href: "/coming-features", label: "Coming Features", icon: Rocket },
-      { href: "/doc-hub", label: "Documentation Hub", icon: FileText },
+      { href: "/guardian-ai-registry", label: "AI Agent Registry", icon: Shield },
+      { href: "/security", label: "Security Overview", icon: Lock },
     ]
   },
   {
-    label: "Ecosystem Sites",
+    label: "Learn & Build",
+    icon: BookOpen,
+    items: [
+      { href: "/learn", label: "Academy", icon: BookOpen },
+      { href: "/developers", label: "Developer Docs", icon: Code },
+      { href: "/studio", label: "DarkWave Studio", icon: Sparkles },
+      { href: "/code-snippets", label: "Code Snippets", icon: Code },
+      { href: "/api-docs", label: "API Docs", icon: FileText },
+      { href: "/webhooks", label: "Webhooks API", icon: Webhook },
+      { href: "/doc-hub", label: "Documentation Hub", icon: FileText },
+      { href: "/roadmap", label: "Roadmap", icon: Star },
+      { href: "/coming-features", label: "Coming Features", icon: Rocket },
+      { href: "/feedback", label: "Feedback", icon: MessageCircle },
+    ]
+  },
+  {
+    label: "Business",
+    icon: Building2,
+    items: [
+      { href: "/business-portal", label: "Business Portal", icon: Building2 },
+      { href: "/business-application", label: "Business Application", icon: FileText },
+      { href: "/team", label: "Team", icon: Users },
+    ]
+  },
+  {
+    label: "Ecosystem Apps",
     icon: Globe,
     items: [
-      { href: "/domains", label: "TLID.io - Domain Registry", icon: Globe },
-      { href: "/guardian-ai", label: "TrustShield.tech - Security", icon: Shield, badge: "New" },
-      { href: "/chronicles", label: "DarkWave Games", icon: Gamepad2 },
-      { href: "/studio", label: "DarkWave Studios", icon: Sparkles },
-      { href: "/chronicles", label: "YourLegacy.io - Chronicles", icon: Star },
+      { href: "/domains", label: "TLID.io - Domains", icon: Globe },
+      { href: "/guardian-ai", label: "TrustShield.tech", icon: Shield },
+      { href: "/arcade", label: "DarkWave Games", icon: Gamepad2 },
+      { href: "/studio", label: "DarkWave Studio", icon: Sparkles },
+      { href: "/chronicles", label: "YourLegacy.io", icon: Star },
+      { href: "/signal-chat", label: "Signal Chat", icon: MessageCircle },
     ]
   },
 ];
