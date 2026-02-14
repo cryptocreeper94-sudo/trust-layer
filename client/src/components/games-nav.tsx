@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
+import { MobileNav } from "@/components/mobile-nav";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -26,7 +27,6 @@ const NAV_LINKS = [
 export function GamesNav() {
   const [location] = useLocation();
   const { isAuthenticated } = useSimpleAuth();
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
 
@@ -45,9 +45,6 @@ export function GamesNav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location]);
 
   const handleInstall = async () => {
     if (!installPrompt) return;
@@ -70,13 +67,7 @@ export function GamesNav() {
       >
         <div className="w-full px-3 sm:px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <button
-              className="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-              onClick={() => setMobileOpen(!mobileOpen)}
-              data-testid="button-games-mobile-menu"
-            >
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
+            <MobileNav />
 
             {!isHome && (
               <Button
@@ -170,102 +161,6 @@ export function GamesNav() {
         </div>
       </nav>
 
-      <AnimatePresence>
-        {mobileOpen && (
-          <>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm lg:hidden"
-              onClick={() => setMobileOpen(false)}
-            />
-            <motion.div
-              initial={{ x: "-100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "-100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="fixed top-0 left-0 bottom-0 z-50 w-72 bg-slate-950 border-r border-white/5 shadow-2xl lg:hidden"
-            >
-              <div className="p-4 border-b border-white/5">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-purple-600 flex items-center justify-center shadow-lg shadow-pink-500/30">
-                    <Gamepad2 className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-white">DarkWave Games</div>
-                    <div className="text-xs text-white/40">darkwavegames.io</div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-3 space-y-1">
-                {NAV_LINKS.map((link) => {
-                  const active = location === link.href;
-                  const Icon = link.icon;
-                  return (
-                    <Link key={link.href} href={link.href}>
-                      <button
-                        className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
-                          active
-                            ? "text-white bg-gradient-to-r from-pink-500/15 to-purple-500/15 border border-pink-500/20"
-                            : "text-white/60 hover:text-white hover:bg-white/5"
-                        }`}
-                      >
-                        <Icon className="w-4.5 h-4.5" />
-                        {link.label}
-                        {link.hot && (
-                          <Flame className="w-3 h-3 text-orange-400 ml-auto" />
-                        )}
-                      </button>
-                    </Link>
-                  );
-                })}
-
-                <div className="pt-3 mt-3 border-t border-white/5">
-                  <Link href="/coinflip">
-                    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/60 hover:text-white hover:bg-white/5">
-                      <Coins className="w-4.5 h-4.5" />
-                      Coin Flip
-                    </button>
-                  </Link>
-                  <Link href="/predictions">
-                    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/60 hover:text-white hover:bg-white/5">
-                      <Trophy className="w-4.5 h-4.5" />
-                      Predictions
-                    </button>
-                  </Link>
-                  <Link href="/lottery">
-                    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm text-white/60 hover:text-white hover:bg-white/5">
-                      <Sparkles className="w-4.5 h-4.5" />
-                      Lottery
-                    </button>
-                  </Link>
-                </div>
-
-                {installPrompt && (
-                  <div className="pt-3 mt-3 border-t border-white/5">
-                    <button
-                      onClick={handleInstall}
-                      className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-pink-400 bg-pink-500/10 border border-pink-500/20 hover:bg-pink-500/20"
-                    >
-                      <Download className="w-4.5 h-4.5" />
-                      Install App
-                    </button>
-                  </div>
-                )}
-              </div>
-
-              <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/5">
-                <div className="text-center">
-                  <div className="text-[10px] text-white/30 uppercase tracking-wider">Powered by</div>
-                  <div className="text-xs text-white/50 font-medium">DarkWave Trust Layer</div>
-                </div>
-              </div>
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
 
       <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-slate-950/95 border-t border-white/5 safe-area-bottom tap-transparent" style={{ WebkitBackdropFilter: 'blur(24px)', backdropFilter: 'blur(24px)' }}>
         <div className="flex items-center justify-around px-2" style={{ height: '56px' }}>
