@@ -155,7 +155,7 @@ const navCategories = [
     icon: Users,
     items: [
       { href: "/signal-chat", label: "Signal Chat", icon: MessageCircle, badge: "Live" },
-      { href: "/community", label: "Community Hub", icon: Users },
+      { href: "/signal-chat", label: "Community Hub", icon: Users },
       { href: "/social", label: "Social Feed", icon: Activity },
       { href: "/activity", label: "Activity Feed", icon: Activity },
       { href: "/domains", label: "Domain Registry", icon: Globe, badge: "New" },
