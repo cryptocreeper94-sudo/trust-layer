@@ -403,13 +403,13 @@ function CategorySection({ category, catIndex }: { category: Category; catIndex:
 
       <div className="relative px-8 md:px-14">
         <Carousel
-          opts={{ align: "center", loop: true }}
+          opts={{ align: "start", dragFree: true, containScroll: "trimSnaps", loop: false }}
           setApi={setApi}
           className="w-full"
         >
-          <CarouselContent className="-ml-4">
+          <CarouselContent className="-ml-5">
             {category.cards.map((card, i) => (
-              <CarouselItem key={card.label} className="pl-4 basis-full">
+              <CarouselItem key={card.label} className="pl-5 basis-full sm:basis-[310px] md:basis-[340px]">
                 <LaunchCardComponent card={card} index={i} />
               </CarouselItem>
             ))}
@@ -417,7 +417,7 @@ function CategorySection({ category, catIndex }: { category: Category; catIndex:
           <CarouselPrevious className="flex -left-2 md:-left-5 w-10 h-10 bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white shadow-xl" />
           <CarouselNext className="flex -right-2 md:-right-5 w-10 h-10 bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white shadow-xl" />
         </Carousel>
-        <div className="flex items-center justify-center gap-1.5 mt-4">
+        <div className="flex sm:hidden items-center justify-center gap-1.5 mt-4">
           {Array.from({ length: count }).map((_, i) => (
             <button
               key={i}
