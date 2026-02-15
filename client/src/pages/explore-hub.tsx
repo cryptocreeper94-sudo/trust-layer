@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useLocation } from "wouter";
 import {
@@ -25,6 +25,7 @@ import {
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
+  type CarouselApi,
 } from "@/components/ui/carousel";
 
 import hubTrading from "@/assets/generated_images/hub_trading_defi.png";
@@ -371,6 +372,17 @@ function LaunchCardComponent({ card, index }: { card: LaunchCard; index: number 
 }
 
 function CategorySection({ category, catIndex }: { category: Category; catIndex: number }) {
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap());
+    api.on("select", () => setCurrent(api.selectedScrollSnap()));
+  }, [api]);
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 30 }}
@@ -389,21 +401,36 @@ function CategorySection({ category, catIndex }: { category: Category; catIndex:
         <p className="text-white/40 text-sm leading-relaxed max-w-2xl pl-14">{category.description}</p>
       </div>
 
-      <div className="relative px-1">
+      <div className="relative px-8 md:px-14">
         <Carousel
-          opts={{ align: "start", dragFree: true, containScroll: "trimSnaps" }}
+          opts={{ align: "center", loop: true }}
+          setApi={setApi}
           className="w-full"
         >
-          <CarouselContent className="-ml-5">
+          <CarouselContent className="-ml-4">
             {category.cards.map((card, i) => (
-              <CarouselItem key={card.label} className="pl-5 basis-[280px] sm:basis-[310px] md:basis-[340px]">
+              <CarouselItem key={card.label} className="pl-4 basis-full">
                 <LaunchCardComponent card={card} index={i} />
               </CarouselItem>
             ))}
           </CarouselContent>
-          <CarouselPrevious className="hidden md:flex -left-4 w-10 h-10 bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white shadow-xl" />
-          <CarouselNext className="hidden md:flex -right-4 w-10 h-10 bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white shadow-xl" />
+          <CarouselPrevious className="flex -left-2 md:-left-5 w-10 h-10 bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white shadow-xl" />
+          <CarouselNext className="flex -right-2 md:-right-5 w-10 h-10 bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white shadow-xl" />
         </Carousel>
+        <div className="flex items-center justify-center gap-1.5 mt-4">
+          {Array.from({ length: count }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => api?.scrollTo(i)}
+              className={`rounded-full transition-all duration-300 ${
+                i === current
+                  ? "w-3 h-3 bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.6)]"
+                  : "w-2 h-2 bg-white/20 hover:bg-white/40"
+              }`}
+              data-testid={`hub-dot-${catIndex}-${i}`}
+            />
+          ))}
+        </div>
       </div>
     </motion.section>
   );
