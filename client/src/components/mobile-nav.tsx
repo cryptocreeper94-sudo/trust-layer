@@ -70,7 +70,7 @@ const navCategories = [
     label: "AI & Intelligence",
     icon: Zap,
     items: [
-      { href: "/guardian-scanner", label: "Guardian Scanner", icon: Shield, badge: "New" },
+      { href: "/guardian-scanner", label: "AI Agent Scanner", icon: Shield, badge: "New" },
       { href: "/guardian-shield", label: "Guardian Screener", icon: Shield, badge: "DEX" },
       { href: "/pulse", label: "Pulse AI", icon: Zap, badge: "Live" },
       { href: "/strike-agent", label: "Strike Agent", icon: Target, badge: "New" },
