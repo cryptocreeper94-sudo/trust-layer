@@ -692,7 +692,7 @@ function Router() {
 
 function AppShell({ appType }: { appType: string }) {
   const [location] = useLocation();
-  const isStandalonePWA = location.startsWith("/signal-chat") || location.startsWith("/guardian-scanner");
+  const isStandalonePWA = location.startsWith("/signal-chat");
   const noFooterPaths = ["/chronicles/play", "/chronicles/interior", "/chronicles/city", "/chronicles/npc-chat", "/studio/editor"];
   const hideFooter = isStandalonePWA || noFooterPaths.some(p => location.startsWith(p));
 

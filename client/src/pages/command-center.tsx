@@ -275,7 +275,7 @@ function PinLogin({ onSuccess }: { onSuccess: () => void }) {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+    <div className="min-h-screen pt-14 flex items-center justify-center relative overflow-hidden" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
       <GlowOrb color="linear-gradient(135deg, #06b6d4, #8b5cf6)" size={400} top="10%" left="10%" />
       <GlowOrb color="linear-gradient(135deg, #ec4899, #8b5cf6)" size={300} top="60%" left="70%" delay={2} />
 
@@ -460,7 +460,7 @@ function CategorySection({ category, catIndex }: { category: Category; catIndex:
 function SkeletonLoader() {
   return (
     <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <div className="sticky top-0 z-50 backdrop-blur-xl bg-[#070b16]/80 border-b border-white/5 px-4 py-3">
+      <div className="sticky top-14 z-30 backdrop-blur-xl bg-[#070b16]/80 border-b border-white/5 px-4 py-3">
         <div className="max-w-7xl mx-auto flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-white/5 animate-pulse" />
           <div className="h-5 w-40 bg-white/5 rounded animate-pulse" />
@@ -515,21 +515,13 @@ export default function CommandCenter() {
   const totalTools = categories.reduce((sum, cat) => sum + cat.cards.length, 0);
 
   return (
-    <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+    <div className="min-h-screen pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
       <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={600} top="-5%" left="60%" />
       <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={500} top="40%" left="-10%" delay={3} />
       <GlowOrb color="linear-gradient(135deg, #f59e0b, #ef4444)" size={400} top="70%" left="80%" delay={5} />
 
-      <div className="sticky top-0 z-50 backdrop-blur-xl bg-[#070b16]/80 border-b border-white/5">
+      <div className="sticky top-14 z-30 backdrop-blur-xl bg-[#070b16]/80 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-3">
-          <button
-            onClick={() => navigate("/")}
-            className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-colors"
-            data-testid="button-command-center-back"
-          >
-            <ArrowLeft className="w-4 h-4" />
-          </button>
-
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
               <Zap className="w-4 h-4 text-white" />

@@ -1130,7 +1130,7 @@ export default function GuardianScanner() {
         </motion.div>
       )}
     </AnimatePresence>
-    <div className="min-h-screen bg-[#0a0a0a] flex">
+    <div className="min-h-screen bg-[#0a0a0a] flex pt-14">
       {/* Left Sidebar */}
       <LeftSidebar 
         watchlistedTokens={watchlistedTokens} 
