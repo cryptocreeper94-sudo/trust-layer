@@ -516,21 +516,17 @@ export default function CommandCenter() {
   const totalTools = categories.reduce((sum, cat) => sum + cat.cards.length, 0);
 
   return (
-    <div className="min-h-screen pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+    <div className="min-h-screen pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
       <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={600} top="-5%" left="60%" />
       <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={500} top="40%" left="-10%" delay={3} />
       <GlowOrb color="linear-gradient(135deg, #f59e0b, #ef4444)" size={400} top="70%" left="80%" delay={5} />
 
-      <div className="sticky top-14 z-30 backdrop-blur-xl bg-[#070b16]/80 border-b border-white/5">
+      <div className="sticky top-0 z-30 backdrop-blur-xl bg-[#070b16]/80 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <motion.div
-              className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/20"
-              animate={{ boxShadow: ["0 0 12px rgba(6,182,212,0.3)", "0 0 20px rgba(139,92,246,0.3)", "0 0 12px rgba(6,182,212,0.3)"] }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
               <Zap className="w-4 h-4 text-white" />
-            </motion.div>
+            </div>
             <h1 className="text-white font-bold text-sm sm:text-base tracking-wide" style={{ fontFamily: "Space Grotesk, sans-serif" }}>
               Trust Layer
             </h1>

@@ -12,6 +12,7 @@ const HIDDEN_PATHS = [
   "/chronicles/login",
   "/chronicles/onboarding",
   "/owner-admin",
+  "/command-center",
 ];
 
 export function SiteNav() {
