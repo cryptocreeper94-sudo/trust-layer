@@ -609,8 +609,8 @@ export default function CommandCenter() {
                       <span className="text-[10px] font-bold uppercase tracking-widest text-cyan-400">Genesis Block</span>
                       <span className="px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white bg-cyan-500/20 rounded-full border border-cyan-500/20">Origin</span>
                     </div>
-                    <p className="text-white font-mono text-lg sm:text-xl font-bold tracking-wider">#0000000001</p>
-                    <p className="text-white/30 text-[10px] mt-0.5 font-mono">DarkWave Trust Layer L1 — Block Zero — The Beginning of Trust</p>
+                    <p className="text-white font-mono text-lg sm:text-xl font-bold tracking-wider">000000000-001</p>
+                    <p className="text-white/30 text-[10px] mt-0.5 font-mono">DarkWave Trust Layer L1 — Genesis Hallmark — The Beginning of Trust</p>
                   </div>
                   <button
                     onClick={() => setShowGenesis(false)}
