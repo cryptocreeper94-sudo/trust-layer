@@ -63,7 +63,6 @@ const navCategories = [
       { href: "/era-codex", label: "Era Codex", icon: BookText },
       { href: "/scenario-generator", label: "Scenario Generator", icon: Sparkles },
       { href: "/creator-program", label: "Creator Program", icon: Palette },
-      { href: "/veil", label: "Through The Veil", icon: BookText, badge: "Read" },
     ]
   },
   {

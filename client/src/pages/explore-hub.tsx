@@ -14,7 +14,7 @@ import {
   PieChart, Compass, Flame, Landmark,
   CreditCard, TrendingUp, Gem, ChartLine,
   Lock, GraduationCap, Newspaper, Share2,
-  Target, Heart, BookOpenCheck, Dice1,
+  Target, Heart, Dice1,
   Palette, Crosshair, Dices, CircleDollarSign,
   ArrowLeftRight, Droplets, ImagePlus, MonitorPlay,
   BrainCircuit, Scan, RefreshCw, Joystick
@@ -274,7 +274,6 @@ const categories: Category[] = [
       { label: "Tokenomics", description: "Signal token economics", href: "/tokenomics", icon: <PieChart className="size-5" />, image: hubPortfolio, glowColor: "shadow-violet-500/30" },
       { label: "Documentation", description: "Technical documentation", href: "/doc-hub", icon: <BookOpen className="size-5" />, image: ccDeveloper, glowColor: "shadow-blue-500/30" },
       { label: "API Docs", description: "Developer API reference", href: "/api-docs", icon: <Code className="size-5" />, image: hubSmartContract, glowColor: "shadow-emerald-500/30" },
-      { label: "Through The Veil", description: "Digital book experience", href: "/veil", icon: <BookOpenCheck className="size-5" />, image: hubEcosystem, glowColor: "shadow-purple-500/30" },
       { label: "Philosophy", description: "Our vision and values", href: "/philosophy", icon: <Compass className="size-5" />, image: hubQuest, glowColor: "shadow-pink-500/30" },
       { label: "Roadmap", description: "Development timeline", href: "/roadmap", icon: <Target className="size-5" />, image: hubGovernance, glowColor: "shadow-cyan-500/30" },
       { label: "FAQ", description: "Frequently asked questions", href: "/faq", icon: <MessageSquare className="size-5" />, image: hubChat, glowColor: "shadow-slate-400/30" },
