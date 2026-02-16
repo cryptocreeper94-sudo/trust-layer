@@ -491,6 +491,7 @@ export default function CommandCenter() {
   const [, navigate] = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+  const [showGenesis, setShowGenesis] = useState(false);
 
   const handleLogout = () => {
     sessionStorage.removeItem("ownerAuth");
@@ -521,18 +522,21 @@ export default function CommandCenter() {
       <GlowOrb color="linear-gradient(135deg, #f59e0b, #ef4444)" size={400} top="70%" left="80%" delay={5} />
 
       <div className="sticky top-14 z-30 backdrop-blur-xl bg-[#070b16]/80 border-b border-white/5">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center gap-3">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <motion.div
+              className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/20"
+              animate={{ boxShadow: ["0 0 12px rgba(6,182,212,0.3)", "0 0 20px rgba(139,92,246,0.3)", "0 0 12px rgba(6,182,212,0.3)"] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
               <Zap className="w-4 h-4 text-white" />
-            </div>
-            <div>
-              <h1 className="text-white font-bold text-sm leading-tight">Command Center</h1>
-              <p className="text-white/30 text-[10px]">{totalTools} tools across {categories.length} sections</p>
-            </div>
+            </motion.div>
+            <h1 className="text-white font-bold text-sm sm:text-base tracking-wide" style={{ fontFamily: "Space Grotesk, sans-serif" }}>
+              Trust Layer
+            </h1>
           </div>
 
-          <div className="ml-auto flex items-center gap-2">
+          <div className="flex items-center gap-2">
             <AnimatePresence>
               {showSearch && (
                 <motion.div
@@ -560,6 +564,16 @@ export default function CommandCenter() {
             >
               <Search className="w-4 h-4" />
             </button>
+            <motion.button
+              onClick={() => setShowGenesis(!showGenesis)}
+              className="relative w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 flex items-center justify-center text-cyan-400 hover:border-cyan-400/40 hover:bg-cyan-500/15 transition-all"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              data-testid="button-genesis-stamp"
+            >
+              <Shield className="w-4 h-4" />
+              <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.6)]" />
+            </motion.button>
             <button
               onClick={handleLogout}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-white/50 hover:text-red-400 hover:bg-red-500/10 hover:border-red-500/20 transition-all text-xs"
@@ -571,6 +585,45 @@ export default function CommandCenter() {
           </div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {showGenesis && (
+          <motion.div
+            initial={{ opacity: 0, y: -10, height: 0 }}
+            animate={{ opacity: 1, y: 0, height: "auto" }}
+            exit={{ opacity: 0, y: -10, height: 0 }}
+            className="sticky top-[105px] z-30 overflow-hidden"
+          >
+            <div className="backdrop-blur-xl bg-[#070b16]/90 border-b border-cyan-500/10 px-4 sm:px-6 py-4">
+              <div className="max-w-7xl mx-auto">
+                <div className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-cyan-500/5 border border-cyan-500/10">
+                  <motion.div
+                    className="shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/20 flex items-center justify-center"
+                    animate={{ boxShadow: ["0 0 15px rgba(6,182,212,0.2)", "0 0 30px rgba(6,182,212,0.4)", "0 0 15px rgba(6,182,212,0.2)"] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <Shield className="w-7 h-7 text-cyan-400" />
+                  </motion.div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-cyan-400">Genesis Block</span>
+                      <span className="px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white bg-cyan-500/20 rounded-full border border-cyan-500/20">Origin</span>
+                    </div>
+                    <p className="text-white font-mono text-lg sm:text-xl font-bold tracking-wider">#0000000001</p>
+                    <p className="text-white/30 text-[10px] mt-0.5 font-mono">DarkWave Trust Layer L1 — Block Zero — The Beginning of Trust</p>
+                  </div>
+                  <button
+                    onClick={() => setShowGenesis(false)}
+                    className="shrink-0 w-7 h-7 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/30 hover:text-white hover:bg-white/10 transition-colors"
+                  >
+                    <span className="text-xs">x</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-16 relative z-10">
         <motion.div
