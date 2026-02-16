@@ -226,12 +226,10 @@ const categories: Category[] = [
   },
 ];
 
-const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
-  <motion.div
-    className="absolute rounded-full blur-3xl opacity-20 pointer-events-none"
+const GlowOrb = ({ color, size, top, left }: { color: string; size: number; top: string; left: string; delay?: number }) => (
+  <div
+    className="absolute rounded-full blur-3xl opacity-15 pointer-events-none"
     style={{ background: color, width: size, height: size, top, left }}
-    animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.25, 0.15] }}
-    transition={{ duration: 8, repeat: Infinity, delay }}
   />
 );
 
@@ -275,7 +273,7 @@ function PinLogin({ onSuccess }: { onSuccess: () => void }) {
   };
 
   return (
-    <div className="min-h-screen pt-14 flex items-center justify-center relative overflow-hidden" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
       <GlowOrb color="linear-gradient(135deg, #06b6d4, #8b5cf6)" size={400} top="10%" left="10%" />
       <GlowOrb color="linear-gradient(135deg, #ec4899, #8b5cf6)" size={300} top="60%" left="70%" delay={2} />
 
@@ -460,7 +458,7 @@ function CategorySection({ category, catIndex }: { category: Category; catIndex:
 function SkeletonLoader() {
   return (
     <div className="min-h-screen" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
-      <div className="sticky top-14 z-30 backdrop-blur-xl bg-[#070b16]/80 border-b border-white/5 px-4 py-3">
+      <div className="sticky top-0 z-30 backdrop-blur-xl bg-[#070b16]/80 border-b border-white/5 px-4 py-3">
         <div className="max-w-7xl mx-auto flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-white/5 animate-pulse" />
           <div className="h-5 w-40 bg-white/5 rounded animate-pulse" />
@@ -588,18 +586,16 @@ export default function CommandCenter() {
             initial={{ opacity: 0, y: -10, height: 0 }}
             animate={{ opacity: 1, y: 0, height: "auto" }}
             exit={{ opacity: 0, y: -10, height: 0 }}
-            className="sticky top-[105px] z-30 overflow-hidden"
+            className="sticky top-[52px] z-29 overflow-hidden"
           >
             <div className="backdrop-blur-xl bg-[#070b16]/90 border-b border-cyan-500/10 px-4 sm:px-6 py-4">
               <div className="max-w-7xl mx-auto">
                 <div className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-cyan-500/5 border border-cyan-500/10">
-                  <motion.div
-                    className="shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/20 flex items-center justify-center"
-                    animate={{ boxShadow: ["0 0 15px rgba(6,182,212,0.2)", "0 0 30px rgba(6,182,212,0.4)", "0 0 15px rgba(6,182,212,0.2)"] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                  <div
+                    className="shrink-0 w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/20 flex items-center justify-center shadow-[0_0_20px_rgba(6,182,212,0.3)]"
                   >
                     <Shield className="w-7 h-7 text-cyan-400" />
-                  </motion.div>
+                  </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <span className="text-[10px] font-bold uppercase tracking-widest text-cyan-400">Genesis Block</span>
