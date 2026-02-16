@@ -136,7 +136,7 @@ import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, inser
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
-import { trustStamp } from "./trust-stamp";
+import { trustStamp, getUserTrustStamps } from "./trust-stamp";
 import { blockchain } from "./blockchain-engine";
 import { sendEmail, sendApiKeyEmail, sendHallmarkEmail, sendPresaleConfirmationEmail, sendEmailVerificationCode, sendBusinessApprovalEmail, sendBusinessRejectionEmail, sendCrowdfundConfirmationEmail, sendSubscriptionActivatedEmail, sendSubscriptionRenewalEmail, sendGoldCoinPurchaseEmail, sendCreditsConfirmationEmail, sendGuardianCertificationEmail, sendDomainRegistrationEmail, sendOrbsPurchaseEmail, sendShellsPurchaseEmail, sendPaymentFailedEmail } from "./email";
 import { submitMemoToSolana, isHeliusConfigured, getSolanaTreasuryAddress, getSolanaBalance } from "./helius";
@@ -11806,6 +11806,18 @@ Current context:
     } catch (error) {
       console.error("Transaction history error:", error);
       res.json({ transactions: [] });
+    }
+  });
+
+  app.get("/api/trust-stamps/my", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const stamps = await getUserTrustStamps(userId);
+      res.json({ stamps });
+    } catch (error) {
+      console.error("Trust stamps fetch error:", error);
+      res.json({ stamps: [] });
     }
   });
 

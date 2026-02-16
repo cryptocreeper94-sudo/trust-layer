@@ -419,6 +419,21 @@ export const hallmarkMints = pgTable("hallmark_mints", {
   mintedAt: timestamp("minted_at"),
 });
 
+// Trust Stamps - blockchain audit trail for all user actions
+export const trustStamps = pgTable("trust_stamps", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id"),
+  category: text("category").notNull(),
+  dataHash: text("data_hash").notNull(),
+  txHash: text("tx_hash"),
+  blockHeight: integer("block_height"),
+  metadata: text("metadata"),
+  status: text("status").notNull().default("confirmed"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type TrustStamp = typeof trustStamps.$inferSelect;
+
 // Global Hallmark Counter (12-digit)
 export const hallmarkGlobalCounter = pgTable("hallmark_global_counter", {
   id: varchar("id").primaryKey().default("global"),

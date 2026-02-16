@@ -4,8 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "wouter";
 import { 
   History, ArrowUpRight, ArrowDownLeft, RefreshCw,
-  Filter, Search, ChevronDown, ExternalLink, Clock, CheckCircle2, Download
-, Shield } from "lucide-react";
+  Filter, Search, ChevronDown, ExternalLink, Clock, CheckCircle2, Download,
+  Shield, Fingerprint, Copy, Check } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -53,17 +53,45 @@ const TX_TYPE_CONFIG: Record<string, { icon: any; color: string; label: string }
   bridge: { icon: () => <span className="text-xs">🌉</span>, color: "text-purple-400", label: "Bridge" },
 };
 
+const STAMP_CATEGORY_CONFIG: Record<string, { label: string; color: string; icon: string }> = {
+  "presale-purchase": { label: "Presale", color: "text-emerald-400", icon: "🚀" },
+  "crowdfund-donation": { label: "Crowdfund", color: "text-green-400", icon: "💚" },
+  "credits-purchase": { label: "Credits", color: "text-blue-400", icon: "⚡" },
+  "guardian-certification": { label: "Guardian Cert", color: "text-red-400", icon: "🛡️" },
+  "subscription-activated": { label: "Subscription", color: "text-purple-400", icon: "⭐" },
+  "shells-purchase": { label: "Shells", color: "text-amber-400", icon: "🐚" },
+  "domain-registration": { label: "Domain", color: "text-cyan-400", icon: "🌐" },
+  "nft-mint": { label: "NFT Mint", color: "text-pink-400", icon: "🖼️" },
+  "business-approved": { label: "Business", color: "text-violet-400", icon: "🏢" },
+  "member-trust-card": { label: "Trust Card", color: "text-teal-400", icon: "💳" },
+  "hallmark": { label: "Hallmark", color: "text-orange-400", icon: "🏛️" },
+};
+
 export default function Transactions() {
   const [searchQuery, setSearchQuery] = useState("");
   const [typeFilter, setTypeFilter] = useState<string>("all");
   const [selectedTx, setSelectedTx] = useState<any>(null);
+  const [activeTab, setActiveTab] = useState<"transactions" | "stamps">("transactions");
+  const [copiedHash, setCopiedHash] = useState<string | null>(null);
 
   const { data: txData, isLoading } = useQuery<{ transactions: any[] }>({
     queryKey: ["/api/transactions/history"],
     refetchInterval: 30000,
   });
 
+  const { data: stampData } = useQuery<{ stamps: any[] }>({
+    queryKey: ["/api/trust-stamps/my"],
+    refetchInterval: 30000,
+  });
+
   const transactions = txData?.transactions || [];
+  const stamps = stampData?.stamps || [];
+
+  const copyHash = (hash: string) => {
+    navigator.clipboard.writeText(hash);
+    setCopiedHash(hash);
+    setTimeout(() => setCopiedHash(null), 2000);
+  };
 
   const filteredTxs = transactions.filter((tx: any) => {
     const matchesSearch = !searchQuery || 
@@ -138,6 +166,43 @@ export default function Transactions() {
             </div>
           </motion.div>
 
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="flex gap-1 mb-4 p-1 rounded-xl bg-white/5 border border-white/10"
+          >
+            <button
+              onClick={() => setActiveTab("transactions")}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold transition-all ${
+                activeTab === "transactions"
+                  ? "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-white border border-blue-500/30"
+                  : "text-white/40 hover:text-white/60"
+              }`}
+              data-testid="tab-transactions"
+            >
+              <History className="w-3.5 h-3.5" />
+              Transactions
+            </button>
+            <button
+              onClick={() => setActiveTab("stamps")}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-semibold transition-all ${
+                activeTab === "stamps"
+                  ? "bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-white border border-cyan-500/30"
+                  : "text-white/40 hover:text-white/60"
+              }`}
+              data-testid="tab-trust-stamps"
+            >
+              <Fingerprint className="w-3.5 h-3.5" />
+              Trust Stamps
+              {stamps.length > 0 && (
+                <span className="px-1.5 py-0.5 text-[9px] rounded-full bg-cyan-500/20 text-cyan-400">{stamps.length}</span>
+              )}
+            </button>
+          </motion.div>
+
+          {activeTab === "transactions" && (
+          <>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -309,10 +374,138 @@ export default function Transactions() {
               </div>
             </div>
           </motion.div>
+          </>
+          )}
+
+          {activeTab === "stamps" && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="space-y-2"
+          >
+            <div className="p-3 rounded-xl bg-cyan-500/10 border border-cyan-500/20 mb-4">
+              <div className="flex items-start gap-2">
+                <Fingerprint className="w-4 h-4 text-cyan-400 shrink-0 mt-0.5" />
+                <p className="text-[10px] text-cyan-200">
+                  <strong className="text-cyan-300">Trust Stamps</strong> are immutable blockchain records of every action tied to your account — purchases, mints, certifications, and more. Each stamp has a unique hash verifiable on the Trust Layer.
+                </p>
+              </div>
+            </div>
+
+            {stamps.length === 0 ? (
+              <div className="text-center py-12">
+                <Fingerprint className="w-12 h-12 text-white/20 mx-auto mb-3" />
+                <p className="text-sm text-muted-foreground">No trust stamps yet</p>
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  Your actions on Trust Layer will generate blockchain-verified stamps
+                </p>
+              </div>
+            ) : (
+              stamps.map((stamp: any, index: number) => {
+                const config = STAMP_CATEGORY_CONFIG[stamp.category] || { label: stamp.category, color: "text-white", icon: "📋" };
+                let parsedMeta: Record<string, any> = {};
+                try { parsedMeta = JSON.parse(stamp.metadata || "{}"); } catch {}
+
+                return (
+                  <motion.div
+                    key={stamp.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.03 }}
+                  >
+                    <GlassCard glow className="p-3">
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2.5">
+                          <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center text-lg">
+                            {config.icon}
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className={`font-semibold text-sm ${config.color}`}>{config.label}</span>
+                              <Badge className={`text-[9px] py-0 h-4 ${stamp.status === "confirmed" ? "bg-green-500/20 text-green-400" : "bg-amber-500/20 text-amber-400"}`}>
+                                {stamp.status === "confirmed" ? <CheckCircle2 className="w-2 h-2 mr-1" /> : <Clock className="w-2 h-2 mr-1" />}
+                                {stamp.status}
+                              </Badge>
+                            </div>
+                            <div className="text-[10px] text-muted-foreground flex items-center gap-1 mt-0.5">
+                              <Clock className="w-2 h-2" />
+                              {formatDate(stamp.createdAt)}
+                            </div>
+                          </div>
+                        </div>
+                        {stamp.blockHeight && (
+                          <div className="text-right">
+                            <div className="text-[10px] text-muted-foreground">Block</div>
+                            <div className="text-xs font-mono text-white font-bold">#{stamp.blockHeight}</div>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="space-y-1.5 pt-2 border-t border-white/5">
+                        {stamp.dataHash && (
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-muted-foreground">Data Hash</span>
+                            <button onClick={() => copyHash(stamp.dataHash)} className="font-mono flex items-center gap-1 text-white/70 hover:text-white transition-colors">
+                              {truncateHash(stamp.dataHash)}
+                              {copiedHash === stamp.dataHash ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
+                            </button>
+                          </div>
+                        )}
+                        {stamp.txHash && (
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-muted-foreground">Tx Hash</span>
+                            <button onClick={() => copyHash(stamp.txHash)} className="font-mono flex items-center gap-1 text-cyan-400/70 hover:text-cyan-400 transition-colors">
+                              {truncateHash(stamp.txHash)}
+                              {copiedHash === stamp.txHash ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3" />}
+                            </button>
+                          </div>
+                        )}
+                        {parsedMeta.amountUsd && (
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-muted-foreground">Amount</span>
+                            <span className="text-white font-medium">${parsedMeta.amountUsd}</span>
+                          </div>
+                        )}
+                        {parsedMeta.tokens && (
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-muted-foreground">Tokens</span>
+                            <span className="text-white font-medium">{Number(parsedMeta.tokens).toLocaleString()} SIG</span>
+                          </div>
+                        )}
+                        {parsedMeta.shells && (
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-muted-foreground">Shells</span>
+                            <span className="text-amber-400 font-medium">{Number(parsedMeta.shells).toLocaleString()}</span>
+                          </div>
+                        )}
+                        {parsedMeta.domain && (
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-muted-foreground">Domain</span>
+                            <span className="text-cyan-400 font-medium">{parsedMeta.domain}.tlid</span>
+                          </div>
+                        )}
+                        {parsedMeta.name && stamp.category === "nft-mint" && (
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-muted-foreground">NFT</span>
+                            <span className="text-pink-400 font-medium">{parsedMeta.name}</span>
+                          </div>
+                        )}
+                        {parsedMeta.plan && (
+                          <div className="flex items-center justify-between text-xs">
+                            <span className="text-muted-foreground">Plan</span>
+                            <span className="text-purple-400 font-medium">{parsedMeta.plan.replace(/_/g, ' ')}</span>
+                          </div>
+                        )}
+                      </div>
+                    </GlassCard>
+                  </motion.div>
+                );
+              })
+            )}
+          </motion.div>
+          )}
         </div>
       </main>
-
-      
     </div>
   );
 }
