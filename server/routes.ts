@@ -136,6 +136,7 @@ import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, inser
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
+import { trustStamp } from "./trust-stamp";
 import { blockchain } from "./blockchain-engine";
 import { sendEmail, sendApiKeyEmail, sendHallmarkEmail, sendPresaleConfirmationEmail, sendEmailVerificationCode, sendBusinessApprovalEmail, sendBusinessRejectionEmail, sendCrowdfundConfirmationEmail, sendSubscriptionActivatedEmail, sendSubscriptionRenewalEmail, sendGoldCoinPurchaseEmail, sendCreditsConfirmationEmail, sendGuardianCertificationEmail, sendDomainRegistrationEmail, sendOrbsPurchaseEmail, sendShellsPurchaseEmail, sendPaymentFailedEmail } from "./email";
 import { submitMemoToSolana, isHeliusConfigured, getSolanaTreasuryAddress, getSolanaBalance } from "./helius";
@@ -378,6 +379,8 @@ export async function registerRoutes(
             
             console.log(`[Stripe Webhook] Presale recorded: ${customerEmail}, ${totalTokens} tokens from $${(amountCents/100).toFixed(2)}`);
             
+            trustStamp("presale-purchase", { email: customerEmail, amountUsd: (amountCents / 100).toFixed(2), tokens: totalTokens, tier, paymentId }).catch(() => {});
+            
             if (customerEmail) {
               try {
                 await sendPresaleConfirmationEmail(customerEmail, (amountCents / 100).toFixed(2), tier, tokenAmount, bonusTokens);
@@ -413,6 +416,8 @@ export async function registerRoutes(
             }
             
             console.log(`[Stripe Webhook] Crowdfund confirmed: ${metadata.contributionId}`);
+            
+            trustStamp("crowdfund-donation", { email: customerEmail, amountUsd: (amountCents / 100).toFixed(2), contributionId: metadata.contributionId, paymentId }).catch(() => {});
           } catch (dbError) {
             console.error("[Stripe Webhook] DB error for crowdfund:", dbError);
           }
@@ -427,6 +432,8 @@ export async function registerRoutes(
               paymentId as string
             );
             console.log(`[Stripe Webhook] Credits purchased: user=${metadata.userId}, credits=${result.creditsAdded}, balance=${result.newBalance}`);
+            
+            trustStamp("credits-purchase", { userId: metadata.userId, credits: result.creditsAdded, amountUsd: (amountCents / 100).toFixed(2), paymentId }).catch(() => {});
             
             if (customerEmail) {
               try {
@@ -473,6 +480,8 @@ export async function registerRoutes(
               userId: metadata.userId || null,
             });
             console.log(`[Stripe Webhook] Guardian certification created: ${certification.id}, tier: ${metadata.tier}, project: ${metadata.projectName}`);
+            
+            trustStamp("guardian-certification", { certId: String(certification.id), tier: metadata.tier, project: metadata.projectName, amountUsd: (amountCents / 100).toFixed(2), paymentId }).catch(() => {});
             
             const certEmail = customerEmail || metadata.contactEmail;
             if (certEmail) {
@@ -554,6 +563,8 @@ export async function registerRoutes(
             );
             
             console.log(`[Stripe Webhook] Subscription activated: user=${userId}, plan=${plan}, cycle=${billingCycle}, price=${priceAmount}`);
+            
+            trustStamp("subscription-activated", { userId, plan, billingCycle, amountCents: priceAmount, paymentId }).catch(() => {});
             
             if (customerEmail) {
               try {
@@ -751,6 +762,8 @@ export async function registerRoutes(
                 charge.code
               );
               console.log(`[Coinbase Webhook] Shells credited: ${shellsAmount} to user ${metadata.userId}`);
+              
+              trustStamp("shells-purchase", { userId: metadata.userId, shells: shellsAmount, amountUsd, source: "coinbase" }).catch(() => {});
             }
           } catch (shellsError) {
             console.error("[Coinbase Webhook] Shells credit error:", shellsError);
@@ -9205,6 +9218,8 @@ const { trustLayerId } = await response.json();`
         } catch (emailErr) { console.error("[Domain] Registration email error:", emailErr); }
       }
       
+      trustStamp("domain-registration", { domain: data.name, tld: "dwsc", owner: data.ownerAddress, priceCents: totalPrice, txHash }).catch(() => {});
+      
       res.json({
         success: true,
         domain,
@@ -11946,6 +11961,8 @@ Current context:
         imageUrl: imageUrl || "",
         ownerId: userId,
       });
+
+      trustStamp("nft-mint", { nftId: nft.id, name, collection: finalCollectionId, owner: userId }).catch(() => {});
 
       res.json({ success: true, nft });
     } catch (error: any) {
@@ -17734,6 +17751,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       // User membership status derived from approved application, not stored on user
       console.log(`[Business Verification] User ${updated.userId} business membership approved`);
       
+      trustStamp("business-approved", { businessName: updated.businessName, userId: updated.userId, mainStreet: mainStreet || false }).catch(() => {});
+      
       if (mainStreet) {
         console.log(`[Business Verification] ${updated.businessName} granted Main Street storefront`);
       }
@@ -20110,6 +20129,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       // Credit the Shells (uses sessionId as referenceId for idempotency)
       const transaction = await shellsService.purchaseShells(userId, username, packageKey, session.id);
       const balance = await shellsService.getBalance(userId);
+      
+      trustStamp("shells-purchase", { userId, shells: shellAmount, package: packageKey, amountCents: session.amount_total || 0, source: "stripe" }).catch(() => {});
       
       // Record purchase receipt for DWC conversion tracking
       try {
