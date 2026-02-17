@@ -1,0 +1,36 @@
+DWTL.io
+
+These are items that need to be addressed
+
+
+Chronicles landing screen upon opening the PWA says "DarkWave the Game" and that is incorrect. It then has a button that says "Enter/Explore the Chronoverse" which then leads you to log in. It's "Chronicles" not "DarkWave the Game". One of these screens seem to be redundant.
+We need to make the setup as simple as possible
+When setting up your play and character the actual setup screens need to be far more premium and use photorealistic images in all cards and utilize all ultra premium effects.
+
+Glassmorphism 
+
+3D Hover Effects 
+
+Shimmer/Skeleton Loading 
+
+Haptic Feedback 
+
+Tooltips 
+
+Dynamic Theming 
+
+Micro-interactions 
+
+Scroll-triggered Animations 
+
+3. Are the character shaping questions in line with my non-RPG concept? This was initially meant to be training an ai agent to be you while you play a game.
+   -The AI agent is the unique aspect of the parallel self that is a first in the gaming industry. We need to develop it to properly to learn the user.
+4. Creating the character button (step 8) should say something more related to The "Parallel Self" concept. That button does nothing and you can't go any further.
+5. Legal disclaimers in the footer call Signal a "Token" I don't want to use that language if we don't have to. 
+6. We have to explore the idea of modes of transportation within eras. it can't just be walking and time travel
+7. Add "Trust Home" trusthome.replit.app, Trust Vault" trustvault.replit.app, "Happy Eats" happyeats.app, "The Void" venting-buddy.replit.app, "Torque" garagebot.io/torque, "Guardian Scanner", "Guardian Screener", and TrustShield.tech (the last three live here) need to be added to ecosystem carousels and photorealistic images should be made based on the abilities and subjects. if you need anything else let me know  
+8. The "Our Story" Section in the footer has all the media versions attached and downloadable and available to everyone. Sweep for other non-public documents
+9. On the command center screen the "Chronicles" card should not include "DarkWave"
+10.On the mobile command screen it horizontally scrolls as if there is another page to the right that you can swipe to. that needs to be removed.
+11.The /Veil homepage is still not in our premium UI
+12.Do you think Guardian Scanner should also scan pages to show if they are real or AI not just Agents? I'm trying to come up with more features for it as a standalone app
