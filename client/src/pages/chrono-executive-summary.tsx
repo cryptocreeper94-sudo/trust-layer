@@ -64,11 +64,11 @@ export default function ChronoExecutiveSummary() {
                 Executive Overview
               </h2>
               <p className="text-white/80 leading-relaxed mb-4">
-                Chronicles is an <span className="text-amber-400 font-semibold">unprecedented adventure platform</span> where 
-                YOU are the hero—not an avatar, your actual parallel self. Experience 70+ mission theaters spanning 
-                from the Prehistoric Era to a speculative 2200 CE future, each with unique campaigns, factions, and ways to build your legend. 
-                The world evolves dynamically—AI-driven NPCs pursue their own goals, economies shift, and alliances form—creating a living 
-                experience that responds authentically to your choices.
+                Chronicles is an <span className="text-amber-400 font-semibold">unprecedented parallel life simulation</span> where 
+                YOU are the character—not an avatar, your actual parallel self. Season Zero launches with three distinct eras: 
+                <span className="text-cyan-400 font-semibold">Modern</span>, <span className="text-purple-400 font-semibold">Medieval</span>, and <span className="text-amber-400 font-semibold">Wild West</span>—each with unique situations, factions, and ways to reveal who you truly are. 
+                The world evolves dynamically—AI-driven NPCs remember your actions, relationships shift, and alliances form—creating a living 
+                experience that responds authentically to your choices. The vision scales to 70+ eras spanning all of human history.
               </p>
               <p className="text-white/80 leading-relaxed">
                 Built on the <span className="text-cyan-400 font-semibold">Trust Layer (DWSC)</span> blockchain infrastructure, 
@@ -110,8 +110,8 @@ export default function ChronoExecutiveSummary() {
                   color: "amber"
                 },
                 {
-                  title: "70+ Mission Theaters",
-                  description: "From Prehistoric tribes to Victorian commerce. Each era offers unique campaigns, factions, and rewards. Your choices ripple across time through our cross-era quest system.",
+                  title: "Season Zero: 3 Starting Eras",
+                  description: "Modern, Medieval, and Wild West—three fully realized worlds at launch. Each era offers unique situations, factions, and rewards. The vision scales to 70+ eras spanning all of human history.",
                   icon: Zap,
                   color: "purple"
                 },

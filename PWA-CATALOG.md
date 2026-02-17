@@ -31,23 +31,42 @@
 
 ---
 
-## 2. Guardian Scanner
+## 2. Guardian Scanner (AI Agent + URL/Website Scanner)
 - **URL:** `dwsc.io/guardian-scanner`
 - **PWA ID:** `/guardian-scanner`
 - **Manifest:** `manifest-guardian.webmanifest`
 - **Icon:** `/icons/guardian-scanner-icon-512.png`
 - **Splash:** `/icons/guardian-scanner-splash.png`
 - **Theme Color:** #06b6d4 (Cyan)
-- **Categories:** Finance, Utilities, Security
-- **Description:** AI-powered token analysis scanner with Pulse predictive scoring. Real-time safety checks, multi-chain monitoring, and Strike Agent recommendations.
-- **Tech Stack:** React 18, TypeScript, Framer Motion, DexScreener API (live data), WebSocket real-time updates, Pulse Safety Engine
-- **Lines of Code:** ~4,403
+- **Categories:** Security, AI, Utilities
+- **Description:** AI-powered security verification platform that scans and certifies autonomous AI agents and websites/URLs across the crypto ecosystem. Guardian Score trust ratings, phishing detection, and public registry.
+- **Tech Stack:** React 18, TypeScript, Framer Motion, Guardian Certification Engine, PWA
 - **Key Features:**
-  - Live DexScreener data (trending, gainers, new tokens)
-  - Multi-chain support (Solana, Ethereum, BSC, Base, Arbitrum, Polygon)
+  - AI agent verification and certification (Security, Transparency, Reliability, Compliance)
+  - Guardian Score trust ratings for all scanned agents
+  - URL and website scanning for phishing, malicious redirects, scam domains
+  - Public Guardian AI Registry with searchable directory
+  - Guardian Certification Program (Assurance Lite + Guardian Premier)
+  - Continuous monitoring via Guardian Shield integration
+  - Mobile-first PWA with iOS fallback
+
+## 2b. Guardian Screener (DEX Screener)
+- **URL:** `dwsc.io/guardian-shield`
+- **PWA ID:** `/guardian-shield`
+- **Manifest:** `manifest-guardian-screener.webmanifest`
+- **Icon:** `/icons/guardian-screener-icon-512.png`
+- **Theme Color:** #06b6d4 (Cyan)
+- **Categories:** Finance, Trading, Security
+- **Description:** AI-powered DEX screener with Pulse Safety Engine, predictive analytics, snipe buying, and real-time threat detection across 13+ blockchains.
+- **Tech Stack:** React 18, TypeScript, Framer Motion, DexScreener API (live data), WebSocket real-time updates, Pulse Safety Engine, ML predictions
+- **Key Features:**
+  - Live DexScreener data (trending, gainers, losers, new tokens)
+  - Multi-chain support (13+ chains)
   - Pulse Safety Engine (honeypot detection, whale concentration, liquidity lock analysis)
   - ML prediction signals (bullish/bearish/neutral)
+  - Snipe buying and quick-trade panel
   - Token detail pages with real contract data
+  - Category filtering (Meme, DeFi, Blue Chip, Gaming, AI, NFT, Stable, RWA)
   - Mobile-first with tap-to-detail navigation
   - PWA install prompt with iOS fallback
 

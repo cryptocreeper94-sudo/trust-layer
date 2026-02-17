@@ -1,7 +1,7 @@
 # DarkWave Trust Layer - ALPHA MASTER ROADMAP
 
-**Version**: 1.0.0  
-**Last Updated**: January 21, 2026  
+**Version**: 1.1.0  
+**Last Updated**: February 17, 2026  
 **Maintainer**: Jason / DarkWave Studios  
 **Primary Domain**: dwtl.io  
 
@@ -63,7 +63,9 @@ DarkWave Trust Layer is a worldwide fractal pattern trust network connecting all
 **Gaming (Chronicles):**
 | Feature | Status | Notes |
 |---------|--------|-------|
-| Core Gameplay | ✅ BETA | 10 historical eras |
+| Parallel Self Onboarding | ✅ COMPLETE | Self-discovery personality quiz (not RPG character creation) |
+| Play System | ✅ COMPLETE | Scenarios, decisions, XP/Shells rewards, achievements |
+| Season Zero (3 Eras) | ✅ BETA | Modern (default), Medieval (Lv.3), Wild West (Lv.5) |
 | AI NPCs (GPT-4o) | ✅ COMPLETE | Persistent memory |
 | 5-Axis Emotion System | ✅ COMPLETE | Arousal, Valence, Fear, etc. |
 | Voice Cloning | ✅ COMPLETE | Character voices |
@@ -116,12 +118,13 @@ DarkWave Trust Layer is a worldwide fractal pattern trust network connecting all
 
 | Priority | Feature | Current State | Action Needed | Owner |
 |----------|---------|---------------|---------------|-------|
-| 1 | **Guardian Token Scanner** | ❌ NOT BUILT | Build DexScreener-style interface with trust scores, bot detection, rug warnings | Agent |
-| 2 | **Ethereum Bridge** | 🟡 UI Ready | Complete lock/mint contracts, test on Sepolia | Agent |
-| 3 | **Solana Bridge** | 🟡 UI Ready | Complete bridge logic, test on Devnet | Agent |
-| 4 | **Presale Flow Polish** | ✅ Working | Final QA, edge case testing | Agent |
-| 5 | **Mobile Responsiveness** | 🟡 Ongoing | Audit all pages for mobile UX | Agent |
-| 6 | **UI Protocol Compliance** | 🟡 Ongoing | Ensure all pages follow Bento Grid protocol | Agent |
+| 1 | **Guardian Screener (DEX)** | ✅ BUILT | Live with Pulse Safety Engine, 13+ chains, ML predictions, snipe buying | Agent |
+| 2 | **Guardian Scanner (AI/URL)** | ✅ BUILT | AI agent scanning live; URL/website scanning in progress | Agent |
+| 3 | **Ethereum Bridge** | ✅ COMPLETE | Lock/mint on Sepolia testnet | Agent |
+| 4 | **Solana Bridge** | ✅ COMPLETE | Bridge logic on Devnet | Agent |
+| 5 | **Presale Flow Polish** | ✅ Working | Final QA, edge case testing | Agent |
+| 6 | **Mobile Responsiveness** | 🟡 Ongoing | Audit all pages for mobile UX | Agent |
+| 7 | **UI Protocol Compliance** | 🟡 Ongoing | Ensure all pages follow Bento Grid protocol | Agent |
 
 ### TIER 2 - SHOULD COMPLETE (High Value)
 
@@ -294,9 +297,11 @@ A comprehensive, affordable crypto education platform that creates informed part
 - api-docs, api-playground, api-usage
 - code-snippets, webhooks
 
-### GUARDIAN/SECURITY (5 pages)
+### GUARDIAN PRODUCTS (7 pages)
+- guardian-scanner (AI agent + URL/website scanner)
+- guardian-screener / guardian-shield (DEX screener with Pulse Safety Engine)
 - guardian-certification, guardian-portal
-- guardian-registry, guardian-shield, security
+- guardian-registry, guardian-whitepaper, security
 
 ### TRUST LAYER (8 pages)
 - trust-layer, rwa-tokenization, dao-governance

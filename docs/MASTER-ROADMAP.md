@@ -1,5 +1,5 @@
 # DARKWAVE MASTER ROADMAP
-*Single Source of Truth - Last Updated: January 9, 2026*
+*Single Source of Truth - Last Updated: February 17, 2026*
 
 ---
 
@@ -12,8 +12,10 @@
 ## COMPLETED FEATURES ✅
 
 ### Chronicles Core Systems (DONE)
-- [x] Character creation with personality quiz
-- [x] Parallel Self onboarding flow
+- [x] Parallel Self onboarding flow (self-discovery personality quiz — not RPG character creation)
+- [x] Play system with scenario generation, decisions, XP/Shells rewards, achievements
+- [x] Game state tracking (level, XP, shells, streaks, era unlocks)
+- [x] Era unlock progression (Modern default, Medieval at level 3, Wild West at level 5)
 - [x] Daily check-in system with streak bonuses (1x-3x multiplier)
 - [x] Daily needs system (energy, mood, health, social, hunger)
 - [x] Need decay over time and restoration through activities
@@ -24,6 +26,15 @@
 - [x] Shell economy with earning caps (200/day, 1000/week)
 - [x] Estate/interior building system
 - [x] Community Builder Program for player-created content
+- [x] Chronicles login and authentication (separate from main portal)
+- [x] Premium glassmorphism UI with GlassCard, glow effects, staggered animations
+
+### Guardian Products (DONE)
+- [x] Guardian Scanner — AI agent verification + website/URL scanning with trust scores and certification
+- [x] Guardian Screener — DEX screener with AI threat detection, Pulse Safety Engine, snipe/limit orders, multi-chain (13+)
+- [x] Guardian Shield — Continuous monitoring service (landing page)
+- [x] Guardian Certification — Security audit service pages (Assurance Lite + Premier)
+- [x] Guardian AI Registry — Public searchable registry of certified AI agents
 
 ### Main Portal (DONE)
 - [x] Full blockchain explorer and documentation
@@ -31,8 +42,10 @@
 - [x] NFT marketplace and creator tools
 - [x] Games arcade with multiple games
 - [x] Token presale and crowdfunding
-- [x] Guardian Certification service pages
 - [x] Developer portal and API documentation
+- [x] Cross-chain bridge (Ethereum Sepolia, Solana Devnet)
+- [x] ChronoChat community platform
+- [x] Signal Chat with WebSocket real-time messaging
 
 ---
 
@@ -57,11 +70,11 @@
 ## PRIORITY 2: GAME CONTENT (Weeks 2-4)
 *Expand the world*
 
-### Beta Era Implementation
-- [ ] Roman Empire era - functional with parallel universe selection
-- [ ] Medieval Europe era - functional with parallel universe selection
-- [ ] Era selection UI (choose dimension/parallel/tone)
-- [ ] Era-specific NPCs, activities, and storylines
+### Era Expansion
+- [ ] Medieval era content expansion — full faction system, NPCs, storylines
+- [ ] Wild West era content expansion — frontier justice, settlements, characters
+- [ ] Era-specific NPCs, activities, and storylines for all 3 starting eras
+- [ ] Era selection UI refinement
 
 ### Player Systems Expansion
 - [ ] Marriage/partner system
@@ -80,11 +93,11 @@
 - [ ] Public-facing transparency page
 - [ ] No vanity metrics - real data only
 
-### Chronicles Polish & Onboarding
-- [ ] Zero crypto knowledge required
-- [ ] Interactive tutorials
-- [ ] Guided first-time experience
-- [ ] Faster load times and smoother animations
+### Guardian Scanner Enhancement
+- [ ] URL/website scanning backend (phishing detection, malicious redirect identification)
+- [ ] Known scam domain database
+- [ ] Real-time risk scoring for URLs
+- [ ] Integration with Guardian Shield for continuous site monitoring
 
 ### Guardian Shield (Recurring Revenue $299-$2,999/mo)
 - [ ] Real-time monitoring scheduler
@@ -161,7 +174,7 @@
 
 ### Chronicles Full Release (July 4, 2026)
 - [ ] 70+ eras live (using era design template)
-- [ ] Parallel Self AI system operational
+- [ ] Parallel Self AI system fully operational
 - [ ] Voice cloning integration
 - [ ] On-chain achievements & NFTs
 - [ ] Full relationship system
@@ -194,18 +207,21 @@
 ## CHRONICLES SEASON ROADMAP
 
 ### Season Zero (NOW - Active Beta)
-- [x] Character creation & personality
-- [x] Modern Era hub with locations
+- [x] Parallel Self onboarding (self-discovery, not character creation)
+- [x] Modern Era hub with locations (starting era for all players)
+- [x] Play system with scenarios, decisions, XP, achievements
 - [x] Daily needs system
 - [x] Check-in streaks & rewards
 - [x] NPC interactions & relationships
 - [x] Estate building basics
 - [x] Community Builder Program
+- [x] Era unlock progression (Medieval at Lv.3, Wild West at Lv.5)
+- [x] Premium glassmorphism UI throughout
 
 ### Season One (Post-TGE)
 - [ ] Daily & weekly quests
 - [ ] Faction system introduction
-- [ ] 3 additional eras (Roman, Medieval, Renaissance)
+- [ ] Full Medieval and Wild West era content
 - [ ] Career paths
 - [ ] Marriage system
 - [ ] Voice integration (text-to-speech)
@@ -224,6 +240,46 @@
 - [ ] Community-created eras
 - [ ] Competitive seasons
 - [ ] On-chain achievements as NFTs
+
+---
+
+## GUARDIAN PRODUCT SUITE
+
+### Guardian Scanner (AI Agent + URL/Website Scanner)
+- [x] AI agent scanning and certification (Security, Transparency, Reliability, Compliance)
+- [x] Guardian Score trust ratings
+- [x] Public Guardian AI Registry
+- [ ] URL/website scanning (phishing, malicious redirects, scam domains)
+- [ ] Known scam domain database
+- [ ] Real-time URL risk scoring
+- [x] Mobile-first PWA (dwsc.io/guardian-scanner)
+
+### Guardian Screener (DEX Screener)
+- [x] Live DexScreener data (trending, gainers, losers, newest)
+- [x] Multi-chain support (13+ chains: Solana, Ethereum, BSC, Base, Arbitrum, Polygon, Avalanche, Fantom, Optimism, Cronos, Tron, zkSync, DarkWave)
+- [x] Pulse Safety Engine (honeypot, whale concentration, liquidity lock analysis)
+- [x] ML prediction signals (bullish/bearish/neutral)
+- [x] Token detail pages with real contract data
+- [x] Quick-trade panel with snipe buying
+- [x] Category filtering (Meme, DeFi, Blue Chip, Gaming, AI, NFT, Stable, RWA)
+- [x] WebSocket real-time updates
+- [ ] Limit order system
+- [ ] Quant analytics dashboard
+- [x] Mobile-first PWA (dwsc.io/guardian-shield)
+
+### Guardian Shield (Continuous Monitoring)
+- [ ] Real-time monitoring for certified projects
+- [ ] Health scoring algorithm
+- [ ] Alert system with escalation rules
+- [ ] SOC operations dashboard
+- [ ] Pricing: $299-$2,999/mo
+
+### Guardian Certification (Security Audits)
+- [x] Assurance Lite tier ($5,999) — 2-3 week audit
+- [x] Guardian Premier tier ($14,999) — 4-6 week audit
+- [x] 5-phase audit process
+- [x] Public registry listing
+- [x] Guardian Verified badge
 
 ---
 

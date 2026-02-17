@@ -6,7 +6,7 @@
 **Status:** Season Zero BETA v0.1 — In Active Development  
 **Codebase:** Included in the DarkWave Trust Layer build at dwsc.io (can be separated as a standalone product for catalog/distribution purposes)  
 **Lines of Code:** ~13,800 lines across 19 dedicated files (frontend pages, backend services, AI engine, NPC system)  
-**Date:** February 10, 2026
+**Date:** February 17, 2026
 
 ---
 
@@ -57,14 +57,23 @@ Roaring Twenties jazz and speakeasies. World War homefront sacrifice. Civil Righ
 **Epoch 7 — Modern & Beyond (2000+)**
 Near-future scenarios grounded in plausible extensions of current technology and society.
 
-### Season Zero — Currently Playable
+### Season Zero — Currently Playable (3 Starting Eras)
 
-The Medieval Era ("Age of Crowns," ~1200 CE) is the first fully playable era, featuring:
-- Five rival factions: House of Crowns (royalists), The Shadow Council (spymasters), Merchant's Guild (traders), Innovator's Circle (visionaries), and The Old Faith (traditionalists)
-- AI-powered NPCs with persistent memory across sessions
-- Faction-based quests and political storylines
+Season Zero launches with three distinct eras, each a fully realized world:
+
+**Modern Era** (default starting era) — Players begin here. 8 locations (home, office, gym, cafe, park, library, mall, restaurant), 10 base activities, 8 NPCs with personality traits, daily needs system (energy, mood, health, social, hunger).
+
+**Medieval Era** ("Age of Crowns," ~1200 CE) — Unlocks at Level 3. Five rival factions: House of Crowns (royalists), The Shadow Council (spymasters), Merchant's Guild (traders), Innovator's Circle (visionaries), and The Old Faith (traditionalists). Faction-based quests and political storylines.
+
+**Wild West Era** (Frontier Justice, ~1870s) — Unlocks at Level 5. Frontier settlements, outlaw encounters, gold rush economics, and frontier justice dilemmas.
+
+All eras feature:
+- AI-powered NPCs with persistent memory across sessions (relationship scores -20 to +20)
+- Parallel Self onboarding (self-discovery personality quiz, not RPG character creation)
+- Scenario system with decisions, XP, Shells rewards, and achievements
 - Estate building and management
 - Chronicle Proofs — soulbound blockchain records of major decisions
+- Daily check-in streaks with 1x-3x multiplier bonuses
 
 ---
 
@@ -178,17 +187,21 @@ Not everyone wants combat and danger. Chronicles supports multiple ways to play:
 ## Current Build Status
 
 ### What's Built and Working
-- [x] Medieval Era (Age of Crowns) — fully playable with 5 factions
+- [x] Season Zero — 3 playable eras: Modern (default), Medieval (Lv.3), Wild West (Lv.5)
+- [x] Parallel Self onboarding — self-discovery personality quiz (not RPG character creation)
+- [x] Play system — scenarios, decisions, XP/Shells rewards, achievements
+- [x] Daily needs system — energy, mood, health, social, hunger with decay and restoration
+- [x] Daily check-in streaks with 1x-3x multiplier bonuses
 - [x] AI NPC conversations — GPT-4o powered with persistent memory
 - [x] 5-Axis Emotion System — Arousal, Valence, Social Cohesion, Fear, Ambition
+- [x] NPC relationship tracking (acquaintance → friend → close friend, scores -20 to +20)
+- [x] Shell economy with earning caps (200/day, 1000/week)
 - [x] Chronicle Proofs — soulbound blockchain records
 - [x] Voice cloning technology — ElevenLabs integration
-- [x] Character onboarding — multi-step personality discovery (traits, values, decision style, conflict approach)
-- [x] Character portrait system
 - [x] Scenario generator with consequence webs
 - [x] Estate management foundation
 - [x] Chronicles Hub with journey chapters
-- [x] Era Codex (Dawn Age, Age of Crowns, Iron Epoch playable)
+- [x] Era Codex
 - [x] Chronicles login and authentication
 - [x] NPC conversation interface
 - [x] AI demo and interactive demo modes
@@ -196,22 +209,23 @@ Not everyone wants combat and danger. Chronicles supports multiple ways to play:
 - [x] Chronicles admin panel
 - [x] Time Portal interface
 - [x] Chronicles Builder (content creation)
+- [x] Community Builder Program for player-created content
 - [x] Roadmap page with phase tracking
+- [x] Premium glassmorphism UI throughout (GlassCard, glow effects, staggered animations)
 
 ### What's In Progress
 - [ ] Business storefront program (real businesses claim in-game real estate)
 - [ ] Belief system framework (religious and philosophical systems shaping moral compass)
-- [ ] Character portrait refinement
-- [ ] Emotion dashboard visualization
 - [ ] Estate interior design system
+- [ ] Real-time 1:1 world clock integration
 
 ### What's Coming Next
-- [ ] Multi-era gameplay (expanding beyond Medieval to all eras)
+- [ ] Full Medieval and Wild West era content expansion (factions, NPCs, storylines)
 - [ ] Political simulation (councils, treaties, power struggles)
 - [ ] Faction system deepening (territory control, faction wars)
 - [ ] Daily and weekly quest system
-- [ ] Career paths
-- [ ] Marriage system
+- [ ] Career paths and income generation
+- [ ] Marriage and partner system
 - [ ] Generational legacy (your choices echo through family lines)
 - [ ] Community creation tools
 - [ ] Full-scale world simulation with thousands of AI agents

@@ -53,25 +53,21 @@ Generate a dark, premium fintech-style image showing a futuristic trading dashbo
 
 ### Marketing Description
 
-Guardian Agent Scanner is the Trust Layer's AI-powered scanning and analysis engine — purpose-built to evaluate, verify, and score autonomous AI agents operating across blockchain networks. In a world where AI agents are making trades, managing wallets, and executing smart contracts on behalf of users, knowing which agents you can trust isn't optional — it's survival.
+Guardian Scanner is the Trust Layer's AI-powered security verification platform — purpose-built to scan, evaluate, and certify both autonomous AI agents and websites/URLs across the crypto ecosystem. In a world where AI agents are making trades, managing wallets, and executing smart contracts on behalf of users — and where phishing links and scam sites are everywhere — knowing what you can trust isn't optional. It's survival.
 
-Guardian Agent Scanner runs deep analysis on AI agents across 13+ blockchains, producing comprehensive safety scores, behavioral pattern analysis, and risk assessments. Every agent gets a Guardian Score based on security posture, transparency, reliability, and compliance. Think of it as a credit score for AI — except the stakes are your crypto.
+Guardian Scanner evaluates AI agents across four dimensions: Security, Transparency, Reliability, and Compliance. Every agent receives a Guardian Score and can earn certification through the Guardian Certification Program. All certified agents are listed on the public Guardian AI Registry.
 
-The scanner features real-time WebSocket updates, multi-chain token monitoring, contract address lookup, AI confidence scoring powered by machine learning prediction models, and a full quick-trade panel for acting on insights instantly. It's not just information — it's actionable intelligence.
+The scanner also provides URL and website scanning — paste any project URL, token website, DEX link, airdrop claim page, or Discord invite and Guardian Scanner checks for phishing indicators, malicious redirects, impersonation patterns, and known scam domains. It verifies site legitimacy before users interact with unfamiliar links.
 
 **Key Features:**
-- AI agent verification and certification scoring across 13+ chains
-- Guardian Score safety ratings (security, transparency, reliability, compliance)
-- Real-time WebSocket live data feeds
-- Multi-chain support: Solana, Ethereum, Base, BSC, Arbitrum, Polygon, DarkWave
-- Contract address lookup and deep analysis
-- ML-powered prediction engine with directional confidence scores
-- Honeypot, mint authority, freeze authority, and liquidity lock detection
-- Whale concentration and bot activity analysis
-- Quick-trade panel for instant action on insights
-- Category filtering: Meme, DeFi, Blue Chip, Gaming, AI, NFT, Stable, RWA
-- Sortable by trending, volume, gainers, losers, newest, Guardian Score, AI confidence, transactions, liquidity, market cap
-- Time-based filtering: 5M, 1H, 6H, 24H
+- AI agent verification and certification scoring (Security, Transparency, Reliability, Compliance)
+- Guardian Score trust ratings for all scanned agents
+- URL and website scanning for phishing, malicious redirects, scam domains
+- Known scam domain database matching
+- Real-time URL risk scoring with clear pass/warn/fail results
+- Public Guardian AI Registry with searchable directory
+- Guardian Certification Program (Assurance Lite + Guardian Premier tiers)
+- Continuous monitoring via Guardian Shield integration
 - Installable as a standalone app on iOS and Android with custom splash screen
 
 ### Tech Stack
@@ -92,6 +88,7 @@ Generate a dark, futuristic AI security interface showing a holographic scanner 
 
 ## Notes for the Architect Agent
 - Both PWAs are already built and included in the dwsc.io codebase total line count. Do NOT add additional lines to the count — these are being cataloged as separate installable apps within the existing ecosystem.
-- Guardian Screener is currently a "Coming Soon" landing page that will be built out at TGE. The PWA shell is complete and installable.
-- Guardian Agent Scanner is fully functional and live with real-time data, WebSocket feeds, and ML predictions.
+- Guardian Screener is the DEX screener — live with real-time data, WebSocket feeds, Pulse Safety Engine, ML predictions, snipe buying, and 13+ chain support.
+- Guardian Scanner is the AI agent + URL/website security scanner — AI agent verification is live, URL/website scanning is in active development.
+- These are two separate PWAs with distinct purposes: Screener = market intelligence tool for traders, Scanner = security verification tool for everyone.
 - Both use the same dark theme, glassmorphism design system, and Framer Motion animation patterns as all other DarkWave PWAs.

@@ -42,9 +42,10 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Signal Chat Platform**: Cross-app community messaging with JWT SSO. Uses `chat_users`, `chat_channels`, `chat_messages` tables. Auth: bcryptjs 12 rounds, JWT HS256. WebSocket at `/ws/chat` for real-time communication.
 - **Shells Economy System**: Pre-launch virtual currency, convertible to Signal, earned via engagement, purchased via Stripe, with atomic transactions.
 - **Subscription System**: Unified subscription management with tiers and cross-app entitlement checking.
-- **Guardian Certification Program**: In-house blockchain security audit service with tiered offerings and public registry. Offers Assurance Lite and Guardian Premier audits with a 5-phase process.
-- **Guardian Shield (trustshield.tech)**: Continuous blockchain security monitoring for enterprises.
-- **Guardian AI**: Certification system for autonomous AI agents across Security, Transparency, Reliability, and Compliance. Public registry at `/guardian-ai-registry`.
+- **Guardian Scanner**: AI-powered security verification platform. Two capabilities: (1) AI agent scanning and certification across Security, Transparency, Reliability, Compliance with Guardian Score trust ratings and public Guardian AI Registry; (2) URL/website scanning for phishing, malicious redirects, scam domains. PWA at `/guardian-scanner`.
+- **Guardian Screener**: DEX screener with Pulse Safety Engine, ML predictions, snipe buying, and real-time threat detection across 13+ blockchains. Live DexScreener data, category filtering, quick-trade panel. PWA at `/guardian-shield`.
+- **Guardian Certification Program**: In-house blockchain security audit service with tiered offerings and public registry. Offers Assurance Lite ($5,999) and Guardian Premier ($14,999) audits with a 5-phase process.
+- **Guardian Shield (trustshield.tech)**: Continuous blockchain security monitoring for enterprises ($299-$2,999/mo).
 - **Security Infrastructure**: Helmet.js, CORS, rate limiting, AES-256-GCM, HMAC-SHA256, parameterized SQL.
 - **Early Adopter Rewards System**: Tracks signup positions and tiered crowdfund bonuses for Signal airdrops.
 - **Backend IDE / Studio Executor**: Docker container orchestration for code execution with JWT auth, sandboxing, and resource enforcement.
