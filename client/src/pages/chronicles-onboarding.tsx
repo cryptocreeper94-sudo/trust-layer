@@ -166,12 +166,14 @@ export default function ChroniclesOnboarding() {
   const savePersonalityMutation = useMutation({
     mutationFn: async (data: PersonalityAnswers) => {
       const session = getChroniclesSession();
-      const res = await fetch("/api/chronicles/personality", {
+      const headers = { 
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session?.token}` 
+      };
+      
+      const personalityRes = await fetch("/api/chronicles/personality", {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${session?.token}` 
-        },
+        headers,
         body: JSON.stringify({
           playerName: chroniclesAccount?.firstName || "Hero",
           parallelSelfName: data.chroniclesName,
@@ -189,10 +191,26 @@ export default function ChroniclesOnboarding() {
           audioMood: data.audioMood,
         })
       });
-      return res.json();
+      const personalityResult = await personalityRes.json();
+
+      const startingEra = data.eraInterest || "modern";
+      const characterRes = await fetch("/api/chronicles/character", {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          name: data.chroniclesName || chroniclesAccount?.firstName || "Traveler",
+          primaryTrait: data.primaryTrait,
+          secondaryTrait: data.secondaryTrait,
+          era: startingEra,
+        })
+      });
+      const characterResult = await characterRes.json();
+
+      return { personality: personalityResult, character: characterResult };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/chronicles/personality"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/chronicles/character"] });
       setCurrentStep("complete");
     },
   });

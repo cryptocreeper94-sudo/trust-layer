@@ -152,6 +152,27 @@ export default function ChroniclesHub() {
       });
   }, [setLocation]);
 
+  const { data: characterData, isLoading: characterLoading } = useQuery({
+    queryKey: ["/api/chronicles/character"],
+    queryFn: async () => {
+      const session = getChroniclesSession();
+      const res = await fetch("/api/chronicles/character", {
+        headers: { Authorization: `Bearer ${session?.token}` }
+      });
+      if (res.status === 404) {
+        return { needsOnboarding: true };
+      }
+      return res.json();
+    },
+    enabled: !!chroniclesAccount,
+  });
+
+  useEffect(() => {
+    if (characterData?.needsOnboarding) {
+      setLocation("/chronicles/onboarding");
+    }
+  }, [characterData, setLocation]);
+
   const { data: personality, isLoading: personalityLoading } = useQuery({
     queryKey: ["/api/chronicles/personality"],
     queryFn: async () => {

@@ -132,7 +132,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and, gte } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications, limitOrders, insertLimitOrderSchema, chatChannels, ecosystemAffiliates, ecosystemReferrals, ecosystemRewardsLedger } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications, limitOrders, insertLimitOrderSchema, chatChannels, ecosystemAffiliates, ecosystemReferrals, ecosystemRewardsLedger, chroniclesGameState } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
@@ -15795,6 +15795,235 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const proofs = await chroniclesGameService.getChronicleProofs(req.params.characterId);
       res.json({ proofs });
     } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // ============================================
+  // CHRONICLES PLAY ENDPOINTS - Game Loop
+  // ============================================
+
+  app.get("/api/chronicles/play/state", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+
+      let [state] = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId));
+      if (!state) {
+        const character = await needsService.getCharacter(userId);
+        const charName = character?.name || "Traveler";
+        [state] = await db.insert(chroniclesGameState).values({
+          userId,
+          name: charName,
+          currentEra: "modern",
+        }).returning();
+      }
+
+      let recentLog: any[] = [];
+      try { recentLog = JSON.parse(state.gameLog || '[]'); } catch { recentLog = []; }
+      recentLog = recentLog.slice(-10);
+
+      const level = state.level || 1;
+      const eraUnlocks = {
+        modern: { unlocked: true, requiredLevel: 1 },
+        medieval: { unlocked: level >= 3, requiredLevel: 3 },
+        wildwest: { unlocked: level >= 5, requiredLevel: 5 },
+      };
+
+      const situationsPerEra = 25;
+      const totalSituations = situationsPerEra * 3;
+      const seasonProgress = Math.min(100, Math.round((state.situationsCompleted / totalSituations) * 100));
+
+      res.json({
+        state,
+        recentLog,
+        eraUnlocks,
+        seasonProgress,
+        seasonComplete: state.situationsCompleted >= totalSituations,
+        eraProgress: {
+          modern: { completed: Math.min(state.situationsCompleted, situationsPerEra), total: situationsPerEra },
+          medieval: { completed: Math.max(0, Math.min(state.situationsCompleted - situationsPerEra, situationsPerEra)), total: situationsPerEra },
+          wildwest: { completed: Math.max(0, Math.min(state.situationsCompleted - situationsPerEra * 2, situationsPerEra)), total: situationsPerEra },
+        },
+      });
+    } catch (error: any) {
+      console.error("Play state error:", error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/play/scenario", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+
+      const { era } = req.body;
+      const eraLabel = era === "medieval" ? "Medieval Kingdom" : era === "wildwest" ? "Wild West Frontier" : "Modern City";
+
+      let [state] = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId));
+      if (!state) {
+        [state] = await db.insert(chroniclesGameState).values({ userId, name: "Traveler", currentEra: era || "modern" }).returning();
+      }
+
+      const level = state.level || 1;
+      if (era === "medieval" && level < 3) return res.status(403).json({ error: "Reach level 3 to unlock Medieval era" });
+      if (era === "wildwest" && level < 5) return res.status(403).json({ error: "Reach level 5 to unlock Wild West era" });
+
+      const hasCredits = await creditsService.hasCredits(userId, CREDIT_COSTS.SCENARIO_GENERATION);
+      if (!hasCredits) {
+        const balance = await creditsService.getBalance(userId);
+        return res.status(402).json({ error: "Insufficient credits", required: CREDIT_COSTS.SCENARIO_GENERATION, balance });
+      }
+
+      const personality = await chroniclesAI.getOrCreatePersonality(userId);
+      const scenario = await chroniclesAI.generateScenario(personality, {
+        era: eraLabel,
+        location: "Marketplace",
+        situation: "A new situation arises",
+      });
+
+      await creditsService.deductCredits(userId, CREDIT_COSTS.SCENARIO_GENERATION, "Scenario generation", "ai_usage");
+
+      const scenarioId = `scenario_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+
+      res.json({
+        scenario: {
+          id: scenarioId,
+          ...scenario,
+          era,
+        },
+      });
+    } catch (error: any) {
+      console.error("Play scenario error:", error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/play/decide", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+
+      const { scenarioId, choiceId, choiceText, era } = req.body;
+      if (!choiceText) return res.status(400).json({ error: "Choice text required" });
+
+      let [state] = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId));
+      if (!state) {
+        [state] = await db.insert(chroniclesGameState).values({ userId, name: "Traveler", currentEra: era || "modern" }).returning();
+      }
+
+      const xpGain = 15 + Math.floor(Math.random() * 20);
+      const shellGain = 2 + Math.floor(Math.random() * 5);
+      const newXp = (state.experience || 0) + xpGain;
+      const newSituations = (state.situationsCompleted || 0) + 1;
+      const newDecisions = (state.decisionsRecorded || 0) + 1;
+
+      const xpForLevel = (lvl: number) => lvl * 100;
+      let currentLevel = state.level || 1;
+      let remainingXp = newXp;
+      while (remainingXp >= xpForLevel(currentLevel)) {
+        remainingXp -= xpForLevel(currentLevel);
+        currentLevel++;
+      }
+      const leveledUp = currentLevel > (state.level || 1);
+
+      const statBoosts: Record<string, number> = {};
+      const stats = ["wisdom", "courage", "compassion", "cunning", "influence"];
+      const boostedStat = stats[Math.floor(Math.random() * stats.length)];
+      statBoosts[boostedStat] = (state as any)[boostedStat] + 1;
+
+      const newAchievements: string[] = [];
+      const currentAchievements = state.achievements || [];
+      if (newDecisions === 1 && !currentAchievements.includes("first_decision")) newAchievements.push("first_decision");
+      if (currentLevel >= 5 && !currentAchievements.includes("level_5")) newAchievements.push("level_5");
+      if (currentLevel >= 10 && !currentAchievements.includes("level_10")) newAchievements.push("level_10");
+      if (newDecisions >= 10 && !currentAchievements.includes("ten_decisions")) newAchievements.push("ten_decisions");
+
+      let recentLog: any[] = [];
+      try { recentLog = JSON.parse(state.gameLog || '[]'); } catch { recentLog = []; }
+      recentLog.push({
+        type: "decision",
+        era,
+        choice: choiceText,
+        xp: xpGain,
+        shells: shellGain,
+        stat: boostedStat,
+        timestamp: new Date().toISOString(),
+      });
+      if (recentLog.length > 50) recentLog = recentLog.slice(-50);
+
+      const today = new Date();
+      const lastPlayed = state.lastPlayedAt ? new Date(state.lastPlayedAt) : null;
+      let streak = state.currentStreak || 0;
+      if (!lastPlayed || (today.getTime() - lastPlayed.getTime()) > 48 * 3600 * 1000) {
+        streak = 1;
+      } else if ((today.getTime() - lastPlayed.getTime()) > 20 * 3600 * 1000) {
+        streak += 1;
+      }
+      if (streak >= 3 && !currentAchievements.includes("streak_3") && !newAchievements.includes("streak_3")) newAchievements.push("streak_3");
+      if (streak >= 7 && !currentAchievements.includes("streak_7") && !newAchievements.includes("streak_7")) newAchievements.push("streak_7");
+
+      await db.update(chroniclesGameState)
+        .set({
+          level: currentLevel,
+          experience: remainingXp,
+          shellsEarned: (state.shellsEarned || 0) + shellGain,
+          situationsCompleted: newSituations,
+          decisionsRecorded: newDecisions,
+          completedSituations: [...(state.completedSituations || []), scenarioId],
+          achievements: [...currentAchievements, ...newAchievements],
+          currentStreak: streak,
+          longestStreak: Math.max(streak, state.longestStreak || 0),
+          lastPlayedAt: today,
+          gameLog: JSON.stringify(recentLog),
+          ...statBoosts,
+          updatedAt: new Date(),
+        })
+        .where(eq(chroniclesGameState.userId, userId));
+
+      res.json({
+        xpGained: xpGain,
+        shellsGained: shellGain,
+        statBoosted: boostedStat,
+        newLevel: leveledUp ? currentLevel : null,
+        newAchievements: newAchievements.length > 0 ? newAchievements : null,
+        consequence: `Your choice reverberates through the ${era === "medieval" ? "kingdom" : era === "wildwest" ? "frontier" : "city"}. ${boostedStat.charAt(0).toUpperCase() + boostedStat.slice(1)} increased.`,
+      });
+    } catch (error: any) {
+      console.error("Play decide error:", error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/chronicles/play/achievements", isChroniclesAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+
+      const [state] = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId));
+      const earned = state?.achievements || [];
+
+      const allAchievements = [
+        { id: "first_decision", name: "First Steps", description: "Made your first decision", icon: "🎯" },
+        { id: "level_5", name: "Rising Star", description: "Reached level 5", icon: "⭐" },
+        { id: "level_10", name: "Veteran", description: "Reached level 10", icon: "🏆" },
+        { id: "explorer", name: "Explorer", description: "Completed situations in all 3 eras", icon: "🗺️" },
+        { id: "social_butterfly", name: "Social Butterfly", description: "Spoken to 5+ NPCs", icon: "🦋" },
+        { id: "faction_member", name: "Faction Member", description: "Joined a faction", icon: "⚔️" },
+        { id: "streak_3", name: "Dedicated", description: "3 day streak", icon: "🔥" },
+        { id: "streak_7", name: "Unstoppable", description: "7 day streak", icon: "💎" },
+        { id: "ten_decisions", name: "Seasoned", description: "Made 10 decisions", icon: "📜" },
+        { id: "hundred_shells", name: "Shell Collector", description: "Earned 100+ shells", icon: "🐚" },
+      ];
+
+      res.json({
+        achievements: allAchievements.map(a => ({
+          ...a,
+          earned: earned.includes(a.id),
+        })),
+      });
+    } catch (error: any) {
+      console.error("Play achievements error:", error);
       res.status(500).json({ error: error.message });
     }
   });
