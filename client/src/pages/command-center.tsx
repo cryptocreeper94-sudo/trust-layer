@@ -181,7 +181,7 @@ const categories: Category[] = [
     title: "Games & Entertainment",
     icon: <Gamepad2 className="size-4" />,
     gradient: "from-pink-500 to-purple-500",
-    description: "DarkWave Chronicles admin, arcade game controls, sweepstakes rules, and all gaming infrastructure. Manage the entertainment side of the ecosystem.",
+    description: "Chronicles admin, arcade game controls, sweepstakes rules, and all gaming infrastructure. Manage the entertainment side of the ecosystem.",
     cards: [
       { label: "Chronicles Admin", description: "Game world and content management", href: "/chronicles-admin", icon: <Swords className="size-5" />, image: ccGames, glowColor: "shadow-pink-500/30", featured: false },
       { label: "Arcade Hub", description: "Arcade and game management", href: "/arcade", icon: <Gamepad2 className="size-5" />, image: hubChroniclesGame, glowColor: "shadow-purple-500/30" },
@@ -195,7 +195,7 @@ const categories: Category[] = [
     title: "Developer & API",
     icon: <Code className="size-4" />,
     gradient: "from-green-500 to-emerald-500",
-    description: "API documentation, developer portal, webhook configuration, studio tools, and technical infrastructure. Everything developers need to build on DarkWave.",
+    description: "API documentation, developer portal, webhook configuration, studio tools, and technical infrastructure. Everything developers need to build on Trust Layer.",
     cards: [
       { label: "Developer Portal", description: "API keys and developer tools", href: "/developer-portal", icon: <Code className="size-5" />, image: ccDeveloper, glowColor: "shadow-green-500/30", featured: false },
       { label: "API Documentation", description: "Comprehensive API reference", href: "/api-docs", icon: <FileText className="size-5" />, image: hubSmartContract, glowColor: "shadow-emerald-500/30" },
@@ -211,7 +211,7 @@ const categories: Category[] = [
     title: "Settings & System",
     icon: <Settings className="size-4" />,
     gradient: "from-slate-400 to-zinc-500",
-    description: "Platform configuration, ecosystem map, roadmap management, status page, and core system settings. Fine-tune every aspect of the DarkWave platform.",
+    description: "Platform configuration, ecosystem map, roadmap management, status page, and core system settings. Fine-tune every aspect of the Trust Layer platform.",
     cards: [
       { label: "Owner Portal", description: "Core owner administration hub", href: "/owner-admin", icon: <Crown className="size-5" />, image: ccSettings, glowColor: "shadow-slate-400/30", featured: false },
       { label: "Ecosystem Map", description: "Visual ecosystem overview", href: "/ecosystem", icon: <Map className="size-5" />, image: ccBlockchain, glowColor: "shadow-zinc-400/30" },
@@ -514,7 +514,7 @@ export default function CommandCenter() {
   const totalTools = categories.reduce((sum, cat) => sum + cat.cards.length, 0);
 
   return (
-    <div className="min-h-screen pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+    <div className="min-h-screen pb-12 overflow-x-hidden" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
       <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={600} top="-5%" left="60%" />
       <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={500} top="40%" left="-10%" delay={3} />
       <GlowOrb color="linear-gradient(135deg, #f59e0b, #ef4444)" size={400} top="70%" left="80%" delay={5} />
@@ -602,7 +602,7 @@ export default function CommandCenter() {
                       <span className="px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white bg-cyan-500/20 rounded-full border border-cyan-500/20">Origin</span>
                     </div>
                     <p className="text-white font-mono text-lg sm:text-xl font-bold tracking-wider">000000000-001</p>
-                    <p className="text-white/30 text-[10px] mt-0.5 font-mono">DarkWave Trust Layer L1 — Genesis Hallmark — The Beginning of Trust</p>
+                    <p className="text-white/30 text-[10px] mt-0.5 font-mono">Trust Layer L1 — Genesis Hallmark — The Beginning of Trust</p>
                   </div>
                   <button
                     onClick={() => setShowGenesis(false)}

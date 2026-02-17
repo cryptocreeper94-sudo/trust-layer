@@ -306,11 +306,11 @@ export default function ChroniclesOnboarding() {
                     Welcome to Chronicles
                   </h1>
                   <p className="text-lg text-slate-300 mb-2">
-                    Create Your Character
+                    Discover Your Parallel Self
                   </p>
                   <p className="text-slate-400 mb-8 max-w-md mx-auto">
-                    Answer a few questions to define who you are in the Chronicles universe. 
-                    Your choices will shape your character's personality, strengths, and story.
+                    Answer a few questions so we understand who you really are. 
+                    Your choices shape how the world responds to you — because in Chronicles, you are YOU.
                   </p>
                   <Badge variant="outline" className="border-amber-500/50 text-amber-400 mb-8">
                     Season Zero - Early Access Preview
@@ -330,20 +330,20 @@ export default function ChroniclesOnboarding() {
                     What Shall We Call You?
                   </h2>
                   <p className="text-slate-400 mb-8 text-center">
-                    Choose a name for your Chronicles character
+                    Choose a name for your parallel self
                   </p>
                   <Card className="bg-slate-900/80 border-slate-700 p-6 max-w-md mx-auto">
-                    <label className="block text-sm text-slate-300 mb-2">Character Name</label>
+                    <label className="block text-sm text-slate-300 mb-2">Your Name</label>
                     <Input
                       data-testid="input-chronicles-name"
                       value={answers.chroniclesName}
                       onChange={(e) => setAnswers(prev => ({ ...prev, chroniclesName: e.target.value }))}
-                      placeholder="Enter your character's name..."
+                      placeholder="Enter your name..."
                       className="bg-slate-800 border-slate-600 text-white text-lg"
                       maxLength={30}
                     />
                     <p className="text-xs text-slate-500 mt-2">
-                      This is how NPCs and other players will address you
+                      This is how the world will know you
                     </p>
                   </Card>
                 </motion.div>
@@ -358,10 +358,10 @@ export default function ChroniclesOnboarding() {
                   exit={{ opacity: 0, y: -20 }}
                 >
                   <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 text-center">
-                    Define Your Character
+                    Who Are You?
                   </h2>
                   <p className="text-slate-400 mb-6 text-center">
-                    Choose your primary and secondary roles
+                    Choose what defines you most
                   </p>
                   
                   <div className="mb-6">
@@ -426,7 +426,7 @@ export default function ChroniclesOnboarding() {
                     What Do You Value Most?
                   </h2>
                   <p className="text-slate-400 mb-6 text-center">
-                    Choose 2-4 values that guide your character
+                    Choose 2-4 values that guide you
                   </p>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     {VALUES.map((value) => (
@@ -466,7 +466,7 @@ export default function ChroniclesOnboarding() {
                     How Do You Make Decisions?
                   </h2>
                   <p className="text-slate-400 mb-6 text-center">
-                    Your decision style shapes how you approach opportunities
+                    How you think shapes every opportunity you encounter
                   </p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-xl mx-auto">
                     {DECISION_STYLES.map((style) => (
@@ -758,17 +758,17 @@ export default function ChroniclesOnboarding() {
                     <Check className="w-12 h-12 text-white" />
                   </div>
                   <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                    Character Created!
+                    Your Parallel Self Awaits
                   </h1>
                   <p className="text-lg text-slate-300 mb-2">
                     Welcome, {answers.chroniclesName}
                   </p>
                   <p className="text-slate-400 mb-8 max-w-md mx-auto">
-                    Your character profile has been saved. You're now ready to explore the Chronicles universe.
+                    Your profile has been saved. You're now ready to step into the Chronicles universe as yourself.
                   </p>
                   
                   <Card className="bg-slate-900/80 border-slate-700 p-6 max-w-md mx-auto mb-8">
-                    <h3 className="text-lg font-semibold text-white mb-4">Your Character Summary</h3>
+                    <h3 className="text-lg font-semibold text-white mb-4">Your Profile Summary</h3>
                     <div className="space-y-2 text-left">
                       <div className="flex justify-between">
                         <span className="text-slate-400">Name:</span>
@@ -863,7 +863,7 @@ export default function ChroniclesOnboarding() {
                 {savePersonalityMutation.isPending ? (
                   <Loader2 className="w-4 h-4 animate-spin mr-2" />
                 ) : null}
-                {currentStep === "portrait" ? "Create Character" : "Continue"}
+                {currentStep === "portrait" ? "Begin Your Journey" : "Continue"}
                 <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
             </div>

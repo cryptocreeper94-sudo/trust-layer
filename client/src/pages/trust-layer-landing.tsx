@@ -105,6 +105,20 @@ const ecosystemImages: Record<string, string> = {
   "strike-agent": "/ecosystem/strike-agent.jpg",
   "veda-solus": "/ecosystem/veda-solus.jpg",
   "vedasolus": "/ecosystem/veda-solus.jpg",
+  "trust-home": "/ecosystem/trust-home.png",
+  "trust-vault": "/ecosystem/trust-vault.png",
+  "guardian-scanner": "/ecosystem/guardian-scanner.png",
+  "guardian-screener": "/ecosystem/guardian-screener.png",
+  "trustshield": "/ecosystem/trustshield.png",
+  "the-void": "/ecosystem/the-void.png",
+  "torque": "/ecosystem/torque.png",
+  "driver-connect": "/ecosystem/happy-eats.png",
+  "happyeats": "/ecosystem/happy-eats.png",
+  "chronicles": "/ecosystem/chronicles.png",
+  "the-arcade": "/ecosystem/the-arcade.png",
+  "signal-chat": "/ecosystem/signal-chat.png",
+  "darkwave-studios": "/ecosystem/darkwave-studios.png",
+  "tradeworks-ai": "/ecosystem/tradeworks-ai.png",
 };
 
 function getAppImage(appId: string): string {

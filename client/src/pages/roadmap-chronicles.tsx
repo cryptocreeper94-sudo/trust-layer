@@ -101,6 +101,9 @@ const CHRONICLES_PHASES: Phase[] = [
       { id: "m16", title: "Community Creation Tools", description: "Build and share your own scenarios, characters, and worlds", status: "pending", isRequired: true },
       { id: "m17", title: "Global Server Infrastructure", description: "Dedicated servers worldwide for smooth experience", status: "pending", isRequired: true },
       { id: "m18", title: "3-Tier AI Stack", description: "Deterministic planners → LLM microservices → Offline batch processing", status: "pending", isRequired: true },
+      { id: "m19", title: "Era-Specific Transportation", description: "Medieval: horses, carriages, sailing ships. Wild West: stagecoaches, steam trains, horseback. Modern: cars, subway, rideshare, flights", status: "pending", isRequired: false },
+      { id: "m20", title: "Travel & Transit System", description: "Real-time travel between city zones with era-appropriate travel times and random encounters during journeys", status: "pending", isRequired: false },
+      { id: "m21", title: "Vehicle Ownership & Upgrades", description: "Own and upgrade your transport — from a tired mule to a warhorse, Model T to sports car, or earn a ship captain's license", status: "pending", isRequired: false },
     ],
   },
 ];

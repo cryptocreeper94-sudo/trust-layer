@@ -985,10 +985,8 @@ export default function Chronicles() {
             
             <h1 className="text-5xl sm:text-6xl md:text-8xl font-display font-black mb-6 leading-tight">
               <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-2xl">
-                DarkWave
+                Chronicles
               </span>
-              <br />
-              <span className="text-white drop-shadow-2xl">The Game</span>
               <Badge className="ml-3 px-3 py-1 bg-amber-500/30 border-amber-500/50 text-amber-300 text-sm font-bold align-middle animate-pulse">
                 BETA
               </Badge>
