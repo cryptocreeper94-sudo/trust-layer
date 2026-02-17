@@ -3,26 +3,27 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { 
-  ChevronRight, ChevronLeft, User, Sparkles, Shield, Brain,
-  Heart, Compass, Eye, Crown, Scroll, Check, Loader2, MessageCircle, Users
+  ChevronRight, ChevronLeft, Sparkles, Shield, Brain,
+  Heart, Compass, Eye, Crown, Check, Loader2, MessageCircle, Users,
+  Fingerprint, Music, Headphones, VolumeX,
+  Swords, BookOpen, Globe, Flame, Star, Gem, Zap, Target
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { GlassCard } from "@/components/glass-card";
 import { getChroniclesSession } from "@/pages/chronicles-login";
 import { CharacterPortraitPreview } from "@/components/character-portrait";
 
 type OnboardingStep = 
   | "welcome"
   | "name"
-  | "traits"
+  | "identity"
   | "values"
-  | "decisions"
-  | "challenges"
+  | "instincts"
+  | "pressure"
   | "audio"
-  | "portrait"
+  | "presence"
   | "complete";
 
 interface PersonalityAnswers {
@@ -40,80 +41,81 @@ interface PersonalityAnswers {
 }
 
 const STEPS: OnboardingStep[] = [
-  "welcome", "name", "traits", "values", "decisions", "challenges", "audio", "portrait", "complete"
+  "welcome", "name", "identity", "values", "instincts", "pressure", "audio", "presence", "complete"
 ];
 
-const AUDIO_PREFERENCES = [
-  { id: "curated", label: "Curated Experience", desc: "Handpicked atmospheric music that matches your journey", icon: Sparkles },
-  { id: "spotify", label: "My Spotify", desc: "Connect your Spotify to play your own playlists", icon: Heart },
-  { id: "silent", label: "Silent Mode", desc: "No background music, just ambient sounds", icon: Eye },
-];
-
-const AUDIO_MOODS = [
-  { id: "epic", label: "Epic & Cinematic", desc: "Orchestral scores and heroic themes" },
-  { id: "calm", label: "Calm & Ambient", desc: "Peaceful, relaxing soundscapes" },
-  { id: "medieval", label: "Medieval & Folk", desc: "Lutes, harps, and tavern tunes" },
-  { id: "electronic", label: "Electronic & Synth", desc: "Modern beats with fantasy vibes" },
-  { id: "nature", label: "Nature Sounds", desc: "Forests, rain, crackling fires" },
-];
-
-const TRAITS = [
-  { id: "leader", label: "Leader", desc: "You take charge and inspire others", icon: Crown },
-  { id: "builder", label: "Builder", desc: "You create lasting things with your hands and mind", icon: Shield },
-  { id: "explorer", label: "Explorer", desc: "You seek new experiences and discoveries", icon: Compass },
-  { id: "diplomat", label: "Diplomat", desc: "You bring people together and resolve conflicts", icon: Heart },
-  { id: "scholar", label: "Scholar", desc: "You pursue knowledge and understanding", icon: Brain },
-  { id: "protector", label: "Protector", desc: "You defend those who cannot defend themselves", icon: Shield },
+const IDENTITY_ASPECTS = [
+  { id: "leader", label: "Taking Charge", desc: "You naturally step up and people follow", icon: Crown, gradient: "from-amber-500/20 to-orange-500/20", border: "border-amber-500/40", glow: "shadow-amber-500/20" },
+  { id: "builder", label: "Creating Things", desc: "You build, fix, and make things better", icon: Target, gradient: "from-emerald-500/20 to-teal-500/20", border: "border-emerald-500/40", glow: "shadow-emerald-500/20" },
+  { id: "explorer", label: "Seeking the Unknown", desc: "You're drawn to new places and ideas", icon: Compass, gradient: "from-cyan-500/20 to-blue-500/20", border: "border-cyan-500/40", glow: "shadow-cyan-500/20" },
+  { id: "diplomat", label: "Connecting People", desc: "You bring people together and ease tensions", icon: Heart, gradient: "from-pink-500/20 to-rose-500/20", border: "border-pink-500/40", glow: "shadow-pink-500/20" },
+  { id: "scholar", label: "Understanding Deeply", desc: "You dig into things until you truly get them", icon: Brain, gradient: "from-purple-500/20 to-violet-500/20", border: "border-purple-500/40", glow: "shadow-purple-500/20" },
+  { id: "protector", label: "Standing Guard", desc: "You protect people who can't protect themselves", icon: Shield, gradient: "from-blue-500/20 to-indigo-500/20", border: "border-blue-500/40", glow: "shadow-blue-500/20" },
 ];
 
 const VALUES = [
-  { id: "justice", label: "Justice", desc: "Fairness and doing what's right" },
-  { id: "freedom", label: "Freedom", desc: "Independence and self-determination" },
-  { id: "loyalty", label: "Loyalty", desc: "Dedication to people and causes" },
-  { id: "knowledge", label: "Knowledge", desc: "Learning and understanding" },
-  { id: "compassion", label: "Compassion", desc: "Caring for others' wellbeing" },
-  { id: "achievement", label: "Achievement", desc: "Accomplishing meaningful goals" },
-  { id: "creativity", label: "Creativity", desc: "Expressing ideas and making new things" },
-  { id: "integrity", label: "Integrity", desc: "Honesty and strong principles" },
+  { id: "justice", label: "Justice", desc: "Fairness matters above all", icon: Swords },
+  { id: "freedom", label: "Freedom", desc: "Nobody should control your path", icon: Globe },
+  { id: "loyalty", label: "Loyalty", desc: "You stand by your people", icon: Shield },
+  { id: "knowledge", label: "Knowledge", desc: "Understanding drives you", icon: BookOpen },
+  { id: "compassion", label: "Compassion", desc: "Others' pain is yours too", icon: Heart },
+  { id: "achievement", label: "Achievement", desc: "You need to accomplish things", icon: Star },
+  { id: "creativity", label: "Creativity", desc: "Making something from nothing", icon: Sparkles },
+  { id: "integrity", label: "Integrity", desc: "Your word is everything", icon: Gem },
 ];
 
-const DECISION_STYLES = [
-  { id: "analytical", label: "Thoughtful & Careful", desc: "You weigh all options before deciding" },
-  { id: "intuitive", label: "Trust Your Instincts", desc: "You follow your gut feeling" },
-  { id: "balanced", label: "Balanced Approach", desc: "You mix logic and intuition" },
-  { id: "collaborative", label: "Seek Input", desc: "You value others' perspectives" },
+const INSTINCT_STYLES = [
+  { id: "analytical", label: "Think It Through", desc: "You slow down, weigh every angle, then move with certainty", icon: Brain, color: "text-cyan-400" },
+  { id: "intuitive", label: "Trust Your Gut", desc: "Something inside you just knows — and it's usually right", icon: Zap, color: "text-yellow-400" },
+  { id: "balanced", label: "Read the Room", desc: "You blend instinct with logic depending on the situation", icon: Eye, color: "text-purple-400" },
+  { id: "collaborative", label: "Ask Around", desc: "Other perspectives make your decisions sharper", icon: Users, color: "text-emerald-400" },
 ];
 
-const CONFLICT_APPROACHES = [
-  { id: "diplomatic", label: "Seek Understanding", desc: "Find common ground through dialogue" },
-  { id: "strategic", label: "Plan & Execute", desc: "Develop a careful strategy to overcome" },
-  { id: "direct", label: "Face It Head-On", desc: "Address challenges directly and honestly" },
-  { id: "adaptive", label: "Stay Flexible", desc: "Adjust your approach as situations change" },
+const PRESSURE_RESPONSES = [
+  { id: "diplomatic", label: "Talk It Out", desc: "You find the words that unlock understanding", icon: MessageCircle, color: "text-cyan-400" },
+  { id: "strategic", label: "Outthink It", desc: "You develop a plan that turns the tables", icon: Brain, color: "text-purple-400" },
+  { id: "direct", label: "Face It Head-On", desc: "You don't flinch — you address it directly", icon: Flame, color: "text-orange-400" },
+  { id: "adaptive", label: "Stay Fluid", desc: "You bend without breaking, adjusting as things shift", icon: Compass, color: "text-emerald-400" },
 ];
 
-const CHALLENGE_RESPONSES = [
-  { id: "persevere", label: "Never Give Up", desc: "Push through until you succeed" },
-  { id: "adapt", label: "Find Another Way", desc: "Look for alternative solutions" },
-  { id: "collaborate", label: "Seek Help", desc: "Work with others to overcome" },
-  { id: "reflect", label: "Step Back & Think", desc: "Take time to understand before acting" },
+const RESILIENCE_STYLES = [
+  { id: "persevere", label: "Push Through", desc: "You don't stop until you succeed" },
+  { id: "adapt", label: "Find a Way Around", desc: "There's always another door" },
+  { id: "collaborate", label: "Rally the Team", desc: "You're stronger with others" },
+  { id: "reflect", label: "Step Back, Then Strike", desc: "Patience is your superpower" },
+];
+
+const AUDIO_PREFERENCES = [
+  { id: "curated", label: "Atmospheric Soundtrack", desc: "Music that matches every moment of your journey", icon: Headphones },
+  { id: "spotify", label: "My Own Music", desc: "Connect Spotify and bring your own vibe", icon: Music },
+  { id: "silent", label: "Ambient Only", desc: "Just wind, rain, and crackling fires", icon: VolumeX },
+];
+
+const AUDIO_MOODS = [
+  { id: "epic", label: "Epic & Cinematic", desc: "Orchestral scores, heroic swells" },
+  { id: "calm", label: "Calm & Ambient", desc: "Peaceful, meditative soundscapes" },
+  { id: "medieval", label: "Medieval & Folk", desc: "Lutes, harps, tavern warmth" },
+  { id: "electronic", label: "Electronic & Synth", desc: "Modern beats with fantasy edge" },
+  { id: "nature", label: "Nature Sounds", desc: "Forests, rain, distant thunder" },
 ];
 
 const COLORS = [
-  { id: "blue", label: "Blue", hex: "#3b82f6", meaning: "Calm & Trustworthy" },
-  { id: "green", label: "Green", hex: "#22c55e", meaning: "Growth & Harmony" },
+  { id: "blue", label: "Blue", hex: "#3b82f6", meaning: "Calm & Steady" },
+  { id: "green", label: "Green", hex: "#22c55e", meaning: "Growth & Balance" },
   { id: "purple", label: "Purple", hex: "#a855f7", meaning: "Creative & Unique" },
-  { id: "gold", label: "Gold", hex: "#eab308", meaning: "Ambitious & Confident" },
-  { id: "red", label: "Red", hex: "#ef4444", meaning: "Bold & Passionate" },
-  { id: "silver", label: "Silver", hex: "#94a3b8", meaning: "Wise & Balanced" },
+  { id: "gold", label: "Gold", hex: "#eab308", meaning: "Ambitious & Bold" },
+  { id: "red", label: "Red", hex: "#ef4444", meaning: "Passionate & Fierce" },
+  { id: "silver", label: "Silver", hex: "#94a3b8", meaning: "Wise & Measured" },
 ];
 
-const FUTURE_ERAS = [
-  { id: "ancient", label: "Ancient Civilizations", desc: "Egypt, Rome, Greece, Mesopotamia" },
-  { id: "medieval", label: "Medieval Era", desc: "Knights, castles, and kingdoms" },
-  { id: "renaissance", label: "Renaissance", desc: "Art, invention, and discovery" },
-  { id: "exploration", label: "Age of Exploration", desc: "New worlds and adventures" },
-  { id: "industrial", label: "Industrial Age", desc: "Innovation and progress" },
-];
+const staggerChildren = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1, transition: { staggerChildren: 0.08 } },
+};
+const fadeUpChild = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
+};
 
 export default function ChroniclesOnboarding() {
   const [, setLocation] = useLocation();
@@ -175,7 +177,7 @@ export default function ChroniclesOnboarding() {
         method: "POST",
         headers,
         body: JSON.stringify({
-          playerName: chroniclesAccount?.firstName || "Hero",
+          playerName: chroniclesAccount?.firstName || "Traveler",
           parallelSelfName: data.chroniclesName,
           coreValues: data.coreValues,
           decisionStyle: data.decisionStyle,
@@ -218,7 +220,7 @@ export default function ChroniclesOnboarding() {
   const nextStep = () => {
     const idx = STEPS.indexOf(currentStep);
     if (idx < STEPS.length - 1) {
-      if (currentStep === "portrait") {
+      if (currentStep === "presence") {
         savePersonalityMutation.mutate(answers);
       } else {
         setCurrentStep(STEPS[idx + 1]);
@@ -237,12 +239,12 @@ export default function ChroniclesOnboarding() {
     switch (currentStep) {
       case "welcome": return true;
       case "name": return answers.chroniclesName.trim().length >= 2;
-      case "traits": return answers.primaryTrait && answers.secondaryTrait;
+      case "identity": return answers.primaryTrait && answers.secondaryTrait;
       case "values": return answers.coreValues.length >= 2;
-      case "decisions": return answers.decisionStyle !== "";
-      case "challenges": return answers.conflictApproach && answers.challengeResponse;
+      case "instincts": return answers.decisionStyle !== "";
+      case "pressure": return answers.conflictApproach && answers.challengeResponse;
       case "audio": return answers.audioPreference !== "" && (answers.audioPreference === "silent" || answers.audioMood !== "");
-      case "portrait": return !!answers.colorPreference;
+      case "presence": return !!answers.colorPreference;
       default: return false;
     }
   };
@@ -259,7 +261,12 @@ export default function ChroniclesOnboarding() {
   if (authLoading) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-cyan-400" />
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+        >
+          <Fingerprint className="w-10 h-10 text-cyan-400" />
+        </motion.div>
       </div>
     );
   }
@@ -267,607 +274,884 @@ export default function ChroniclesOnboarding() {
   if (!chroniclesAccount) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-        <Card className="max-w-md w-full bg-slate-900/80 border-slate-700 p-8 text-center">
-          <User className="w-16 h-16 mx-auto text-cyan-400 mb-4" />
+        <GlassCard glow className="max-w-md w-full p-8 text-center">
+          <Fingerprint className="w-16 h-16 mx-auto text-cyan-400 mb-4" />
           <h2 className="text-2xl font-bold text-white mb-2">Sign In Required</h2>
           <p className="text-slate-400 mb-6">Create an account to begin your Chronicles journey</p>
-          <Button onClick={() => setLocation("/chronicles/login")} className="bg-gradient-to-r from-cyan-500 to-purple-500">
+          <Button
+            data-testid="button-sign-in"
+            onClick={() => setLocation("/chronicles/login")}
+            className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400"
+          >
             Sign In or Create Account
           </Button>
-        </Card>
+        </GlassCard>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-slate-950 relative overflow-hidden">
-      {/* Ambient Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900/80 to-slate-950" />
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], opacity: [0.1, 0.2, 0.1] }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px]"
+        />
+        <motion.div
+          animate={{ scale: [1.2, 1, 1.2], opacity: [0.1, 0.15, 0.1] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-20 right-1/4 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px]"
+        />
+        <motion.div
+          animate={{ scale: [1, 1.3, 1], opacity: [0.05, 0.1, 0.05] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/5 rounded-full blur-[120px]"
+        />
+      </div>
 
-      {/* Content */}
       <div className="relative z-10 min-h-screen flex flex-col">
-        {/* Header */}
-        <div className="p-4 md:p-6">
-          <div className="max-w-2xl mx-auto">
-            <div className="flex items-center justify-between mb-4">
-              <Badge variant="outline" className="border-cyan-500/50 text-cyan-400">
-                <Sparkles className="w-3 h-3 mr-1" />
-                Season Zero
-              </Badge>
-              <span className="text-sm text-slate-400">
-                Step {stepIndex + 1} of {STEPS.length}
-              </span>
+        {currentStep !== "welcome" && currentStep !== "complete" && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-4 md:p-6"
+          >
+            <div className="max-w-2xl mx-auto">
+              <div className="flex items-center justify-between mb-3">
+                <Badge variant="outline" className="border-cyan-500/30 text-cyan-400 bg-cyan-500/5 backdrop-blur-sm">
+                  <Sparkles className="w-3 h-3 mr-1" />
+                  Self-Discovery
+                </Badge>
+                <span className="text-sm text-slate-500 font-mono">
+                  {stepIndex}/{STEPS.length - 1}
+                </span>
+              </div>
+              <div className="relative h-1.5 bg-slate-800/80 rounded-full overflow-hidden backdrop-blur-sm">
+                <motion.div
+                  className="absolute inset-y-0 left-0 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${progress}%` }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-transparent rounded-full" />
+              </div>
             </div>
-            <Progress value={progress} className="h-2 bg-slate-800" />
-          </div>
-        </div>
+          </motion.div>
+        )}
 
-        {/* Main Content */}
         <div className="flex-1 flex items-center justify-center p-4 md:p-6">
           <div className="max-w-2xl w-full">
             <AnimatePresence mode="wait">
-              {/* Welcome Step */}
+
               {currentStep === "welcome" && (
                 <motion.div
                   key="welcome"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.5 }}
                   className="text-center"
                 >
-                  <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center">
-                    <Scroll className="w-12 h-12 text-white" />
-                  </div>
-                  <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                    Welcome to Chronicles
-                  </h1>
-                  <p className="text-lg text-slate-300 mb-2">
-                    Discover Your Parallel Self
-                  </p>
-                  <p className="text-slate-400 mb-8 max-w-md mx-auto">
-                    Answer a few questions so we understand who you really are. 
-                    Your choices shape how the world responds to you — because in Chronicles, you are YOU.
-                  </p>
-                  <Badge variant="outline" className="border-amber-500/50 text-amber-400 mb-8">
-                    Season Zero - Early Access Preview
-                  </Badge>
+                  <motion.div
+                    className="w-28 h-28 mx-auto mb-8 relative"
+                    animate={{ rotate: [0, 5, -5, 0] }}
+                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                  >
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 blur-xl opacity-40" />
+                    <div className="relative w-full h-full rounded-full bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center shadow-2xl shadow-cyan-500/20">
+                      <Fingerprint className="w-14 h-14 text-white" />
+                    </div>
+                  </motion.div>
+
+                  <motion.h1
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="text-4xl md:text-5xl font-bold mb-4"
+                  >
+                    <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                      This Is You
+                    </span>
+                  </motion.h1>
+
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="text-lg text-slate-300 mb-3 max-w-lg mx-auto"
+                  >
+                    Chronicles isn't a game where you become someone else.
+                  </motion.p>
+
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-slate-400 mb-8 max-w-md mx-auto leading-relaxed"
+                  >
+                    It's a world where <span className="text-white font-medium">you are you</span> — living parallel lives across different eras. 
+                    Answer honestly. There are no wrong answers, only <span className="text-cyan-400">your</span> answers.
+                  </motion.p>
+
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.6 }}
+                    className="flex flex-wrap justify-center gap-3 mb-8"
+                  >
+                    <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 px-3 py-1">
+                      Not an RPG
+                    </Badge>
+                    <Badge className="bg-purple-500/10 text-purple-400 border border-purple-500/20 px-3 py-1">
+                      Your Real Self
+                    </Badge>
+                    <Badge className="bg-amber-500/10 text-amber-400 border border-amber-500/20 px-3 py-1">
+                      Season Zero
+                    </Badge>
+                  </motion.div>
                 </motion.div>
               )}
 
-              {/* Name Step */}
               {currentStep === "name" && (
                 <motion.div
                   key="name"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -40 }}
+                  transition={{ duration: 0.4 }}
                 >
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 text-center">
-                    What Shall We Call You?
-                  </h2>
-                  <p className="text-slate-400 mb-8 text-center">
-                    Choose a name for your parallel self
-                  </p>
-                  <Card className="bg-slate-900/80 border-slate-700 p-6 max-w-md mx-auto">
-                    <label className="block text-sm text-slate-300 mb-2">Your Name</label>
+                  <div className="text-center mb-8">
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                      What's Your Name?
+                    </h2>
+                    <p className="text-slate-400 max-w-md mx-auto">
+                      Not a character name. Not a gamertag. This is how the world will know <span className="text-cyan-400">you</span>.
+                    </p>
+                  </div>
+                  <GlassCard glow className="max-w-md mx-auto p-6 sm:p-8">
+                    <label className="block text-sm text-cyan-400 mb-2 font-medium">Your name in Chronicles</label>
                     <Input
                       data-testid="input-chronicles-name"
                       value={answers.chroniclesName}
                       onChange={(e) => setAnswers(prev => ({ ...prev, chroniclesName: e.target.value }))}
                       placeholder="Enter your name..."
-                      className="bg-slate-800 border-slate-600 text-white text-lg"
+                      className="bg-slate-800/80 border-slate-600/50 text-white text-lg h-12 focus:border-cyan-500/50 focus:ring-cyan-500/20"
                       maxLength={30}
                     />
-                    <p className="text-xs text-slate-500 mt-2">
-                      This is how the world will know you
+                    <p className="text-xs text-slate-500 mt-3">
+                      Use your real name, a nickname, whatever feels like <span className="text-slate-400">you</span>.
                     </p>
-                  </Card>
+                  </GlassCard>
                 </motion.div>
               )}
 
-              {/* Traits Step */}
-              {currentStep === "traits" && (
+              {currentStep === "identity" && (
                 <motion.div
-                  key="traits"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
+                  key="identity"
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -40 }}
+                  transition={{ duration: 0.4 }}
                 >
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 text-center">
-                    Who Are You?
-                  </h2>
-                  <p className="text-slate-400 mb-6 text-center">
-                    Choose what defines you most
-                  </p>
+                  <div className="text-center mb-6">
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                      What Comes Naturally?
+                    </h2>
+                    <p className="text-slate-400 max-w-lg mx-auto">
+                      Don't think about who you <em>want</em> to be. Think about what you <em>actually</em> do when nobody's watching.
+                    </p>
+                  </div>
                   
-                  <div className="mb-6">
-                    <label className="block text-sm text-cyan-400 mb-3">Primary Role</label>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      {TRAITS.map((trait) => (
-                        <Card
-                          key={trait.id}
-                          data-testid={`trait-primary-${trait.id}`}
-                          onClick={() => setAnswers(prev => ({ 
-                            ...prev, 
-                            primaryTrait: trait.id,
-                            secondaryTrait: prev.secondaryTrait === trait.id ? "" : prev.secondaryTrait
-                          }))}
-                          className={`p-4 cursor-pointer transition-all ${
-                            answers.primaryTrait === trait.id
-                              ? "bg-cyan-500/20 border-cyan-500"
-                              : "bg-slate-900/80 border-slate-700 hover:border-slate-500"
-                          }`}
-                        >
-                          <trait.icon className={`w-6 h-6 mb-2 ${answers.primaryTrait === trait.id ? "text-cyan-400" : "text-slate-400"}`} />
-                          <h3 className="font-semibold text-white text-sm">{trait.label}</h3>
-                          <p className="text-xs text-slate-400 mt-1">{trait.desc}</p>
-                        </Card>
-                      ))}
+                  <div className="mb-8">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="h-px flex-1 bg-gradient-to-r from-transparent to-cyan-500/30" />
+                      <span className="text-xs text-cyan-400 font-medium uppercase tracking-wider">Your strongest instinct</span>
+                      <div className="h-px flex-1 bg-gradient-to-l from-transparent to-cyan-500/30" />
                     </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm text-purple-400 mb-3">Secondary Role</label>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                      {TRAITS.filter(t => t.id !== answers.primaryTrait).map((trait) => (
-                        <Card
-                          key={trait.id}
-                          data-testid={`trait-secondary-${trait.id}`}
-                          onClick={() => setAnswers(prev => ({ ...prev, secondaryTrait: trait.id }))}
-                          className={`p-4 cursor-pointer transition-all ${
-                            answers.secondaryTrait === trait.id
-                              ? "bg-purple-500/20 border-purple-500"
-                              : "bg-slate-900/80 border-slate-700 hover:border-slate-500"
-                          }`}
-                        >
-                          <trait.icon className={`w-6 h-6 mb-2 ${answers.secondaryTrait === trait.id ? "text-purple-400" : "text-slate-400"}`} />
-                          <h3 className="font-semibold text-white text-sm">{trait.label}</h3>
-                          <p className="text-xs text-slate-400 mt-1">{trait.desc}</p>
-                        </Card>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Values Step */}
-              {currentStep === "values" && (
-                <motion.div
-                  key="values"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                >
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 text-center">
-                    What Do You Value Most?
-                  </h2>
-                  <p className="text-slate-400 mb-6 text-center">
-                    Choose 2-4 values that guide you
-                  </p>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                    {VALUES.map((value) => (
-                      <Card
-                        key={value.id}
-                        data-testid={`value-${value.id}`}
-                        onClick={() => toggleValue(value.id)}
-                        className={`p-4 cursor-pointer transition-all text-center ${
-                          answers.coreValues.includes(value.id)
-                            ? "bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border-cyan-500"
-                            : "bg-slate-900/80 border-slate-700 hover:border-slate-500"
-                        }`}
-                      >
-                        {answers.coreValues.includes(value.id) && (
-                          <Check className="w-4 h-4 text-cyan-400 absolute top-2 right-2" />
-                        )}
-                        <h3 className="font-semibold text-white">{value.label}</h3>
-                        <p className="text-xs text-slate-400 mt-1">{value.desc}</p>
-                      </Card>
-                    ))}
-                  </div>
-                  <p className="text-center text-sm text-slate-500 mt-4">
-                    Selected: {answers.coreValues.length}/4
-                  </p>
-                </motion.div>
-              )}
-
-              {/* Decisions Step */}
-              {currentStep === "decisions" && (
-                <motion.div
-                  key="decisions"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                >
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 text-center">
-                    How Do You Make Decisions?
-                  </h2>
-                  <p className="text-slate-400 mb-6 text-center">
-                    How you think shapes every opportunity you encounter
-                  </p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-xl mx-auto">
-                    {DECISION_STYLES.map((style) => (
-                      <Card
-                        key={style.id}
-                        data-testid={`decision-${style.id}`}
-                        onClick={() => setAnswers(prev => ({ ...prev, decisionStyle: style.id }))}
-                        className={`p-4 cursor-pointer transition-all ${
-                          answers.decisionStyle === style.id
-                            ? "bg-cyan-500/20 border-cyan-500"
-                            : "bg-slate-900/80 border-slate-700 hover:border-slate-500"
-                        }`}
-                      >
-                        <h3 className="font-semibold text-white">{style.label}</h3>
-                        <p className="text-sm text-slate-400 mt-1">{style.desc}</p>
-                      </Card>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Challenges Step */}
-              {currentStep === "challenges" && (
-                <motion.div
-                  key="challenges"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                >
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 text-center">
-                    How Do You Handle Challenges?
-                  </h2>
-                  <p className="text-slate-400 mb-6 text-center">
-                    Your approach to obstacles and difficulties
-                  </p>
-                  
-                  <div className="mb-6">
-                    <label className="block text-sm text-cyan-400 mb-3">When Facing Conflict</label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {CONFLICT_APPROACHES.map((approach) => (
-                        <Card
-                          key={approach.id}
-                          data-testid={`conflict-${approach.id}`}
-                          onClick={() => setAnswers(prev => ({ ...prev, conflictApproach: approach.id }))}
-                          className={`p-4 cursor-pointer transition-all ${
-                            answers.conflictApproach === approach.id
-                              ? "bg-cyan-500/20 border-cyan-500"
-                              : "bg-slate-900/80 border-slate-700 hover:border-slate-500"
-                          }`}
-                        >
-                          <h3 className="font-semibold text-white">{approach.label}</h3>
-                          <p className="text-sm text-slate-400 mt-1">{approach.desc}</p>
-                        </Card>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm text-purple-400 mb-3">When Things Get Tough</label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {CHALLENGE_RESPONSES.map((response) => (
-                        <Card
-                          key={response.id}
-                          data-testid={`challenge-${response.id}`}
-                          onClick={() => setAnswers(prev => ({ ...prev, challengeResponse: response.id }))}
-                          className={`p-4 cursor-pointer transition-all ${
-                            answers.challengeResponse === response.id
-                              ? "bg-purple-500/20 border-purple-500"
-                              : "bg-slate-900/80 border-slate-700 hover:border-slate-500"
-                          }`}
-                        >
-                          <h3 className="font-semibold text-white">{response.label}</h3>
-                          <p className="text-sm text-slate-400 mt-1">{response.desc}</p>
-                        </Card>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Audio Step */}
-              {currentStep === "audio" && (
-                <motion.div
-                  key="audio"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                >
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 text-center">
-                    Your Soundtrack
-                  </h2>
-                  <p className="text-slate-400 mb-6 text-center">
-                    How do you want to experience audio in your journey?
-                  </p>
-                  
-                  <div className="mb-6">
-                    <label className="block text-sm text-cyan-400 mb-3">Audio Experience</label>
-                    <div className="grid grid-cols-1 gap-3 max-w-xl mx-auto">
-                      {AUDIO_PREFERENCES.map((pref) => {
-                        const Icon = pref.icon;
+                    <motion.div
+                      variants={staggerChildren}
+                      initial="hidden"
+                      animate="visible"
+                      className="grid grid-cols-2 md:grid-cols-3 gap-3"
+                    >
+                      {IDENTITY_ASPECTS.map((aspect) => {
+                        const Icon = aspect.icon;
+                        const isSelected = answers.primaryTrait === aspect.id;
                         return (
-                          <Card
-                            key={pref.id}
-                            data-testid={`audio-pref-${pref.id}`}
-                            onClick={() => setAnswers(prev => ({ 
-                              ...prev, 
-                              audioPreference: pref.id,
-                              audioMood: pref.id === "silent" ? "" : prev.audioMood 
-                            }))}
-                            className={`p-4 cursor-pointer transition-all flex items-center gap-4 ${
-                              answers.audioPreference === pref.id
-                                ? "bg-cyan-500/20 border-cyan-500"
-                                : "bg-slate-900/80 border-slate-700 hover:border-slate-500"
-                            }`}
-                          >
-                            <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                              answers.audioPreference === pref.id ? "bg-cyan-500/30" : "bg-slate-800"
-                            }`}>
-                              <Icon className={`w-6 h-6 ${answers.audioPreference === pref.id ? "text-cyan-400" : "text-slate-400"}`} />
-                            </div>
-                            <div>
-                              <h3 className="font-semibold text-white">{pref.label}</h3>
-                              <p className="text-sm text-slate-400">{pref.desc}</p>
-                            </div>
-                          </Card>
+                          <motion.div key={aspect.id} variants={fadeUpChild}>
+                            <GlassCard
+                              hover
+                              glow={isSelected}
+                              className={`cursor-pointer transition-all duration-300 ${
+                                isSelected ? aspect.border : "border-transparent"
+                              }`}
+                            >
+                              <div
+                                data-testid={`trait-primary-${aspect.id}`}
+                                onClick={() => setAnswers(prev => ({ 
+                                  ...prev, 
+                                  primaryTrait: aspect.id,
+                                  secondaryTrait: prev.secondaryTrait === aspect.id ? "" : prev.secondaryTrait
+                                }))}
+                                className={`p-4 relative ${isSelected ? `bg-gradient-to-br ${aspect.gradient}` : ""}`}
+                              >
+                                {isSelected && (
+                                  <motion.div
+                                    layoutId="primary-check"
+                                    className="absolute top-2 right-2"
+                                  >
+                                    <Check className="w-4 h-4 text-cyan-400" />
+                                  </motion.div>
+                                )}
+                                <Icon className={`w-7 h-7 mb-3 ${isSelected ? "text-white" : "text-slate-500"}`} />
+                                <h3 className={`font-semibold text-sm mb-1 ${isSelected ? "text-white" : "text-slate-300"}`}>{aspect.label}</h3>
+                                <p className="text-xs text-slate-500 leading-snug">{aspect.desc}</p>
+                              </div>
+                            </GlassCard>
+                          </motion.div>
                         );
                       })}
-                    </div>
+                    </motion.div>
                   </div>
 
-                  {answers.audioPreference !== "silent" && (
+                  {answers.primaryTrait && (
                     <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
                     >
-                      <label className="block text-sm text-purple-400 mb-3">
-                        {answers.audioPreference === "spotify" ? "Preferred Mood (we'll suggest playlists)" : "Music Mood"}
-                      </label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-xl mx-auto">
-                        {AUDIO_MOODS.map((mood) => (
-                          <Card
-                            key={mood.id}
-                            data-testid={`audio-mood-${mood.id}`}
-                            onClick={() => setAnswers(prev => ({ ...prev, audioMood: mood.id }))}
-                            className={`p-3 cursor-pointer transition-all ${
-                              answers.audioMood === mood.id
-                                ? "bg-purple-500/20 border-purple-500"
-                                : "bg-slate-900/80 border-slate-700 hover:border-slate-500"
-                            }`}
-                          >
-                            <h3 className="font-semibold text-white text-sm">{mood.label}</h3>
-                            <p className="text-xs text-slate-400 mt-1">{mood.desc}</p>
-                          </Card>
-                        ))}
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="h-px flex-1 bg-gradient-to-r from-transparent to-purple-500/30" />
+                        <span className="text-xs text-purple-400 font-medium uppercase tracking-wider">What else defines you?</span>
+                        <div className="h-px flex-1 bg-gradient-to-l from-transparent to-purple-500/30" />
                       </div>
-                      
-                      {answers.audioPreference === "spotify" && (
-                        <p className="text-center text-slate-500 text-sm mt-4">
-                          You can connect your Spotify account later in settings
-                        </p>
-                      )}
+                      <motion.div
+                        variants={staggerChildren}
+                        initial="hidden"
+                        animate="visible"
+                        className="grid grid-cols-2 md:grid-cols-3 gap-3"
+                      >
+                        {IDENTITY_ASPECTS.filter(a => a.id !== answers.primaryTrait).map((aspect) => {
+                          const Icon = aspect.icon;
+                          const isSelected = answers.secondaryTrait === aspect.id;
+                          return (
+                            <motion.div key={aspect.id} variants={fadeUpChild}>
+                              <GlassCard
+                                hover
+                                glow={isSelected}
+                                className={`cursor-pointer transition-all duration-300 ${
+                                  isSelected ? "border-purple-500/40" : "border-transparent"
+                                }`}
+                              >
+                                <div
+                                  data-testid={`trait-secondary-${aspect.id}`}
+                                  onClick={() => setAnswers(prev => ({ ...prev, secondaryTrait: aspect.id }))}
+                                  className={`p-4 relative ${isSelected ? "bg-gradient-to-br from-purple-500/20 to-pink-500/20" : ""}`}
+                                >
+                                  {isSelected && (
+                                    <motion.div
+                                      layoutId="secondary-check"
+                                      className="absolute top-2 right-2"
+                                    >
+                                      <Check className="w-4 h-4 text-purple-400" />
+                                    </motion.div>
+                                  )}
+                                  <Icon className={`w-6 h-6 mb-2 ${isSelected ? "text-purple-300" : "text-slate-500"}`} />
+                                  <h3 className={`font-semibold text-sm ${isSelected ? "text-white" : "text-slate-300"}`}>{aspect.label}</h3>
+                                  <p className="text-xs text-slate-500">{aspect.desc}</p>
+                                </div>
+                              </GlassCard>
+                            </motion.div>
+                          );
+                        })}
+                      </motion.div>
                     </motion.div>
                   )}
                 </motion.div>
               )}
 
-              {/* Portrait Step */}
-              {currentStep === "portrait" && (
+              {currentStep === "values" && (
                 <motion.div
-                  key="portrait"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
+                  key="values"
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -40 }}
+                  transition={{ duration: 0.4 }}
                 >
-                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-2 text-center">
-                    Customize Your Presence
-                  </h2>
-                  <p className="text-slate-400 mb-6 text-center">
-                    Choose how you want to be represented in the world
-                  </p>
+                  <div className="text-center mb-6">
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                      What Do You Stand For?
+                    </h2>
+                    <p className="text-slate-400 max-w-lg mx-auto">
+                      Pick 2-4 values that guide your decisions in real life. 
+                      The world will test these — and remember.
+                    </p>
+                  </div>
+                  <motion.div
+                    variants={staggerChildren}
+                    initial="hidden"
+                    animate="visible"
+                    className="grid grid-cols-2 md:grid-cols-4 gap-3"
+                  >
+                    {VALUES.map((value) => {
+                      const Icon = value.icon;
+                      const isSelected = answers.coreValues.includes(value.id);
+                      return (
+                        <motion.div key={value.id} variants={fadeUpChild}>
+                          <GlassCard
+                            hover
+                            glow={isSelected}
+                            className={`cursor-pointer transition-all duration-300 ${
+                              isSelected ? "border-cyan-500/40" : "border-transparent"
+                            }`}
+                          >
+                            <div
+                              data-testid={`value-${value.id}`}
+                              onClick={() => toggleValue(value.id)}
+                              className={`p-4 text-center relative ${
+                                isSelected ? "bg-gradient-to-br from-cyan-500/15 to-purple-500/15" : ""
+                              }`}
+                            >
+                              {isSelected && (
+                                <div className="absolute top-2 right-2">
+                                  <Check className="w-3.5 h-3.5 text-cyan-400" />
+                                </div>
+                              )}
+                              <Icon className={`w-6 h-6 mx-auto mb-2 ${isSelected ? "text-cyan-400" : "text-slate-500"}`} />
+                              <h3 className={`font-semibold text-sm ${isSelected ? "text-white" : "text-slate-300"}`}>{value.label}</h3>
+                              <p className="text-[11px] text-slate-500 mt-1">{value.desc}</p>
+                            </div>
+                          </GlassCard>
+                        </motion.div>
+                      );
+                    })}
+                  </motion.div>
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                    className="text-center mt-5"
+                  >
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-800/50 border border-slate-700/50">
+                      <span className="text-sm text-slate-400">Selected:</span>
+                      <span className={`text-sm font-semibold ${answers.coreValues.length >= 2 ? "text-cyan-400" : "text-slate-500"}`}>
+                        {answers.coreValues.length}/4
+                      </span>
+                      {answers.coreValues.length >= 2 && <Check className="w-3.5 h-3.5 text-emerald-400" />}
+                    </div>
+                  </motion.div>
+                </motion.div>
+              )}
+
+              {currentStep === "instincts" && (
+                <motion.div
+                  key="instincts"
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -40 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <div className="text-center mb-6">
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                      How Do You Decide?
+                    </h2>
+                    <p className="text-slate-400 max-w-lg mx-auto">
+                      A crossroads. Two paths. No map. What does your mind do first?
+                    </p>
+                  </div>
+                  <motion.div
+                    variants={staggerChildren}
+                    initial="hidden"
+                    animate="visible"
+                    className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-xl mx-auto"
+                  >
+                    {INSTINCT_STYLES.map((style) => {
+                      const Icon = style.icon;
+                      const isSelected = answers.decisionStyle === style.id;
+                      return (
+                        <motion.div key={style.id} variants={fadeUpChild}>
+                          <GlassCard
+                            hover
+                            glow={isSelected}
+                            className={`cursor-pointer transition-all duration-300 ${
+                              isSelected ? "border-cyan-500/40" : "border-transparent"
+                            }`}
+                          >
+                            <div
+                              data-testid={`decision-${style.id}`}
+                              onClick={() => setAnswers(prev => ({ ...prev, decisionStyle: style.id }))}
+                              className={`p-5 flex items-start gap-4 ${isSelected ? "bg-gradient-to-br from-cyan-500/10 to-purple-500/10" : ""}`}
+                            >
+                              <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                                isSelected ? "bg-cyan-500/20" : "bg-slate-800/80"
+                              }`}>
+                                <Icon className={`w-5 h-5 ${isSelected ? style.color : "text-slate-500"}`} />
+                              </div>
+                              <div>
+                                <h3 className={`font-semibold ${isSelected ? "text-white" : "text-slate-300"}`}>{style.label}</h3>
+                                <p className="text-sm text-slate-500 mt-1">{style.desc}</p>
+                              </div>
+                            </div>
+                          </GlassCard>
+                        </motion.div>
+                      );
+                    })}
+                  </motion.div>
+                </motion.div>
+              )}
+
+              {currentStep === "pressure" && (
+                <motion.div
+                  key="pressure"
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -40 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <div className="text-center mb-6">
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                      Under Pressure
+                    </h2>
+                    <p className="text-slate-400 max-w-lg mx-auto">
+                      Life gets hard. People disagree. Things break. How do you handle it — really?
+                    </p>
+                  </div>
                   
-                  {/* Portrait Preview */}
+                  <div className="mb-8">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="h-px flex-1 bg-gradient-to-r from-transparent to-cyan-500/30" />
+                      <span className="text-xs text-cyan-400 font-medium uppercase tracking-wider">When conflict finds you</span>
+                      <div className="h-px flex-1 bg-gradient-to-l from-transparent to-cyan-500/30" />
+                    </div>
+                    <motion.div
+                      variants={staggerChildren}
+                      initial="hidden"
+                      animate="visible"
+                      className="grid grid-cols-1 md:grid-cols-2 gap-3"
+                    >
+                      {PRESSURE_RESPONSES.map((approach) => {
+                        const Icon = approach.icon;
+                        const isSelected = answers.conflictApproach === approach.id;
+                        return (
+                          <motion.div key={approach.id} variants={fadeUpChild}>
+                            <GlassCard
+                              hover
+                              glow={isSelected}
+                              className={`cursor-pointer transition-all duration-300 ${
+                                isSelected ? "border-cyan-500/40" : "border-transparent"
+                              }`}
+                            >
+                              <div
+                                data-testid={`conflict-${approach.id}`}
+                                onClick={() => setAnswers(prev => ({ ...prev, conflictApproach: approach.id }))}
+                                className={`p-4 flex items-start gap-3 ${isSelected ? "bg-gradient-to-br from-cyan-500/10 to-blue-500/10" : ""}`}
+                              >
+                                <Icon className={`w-5 h-5 mt-0.5 flex-shrink-0 ${isSelected ? approach.color : "text-slate-500"}`} />
+                                <div>
+                                  <h3 className={`font-semibold text-sm ${isSelected ? "text-white" : "text-slate-300"}`}>{approach.label}</h3>
+                                  <p className="text-xs text-slate-500 mt-1">{approach.desc}</p>
+                                </div>
+                              </div>
+                            </GlassCard>
+                          </motion.div>
+                        );
+                      })}
+                    </motion.div>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="h-px flex-1 bg-gradient-to-r from-transparent to-purple-500/30" />
+                      <span className="text-xs text-purple-400 font-medium uppercase tracking-wider">When things fall apart</span>
+                      <div className="h-px flex-1 bg-gradient-to-l from-transparent to-purple-500/30" />
+                    </div>
+                    <motion.div
+                      variants={staggerChildren}
+                      initial="hidden"
+                      animate="visible"
+                      className="grid grid-cols-1 md:grid-cols-2 gap-3"
+                    >
+                      {RESILIENCE_STYLES.map((response) => {
+                        const isSelected = answers.challengeResponse === response.id;
+                        return (
+                          <motion.div key={response.id} variants={fadeUpChild}>
+                            <GlassCard
+                              hover
+                              glow={isSelected}
+                              className={`cursor-pointer transition-all duration-300 ${
+                                isSelected ? "border-purple-500/40" : "border-transparent"
+                              }`}
+                            >
+                              <div
+                                data-testid={`challenge-${response.id}`}
+                                onClick={() => setAnswers(prev => ({ ...prev, challengeResponse: response.id }))}
+                                className={`p-4 ${isSelected ? "bg-gradient-to-br from-purple-500/10 to-pink-500/10" : ""}`}
+                              >
+                                <h3 className={`font-semibold text-sm ${isSelected ? "text-white" : "text-slate-300"}`}>{response.label}</h3>
+                                <p className="text-xs text-slate-500 mt-1">{response.desc}</p>
+                              </div>
+                            </GlassCard>
+                          </motion.div>
+                        );
+                      })}
+                    </motion.div>
+                  </div>
+                </motion.div>
+              )}
+
+              {currentStep === "audio" && (
+                <motion.div
+                  key="audio"
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -40 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <div className="text-center mb-6">
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                      Your Soundtrack
+                    </h2>
+                    <p className="text-slate-400 max-w-md mx-auto">
+                      Every life has a soundtrack. What's yours?
+                    </p>
+                  </div>
+                  
+                  <div className="mb-6">
+                    <motion.div
+                      variants={staggerChildren}
+                      initial="hidden"
+                      animate="visible"
+                      className="space-y-3 max-w-xl mx-auto"
+                    >
+                      {AUDIO_PREFERENCES.map((pref) => {
+                        const Icon = pref.icon;
+                        const isSelected = answers.audioPreference === pref.id;
+                        return (
+                          <motion.div key={pref.id} variants={fadeUpChild}>
+                            <GlassCard
+                              hover
+                              glow={isSelected}
+                              className={`cursor-pointer transition-all duration-300 ${
+                                isSelected ? "border-cyan-500/40" : "border-transparent"
+                              }`}
+                            >
+                              <div
+                                data-testid={`audio-pref-${pref.id}`}
+                                onClick={() => setAnswers(prev => ({ 
+                                  ...prev, 
+                                  audioPreference: pref.id,
+                                  audioMood: pref.id === "silent" ? "" : prev.audioMood 
+                                }))}
+                                className={`p-4 flex items-center gap-4 ${isSelected ? "bg-gradient-to-r from-cyan-500/10 to-purple-500/10" : ""}`}
+                              >
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                                  isSelected ? "bg-cyan-500/20" : "bg-slate-800/80"
+                                }`}>
+                                  <Icon className={`w-6 h-6 ${isSelected ? "text-cyan-400" : "text-slate-500"}`} />
+                                </div>
+                                <div>
+                                  <h3 className={`font-semibold ${isSelected ? "text-white" : "text-slate-300"}`}>{pref.label}</h3>
+                                  <p className="text-sm text-slate-500">{pref.desc}</p>
+                                </div>
+                                {isSelected && <Check className="w-5 h-5 text-cyan-400 ml-auto flex-shrink-0" />}
+                              </div>
+                            </GlassCard>
+                          </motion.div>
+                        );
+                      })}
+                    </motion.div>
+                  </div>
+
+                  <AnimatePresence>
+                    {answers.audioPreference !== "silent" && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <div className="flex items-center gap-2 mb-4">
+                          <div className="h-px flex-1 bg-gradient-to-r from-transparent to-purple-500/30" />
+                          <span className="text-xs text-purple-400 font-medium uppercase tracking-wider">Mood</span>
+                          <div className="h-px flex-1 bg-gradient-to-l from-transparent to-purple-500/30" />
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-w-xl mx-auto">
+                          {AUDIO_MOODS.map((mood) => {
+                            const isSelected = answers.audioMood === mood.id;
+                            return (
+                              <GlassCard
+                                key={mood.id}
+                                hover
+                                glow={isSelected}
+                                className={`cursor-pointer transition-all ${isSelected ? "border-purple-500/40" : "border-transparent"}`}
+                              >
+                                <div
+                                  data-testid={`audio-mood-${mood.id}`}
+                                  onClick={() => setAnswers(prev => ({ ...prev, audioMood: mood.id }))}
+                                  className={`p-3 ${isSelected ? "bg-gradient-to-br from-purple-500/10 to-pink-500/10" : ""}`}
+                                >
+                                  <h3 className={`font-semibold text-sm ${isSelected ? "text-white" : "text-slate-300"}`}>{mood.label}</h3>
+                                  <p className="text-xs text-slate-500 mt-1">{mood.desc}</p>
+                                </div>
+                              </GlassCard>
+                            );
+                          })}
+                        </div>
+
+                        {answers.audioPreference === "spotify" && (
+                          <p className="text-center text-slate-500 text-sm mt-4">
+                            You can connect Spotify later in settings
+                          </p>
+                        )}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              )}
+
+              {currentStep === "presence" && (
+                <motion.div
+                  key="presence"
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -40 }}
+                  transition={{ duration: 0.4 }}
+                >
+                  <div className="text-center mb-6">
+                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+                      Your Presence
+                    </h2>
+                    <p className="text-slate-400 max-w-md mx-auto">
+                      A color that represents you. People will recognize your mark by it.
+                    </p>
+                  </div>
+                  
                   {answers.primaryTrait && answers.secondaryTrait && (
-                    <div className="flex justify-center mb-6">
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="flex justify-center mb-8"
+                    >
                       <CharacterPortraitPreview
                         primaryTrait={answers.primaryTrait}
                         secondaryTrait={answers.secondaryTrait}
                         colorPreference={answers.colorPreference || "cyan"}
                       />
-                    </div>
+                    </motion.div>
                   )}
                   
-                  <div className="mb-6">
-                    <label className="block text-sm text-cyan-400 mb-3">Signature Color</label>
-                    <div className="flex flex-wrap justify-center gap-3">
-                      {COLORS.map((color) => (
-                        <div
-                          key={color.id}
-                          data-testid={`color-${color.id}`}
-                          onClick={() => setAnswers(prev => ({ ...prev, colorPreference: color.id }))}
-                          className={`cursor-pointer transition-all ${
-                            answers.colorPreference === color.id ? "scale-110" : "hover:scale-105"
-                          }`}
-                        >
-                          <div
-                            className={`w-12 h-12 rounded-full border-4 ${
-                              answers.colorPreference === color.id ? "border-white" : "border-transparent"
-                            }`}
-                            style={{ backgroundColor: color.hex }}
-                          />
-                          <p className="text-xs text-slate-400 text-center mt-1">{color.label}</p>
-                        </div>
-                      ))}
+                  <div className="mb-8">
+                    <div className="flex items-center gap-2 mb-4">
+                      <div className="h-px flex-1 bg-gradient-to-r from-transparent to-cyan-500/30" />
+                      <span className="text-xs text-cyan-400 font-medium uppercase tracking-wider">Signature Color</span>
+                      <div className="h-px flex-1 bg-gradient-to-l from-transparent to-cyan-500/30" />
+                    </div>
+                    <div className="flex flex-wrap justify-center gap-4">
+                      {COLORS.map((color) => {
+                        const isSelected = answers.colorPreference === color.id;
+                        return (
+                          <motion.div
+                            key={color.id}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.95 }}
+                            data-testid={`color-${color.id}`}
+                            onClick={() => setAnswers(prev => ({ ...prev, colorPreference: color.id }))}
+                            className="cursor-pointer text-center"
+                          >
+                            <div className="relative">
+                              {isSelected && (
+                                <motion.div
+                                  layoutId="color-glow"
+                                  className="absolute -inset-2 rounded-full blur-md"
+                                  style={{ backgroundColor: `${color.hex}40` }}
+                                />
+                              )}
+                              <div
+                                className={`relative w-14 h-14 rounded-full border-[3px] transition-all ${
+                                  isSelected ? "border-white scale-110" : "border-slate-700 hover:border-slate-500"
+                                }`}
+                                style={{ backgroundColor: color.hex }}
+                              />
+                            </div>
+                            <p className={`text-xs mt-2 ${isSelected ? "text-white font-medium" : "text-slate-500"}`}>{color.label}</p>
+                            {isSelected && (
+                              <p className="text-[10px] text-slate-400">{color.meaning}</p>
+                            )}
+                          </motion.div>
+                        );
+                      })}
                     </div>
                   </div>
 
-                  <div className="mt-6">
-                    <Card className="bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border-cyan-500/30 p-4 mb-4">
-                      <div className="flex items-center gap-2 mb-2">
+                  <GlassCard glow className="max-w-lg mx-auto p-5">
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center">
                         <Compass className="w-5 h-5 text-cyan-400" />
-                        <h3 className="font-bold text-white">All Journeys Begin in the Modern Era</h3>
                       </div>
-                      <p className="text-sm text-slate-300">
-                        Every Chronicles player starts together in the Modern Era. Complete missions to unlock transport to other time periods.
-                      </p>
-                    </Card>
-                    
-                    <label className="block text-sm text-purple-400 mb-3">Available Eras to Unlock</label>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-                      <Card className="p-3 bg-slate-900/80 border-emerald-500/30">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h3 className="font-semibold text-white text-sm">Medieval Era</h3>
-                            <p className="text-xs text-slate-400">Knights, castles, and kingdoms</p>
-                          </div>
-                          <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">Unlockable</Badge>
-                        </div>
-                      </Card>
-                      <Card className="p-3 bg-slate-900/80 border-emerald-500/30">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <h3 className="font-semibold text-white text-sm">Roman Empire</h3>
-                            <p className="text-xs text-slate-400">Glory of ancient Rome</p>
-                          </div>
-                          <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 text-xs">Unlockable</Badge>
-                        </div>
-                      </Card>
-                    </div>
-                    
-                    <div className="text-center">
-                      <p className="text-sm text-slate-500 italic">More eras coming soon...</p>
-                    </div>
-                    
-                    <div className="mt-6">
-                      <label className="block text-sm text-purple-400 mb-3">Which era excites you most? (Optional)</label>
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                        {FUTURE_ERAS.map((era) => (
-                          <Card
-                            key={era.id}
-                            data-testid={`era-${era.id}`}
-                            onClick={() => setAnswers(prev => ({ ...prev, eraInterest: prev.eraInterest === era.id ? "modern" : era.id }))}
-                            className={`p-3 cursor-pointer transition-all ${
-                              answers.eraInterest === era.id
-                                ? "bg-purple-500/20 border-purple-500"
-                                : "bg-slate-900/80 border-slate-700 hover:border-slate-500"
-                            }`}
-                          >
-                            <h3 className="font-semibold text-white text-sm">{era.label}</h3>
-                            <p className="text-xs text-slate-400">{era.desc}</p>
-                          </Card>
-                        ))}
+                      <div>
+                        <h3 className="font-bold text-white text-sm">Everyone Begins in the Modern Era</h3>
+                        <p className="text-xs text-slate-500">Level up to unlock Medieval and Wild West</p>
                       </div>
-                      <p className="text-xs text-slate-500 text-center mt-2">This helps us personalize your future journey recommendations</p>
                     </div>
-                  </div>
+                    <div className="flex gap-2 mt-3">
+                      <Badge className="bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-xs">
+                        Modern - Now
+                      </Badge>
+                      <Badge className="bg-slate-800/80 text-slate-500 border border-slate-700/50 text-xs">
+                        Medieval - Lv.3
+                      </Badge>
+                      <Badge className="bg-slate-800/80 text-slate-500 border border-slate-700/50 text-xs">
+                        Wild West - Lv.5
+                      </Badge>
+                    </div>
+                  </GlassCard>
                 </motion.div>
               )}
 
-              {/* Complete Step */}
               {currentStep === "complete" && (
                 <motion.div
                   key="complete"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
                   className="text-center"
                 >
-                  <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center">
-                    <Check className="w-12 h-12 text-white" />
-                  </div>
-                  <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
-                    Your Parallel Self Awaits
-                  </h1>
-                  <p className="text-lg text-slate-300 mb-2">
-                    Welcome, {answers.chroniclesName}
-                  </p>
-                  <p className="text-slate-400 mb-8 max-w-md mx-auto">
-                    Your profile has been saved. You're now ready to step into the Chronicles universe as yourself.
-                  </p>
-                  
-                  <Card className="bg-slate-900/80 border-slate-700 p-6 max-w-md mx-auto mb-8">
-                    <h3 className="text-lg font-semibold text-white mb-4">Your Profile Summary</h3>
-                    <div className="space-y-2 text-left">
-                      <div className="flex justify-between">
-                        <span className="text-slate-400">Name:</span>
-                        <span className="text-white">{answers.chroniclesName}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-400">Primary Role:</span>
-                        <span className="text-cyan-400 capitalize">{answers.primaryTrait}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-400">Secondary Role:</span>
-                        <span className="text-purple-400 capitalize">{answers.secondaryTrait}</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span className="text-slate-400">Values:</span>
-                        <span className="text-white capitalize">{answers.coreValues.join(", ")}</span>
-                      </div>
+                  <motion.div
+                    className="w-28 h-28 mx-auto mb-8 relative"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.2, type: "spring", stiffness: 200, damping: 15 }}
+                  >
+                    <div className="absolute inset-0 rounded-full bg-gradient-to-br from-emerald-500 to-cyan-500 blur-xl opacity-40" />
+                    <div className="relative w-full h-full rounded-full bg-gradient-to-br from-emerald-500 to-cyan-600 flex items-center justify-center shadow-2xl shadow-emerald-500/30">
+                      <Check className="w-14 h-14 text-white" />
                     </div>
-                  </Card>
+                  </motion.div>
 
-                  <Badge variant="outline" className="border-amber-500/50 text-amber-400 mb-6">
-                    Season Zero - More Features Coming Soon
-                  </Badge>
-                  
-                  {/* ChronoLink Introduction */}
-                  <Card className="bg-gradient-to-r from-purple-900/30 to-cyan-900/30 border-purple-500/30 p-4 max-w-md mx-auto mb-6">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500/30 to-cyan-500/30 flex items-center justify-center">
-                        <MessageCircle className="w-5 h-5 text-cyan-400" />
+                  <motion.h1
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-4xl md:text-5xl font-bold mb-4"
+                  >
+                    <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                      {answers.chroniclesName}, You're Ready
+                    </span>
+                  </motion.h1>
+
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="text-slate-400 mb-8 max-w-md mx-auto"
+                  >
+                    Your parallel self has been recorded. The world will respond to who you really are.
+                  </motion.p>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.6 }}
+                  >
+                    <GlassCard glow className="max-w-md mx-auto p-6 mb-8">
+                      <h3 className="text-lg font-semibold text-white mb-4">Your Identity</h3>
+                      <div className="space-y-3 text-left">
+                        <div className="flex justify-between items-center">
+                          <span className="text-slate-500 text-sm">Name</span>
+                          <span className="text-white font-medium">{answers.chroniclesName}</span>
+                        </div>
+                        <div className="h-px bg-slate-800" />
+                        <div className="flex justify-between items-center">
+                          <span className="text-slate-500 text-sm">Core Strength</span>
+                          <span className="text-cyan-400 capitalize font-medium">
+                            {IDENTITY_ASPECTS.find(a => a.id === answers.primaryTrait)?.label}
+                          </span>
+                        </div>
+                        <div className="h-px bg-slate-800" />
+                        <div className="flex justify-between items-center">
+                          <span className="text-slate-500 text-sm">Secondary</span>
+                          <span className="text-purple-400 capitalize font-medium">
+                            {IDENTITY_ASPECTS.find(a => a.id === answers.secondaryTrait)?.label}
+                          </span>
+                        </div>
+                        <div className="h-px bg-slate-800" />
+                        <div className="flex justify-between items-center">
+                          <span className="text-slate-500 text-sm">Values</span>
+                          <span className="text-white capitalize text-sm">{answers.coreValues.join(", ")}</span>
+                        </div>
                       </div>
-                      <div className="text-left">
-                        <h4 className="font-semibold text-white">Activate ChronoLink</h4>
-                        <p className="text-xs text-slate-400">Connect with fellow travelers</p>
+                    </GlassCard>
+                  </motion.div>
+
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7 }}
+                  >
+                    <GlassCard className="max-w-md mx-auto p-5 mb-8 border-purple-500/20">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-purple-500/20 to-cyan-500/20 flex items-center justify-center">
+                          <MessageCircle className="w-5 h-5 text-cyan-400" />
+                        </div>
+                        <div className="text-left">
+                          <h4 className="font-semibold text-white text-sm">ChronoChat</h4>
+                          <p className="text-xs text-slate-500">Connect with fellow travelers</p>
+                        </div>
                       </div>
-                    </div>
-                    <p className="text-sm text-slate-400 text-left mb-3">
-                      Your journey doesn't have to be alone. Join ChronoChat to meet other explorers, share discoveries, and earn bonus Shells.
-                    </p>
-                    <Button
-                      data-testid="button-chronolink"
-                      onClick={() => setLocation("/chronochat")}
-                      className="w-full bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500"
-                    >
-                      <Users className="w-4 h-4 mr-2" />
-                      Enter ChronoChat
-                    </Button>
-                  </Card>
+                      <Button
+                        data-testid="button-chronolink"
+                        onClick={() => setLocation("/chronochat")}
+                        className="w-full bg-gradient-to-r from-purple-600/80 to-cyan-600/80 hover:from-purple-500 hover:to-cyan-500 border border-purple-500/20"
+                      >
+                        <Users className="w-4 h-4 mr-2" />
+                        Enter ChronoChat
+                      </Button>
+                    </GlassCard>
+                  </motion.div>
                   
-                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.8 }}
+                    className="flex flex-col sm:flex-row gap-3 justify-center"
+                  >
                     <Button
                       data-testid="button-explore-estate"
                       onClick={() => setLocation("/chronicles/hub")}
-                      className="bg-gradient-to-r from-cyan-500 to-purple-500"
+                      className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 shadow-lg shadow-cyan-500/20 h-12 px-8 text-base"
                     >
-                      Explore Your Estate
-                      <ChevronRight className="w-4 h-4 ml-2" />
+                      Enter Your World
+                      <ChevronRight className="w-5 h-5 ml-2" />
                     </Button>
                     <Button
                       data-testid="button-back-home"
                       onClick={() => setLocation("/")}
                       variant="outline"
-                      className="border-slate-600"
+                      className="border-slate-700 hover:border-slate-500 h-12"
                     >
                       Return Home
                     </Button>
-                  </div>
+                  </motion.div>
                 </motion.div>
               )}
+
             </AnimatePresence>
           </div>
         </div>
 
-        {/* Navigation Footer */}
         {currentStep !== "complete" && (
-          <div className="p-4 md:p-6">
-            <div className="max-w-2xl mx-auto flex justify-between">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-4 md:p-6"
+          >
+            <div className="max-w-2xl mx-auto flex justify-between items-center">
               <Button
                 data-testid="button-prev"
                 onClick={() => currentStep === "welcome" ? setLocation("/chronicles") : prevStep()}
-                variant="outline"
-                className="border-slate-600"
+                variant="ghost"
+                className="text-slate-400 hover:text-white hover:bg-slate-800/50"
               >
                 <ChevronLeft className="w-4 h-4 mr-2" />
                 Back
@@ -876,16 +1160,27 @@ export default function ChroniclesOnboarding() {
                 data-testid="button-next"
                 onClick={nextStep}
                 disabled={!canProceed() || savePersonalityMutation.isPending}
-                className="bg-gradient-to-r from-cyan-500 to-purple-500"
+                className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 shadow-lg shadow-cyan-500/20 disabled:opacity-40 disabled:shadow-none h-11 px-6"
               >
                 {savePersonalityMutation.isPending ? (
-                  <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                ) : null}
-                {currentStep === "portrait" ? "Begin Your Journey" : "Continue"}
-                <ChevronRight className="w-4 h-4 ml-2" />
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                    Saving...
+                  </>
+                ) : currentStep === "presence" ? (
+                  <>
+                    Begin Your Life
+                    <Sparkles className="w-4 h-4 ml-2" />
+                  </>
+                ) : (
+                  <>
+                    Continue
+                    <ChevronRight className="w-4 h-4 ml-2" />
+                  </>
+                )}
               </Button>
             </div>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>
