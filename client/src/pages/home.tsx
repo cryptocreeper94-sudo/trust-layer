@@ -120,7 +120,6 @@ const ecosystemImages: Record<string, string> = {
   "driver-connect": "/ecosystem/driver-connect.png",
   "trust-layer": "/ecosystem/trust-layer.png",
   "tlid": "/ecosystem/tlid.png",
-  "guardian-agent-scanner": "/ecosystem/guardian-agent-scanner.png",
   "chronicles": "/ecosystem/chronicles.png",
   "the-arcade": "/ecosystem/the-arcade.png",
   "signal-chat": "/ecosystem/signal-chat.png",
