@@ -1,13 +1,13 @@
 import axios from 'axios';
-import { db } from '../db/client.js';
-import { strikeAgentSignals } from '../db/schema.js';
+import { db } from '../../db';
+import { strikeAgentSignals } from '@shared/schema';
 import { eq, desc, and, sql, inArray } from 'drizzle-orm';
-import { tokenScannerService } from './tokenScannerService.js';
-import { safetyEngineService, TokenSafetyReport } from './safetyEngineService.js';
-import { evmSafetyEngine, EvmTokenSafetyReport } from './evmSafetyEngine.js';
-import { ChainId, CHAIN_CONFIGS } from './multiChainProvider.js';
+import { safetyEngineService, type TokenSafetyReport } from './safetyEngineService';
+import { evmSafetyEngine, type EvmTokenSafetyReport } from './evmSafetyEngine';
 import { randomBytes } from 'crypto';
-import { strikeAgentTrackingService } from './strikeAgentTrackingService.js';
+import { strikeAgentTrackingService } from './strikeAgentTrackingService';
+
+export type ChainId = 'solana' | 'ethereum' | 'base' | 'polygon' | 'arbitrum' | 'bsc';
 
 const DEX_SCREENER_API = 'https://api.dexscreener.com/latest/dex';
 
@@ -456,7 +456,7 @@ class TopSignalsService {
     compositeScore: number
   ): string {
     const reasons: string[] = [];
-    const chainName = CHAIN_CONFIGS[chain]?.name || chain;
+    const chainName = chain.charAt(0).toUpperCase() + chain.slice(1);
 
     if (compositeScore >= 70) {
       reasons.push(`Strong score of ${compositeScore}/100 on ${chainName}.`);
@@ -544,7 +544,7 @@ class TopSignalsService {
         id: row.id,
         tokenAddress: row.tokenAddress,
         tokenSymbol: row.tokenSymbol,
-        tokenName: row.tokenName,
+        tokenName: row.tokenName || 'Unknown',
         chain: row.chain,
         priceUsd: parseFloat(row.priceUsd || '0'),
         marketCapUsd: parseFloat(row.marketCapUsd || '0'),

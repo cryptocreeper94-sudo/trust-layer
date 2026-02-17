@@ -66,7 +66,7 @@ interface Interior {
   rooms: Room[];
 }
 
-const ROOM_ICONS: Record<string, React.ElementType> = {
+const ROOM_ICONS: Record<string, any> = {
   living_room: Sofa,
   bedroom: Bed,
   kitchen: Utensils,

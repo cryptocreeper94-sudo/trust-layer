@@ -3,8 +3,7 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
   TrendingUp, TrendingDown, Clock, Users, Trophy,
-  Zap, DollarSign, Target, BarChart3, Wallet
-, Shield , Shield } from "lucide-react";
+  Zap, DollarSign, Target, BarChart3, Wallet, Shield } from "lucide-react";
 import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";

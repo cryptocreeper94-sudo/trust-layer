@@ -7332,6 +7332,32 @@ export const predictionModelMetrics = pgTable('prediction_model_metrics', {
 
 export type PredictionModelMetric = typeof predictionModelMetrics.$inferSelect;
 
+// Strike Agent Signals - Top token signals from multi-chain scanning
+export const strikeAgentSignals = pgTable('strike_agent_signals', {
+  id: varchar('id', { length: 255 }).primaryKey(),
+  tokenAddress: varchar('token_address', { length: 255 }).notNull(),
+  tokenSymbol: varchar('token_symbol', { length: 50 }).notNull(),
+  tokenName: varchar('token_name', { length: 255 }),
+  chain: varchar('chain', { length: 50 }).notNull().default('solana'),
+  priceUsd: varchar('price_usd', { length: 50 }),
+  marketCapUsd: varchar('market_cap_usd', { length: 50 }),
+  liquidityUsd: varchar('liquidity_usd', { length: 50 }),
+  compositeScore: integer('composite_score').notNull().default(0),
+  technicalScore: integer('technical_score').notNull().default(0),
+  safetyScore: integer('safety_score').notNull().default(0),
+  momentumScore: integer('momentum_score').notNull().default(0),
+  mlConfidence: varchar('ml_confidence', { length: 20 }),
+  indicators: text('indicators'),
+  reasoning: text('reasoning'),
+  rank: integer('rank').notNull().default(0),
+  category: varchar('category', { length: 50 }).notNull().default('new'),
+  dex: varchar('dex', { length: 50 }),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+});
+
+export type StrikeAgentSignal = typeof strikeAgentSignals.$inferSelect;
+
 // Blog Posts - AI-generated SEO content
 export const blogPosts = pgTable('blog_posts', {
   id: varchar('id', { length: 255 }).primaryKey().default(sql`gen_random_uuid()`),

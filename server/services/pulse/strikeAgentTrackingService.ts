@@ -171,7 +171,6 @@ class StrikeAgentTrackingService {
         maxGainPercent: input.maxGainPercent?.toString(),
         maxDrawdownPercent: input.maxDrawdownPercent?.toString(),
         isRugged: input.isRugged,
-        liquidityRemaining: input.liquidityAtCheck?.toString(),
       });
 
       await db.update(strikeAgentPredictions)
