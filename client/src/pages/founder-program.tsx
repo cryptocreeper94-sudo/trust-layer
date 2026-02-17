@@ -269,6 +269,9 @@ export default function FounderProgram() {
               <p className="text-xs text-muted-foreground mt-4 text-center">
                 Secure payment powered by Stripe &amp; Coinbase Commerce
               </p>
+              <div className="mt-3 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-center">
+                <p className="text-[10px] text-amber-400/80 font-medium uppercase tracking-wider">Beta Program — Early Access Pricing</p>
+              </div>
             </GlassCard>
 
             <GlassCard className="p-4">

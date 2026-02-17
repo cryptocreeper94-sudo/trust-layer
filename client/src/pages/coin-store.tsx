@@ -196,6 +196,10 @@ export default function CoinStore() {
               Coin Store
             </h1>
             <p className="text-gray-400 mt-2">Purchase Gold Coins to play games. Get FREE Sweeps Coins with every purchase!</p>
+            <div className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+              <span className="text-[10px] text-amber-400 font-semibold uppercase tracking-wider">Beta — Early Access</span>
+            </div>
           </div>
           
           {user && balance && (

@@ -1356,7 +1356,7 @@ export default function Presale() {
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/30 mb-6">
             <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span className="text-cyan-300 text-sm font-medium">Founders Preview - Early Access</span>
+            <span className="text-cyan-300 text-sm font-medium">Beta — Founders Preview — Early Access</span>
           </div>
           
           <h1 className="text-4xl md:text-6xl font-bold mb-6">

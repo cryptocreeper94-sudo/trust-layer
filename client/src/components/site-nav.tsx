@@ -47,6 +47,7 @@ export function SiteNav() {
           <Link href="/" className="flex items-center">
             <img src={signalEmblem} alt="Home" className="w-7 h-7 sm:w-8 sm:h-8" />
           </Link>
+          <span className="ml-1 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest text-cyan-300 bg-cyan-500/15 border border-cyan-500/25 rounded" data-testid="badge-beta">Beta</span>
         </div>
 
         <div className="flex items-center gap-1.5 sm:gap-2">
