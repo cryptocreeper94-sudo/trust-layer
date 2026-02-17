@@ -463,12 +463,12 @@ export default function ExploreHub() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-8 text-center"
         >
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-3">
             Explore{" "}
             <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-              DarkWave
+              Trust Layer
             </span>
-          </h2>
+          </h1>
           <p className="text-white/40 text-sm max-w-lg mx-auto mb-6">
             Every feature, every tool, every experience — all in one place. Tap any card to dive in.
           </p>
