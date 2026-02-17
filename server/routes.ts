@@ -21980,7 +21980,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
   return [
     {
       id: "orbit-staffing",
-      name: "Orbit Staffing",
+      name: "ORBIT Staffing OS",
       category: "Enterprise",
       description: "Complete workforce management platform with blockchain-verified employment records.",
       hook: "Blockchain-powered HR",
@@ -22004,7 +22004,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
     },
     {
       id: "brew-board",
-      name: "Brew & Board",
+      name: "Brew & Board Coffee",
       category: "Hospitality",
       description: "Community platform for coffee shops with loyalty rewards.",
       hook: "Social gaming meets craft coffee",
@@ -22028,7 +22028,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
     },
     {
       id: "darkwave-pulse",
-      name: "Trust Layer Pulse",
+      name: "Pulse",
       category: "Analytics",
       description: "Predictive market intelligence powered by AI systems.",
       hook: "Auto-trade with AI precision",
@@ -22041,9 +22041,9 @@ function getLocalEcosystemApps(): EcosystemApp[] {
     },
     {
       id: "orby",
-      name: "Orby",
+      name: "Orby Commander",
       category: "Enterprise",
-      description: "Dual blockchain verified venue and event operations command suite with geofencing, facial recognition clock-in for fraud protection, and direct integration with Orbit Staffing.",
+      description: "Dual blockchain verified venue and event operations command suite with geofencing, facial recognition clock-in for fraud protection, and direct integration with ORBIT Staffing OS.",
       hook: "Venue & Event Operations Command Suite",
       tags: ["Enterprise", "Operations", "Security", "Geofencing"],
       gradient: "from-cyan-400 to-blue-500",
@@ -22076,20 +22076,8 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       url: "https://paintpros.io",
     },
     {
-      id: "lumepaint",
-      name: "Lume Paint",
-      category: "Services",
-      description: "Next-generation painting service platform with smart scheduling and project management.",
-      hook: "Smart Painting Solutions",
-      tags: ["Services", "Scheduling", "CRM", "Smart"],
-      gradient: "from-yellow-500 to-amber-600",
-      verified: true,
-      users: "DarkWave Verified",
-      url: "https://lumepaint.co",
-    },
-    {
       id: "strike-agent",
-      name: "Strike Agent",
+      name: "StrikeAgent",
       category: "AI Trading",
       description: "AI sentient bot with multiple trading settings, hashed predictions and verified results.",
       hook: "Automated trading intelligence",
@@ -22113,7 +22101,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
     },
     {
       id: "darkwave-studios",
-      name: "DarkWave Studios",
+      name: "DarkWave Studio",
       category: "Development",
       description: "The architectural hub for Trust Layer ecosystem development. Build, deploy, and manage blockchain-integrated applications.",
       hook: "Build. Create. Deploy.",
@@ -22138,7 +22126,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
     },
     {
       id: "chronicles",
-      name: "Chronicles",
+      name: "DarkWave Chronicles",
       category: "Gaming",
       description: "Not a game. A life. Live your legacy through a persistent parallel world with emotion-driven AI and living political simulation.",
       hook: "Live Your Legacy",
@@ -22175,11 +22163,11 @@ function getLocalEcosystemApps(): EcosystemApp[] {
     },
     {
       id: "driver-connect",
-      name: "Happy Eats",
+      name: "TL Driver Connect",
       category: "Transportation",
-      description: "Blockchain-verified driver coordination and food delivery logistics platform with real-time tracking and transparent earnings.",
+      description: "Blockchain-verified driver coordination and logistics platform with real-time tracking and transparent earnings.",
       hook: "Verified Driver Coordination",
-      tags: ["Transportation", "Logistics", "Drivers", "Food Delivery"],
+      tags: ["Transportation", "Logistics", "Drivers", "Delivery"],
       gradient: "from-blue-600 to-indigo-700",
       verified: true,
       users: "DarkWave Verified",
