@@ -106,6 +106,7 @@ const ecosystemImages: Record<string, string> = {
   "garagebot-prod": "/ecosystem/garagebot-prod.jpg",
   "darkwave-pulse": "/ecosystem/darkwave-pulse.jpg",
   "paintpros": "/ecosystem/paintpros.jpg",
+  "nashpaintpros": "/ecosystem/paintpros.jpg",
   "orby": "/ecosystem/orby.jpg",
   "strike-agent": "/ecosystem/strike-agent.jpg",
   "veda-solus": "/ecosystem/veda-solus.jpg",
