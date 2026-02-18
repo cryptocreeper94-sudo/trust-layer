@@ -1,4 +1,6 @@
 import express, { type Request, Response, NextFunction } from "express";
+import crypto from "crypto";
+import { createLogger } from "./logger";
 
 // Extend Express Request type for tlid subdomain routing
 declare global {
@@ -85,6 +87,12 @@ app.use((req, res, next) => {
 });
 
 const httpServer = createServer(app);
+const httpLog = createLogger("http");
+
+app.use((req: Request, _res: Response, next: NextFunction) => {
+  (req as any).requestId = req.headers["x-request-id"] || crypto.randomUUID();
+  next();
+});
 
 // Security headers via Helmet - stricter in production
 const isProduction = process.env.NODE_ENV === "production";
@@ -374,12 +382,28 @@ async function initializeServices() {
 
     await registerRoutes(httpServer, app);
 
-    app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
+    app.use((err: any, req: Request, res: Response, _next: NextFunction) => {
       const status = err.status || err.statusCode || 500;
       const message = err.message || "Internal Server Error";
+      const requestId = (req as any).requestId || req.headers["x-request-id"] || crypto.randomUUID();
 
-      res.status(status).json({ message });
-      throw err;
+      if (status >= 500) {
+        httpLog.error(`${req.method} ${req.path} → ${status}`, {
+          error: message,
+          stack: process.env.NODE_ENV !== "production" ? err.stack : undefined,
+          requestId,
+          ip: req.ip,
+        });
+      } else {
+        httpLog.warn(`${req.method} ${req.path} → ${status}`, {
+          error: message,
+          requestId,
+        });
+      }
+
+      if (!res.headersSent) {
+        res.status(status).json({ message, requestId });
+      }
     });
 
     // importantly only setup vite in development and after
@@ -444,3 +468,20 @@ async function initializeServices() {
     throw err;
   }
 }
+
+const processLog = createLogger("process");
+
+process.on("unhandledRejection", (reason: any) => {
+  processLog.fatal("Unhandled promise rejection", {
+    error: reason?.message || String(reason),
+    stack: reason?.stack,
+  });
+});
+
+process.on("uncaughtException", (err: Error) => {
+  processLog.fatal("Uncaught exception", {
+    error: err.message,
+    stack: err.stack,
+  });
+  process.exit(1);
+});

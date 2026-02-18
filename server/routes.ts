@@ -256,6 +256,9 @@ export async function registerRoutes(
   registerImageRoutes(app);
   registerObjectStorageRoutes(app);
 
+  const { registerApiDocs } = await import("./api-docs");
+  registerApiDocs(app);
+
   // =====================================================
   // TLID GATEWAY - Handle *.tlid.io subdomain routing
   // =====================================================
