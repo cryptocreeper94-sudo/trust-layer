@@ -123,7 +123,6 @@ const ecosystemImages: Record<string, string> = {
   "darkwave-studios": "/ecosystem/darkwave-studios.png",
   "tradeworks-ai": "/ecosystem/tradeworks-ai.png",
   "tlid": "/ecosystem/tlid.png",
-  "veil": "/ecosystem/veil.png",
   "darkwave-academy": "/ecosystem/darkwave-academy.png",
 };
 

@@ -317,7 +317,7 @@ export default function ChronoEras() {
             className="text-center mb-12"
           >
             <Badge className="mb-4 bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
-              <Globe className="w-3 h-3 mr-1" /> The ChronoVerse
+              <Globe className="w-3 h-3 mr-1" /> Chronicles
             </Badge>
             <h1 className="text-4xl md:text-6xl font-display font-bold mb-4 text-white">
               Era Explorer

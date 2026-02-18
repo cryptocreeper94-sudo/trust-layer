@@ -46,7 +46,7 @@ export function ChronoLayout({
           <Link href="/" className="flex items-center gap-2 shrink-0" data-testid="link-chrono-home">
             <Shield className="w-7 h-7 text-cyan-400" />
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-              ChronoVerse
+              Chronicles
             </span>
           </Link>
           
@@ -110,7 +110,7 @@ export function ChronoLayout({
                 <div className="flex items-center gap-2">
                   <Shield className="w-7 h-7 text-cyan-400" />
                   <span className="font-display font-bold text-xl bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                    ChronoVerse
+                    Chronicles
                   </span>
                 </div>
                 <button 
@@ -211,7 +211,7 @@ function ChronoFooter() {
               </span>
             </div>
             <p className="text-white/60 text-sm mb-4 max-w-md">
-              Not a game. A life. Live your legacy across 70+ historical eras in the ChronoVerse. Coming 2026.
+              Not a game. A life. Live your legacy across 70+ historical eras in Chronicles. Coming 2026.
             </p>
             <div className="flex items-center gap-2 text-xs text-white/40">
               <span>Powered by</span>
@@ -289,7 +289,7 @@ function StickyJoinBar() {
     >
       <div className="container mx-auto max-w-6xl flex items-center justify-between gap-4">
         <div className="hidden sm:block">
-          <p className="text-sm font-medium text-white">Join the ChronoVerse</p>
+          <p className="text-sm font-medium text-white">Join Chronicles</p>
           <p className="text-xs text-white/60">Be among the first to live your legacy</p>
         </div>
         <div className="flex items-center gap-2 w-full sm:w-auto">

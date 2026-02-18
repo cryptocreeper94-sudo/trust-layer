@@ -53,7 +53,7 @@ const QUICK_LINKS = [
   { href: "/presale", icon: ShoppingBag, label: "Buy Signal", color: "cyan" },
   { href: "/chronicles", icon: Gamepad2, label: "Chronicles", color: "purple", image: samuraiImage },
   { href: "/rewards", icon: Gift, label: "Rewards", color: "amber" },
-  { href: "/veil", icon: BookOpen, label: "The Veil", color: "pink" },
+  { href: "/academy", icon: BookOpen, label: "Academy", color: "pink" },
   { href: "/community-hub", icon: Users, label: "Community", color: "emerald" },
   { href: "/ecosystem", icon: Globe, label: "Ecosystem", color: "blue" },
   { href: "/faq", icon: MessageSquare, label: "FAQ", color: "slate" },

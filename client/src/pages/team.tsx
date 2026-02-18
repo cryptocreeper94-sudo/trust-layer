@@ -461,7 +461,7 @@ function ExecutiveSummary() {
 
 function AdminLinksGrid() {
   const adminLinks = [
-    { title: "DarkWave Studio", href: "/studio", icon: Code, description: "Web IDE and development environment", color: "primary" },
+    { title: "Trust Studio", href: "/studio", icon: Code, description: "Web IDE and development environment", color: "primary" },
     { title: "Developer Portal", href: "/developer-portal", icon: Shield, description: "API keys and analytics", color: "secondary" },
     { title: "Treasury", href: "/treasury", icon: Database, description: "Token treasury management", color: "green" },
     { title: "Billing Admin", href: "/billing", icon: Settings, description: "Subscriptions and payments", color: "cyan" },

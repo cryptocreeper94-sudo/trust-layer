@@ -54,7 +54,7 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Strategic Marketing Pages**: Competitive Analysis (`/token-compare`), Investor Pitch (`/investor-pitch`), Innovation Hub (`/innovation`).
 - **Business Tenant Portals**: Secure B2B dashboards with transaction ledgers, trusted networks, and API access. Requires personal account first and business verification.
 - **Multi-SIG Multi-Chain Wallet**: M-of-N signature requirements across all supported chains for business treasuries and DAOs.
-- **DarkWave Academy**: Education and certification platform for crypto fundamentals, multi-chain ecosystems, DeFi, security, bridging, and Trust Layer operations.
+- **DarkWave Academy**: Education and certification platform at `/academy` with 6 course tracks, 3 certifications, Stripe subscription tiers (Explorer free, Scholar $19.99/mo price_1T2GJZRq977vVehdIBcsUn7x, Master $49.99/mo price_1T2GJdRq977vVehdYtJ5plVZ), installable PWA.
 - **Blockchain Domain Service**: `.tlid` domains (Trust Layer ID) at `tlid.io` for blockchain-verified identity names.
 - **Ecosystem SSO (Single Sign-On)**: Cross-app authentication for ecosystem apps via Trust Layer, using HMAC-SHA256 request signing and one-time tokens.
 - **Ecosystem Credential Sync**: Behind-the-scenes user credential sync for ecosystem apps with independent login UIs, using email as a shared identifier and HMAC-SHA256 signed requests.
@@ -84,6 +84,42 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **No Limits**: Unlimited referrals.
 - **Business Partners**: 2.5x multiplier on all rewards.
 - **Claim Window**: Wallet required before launch; 30 days after TGE to claim.
+
+### Ecosystem Domains & Subdomains (27 Verified Apps)
+**Primary Domains:**
+- `dwsc.io` — Trust Layer main portal (landing, DeFi, wallet, membership)
+- `darkwavegames.io` — The Arcade (provably fair blockchain games)
+- `darkwavestudios.io` — Trust Studio (IDE / development environment)
+- `yourlegacy.io` — Chronicles (parallel life simulation)
+- `tlid.io` — Blockchain Domain Service (.tlid identity names)
+- `trustshield.tech` — Guardian Shield (enterprise security monitoring)
+
+**External Ecosystem Apps (separate domains):**
+- `orbitstaffing.io` — ORBIT Staffing OS
+- `garagebot.io` — GarageBot (IoT garage automation)
+- `brewandboard.coffee` — Brew & Board Coffee
+- `lotopspro.io` — Lot Ops Pro (auto auction lot management)
+- `darkwavepulse.com` — Pulse (AI predictive market intelligence)
+- `getorby.io` — Orby Commander (venue/event operations)
+- `nashpaintpros.io` — Nashville Painting Professionals
+- `paintpros.io` — PaintPros (painting service management)
+- `strikeagent.io` — StrikeAgent (AI trading bot)
+- `vedasolus.io` — VedaSolus (holistic wellness platform)
+- `tradeworksai.io` — TradeWorks AI (trading intelligence)
+- `happyeats.app` — TL Driver Connect (driver coordination)
+
+**Internal PWA Routes (hosted at dwsc.io):**
+- `/academy` — DarkWave Academy
+- `/guardian-scanner` — Guardian Scanner
+- `/guardian-screener` — Guardian Screener
+- `/signal-chat` — Signal Chat
+- `/wallet` — Trust Vault
+- `/my-hub` — Trust Home
+- `/the-void` — The Void
+- `/torque` — Torque (automotive marketplace)
+
+**Hidden (not in public listings):**
+- `/veil`, `/veil-reader` — Through The Veil eBook reader (too controversial for main site)
 
 ## External Dependencies
 - **Database**: PostgreSQL

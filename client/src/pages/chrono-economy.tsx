@@ -100,7 +100,7 @@ const TOKEN_UTILITY = [
   { use: "In-game purchases", desc: "Buy gear, items, services" },
   { use: "Property transactions", desc: "Land, buildings, businesses" },
   { use: "Era travel fees", desc: "Time-travel between eras" },
-  { use: "Governance voting", desc: "Shape the ChronoVerse" },
+  { use: "Governance voting", desc: "Shape Chronicles" },
   { use: "Staking rewards", desc: "Earn passive income" },
   { use: "Creator rewards", desc: "Monetize your creations" },
 ];
@@ -248,7 +248,7 @@ export default function ChronoEconomy() {
                 <div className="p-8 h-full flex flex-col justify-center items-center text-center">
                   <Coins className="w-16 h-16 text-amber-400 mb-6" />
                   <h3 className="text-2xl font-bold text-white mb-2">Signal</h3>
-                  <p className="text-white/60 mb-6">The native currency of the ChronoVerse</p>
+                  <p className="text-white/60 mb-6">The native currency of Chronicles</p>
                   <Link href="/presale">
                     <Button className="rounded-full gap-2 bg-gradient-to-r from-amber-500 to-orange-600" data-testid="get-dwc-tokens">
                       <Coins className="w-4 h-4" />
@@ -305,7 +305,7 @@ export default function ChronoEconomy() {
 
       <CTABanner
         title="Ready to Join the Economy?"
-        subtitle="Get SIG tokens now and be ready when the ChronoVerse launches."
+        subtitle="Get SIG tokens now and be ready when Chronicles launches."
         primaryAction={{ label: "Get SIG Tokens", href: "/presale" }}
         secondaryAction={{ label: "Learn More", href: "/chronicles" }}
         backgroundImage={cyberpunkCity}

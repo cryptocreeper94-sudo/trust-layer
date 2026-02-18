@@ -81,7 +81,7 @@ const PHASES: Phase[] = [
     name: "Era Expansion",
     period: "Phase 3 - TBD",
     status: "upcoming",
-    description: "Adding more eras and expanding the ChronoVerse.",
+    description: "Adding more eras and expanding Chronicles.",
     milestones: [
       { item: "5 additional eras", done: false },
       { item: "Cross-era mechanics", done: false },
@@ -97,7 +97,7 @@ const PHASES: Phase[] = [
     name: "Public Launch",
     period: "Community Driven",
     status: "upcoming",
-    description: "Opening the ChronoVerse to the world.",
+    description: "Opening Chronicles to the world.",
     milestones: [
       { item: "20+ eras available", done: false },
       { item: "Full economy system", done: false },
@@ -248,7 +248,7 @@ export default function ChronoRoadmap() {
               <Rocket className="w-3 h-3 mr-1" /> Development Journey
             </Badge>
             <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 text-white">
-              The Road to the <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">ChronoVerse</span>
+              The Road to <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Chronicles</span>
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto mb-8">
               A transparent look at where we are, where we're going, and how we'll get there.
@@ -326,7 +326,7 @@ export default function ChronoRoadmap() {
 
       <CTABanner
         title="Help Us Get There Faster"
-        subtitle="Your support directly funds development. Every contribution brings the ChronoVerse closer to reality."
+        subtitle="Your support directly funds development. Every contribution brings Chronicles closer to reality."
         primaryAction={{ label: "Support Development", href: "/crowdfund" }}
         secondaryAction={{ label: "Join Community", href: "/community" }}
         backgroundImage={deepSpace}

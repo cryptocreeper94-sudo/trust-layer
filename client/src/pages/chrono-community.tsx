@@ -79,7 +79,7 @@ const BENEFITS = [
   {
     icon: Gift,
     title: "Early Access",
-    description: "Be first to enter the ChronoVerse before public launch"
+    description: "Be first to enter Chronicles before public launch"
   },
   {
     icon: Coins,
@@ -130,7 +130,7 @@ export default function ChronoCommunity() {
               Be Part of <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">History</span>
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto mb-8">
-              The ChronoVerse is being built right now. Join the founding community 
+              Chronicles is being built right now. Join the founding community 
               and help shape the future of gaming.
             </p>
             
@@ -162,7 +162,7 @@ export default function ChronoCommunity() {
               >
                 <Check className="w-12 h-12 text-green-400 mx-auto mb-3" />
                 <p className="text-green-400 font-bold text-lg">You're on the list!</p>
-                <p className="text-white/60 text-sm">We'll notify you when the ChronoVerse opens.</p>
+                <p className="text-white/60 text-sm">We'll notify you when Chronicles opens.</p>
               </motion.div>
             )}
           </motion.div>
@@ -187,7 +187,7 @@ export default function ChronoCommunity() {
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto">
               Early supporters get exclusive benefits, bonus tokens, and their name 
-              permanently recorded in the ChronoVerse.
+              permanently recorded in Chronicles.
             </p>
           </motion.div>
           
@@ -342,7 +342,7 @@ export default function ChronoCommunity() {
 
       <CTABanner
         title="Ready to Make History?"
-        subtitle="Join the founding community today and help build the ChronoVerse."
+        subtitle="Join the founding community today and help build Chronicles."
         primaryAction={{ label: "Support Development", href: "/crowdfund" }}
         backgroundImage={medievalKingdom}
       />

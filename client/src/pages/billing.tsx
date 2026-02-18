@@ -217,7 +217,7 @@ export default function Billing() {
                   </div>
                   <ul className="space-y-2 mb-auto text-[11px]">
                     <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> 50,000 API calls/month</li>
-                    <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> DarkWave Studio</li>
+                    <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> Trust Studio</li>
                     <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> Priority support</li>
                     <li className="flex items-center gap-2 text-white/70"><Check className="w-3 h-3 text-primary shrink-0" /> Early Signal access</li>
                   </ul>

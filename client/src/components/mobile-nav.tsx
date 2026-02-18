@@ -190,7 +190,7 @@ const navCategories = [
     items: [
       { href: "/learn", label: "Academy", icon: BookOpen },
       { href: "/developers", label: "Developer Docs", icon: Code },
-      { href: "/studio", label: "DarkWave Studio", icon: Sparkles },
+      { href: "/studio", label: "Trust Studio", icon: Sparkles },
       { href: "/code-snippets", label: "Code Snippets", icon: Code },
       { href: "/api-docs", label: "API Docs", icon: FileText },
       { href: "/webhooks", label: "Webhooks API", icon: Webhook },
@@ -216,7 +216,8 @@ const navCategories = [
       { href: "/domains", label: "TLID.io - Domains", icon: Globe },
       { href: "/guardian-ai", label: "TrustShield.tech", icon: Shield },
       { href: "/arcade", label: "DarkWave Games", icon: Gamepad2 },
-      { href: "/studio", label: "DarkWave Studio", icon: Sparkles },
+      { href: "/studio", label: "Trust Studio", icon: Sparkles },
+      { href: "/academy", label: "DarkWave Academy", icon: BookOpen },
       { href: "/chronicles", label: "YourLegacy.io", icon: Star },
       { href: "/signal-chat", label: "Signal Chat", icon: MessageCircle },
     ]

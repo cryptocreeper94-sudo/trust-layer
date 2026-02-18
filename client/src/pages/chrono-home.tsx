@@ -127,7 +127,7 @@ export default function ChronoHome() {
         >
           <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-500/30 text-white text-sm backdrop-blur-sm">
             <Sparkles className="w-4 h-4 mr-2 text-cyan-400" />
-            Welcome to the ChronoVerse
+            Welcome to Chronicles
           </Badge>
           
           <h1 className="text-5xl sm:text-6xl md:text-8xl font-display font-black mb-6 leading-tight">
@@ -162,7 +162,7 @@ export default function ChronoHome() {
             <Link href="/chronicles">
               <Button size="lg" className="rounded-full gap-2 text-lg px-8 py-6 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 hover:from-cyan-400 hover:via-purple-400 hover:to-pink-400 text-white shadow-xl shadow-purple-500/25 hover:shadow-purple-500/40 transition-all" data-testid="hero-explore">
                 <Play className="w-5 h-5" />
-                Explore the ChronoVerse
+                Explore Chronicles
               </Button>
             </Link>
             <Link href="/community">
@@ -252,7 +252,7 @@ export default function ChronoHome() {
             className="text-center mb-12"
           >
             <Badge className="mb-4 bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
-              <History className="w-3 h-3 mr-1" /> The ChronoVerse
+              <History className="w-3 h-3 mr-1" /> Chronicles
             </Badge>
             <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 text-white">
               Choose Your Era
@@ -417,7 +417,7 @@ export default function ChronoHome() {
               Planned Features
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto">
-              Here's what's on the horizon. Join the waitlist to get early access and shape the future of the ChronoVerse.
+              Here's what's on the horizon. Join the waitlist to get early access and shape the future of Chronicles.
             </p>
           </motion.div>
 
@@ -500,7 +500,7 @@ export default function ChronoHome() {
                   <div>
                     <h3 className="text-lg font-bold text-white mb-1">Business Pre-Registration</h3>
                     <p className="text-white/60 text-sm mb-3">
-                      Want your brand in the ChronoVerse? Pre-register for storefront sponsorship opportunities. 
+                      Want your brand in Chronicles? Pre-register for storefront sponsorship opportunities. 
                       Early partners get priority placement and founding rates.
                     </p>
                     <Link href="/creators">
@@ -555,7 +555,7 @@ export default function ChronoHome() {
 
       <CTABanner
         title="Ready to Live Your Legacy?"
-        subtitle="Join the founding members building the ChronoVerse. Early supporters get exclusive access, bonus SIG tokens, and their name in history."
+        subtitle="Join the founding members building Chronicles. Early supporters get exclusive access, bonus SIG tokens, and their name in history."
         primaryAction={{ label: "Support Development", href: "/crowdfund" }}
         secondaryAction={{ label: "Learn More", href: "/chronicles" }}
         backgroundImage={fantasyWorld}

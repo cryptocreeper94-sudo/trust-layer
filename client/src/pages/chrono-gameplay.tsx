@@ -126,7 +126,7 @@ export default function ChronoGameplay() {
               <Brain className="w-3 h-3 mr-1" /> How It Works
             </Badge>
             <h1 className="text-4xl md:text-6xl font-display font-bold mb-6 text-white">
-              A Day in the <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">ChronoVerse</span>
+              A Day in <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Chronicles</span>
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto">
               Not a game you complete. A life you live. Here's what that actually means.
@@ -220,7 +220,7 @@ export default function ChronoGameplay() {
               Core Systems
             </h2>
             <p className="text-white/60 max-w-2xl mx-auto">
-              The engines that power the ChronoVerse experience.
+              The engines that power Chronicles experience.
             </p>
           </motion.div>
           
@@ -311,7 +311,7 @@ export default function ChronoGameplay() {
 
       <CTABanner
         title="Ready to Experience It?"
-        subtitle="Join the founding members who will be first to enter the ChronoVerse."
+        subtitle="Join the founding members who will be first to enter Chronicles."
         primaryAction={{ label: "Join Waitlist", href: "/community" }}
         secondaryAction={{ label: "Explore Eras", href: "/eras" }}
         backgroundImage={cyberpunkCity}

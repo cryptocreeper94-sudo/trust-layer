@@ -49,7 +49,7 @@ export default function ChronoExecutiveSummary() {
                   Chronicles
                 </span>
               </h1>
-              <p className="text-xl md:text-2xl text-white/80 mb-2">The ChronoVerse</p>
+              <p className="text-xl md:text-2xl text-white/80 mb-2">Chronicles</p>
               <p className="text-lg text-white/60 italic">"YOU. The Legend."</p>
             </motion.div>
 
@@ -99,7 +99,7 @@ export default function ChronoExecutiveSummary() {
               {[
                 {
                   title: "Living World Adventures",
-                  description: "The ChronoVerse evolves dynamically. AI-driven NPCs pursue quests, form alliances, and remember your actions. Drop in for quick missions or commit to epic campaigns—your legend grows at your pace, with no grinding or forced obligations.",
+                  description: "Chronicles evolves dynamically. AI-driven NPCs pursue quests, form alliances, and remember your actions. Drop in for quick missions or commit to epic campaigns—your legend grows at your pace, with no grinding or forced obligations.",
                   icon: Globe,
                   color: "cyan"
                 },
@@ -630,7 +630,7 @@ export default function ChronoExecutiveSummary() {
               className="text-center mb-8"
             >
               <h2 className="text-2xl font-display font-bold text-white mb-2">
-                Ready to Shape the ChronoVerse?
+                Ready to Shape Chronicles?
               </h2>
               <p className="text-white/60">Connect with Trust Layer Studios to explore partnership opportunities</p>
             </motion.div>
@@ -643,7 +643,7 @@ export default function ChronoExecutiveSummary() {
             >
               <div className="flex flex-wrap justify-center gap-4 mb-6">
                 <a 
-                  href="mailto:cryptocreeper94@gmail.com?subject=ChronoVerse%20Investment%20Inquiry"
+                  href="mailto:cryptocreeper94@gmail.com?subject=Chronicles%20Investment%20Inquiry"
                   className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-lg text-white font-semibold transition-colors"
                   data-testid="contact-investor"
                 >

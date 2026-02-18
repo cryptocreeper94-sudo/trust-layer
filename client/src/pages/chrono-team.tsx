@@ -69,7 +69,7 @@ const ROADMAP_PHASES = [
   },
   {
     phase: "Phase 3",
-    title: "Full ChronoVerse",
+    title: "Full Chronicles",
     timeline: "TBD - Community Driven",
     status: "future",
     progress: 0,
@@ -146,7 +146,7 @@ export default function ChronoTeam() {
               <Code className="w-3 h-3 mr-1" /> Development
             </Badge>
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-4 text-white">
-              Building the <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">ChronoVerse</span>
+              Building <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Chronicles</span>
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto">
               A realistic look at what we're building, how we're building it, and when you can expect to live your legacy.
@@ -309,7 +309,7 @@ export default function ChronoTeam() {
               <h2 className="text-2xl md:text-3xl font-display font-bold text-white">Technology Stack</h2>
             </div>
             <p className="text-white/60 max-w-2xl">
-              The technologies powering the ChronoVerse. Built for scale, designed for immersion.
+              The technologies powering Chronicles. Built for scale, designed for immersion.
             </p>
           </motion.div>
 
@@ -363,7 +363,7 @@ export default function ChronoTeam() {
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Founder & Lead Developer</h3>
                 <p className="text-white/60 text-sm mb-4">
-                  Building the ChronoVerse vision from scratch. One developer, one laptop, infinite determination. 
+                  Building the Chronicles vision from scratch. One developer, one laptop, infinite determination. 
                   Seeking talented contributors who share the vision.
                 </p>
                 <Badge className="w-fit bg-purple-500/20 text-purple-400 border-purple-500/30">
@@ -400,7 +400,7 @@ export default function ChronoTeam() {
             <div className="p-8 text-center">
               <h3 className="text-2xl font-bold text-white mb-3">Support Development</h3>
               <p className="text-white/60 mb-6 max-w-xl mx-auto">
-                Every contribution helps bring the ChronoVerse closer to reality. 
+                Every contribution helps bring Chronicles closer to reality. 
                 Supporters get early access, exclusive rewards, and their name in history.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center flex-wrap">

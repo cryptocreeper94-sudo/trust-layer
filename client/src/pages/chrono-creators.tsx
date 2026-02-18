@@ -21,7 +21,7 @@ import renaissanceFlorence from "@assets/generated_images/renaissance_florence_i
 const CREATION_TYPES = [
   {
     title: "Quests & Storylines",
-    description: "Craft adventures, mysteries, and narrative arcs that players will experience across the ChronoVerse.",
+    description: "Craft adventures, mysteries, and narrative arcs that players will experience across Chronicles.",
     icon: Scroll,
     difficulty: "Beginner",
     image: medievalKingdom,
@@ -67,7 +67,7 @@ const OWNERSHIP_TIERS = [
   {
     tier: "Contributor",
     price: "Free",
-    description: "Share your ideas and help shape the ChronoVerse",
+    description: "Share your ideas and help shape Chronicles",
     features: [
       "Submit ideas and suggestions",
       "Participate in community votes",
@@ -146,7 +146,7 @@ export default function ChronoCreators() {
               <Palette className="w-3 h-3 mr-1" /> Creator Hub
             </Badge>
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-4 text-white">
-              Build the <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">ChronoVerse</span>
+              Build <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Chronicles</span>
             </h1>
             <p className="text-xl text-white/60 max-w-2xl mx-auto mb-6">
               Create quests, characters, locations, and stories. Your creations become real estate in a living world - 
@@ -317,7 +317,7 @@ export default function ChronoCreators() {
               <div>
                 <h4 className="font-semibold text-white mb-1">Important: Ownership Terms</h4>
                 <p className="text-sm text-white/60">
-                  All content submitted to the ChronoVerse is subject to our Creator Terms of Service. 
+                  All content submitted to Chronicles is subject to our Creator Terms of Service. 
                   Free contributions grant DarkWave Studios a perpetual license to use, modify, and distribute your content. 
                   <span className="text-amber-400"> Creator License holders retain full ownership rights</span>, 
                   including the ability to sell, trade, or remove their content. 
@@ -527,14 +527,14 @@ export default function ChronoCreators() {
               <Code className="w-12 h-12 text-amber-400 mx-auto mb-4" />
               <h3 className="text-2xl font-bold text-white mb-3">Advanced Developers</h3>
               <p className="text-white/60 mb-6 max-w-xl mx-auto">
-                Ready to dive deeper? DarkWave Studio provides a full code editor for AI behaviors, 
+                Ready to dive deeper? Trust Studio provides a full code editor for AI behaviors, 
                 game mechanics, smart contract integration, and complex scripting. 
                 Build with our SDK and APIs for maximum control.
               </p>
               <a href="https://dwsc.io/studio" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="rounded-full gap-2 bg-gradient-to-r from-amber-600 to-orange-600" data-testid="go-to-studio">
                   <Code className="w-5 h-5" />
-                  Open DarkWave Studio
+                  Open Trust Studio
                   <ExternalLink className="w-4 h-4" />
                 </Button>
               </a>

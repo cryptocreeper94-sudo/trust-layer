@@ -9725,7 +9725,7 @@ const { trustLayerId } = await response.json();`
             product_data: {
               name: `Trust Layer ${planName} Membership`,
               description: plan === "builder" 
-                ? "50,000 API calls/month, DarkWave Studio, Priority support, Early token access"
+                ? "50,000 API calls/month, Trust Studio, Priority support, Early token access"
                 : "Unlimited API calls, Dedicated support, Custom integrations, Validator node access",
             },
             unit_amount: priceAmount,
@@ -10954,7 +10954,32 @@ const { trustLayerId } = await response.json();`
     }
   });
 
-  // ===== DarkWave Studio API Routes =====
+  // ===== DarkWave Academy API Routes =====
+
+  app.post("/api/academy/subscribe", async (req: any, res) => {
+    try {
+      const { priceId } = req.body;
+      if (!priceId) {
+        return res.status(400).json({ error: "Price ID required" });
+      }
+
+      const session = await stripe.checkout.sessions.create({
+        mode: "subscription",
+        payment_method_types: ["card"],
+        line_items: [{ price: priceId, quantity: 1 }],
+        success_url: `${req.headers.origin || "https://dwsc.io"}/academy?success=true`,
+        cancel_url: `${req.headers.origin || "https://dwsc.io"}/academy?canceled=true`,
+        metadata: { product: "darkwave-academy" },
+      });
+
+      res.json({ url: session.url });
+    } catch (error: any) {
+      console.error("Academy subscribe error:", error);
+      res.status(500).json({ error: error.message || "Failed to create checkout session" });
+    }
+  });
+
+  // ===== Trust Studio API Routes =====
 
   app.get("/api/studio/projects", isAuthenticated, async (req: any, res) => {
     try {
@@ -10980,10 +11005,10 @@ const { trustLayerId } = await response.json();`
         isPublic: false,
       });
       const starterFiles: Record<string, { name: string; content: string; ext: string }> = {
-        javascript: { name: "index.js", content: '// Welcome to DarkWave Studio\nconsole.log("Hello, DarkWave!");', ext: "js" },
-        typescript: { name: "index.ts", content: '// Welcome to DarkWave Studio\nconsole.log("Hello, DarkWave!");', ext: "ts" },
-        python: { name: "main.py", content: '# Welcome to DarkWave Studio\nprint("Hello, DarkWave!")', ext: "py" },
-        rust: { name: "main.rs", content: '// Welcome to DarkWave Studio\nfn main() {\n    println!("Hello, DarkWave!");\n}', ext: "rs" },
+        javascript: { name: "index.js", content: '// Welcome to Trust Studio\nconsole.log("Hello, Trust Layer!");', ext: "js" },
+        typescript: { name: "index.ts", content: '// Welcome to Trust Studio\nconsole.log("Hello, Trust Layer!");', ext: "ts" },
+        python: { name: "main.py", content: '# Welcome to Trust Studio\nprint("Hello, Trust Layer!")', ext: "py" },
+        rust: { name: "main.rs", content: '// Welcome to Trust Studio\nfn main() {\n    println!("Hello, Trust Layer!");\n}', ext: "rs" },
         html: { name: "index.html", content: '<!DOCTYPE html>\n<html>\n<head>\n  <title>DarkWave Project</title>\n</head>\n<body>\n  <h1>Hello, DarkWave!</h1>\n</body>\n</html>', ext: "html" },
       };
       const starter = starterFiles[lang] || starterFiles.javascript;
@@ -11532,7 +11557,7 @@ const { trustLayerId } = await response.json();`
         baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
       });
 
-      const systemPrompt = `You are an expert coding assistant for DarkWave Studio, a web-based IDE. 
+      const systemPrompt = `You are an expert coding assistant for Trust Studio, a web-based IDE. 
 You help developers write, debug, explain, and optimize code.
 
 Guidelines:
@@ -13741,7 +13766,7 @@ Current context:
           price_data: {
             currency: "usd",
             product_data: {
-              name: "DarkWave Studio AI Credits",
+              name: "Trust Studio AI Credits",
               description: `${amount} credits for Studio AI coding features`,
             },
             unit_amount: amount,
@@ -13900,7 +13925,7 @@ Key features available:
 - Liquidity Pools: Provide liquidity and earn fees
 - Launchpad: Launch new tokens
 - Bridge: Transfer SIG to Ethereum (wSIG) or Solana
-- DarkWave Studio: Full-featured web IDE
+- Trust Studio: Full-featured web IDE
 
 Keep responses concise (2-3 sentences max), friendly, and helpful. If asked about prices, balances, or specific data, explain that you can guide them to the relevant page. Use casual, warm language like you're a helpful friend. Do not use emojis or describe emojis in text form (like ":)" or "smile emoji"). Just communicate naturally without any emoji references.`;
 
@@ -22330,7 +22355,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
     },
     {
       id: "darkwave-studios",
-      name: "DarkWave Studio",
+      name: "Trust Studio",
       category: "Development",
       description: "The architectural hub for Trust Layer ecosystem development. Build, deploy, and manage blockchain-integrated applications.",
       hook: "Build. Create. Deploy.",
@@ -22514,18 +22539,6 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       verified: true,
       users: "DarkWave Verified",
       url: "/torque",
-    },
-    {
-      id: "veil",
-      name: "Through The Veil",
-      category: "Publishing",
-      description: "Free digital eBook reader and publishing platform. Read 'Through The Veil' online or download in PDF and EPUB formats — free forever.",
-      hook: "Free eBook Reader & Publishing",
-      tags: ["Publishing", "eBook", "Reading", "Free"],
-      gradient: "from-purple-500 to-pink-600",
-      verified: true,
-      users: "DarkWave Verified",
-      url: "/veil",
     },
     {
       id: "darkwave-academy",
