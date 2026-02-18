@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
@@ -19,6 +19,7 @@ import {
   Coins,
   Crown,
   ChevronRight,
+  ChevronLeft,
   Menu,
   LayoutGrid,
   BadgeCheck,
@@ -101,24 +102,29 @@ const ecosystemImages: Record<string, string> = {
   "garagebot-prod": "/ecosystem/garagebot-prod.jpg",
   "darkwave-pulse": "/ecosystem/darkwave-pulse.jpg",
   "paintpros": "/ecosystem/paintpros.jpg",
+  "nashpaintpros": "/ecosystem/nashpaintpros.png",
   "orby": "/ecosystem/orby.jpg",
   "strike-agent": "/ecosystem/strike-agent.jpg",
   "veda-solus": "/ecosystem/veda-solus.jpg",
   "vedasolus": "/ecosystem/veda-solus.jpg",
   "trust-home": "/ecosystem/trust-home.png",
   "trust-vault": "/ecosystem/trust-vault.png",
+  "trust-layer": "/ecosystem/trust-layer.png",
   "guardian-scanner": "/ecosystem/guardian-scanner.png",
   "guardian-screener": "/ecosystem/guardian-screener.png",
   "trustshield": "/ecosystem/trustshield.png",
   "the-void": "/ecosystem/the-void.png",
   "torque": "/ecosystem/torque.png",
-  "driver-connect": "/ecosystem/happy-eats.png",
+  "driver-connect": "/ecosystem/driver-connect.png",
   "happyeats": "/ecosystem/happy-eats.png",
   "chronicles": "/ecosystem/chronicles.png",
   "the-arcade": "/ecosystem/the-arcade.png",
   "signal-chat": "/ecosystem/signal-chat.png",
   "darkwave-studios": "/ecosystem/darkwave-studios.png",
   "tradeworks-ai": "/ecosystem/tradeworks-ai.png",
+  "tlid": "/ecosystem/tlid.png",
+  "veil": "/ecosystem/veil.png",
+  "darkwave-academy": "/ecosystem/darkwave-academy.png",
 };
 
 function getAppImage(appId: string): string {
@@ -136,7 +142,37 @@ export default function TrustLayerLanding() {
     staleTime: 30000,
   });
 
-  const verifiedApps = apps.filter((app) => app.verified).slice(0, 6);
+  const verifiedApps = apps.filter((app) => app.verified);
+  const carouselRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const updateScrollButtons = useCallback(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 10);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 10);
+  }, []);
+
+  const scrollCarousel = useCallback((direction: "left" | "right") => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const scrollAmount = el.clientWidth * 0.7;
+    el.scrollBy({ left: direction === "left" ? -scrollAmount : scrollAmount, behavior: "smooth" });
+  }, []);
+
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    updateScrollButtons();
+    el.addEventListener("scroll", updateScrollButtons, { passive: true });
+    const resizeObserver = new ResizeObserver(updateScrollButtons);
+    resizeObserver.observe(el);
+    return () => {
+      el.removeEventListener("scroll", updateScrollButtons);
+      resizeObserver.disconnect();
+    };
+  }, [updateScrollButtons, verifiedApps]);
 
   const handleGetStarted = () => {
     if (isAuthenticated) {
@@ -434,10 +470,10 @@ export default function TrustLayerLanding() {
                 Ecosystem
               </Badge>
               <h2 className="text-2xl sm:text-3xl font-display font-bold">
-                Verified Trust Layer Businesses
+                The Trust Layer Ecosystem
               </h2>
               <p className="text-white/60 mt-2 text-sm">
-                Companies building on and verified by the Trust Layer
+                {verifiedApps.length} verified apps building on the Trust Layer
               </p>
             </div>
             <Link href="/ecosystem">
@@ -448,42 +484,71 @@ export default function TrustLayerLanding() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-            {verifiedApps.map((app) => (
-              <motion.a
-                key={app.id}
-                href={app.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block group"
-                whileHover={{ y: -4 }}
-                data-testid={`card-ecosystem-app-${app.id}`}
+          <div className="relative group/carousel">
+            {canScrollLeft && (
+              <button
+                onClick={() => scrollCarousel("left")}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-slate-900/90 border border-white/10 backdrop-blur-md flex items-center justify-center text-white/70 hover:text-white hover:border-cyan-500/30 transition-all shadow-xl -ml-4"
+                data-testid="button-carousel-left"
               >
-                <GlassCard className="overflow-hidden hover:border-cyan-500/30 transition-all">
-                  <div className="aspect-square relative">
-                    <div className="w-full h-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center">
-                      <span className="text-2xl font-bold text-white/50">{app.name.charAt(0)}</span>
-                    </div>
-                    {getAppImage(app.id) && (
-                      <img
-                        src={getAppImage(app.id)}
-                        alt={app.name}
-                        className="absolute inset-0 w-full h-full object-cover"
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
-                      />
-                    )}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-2">
-                      <div className="flex items-center gap-1">
-                        <span className="text-xs font-semibold text-white truncate" data-testid={`text-app-name-${app.id}`}>{app.name}</span>
-                        {app.verified && <CheckCircle2 className="w-3 h-3 text-cyan-400 shrink-0" />}
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+            )}
+            {canScrollRight && (
+              <button
+                onClick={() => scrollCarousel("right")}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-slate-900/90 border border-white/10 backdrop-blur-md flex items-center justify-center text-white/70 hover:text-white hover:border-cyan-500/30 transition-all shadow-xl -mr-4"
+                data-testid="button-carousel-right"
+              >
+                <ChevronRight className="w-5 h-5" />
+              </button>
+            )}
+
+            <div
+              ref={carouselRef}
+              className="flex gap-3 overflow-x-auto scrollbar-hide pb-2 snap-x snap-mandatory"
+              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+            >
+              {verifiedApps.map((app) => (
+                <motion.a
+                  key={app.id}
+                  href={app.url}
+                  className="block group flex-shrink-0 w-[140px] sm:w-[160px] md:w-[170px] snap-start"
+                  whileHover={{ y: -4 }}
+                  data-testid={`card-ecosystem-app-${app.id}`}
+                >
+                  <GlassCard className="overflow-hidden hover:border-cyan-500/30 transition-all">
+                    <div className="aspect-square relative">
+                      <div className="w-full h-full bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center">
+                        <span className="text-2xl font-bold text-white/50">{app.name.charAt(0)}</span>
                       </div>
-                      <span className="text-[10px] text-white/50">{app.category}</span>
+                      {getAppImage(app.id) && (
+                        <img
+                          src={getAppImage(app.id)}
+                          alt={app.name}
+                          className="absolute inset-0 w-full h-full object-cover"
+                          onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }}
+                        />
+                      )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                      <div className="absolute bottom-0 left-0 right-0 p-2">
+                        <div className="flex items-center gap-1">
+                          <span className="text-xs font-semibold text-white truncate" data-testid={`text-app-name-${app.id}`}>{app.name}</span>
+                          {app.verified && <CheckCircle2 className="w-3 h-3 text-cyan-400 shrink-0" />}
+                        </div>
+                        <span className="text-[10px] text-white/50">{app.category}</span>
+                      </div>
                     </div>
-                  </div>
-                </GlassCard>
-              </motion.a>
-            ))}
+                  </GlassCard>
+                </motion.a>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-center gap-2 mt-4">
+              <span className="text-xs text-white/40">{verifiedApps.length} verified apps</span>
+              <span className="text-white/20">|</span>
+              <span className="text-xs text-white/40">Scroll to explore</span>
+            </div>
           </div>
         </div>
       </section>

@@ -22515,6 +22515,30 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       users: "DarkWave Verified",
       url: "/torque",
     },
+    {
+      id: "veil",
+      name: "Through The Veil",
+      category: "Publishing",
+      description: "Free digital eBook reader and publishing platform. Read 'Through The Veil' online or download in PDF and EPUB formats — free forever.",
+      hook: "Free eBook Reader & Publishing",
+      tags: ["Publishing", "eBook", "Reading", "Free"],
+      gradient: "from-purple-500 to-pink-600",
+      verified: true,
+      users: "DarkWave Verified",
+      url: "/veil",
+    },
+    {
+      id: "darkwave-academy",
+      name: "DarkWave Academy",
+      category: "Education",
+      description: "Education and certification platform for crypto fundamentals, multi-chain ecosystems, DeFi strategies, security best practices, and Trust Layer operations.",
+      hook: "Learn. Certify. Master Crypto.",
+      tags: ["Education", "Certification", "Crypto", "Learning"],
+      gradient: "from-blue-500 to-indigo-600",
+      verified: true,
+      users: "DarkWave Verified",
+      url: "/academy",
+    },
   ];
 }
 
