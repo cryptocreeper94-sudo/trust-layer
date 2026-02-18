@@ -20,9 +20,11 @@ import {
   Crown,
   ChevronRight,
   ChevronLeft,
-  Menu,
   LayoutGrid,
-  BadgeCheck,
+  Hash,
+  ExternalLink,
+  Copy,
+  Check,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -134,6 +136,17 @@ export default function TrustLayerLanding() {
   const [, navigate] = useLocation();
   const { user, isAuthenticated } = useSimpleAuth();
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [copiedHash, setCopiedHash] = useState(false);
+
+  const { data: genesis } = useQuery({
+    queryKey: ["genesis-hallmark"],
+    queryFn: async () => {
+      const res = await fetch("/api/hallmark/genesis");
+      if (!res.ok) throw new Error("Failed");
+      return res.json();
+    },
+    staleTime: 60000,
+  });
 
   const { data: apps = [] } = useQuery({
     queryKey: ["ecosystem-apps"],
@@ -185,10 +198,86 @@ export default function TrustLayerLanding() {
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="container mx-auto px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 flex-shrink-0">
-            <Shield className="w-6 h-6 text-cyan-400" />
-            <span className="font-display font-bold text-base sm:text-lg tracking-tight whitespace-nowrap">Trust Layer</span>
-          </Link>
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="relative p-1 rounded-lg hover:bg-white/10 transition-colors group" data-testid="button-genesis-shield">
+                  <Shield className="w-6 h-6 text-cyan-400 group-hover:text-cyan-300 transition-colors" />
+                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-72 bg-slate-900/95 border-white/10 backdrop-blur-xl p-3">
+                <div className="mb-2">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Shield className="w-4 h-4 text-cyan-400" />
+                    <span className="text-sm font-bold text-white">Trust Layer Genesis</span>
+                    <Badge className="text-[9px] bg-green-500/20 text-green-400 px-1.5 py-0">Live</Badge>
+                  </div>
+                  {genesis ? (
+                    <div className="space-y-2">
+                      <div className="p-2 rounded-lg bg-white/5 border border-white/10">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <Hash className="w-3 h-3 text-cyan-400" />
+                          <span className="text-[10px] text-white/50 uppercase tracking-wider">Genesis Hash</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <code className="text-[11px] text-cyan-300 font-mono truncate flex-1">{genesis.payloadHash?.slice(0, 24)}...</code>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              navigator.clipboard.writeText(genesis.payloadHash || "");
+                              setCopiedHash(true);
+                              setTimeout(() => setCopiedHash(false), 2000);
+                            }}
+                            className="p-1 rounded hover:bg-white/10 transition-colors"
+                          >
+                            {copiedHash ? <Check className="w-3 h-3 text-green-400" /> : <Copy className="w-3 h-3 text-white/40" />}
+                          </button>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2 text-[11px]">
+                        <div className="p-1.5 rounded bg-white/5">
+                          <span className="text-white/40">Block Time</span>
+                          <div className="text-white font-medium">{genesis.metadata?.blockTime || "400ms"}</div>
+                        </div>
+                        <div className="p-1.5 rounded bg-white/5">
+                          <span className="text-white/40">TPS</span>
+                          <div className="text-white font-medium">{genesis.metadata?.tps || "200K+"}</div>
+                        </div>
+                        <div className="p-1.5 rounded bg-white/5">
+                          <span className="text-white/40">Consensus</span>
+                          <div className="text-white font-medium">{genesis.metadata?.consensusType || "BFT-PoA"}</div>
+                        </div>
+                        <div className="p-1.5 rounded bg-white/5">
+                          <span className="text-white/40">Supply</span>
+                          <div className="text-white font-medium">1B SIG</div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-xs text-white/40">Loading genesis data...</div>
+                  )}
+                </div>
+                <div className="border-t border-white/10 pt-2 mt-2">
+                  <DropdownMenuItem asChild>
+                    <Link href="/explorer" className="flex items-center gap-2 p-2 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
+                      <ExternalLink className="w-3.5 h-3.5 text-cyan-400" />
+                      <span className="text-sm text-white font-medium">Block Explorer</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/genesis" className="flex items-center gap-2 p-2 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
+                      <Hash className="w-3.5 h-3.5 text-purple-400" />
+                      <span className="text-sm text-white font-medium">Genesis Details</span>
+                    </Link>
+                  </DropdownMenuItem>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <Link href="/" className="flex items-center">
+              <span className="font-display font-bold text-base sm:text-lg tracking-tight whitespace-nowrap">Trust Layer</span>
+            </Link>
+          </div>
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="hidden sm:flex items-center gap-2">
               <Link href="/ecosystem">
@@ -208,52 +297,12 @@ export default function TrustLayerLanding() {
               </Link>
             </div>
             
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0" data-testid="button-nav-menu">
-                  <Menu className="w-5 h-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56 bg-slate-900/95 border-white/10 backdrop-blur-xl p-2">
-                <DropdownMenuItem asChild>
-                  <Link href="/" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
-                    <Shield className="w-4 h-4 text-cyan-400" />
-                    <span className="font-medium text-sm text-white">Trust Layer Home</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/ecosystem" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
-                    <LayoutGrid className="w-4 h-4 text-purple-400" />
-                    <span className="font-medium text-sm text-white">Ecosystem Apps</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/chronochat" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
-                    <Users className="w-4 h-4 text-pink-400" />
-                    <span className="font-medium text-sm text-white">ChronoChat</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/presale" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
-                    <Coins className="w-4 h-4 text-yellow-400" />
-                    <span className="font-medium text-sm text-white">Signal Presale</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/guardian-ai" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
-                    <BadgeCheck className="w-4 h-4 text-blue-400" />
-                    <span className="font-medium text-sm text-white">Guardian AI</span>
-                  </Link>
-                </DropdownMenuItem>
-                <div className="my-2 border-t border-white/5" />
-                <DropdownMenuItem asChild>
-                  <Link href="/portal" className="flex items-center gap-3 p-2.5 cursor-pointer rounded-lg hover:bg-white/5 transition-colors">
-                    <Globe className="w-4 h-4 text-cyan-500" />
-                    <span className="font-medium text-sm text-white">Main Portal</span>
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Link href="/explore">
+              <Button variant="ghost" size="sm" className="h-8 w-8 p-0 sm:w-auto sm:px-3" data-testid="button-nav-explore">
+                <LayoutGrid className="w-5 h-5 sm:w-4 sm:h-4" />
+                <span className="hidden sm:inline ml-1.5 text-xs">Explore</span>
+              </Button>
+            </Link>
 
             {isAuthenticated ? (
               <Link href="/my-hub">

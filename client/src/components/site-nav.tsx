@@ -15,12 +15,15 @@ const HIDDEN_PATHS = [
   "/command-center",
 ];
 
+const LANDING_PATHS = ["/"];
+
 export function SiteNav() {
   const [location] = useLocation();
   const { user, isAuthenticated } = useSimpleAuth();
 
   const isHidden = HIDDEN_PATHS.some(p => location.startsWith(p));
-  if (isHidden) return null;
+  const isLanding = LANDING_PATHS.includes(location);
+  if (isHidden || isLanding) return null;
 
   const isHome = location === "/" || location === "/home" || location === "/portal" || location === "/explore";
   const showBack = !isHome;
