@@ -1027,7 +1027,7 @@ export default function Chronicles() {
               <Link href={chroniclesAccount ? "/chronicles/hub" : "/chronicles/login"}>
                 <Button size="lg" className="rounded-full gap-2 text-lg px-8 py-6 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white shadow-xl shadow-purple-500/25 hover:shadow-purple-500/40 transition-all" data-testid="button-enter-chronoverse">
                   <Rocket className="w-5 h-5" />
-                  {chroniclesAccount ? "Continue Your Journey" : "Enter the Chronoverse"}
+                  {chroniclesAccount ? "Continue Your Journey" : "Enter Chronicles"}
                 </Button>
               </Link>
               <Link href="/crowdfund">

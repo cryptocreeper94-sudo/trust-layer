@@ -63,7 +63,7 @@ export default function ChroniclesLogin() {
         .then(res => res.json())
         .then(data => {
           if (data.authenticated) {
-            setLocation("/chronicles");
+            setLocation("/chronicles/hub");
           } else {
             clearChroniclesSession();
             setCheckingSession(false);
@@ -100,7 +100,7 @@ export default function ChroniclesLogin() {
 
       setChroniclesSession(data.sessionToken, data.account);
       toast.success(`Welcome back, ${data.account.firstName}!`);
-      setLocation("/chronicles");
+      setLocation("/chronicles/hub");
     } catch (error: any) {
       toast.error(error.message || "Login failed");
     } finally {
@@ -162,7 +162,7 @@ export default function ChroniclesLogin() {
 
       setChroniclesSession(data.sessionToken, data.account);
       toast.success(`Welcome to Chronicles, ${data.account.firstName}!`);
-      setLocation("/chronicles");
+      setLocation("/chronicles/hub");
     } catch (error: any) {
       console.error("[Chronicles Signup] Error:", error);
       toast.error(error.message || "Signup failed");
