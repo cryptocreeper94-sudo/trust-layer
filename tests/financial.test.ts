@@ -83,8 +83,9 @@ describe("Shells Economy", () => {
     });
 
     it("should calculate correct SIG equivalents", () => {
-      expect(SHELL_BUNDLES.starter.dwcEquivalent).toBe(SHELL_BUNDLES.starter.amount / DWC_CONVERSION_RATE);
-      expect(SHELL_BUNDLES.pro.dwcEquivalent).toBe(SHELL_BUNDLES.pro.amount / DWC_CONVERSION_RATE);
+      expect(SHELL_BUNDLES.starter.dwcEquivalent).toBe(10);
+      expect(SHELL_BUNDLES.pro.dwcEquivalent).toBe(50);
+      expect(SHELL_BUNDLES.elite.dwcEquivalent).toBe(125);
     });
 
     it("should offer increasing bonus percentages for larger bundles", () => {
