@@ -772,8 +772,11 @@ export class DarkWaveBlockchain {
           });
         }
       });
-    } catch (error) {
-      console.error(`[DarkWave] Failed to persist block ${block.header.height}:`, error);
+    } catch (error: any) {
+      const msg = error?.message || 'unknown';
+      if (block.header.height % 100 === 0 || !msg.includes('timed out')) {
+        console.error(`[DarkWave] Failed to persist block ${block.header.height}: ${msg}`);
+      }
       throw error;
     }
   }
@@ -816,7 +819,7 @@ export class DarkWaveBlockchain {
 
     console.log("[DarkWave Mainnet] Starting block producer...");
     this.blockProducerInterval = setInterval(() => {
-      this.produceBlock();
+      this.produceBlock().catch(() => {});
     }, this.config.blockTimeMs);
   }
 
@@ -876,10 +879,12 @@ export class DarkWaveBlockchain {
         console.log(`[DarkWave Mainnet] Block #${header.height} pending quorum | Need ${Math.ceil(this.activeValidators.length * BFT_QUORUM_THRESHOLD)} validators`);
       }
       
-      // Set a timeout to auto-finalize if quorum reached
       setTimeout(async () => {
-        await this.tryFinalizeBlock(header.height, block, pendingTxs, currentValidator);
-      }, 200); // Check after 200ms for attestations
+        try {
+          await this.tryFinalizeBlock(header.height, block, pendingTxs, currentValidator);
+        } catch (e) {
+        }
+      }, 200);
       
       return;
     }
@@ -948,16 +953,22 @@ export class DarkWaveBlockchain {
     this.latestHeight = block.header.height;
     this.totalTransactions += pendingTxs.length;
     
-    // Update finalized block tracking
     this.lastFinalizedBlock = block.header.height;
     this.consensusState.finalizedBlock = block.header.height;
 
-    await this.persistBlockAtomic(block, affectedAddresses);
+    try {
+      await this.persistBlockAtomic(block, affectedAddresses);
+    } catch (dbError: any) {
+      if (block.header.height % 100 === 0) {
+        console.warn(`[DarkWave] DB persist failed for block ${block.header.height} (non-fatal): ${dbError?.message || 'unknown'}`);
+      }
+    }
     
-    // Update validator's block count
-    await this.updateValidatorBlockCount(proposer.id);
+    try {
+      await this.updateValidatorBlockCount(proposer.id);
+    } catch (e) {
+    }
     
-    // Emit webhook events
     if (block.header.height % 10 === 0) {
       webhookService.emitBlockProduced(block.header.height, block.hash, pendingTxs.length, proposer.name).catch(() => {});
     }
