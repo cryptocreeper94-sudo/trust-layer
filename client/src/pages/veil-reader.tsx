@@ -1041,7 +1041,7 @@ export default function VeilReader() {
       </AnimatePresence>
 
       {/* Content */}
-      <div className="pt-20 pb-28 px-4 sm:px-6">
+      <div className="pt-28 pb-36 px-8 sm:px-10 md:px-12">
         <motion.div
           key={`${currentVolume}-${currentChapter}`}
           initial={{ opacity: 0, y: 20 }}
@@ -1049,7 +1049,7 @@ export default function VeilReader() {
           transition={{ duration: 0.4, ease: "easeOut" as const }}
           className="max-w-3xl mx-auto"
         >
-          <div className="mb-10 pt-4">
+          <div className="mb-16 pt-8">
             <div className="flex items-center gap-3 mb-4">
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
               <span className="text-xs font-medium uppercase tracking-[0.2em] bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent px-2">
@@ -1068,10 +1068,10 @@ export default function VeilReader() {
           </div>
 
           <div className="prose prose-invert prose-lg max-w-none 
-            prose-p:text-slate-300 prose-p:leading-[1.85] prose-p:mb-5 prose-p:text-[17px]
+            prose-p:text-slate-300 prose-p:leading-[1.9] prose-p:mb-7 prose-p:text-[17px]
             prose-headings:text-white
-            prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-5 prose-h2:font-bold
-            prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-purple-300
+            prose-h2:text-2xl prose-h2:mt-14 prose-h2:mb-7 prose-h2:font-bold
+            prose-h3:text-xl prose-h3:mt-12 prose-h3:mb-5 prose-h3:text-purple-300
             prose-strong:text-white prose-strong:font-semibold
             prose-em:text-purple-200/90
             prose-ul:text-slate-300 prose-ul:space-y-2
