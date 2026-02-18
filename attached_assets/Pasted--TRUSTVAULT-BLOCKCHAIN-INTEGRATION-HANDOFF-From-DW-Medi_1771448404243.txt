@@ -1,0 +1,150 @@
+=== TRUSTVAULT → BLOCKCHAIN INTEGRATION HANDOFF ===
+From: DW Media Studio / TrustVault
+To: TrustLayer Blockchain Agent
+Date: February 18, 2026
+
+== WHAT TRUSTVAULT IS ==
+
+TrustVault (DW Media Studio) is a full-stack universal media vault — a private, trust-gated IP storage platform for video, audio, images, and documents. It runs React + Express + PostgreSQL with Replit Object Storage for files. It's the first product in the TrustLayer ecosystem.
+
+Live URL: Currently on Replit (trustvault.replit.app), targeting custom domain (tlid.io or similar).
+
+== WHAT'S ALREADY BUILT (the foundation the blockchain plugs into) ==
+
+1. Identity System (TrustLayer SSO — ready for blockchain upgrade)
+
+Every user gets a Trust Layer ID at registration: tl-{base36-timestamp}-{random-8-chars}
+Example: tl-mlamvhdd-qvg07fyt
+These IDs are stored in chat_users.trust_layer_id (unique per user)
+JWT-based SSO across all ecosystem apps (HS256, 7-day expiry, shared JWT_SECRET)
+Currently off-chain only — IDs are generated locally, not anchored to any blockchain
+This is the field that needs to map to an on-chain identity
+2. Media Storage with Full Metadata
+
+Every uploaded file gets a database record in media_items with:
+id (UUID), tenant (owner), filename, contentType, size, category
+tags (text array), description, artist, venue, tourName, eventDate
+storageKey (path in object storage), createdAt
+Files stored in Replit Object Storage (Google Cloud Storage backend)
+These records are what need on-chain provenance timestamps
+3. Multi-Tenant Architecture
+
+Users: Jason (admin), Madeline, Natalie, Avery, Jennifer, Will, Carley + anyone who joins via invite
+Each user has an isolated vault scoped by tenant field
+Admin (Jason) can view all tenant spaces
+Tenant isolation = perfect for per-identity blockchain scoping
+4. Collections & Sharing
+
+Media organized into collections (with nested parent/child hierarchy)
+Shared collections between family members
+Sharing permissions could be trust-gated once the Trust Engine exists
+5. Stripe Subscriptions
+
+4 tiers: Free / Personal ($5.99/mo) / Pro ($12.99/mo) / Studio ($24.99/mo)
+Checkout, Customer Portal, webhooks, automated emails all working
+Signal asset transactions could supplement or replace this in the future
+6. Signal Chat (Real-time messaging)
+
+WebSocket-based chat at /ws/chat with JWT auth
+Channel-based + direct messages
+Already uses Trust Layer IDs for identity — ready for on-chain identity linkage
+== WHAT TRUSTVAULT NEEDS FROM THE BLOCKCHAIN ==
+
+Priority 1: On-Chain Identity Anchoring
+
+Map existing Trust Layer IDs (tl-xxxx-xxxxxxxx) to on-chain wallet addresses or identity records
+TrustVault needs an API to call:
+POST /api/identity/anchor — Register/anchor a Trust Layer ID on-chain
+GET /api/identity/verify/{trustLayerId} — Check if an identity is verified on-chain
+GET /api/identity/resolve/{trustLayerId} — Get on-chain data for a Trust Layer ID
+TrustVault will store the returned on-chain address/hash in a new column: chat_users.chain_address
+Priority 2: Media Provenance (Proof of Ownership)
+
+When a user uploads a file, TrustVault needs to register it on-chain:
+POST /api/provenance/register — Body: { trustLayerId, fileHash (SHA-256 of file), filename, contentType, size, uploadTimestamp }
+Returns: { provenanceId, txHash, blockNumber, timestamp }
+TrustVault will store provenance_id and tx_hash on the media_items record
+This creates an immutable, timestamped proof that this person uploaded this file at this time
+GET /api/provenance/verify/{provenanceId} — Anyone can verify the chain of custody
+Priority 3: Trust Engine (Access Control)
+
+Trust-gated sharing: "Only people with trust score >= X can view this vault/collection"
+GET /api/trust/score/{trustLayerId} — Get a user's trust score
+GET /api/trust/relationship/{idA}/{idB} — Get the trust relationship between two users
+POST /api/trust/verify — Initiate a trust verification between two identities
+TrustVault will query this before granting access to shared content
+Priority 4: Signal Asset Integration (Future)
+
+Transaction processing for licensing, pay-per-view, premium vault access
+GET /api/signal/balance/{trustLayerId} — Check Signal balance
+POST /api/signal/transfer — Transfer Signal between identities
+POST /api/signal/gate — Check if a user has enough Signal to access gated content
+This replaces or supplements the current Stripe subscription model
+== DATABASE FIELDS TRUSTVAULT IS READY TO ADD ==
+
+Once blockchain APIs are available, TrustVault will add these columns:
+
+-- On chat_users (identity anchoring)
+ALTER TABLE chat_users ADD COLUMN chain_address TEXT UNIQUE;
+ALTER TABLE chat_users ADD COLUMN chain_verified BOOLEAN DEFAULT false;
+ALTER TABLE chat_users ADD COLUMN chain_verified_at TIMESTAMP;
+-- On media_items (provenance)
+ALTER TABLE media_items ADD COLUMN provenance_id TEXT;
+ALTER TABLE media_items ADD COLUMN tx_hash TEXT;
+ALTER TABLE media_items ADD COLUMN block_number INTEGER;
+ALTER TABLE media_items ADD COLUMN chain_timestamp TIMESTAMP;
+ALTER TABLE media_items ADD COLUMN file_hash TEXT; -- SHA-256 of the original file
+== INTEGRATION PATTERN TRUSTVAULT EXPECTS ==
+
+TrustVault will call the blockchain layer via REST API. The pattern:
+
+TrustVault (this app)
+    │
+    ├── On user registration → POST /api/identity/anchor
+    ├── On file upload → POST /api/provenance/register
+    ├── On sharing decision → GET /api/trust/score or /api/trust/relationship
+    └── On gated access → POST /api/signal/gate
+    │
+    ▼
+Blockchain Service (your side)
+    │
+    ├── Anchors identities on-chain
+    ├── Records file provenance with timestamps
+    ├── Manages trust scores and verification
+    └── Handles Signal asset transactions
+Authentication between services: HMAC-signed requests (TrustVault already uses this pattern for its ORBIT and Ecosystem API integrations). We'd need a shared BLOCKCHAIN_API_KEY and BLOCKCHAIN_API_SECRET.
+
+Environment variables TrustVault will need:
+
+BLOCKCHAIN_API_URL=https://<blockchain-service-url>
+BLOCKCHAIN_API_KEY=<shared-api-key>
+BLOCKCHAIN_API_SECRET=<shared-api-secret>
+== EXISTING ECOSYSTEM CONNECTIONS (for context) ==
+
+TrustVault already integrates with:
+
+ORBIT Staffing OS — Financial hub, HMAC-authenticated webhooks
+DarkWave Studios — JWT Bearer auth, media/project APIs, webhook callbacks
+TrustHome (Ecosystem API) — HMAC auth, tenant-scoped project management
+All use the same pattern: REST API + shared secrets + webhook callbacks. The blockchain service should follow the same pattern for consistency.
+
+== WHAT THE BLOCKCHAIN SIDE NEEDS TO BUILD ==
+
+Identity anchoring service — Takes Trust Layer IDs, anchors them on-chain, returns chain addresses
+Provenance registry — Accepts file hashes + metadata, records them immutably, returns transaction receipts
+Trust Engine API — Manages trust scores, relationships, and verification flows
+Signal asset service — Wallet management, transfers, balance queries, access gating
+Webhook/callback support — Notify TrustVault when on-chain confirmations complete (provenance registration can be async)
+== KEY DESIGN PRINCIPLES ==
+
+Private by default — Everything in the vault is private. The owner chooses what to share and with whom.
+Trust is earned, not assumed — Access is granted based on verified trust relationships, not just a shared link.
+Provenance is permanent — Once a file is registered on-chain, that proof exists forever. No one can dispute who uploaded it first.
+Signal has real utility — It's not speculative. It's the medium for value exchange: licensing, access, rewards.
+The ecosystem reinforces itself — Identity feeds trust, trust feeds access, access feeds usage, usage feeds value, value feeds Signal.
+That's everything the blockchain agent needs to know about what TrustVault has and what it needs. They can build the blockchain service endpoints, and TrustVault is ready to call them as soon as those APIs are live.
+
+
+Scroll to latest
+
+Make, test, iterate…

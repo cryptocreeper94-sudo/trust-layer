@@ -8020,3 +8020,44 @@ export const chronicleDailySituations = pgTable("chronicle_daily_situations", {
   completedAt: timestamp("completed_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export const voidIds = pgTable("void_ids", {
+  id: serial("id").primaryKey(),
+  voidId: text("void_id").notNull().unique(),
+  userId: integer("user_id").notNull(),
+  status: text("status").notNull().default("active"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const voidStamps = pgTable("void_stamps", {
+  id: serial("id").primaryKey(),
+  voidId: text("void_id").notNull(),
+  userId: integer("user_id").notNull(),
+  stampHash: text("stamp_hash").notNull(),
+  blockNumber: integer("block_number").notNull(),
+  previousHash: text("previous_hash"),
+  payload: jsonb("payload").notNull(),
+  verified: boolean("verified").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const voidBridgeLinks = pgTable("void_bridge_links", {
+  id: serial("id").primaryKey(),
+  chatUserId: text("chat_user_id").notNull().unique(),
+  userId: integer("user_id").notNull(),
+  trustLayerId: text("trust_layer_id").notNull(),
+  voidId: text("void_id"),
+  displayName: text("display_name"),
+  role: text("role").notNull().default("member"),
+  linkedAt: timestamp("linked_at").defaultNow().notNull(),
+});
+
+export const insertVoidIdSchema = createInsertSchema(voidIds).omit({ id: true, createdAt: true });
+export const insertVoidStampSchema = createInsertSchema(voidStamps).omit({ id: true, createdAt: true });
+export const insertVoidBridgeLinkSchema = createInsertSchema(voidBridgeLinks).omit({ id: true, linkedAt: true });
+export type VoidId = typeof voidIds.$inferSelect;
+export type VoidStamp = typeof voidStamps.$inferSelect;
+export type VoidBridgeLink = typeof voidBridgeLinks.$inferSelect;
+export type InsertVoidId = z.infer<typeof insertVoidIdSchema>;
+export type InsertVoidStamp = z.infer<typeof insertVoidStampSchema>;
+export type InsertVoidBridgeLink = z.infer<typeof insertVoidBridgeLinkSchema>;

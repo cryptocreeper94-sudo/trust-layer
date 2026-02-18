@@ -22146,6 +22146,246 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // ============================================================
+  // THE VOID — Void ID System, DW-STAMP-1.0 & Bridge API
+  // ============================================================
+
+  function generateVoidId(): string {
+    const digits = Array.from({ length: 8 }, () => Math.floor(Math.random() * 10)).join('');
+    return `V-${digits}`;
+  }
+
+  function generateTrustLayerId(): string {
+    const ts = Date.now().toString(36);
+    const rand = crypto.randomBytes(4).toString('hex');
+    return `tl-${ts}-${rand}`;
+  }
+
+  function computeStampHash(data: { voidId: string; userId: number; block: number; prev: string | null; ts: string }): string {
+    const input = JSON.stringify({
+      voidId: data.voidId,
+      userId: data.userId,
+      block: data.block,
+      prev: data.prev,
+      ts: data.ts,
+      issuer: "darkwave-studios-void",
+      network: "trust-layer-v1",
+    });
+    return crypto.createHash("sha256").update(input).digest("hex");
+  }
+
+  app.get("/api/stamp/verify/:voidId", async (req: Request, res: Response) => {
+    try {
+      const { voidId } = req.params;
+      if (!voidId || !voidId.startsWith("V-")) {
+        return res.json({ valid: false });
+      }
+
+      const stampResult = await db.execute(
+        sql`SELECT * FROM void_stamps WHERE void_id = ${voidId} ORDER BY block_number DESC LIMIT 1`
+      );
+      const stamp = stampResult.rows?.[0];
+      if (!stamp) {
+        return res.json({ valid: false });
+      }
+
+      const recomputedHash = computeStampHash({
+        voidId: stamp.void_id as string,
+        userId: stamp.user_id as number,
+        block: stamp.block_number as number,
+        prev: stamp.previous_hash as string | null,
+        ts: (stamp.created_at as Date).toISOString(),
+      });
+      const hashMatch = recomputedHash === stamp.stamp_hash;
+
+      let chainIntegrity = true;
+      if ((stamp.block_number as number) > 1 && stamp.previous_hash) {
+        const prevResult = await db.execute(
+          sql`SELECT stamp_hash FROM void_stamps WHERE block_number = ${(stamp.block_number as number) - 1} ORDER BY id DESC LIMIT 1`
+        );
+        if (prevResult.rows?.[0]) {
+          chainIntegrity = prevResult.rows[0].stamp_hash === stamp.previous_hash;
+        }
+      }
+
+      const payload = stamp.payload as any;
+
+      res.json({
+        valid: true,
+        stamp: {
+          voidId: stamp.void_id,
+          userId: stamp.user_id,
+          stampHash: stamp.stamp_hash,
+          blockNumber: stamp.block_number,
+          previousHash: stamp.previous_hash,
+          payload,
+          verified: stamp.verified,
+          createdAt: stamp.created_at,
+        },
+        verification: {
+          hashMatch,
+          chainIntegrity,
+          issuer: payload?.issuer || "DarkWave Studios",
+          network: payload?.network || "Trust Layer v1",
+          blockNumber: stamp.block_number,
+          mintedAt: stamp.created_at,
+        },
+      });
+    } catch (error) {
+      console.error("Stamp verify error:", error);
+      res.json({ valid: false });
+    }
+  });
+
+  app.post("/api/bridge/link-void", async (req: Request, res: Response) => {
+    try {
+      const { chatUserId, userId } = req.body;
+      if (!chatUserId || !userId) {
+        return res.status(400).json({ error: "chatUserId and userId are required" });
+      }
+
+      const existingVoid = await db.execute(
+        sql`SELECT void_id FROM void_ids WHERE user_id = ${userId} AND status = 'active' LIMIT 1`
+      );
+      let voidId: string;
+      if (existingVoid.rows?.length > 0) {
+        voidId = existingVoid.rows[0].void_id as string;
+      } else {
+        let attempts = 0;
+        do {
+          voidId = generateVoidId();
+          const exists = await db.execute(sql`SELECT 1 FROM void_ids WHERE void_id = ${voidId}`);
+          if (!exists.rows?.length) break;
+          attempts++;
+        } while (attempts < 10);
+
+        await db.execute(
+          sql`INSERT INTO void_ids (void_id, user_id, status) VALUES (${voidId}, ${userId}, 'active')`
+        );
+
+        const lastStamp = await db.execute(
+          sql`SELECT stamp_hash, block_number FROM void_stamps ORDER BY block_number DESC LIMIT 1`
+        );
+        const blockNumber = lastStamp.rows?.length ? (lastStamp.rows[0].block_number as number) + 1 : 1;
+        const previousHash = lastStamp.rows?.length ? (lastStamp.rows[0].stamp_hash as string) : null;
+        const mintedAt = new Date().toISOString();
+
+        const stampHash = computeStampHash({
+          voidId,
+          userId,
+          block: blockNumber,
+          prev: previousHash,
+          ts: mintedAt,
+        });
+
+        const payload = {
+          voidId,
+          userId,
+          issuer: "DarkWave Studios",
+          network: "Trust Layer v1",
+          type: "VOID_PREMIUM_HALLMARK",
+          mintedAt,
+          ecosystem: "darkwave",
+          standard: "DW-STAMP-1.0",
+        };
+
+        await db.execute(
+          sql`INSERT INTO void_stamps (void_id, user_id, stamp_hash, block_number, previous_hash, payload, verified)
+              VALUES (${voidId}, ${userId}, ${stampHash}, ${blockNumber}, ${previousHash}, ${JSON.stringify(payload)}, true)`
+        );
+      }
+
+      const trustLayerId = generateTrustLayerId();
+
+      const existingBridge = await db.execute(
+        sql`SELECT id FROM void_bridge_links WHERE chat_user_id = ${chatUserId}`
+      );
+      if (existingBridge.rows?.length) {
+        await db.execute(
+          sql`UPDATE void_bridge_links SET void_id = ${voidId}, trust_layer_id = ${trustLayerId} WHERE chat_user_id = ${chatUserId}`
+        );
+      } else {
+        await db.execute(
+          sql`INSERT INTO void_bridge_links (chat_user_id, user_id, trust_layer_id, void_id, role)
+              VALUES (${chatUserId}, ${userId}, ${trustLayerId}, ${voidId}, 'member')`
+        );
+      }
+
+      res.json({ success: true, voidId, message: `Void ID ${voidId} linked successfully` });
+    } catch (error) {
+      console.error("Bridge link-void error:", error);
+      res.status(500).json({ error: "Failed to link Void ID" });
+    }
+  });
+
+  app.get("/api/bridge/status/:chatUserId", async (req: Request, res: Response) => {
+    try {
+      const { chatUserId } = req.params;
+
+      const bridgeResult = await db.execute(
+        sql`SELECT * FROM void_bridge_links WHERE chat_user_id = ${chatUserId} LIMIT 1`
+      );
+      const bridge = bridgeResult.rows?.[0];
+      if (!bridge) {
+        return res.json({
+          chatUserId,
+          trustLayerId: null,
+          voidId: null,
+          isLinked: false,
+          stampVerified: false,
+          displayName: null,
+          role: "member",
+        });
+      }
+
+      let stampVerified = false;
+      if (bridge.void_id) {
+        const stampResult = await db.execute(
+          sql`SELECT verified FROM void_stamps WHERE void_id = ${bridge.void_id} ORDER BY block_number DESC LIMIT 1`
+        );
+        stampVerified = !!stampResult.rows?.[0]?.verified;
+      }
+
+      res.json({
+        chatUserId: bridge.chat_user_id,
+        trustLayerId: bridge.trust_layer_id,
+        voidId: bridge.void_id || null,
+        isLinked: true,
+        stampVerified,
+        displayName: bridge.display_name || null,
+        role: bridge.role || "member",
+      });
+    } catch (error) {
+      console.error("Bridge status error:", error);
+      res.status(500).json({ error: "Failed to fetch bridge status" });
+    }
+  });
+
+  app.get("/api/void/stats", async (_req: Request, res: Response) => {
+    try {
+      const totalIds = await db.execute(sql`SELECT COUNT(*) as count FROM void_ids WHERE status = 'active'`);
+      const totalStamps = await db.execute(sql`SELECT COUNT(*) as count FROM void_stamps`);
+      const totalBridges = await db.execute(sql`SELECT COUNT(*) as count FROM void_bridge_links`);
+      const latestStamp = await db.execute(sql`SELECT block_number, stamp_hash, created_at FROM void_stamps ORDER BY block_number DESC LIMIT 1`);
+
+      res.json({
+        totalVoidIds: parseInt(totalIds.rows?.[0]?.count as string) || 0,
+        totalStamps: parseInt(totalStamps.rows?.[0]?.count as string) || 0,
+        totalBridgeLinks: parseInt(totalBridges.rows?.[0]?.count as string) || 0,
+        latestBlock: latestStamp.rows?.[0] ? {
+          blockNumber: latestStamp.rows[0].block_number,
+          hash: latestStamp.rows[0].stamp_hash,
+          timestamp: latestStamp.rows[0].created_at,
+        } : null,
+        network: "Trust Layer v1",
+        standard: "DW-STAMP-1.0",
+      });
+    } catch (error) {
+      console.error("Void stats error:", error);
+      res.status(500).json({ error: "Failed to fetch void stats" });
+    }
+  });
+
   return httpServer;
 }
 

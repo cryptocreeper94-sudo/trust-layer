@@ -155,6 +155,7 @@ const Genesis = lazy(() => import("@/pages/genesis"));
 const Veil = lazy(() => import("@/pages/veil"));
 const VeilReader = lazy(() => import("@/pages/veil-reader"));
 const VeilPrintVol2 = lazy(() => import("@/pages/veil-print-vol2"));
+const TheVoid = lazy(() => import("@/pages/the-void"));
 const ChronoChat = lazy(() => import("@/pages/chronochat"));
 const ChronoChatInvite = lazy(() => import("@/pages/chronochat-invite"));
 const SignalChat = lazy(() => import("@/pages/signal-chat"));
@@ -299,6 +300,7 @@ function GamesRouter() {
         <Route path="/veil" component={Veil} />
         <Route path="/veil/read" component={VeilReader} />
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
+        <Route path="/the-void" component={TheVoid} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
         <Route path="/signal-chat" component={SignalChat} />
@@ -369,6 +371,7 @@ function ChronoRouter() {
         <Route path="/veil" component={Veil} />
         <Route path="/veil/read" component={VeilReader} />
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
+        <Route path="/the-void" component={TheVoid} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
         <Route path="/signal-chat" component={SignalChat} />
@@ -570,6 +573,7 @@ function DWSCRouter() {
         <Route path="/veil" component={Veil} />
         <Route path="/veil/read" component={VeilReader} />
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
+        <Route path="/the-void" component={TheVoid} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
         <Route path="/signal-chat" component={SignalChat} />
