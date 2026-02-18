@@ -490,6 +490,8 @@ export default function VeilReader() {
     setIsPlaying(true);
   };
 
+  const autoPlayNextRef = useRef(false);
+
   // Auto-advance to next chapter (called when audio ends)
   const handleNextChapterAuto = () => {
     if (volumes.length === 0) return;
@@ -501,8 +503,8 @@ export default function VeilReader() {
     if (currentChapter < volume.chapters.length - 1) {
       const nextChapter = currentChapter + 1;
       setCurrentChapter(nextChapter);
-      // Clear last played ref so next play starts fresh on new chapter
       lastPlayedChapterRef.current = null;
+      autoPlayNextRef.current = true;
       window.scrollTo(0, 0);
     } 
     // Check if there's a next volume
@@ -510,12 +512,23 @@ export default function VeilReader() {
       const nextVolume = currentVolume + 1;
       setCurrentVolume(nextVolume);
       setCurrentChapter(0);
-      // Clear last played ref so next play starts fresh on new chapter
       lastPlayedChapterRef.current = null;
+      autoPlayNextRef.current = true;
       window.scrollTo(0, 0);
     }
     // End of book - just stop
   };
+
+  // Auto-play next chapter after navigation
+  useEffect(() => {
+    if (autoPlayNextRef.current && volumes.length > 0) {
+      autoPlayNextRef.current = false;
+      const timer = setTimeout(() => {
+        handlePlay();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [currentVolume, currentChapter]);
 
   const handlePlay = async () => {
     if (volumes.length === 0) return;
@@ -553,11 +566,21 @@ export default function VeilReader() {
       window.speechSynthesis.cancel();
     }
 
-    // Clean text for TTS - remove emojis and formatting
     let text = chapter.content
+      .replace(/!\[.*?\]\(.*?\)/g, '')
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+      .replace(/https?:\/\/[^\s)]+/g, '')
+      .replace(/[\u2600-\u27BF\uD83C-\uDBFF\uDC00-\uDFFF\uFE0F\u200D]+/g, '')
+      .replace(/^#{1,6}\s+/gm, '')
+      .replace(/[*_~`]/g, '')
+      .replace(/^[\-*]\s+/gm, '')
+      .replace(/^\d+\.\s+/gm, '')
+      .replace(/^>\s?/gm, '')
+      .replace(/\|/g, ',')
+      .replace(/---+/g, '')
       .replace(/[!]{2,}/g, '!')
-      .replace(/[:;]/g, ',')
-      .replace(/[*_~`#]/g, '')
+      .replace(/[?]{2,}/g, '?')
+      .replace(/\n{3,}/g, '\n\n')
       .replace(/\s+/g, ' ')
       .trim();
     
