@@ -1,0 +1,98 @@
+TRUST LAYER INTEGRATION HANDOFF — THE VOID by DarkWave Studios
+
+1. Void ID System
+
+Format: V-XXXXXXXX where X = random digit (0-9)
+Assigned to: Premium subscribers only (Stripe-verified)
+Uniqueness: Enforced at database level, globally unique
+Purpose: Serves as membership hallmark, affiliate referral code, and cross-ecosystem identity anchor
+2. Blockchain Hallmark (DW-STAMP-1.0)
+Each Void ID is minted with a SHA-256 hash-chained stamp on the Trust Layer v1 network.
+
+Stamp structure:
+
+{
+  "voidId": "V-12345678",
+  "userId": 42,
+  "stampHash": "a3f8c2e1...64-char-sha256-hex",
+  "blockNumber": 1,
+  "previousHash": null,
+  "payload": {
+    "voidId": "V-12345678",
+    "userId": 42,
+    "issuer": "DarkWave Studios",
+    "network": "Trust Layer v1",
+    "type": "VOID_PREMIUM_HALLMARK",
+    "mintedAt": "2026-02-18T20:22:06.000Z",
+    "ecosystem": "darkwave",
+    "standard": "DW-STAMP-1.0"
+  },
+  "verified": true,
+  "createdAt": "2026-02-18T20:22:06.000Z"
+}
+Hash is computed from: SHA-256(JSON.stringify({ voidId, userId, block, prev, ts, issuer: "darkwave-studios-void", network: "trust-layer-v1" }))
+
+Chain integrity: Each stamp references the previous stamp's hash. Block 1 has previousHash: null.
+
+3. Verification Endpoint
+
+GET /api/stamp/verify/{voidId}
+Example: GET /api/stamp/verify/V-12345678
+
+Response:
+
+{
+  "valid": true,
+  "stamp": { ...full stamp object... },
+  "verification": {
+    "hashMatch": true,
+    "chainIntegrity": true,
+    "issuer": "DarkWave Studios",
+    "network": "Trust Layer v1",
+    "blockNumber": 1,
+    "mintedAt": "2026-02-18T20:22:06.000Z"
+  }
+}
+If invalid or not found: { "valid": false }
+
+4. JWT Token Structure
+When a Void premium member authenticates via Trust Layer SSO, their JWT includes:
+
+{
+  "userId": "chat-user-id",
+  "trustLayerId": "tl-{base36-timestamp}-{random-8-chars}",
+  "voidId": "V-12345678",
+  "iss": "trust-layer-sso"
+}
+The voidId claim is only present for linked premium members. If absent, the user is not a Void premium subscriber.
+
+5. Bridge Endpoints
+
+Link a chat user to their Void ID:
+
+POST /api/bridge/link-void
+Body: { "chatUserId": "string", "userId": number }
+Response: { "success": true, "voidId": "V-12345678", "message": "..." }
+Check bridge status:
+
+GET /api/bridge/status/{chatUserId}
+Response: {
+  "chatUserId": "...",
+  "trustLayerId": "tl-...",
+  "voidId": "V-12345678" | null,
+  "isLinked": true,
+  "stampVerified": true,
+  "displayName": "...",
+  "role": "member"
+}
+6. Recognition Rules for Trust Layer
+
+If a user's JWT contains a voidId claim starting with V-, they are a verified Void premium member
+To validate authenticity, call the verification endpoint with that Void ID — a valid: true response confirms the hallmark is genuine and chain-intact
+Premium members should be visually distinguished in the Trust Layer ecosystem (badge, flair, etc.)
+The Trust Layer ID format is tl-{base36-timestamp}-{random-8-chars} and is stored alongside the Void ID in the bridge
+7. Affiliate System
+
+Void IDs double as referral codes
+When a referred user subscribes to Premium, the referrer earns 5 bonus credits
+This is handled internally by THE VOID — no action needed from Trust Layer
