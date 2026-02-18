@@ -22386,6 +22386,557 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  // ============================================
+  // TRUSTVAULT BLOCKCHAIN INTEGRATION API
+  // ============================================
+  // HMAC-authenticated endpoints for TrustVault media provenance,
+  // identity anchoring, trust engine, and Signal asset integration.
+  // Auth: TRUSTLAYER_API_KEY + TRUSTLAYER_API_SECRET via HMAC-SHA256
+
+  function verifyTrustVaultAuth(req: Request, res: Response): boolean {
+    const apiKey = req.headers["x-blockchain-key"] as string;
+    const signature = req.headers["x-blockchain-signature"] as string;
+    const timestamp = req.headers["x-blockchain-timestamp"] as string;
+    const serverKey = process.env.TRUSTLAYER_API_KEY;
+    const serverSecret = process.env.TRUSTLAYER_API_SECRET;
+
+    if (!serverKey || !serverSecret) {
+      res.status(503).json({ error: "Blockchain API not configured", code: "CONFIG_ERROR" });
+      return false;
+    }
+    if (!apiKey || !signature || !timestamp) {
+      res.status(401).json({ error: "Missing authentication headers (x-blockchain-key, x-blockchain-signature, x-blockchain-timestamp)", code: "AUTH_MISSING" });
+      return false;
+    }
+    const keyBuf = Buffer.from(apiKey);
+    const expectedKeyBuf = Buffer.from(serverKey);
+    if (keyBuf.length !== expectedKeyBuf.length || !crypto.timingSafeEqual(keyBuf, expectedKeyBuf)) {
+      res.status(401).json({ error: "Invalid API key", code: "AUTH_INVALID" });
+      return false;
+    }
+    const requestTime = parseInt(timestamp);
+    if (isNaN(requestTime) || Math.abs(Date.now() - requestTime) > 5 * 60 * 1000) {
+      res.status(401).json({ error: "Request expired or invalid timestamp", code: "TIMESTAMP_INVALID" });
+      return false;
+    }
+    const method = req.method.toUpperCase();
+    const path = req.originalUrl || req.path;
+    const bodyHash = req.body && Object.keys(req.body).length > 0
+      ? crypto.createHash("sha256").update(JSON.stringify(req.body)).digest("hex")
+      : "";
+    const canonical = `${method}:${path}:${apiKey}:${timestamp}:${bodyHash}`;
+    const expectedSig = crypto.createHmac("sha256", serverSecret).update(canonical).digest("hex");
+    const sigBuf = Buffer.from(signature);
+    const expectedSigBuf = Buffer.from(expectedSig);
+    if (sigBuf.length !== expectedSigBuf.length || !crypto.timingSafeEqual(sigBuf, expectedSigBuf)) {
+      res.status(401).json({ error: "Invalid signature", code: "SIG_INVALID" });
+      return false;
+    }
+    return true;
+  }
+
+  // --- Priority 1: Identity Anchoring ---
+
+  app.post("/api/identity/anchor", async (req: Request, res: Response) => {
+    try {
+      if (!verifyTrustVaultAuth(req, res)) return;
+      const { trustLayerId } = req.body;
+      if (!trustLayerId || typeof trustLayerId !== "string") {
+        return res.status(400).json({ error: "trustLayerId is required" });
+      }
+
+      const userCheck = await db.execute(sql`
+        SELECT id, trust_layer_id, chain_address FROM chat_users WHERE trust_layer_id = ${trustLayerId} LIMIT 1
+      `);
+      if (!userCheck.rows?.length) {
+        return res.status(404).json({ error: "Trust Layer ID not found. Identity must exist before anchoring.", code: "IDENTITY_NOT_FOUND" });
+      }
+
+      const existingUser = userCheck.rows[0] as any;
+      if (existingUser.chain_address) {
+        return res.json({
+          trustLayerId,
+          chainAddress: existingUser.chain_address,
+          alreadyAnchored: true,
+          network: "Trust Layer v1",
+          chainId: blockchain.getChainInfo().chainId,
+        });
+      }
+
+      const chainAddress = "0x" + crypto.createHash("sha256").update(trustLayerId).digest("hex").slice(0, 40);
+
+      const dataHash = crypto.createHash("sha256").update(JSON.stringify({
+        type: "IDENTITY_ANCHOR",
+        trustLayerId,
+        chainAddress,
+        timestamp: Date.now(),
+        network: "Trust Layer v1",
+      })).digest("hex");
+
+      const tx = blockchain.submitDataHash(dataHash, `identity:${trustLayerId}`);
+
+      const updateResult = await db.execute(sql`
+        UPDATE chat_users SET chain_address = ${chainAddress}, chain_verified = true, chain_verified_at = NOW()
+        WHERE trust_layer_id = ${trustLayerId}
+        RETURNING id
+      `);
+      if (!updateResult.rows?.length) {
+        return res.status(500).json({ error: "Failed to update identity record" });
+      }
+
+      res.json({
+        trustLayerId,
+        chainAddress,
+        txHash: tx.hash,
+        blockNumber: blockchain.getChainInfo().blockHeight,
+        network: "Trust Layer v1",
+        chainId: blockchain.getChainInfo().chainId,
+        anchored: true,
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error: any) {
+      console.error("Identity anchor error:", error);
+      res.status(500).json({ error: "Failed to anchor identity", details: error.message });
+    }
+  });
+
+  app.get("/api/identity/verify/:trustLayerId", async (req: Request, res: Response) => {
+    try {
+      const { trustLayerId } = req.params;
+      const result = await db.execute(sql`
+        SELECT trust_layer_id, chain_address, chain_verified, chain_verified_at
+        FROM chat_users WHERE trust_layer_id = ${trustLayerId} LIMIT 1
+      `);
+
+      if (!result.rows?.length) {
+        return res.json({ verified: false, trustLayerId, reason: "Identity not found" });
+      }
+
+      const user = result.rows[0] as any;
+      res.json({
+        verified: !!user.chain_verified,
+        trustLayerId: user.trust_layer_id,
+        chainAddress: user.chain_address || null,
+        verifiedAt: user.chain_verified_at || null,
+        network: "Trust Layer v1",
+      });
+    } catch (error: any) {
+      console.error("Identity verify error:", error);
+      res.status(500).json({ error: "Failed to verify identity" });
+    }
+  });
+
+  app.get("/api/identity/resolve/:trustLayerId", async (req: Request, res: Response) => {
+    try {
+      const { trustLayerId } = req.params;
+      const result = await db.execute(sql`
+        SELECT trust_layer_id, chain_address, chain_verified, chain_verified_at, display_name, role, created_at
+        FROM chat_users WHERE trust_layer_id = ${trustLayerId} LIMIT 1
+      `);
+
+      if (!result.rows?.length) {
+        return res.status(404).json({ error: "Identity not found" });
+      }
+
+      const user = result.rows[0] as any;
+      const voidBridge = await db.execute(sql`
+        SELECT void_id FROM void_bridge_links WHERE trust_layer_id = ${trustLayerId} LIMIT 1
+      `);
+
+      res.json({
+        trustLayerId: user.trust_layer_id,
+        chainAddress: user.chain_address || null,
+        verified: !!user.chain_verified,
+        verifiedAt: user.chain_verified_at || null,
+        displayName: user.display_name || null,
+        role: user.role || "member",
+        voidId: voidBridge.rows?.[0]?.void_id || null,
+        joinedAt: user.created_at,
+        network: "Trust Layer v1",
+        chainId: blockchain.getChainInfo().chainId,
+      });
+    } catch (error: any) {
+      console.error("Identity resolve error:", error);
+      res.status(500).json({ error: "Failed to resolve identity" });
+    }
+  });
+
+  // --- Priority 2: Media Provenance ---
+
+  app.post("/api/provenance/register", async (req: Request, res: Response) => {
+    try {
+      if (!verifyTrustVaultAuth(req, res)) return;
+      const { trustLayerId, fileHash, filename, contentType, size, uploadTimestamp } = req.body;
+
+      if (!trustLayerId || !fileHash || !filename) {
+        return res.status(400).json({ error: "trustLayerId, fileHash, and filename are required" });
+      }
+
+      const provenanceId = `prov-${crypto.randomBytes(16).toString("hex")}`;
+      const chainInfo = blockchain.getChainInfo();
+
+      const provenancePayload = JSON.stringify({
+        type: "MEDIA_PROVENANCE",
+        provenanceId,
+        trustLayerId,
+        fileHash,
+        filename,
+        contentType: contentType || "application/octet-stream",
+        size: size || 0,
+        uploadTimestamp: uploadTimestamp || new Date().toISOString(),
+        network: "Trust Layer v1",
+        standard: "DW-STAMP-1.0",
+      });
+
+      const dataHash = crypto.createHash("sha256").update(provenancePayload).digest("hex");
+      const tx = blockchain.submitDataHash(dataHash, `provenance:${provenanceId}`);
+
+      await db.execute(sql`
+        INSERT INTO media_provenance (provenance_id, trust_layer_id, file_hash, filename, content_type, file_size, tx_hash, block_number, chain_timestamp, payload, data_hash)
+        VALUES (${provenanceId}, ${trustLayerId}, ${fileHash}, ${filename}, ${contentType || "application/octet-stream"}, ${size || 0}, ${tx.hash}, ${chainInfo.blockHeight}, NOW(), ${provenancePayload}, ${dataHash})
+      `);
+
+      res.json({
+        provenanceId,
+        txHash: tx.hash,
+        blockNumber: chainInfo.blockHeight,
+        timestamp: new Date().toISOString(),
+        network: "Trust Layer v1",
+        standard: "DW-STAMP-1.0",
+      });
+    } catch (error: any) {
+      console.error("Provenance register error:", error);
+      res.status(500).json({ error: "Failed to register provenance", details: error.message });
+    }
+  });
+
+  app.get("/api/provenance/verify/:provenanceId", async (req: Request, res: Response) => {
+    try {
+      const { provenanceId } = req.params;
+      const result = await db.execute(sql`
+        SELECT * FROM media_provenance WHERE provenance_id = ${provenanceId} LIMIT 1
+      `);
+
+      if (!result.rows?.length) {
+        return res.json({ verified: false, provenanceId, reason: "Provenance record not found" });
+      }
+
+      const record = result.rows[0] as any;
+      const payloadStr = typeof record.payload === "string" ? record.payload : JSON.stringify(record.payload);
+      const recomputedDataHash = crypto.createHash("sha256").update(payloadStr).digest("hex");
+
+      const payloadObj = typeof record.payload === "string" ? JSON.parse(record.payload) : record.payload;
+      const payloadFileHash = payloadObj?.fileHash || null;
+      const fileHashMatch = payloadFileHash === record.file_hash;
+      const dataHashMatch = record.data_hash ? recomputedDataHash === record.data_hash : null;
+      const payloadIntact = dataHashMatch === true || dataHashMatch === null;
+
+      res.json({
+        verified: true,
+        provenanceId: record.provenance_id,
+        trustLayerId: record.trust_layer_id,
+        fileHash: record.file_hash,
+        filename: record.filename,
+        contentType: record.content_type,
+        size: record.file_size,
+        txHash: record.tx_hash,
+        blockNumber: record.block_number,
+        chainTimestamp: record.chain_timestamp,
+        integrity: {
+          payloadIntact,
+          fileHashMatch,
+          dataHash: recomputedDataHash,
+        },
+        network: "Trust Layer v1",
+        standard: "DW-STAMP-1.0",
+      });
+    } catch (error: any) {
+      console.error("Provenance verify error:", error);
+      res.status(500).json({ error: "Failed to verify provenance" });
+    }
+  });
+
+  // --- Priority 3: Trust Engine ---
+
+  app.get("/api/trust/score/:trustLayerId", async (req: Request, res: Response) => {
+    try {
+      const { trustLayerId } = req.params;
+      const user = await db.execute(sql`
+        SELECT id, trust_layer_id, chain_verified, created_at FROM chat_users WHERE trust_layer_id = ${trustLayerId} LIMIT 1
+      `);
+
+      if (!user.rows?.length) {
+        return res.status(404).json({ error: "Identity not found" });
+      }
+
+      const u = user.rows[0] as any;
+      let score = 10;
+      if (u.chain_verified) score += 30;
+
+      const voidCheck = await db.execute(sql`SELECT void_id FROM void_bridge_links WHERE trust_layer_id = ${trustLayerId} LIMIT 1`);
+      if (voidCheck.rows?.length) score += 20;
+
+      const stampCheck = await db.execute(sql`SELECT COUNT(*) as cnt FROM void_stamps WHERE user_id = ${u.id}`);
+      const stampCount = parseInt(stampCheck.rows?.[0]?.cnt as string) || 0;
+      score += Math.min(stampCount * 5, 20);
+
+      const provenanceCheck = await db.execute(sql`SELECT COUNT(*) as cnt FROM media_provenance WHERE trust_layer_id = ${trustLayerId}`);
+      const provenanceCount = parseInt(provenanceCheck.rows?.[0]?.cnt as string) || 0;
+      score += Math.min(provenanceCount * 2, 20);
+
+      score = Math.min(score, 100);
+
+      res.json({
+        trustLayerId,
+        score,
+        maxScore: 100,
+        level: score >= 80 ? "platinum" : score >= 60 ? "gold" : score >= 40 ? "silver" : "bronze",
+        factors: {
+          identityVerified: !!u.chain_verified,
+          voidMember: !!voidCheck.rows?.length,
+          stamps: stampCount,
+          provenanceRecords: provenanceCount,
+        },
+        network: "Trust Layer v1",
+      });
+    } catch (error: any) {
+      console.error("Trust score error:", error);
+      res.status(500).json({ error: "Failed to compute trust score" });
+    }
+  });
+
+  app.get("/api/trust/relationship/:idA/:idB", async (req: Request, res: Response) => {
+    try {
+      const { idA, idB } = req.params;
+      const [userA, userB] = await Promise.all([
+        db.execute(sql`SELECT id, trust_layer_id, chain_verified FROM chat_users WHERE trust_layer_id = ${idA} LIMIT 1`),
+        db.execute(sql`SELECT id, trust_layer_id, chain_verified FROM chat_users WHERE trust_layer_id = ${idB} LIMIT 1`),
+      ]);
+
+      if (!userA.rows?.length || !userB.rows?.length) {
+        return res.status(404).json({ error: "One or both identities not found" });
+      }
+
+      const a = userA.rows[0] as any;
+      const b = userB.rows[0] as any;
+
+      let trustLevel = 0;
+      if (a.chain_verified && b.chain_verified) trustLevel += 40;
+
+      const sharedChannels = await db.execute(sql`
+        SELECT COUNT(DISTINCT cm1.channel_id) as shared
+        FROM chat_channel_members cm1
+        JOIN chat_channel_members cm2 ON cm1.channel_id = cm2.channel_id
+        WHERE cm1.user_id = ${a.id} AND cm2.user_id = ${b.id}
+      `);
+      const shared = parseInt(sharedChannels.rows?.[0]?.shared as string) || 0;
+      trustLevel += Math.min(shared * 10, 30);
+
+      const messages = await db.execute(sql`
+        SELECT COUNT(*) as cnt FROM chat_messages
+        WHERE (sender_id = ${a.id} OR sender_id = ${b.id})
+        AND channel_id IN (
+          SELECT cm1.channel_id FROM chat_channel_members cm1
+          JOIN chat_channel_members cm2 ON cm1.channel_id = cm2.channel_id
+          WHERE cm1.user_id = ${a.id} AND cm2.user_id = ${b.id}
+        )
+      `);
+      const msgCount = parseInt(messages.rows?.[0]?.cnt as string) || 0;
+      trustLevel += Math.min(Math.floor(msgCount / 10), 30);
+
+      trustLevel = Math.min(trustLevel, 100);
+
+      res.json({
+        identityA: idA,
+        identityB: idB,
+        trustLevel,
+        relationship: trustLevel >= 70 ? "trusted" : trustLevel >= 40 ? "acquainted" : trustLevel >= 10 ? "known" : "unknown",
+        factors: {
+          bothVerified: a.chain_verified && b.chain_verified,
+          sharedChannels: shared,
+          messageActivity: msgCount,
+        },
+        network: "Trust Layer v1",
+      });
+    } catch (error: any) {
+      console.error("Trust relationship error:", error);
+      res.status(500).json({ error: "Failed to compute trust relationship" });
+    }
+  });
+
+  app.post("/api/trust/verify", async (req: Request, res: Response) => {
+    try {
+      if (!verifyTrustVaultAuth(req, res)) return;
+      const { requesterId, targetId } = req.body;
+
+      if (!requesterId || !targetId) {
+        return res.status(400).json({ error: "requesterId and targetId are required" });
+      }
+
+      const [requester, target] = await Promise.all([
+        db.execute(sql`SELECT id, trust_layer_id, chain_verified FROM chat_users WHERE trust_layer_id = ${requesterId} LIMIT 1`),
+        db.execute(sql`SELECT id, trust_layer_id, chain_verified FROM chat_users WHERE trust_layer_id = ${targetId} LIMIT 1`),
+      ]);
+
+      if (!requester.rows?.length || !target.rows?.length) {
+        return res.status(404).json({ error: "One or both identities not found" });
+      }
+
+      const verificationId = `tv-${crypto.randomBytes(8).toString("hex")}`;
+      const dataHash = crypto.createHash("sha256").update(JSON.stringify({
+        type: "TRUST_VERIFICATION",
+        verificationId,
+        requesterId,
+        targetId,
+        timestamp: Date.now(),
+      })).digest("hex");
+
+      blockchain.submitDataHash(dataHash, `trust-verify:${verificationId}`);
+
+      res.json({
+        verificationId,
+        requesterId,
+        targetId,
+        status: "initiated",
+        requesterVerified: !!(requester.rows[0] as any).chain_verified,
+        targetVerified: !!(target.rows[0] as any).chain_verified,
+        network: "Trust Layer v1",
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error: any) {
+      console.error("Trust verify error:", error);
+      res.status(500).json({ error: "Failed to initiate trust verification" });
+    }
+  });
+
+  // --- Priority 4: Signal Asset Integration ---
+
+  app.get("/api/signal/balance/:trustLayerId", async (req: Request, res: Response) => {
+    try {
+      const { trustLayerId } = req.params;
+      const user = await db.execute(sql`
+        SELECT id, chain_address FROM chat_users WHERE trust_layer_id = ${trustLayerId} LIMIT 1
+      `);
+
+      if (!user.rows?.length) {
+        return res.status(404).json({ error: "Identity not found" });
+      }
+
+      const u = user.rows[0] as any;
+      const chainAddress = u.chain_address;
+
+      let balance = "0";
+      let balanceFormatted = "0.000000000000000000";
+      if (chainAddress) {
+        const account = blockchain.getAccount(chainAddress);
+        if (account) {
+          balance = account.balance.toString();
+          const whole = account.balance / BigInt("1000000000000000000");
+          const fraction = account.balance % BigInt("1000000000000000000");
+          balanceFormatted = `${whole}.${fraction.toString().padStart(18, "0")}`;
+        }
+      }
+
+      const shellBalance = await db.execute(sql`
+        SELECT balance FROM orb_wallets WHERE user_id = ${u.id} AND currency = 'shells' LIMIT 1
+      `);
+      const shells = shellBalance.rows?.[0]?.balance || "0";
+
+      res.json({
+        trustLayerId,
+        chainAddress: chainAddress || null,
+        signal: { balance, formatted: balanceFormatted, symbol: "SIG", decimals: 18 },
+        shells: { balance: parseInt(shells as string) || 0, symbol: "SHELL" },
+        network: "Trust Layer v1",
+      });
+    } catch (error: any) {
+      console.error("Signal balance error:", error);
+      res.status(500).json({ error: "Failed to fetch balance" });
+    }
+  });
+
+  app.post("/api/signal/transfer", async (req: Request, res: Response) => {
+    try {
+      if (!verifyTrustVaultAuth(req, res)) return;
+      const { fromTrustLayerId, toTrustLayerId, amount } = req.body;
+
+      if (!fromTrustLayerId || !toTrustLayerId || !amount) {
+        return res.status(400).json({ error: "fromTrustLayerId, toTrustLayerId, and amount are required" });
+      }
+
+      const [fromUser, toUser] = await Promise.all([
+        db.execute(sql`SELECT chain_address FROM chat_users WHERE trust_layer_id = ${fromTrustLayerId} LIMIT 1`),
+        db.execute(sql`SELECT chain_address FROM chat_users WHERE trust_layer_id = ${toTrustLayerId} LIMIT 1`),
+      ]);
+
+      if (!fromUser.rows?.length || !toUser.rows?.length) {
+        return res.status(404).json({ error: "One or both identities not found" });
+      }
+
+      const fromAddress = (fromUser.rows[0] as any).chain_address;
+      const toAddress = (toUser.rows[0] as any).chain_address;
+
+      if (!fromAddress || !toAddress) {
+        return res.status(400).json({ error: "Both identities must be anchored on-chain before transferring" });
+      }
+
+      const amountBigInt = BigInt(amount);
+      const tx = blockchain.submitTransaction(fromAddress, toAddress, amountBigInt, `transfer:${fromTrustLayerId}→${toTrustLayerId}`);
+
+      res.json({
+        txHash: tx.hash,
+        from: fromTrustLayerId,
+        to: toTrustLayerId,
+        amount: amount.toString(),
+        status: "submitted",
+        network: "Trust Layer v1",
+        timestamp: new Date().toISOString(),
+      });
+    } catch (error: any) {
+      console.error("Signal transfer error:", error);
+      res.status(500).json({ error: "Failed to process transfer", details: error.message });
+    }
+  });
+
+  app.post("/api/signal/gate", async (req: Request, res: Response) => {
+    try {
+      if (!verifyTrustVaultAuth(req, res)) return;
+      const { trustLayerId, requiredAmount } = req.body;
+
+      if (!trustLayerId || requiredAmount === undefined) {
+        return res.status(400).json({ error: "trustLayerId and requiredAmount are required" });
+      }
+
+      const user = await db.execute(sql`
+        SELECT chain_address FROM chat_users WHERE trust_layer_id = ${trustLayerId} LIMIT 1
+      `);
+
+      if (!user.rows?.length) {
+        return res.json({ allowed: false, reason: "Identity not found" });
+      }
+
+      const chainAddress = (user.rows[0] as any).chain_address;
+      if (!chainAddress) {
+        return res.json({ allowed: false, reason: "Identity not anchored on-chain" });
+      }
+
+      const account = blockchain.getAccount(chainAddress);
+      const balance = account?.balance || BigInt(0);
+      const required = BigInt(requiredAmount);
+
+      res.json({
+        allowed: balance >= required,
+        trustLayerId,
+        balance: balance.toString(),
+        required: required.toString(),
+        network: "Trust Layer v1",
+      });
+    } catch (error: any) {
+      console.error("Signal gate error:", error);
+      res.status(500).json({ error: "Failed to check gate" });
+    }
+  });
+
   return httpServer;
 }
 

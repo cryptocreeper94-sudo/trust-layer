@@ -58,6 +58,7 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - **Blockchain Domain Service**: `.tlid` domains (Trust Layer ID) at `tlid.io` for blockchain-verified identity names.
 - **Ecosystem SSO (Single Sign-On)**: Cross-app authentication for ecosystem apps via Trust Layer, using HMAC-SHA256 request signing and one-time tokens.
 - **Ecosystem Credential Sync**: Behind-the-scenes user credential sync for ecosystem apps with independent login UIs, using email as a shared identifier and HMAC-SHA256 signed requests.
+- **TrustVault Blockchain Integration API**: HMAC-authenticated REST endpoints for TrustVault (DW Media Studio). Identity anchoring (`POST /api/identity/anchor`, `GET /api/identity/verify/:id`, `GET /api/identity/resolve/:id`), media provenance (`POST /api/provenance/register`, `GET /api/provenance/verify/:id`), trust engine (`GET /api/trust/score/:id`, `GET /api/trust/relationship/:a/:b`, `POST /api/trust/verify`), Signal assets (`GET /api/signal/balance/:id`, `POST /api/signal/transfer`, `POST /api/signal/gate`). Auth: `x-blockchain-key`, `x-blockchain-signature` (HMAC-SHA256 of `METHOD:PATH:KEY:TIMESTAMP:BODYHASH`), `x-blockchain-timestamp`. Uses `TRUSTLAYER_API_KEY`/`TRUSTLAYER_API_SECRET`. DB tables: `media_provenance`, `chat_channel_members`; columns added to `chat_users`: `chain_address`, `chain_verified`, `chain_verified_at`.
 
 ### React Native Portability Guidelines
 - **Business Logic**: Located in `shared/` folder, platform-agnostic TypeScript.

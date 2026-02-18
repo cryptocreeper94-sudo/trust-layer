@@ -128,7 +128,7 @@ export default function TheVoid() {
 
           <motion.div variants={fadeUp} className="relative mb-8 sm:mb-10">
             <div className="absolute -inset-4 bg-gradient-to-r from-purple-500/10 via-indigo-500/10 to-cyan-500/10 blur-3xl rounded-full" />
-            <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold leading-[0.95] relative" data-testid="text-void-title">
+            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold leading-[0.95] relative" data-testid="text-void-title">
               <span className="bg-gradient-to-r from-purple-300 via-indigo-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-2xl">
                 THE VOID
               </span>
@@ -144,10 +144,10 @@ export default function TheVoid() {
             DW-STAMP-1.0, hash-chained on Trust Layer v1, and recognized across the entire DarkWave ecosystem.
           </motion.p>
 
-          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-2 sm:px-0">
             <Button
               size="lg"
-              className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-10 py-7 text-lg shadow-2xl shadow-purple-500/20 hover:shadow-purple-500/40 transition-all group"
+              className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-8 sm:px-10 py-6 sm:py-7 text-base sm:text-lg shadow-2xl shadow-purple-500/20 hover:shadow-purple-500/40 transition-all group"
               onClick={() => document.getElementById('verify-section')?.scrollIntoView({ behavior: 'smooth' })}
               data-testid="button-verify-scroll"
             >
@@ -157,7 +157,7 @@ export default function TheVoid() {
             <Button
               size="lg"
               variant="outline"
-              className="border-purple-500/30 text-purple-300 hover:bg-purple-500/10 hover:border-purple-500/50 px-10 py-7 text-lg backdrop-blur-sm transition-all"
+              className="w-full sm:w-auto border-purple-500/30 text-purple-300 hover:bg-purple-500/10 hover:border-purple-500/50 px-8 sm:px-10 py-6 sm:py-7 text-base sm:text-lg backdrop-blur-sm transition-all"
               onClick={() => document.getElementById('features-section')?.scrollIntoView({ behavior: 'smooth' })}
               data-testid="button-features-scroll"
             >
@@ -250,8 +250,8 @@ export default function TheVoid() {
 
           <motion.div variants={fadeUp}>
             <GlassCard glow>
-              <div className="p-6 sm:p-8">
-                <div className="flex gap-3 mb-6">
+              <div className="p-5 sm:p-8">
+                <div className="flex flex-col sm:flex-row gap-3 mb-6">
                   <div className="relative flex-1">
                     <Fingerprint className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
                     <Input
@@ -266,7 +266,7 @@ export default function TheVoid() {
                   <Button
                     onClick={handleVerify}
                     disabled={verifying || !verifyInput.trim()}
-                    className="bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 px-6 h-12 min-w-[44px]"
+                    className="w-full sm:w-auto bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 px-6 h-12 min-w-[44px]"
                     data-testid="button-verify-stamp"
                   >
                     {verifying ? (
@@ -404,54 +404,54 @@ export default function TheVoid() {
 
           <motion.div variants={fadeUp}>
             <GlassCard glow>
-              <div className="p-6 sm:p-8">
-                <div className="space-y-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+              <div className="p-5 sm:p-8">
+                <div className="space-y-5 sm:space-y-6">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center flex-shrink-0 shadow-lg">
                       <span className="text-sm font-bold text-white">1</span>
                     </div>
-                    <div>
-                      <h3 className="text-base font-semibold text-white mb-1">Void ID Generation</h3>
-                      <p className="text-sm text-slate-400 leading-relaxed">
+                    <div className="min-w-0">
+                      <h3 className="text-sm sm:text-base font-semibold text-white mb-1">Void ID Generation</h3>
+                      <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
                         Format: <code className="text-purple-300 bg-purple-500/10 px-1.5 py-0.5 rounded text-xs">V-XXXXXXXX</code> where X = random digit (0-9).
                         Assigned to premium subscribers only (Stripe-verified). Uniqueness enforced at database level.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center flex-shrink-0 shadow-lg">
                       <span className="text-sm font-bold text-white">2</span>
                     </div>
-                    <div>
-                      <h3 className="text-base font-semibold text-white mb-1">Hash-Chain Minting</h3>
-                      <p className="text-sm text-slate-400 leading-relaxed">
+                    <div className="min-w-0">
+                      <h3 className="text-sm sm:text-base font-semibold text-white mb-1">Hash-Chain Minting</h3>
+                      <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
                         Each ID is minted with a SHA-256 stamp: <code className="text-cyan-300 bg-cyan-500/10 px-1.5 py-0.5 rounded text-xs">SHA-256(JSON.stringify(&#123; voidId, userId, block, prev, ts, issuer, network &#125;))</code>.
                         Every stamp references the previous stamp's hash, forming an immutable chain.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center flex-shrink-0 shadow-lg">
                       <span className="text-sm font-bold text-white">3</span>
                     </div>
-                    <div>
-                      <h3 className="text-base font-semibold text-white mb-1">Verification</h3>
-                      <p className="text-sm text-slate-400 leading-relaxed">
+                    <div className="min-w-0">
+                      <h3 className="text-sm sm:text-base font-semibold text-white mb-1">Verification</h3>
+                      <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
                         Any Void ID can be verified via <code className="text-emerald-300 bg-emerald-500/10 px-1.5 py-0.5 rounded text-xs">GET /api/stamp/verify/V-XXXXXXXX</code>.
                         Returns hash match status, chain integrity confirmation, issuer, network, and mint timestamp.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center flex-shrink-0 shadow-lg">
                       <span className="text-sm font-bold text-white">4</span>
                     </div>
-                    <div>
-                      <h3 className="text-base font-semibold text-white mb-1">Bridge Protocol</h3>
-                      <p className="text-sm text-slate-400 leading-relaxed">
+                    <div className="min-w-0">
+                      <h3 className="text-sm sm:text-base font-semibold text-white mb-1">Bridge Protocol</h3>
+                      <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
                         Links Signal Chat users to Trust Layer Void IDs. The bridge generates a Trust Layer ID
                         (<code className="text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded text-xs">tl-&#123;base36-ts&#125;-&#123;rand&#125;</code>)
                         and embeds the <code className="text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded text-xs">voidId</code> claim in JWT tokens for cross-ecosystem SSO.
@@ -475,7 +475,7 @@ export default function TheVoid() {
                     animate={{ opacity: 1, height: "auto" }}
                     className="mt-4 p-4 rounded-xl bg-slate-950/80 border border-white/5 overflow-x-auto"
                   >
-                    <pre className="text-xs font-mono text-slate-300 leading-relaxed whitespace-pre" data-testid="text-stamp-structure">
+                    <pre className="text-[10px] sm:text-xs font-mono text-slate-300 leading-relaxed whitespace-pre overflow-x-auto max-w-full" data-testid="text-stamp-structure">
 {`{
   "voidId": "V-12345678",
   "userId": 42,
@@ -512,7 +512,7 @@ export default function TheVoid() {
         >
           <motion.div variants={fadeUp}>
             <GlassCard glow>
-              <div className="p-6 sm:p-10 text-center relative overflow-hidden">
+              <div className="p-5 sm:p-10 text-center relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-cyan-500 to-indigo-500" />
                 <div className="absolute top-0 right-0 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
                 <div className="absolute bottom-0 left-0 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -525,10 +525,10 @@ export default function TheVoid() {
                   Premium subscribers receive their Void ID automatically upon activation.
                   Your identity is minted on-chain and verified across the entire DarkWave ecosystem.
                 </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 px-2 sm:px-0">
                   <Button
                     size="lg"
-                    className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-8 py-6 text-base shadow-2xl shadow-purple-500/20 hover:shadow-purple-500/40 transition-all"
+                    className="w-full sm:w-auto bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-8 py-6 text-base shadow-2xl shadow-purple-500/20 hover:shadow-purple-500/40 transition-all"
                     onClick={() => window.location.href = '/crowdfund'}
                     data-testid="button-become-premium"
                   >
@@ -538,7 +538,7 @@ export default function TheVoid() {
                   <Button
                     size="lg"
                     variant="outline"
-                    className="border-purple-500/30 text-purple-300 hover:bg-purple-500/10 px-8 py-6 text-base"
+                    className="w-full sm:w-auto border-purple-500/30 text-purple-300 hover:bg-purple-500/10 px-8 py-6 text-base"
                     onClick={() => window.location.href = '/signal-chat'}
                     data-testid="button-signal-chat"
                   >
