@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Download, FileText, Smartphone, ChevronDown, ChevronRight, Headphones, ExternalLink } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { 
+  BookOpen, Download, FileText, Smartphone, ChevronDown, ChevronRight, 
+  Headphones, ExternalLink, Sparkles, ScrollText, Eye, Star, Quote,
+  Shield, Clock, Users, Layers
+} from "lucide-react";
 
 interface TocSection {
   title: string;
@@ -57,12 +62,21 @@ const tableOfContents: TocSection[] = [
   }
 ];
 
+const stagger = {
+  hidden: { opacity: 0 },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } },
+};
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" as const } },
+};
+
 export default function Veil() {
   const [expandedSections, setExpandedSections] = useState<string[]>(["Part One: The Evidence"]);
 
   const toggleSection = (title: string) => {
-    setExpandedSections(prev => 
-      prev.includes(title) 
+    setExpandedSections(prev =>
+      prev.includes(title)
         ? prev.filter(t => t !== title)
         : [...prev, title]
     );
@@ -78,27 +92,14 @@ export default function Veil() {
 
   useEffect(() => {
     document.title = "Through The Veil | The Greatest Story Ever Stole?";
-    
     let manifestLink = document.querySelector('link[rel="manifest"]') as HTMLLinkElement;
-    if (manifestLink) {
-      manifestLink.href = '/manifest-veil.webmanifest';
-    }
-    
+    if (manifestLink) manifestLink.href = '/manifest-veil.webmanifest';
     let themeColor = document.querySelector('meta[name="theme-color"]') as HTMLMetaElement;
-    if (themeColor) {
-      themeColor.content = '#a855f7';
-    }
-    
+    if (themeColor) themeColor.content = '#a855f7';
     let appleTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]') as HTMLMetaElement;
-    if (appleTitle) {
-      appleTitle.content = 'Through The Veil';
-    }
-
+    if (appleTitle) appleTitle.content = 'Through The Veil';
     let appleIcon = document.querySelector('link[rel="apple-touch-icon"]') as HTMLLinkElement;
-    if (appleIcon) {
-      appleIcon.href = '/icons/veil-192x192.png';
-    }
-
+    if (appleIcon) appleIcon.href = '/icons/veil-192x192.png';
     return () => {
       if (manifestLink) manifestLink.href = '/manifest.webmanifest';
       if (themeColor) themeColor.content = '#00ffff';
@@ -109,154 +110,247 @@ export default function Veil() {
 
   return (
     <div className="min-h-screen bg-slate-950 relative overflow-hidden">
-      <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute bottom-20 right-10 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/5 rounded-full blur-3xl" />
+      <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse pointer-events-none" />
+      <div className="absolute bottom-40 right-10 w-80 h-80 bg-cyan-500/8 rounded-full blur-3xl animate-pulse pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/5 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="container mx-auto px-6 sm:px-8 lg:px-12 py-16 relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12"
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 relative z-10">
+
+        {/* ── HERO ── */}
+        <motion.section
+          variants={stagger}
+          initial="hidden"
+          animate="show"
+          className="text-center mb-16 max-w-4xl mx-auto"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-white/10 mb-6">
+          <motion.div variants={fadeUp} className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-white/10 mb-8">
             <BookOpen className="w-4 h-4 text-cyan-400" />
-            <span className="text-sm text-slate-300 uppercase tracking-wider">Complete Edition - 2026</span>
-          </div>
-          
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+            <span className="text-sm text-slate-300 uppercase tracking-wider font-medium">Complete Edition — 2026</span>
+          </motion.div>
+
+          <motion.h1 variants={fadeUp} className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
             <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Through The Veil
             </span>
-          </h1>
-          
-          <h2 className="text-xl md:text-2xl text-slate-400 mb-6">
-            The Greatest Story Ever Stole?
-          </h2>
-          
-          <p className="text-lg text-slate-300 max-w-2xl mx-auto mb-4">
-            A Journey Through Hidden History, Suppressed Truth, and Spiritual Warfare
-          </p>
-          
-          <p className="text-cyan-400 font-medium mb-8">By Jason Andrews</p>
+          </motion.h1>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <motion.h2 variants={fadeUp} className="text-2xl sm:text-3xl text-slate-400 mb-8 font-light">
+            The Greatest Story Ever Stole?
+          </motion.h2>
+
+          <motion.p variants={fadeUp} className="text-lg sm:text-xl text-slate-300 max-w-2xl mx-auto mb-3 leading-relaxed">
+            A Journey Through Hidden History, Suppressed Truth, and Spiritual Warfare
+          </motion.p>
+
+          <motion.p variants={fadeUp} className="text-cyan-400 font-semibold text-lg mb-10">By Jason Andrews</motion.p>
+
+          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              onClick={() => handleReadOnline()}
+              size="lg"
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 px-10 py-7 text-lg shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all"
+              data-testid="button-read-online"
+            >
+              <BookOpen className="w-5 h-5 mr-2" />
+              Read Online — Free
+            </Button>
             <a href="/api/veil/pdf" download="Through-The-Veil.pdf">
-              <Button 
+              <Button
                 size="lg"
-                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 px-8 py-6 text-lg"
+                variant="outline"
+                className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 px-10 py-7 text-lg w-full"
               >
                 <Download className="w-5 h-5 mr-2" />
                 Download PDF
               </Button>
             </a>
-            <Button 
-              onClick={() => handleReadOnline()}
-              size="lg"
-              variant="outline"
-              className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 px-8 py-6 text-lg"
-              data-testid="button-read-online"
-            >
-              <BookOpen className="w-5 h-5 mr-2" />
-              Read Online
-            </Button>
-          </div>
-        </motion.div>
+          </motion.div>
+        </motion.section>
 
-        {/* LISTEN SECTION - Primary Feature */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="mb-12"
+        {/* ── STATS ROW ── */}
+        <motion.section
+          variants={stagger}
+          initial="hidden"
+          animate="show"
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16 max-w-4xl mx-auto"
         >
-          <GlassCard className="p-8 sm:p-10 max-w-3xl mx-auto" glow>
-            <div className="flex items-center gap-4 mb-6">
-              <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 flex-shrink-0">
-                <Headphones className="w-6 h-6 text-purple-400" />
+          {[
+            { icon: ScrollText, label: "44+ Chapters", sub: "Complete Edition", color: "text-cyan-400" },
+            { icon: Shield, label: "163+ Scriptures", sub: "Cited & Referenced", color: "text-purple-400" },
+            { icon: Layers, label: "5 Parts", sub: "Evidence to Journey", color: "text-pink-400" },
+            { icon: Star, label: "Free Forever", sub: "No Paywalls", color: "text-amber-400" },
+          ].map((stat) => (
+            <motion.div key={stat.label} variants={fadeUp}>
+              <GlassCard className="p-5 sm:p-6 text-center h-full">
+                <stat.icon className={`w-6 h-6 ${stat.color} mx-auto mb-3`} />
+                <p className="text-white font-bold text-base sm:text-lg">{stat.label}</p>
+                <p className="text-slate-400 text-xs sm:text-sm mt-1">{stat.sub}</p>
+              </GlassCard>
+            </motion.div>
+          ))}
+        </motion.section>
+
+        {/* ── BENTO GRID: Listen + Downloads ── */}
+        <motion.section
+          variants={stagger}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.15 }}
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16 max-w-6xl mx-auto"
+        >
+          {/* Listen — spans 2 cols */}
+          <motion.div variants={fadeUp} className="lg:col-span-2">
+            <GlassCard className="p-6 sm:p-8 lg:p-10 h-full" glow>
+              <div className="flex items-center gap-4 mb-6">
+                <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 flex-shrink-0">
+                  <Headphones className="w-7 h-7 text-purple-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl sm:text-2xl font-bold text-white">Listen to the Book</h3>
+                  <p className="text-sm text-slate-400 mt-1">Free Audio with Adobe Reader</p>
+                </div>
               </div>
-              <div>
-                <h4 className="text-xl font-bold text-white">Listen to the Book</h4>
-                <p className="text-sm text-slate-400">Free Audio with Adobe Reader</p>
+
+              <p className="text-slate-300 mb-6 leading-relaxed text-base">
+                Want to listen instead of read? Adobe Acrobat Reader has a built-in "Read Out Loud" feature that will read the entire book to you — completely free, works offline, no internet needed.
+              </p>
+
+              <div className="bg-slate-900/60 rounded-xl p-6 mb-6 border border-white/5">
+                <h4 className="text-white font-semibold mb-5 text-base">How to Listen:</h4>
+                <ol className="space-y-4 text-slate-300">
+                  {[
+                    "Download the PDF above and open it in Adobe Acrobat Reader",
+                    <>Go to <strong className="text-white">View → Read Out Loud → Activate Read Out Loud</strong></>,
+                    <>Click <strong className="text-white">"Read This Page Only"</strong> or <strong className="text-white">"Read To End Of Document"</strong></>,
+                    "Sit back and listen — works offline on any device!",
+                  ].map((step, i) => (
+                    <li key={i} className="flex gap-4 items-start">
+                      <span className="flex-shrink-0 w-7 h-7 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-bold mt-0.5">
+                        {i + 1}
+                      </span>
+                      <span className="text-sm sm:text-base leading-relaxed">{step}</span>
+                    </li>
+                  ))}
+                </ol>
               </div>
-            </div>
-            
-            <p className="text-slate-300 mb-6">
-              Want to listen instead of read? Adobe Acrobat Reader has a built-in "Read Out Loud" feature that will read the entire book to you - completely free, works offline, no internet needed.
-            </p>
-            
-            <div className="bg-slate-900/50 rounded-lg p-6 mb-6 border border-white/5">
-              <h5 className="text-white font-semibold mb-4">How to Listen:</h5>
-              <ol className="space-y-3 text-slate-300 text-sm">
-                <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-bold">1</span>
-                  <span>Download the PDF above and open it in Adobe Acrobat Reader</span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-bold">2</span>
-                  <span>Go to <strong className="text-white">View → Read Out Loud → Activate Read Out Loud</strong></span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-bold">3</span>
-                  <span>Click <strong className="text-white">"Read This Page Only"</strong> or <strong className="text-white">"Read To End Of Document"</strong></span>
-                </li>
-                <li className="flex gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-500/20 text-purple-400 flex items-center justify-center text-xs font-bold">4</span>
-                  <span>Sit back and listen - works offline on any device!</span>
-                </li>
-              </ol>
-            </div>
-            
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="https://get.adobe.com/reader/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="flex-1"
-              >
-                <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 py-5 text-base">
-                  <ExternalLink className="w-5 h-5 mr-2" />
-                  Get Adobe Reader (Free)
-                </Button>
-              </a>
-              <a href="/api/veil/pdf" download="Through-The-Veil.pdf" className="flex-1">
-                <Button variant="outline" className="w-full border-purple-500/30 text-purple-400 hover:bg-purple-500/10 py-5 text-base">
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <a href="https://get.adobe.com/reader/" target="_blank" rel="noopener noreferrer" className="flex-1">
+                  <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 py-5 text-base">
+                    <ExternalLink className="w-5 h-5 mr-2" />
+                    Get Adobe Reader (Free)
+                  </Button>
+                </a>
+                <a href="/api/veil/pdf" download="Through-The-Veil.pdf" className="flex-1">
+                  <Button variant="outline" className="w-full border-purple-500/30 text-purple-400 hover:bg-purple-500/10 py-5 text-base">
+                    <Download className="w-5 h-5 mr-2" />
+                    Download PDF
+                  </Button>
+                </a>
+              </div>
+            </GlassCard>
+          </motion.div>
+
+          {/* Download Cards — stacked in 1 col */}
+          <motion.div variants={fadeUp} className="flex flex-col gap-6">
+            {/* PDF Card */}
+            <GlassCard className="p-6 sm:p-8 flex-1" glow>
+              <div className="flex items-center gap-4 mb-6">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/30 flex-shrink-0">
+                  <FileText className="w-6 h-6 text-red-400" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-white">PDF Download</h4>
+                  <p className="text-xs text-slate-400 mt-0.5">Desktop & Print</p>
+                </div>
+              </div>
+
+              <ul className="space-y-3 mb-6 text-slate-300">
+                {["Complete edition", "163+ scripture refs", "Print-ready format"].map((item) => (
+                  <li key={item} className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-cyan-400 flex-shrink-0" />
+                    <span className="text-sm">{item}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <a href="/api/veil/pdf" download="Through-The-Veil.pdf" className="block">
+                <Button className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 py-5 text-base">
                   <Download className="w-5 h-5 mr-2" />
                   Download PDF
                 </Button>
               </a>
-            </div>
-          </GlassCard>
-        </motion.div>
+            </GlassCard>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          className="mb-16"
+            {/* EPUB Card */}
+            <GlassCard className="p-6 sm:p-8 flex-1" glow>
+              <div className="flex items-center gap-4 mb-6">
+                <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex-shrink-0">
+                  <Smartphone className="w-6 h-6 text-cyan-400" />
+                </div>
+                <div>
+                  <h4 className="text-lg font-bold text-white">EPUB Download</h4>
+                  <p className="text-xs text-slate-400 mt-0.5">E-readers & Mobile</p>
+                </div>
+              </div>
+
+              <ul className="space-y-3 mb-6 text-slate-300">
+                {["Complete edition", "Mobile optimized", "Kindle / Kobo / Nook"].map((item) => (
+                  <li key={item} className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-purple-400 flex-shrink-0" />
+                    <span className="text-sm">{item}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <a href="/api/veil/epub" download="Through-The-Veil.epub" className="block">
+                <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 py-5 text-base">
+                  <Download className="w-5 h-5 mr-2" />
+                  Download EPUB
+                </Button>
+              </a>
+            </GlassCard>
+          </motion.div>
+        </motion.section>
+
+        {/* ── TABLE OF CONTENTS ── */}
+        <motion.section
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.5 }}
+          className="mb-16 max-w-4xl mx-auto"
         >
-          <GlassCard className="p-6 sm:p-8 max-w-3xl mx-auto" glow>
-            <h3 className="text-2xl font-bold text-white mb-6 text-center">Table of Contents</h3>
-            
-            <div className="space-y-2">
+          <div className="text-center mb-8">
+            <Badge variant="outline" className="border-purple-500/30 text-purple-400 mb-4">
+              <ScrollText className="w-3.5 h-3.5 mr-1.5" />
+              Full Table of Contents
+            </Badge>
+            <h3 className="text-3xl sm:text-4xl font-bold text-white">What's Inside</h3>
+          </div>
+
+          <GlassCard className="p-6 sm:p-8 lg:p-10" glow>
+            <div className="space-y-3">
               {tableOfContents.map((section) => (
-                <div key={section.title} className="border border-white/10 rounded-lg overflow-hidden">
+                <div key={section.title} className="border border-white/10 rounded-xl overflow-hidden hover:border-white/15 transition-colors">
                   <button
                     onClick={() => toggleSection(section.title)}
-                    className="w-full flex items-center justify-between p-4 text-left hover:bg-white/5 transition-colors"
+                    className="w-full flex items-center justify-between p-5 sm:p-6 text-left hover:bg-white/5 transition-colors"
                     data-testid={`toc-section-${section.title.replace(/\s+/g, '-').toLowerCase()}`}
                   >
-                    <span className="text-lg font-semibold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                    <span className="text-lg sm:text-xl font-semibold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                       {section.title}
                     </span>
-                    {expandedSections.includes(section.title) ? (
-                      <ChevronDown className="w-5 h-5 text-slate-400" />
-                    ) : (
-                      <ChevronRight className="w-5 h-5 text-slate-400" />
-                    )}
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs text-slate-500">{section.chapters.length} chapters</span>
+                      {expandedSections.includes(section.title) ? (
+                        <ChevronDown className="w-5 h-5 text-slate-400" />
+                      ) : (
+                        <ChevronRight className="w-5 h-5 text-slate-400" />
+                      )}
+                    </div>
                   </button>
-                  
+
                   {expandedSections.includes(section.title) && (
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
@@ -268,11 +362,11 @@ export default function Veil() {
                         <button
                           key={idx}
                           onClick={() => handleReadOnline(chapter.anchor)}
-                          className="w-full flex flex-col p-4 text-left hover:bg-purple-500/10 transition-colors border-b border-white/5 last:border-b-0"
+                          className="w-full flex flex-col p-5 sm:p-6 text-left hover:bg-purple-500/10 transition-colors border-b border-white/5 last:border-b-0 group"
                           data-testid={`toc-chapter-${chapter.anchor}`}
                         >
-                          <span className="text-white font-medium mb-1">{chapter.name}</span>
-                          <span className="text-slate-400 text-sm">{chapter.description}</span>
+                          <span className="text-white font-medium mb-1.5 group-hover:text-cyan-300 transition-colors">{chapter.name}</span>
+                          <span className="text-slate-400 text-sm leading-relaxed">{chapter.description}</span>
                         </button>
                       ))}
                     </motion.div>
@@ -281,92 +375,58 @@ export default function Veil() {
               ))}
             </div>
           </GlassCard>
-        </motion.div>
+        </motion.section>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="mb-12"
+        {/* ── QUOTE / CALLOUT ── */}
+        <motion.section
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="mb-16 max-w-3xl mx-auto"
         >
-          <h3 className="text-2xl font-bold text-white mb-8 text-center">Download the Complete Edition</h3>
+          <GlassCard className="p-8 sm:p-10 lg:p-12 text-center relative overflow-hidden">
+            <div className="absolute top-4 left-6 opacity-10">
+              <Quote className="w-16 h-16 text-purple-400" />
+            </div>
+            <p className="text-xl sm:text-2xl text-slate-200 leading-relaxed italic mb-6 relative z-10">
+              "I do not add to Scripture. I do not take away from it. I simply illuminate what is already written."
+            </p>
+            <p className="text-cyan-400 font-semibold relative z-10">— Jason Andrews</p>
+          </GlassCard>
+        </motion.section>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto px-4">
-            <GlassCard className="p-8 sm:p-10" glow>
-              <div className="flex items-center gap-4 mb-8">
-                <div className="p-4 rounded-xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/30 flex-shrink-0">
-                  <FileText className="w-6 h-6 text-red-400" />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold text-white">PDF Download</h4>
-                  <p className="text-sm text-slate-400">Desktop & Print</p>
-                </div>
-              </div>
-              
-              <ul className="space-y-4 mb-8 text-slate-300 pl-2">
-                <li className="flex items-center gap-4">
-                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 flex-shrink-0" />
-                  <span>Complete edition</span>
-                </li>
-                <li className="flex items-center gap-4">
-                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 flex-shrink-0" />
-                  <span>163+ scripture refs</span>
-                </li>
-                <li className="flex items-center gap-4">
-                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 flex-shrink-0" />
-                  <span>Print-ready</span>
-                </li>
-              </ul>
-              
-              <a href="/api/veil/pdf" download="Through-The-Veil.pdf" className="block">
-                <Button className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 py-5 text-base">
-                  <Download className="w-5 h-5 mr-2" />
-                  Download PDF
-                </Button>
-              </a>
-            </GlassCard>
-
-            <GlassCard className="p-8 sm:p-10" glow>
-              <div className="flex items-center gap-4 mb-8">
-                <div className="p-4 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex-shrink-0">
-                  <Smartphone className="w-6 h-6 text-cyan-400" />
-                </div>
-                <div>
-                  <h4 className="text-xl font-bold text-white">EPUB Download</h4>
-                  <p className="text-sm text-slate-400">E-readers & Mobile</p>
-                </div>
-              </div>
-              
-              <ul className="space-y-4 mb-8 text-slate-300 pl-2">
-                <li className="flex items-center gap-4">
-                  <span className="w-2.5 h-2.5 rounded-full bg-purple-400 flex-shrink-0" />
-                  <span>Complete edition</span>
-                </li>
-                <li className="flex items-center gap-4">
-                  <span className="w-2.5 h-2.5 rounded-full bg-purple-400 flex-shrink-0" />
-                  <span>Mobile optimized</span>
-                </li>
-                <li className="flex items-center gap-4">
-                  <span className="w-2.5 h-2.5 rounded-full bg-purple-400 flex-shrink-0" />
-                  <span>Kindle/Kobo/Nook</span>
-                </li>
-              </ul>
-              
-              <a href="/api/veil/epub" download="Through-The-Veil.epub" className="block">
-                <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 py-5 text-base">
-                  <Download className="w-5 h-5 mr-2" />
-                  Download EPUB
-                </Button>
-              </a>
-            </GlassCard>
+        {/* ── FOOTER CTA ── */}
+        <motion.section
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-2xl mx-auto mb-8"
+        >
+          <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">Ready to Begin?</h3>
+          <p className="text-slate-400 mb-8 leading-relaxed">
+            Start reading online for free, or download your copy in PDF or EPUB format.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              onClick={() => handleReadOnline()}
+              size="lg"
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 px-10 py-7 text-lg shadow-lg shadow-purple-500/20"
+              data-testid="button-read-online-bottom"
+            >
+              <Eye className="w-5 h-5 mr-2" />
+              Start Reading
+            </Button>
           </div>
-        </motion.div>
+        </motion.section>
 
+        {/* ── FOOTER NOTE ── */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5 }}
-          className="text-center mt-12"
+          className="text-center mt-16"
         >
           <p className="text-slate-500 text-sm">
             All glory to Yahuah, the Most High. HalleluYah.
