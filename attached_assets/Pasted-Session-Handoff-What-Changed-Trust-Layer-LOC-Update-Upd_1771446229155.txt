@@ -1,0 +1,33 @@
+Session Handoff — What Changed
+
+Trust Layer LOC Update:
+
+Updated Trust Layer (dwsc.io) entry in EcosystemMetrics.tsx from 673,309 lines → 282,494 lines
+New breakdown: 160,671 frontend / 61,375 server / 9,460 shared
+Updated highlights to: 233 pages, 158 components, 749 API endpoints, 544 schema exports, 12 PWA manifests, 7 host-based domains, 105 server files, 3 service workers, 5 cross-chain bridges, 12 arcade games
+Updated stack to include WebAuthn/Passkeys and BFT-PoA Blockchain
+New Ecosystem Apps (25 → 27):
+
+Added DarkWave Academy (dwsc.io/academy) — education/certification platform, 6 course tracks, 3 certifications, Stripe subscriptions, included in Trust Layer build
+Added ChronoChat (chronochat.io) — community chat with invite system, WebSocket real-time, included in Trust Layer build
+Both added to Ecosystem.tsx (carousel data) and EcosystemMetrics.tsx (metrics data)
+Count & LOC References Updated Across All Pages:
+
+Explore.tsx — "25 apps" → "27 apps", "1.97M+" → "1.6M+", badge updated
+Developers.tsx — 5 pitch references updated (TechCrunch, Hacker News, Decrypt, SaaStr, summary tip)
+CommandCenter.tsx — description and card label updated
+TrustLayerHub.tsx — "25 apps" → "27 apps" in ecosystem status indicator
+Home.tsx — stat card "1.97M+" → "1.6M+"
+Ecosystem.tsx — SEO description updated, Trust Layer description rewritten with new stats, Arcade description updated to list all 12 games
+Why 1.6M: The ecosystem total is computed dynamically in EcosystemMetrics by summing all app entries. Changing Trust Layer from 673K → 282K dropped the total from ~1.97M to ~1.58M, rounded to "1.6M+" in hardcoded references.
+
+Files Modified:
+
+client/src/pages/EcosystemMetrics.tsx
+client/src/pages/Ecosystem.tsx
+client/src/pages/Explore.tsx
+client/src/pages/Developers.tsx
+client/src/pages/CommandCenter.tsx
+client/src/pages/TrustLayerHub.tsx
+client/src/pages/Home.tsx
+Mobile Carousels: Verified all carousel implementations use one-card-per-page on mobile (basis-full / w-full), arrow navigation, and cyan dot indicators. No fixes needed.
