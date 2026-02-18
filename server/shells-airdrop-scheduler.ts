@@ -38,10 +38,11 @@ async function getEligibleUsers(): Promise<Array<{ userId: string; username: str
   try {
     // Get users with shell wallets who have been active
     const result = await db.execute(sql`
-      SELECT DISTINCT user_id, username 
-      FROM shell_wallets 
+      SELECT DISTINCT user_id, username, MAX(updated_at) as last_active
+      FROM orb_wallets 
       WHERE updated_at > NOW() - INTERVAL '7 days'
-      ORDER BY updated_at DESC
+      GROUP BY user_id, username
+      ORDER BY last_active DESC
     `);
     
     return result.rows.map((row: any) => ({
