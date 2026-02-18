@@ -625,28 +625,45 @@ export default function VeilReader() {
     setHasSeenUpdates(true);
   };
 
-  // Loading state
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 text-cyan-400 animate-spin mx-auto mb-4" />
-          <p className="text-slate-400">Loading Through The Veil...</p>
-        </div>
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center"
+        >
+          <div className="relative w-16 h-16 mx-auto mb-6">
+            <div className="absolute inset-0 rounded-full border-2 border-purple-500/20 animate-ping" />
+            <div className="absolute inset-0 rounded-full border-2 border-t-purple-400 border-r-cyan-400 border-b-transparent border-l-transparent animate-spin" />
+            <BookOpen className="absolute inset-0 m-auto w-6 h-6 text-purple-400" />
+          </div>
+          <p className="text-slate-300 text-lg font-medium mb-1">Loading</p>
+          <p className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent font-medium">Through The Veil</p>
+        </motion.div>
       </div>
     );
   }
 
-  // Error state
   if (error || volumes.length === 0) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-400 mb-4">{error || 'Failed to load content'}</p>
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center max-w-sm"
+        >
+          <div className="w-14 h-14 mx-auto mb-4 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center">
+            <X className="w-6 h-6 text-red-400" />
+          </div>
+          <p className="text-red-300 mb-2 font-medium">{error || 'Failed to load content'}</p>
+          <p className="text-slate-500 text-sm mb-6">Please try again or return to the book page.</p>
           <Link href="/veil">
-            <Button className="bg-cyan-600 hover:bg-cyan-500">Return to Veil</Button>
+            <Button className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 shadow-lg shadow-purple-500/20">
+              Return to Veil
+            </Button>
           </Link>
-        </div>
+        </motion.div>
       </div>
     );
   }
@@ -689,116 +706,143 @@ export default function VeilReader() {
 
   return (
     <div className="min-h-screen bg-slate-950 relative">
-      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800">
+      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-xl border-b border-purple-500/20 shadow-lg shadow-purple-500/5">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Button 
               variant="ghost" 
               size="sm"
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="text-slate-300 hover:text-white"
+              className="text-slate-300 hover:text-purple-300 hover:bg-purple-500/10 transition-all"
+              data-testid="button-toggle-sidebar"
             >
               <Menu className="w-5 h-5" />
             </Button>
-            <div>
-              <p className="text-xs text-cyan-400">{volume.title}</p>
-              <p className="text-sm text-white font-medium truncate max-w-[200px] md:max-w-none">{chapter.title}</p>
+            <div className="flex items-center gap-3">
+              <div className="hidden sm:flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/30">
+                <BookOpen className="w-4 h-4 text-purple-400" />
+              </div>
+              <div>
+                <p className="text-xs font-medium bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">{volume.title}</p>
+                <p className="text-sm text-white font-medium truncate max-w-[180px] md:max-w-[400px]">{chapter.title}</p>
+              </div>
             </div>
           </div>
           
-          <div className="flex items-center gap-2">
-            {/* TTS Controls */}
+          <div className="flex items-center gap-1.5 md:gap-2">
             {(speechSupported || useAIVoice) && (
-              <div className="flex items-center gap-2 group relative">
+              <div className="flex items-center gap-1.5 group relative">
                 {isLoading ? (
-                  <Button 
-                    size="sm" 
-                    disabled
-                    className="bg-cyan-600 text-white px-4"
-                  >
-                    <div className="w-4 h-4 mr-2 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Loading...
-                  </Button>
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/20 border border-purple-500/30">
+                    <div className="w-3.5 h-3.5 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
+                    <span className="text-xs text-purple-300 hidden sm:inline">Loading Nova...</span>
+                  </div>
                 ) : isPlaying ? (
-                  <Button 
-                    size="icon" 
-                    onClick={handlePause}
-                    className="bg-amber-500 hover:bg-amber-600 text-white rounded-full w-8 h-8"
-                    data-testid="button-pause-chapter"
-                    title="Pause"
-                  >
-                    <Pause className="w-4 h-4" />
-                  </Button>
+                  <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-purple-500/15 border border-purple-500/30">
+                    <div className="flex items-center gap-0.5 mr-1">
+                      <div className="w-0.5 h-3 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '0ms' }} />
+                      <div className="w-0.5 h-4 bg-cyan-400 rounded-full animate-pulse" style={{ animationDelay: '150ms' }} />
+                      <div className="w-0.5 h-2.5 bg-purple-400 rounded-full animate-pulse" style={{ animationDelay: '300ms' }} />
+                      <div className="w-0.5 h-3.5 bg-cyan-400 rounded-full animate-pulse" style={{ animationDelay: '450ms' }} />
+                    </div>
+                    <Button 
+                      size="icon" 
+                      onClick={handlePause}
+                      className="bg-amber-500/90 hover:bg-amber-500 text-white rounded-full w-7 h-7 shadow-lg shadow-amber-500/20"
+                      data-testid="button-pause-chapter"
+                      title="Pause"
+                    >
+                      <Pause className="w-3.5 h-3.5" />
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      onClick={handleStop}
+                      className="text-slate-400 hover:text-white w-7 h-7"
+                      title="Stop"
+                    >
+                      <VolumeX className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
                 ) : (
                   <Button 
                     size="icon" 
                     onClick={handlePlay}
-                    className="bg-cyan-500 hover:bg-cyan-600 text-white rounded-full w-8 h-8"
+                    className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white rounded-full w-8 h-8 shadow-lg shadow-purple-500/25 transition-all hover:shadow-purple-500/40 hover:scale-105"
                     data-testid="button-play-chapter"
-                    title={isPaused ? 'Resume' : (useAIVoice ? 'Play (Nova AI Voice)' : 'Play (Browser Voice)')}
+                    title={isPaused ? 'Resume' : (useAIVoice ? 'Listen with Nova AI' : 'Listen (Browser Voice)')}
                   >
-                    <Play className="w-4 h-4" />
+                    <Play className="w-4 h-4 ml-0.5" />
                   </Button>
                 )}
-                {(isPlaying || isPaused) && (
+                {isPaused && !isPlaying && (
                   <Button 
                     variant="ghost" 
-                    size="sm" 
+                    size="icon" 
                     onClick={handleStop}
-                    className="text-slate-400 hover:text-white"
+                    className="text-slate-400 hover:text-white w-7 h-7"
                     title="Stop"
                   >
-                    <VolumeX className="w-4 h-4" />
+                    <VolumeX className="w-3.5 h-3.5" />
                   </Button>
                 )}
-                {/* Voice info tooltip */}
-                <div className="absolute top-full right-0 mt-2 w-64 p-3 bg-slate-800 border border-slate-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 text-xs">
-                  <p className="text-white font-medium mb-1">Nova AI Voice</p>
-                  <p className="text-slate-400 mb-2">Our primary reader is Nova from OpenAI. If she fails, you'll hear your browser's built-in voice.</p>
-                  <p className="text-cyan-400">For the best offline experience, download the PDF and use Adobe Reader's "Read Out Loud" feature.</p>
-                </div>
-                {/* TTS Error Message */}
-                {ttsError && (
-                  <div className="absolute top-full right-0 mt-2 w-72 p-3 bg-red-900/90 border border-red-500/50 rounded-lg shadow-xl z-50 text-xs">
-                    <p className="text-red-200">{ttsError}</p>
-                    <a href="/veil" className="text-cyan-400 underline mt-1 block">Go to download page</a>
+                <div className="absolute top-full right-0 mt-2 w-72 p-4 bg-slate-900/95 backdrop-blur-xl border border-purple-500/20 rounded-xl shadow-2xl shadow-purple-500/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center">
+                      <Volume2 className="w-3 h-3 text-white" />
+                    </div>
+                    <p className="text-white font-semibold text-sm">Nova AI Voice</p>
                   </div>
+                  <p className="text-slate-400 text-xs leading-relaxed mb-2">Powered by OpenAI. Nova provides natural, expressive narration. Falls back to browser voice if unavailable.</p>
+                  <p className="text-purple-400 text-xs">For offline listening, download and use your device's reader.</p>
+                </div>
+                {ttsError && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="absolute top-full right-0 mt-2 w-72 p-3 bg-red-950/90 backdrop-blur-xl border border-red-500/30 rounded-xl shadow-2xl z-50 text-xs"
+                  >
+                    <p className="text-red-200">{ttsError}</p>
+                    <a href="/veil" className="text-cyan-400 hover:text-cyan-300 underline mt-1 block transition-colors">Go to download page</a>
+                  </motion.div>
                 )}
               </div>
             )}
             
-            <div className="flex items-center gap-1">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={handleDownloadPDF}
-                className="text-slate-400 hover:text-white hover:bg-slate-700/50"
-                title="Download Markdown"
-              >
-                <Download className="w-4 h-4" />
-                <span className="hidden md:inline text-xs ml-1">MD</span>
-              </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handleDownloadPDF}
+              className="text-slate-400 hover:text-purple-300 hover:bg-purple-500/10 transition-all"
+              title="Download"
+              data-testid="button-download-md"
+            >
+              <Download className="w-4 h-4" />
+            </Button>
+
+            <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-800/50 border border-slate-700/50">
+              <BookMarked className="w-3 h-3 text-purple-400" />
+              <span className="text-xs text-slate-400 font-mono">
+                {currentGlobalIndex + 1}<span className="text-slate-600">/</span>{totalChapters}
+              </span>
             </div>
-            
-            <span className="text-xs text-slate-500 hidden md:block">
-              {currentGlobalIndex + 1} of {totalChapters}
-            </span>
             
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={() => setShowWhatsNew(true)}
-              className="text-slate-300 hover:text-white relative"
+              className="text-slate-300 hover:text-purple-300 hover:bg-purple-500/10 relative transition-all"
               title="What's New"
+              data-testid="button-whats-new"
             >
               <Sparkles className="w-4 h-4" />
               {newUpdatesSinceVisit.length > 0 && !hasSeenUpdates && (
-                <span className="absolute -top-1 -right-1 w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
+                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-gradient-to-r from-purple-400 to-cyan-400 rounded-full animate-pulse shadow-lg shadow-purple-500/50" />
               )}
             </Button>
             
             <Link href="/veil">
-              <Button variant="ghost" size="sm" className="text-slate-300 hover:text-white">
+              <Button variant="ghost" size="sm" className="text-slate-300 hover:text-purple-300 hover:bg-purple-500/10 transition-all" data-testid="button-home">
                 <Home className="w-4 h-4" />
               </Button>
             </Link>
@@ -892,135 +936,225 @@ export default function VeilReader() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/60 z-40"
+              className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40"
               onClick={() => setSidebarOpen(false)}
             />
             <motion.div
-              initial={{ x: -300 }}
+              initial={{ x: -320 }}
               animate={{ x: 0 }}
-              exit={{ x: -300 }}
-              className="fixed left-0 top-0 bottom-0 w-80 bg-slate-900 z-50 overflow-y-auto border-r border-slate-800"
+              exit={{ x: -320 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="fixed left-0 top-0 bottom-0 w-80 bg-slate-950/95 backdrop-blur-xl z-50 overflow-y-auto border-r border-purple-500/20 shadow-2xl shadow-purple-500/10"
             >
-              <div className="p-4 border-b border-slate-800 flex items-center justify-between">
-                <h2 className="text-lg font-bold text-white">Contents</h2>
-                <Button variant="ghost" size="sm" onClick={() => setSidebarOpen(false)}>
+              <div className="p-5 border-b border-purple-500/15 flex items-center justify-between bg-gradient-to-r from-purple-500/5 to-transparent">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500/30 to-cyan-500/30 border border-purple-500/30 flex items-center justify-center">
+                    <ScrollText className="w-4 h-4 text-purple-400" />
+                  </div>
+                  <div>
+                    <h2 className="text-base font-bold text-white">Contents</h2>
+                    <p className="text-[10px] text-slate-500 uppercase tracking-wider">{totalChapters} chapters</p>
+                  </div>
+                </div>
+                <Button variant="ghost" size="sm" onClick={() => setSidebarOpen(false)} className="text-slate-400 hover:text-white hover:bg-purple-500/10">
                   <X className="w-4 h-4" />
                 </Button>
               </div>
               
-              {volumes.map((vol, volIndex) => (
-                <div key={vol.id} className="p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <ScrollText className="w-4 h-4 text-cyan-400" />
-                    <h3 className="font-semibold text-cyan-400 text-sm">
-                      {vol.title}
-                    </h3>
+              <div className="py-2">
+                {volumes.map((vol, volIndex) => (
+                  <div key={vol.id} className="px-3 py-3">
+                    <div className="flex items-center gap-2 mb-2 px-2">
+                      <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-purple-400 to-cyan-400" />
+                      <h3 className="font-semibold text-xs uppercase tracking-wider bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                        {vol.title}
+                      </h3>
+                    </div>
+                    <p className="text-[10px] text-slate-600 mb-2 px-2">{vol.subtitle}</p>
+                    
+                    <div className="space-y-0.5">
+                      {vol.chapters.map((chap, chapIndex) => {
+                        const isActive = currentVolume === volIndex && currentChapter === chapIndex;
+                        return (
+                          <button
+                            key={chap.id}
+                            onClick={() => goToChapter(volIndex, chapIndex)}
+                            className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all duration-200 ${
+                              isActive
+                                ? 'bg-gradient-to-r from-purple-500/20 to-cyan-500/10 text-white border border-purple-500/30 shadow-sm shadow-purple-500/10'
+                                : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
+                            }`}
+                            data-testid={`chapter-nav-${volIndex}-${chapIndex}`}
+                          >
+                            <div className="flex items-center gap-2">
+                              {isActive && <div className="w-1 h-4 rounded-full bg-gradient-to-b from-purple-400 to-cyan-400 flex-shrink-0" />}
+                              <span className={`text-xs leading-snug ${isActive ? 'font-medium' : ''}`}>{chap.title}</span>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
                   </div>
-                  <p className="text-xs text-slate-500 mb-3">{vol.subtitle}</p>
-                  
-                  <div className="space-y-1">
-                    {vol.chapters.map((chap, chapIndex) => (
-                      <button
-                        key={chap.id}
-                        onClick={() => goToChapter(volIndex, chapIndex)}
-                        className={`w-full text-left px-3 py-2 rounded text-sm transition-colors ${
-                          currentVolume === volIndex && currentChapter === chapIndex
-                            ? 'bg-cyan-500/20 text-cyan-300'
-                            : 'text-slate-400 hover:bg-slate-800 hover:text-white'
-                        }`}
-                      >
-                        {chap.title}
-                      </button>
-                    ))}
-                  </div>
+                ))}
+              </div>
+
+              <div className="p-4 border-t border-purple-500/15 mt-2">
+                <div className="flex items-center justify-between text-xs text-slate-500 mb-2">
+                  <span>Progress</span>
+                  <span className="font-mono text-purple-400">{Math.round(((currentGlobalIndex + 1) / totalChapters) * 100)}%</span>
                 </div>
-              ))}
+                <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                  <motion.div 
+                    className="h-full bg-gradient-to-r from-purple-500 to-cyan-500 rounded-full"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${((currentGlobalIndex + 1) / totalChapters) * 100}%` }}
+                    transition={{ duration: 0.5 }}
+                  />
+                </div>
+              </div>
             </motion.div>
           </>
         )}
       </AnimatePresence>
 
       {/* Content */}
-      <div className="pt-20 pb-24 px-4">
+      <div className="pt-20 pb-28 px-4 sm:px-6">
         <motion.div
           key={`${currentVolume}-${currentChapter}`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.4, ease: "easeOut" as const }}
           className="max-w-3xl mx-auto"
         >
-          <div className="mb-8">
-            <span className="text-sm text-cyan-400">
-              {volume.title}
-            </span>
-            <h1 className="text-3xl md:text-4xl font-bold text-white mt-2">{chapter.title}</h1>
+          <div className="mb-10 pt-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
+              <span className="text-xs font-medium uppercase tracking-[0.2em] bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent px-2">
+                {volume.title}
+              </span>
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-500/30 to-transparent" />
+            </div>
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white text-center leading-tight" data-testid="chapter-title">
+              {chapter.title}
+            </h1>
+            <div className="flex items-center justify-center gap-3 mt-4">
+              <div className="w-8 h-px bg-gradient-to-r from-purple-500 to-transparent" />
+              <div className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+              <div className="w-8 h-px bg-gradient-to-l from-cyan-500 to-transparent" />
+            </div>
           </div>
 
           <div className="prose prose-invert prose-lg max-w-none 
-            prose-p:text-slate-300 prose-p:leading-relaxed prose-p:mb-4
+            prose-p:text-slate-300 prose-p:leading-[1.85] prose-p:mb-5 prose-p:text-[17px]
             prose-headings:text-white
-            prose-h2:text-2xl prose-h2:mt-8 prose-h2:mb-4 prose-h2:text-cyan-400
-            prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3 prose-h3:text-purple-400
-            prose-strong:text-white
-            prose-ul:text-slate-300
-            prose-li:text-slate-300
-            prose-blockquote:border-l-cyan-500 prose-blockquote:bg-slate-900/50 prose-blockquote:px-4 prose-blockquote:py-2 prose-blockquote:rounded-r
-            prose-blockquote:text-slate-300 prose-blockquote:italic
-            prose-hr:border-slate-700
-            prose-img:rounded-lg prose-img:border prose-img:border-cyan-500/30 prose-img:shadow-lg prose-img:shadow-cyan-500/10
+            prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-5 prose-h2:font-bold
+            prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4 prose-h3:text-purple-300
+            prose-strong:text-white prose-strong:font-semibold
+            prose-em:text-purple-200/90
+            prose-ul:text-slate-300 prose-ul:space-y-2
+            prose-ol:text-slate-300 prose-ol:space-y-2
+            prose-li:text-slate-300 prose-li:leading-relaxed prose-li:text-[17px]
+            prose-blockquote:border-l-2 prose-blockquote:border-l-purple-500/60 prose-blockquote:bg-purple-500/5 prose-blockquote:px-5 prose-blockquote:py-3 prose-blockquote:rounded-r-lg
+            prose-blockquote:text-slate-200 prose-blockquote:italic prose-blockquote:not-italic prose-blockquote:text-[17px]
+            prose-hr:border-purple-500/20 prose-hr:my-10
+            prose-a:text-purple-400 prose-a:no-underline hover:prose-a:text-purple-300
+            prose-code:text-cyan-300 prose-code:bg-slate-800/60 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm prose-code:border prose-code:border-slate-700/50
+            prose-img:rounded-xl prose-img:border prose-img:border-purple-500/20 prose-img:shadow-xl prose-img:shadow-purple-500/10
+            [&>p:first-of-type]:first-letter:text-5xl [&>p:first-of-type]:first-letter:font-bold [&>p:first-of-type]:first-letter:text-purple-400 [&>p:first-of-type]:first-letter:float-left [&>p:first-of-type]:first-letter:mr-3 [&>p:first-of-type]:first-letter:mt-1 [&>p:first-of-type]:first-letter:leading-none
           ">
             <ReactMarkdown 
               remarkPlugins={[remarkGfm]}
               components={{
+                h2: ({ node, children, ...props }) => (
+                  <h2 {...props} className="flex items-center gap-3">
+                    <div className="w-1 h-6 rounded-full bg-gradient-to-b from-purple-400 to-cyan-500 flex-shrink-0" />
+                    <span className="bg-gradient-to-r from-purple-300 to-cyan-300 bg-clip-text text-transparent">{children}</span>
+                  </h2>
+                ),
+                blockquote: ({ node, children, ...props }) => (
+                  <blockquote {...props} className="border-l-2 border-l-purple-500/60 bg-purple-500/5 backdrop-blur-sm px-5 py-4 rounded-r-lg my-6 not-italic">
+                    <div className="text-slate-200 italic text-[17px] leading-relaxed">{children}</div>
+                  </blockquote>
+                ),
                 img: ({ node, ...props }) => (
-                  <figure className="my-6 flex flex-col items-center">
-                    <div className="bg-slate-800/50 p-3 rounded-lg border border-cyan-500/30 max-w-lg w-full">
+                  <figure className="my-8 flex flex-col items-center">
+                    <div className="bg-slate-900/60 backdrop-blur-sm p-4 rounded-xl border border-purple-500/20 shadow-xl shadow-purple-500/5 max-w-lg w-full">
                       <img {...props} className="w-full rounded-lg" loading="lazy" />
                       {props.alt && (
-                        <p className="text-center text-sm text-slate-400 mt-2 italic">{props.alt}</p>
+                        <p className="text-center text-sm text-slate-400 mt-3 italic">{props.alt}</p>
                       )}
                     </div>
                   </figure>
+                ),
+                hr: () => (
+                  <div className="my-10 flex items-center justify-center gap-3">
+                    <div className="h-px flex-1 bg-gradient-to-r from-transparent to-purple-500/30" />
+                    <div className="flex gap-1.5">
+                      <div className="w-1 h-1 rounded-full bg-purple-400/60" />
+                      <div className="w-1 h-1 rounded-full bg-cyan-400/60" />
+                      <div className="w-1 h-1 rounded-full bg-purple-400/60" />
+                    </div>
+                    <div className="h-px flex-1 bg-gradient-to-l from-transparent to-purple-500/30" />
+                  </div>
                 ),
               }}
             >
               {chapter.content}
             </ReactMarkdown>
           </div>
+
+          <div className="mt-16 mb-8 flex items-center justify-center gap-3">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent to-purple-500/20" />
+            <div className="flex gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-purple-500/40" />
+              <div className="w-1.5 h-1.5 rounded-full bg-cyan-500/40" />
+              <div className="w-1.5 h-1.5 rounded-full bg-purple-500/40" />
+            </div>
+            <div className="h-px flex-1 bg-gradient-to-l from-transparent to-purple-500/20" />
+          </div>
         </motion.div>
       </div>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-sm border-t border-slate-800 z-40">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <Button
-            variant="ghost"
-            onClick={goPrev}
-            disabled={!hasPrev}
-            className="text-slate-300 hover:text-white disabled:opacity-30"
-          >
-            <ChevronLeft className="w-5 h-5 mr-1" />
-            <span className="hidden md:inline">Previous</span>
-          </Button>
+      <div className="fixed bottom-0 left-0 right-0 bg-slate-900/80 backdrop-blur-xl border-t border-purple-500/20 shadow-lg shadow-purple-500/5 z-40">
+        <div className="container mx-auto px-4 py-2.5">
+          <div className="flex items-center justify-between gap-4">
+            <Button
+              variant="ghost"
+              onClick={goPrev}
+              disabled={!hasPrev}
+              className="text-slate-300 hover:text-purple-300 hover:bg-purple-500/10 disabled:opacity-20 transition-all min-w-[100px] justify-start"
+              data-testid="button-prev-chapter"
+            >
+              <ChevronLeft className="w-4 h-4 mr-1 flex-shrink-0" />
+              <span className="hidden sm:inline text-sm">Previous</span>
+            </Button>
 
-          <div className="flex-1 mx-4">
-            <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 transition-all duration-300"
-                style={{ width: `${((currentGlobalIndex + 1) / totalChapters) * 100}%` }}
-              />
+            <div className="flex-1 max-w-md mx-auto flex flex-col items-center gap-1">
+              <div className="w-full h-1.5 bg-slate-800/80 rounded-full overflow-hidden">
+                <motion.div 
+                  className="h-full bg-gradient-to-r from-purple-500 via-cyan-500 to-purple-500 rounded-full"
+                  initial={false}
+                  animate={{ width: `${((currentGlobalIndex + 1) / totalChapters) * 100}%` }}
+                  transition={{ duration: 0.4 }}
+                />
+              </div>
+              <span className="text-[10px] text-slate-500 font-mono">
+                {Math.round(((currentGlobalIndex + 1) / totalChapters) * 100)}% complete
+              </span>
             </div>
-          </div>
 
-          <Button
-            variant="ghost"
-            onClick={goNext}
-            disabled={!hasNext}
-            className="text-slate-300 hover:text-white disabled:opacity-30"
-          >
-            <span className="hidden md:inline">Next</span>
-            <ChevronRight className="w-5 h-5 ml-1" />
-          </Button>
+            <Button
+              variant="ghost"
+              onClick={goNext}
+              disabled={!hasNext}
+              className="text-slate-300 hover:text-purple-300 hover:bg-purple-500/10 disabled:opacity-20 transition-all min-w-[100px] justify-end"
+              data-testid="button-next-chapter"
+            >
+              <span className="hidden sm:inline text-sm">Next</span>
+              <ChevronRight className="w-4 h-4 ml-1 flex-shrink-0" />
+            </Button>
+          </div>
         </div>
       </div>
     </div>
