@@ -1,117 +1,124 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Volume2, VolumeX, Music, Settings, ChevronUp, ChevronDown, Pause, Play } from "lucide-react";
+import { Volume2, VolumeX, Music, ChevronUp, ChevronDown, Pause, Play, MapPin, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
+import { AmbientAudioEngine, AmbientAudioState, getAvailableLocations } from "@/lib/ambient-audio-engine";
 
-interface AudioPlayerProps {
-  audioPreference: string;
-  audioMood: string;
-  compact?: boolean;
+interface AmbientAudioControllerProps {
+  era: string;
+  location: string;
+  isNight?: boolean;
 }
 
-const MOOD_LABELS: Record<string, string> = {
-  epic: "Epic & Cinematic",
-  calm: "Calm & Ambient",
-  medieval: "Medieval & Folk",
-  electronic: "Electronic & Synth",
-  nature: "Nature Sounds",
-};
-
-export function AudioPlayer({ audioPreference, audioMood, compact = false }: AudioPlayerProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.5);
-  const [isMuted, setIsMuted] = useState(false);
+export function AmbientAudioController({ era, location, isNight = false }: AmbientAudioControllerProps) {
+  const engineRef = useRef<AmbientAudioEngine | null>(null);
+  const [state, setState] = useState<AmbientAudioState>({
+    isPlaying: false,
+    isMuted: false,
+    masterVolume: 0.5,
+    currentLocation: "",
+    currentEra: "",
+    locationName: "Unknown",
+    locationEmoji: "🔇",
+    layerCount: 0,
+    isNight: false,
+  });
   const [isExpanded, setIsExpanded] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [showLocationPicker, setShowLocationPicker] = useState(false);
 
-  if (audioPreference === "silent") {
-    return null;
-  }
-
-  const toggleMute = () => {
-    setIsMuted(!isMuted);
-    if (audioRef.current) {
-      audioRef.current.muted = !isMuted;
+  useEffect(() => {
+    if (!engineRef.current) {
+      engineRef.current = new AmbientAudioEngine((newState) => {
+        setState(newState);
+      });
     }
-  };
+    return () => {
+      engineRef.current?.destroy();
+      engineRef.current = null;
+    };
+  }, []);
 
-  const handleVolumeChange = (value: number[]) => {
-    const newVolume = value[0];
-    setVolume(newVolume);
-    if (audioRef.current) {
-      audioRef.current.volume = newVolume;
+  useEffect(() => {
+    if (engineRef.current && era && location) {
+      engineRef.current.setLocation(era, location, isNight);
     }
-    if (newVolume === 0) {
-      setIsMuted(true);
-    } else if (isMuted) {
-      setIsMuted(false);
-    }
-  };
+  }, [era, location, isNight]);
 
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
+  const togglePlay = useCallback(() => {
+    engineRef.current?.togglePlay();
+  }, []);
 
-  if (compact) {
-    return (
-      <div className="flex items-center gap-2">
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleMute}
-          className="h-8 w-8 text-slate-400 hover:text-white"
-          data-testid="button-audio-mute"
-        >
-          {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-        </Button>
-        <Badge variant="outline" className="text-xs border-slate-600 text-slate-400">
-          <Music className="w-3 h-3 mr-1" />
-          {audioPreference === "spotify" ? "Spotify" : MOOD_LABELS[audioMood] || "Curated"}
-        </Badge>
-      </div>
-    );
-  }
+  const toggleMute = useCallback(() => {
+    engineRef.current?.toggleMute();
+  }, []);
+
+  const handleVolumeChange = useCallback((value: number[]) => {
+    engineRef.current?.setMasterVolume(value[0]);
+  }, []);
+
+  const switchLocation = useCallback((locId: string) => {
+    engineRef.current?.setLocation(era, locId, isNight);
+    setShowLocationPicker(false);
+  }, [era, isNight]);
+
+  const locations = getAvailableLocations(era);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="fixed bottom-4 right-4 z-40"
+      style={{ maxWidth: "280px" }}
     >
-      <div className="bg-slate-900/95 backdrop-blur-xl border border-slate-700 rounded-2xl shadow-xl overflow-hidden">
-        <div 
-          className="flex items-center gap-3 p-3 cursor-pointer hover:bg-slate-800/50 transition-colors"
+      <div className="bg-slate-900/95 backdrop-blur-xl border border-slate-700/80 rounded-2xl shadow-2xl shadow-black/40 overflow-hidden">
+        <div
+          className="flex items-center gap-2.5 p-2.5 cursor-pointer hover:bg-slate-800/50 transition-colors"
           onClick={() => setIsExpanded(!isExpanded)}
+          data-testid="ambient-audio-toggle"
         >
-          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-cyan-500/30 to-purple-500/30 flex items-center justify-center">
-            <Music className="w-5 h-5 text-cyan-400" />
+          <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
+            state.isPlaying
+              ? "bg-gradient-to-r from-cyan-500/30 to-purple-500/30 shadow-lg shadow-cyan-500/10"
+              : "bg-slate-800/80"
+          }`}>
+            {state.isPlaying ? (
+              <div className="relative">
+                <Music className="w-4 h-4 text-cyan-400" />
+                <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-cyan-400 rounded-full animate-pulse" />
+              </div>
+            ) : (
+              <VolumeX className="w-4 h-4 text-slate-500" />
+            )}
           </div>
-          <div className="flex-1">
-            <p className="text-sm font-medium text-white">
-              {audioPreference === "spotify" ? "Spotify" : "Curated Audio"}
-            </p>
-            <p className="text-xs text-slate-400">
-              {MOOD_LABELS[audioMood] || "Select a mood"}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-1.5">
+              <span className="text-sm">{state.locationEmoji}</span>
+              <p className="text-xs font-medium text-white truncate">{state.locationName}</p>
+            </div>
+            <p className="text-[10px] text-slate-500">
+              {state.isPlaying
+                ? `${state.layerCount} sound layers active`
+                : "Tap to expand"}
             </p>
           </div>
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 text-slate-400"
+            className={`h-8 w-8 shrink-0 ${state.isPlaying ? "text-cyan-400" : "text-slate-500"}`}
             onClick={(e) => {
               e.stopPropagation();
               togglePlay();
             }}
-            data-testid="button-audio-play"
+            data-testid="button-ambient-play"
           >
-            {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+            {state.isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
           </Button>
           {isExpanded ? (
-            <ChevronDown className="w-4 h-4 text-slate-400" />
+            <ChevronDown className="w-3.5 h-3.5 text-slate-500 shrink-0" />
           ) : (
-            <ChevronUp className="w-4 h-4 text-slate-400" />
+            <ChevronUp className="w-3.5 h-3.5 text-slate-500 shrink-0" />
           )}
         </div>
 
@@ -121,57 +128,93 @@ export function AudioPlayer({ audioPreference, audioMood, compact = false }: Aud
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="border-t border-slate-700"
+              transition={{ duration: 0.2 }}
+              className="border-t border-slate-700/50"
             >
-              <div className="p-4 space-y-4">
-                <div className="flex items-center gap-3">
+              <div className="p-3 space-y-3">
+                <div className="flex items-center gap-2.5">
                   <Button
                     variant="ghost"
                     size="icon"
                     onClick={toggleMute}
-                    className="h-8 w-8 text-slate-400 hover:text-white"
-                    data-testid="button-audio-mute-expanded"
+                    className="h-7 w-7 text-slate-400 hover:text-white shrink-0"
+                    data-testid="button-ambient-mute"
                   >
-                    {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+                    {state.isMuted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
                   </Button>
                   <Slider
-                    value={[isMuted ? 0 : volume]}
+                    value={[state.isMuted ? 0 : state.masterVolume]}
                     min={0}
                     max={1}
                     step={0.01}
                     onValueChange={handleVolumeChange}
                     className="flex-1"
-                    data-testid="slider-audio-volume"
+                    data-testid="slider-ambient-volume"
                   />
+                  <span className="text-[10px] text-slate-500 w-7 text-right shrink-0">
+                    {Math.round(state.masterVolume * 100)}%
+                  </span>
                 </div>
 
-                {audioPreference === "spotify" ? (
-                  <div className="text-center py-4">
-                    <Badge className="bg-green-500/20 text-green-400 border-green-500/30 mb-2">
-                      Spotify Integration
-                    </Badge>
-                    <p className="text-sm text-slate-400">
-                      Connect your Spotify account in settings to play your playlists
-                    </p>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="mt-3 border-green-500/30 text-green-400 hover:bg-green-500/10"
-                      data-testid="button-connect-spotify"
-                    >
-                      Connect Spotify
-                    </Button>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    {state.isNight ? (
+                      <Moon className="w-3 h-3 text-purple-400" />
+                    ) : (
+                      <Sun className="w-3 h-3 text-yellow-400" />
+                    )}
+                    <span className="text-[10px] text-slate-500">
+                      {state.isNight ? "Night Mode" : "Day Mode"}
+                    </span>
                   </div>
-                ) : (
-                  <div className="text-center py-2">
-                    <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 mb-2">
-                      Season Zero Preview
-                    </Badge>
-                    <p className="text-xs text-slate-500">
-                      Curated tracks coming soon. Your preference is saved!
-                    </p>
-                  </div>
-                )}
+                  <Badge className="bg-slate-800/80 text-slate-400 text-[9px] border-slate-700/50">
+                    {state.currentEra || era}
+                  </Badge>
+                </div>
+
+                <div>
+                  <button
+                    onClick={() => setShowLocationPicker(!showLocationPicker)}
+                    className="w-full flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 transition-colors text-left"
+                    data-testid="button-location-picker"
+                  >
+                    <MapPin className="w-3 h-3 text-cyan-400 shrink-0" />
+                    <span className="text-[10px] text-slate-400 flex-1">Change Location</span>
+                    <ChevronDown className={`w-3 h-3 text-slate-500 transition-transform ${showLocationPicker ? "rotate-180" : ""}`} />
+                  </button>
+
+                  <AnimatePresence>
+                    {showLocationPicker && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="mt-1.5 space-y-0.5 overflow-hidden"
+                      >
+                        {locations.map((loc) => (
+                          <button
+                            key={loc.id}
+                            onClick={() => switchLocation(loc.id)}
+                            className={`w-full flex items-center gap-2 px-2.5 py-2 rounded-lg transition-colors text-left min-h-[36px] ${
+                              state.currentLocation === loc.id
+                                ? "bg-cyan-500/10 border border-cyan-500/20"
+                                : "hover:bg-slate-800/60"
+                            }`}
+                            data-testid={`btn-location-${loc.id}`}
+                          >
+                            <span className="text-base">{loc.emoji}</span>
+                            <span className={`text-xs ${state.currentLocation === loc.id ? "text-cyan-400 font-medium" : "text-slate-400"}`}>
+                              {loc.name}
+                            </span>
+                            {state.currentLocation === loc.id && (
+                              <span className="ml-auto w-1.5 h-1.5 bg-cyan-400 rounded-full" />
+                            )}
+                          </button>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               </div>
             </motion.div>
           )}
@@ -179,6 +222,29 @@ export function AudioPlayer({ audioPreference, audioMood, compact = false }: Aud
       </div>
     </motion.div>
   );
+}
+
+interface AudioPlayerProps {
+  audioPreference: string;
+  audioMood: string;
+  compact?: boolean;
+}
+
+export function AudioPlayer({ audioPreference, audioMood, compact = false }: AudioPlayerProps) {
+  if (audioPreference === "silent") return null;
+
+  if (compact) {
+    return (
+      <div className="flex items-center gap-2">
+        <Badge variant="outline" className="text-xs border-slate-600 text-slate-400">
+          <Music className="w-3 h-3 mr-1" />
+          Ambient Audio
+        </Badge>
+      </div>
+    );
+  }
+
+  return null;
 }
 
 export function AudioPlayerCompact({ audioPreference, audioMood }: AudioPlayerProps) {

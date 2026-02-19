@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Link, useLocation } from "wouter";
 import { getChroniclesSession } from "./chronicles-login";
 import { ChroniclesChatPanel } from "@/components/chronicles-chat-panel";
+import { AmbientAudioController } from "@/components/audio-player";
 import {
   Compass, Users, Shield, Crown, Sparkles, MapPin, Swords,
   ChevronRight, Sun, Moon, CloudSun, Sunrise, Sunset,
@@ -725,6 +726,17 @@ export default function ChroniclesPlay() {
     }
   }, [stateLoading, gameState, navigate]);
 
+  const { data: sessionContext } = useQuery({
+    queryKey: ["/api/chronicles/session-context", selectedEra],
+    queryFn: async () => {
+      const res = await fetch(`/api/chronicles/session-context?era=${selectedEra}`, { headers: getAuthHeaders() });
+      if (!res.ok) return null;
+      return res.json();
+    },
+    staleTime: 60000,
+    refetchInterval: 120000,
+  });
+
   const { data: achievementsData } = useQuery({
     queryKey: ["/api/chronicles/play/achievements"],
     queryFn: async () => {
@@ -1098,6 +1110,12 @@ export default function ChroniclesPlay() {
           )}
         </AnimatePresence>
       </div>
+
+      <AmbientAudioController
+        era={selectedEra}
+        location={sessionContext?.location || "home"}
+        isNight={sessionContext?.timeOfDay === "night" || sessionContext?.timeOfDay === "late_night"}
+      />
 
       <ChroniclesChatPanel currentEra={selectedEra} />
     </div>
