@@ -1022,6 +1022,13 @@ export default function ChroniclesPlay() {
                     <p className="text-[10px] text-gray-500">Train your voice</p>
                   </GlassCard>
                 </Link>
+                <Link href="/chronicles/faith">
+                  <GlassCard glow className="p-3 cursor-pointer hover:border-amber-500/30 transition-all h-full">
+                    <Star className="w-5 h-5 text-amber-400 mb-1" />
+                    <p className="text-xs text-white font-medium">Faith</p>
+                    <p className="text-[10px] text-gray-500">Worship & scripture</p>
+                  </GlassCard>
+                </Link>
                 <Link href="/chronicles/tutorial">
                   <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
                     <BookOpen className="w-5 h-5 text-emerald-400 mb-1" />

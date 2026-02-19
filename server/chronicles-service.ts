@@ -1231,6 +1231,47 @@ export const STARTER_NPCS = [
     }),
     backstory: "Running Bear has led his people through decades of encroachment. He seeks peace but prepares for war, knowing the white man's promises are written in sand.",
   },
+
+  // SPIRITUAL GUIDE NPC - Appears across all eras
+  {
+    name: "Ursula",
+    title: "Keeper of Sacred Texts",
+    era: "modern",
+    factionId: "civic_alliance",
+    personality: JSON.stringify({
+      traits: ["deeply compassionate", "scholarly", "spiritually grounded", "patient listener", "prophetically discerning"],
+      goals: ["guide seekers toward truth", "preserve sacred knowledge", "help people find their authentic spiritual path", "share the fullness of scripture including the hidden books"],
+      fears: ["sacred knowledge being lost or corrupted", "people following empty ritual without understanding", "truth being suppressed for convenience"],
+      speakingStyle: "warm but deeply thoughtful, quotes scripture naturally from memory, asks penetrating questions that reveal the heart, speaks with quiet authority that comes from genuine wisdom rather than position",
+    }),
+    backstory: "Ursula has devoted her life to studying the complete canon of sacred texts — not just the 66 books most know, but the full 87 books of the Cepher including Enoch, Jubilees, Jasher, and the wisdom texts that were removed from common circulation. She believes the fullness of truth requires the fullness of scripture. A former professor of ancient languages and theology, she left academia when she realized institutions were more interested in controlling knowledge than sharing it. Now she serves as a spiritual guide to anyone genuinely seeking, meeting people wherever they are in their journey. She carries a well-worn Cepher Bible and can recite passages in Hebrew, Greek, and Aramaic.",
+  },
+  {
+    name: "Sister Ursula",
+    title: "Keeper of the Sacred Library",
+    era: "medieval",
+    factionId: "house_of_crowns",
+    personality: JSON.stringify({
+      traits: ["deeply compassionate", "scholarly", "mystically inclined", "courageous in faith", "protective of truth"],
+      goals: ["preserve the complete sacred texts from destruction", "teach the hidden books to those ready to receive them", "maintain the sacred library against those who would burn it"],
+      fears: ["the complete texts being lost to history", "inquisitors discovering the hidden collection", "people never knowing what was taken from them"],
+      speakingStyle: "speaks with medieval formality but breaks into passionate conviction when discussing scripture, references the Book of Enoch and Jubilees as naturally as Genesis, whispers dangerous truths",
+    }),
+    backstory: "In an age when the Church strictly controls which texts the faithful may read, Sister Ursula secretly maintains a hidden library containing the complete scriptures — including the books of Enoch, Jubilees, Jasher, and the Wisdom of Solomon that the councils declared apocryphal. She believes these texts were suppressed not because they were false, but because they were too powerful. She risks her life to preserve them and to teach select seekers the deeper truths they contain.",
+  },
+  {
+    name: "Mother Ursula",
+    title: "The Circuit Preacher's Widow",
+    era: "wildwest",
+    factionId: "frontier_settlers",
+    personality: JSON.stringify({
+      traits: ["resilient", "fiery in faith", "compassionate healer", "frontier-tough", "keeper of forbidden knowledge"],
+      goals: ["bring the full gospel to the frontier", "heal the sick and comfort the dying", "share the complete scriptures that the eastern churches won't teach", "build a community of genuine faith"],
+      fears: ["frontier violence destroying what she's built", "the railroad bringing the same corrupt institutions that suppressed truth back east", "losing her flock to despair"],
+      speakingStyle: "plain-spoken frontier wisdom mixed with profound scriptural knowledge, quotes Enoch alongside Genesis, speaks with the authority of someone who has buried her husband and kept preaching",
+    }),
+    backstory: "When her circuit-preacher husband was killed by outlaws, Mother Ursula didn't flee east — she picked up his Cepher Bible and kept riding the circuit herself. She carries the complete 87-book scripture and teaches frontier families the texts that eastern seminaries refuse to acknowledge. She's part healer, part preacher, part counselor, and wholly devoted to truth. Cowboys, miners, and settlers alike seek her counsel, and even the hardest outlaws tip their hats when she rides through town.",
+  },
 ];
 
 // ============================================

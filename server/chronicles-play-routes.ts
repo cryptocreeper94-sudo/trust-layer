@@ -1590,4 +1590,707 @@ export function registerChroniclesChatRoutes(app: Express) {
       res.status(500).json({ error: "Failed to process purchase" });
     }
   });
+
+  // ============================================
+  // FAITH & SPIRITUAL LIFE SYSTEM
+  // ============================================
+
+  const SACRED_TEXTS: Record<string, any[]> = {
+    cepher: [
+      { id: "genesis", book: "Bere'shiyth (Genesis)", category: "torah", chapters: 50, description: "The beginning of all things — creation, the fall, the flood, and the patriarchs." },
+      { id: "exodus", book: "Shemoth (Exodus)", category: "torah", chapters: 40, description: "The deliverance from Egypt, the giving of the Torah at Sinai, and the building of the Tabernacle." },
+      { id: "leviticus", book: "Vayiqra (Leviticus)", category: "torah", chapters: 27, description: "The laws of holiness, sacrifice, and priestly service." },
+      { id: "numbers", book: "Bemidbar (Numbers)", category: "torah", chapters: 36, description: "The wilderness wanderings and the counting of Israel." },
+      { id: "deuteronomy", book: "Devariym (Deuteronomy)", category: "torah", chapters: 34, description: "Moses' final words and the renewal of the covenant before entering the Promised Land." },
+      { id: "joshua", book: "Yahusha (Joshua)", category: "history", chapters: 24, description: "The conquest and settlement of the land of Canaan." },
+      { id: "judges", book: "Shophetiym (Judges)", category: "history", chapters: 21, description: "The cycle of faithfulness and rebellion in the time of the judges." },
+      { id: "ruth", book: "Ruth", category: "history", chapters: 4, description: "A story of loyalty, redemption, and the lineage of King David." },
+      { id: "1samuel", book: "Shemu'el Ri'shon (1 Samuel)", category: "history", chapters: 31, description: "The rise of the monarchy — Samuel, Saul, and David." },
+      { id: "2samuel", book: "Shemu'el Sheniy (2 Samuel)", category: "history", chapters: 24, description: "David's reign and the establishment of Jerusalem." },
+      { id: "psalms", book: "Tehilliym (Psalms)", category: "poetry", chapters: 150, description: "Songs of praise, lament, wisdom, and prophecy — the prayer book of Israel." },
+      { id: "proverbs", book: "Mishley (Proverbs)", category: "wisdom", chapters: 31, description: "Wisdom for daily living — the fear of YAHUAH is the beginning of knowledge." },
+      { id: "ecclesiastes", book: "Qoheleth (Ecclesiastes)", category: "wisdom", chapters: 12, description: "The search for meaning — vanity of vanities, all is vanity." },
+      { id: "song", book: "Shiyr HaShiyriym (Song of Songs)", category: "wisdom", chapters: 8, description: "A love poem expressing the deepest human and divine intimacy." },
+      { id: "isaiah", book: "Yesha'yahu (Isaiah)", category: "prophets", chapters: 66, description: "Prophecies of judgment, redemption, and the coming Messiah." },
+      { id: "jeremiah", book: "Yirmeyahu (Jeremiah)", category: "prophets", chapters: 52, description: "The weeping prophet's warnings before the destruction of Jerusalem." },
+      { id: "ezekiel", book: "Yechezq'el (Ezekiel)", category: "prophets", chapters: 48, description: "Visions of divine glory, judgment, and the restoration of Israel." },
+      { id: "daniel", book: "Daniy'el (Daniel)", category: "prophets", chapters: 12, description: "Prophecies of empires, the end times, and faithfulness under persecution." },
+      { id: "matthew", book: "Mattithyahu (Matthew)", category: "gospels", chapters: 28, description: "The Gospel of the Kingdom — Yahusha as the promised Messiah." },
+      { id: "mark", book: "Marqus (Mark)", category: "gospels", chapters: 16, description: "The Gospel of action — the servant Messiah who came to give his life." },
+      { id: "luke", book: "Luqas (Luke)", category: "gospels", chapters: 24, description: "The Gospel of compassion — Yahusha as the Son of Man for all people." },
+      { id: "john", book: "Yochanon (John)", category: "gospels", chapters: 21, description: "The Gospel of divinity — In the beginning was the Word." },
+      { id: "acts", book: "Ma'asiym (Acts)", category: "gospels", chapters: 28, description: "The birth of the early assembly and the spread of the Good News." },
+      { id: "romans", book: "Romaiym (Romans)", category: "letters", chapters: 16, description: "Paul's masterwork on salvation by grace through faith." },
+      { id: "revelation", book: "Chizayon (Revelation)", category: "prophecy", chapters: 22, description: "The unveiling of the end times and the triumph of the Lamb." },
+      { id: "enoch", book: "Chanok (1 Enoch)", category: "cepher_exclusive", chapters: 108, description: "The Book of the Watchers, the Parables, and the astronomical writings. Quoted by Jude. Reveals the fallen angels, the origin of nephilim, and the coming judgment." },
+      { id: "2enoch", book: "Chanok Sheniy (2 Enoch)", category: "cepher_exclusive", chapters: 68, description: "The Secrets of Enoch — his journey through the seven heavens and the creation narrative as told by the Most High." },
+      { id: "jubilees", book: "Yovheliym (Jubilees)", category: "cepher_exclusive", chapters: 50, description: "The Little Genesis — a detailed retelling of creation through Moses, organized by jubilee cycles. Reveals the sacred calendar and the war between the spirits of truth and falsehood." },
+      { id: "jasher", book: "Yashar (Jasher)", category: "cepher_exclusive", chapters: 91, description: "The Book of the Upright — referenced in Joshua and 2 Samuel. A detailed history from Adam through the Judges, filling in gaps the other books leave silent." },
+      { id: "wisdom", book: "Chokmah Shlomoh (Wisdom of Solomon)", category: "cepher_exclusive", chapters: 19, description: "Deep wisdom on righteousness, the nature of wisdom itself, and the destiny of the faithful." },
+      { id: "sirach", book: "Sirach (Ecclesiasticus)", category: "cepher_exclusive", chapters: 51, description: "Practical wisdom for daily living — the fear of the Most High applied to every aspect of life." },
+      { id: "tobit", book: "Toviyahu (Tobit)", category: "cepher_exclusive", chapters: 14, description: "A story of faith, healing, and angelic intervention in the life of a righteous family." },
+      { id: "2esdras", book: "Ezra Reviy'iy (2 Esdras / 4 Ezra)", category: "cepher_exclusive", chapters: 16, description: "Apocalyptic visions given to Ezra — prophecies of the end times, the coming Messiah, and the restoration of all things." },
+      { id: "baruch", book: "Baruk (Baruch)", category: "cepher_exclusive", chapters: 6, description: "The words of Jeremiah's scribe — prayers of repentance and the promise of return from exile." },
+      { id: "maccabees1", book: "Makkabiym Ri'shon (1 Maccabees)", category: "cepher_exclusive", chapters: 16, description: "The revolt against Greek oppression and the rededication of the Temple — the origin of Chanukah." },
+      { id: "maccabees2", book: "Makkabiym Sheniy (2 Maccabees)", category: "cepher_exclusive", chapters: 15, description: "Miraculous accounts of divine intervention during the Maccabean revolt." },
+    ],
+  };
+
+  const CONGREGATIONS: Record<string, any[]> = {
+    modern: [
+      { id: "community_chapel", name: "Community Chapel", type: "non-denominational", description: "A welcoming congregation focused on studying the complete scriptures, including the books most churches leave out. Ursula leads weekly Cepher study groups here.", schedule: "Sunday 10am, Wednesday 7pm", leader: "Ursula" },
+      { id: "city_cathedral", name: "City Cathedral", type: "traditional", description: "The grand cathedral downtown where generations have worshipped. Traditional liturgy, powerful organ music, and a sense of sacred history.", schedule: "Sunday 8am & 11am", leader: "Pastor Morrison" },
+      { id: "storefront_church", name: "Cornerstone Fellowship", type: "charismatic", description: "A vibrant storefront church in the heart of the neighborhood. Energetic worship, passionate preaching, and a tight-knit community that takes care of its own.", schedule: "Sunday 11am, Friday 7pm", leader: "Pastor Williams" },
+      { id: "home_fellowship", name: "Home Fellowship Group", type: "house_church", description: "A small gathering in someone's living room. No formal structure — just people reading scripture together, sharing meals, and being real about life.", schedule: "Thursday 7pm", leader: "Various" },
+    ],
+    medieval: [
+      { id: "village_chapel", name: "The Village Chapel", type: "parish", description: "The stone chapel at the heart of the village where the faithful gather for mass. Simple but sacred, with hand-painted icons and candlelight.", schedule: "Daily Matins, Sunday High Mass", leader: "Father Thomas" },
+      { id: "abbey_scriptorium", name: "The Abbey Scriptorium", type: "monastic", description: "Sister Ursula's hidden sanctuary within the abbey walls. Monks copy manuscripts by candlelight while she guards texts that the Church has tried to suppress.", schedule: "Night prayers, secret study sessions", leader: "Sister Ursula" },
+      { id: "forest_shrine", name: "The Forest Shrine", type: "celtic", description: "A sacred grove where the old Celtic Christian traditions live on — prayers that honor creation, rituals that predate Rome's influence, and the complete scriptures.", schedule: "Solstice gatherings, dawn prayers", leader: "Brother Aidan" },
+      { id: "cathedral", name: "The Grand Cathedral", type: "cathedral", description: "The bishop's seat of power. Magnificent stained glass, soaring arches, and political intrigue behind every confession.", schedule: "Daily hours, Sunday solemn mass", leader: "Bishop Renault" },
+    ],
+    wildwest: [
+      { id: "frontier_church", name: "Frontier Church", type: "frontier", description: "A whitewashed wooden church on the edge of town. Mother Ursula preaches here on Sundays, and her sermons draw people from miles around — she teaches from the complete Cepher, not just the approved texts.", schedule: "Sunday 10am", leader: "Mother Ursula" },
+      { id: "camp_meeting", name: "Revival Camp Meeting", type: "revival", description: "A tent meeting ground outside town where traveling preachers set up for week-long revivals. Singing, testifying, and the kind of preaching that makes you feel every word in your bones.", schedule: "Seasonal revivals", leader: "Traveling evangelists" },
+      { id: "mission", name: "San Miguel Mission", type: "mission", description: "An old Spanish mission with thick adobe walls, a bell tower, and centuries of prayer soaked into the stone. A place of refuge for anyone — outlaw or saint.", schedule: "Daily vespers, Sunday mass", leader: "Padre Esteban" },
+      { id: "prayer_circle", name: "Settlers' Prayer Circle", type: "informal", description: "An informal gathering around a campfire where frontier families pray together, share scripture, and support each other through the hardships of frontier life.", schedule: "Nightly around sundown", leader: "Community" },
+    ],
+  };
+
+  const COMMUNITY_EVENTS: Record<string, any[]> = {
+    modern: [
+      { id: "potluck", name: "Community Potluck", type: "fellowship", description: "Monthly gathering after service where everyone brings a dish and shares a meal together.", echoReward: 15, faithXp: 20 },
+      { id: "bible_study", name: "Cepher Study Group", type: "study", description: "Ursula's deep-dive into the books most people have never read — tonight: the Book of Enoch and the Watchers.", echoReward: 25, faithXp: 40 },
+      { id: "food_bank", name: "Food Bank Volunteering", type: "service", description: "Serving the community by helping at the local food bank — faith in action.", echoReward: 30, faithXp: 35 },
+      { id: "prayer_vigil", name: "Evening Prayer Vigil", type: "prayer", description: "A quiet evening of communal prayer and meditation on scripture.", echoReward: 10, faithXp: 30 },
+      { id: "youth_night", name: "Youth Night", type: "fellowship", description: "Games, music, and real conversations about faith and life for the younger generation.", echoReward: 15, faithXp: 15 },
+      { id: "baptism", name: "Baptism Ceremony", type: "ceremony", description: "A sacred immersion ceremony at the river — a public declaration of faith.", echoReward: 50, faithXp: 100, minFaithLevel: 3 },
+    ],
+    medieval: [
+      { id: "feast_day", name: "Saint's Feast Day", type: "festival", description: "The village celebrates with food, music, and stories of the saints. The whole community comes together.", echoReward: 20, faithXp: 25 },
+      { id: "manuscript_study", name: "Secret Manuscript Reading", type: "study", description: "Sister Ursula opens the hidden library for those brave enough to read the forbidden books — tonight: Jubilees.", echoReward: 35, faithXp: 50 },
+      { id: "pilgrimage", name: "Local Pilgrimage", type: "journey", description: "Walk the ancient pilgrim's path to the holy well, praying at each station along the way.", echoReward: 25, faithXp: 40 },
+      { id: "almsgiving", name: "Almsgiving Day", type: "service", description: "Distribution of bread and coin to the poor at the abbey gates.", echoReward: 20, faithXp: 30 },
+      { id: "vespers", name: "Evening Vespers", type: "prayer", description: "Candlelit evening prayers with Gregorian chant echoing through stone corridors.", echoReward: 10, faithXp: 20 },
+      { id: "ordination", name: "Ordination Ceremony", type: "ceremony", description: "A solemn ceremony of dedication — committing your life to sacred service.", echoReward: 75, faithXp: 120, minFaithLevel: 5 },
+    ],
+    wildwest: [
+      { id: "sunday_dinner", name: "Sunday Dinner on the Ground", type: "fellowship", description: "After Mother Ursula's sermon, the whole community spreads blankets and shares food. The best conversations happen here.", echoReward: 15, faithXp: 20 },
+      { id: "cepher_reading", name: "Cepher Reading by Firelight", type: "study", description: "Mother Ursula reads from the Book of Jasher by campfire light, drawing connections to the frontier life.", echoReward: 30, faithXp: 45 },
+      { id: "barn_raising", name: "Community Barn Raising", type: "service", description: "The whole community comes together to build a barn for a family in need — faith is what you do, not just what you say.", echoReward: 35, faithXp: 35 },
+      { id: "hymn_sing", name: "Evening Hymn Sing", type: "prayer", description: "Gather on the church porch as the sun sets, singing old hymns that carry across the frontier.", echoReward: 10, faithXp: 20 },
+      { id: "healing_prayer", name: "Healing Prayer Service", type: "prayer", description: "Mother Ursula lays hands on the sick and prays. Whether it's faith or frontier grit, people get better.", echoReward: 20, faithXp: 40 },
+      { id: "dedication", name: "Frontier Dedication", type: "ceremony", description: "A dedication ceremony under the open sky — committing your land, your work, and your life to something greater.", echoReward: 60, faithXp: 100, minFaithLevel: 4 },
+    ],
+  };
+
+  // GET /api/chronicles/faith/status
+  app.get("/api/chronicles/faith/status", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+
+      const [state] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, userId))
+        .limit(1);
+
+      if (!state) return res.status(404).json({ error: "Game state not found" });
+
+      const era = state.currentEra || "modern";
+      const sacredTextsRead = JSON.parse(state.sacredTextsRead || '[]');
+      const spiritualJournal = JSON.parse(state.spiritualJournal || '[]');
+      const congregations = CONGREGATIONS[era] || [];
+      const events = (COMMUNITY_EVENTS[era] || []).filter(e => !e.minFaithLevel || (state.faithLevel || 0) >= e.minFaithLevel);
+      const relationships = JSON.parse(state.npcRelationships || '{}');
+      const eraUrsulaNames: Record<string, string> = { modern: "Ursula", medieval: "Sister Ursula", wildwest: "Mother Ursula" };
+      const ursulaName = eraUrsulaNames[era] || "Ursula";
+      const ursulaRelationship = relationships[ursulaName] || 0;
+
+      const now = new Date();
+      const lastService = state.lastServiceAt ? new Date(state.lastServiceAt) : null;
+      const lastPrayer = state.lastPrayerAt ? new Date(state.lastPrayerAt) : null;
+      const canAttendService = !lastService || (now.getTime() - lastService.getTime()) > 4 * 3600000;
+      const canPray = !lastPrayer || (now.getTime() - lastPrayer.getTime()) > 1800000;
+
+      res.json({
+        faithLevel: state.faithLevel || 0,
+        faithXpToNext: ((state.faithLevel || 0) + 1) * 100,
+        spiritualPath: state.spiritualPath,
+        sacredTextsRead,
+        totalTexts: SACRED_TEXTS.cepher.length,
+        servicesAttended: state.servicesAttended || 0,
+        congregationId: state.congregationId,
+        prayerStreak: state.prayerStreak || 0,
+        canAttendService,
+        canPray,
+        congregations,
+        upcomingEvents: events,
+        ursulaRelationship,
+        ursulaName,
+        era,
+        recentJournal: spiritualJournal.slice(-5),
+      });
+    } catch (error: any) {
+      console.error("Faith status error:", error);
+      res.status(500).json({ error: "Failed to load faith status" });
+    }
+  });
+
+  // GET /api/chronicles/faith/sacred-texts
+  app.get("/api/chronicles/faith/sacred-texts", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+
+      const [state] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, userId))
+        .limit(1);
+
+      if (!state) return res.status(404).json({ error: "Game state not found" });
+
+      const sacredTextsRead = JSON.parse(state.sacredTextsRead || '[]');
+      const category = (req.query.category as string) || "all";
+
+      let texts = SACRED_TEXTS.cepher;
+      if (category !== "all") {
+        texts = texts.filter(t => t.category === category);
+      }
+
+      res.json({
+        texts: texts.map(t => ({
+          ...t,
+          read: sacredTextsRead.includes(t.id),
+        })),
+        categories: ["torah", "history", "poetry", "wisdom", "prophets", "gospels", "letters", "prophecy", "cepher_exclusive"],
+        totalRead: sacredTextsRead.length,
+        totalTexts: SACRED_TEXTS.cepher.length,
+      });
+    } catch (error: any) {
+      console.error("Sacred texts error:", error);
+      res.status(500).json({ error: "Failed to load sacred texts" });
+    }
+  });
+
+  // POST /api/chronicles/faith/read-text - Read a sacred text passage (AI-generated)
+  app.post("/api/chronicles/faith/read-text", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+
+      const { textId } = req.body;
+      if (!textId) return res.status(400).json({ error: "Text ID required" });
+
+      const text = SACRED_TEXTS.cepher.find(t => t.id === textId);
+      if (!text) return res.status(404).json({ error: "Sacred text not found" });
+
+      const [state] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, userId))
+        .limit(1);
+
+      if (!state) return res.status(404).json({ error: "Game state not found" });
+
+      const era = state.currentEra || "modern";
+      const eraUrsulaNames: Record<string, string> = { modern: "Ursula", medieval: "Sister Ursula", wildwest: "Mother Ursula" };
+      const ursulaName = eraUrsulaNames[era] || "Ursula";
+      const isCepherExclusive = text.category === "cepher_exclusive";
+
+      let passage;
+      try {
+        const response = await openai.chat.completions.create({
+          model: "gpt-4o",
+          messages: [
+            {
+              role: "system",
+              content: `You are generating a reading experience for "${text.book}" from the Cepher Bible in DarkWave Chronicles.
+
+The player is reading this text in the ${era} era. ${ursulaName} is their spiritual guide.
+
+${isCepherExclusive ? `IMPORTANT: This is one of the books EXCLUDED from most modern Bibles but preserved in the Cepher. ${ursulaName} considers these texts essential to understanding the full picture of scripture. Treat this text with deep reverence and scholarly accuracy.` : ""}
+
+Generate a meaningful passage and ${ursulaName}'s commentary on it. The passage should feel authentic to the actual biblical text (using the sacred names: YAHUAH, Yahusha, Ruach HaQodesh). ${ursulaName}'s commentary should draw connections between the ancient text and the player's life, making it personally relevant.
+
+Return JSON:
+{
+  "passageTitle": "Chapter/section title",
+  "passage": "2-3 paragraphs of the sacred text in reverent, authentic style using the sacred names",
+  "ursulaCommentary": "${ursulaName}'s personal insight connecting this passage to the player's journey (2-3 sentences, in her voice)",
+  "reflectionQuestion": "A penetrating question ${ursulaName} poses to the player for personal reflection",
+  "historicalContext": "One fascinating historical/scholarly fact about this text (1-2 sentences)"
+}`
+            },
+            { role: "user", content: `Generate a reading from ${text.book}: "${text.description}"` }
+          ],
+          response_format: { type: "json_object" },
+          max_completion_tokens: 1000,
+        });
+        passage = JSON.parse(response.choices[0]?.message?.content || '{}');
+      } catch {
+        passage = {
+          passageTitle: `From ${text.book}`,
+          passage: text.description,
+          ursulaCommentary: `${ursulaName} looks at you thoughtfully. "This text has much to teach us, if we have ears to hear."`,
+          reflectionQuestion: "What does this passage stir in your heart?",
+          historicalContext: `This text is part of the Cepher's ${text.chapters}-chapter collection.`,
+        };
+      }
+
+      const sacredTextsRead = JSON.parse(state.sacredTextsRead || '[]');
+      const isNew = !sacredTextsRead.includes(textId);
+      if (isNew) {
+        sacredTextsRead.push(textId);
+      }
+
+      const faithXpGained = isNew ? (isCepherExclusive ? 30 : 15) : 5;
+      const echoReward = isNew ? (isCepherExclusive ? 20 : 10) : 0;
+      const newFaithXp = (state.faithLevel || 0) * 100 + faithXpGained;
+      const newFaithLevel = Math.floor(newFaithXp / 100);
+
+      const journal = JSON.parse(state.spiritualJournal || '[]');
+      journal.push({
+        type: "reading",
+        textId,
+        book: text.book,
+        passageTitle: passage.passageTitle,
+        timestamp: new Date().toISOString(),
+      });
+
+      await db.update(chroniclesGameState)
+        .set({
+          sacredTextsRead: JSON.stringify(sacredTextsRead),
+          faithLevel: newFaithLevel,
+          echoBalance: (state.echoBalance || 0) + echoReward,
+          spiritualJournal: JSON.stringify(journal.slice(-100)),
+          experience: (state.experience || 0) + faithXpGained,
+          updatedAt: new Date(),
+        })
+        .where(eq(chroniclesGameState.userId, userId));
+
+      res.json({
+        passage,
+        text,
+        isNew,
+        faithXpGained,
+        echoReward,
+        faithLevel: newFaithLevel,
+        totalTextsRead: sacredTextsRead.length,
+      });
+    } catch (error: any) {
+      console.error("Read text error:", error);
+      res.status(500).json({ error: "Failed to read sacred text" });
+    }
+  });
+
+  // POST /api/chronicles/faith/attend-service
+  app.post("/api/chronicles/faith/attend-service", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+
+      const { congregationId } = req.body;
+
+      const [state] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, userId))
+        .limit(1);
+
+      if (!state) return res.status(404).json({ error: "Game state not found" });
+
+      const era = state.currentEra || "modern";
+      const congregations = CONGREGATIONS[era] || [];
+      const congregation = congregations.find(c => c.id === congregationId);
+      if (!congregation) return res.status(404).json({ error: "Congregation not found" });
+
+      const now = new Date();
+      const lastService = state.lastServiceAt ? new Date(state.lastServiceAt) : null;
+      if (lastService && (now.getTime() - lastService.getTime()) < 4 * 3600000) {
+        return res.status(429).json({ error: "You've attended a service recently. Come back later." });
+      }
+
+      const eraUrsulaNames: Record<string, string> = { modern: "Ursula", medieval: "Sister Ursula", wildwest: "Mother Ursula" };
+      const ursulaName = eraUrsulaNames[era] || "Ursula";
+      const isUrsulaLed = congregation.leader === ursulaName || congregation.leader === "Sister Ursula" || congregation.leader === "Mother Ursula";
+
+      let serviceExperience;
+      try {
+        const response = await openai.chat.completions.create({
+          model: "gpt-4o",
+          messages: [
+            {
+              role: "system",
+              content: `Generate an immersive worship service experience at "${congregation.name}" (${congregation.type}) in the ${era} era of DarkWave Chronicles.
+
+${congregation.description}
+
+${isUrsulaLed ? `${ursulaName} is leading this service. She teaches from the complete Cepher Bible, including the books most don't know about. Her teaching style is warm, deeply insightful, and personally challenging. She uses the sacred names (YAHUAH, Yahusha).` : `The service is led by ${congregation.leader}.`}
+
+Make it feel like the player is THERE. Sights, sounds, atmosphere. The service should feel authentic to the era and denomination.
+
+Return JSON:
+{
+  "title": "Service title or theme",
+  "atmosphere": "1-2 sentences describing the sights, sounds, and feeling of arriving",
+  "sermon": "2-3 paragraphs of the teaching/sermon — make it personally meaningful, not generic",
+  "communityMoment": "A brief scene of fellowship — a conversation, a shared meal, a moment of connection with another worshipper",
+  "personalInsight": "A thought that stays with the player after the service (1-2 sentences)",
+  "scriptureReference": "The scripture passage referenced in the teaching"
+}`
+            },
+            { role: "user", content: `Generate a worship service experience. Player faith level: ${state.faithLevel}, services attended: ${state.servicesAttended}` }
+          ],
+          response_format: { type: "json_object" },
+          max_completion_tokens: 1200,
+        });
+        serviceExperience = JSON.parse(response.choices[0]?.message?.content || '{}');
+      } catch {
+        serviceExperience = {
+          title: "A Gathering of the Faithful",
+          atmosphere: `The ${congregation.name} fills with the warmth of gathered souls.`,
+          sermon: "The teaching today speaks of perseverance and the faithfulness of the Most High through all seasons of life.",
+          communityMoment: "After the service, someone extends a hand of welcome and invites you to stay for fellowship.",
+          personalInsight: "You leave with a renewed sense of purpose.",
+          scriptureReference: "Tehilliym (Psalms) 23",
+        };
+      }
+
+      const faithXpGained = isUrsulaLed ? 50 : 30;
+      const echoReward = 20;
+      const newServicesAttended = (state.servicesAttended || 0) + 1;
+
+      const relationships = JSON.parse(state.npcRelationships || '{}');
+      if (isUrsulaLed) {
+        relationships[ursulaName] = clamp((relationships[ursulaName] || 0) + 2, -20, 20);
+      }
+
+      const journal = JSON.parse(state.spiritualJournal || '[]');
+      journal.push({
+        type: "service",
+        congregation: congregation.name,
+        title: serviceExperience.title,
+        timestamp: new Date().toISOString(),
+      });
+
+      const newFaithXp = (state.faithLevel || 0) * 100 + faithXpGained;
+      const newFaithLevel = Math.floor(newFaithXp / 100);
+
+      await db.update(chroniclesGameState)
+        .set({
+          servicesAttended: newServicesAttended,
+          lastServiceAt: now,
+          congregationId,
+          faithLevel: newFaithLevel,
+          echoBalance: (state.echoBalance || 0) + echoReward,
+          npcRelationships: JSON.stringify(relationships),
+          spiritualJournal: JSON.stringify(journal.slice(-100)),
+          experience: (state.experience || 0) + faithXpGained,
+          updatedAt: new Date(),
+        })
+        .where(eq(chroniclesGameState.userId, userId));
+
+      res.json({
+        service: serviceExperience,
+        congregation,
+        faithXpGained,
+        echoReward,
+        faithLevel: newFaithLevel,
+        servicesAttended: newServicesAttended,
+        ursulaRelationshipChange: isUrsulaLed ? 2 : 0,
+      });
+    } catch (error: any) {
+      console.error("Attend service error:", error);
+      res.status(500).json({ error: "Failed to attend service" });
+    }
+  });
+
+  // POST /api/chronicles/faith/pray
+  app.post("/api/chronicles/faith/pray", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+
+      const { intention } = req.body;
+
+      const [state] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, userId))
+        .limit(1);
+
+      if (!state) return res.status(404).json({ error: "Game state not found" });
+
+      const now = new Date();
+      const lastPrayer = state.lastPrayerAt ? new Date(state.lastPrayerAt) : null;
+      if (lastPrayer && (now.getTime() - lastPrayer.getTime()) < 1800000) {
+        return res.status(429).json({ error: "Take time to reflect on your last prayer before praying again." });
+      }
+
+      const era = state.currentEra || "modern";
+      const eraUrsulaNames: Record<string, string> = { modern: "Ursula", medieval: "Sister Ursula", wildwest: "Mother Ursula" };
+      const ursulaName = eraUrsulaNames[era] || "Ursula";
+
+      const lastPrayerDate = lastPrayer ? lastPrayer.toDateString() : null;
+      const todayStr = now.toDateString();
+      const yesterdayStr = new Date(now.getTime() - 86400000).toDateString();
+      let newStreak = state.prayerStreak || 0;
+      if (lastPrayerDate === todayStr) {
+        // already prayed today, no streak change
+      } else if (lastPrayerDate === yesterdayStr) {
+        newStreak += 1;
+      } else {
+        newStreak = 1;
+      }
+
+      let prayerResponse;
+      try {
+        const response = await openai.chat.completions.create({
+          model: "gpt-4o",
+          messages: [
+            {
+              role: "system",
+              content: `Generate a prayer and meditation moment for a player in the ${era} era of DarkWave Chronicles.
+
+${intention ? `The player's prayer intention: "${intention}"` : "The player is praying without a specific intention — seeking peace and guidance."}
+
+Prayer streak: ${newStreak} days. Faith level: ${state.faithLevel}.
+
+Create an intimate, reverent moment. Use the sacred names (YAHUAH, Yahusha) naturally. Include a scripture from the Cepher that relates to their intention or state of mind. This should feel personal and genuine, not formulaic.
+
+Return JSON:
+{
+  "atmosphere": "A brief description of the prayer setting and moment (1-2 sentences)",
+  "prayer": "A heartfelt prayer in first person — what rises from the heart (2-3 sentences)",
+  "scripture": "A comforting or guiding scripture passage from the Cepher",
+  "scriptureSource": "Book and chapter reference",
+  "innerPeace": "What the player feels after praying (1-2 sentences — warmth, clarity, peace, conviction)",
+  "ursulaWhisper": "${ursulaName}'s gentle encouragement if she's nearby, or null if the player is alone"
+}`
+            },
+            { role: "user", content: intention ? `Prayer intention: ${intention}` : "Seeking peace and guidance" }
+          ],
+          response_format: { type: "json_object" },
+          max_completion_tokens: 600,
+        });
+        prayerResponse = JSON.parse(response.choices[0]?.message?.content || '{}');
+      } catch {
+        prayerResponse = {
+          atmosphere: "A quiet moment of stillness settles over you.",
+          prayer: "YAHUAH, I come before you seeking wisdom and peace. Guide my steps in this world.",
+          scripture: "Trust in YAHUAH with all your heart, and lean not on your own understanding.",
+          scriptureSource: "Mishley (Proverbs) 3:5",
+          innerPeace: "A gentle warmth fills your chest. You feel heard.",
+          ursulaWhisper: null,
+        };
+      }
+
+      const faithXpGained = 15 + Math.min(newStreak * 2, 20);
+      const echoReward = newStreak >= 7 ? 10 : 5;
+
+      const journal = JSON.parse(state.spiritualJournal || '[]');
+      journal.push({
+        type: "prayer",
+        intention: intention || "general",
+        streak: newStreak,
+        timestamp: new Date().toISOString(),
+      });
+
+      const newFaithXp = (state.faithLevel || 0) * 100 + faithXpGained;
+      const newFaithLevel = Math.floor(newFaithXp / 100);
+
+      await db.update(chroniclesGameState)
+        .set({
+          prayerStreak: newStreak,
+          lastPrayerAt: now,
+          faithLevel: newFaithLevel,
+          echoBalance: (state.echoBalance || 0) + echoReward,
+          wisdom: (state.wisdom || 10) + (newStreak >= 7 ? 1 : 0),
+          spiritualJournal: JSON.stringify(journal.slice(-100)),
+          experience: (state.experience || 0) + faithXpGained,
+          updatedAt: new Date(),
+        })
+        .where(eq(chroniclesGameState.userId, userId));
+
+      res.json({
+        prayer: prayerResponse,
+        faithXpGained,
+        echoReward,
+        prayerStreak: newStreak,
+        faithLevel: newFaithLevel,
+        wisdomGained: newStreak >= 7 ? 1 : 0,
+      });
+    } catch (error: any) {
+      console.error("Prayer error:", error);
+      res.status(500).json({ error: "Failed to process prayer" });
+    }
+  });
+
+  // POST /api/chronicles/faith/attend-event
+  app.post("/api/chronicles/faith/attend-event", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+
+      const { eventId } = req.body;
+      if (!eventId) return res.status(400).json({ error: "Event ID required" });
+
+      const [state] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, userId))
+        .limit(1);
+
+      if (!state) return res.status(404).json({ error: "Game state not found" });
+
+      const era = state.currentEra || "modern";
+      const events = COMMUNITY_EVENTS[era] || [];
+      const event = events.find(e => e.id === eventId);
+      if (!event) return res.status(404).json({ error: "Event not found" });
+
+      if (event.minFaithLevel && (state.faithLevel || 0) < event.minFaithLevel) {
+        return res.status(403).json({ error: `Requires faith level ${event.minFaithLevel}`, currentLevel: state.faithLevel });
+      }
+
+      let eventExperience;
+      try {
+        const eraUrsulaNames: Record<string, string> = { modern: "Ursula", medieval: "Sister Ursula", wildwest: "Mother Ursula" };
+        const ursulaName = eraUrsulaNames[era] || "Ursula";
+
+        const response = await openai.chat.completions.create({
+          model: "gpt-4o",
+          messages: [
+            {
+              role: "system",
+              content: `Generate an immersive community event experience for "${event.name}" (${event.type}) in the ${era} era.
+
+${event.description}
+
+Make the player feel PRESENT at this gathering. Include other community members, conversations, moments of genuine human connection. This is life simulation — make it feel real.
+
+Return JSON:
+{
+  "narrative": "2-3 vivid paragraphs describing the player's experience at the event",
+  "highlight": "The most memorable moment (1-2 sentences)",
+  "connection": "A meaningful interaction with another person at the event",
+  "takeaway": "What the player carries with them from this experience"
+}`
+            },
+            { role: "user", content: `Generate community event experience. Player faith level: ${state.faithLevel}, era: ${era}` }
+          ],
+          response_format: { type: "json_object" },
+          max_completion_tokens: 800,
+        });
+        eventExperience = JSON.parse(response.choices[0]?.message?.content || '{}');
+      } catch {
+        eventExperience = {
+          narrative: `You arrive at ${event.name} and find a warm welcome. ${event.description}`,
+          highlight: "A moment of genuine connection with the community.",
+          connection: "Someone reaches out and shares their story with you.",
+          takeaway: "You leave feeling more connected to the people around you.",
+        };
+      }
+
+      const journal = JSON.parse(state.spiritualJournal || '[]');
+      journal.push({
+        type: "event",
+        eventId,
+        name: event.name,
+        timestamp: new Date().toISOString(),
+      });
+
+      const faithXpGained = event.faithXp || 20;
+      const echoReward = event.echoReward || 15;
+      const newFaithXp = (state.faithLevel || 0) * 100 + faithXpGained;
+      const newFaithLevel = Math.floor(newFaithXp / 100);
+
+      await db.update(chroniclesGameState)
+        .set({
+          faithLevel: newFaithLevel,
+          echoBalance: (state.echoBalance || 0) + echoReward,
+          compassion: (state.compassion || 10) + (event.type === "service" ? 1 : 0),
+          influence: (state.influence || 10) + (event.type === "ceremony" ? 1 : 0),
+          spiritualJournal: JSON.stringify(journal.slice(-100)),
+          experience: (state.experience || 0) + faithXpGained,
+          updatedAt: new Date(),
+        })
+        .where(eq(chroniclesGameState.userId, userId));
+
+      res.json({
+        event: eventExperience,
+        eventInfo: event,
+        faithXpGained,
+        echoReward,
+        faithLevel: newFaithLevel,
+      });
+    } catch (error: any) {
+      console.error("Attend event error:", error);
+      res.status(500).json({ error: "Failed to attend event" });
+    }
+  });
+
+  // POST /api/chronicles/faith/talk-to-ursula - Direct conversation with Ursula
+  app.post("/api/chronicles/faith/talk-to-ursula", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+
+      const { message } = req.body;
+      if (!message) return res.status(400).json({ error: "Message required" });
+
+      const [state] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, userId))
+        .limit(1);
+
+      if (!state) return res.status(404).json({ error: "Game state not found" });
+
+      const era = state.currentEra || "modern";
+      const eraUrsulaNames: Record<string, string> = { modern: "Ursula", medieval: "Sister Ursula", wildwest: "Mother Ursula" };
+      const ursulaName = eraUrsulaNames[era] || "Ursula";
+      const ursulaData = STARTER_NPCS.find(n => n.name === ursulaName);
+      const relationships = JSON.parse(state.npcRelationships || '{}');
+      const relScore = relationships[ursulaName] || 0;
+
+      let reply;
+      try {
+        const response = await openai.chat.completions.create({
+          model: "gpt-4o",
+          messages: [
+            {
+              role: "system",
+              content: `You are ${ursulaName} in the ${era} era of DarkWave Chronicles.
+
+${ursulaData?.backstory || "A keeper of sacred texts who guides seekers toward truth."}
+
+PERSONALITY: ${ursulaData?.personality || "Compassionate, scholarly, deeply spiritual"}
+
+RELATIONSHIP WITH PLAYER: ${relScore > 5 ? "Deep trust and friendship" : relScore > 0 ? "Growing warmth" : relScore < -5 ? "Guarded and cautious" : relScore < 0 ? "Slightly wary" : "Neutral but open"}
+
+YOUR KNOWLEDGE: You know the complete Cepher Bible — all 87 books. You can quote from Enoch, Jubilees, Jasher, Wisdom of Solomon, Sirach, Tobit, 2 Esdras, Baruch, Maccabees, and all the standard texts. You use the sacred names: YAHUAH (the Most High), Yahusha (the Messiah), Ruach HaQodesh (the Holy Spirit). You believe the removed books were suppressed for political reasons, not theological ones.
+
+SPEAKING STYLE: Warm, deeply thoughtful, quotes scripture naturally, asks questions that pierce the heart. You don't preach at people — you walk with them. You meet people where they are.
+
+${era === "medieval" ? "You speak with medieval formality but genuine warmth. You're cautious about who you share the hidden texts with." : era === "wildwest" ? "You're frontier-tough but tender-hearted. Plain-spoken wisdom. You've buried your husband and kept preaching. You don't suffer fools but you love everyone." : "You're a former professor who left academia for truth. Approachable, intellectually rigorous, spiritually grounded."}
+
+Respond as ${ursulaName} in character. Keep responses 2-4 sentences. Be genuine, not preachy. If the player asks about scripture, quote from the Cepher (including the hidden books when relevant).`
+            },
+            { role: "user", content: message }
+          ],
+          max_completion_tokens: 300,
+        });
+        reply = response.choices[0]?.message?.content || `${ursulaName} considers your words thoughtfully.`;
+      } catch {
+        reply = `${ursulaName} nods slowly. "That's a profound question. Let me think on it and we can talk more."`;
+      }
+
+      relationships[ursulaName] = clamp((relationships[ursulaName] || 0) + 1, -20, 20);
+
+      await db.update(chroniclesGameState)
+        .set({
+          npcRelationships: JSON.stringify(relationships),
+          updatedAt: new Date(),
+        })
+        .where(eq(chroniclesGameState.userId, userId));
+
+      res.json({
+        reply,
+        ursulaName,
+        relationshipScore: relationships[ursulaName],
+      });
+    } catch (error: any) {
+      console.error("Talk to Ursula error:", error);
+      res.status(500).json({ error: "Failed to talk to Ursula" });
+    }
+  });
 }

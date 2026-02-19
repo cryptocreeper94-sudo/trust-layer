@@ -196,6 +196,7 @@ const ChroniclesNpcChat = lazy(() => import("@/pages/chronicles-npc-chat"));
 const ChroniclesCity = lazy(() => import("@/pages/chronicles-city"));
 const ChroniclesDashboardPage = lazy(() => import("@/pages/chronicles-dashboard"));
 const ChroniclesVoice = lazy(() => import("@/pages/chronicles-voice"));
+const ChroniclesFaith = lazy(() => import("@/pages/chronicles-faith"));
 const SyndicateInvite = lazy(() => import("@/pages/syndicate-invite"));
 const ChronoHome = lazy(() => import("@/pages/chrono-home"));
 const ChronoEras = lazy(() => import("@/pages/chrono-eras"));
@@ -359,6 +360,7 @@ function ChronoRouter() {
         <Route path="/chronicles/npc-chat" component={ChroniclesNpcChat} />
         <Route path="/chronicles/city" component={ChroniclesCity} />
         <Route path="/chronicles/dashboard" component={ChroniclesDashboardPage} />
+        <Route path="/chronicles/faith" component={ChroniclesFaith} />
         <Route path="/join/:code" component={SyndicateInvite} />
         <Route path="/chronicles-estate" component={ChroniclesEstate} />
         <Route path="/legacy" component={BuildYourLegacy} />
@@ -616,6 +618,7 @@ function DWSCRouter() {
         <Route path="/chronicles/npc-chat" component={ChroniclesNpcChat} />
         <Route path="/chronicles/city" component={ChroniclesCity} />
         <Route path="/chronicles/dashboard" component={ChroniclesDashboardPage} />
+        <Route path="/chronicles/faith" component={ChroniclesFaith} />
         <Route path="/chronicles/voice" component={ChroniclesVoice} />
         <Route path="/chronicles-estate" component={ChroniclesEstate} />
         <Route path="/legacy" component={BuildYourLegacy} />
@@ -705,7 +708,7 @@ function Router() {
 function AppShell({ appType }: { appType: string }) {
   const [location] = useLocation();
   const isStandalonePWA = location.startsWith("/signal-chat");
-  const noFooterPaths = ["/chronicles/play", "/chronicles/interior", "/chronicles/city", "/chronicles/npc-chat", "/studio/editor"];
+  const noFooterPaths = ["/chronicles/play", "/chronicles/interior", "/chronicles/city", "/chronicles/npc-chat", "/chronicles/faith", "/studio/editor"];
   const hideFooter = isStandalonePWA || noFooterPaths.some(p => location.startsWith(p));
 
   return (

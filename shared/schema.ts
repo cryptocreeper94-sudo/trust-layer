@@ -2909,6 +2909,16 @@ export const chroniclesGameState = pgTable("chronicles_game_state", {
   pendingEvents: text("pending_events").notNull().default('[]'),
   offlineSummary: text("offline_summary"),
 
+  faithLevel: integer("faith_level").notNull().default(0),
+  spiritualPath: text("spiritual_path"),
+  sacredTextsRead: text("sacred_texts_read").notNull().default('[]'),
+  servicesAttended: integer("services_attended").notNull().default(0),
+  lastServiceAt: timestamp("last_service_at"),
+  congregationId: text("congregation_id"),
+  prayerStreak: integer("prayer_streak").notNull().default(0),
+  lastPrayerAt: timestamp("last_prayer_at"),
+  spiritualJournal: text("spiritual_journal").notNull().default('[]'),
+
   gameLog: text("game_log").notNull().default('[]'),
   npcRelationships: text("npc_relationships").notNull().default('{}'),
   
