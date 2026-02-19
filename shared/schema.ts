@@ -2922,6 +2922,9 @@ export const chroniclesGameState = pgTable("chronicles_game_state", {
   currentZone: text("current_zone"),
   currentActivity: text("current_activity"),
 
+  tutorialStep: integer("tutorial_step").notNull().default(0),
+  tutorialCompleted: boolean("tutorial_completed").notNull().default(false),
+
   gameLog: text("game_log").notNull().default('[]'),
   npcRelationships: text("npc_relationships").notNull().default('{}'),
   

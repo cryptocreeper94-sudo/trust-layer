@@ -2308,7 +2308,8 @@ Respond as ${ursulaName} in character. Keep responses 2-4 sentences. Be genuine,
       const zones = getAllZonesForEra(era);
       const time = getWorldTimeInfo(era);
 
-      const userId = req.userId;
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
       const activePresence = await db.select().from(zonePresence)
         .where(and(eq(zonePresence.era, era), eq(zonePresence.isActive, true)));
 
@@ -2359,7 +2360,8 @@ Respond as ${ursulaName} in character. Keep responses 2-4 sentences. Be genuine,
         ));
 
       const recentPlayers = activePlayers.filter(p => p.lastHeartbeat > fiveMinAgo);
-      const userId = req.userId;
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
       const state = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId));
       const playerLevel = state[0]?.level || 1;
       const relationships = state[0]?.npcRelationships ? JSON.parse(state[0].npcRelationships as string) : {};
@@ -2389,7 +2391,8 @@ Respond as ${ursulaName} in character. Keep responses 2-4 sentences. Be genuine,
 
   app.post("/api/chronicles/world/enter-zone", isChroniclesAuthenticated, async (req: any, res: Response) => {
     try {
-      const userId = req.userId;
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
       const { era, zoneId } = req.body;
       if (!era || !zoneId) return res.status(400).json({ error: "era and zoneId required" });
 
@@ -2467,7 +2470,8 @@ Write the scene as if the player is stepping into it. The world doesn't stop for
 
   app.post("/api/chronicles/world/heartbeat", isChroniclesAuthenticated, async (req: any, res: Response) => {
     try {
-      const userId = req.userId;
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
       await db.update(zonePresence)
         .set({ lastHeartbeat: new Date() })
         .where(and(eq(zonePresence.userId, userId), eq(zonePresence.isActive, true)));
@@ -2479,7 +2483,8 @@ Write the scene as if the player is stepping into it. The world doesn't stop for
 
   app.post("/api/chronicles/world/do-activity", isChroniclesAuthenticated, async (req: any, res: Response) => {
     try {
-      const userId = req.userId;
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
       const { activityId, era } = req.body;
       if (!activityId || !era) return res.status(400).json({ error: "activityId and era required" });
 
@@ -2561,7 +2566,8 @@ Write 2-3 vivid sentences of what happens. Include sensory details. If NPCs are 
 
   app.post("/api/chronicles/world/minigame/submit", isChroniclesAuthenticated, async (req: any, res: Response) => {
     try {
-      const userId = req.userId;
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
       const { gameType, score, era, zoneId } = req.body;
       if (!gameType || score === undefined || !era) {
         return res.status(400).json({ error: "gameType, score, and era required" });
@@ -2633,7 +2639,8 @@ Write 2-3 vivid sentences of what happens. Include sensory details. If NPCs are 
 
   app.get("/api/chronicles/world/minigame/scores/:gameType", isChroniclesAuthenticated, async (req: any, res: Response) => {
     try {
-      const userId = req.userId;
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
       const { gameType } = req.params;
       const config = MINIGAME_CONFIGS[gameType];
       if (!config) return res.status(400).json({ error: "Invalid game type" });
@@ -2656,6 +2663,46 @@ Write 2-3 vivid sentences of what happens. Include sensory details. If NPCs are 
       });
     } catch (error: any) {
       res.status(500).json({ error: "Failed to get scores" });
+    }
+  });
+
+  // =====================================================
+  // TUTORIAL PROGRESS
+  // =====================================================
+
+  app.post("/api/chronicles/tutorial/progress", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { step, completed } = req.body;
+
+      const updates: any = { updatedAt: new Date() };
+      if (typeof step === "number") updates.tutorialStep = step;
+      if (typeof completed === "boolean") updates.tutorialCompleted = completed;
+
+      await db.update(chroniclesGameState)
+        .set(updates)
+        .where(eq(chroniclesGameState.userId, userId));
+
+      res.json({ success: true, step, completed });
+    } catch (error: any) {
+      console.error("Tutorial progress error:", error);
+      res.status(500).json({ error: "Failed to update tutorial" });
+    }
+  });
+
+  app.get("/api/chronicles/tutorial/status", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const state = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId));
+      if (!state[0]) return res.json({ tutorialStep: 0, tutorialCompleted: false });
+      res.json({
+        tutorialStep: state[0].tutorialStep || 0,
+        tutorialCompleted: state[0].tutorialCompleted || false,
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: "Failed to get tutorial status" });
     }
   });
 }
