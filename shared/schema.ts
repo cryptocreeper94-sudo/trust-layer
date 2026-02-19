@@ -3341,6 +3341,59 @@ export const insertSeasonProgressSchema = createInsertSchema(seasonProgress).omi
 export type SeasonProgress = typeof seasonProgress.$inferSelect;
 export type InsertSeasonProgress = z.infer<typeof insertSeasonProgressSchema>;
 
+// =====================================================
+// PET & COMPANION SYSTEM
+// =====================================================
+
+export const playerPets = pgTable("player_pets", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  era: text("era").notNull(),
+  
+  name: text("name").notNull(),
+  species: text("species").notNull(),
+  breed: text("breed").notNull(),
+  emoji: text("emoji").notNull().default("🐾"),
+  
+  bondLevel: integer("bond_level").notNull().default(0),
+  maxBond: integer("max_bond").notNull().default(100),
+  happiness: integer("happiness").notNull().default(50),
+  health: integer("health").notNull().default(100),
+  energy: integer("energy").notNull().default(100),
+  
+  ageMonths: integer("age_months").notNull().default(3),
+  stage: text("stage").notNull().default("young"),
+  
+  primaryAbility: text("primary_ability").notNull(),
+  secondaryAbility: text("secondary_ability"),
+  abilityLevel: integer("ability_level").notNull().default(1),
+  
+  traits: text("traits").notNull().default('[]'),
+  appearance: text("appearance").notNull().default('{}'),
+  
+  totalFeedings: integer("total_feedings").notNull().default(0),
+  totalTrainings: integer("total_trainings").notNull().default(0),
+  totalPlaySessions: integer("total_play_sessions").notNull().default(0),
+  adventuresCompleted: integer("adventures_completed").notNull().default(0),
+  
+  lastFed: timestamp("last_fed"),
+  lastTrained: timestamp("last_trained"),
+  lastPlayed: timestamp("last_played"),
+  
+  acquisitionMethod: text("acquisition_method").notNull().default("adopted"),
+  legacyPetId: varchar("legacy_pet_id"),
+  
+  isActive: boolean("is_active").notNull().default(true),
+  isCompanion: boolean("is_companion").notNull().default(false),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertPlayerPetSchema = createInsertSchema(playerPets).omit({ id: true, createdAt: true, updatedAt: true });
+export type PlayerPet = typeof playerPets.$inferSelect;
+export type InsertPlayerPet = z.infer<typeof insertPlayerPetSchema>;
+
 // Daily Login Rewards - Track player streaks and rewards
 export const dailyLoginRewards = pgTable("daily_login_rewards", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

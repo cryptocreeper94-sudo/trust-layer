@@ -20,7 +20,7 @@ import {
   TrendingUp, Activity, Flame, Gift, Target,
   MessageCircle, Volume2, Loader2, Award, Play, Lock,
   RotateCcw, ArrowRight, CheckCircle2, XCircle,
-  ShoppingBag, BookOpen, Bell, Coins,
+  ShoppingBag, BookOpen, Bell, Coins, PawPrint,
 } from "lucide-react";
 
 function WorldClockBanner({ era }: { era: string }) {
@@ -1004,6 +1004,7 @@ export default function ChroniclesPlay() {
                   { href: "/chronicles/marketplace", icon: ShoppingBag, color: "text-purple-400", hoverBorder: "hover:border-purple-500/30", label: "Marketplace", sub: "Shop & craft", glow: true, testId: "nav-market" },
                   { href: "/chronicles/estate", icon: Building, color: "text-amber-400", hoverBorder: "hover:border-amber-500/30", label: "Your Estate", sub: "Build & expand", glow: true, testId: "nav-estate" },
                   { href: "/chronicles/world", icon: Globe, color: "text-green-400", hoverBorder: "hover:border-green-500/30", label: "Your World", sub: "People & places", glow: true, testId: "nav-world" },
+                  { href: "/chronicles/pets", icon: PawPrint, color: "text-pink-400", hoverBorder: "hover:border-pink-500/30", label: "Companions", sub: "Pets & bond", glow: true, testId: "nav-pets" },
                   { href: "/chronicles/city", icon: Home, color: "text-blue-400", hoverBorder: "hover:border-blue-500/30", label: "City", sub: "Build together", glow: false, testId: "nav-city" },
                   { href: "/chronicles/voice", icon: Volume2, color: "text-pink-400", hoverBorder: "hover:border-pink-500/30", label: "Voice", sub: "Voice clone", glow: false, testId: "nav-voice" },
                   { href: "/chronicles/faith", icon: Star, color: "text-amber-400", hoverBorder: "hover:border-amber-500/30", label: "Faith", sub: "Worship & pray", glow: true, testId: "nav-faith" },

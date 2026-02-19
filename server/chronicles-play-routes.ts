@@ -1,6 +1,6 @@
 import { db } from "./db";
 import { eq, sql, and, desc } from "drizzle-orm";
-import { chroniclesGameState, playerChoices, playerPersonalities, chronicleAccounts, landPlots, cityZones, chatUsers, chatChannels, chatMessages, voiceSamples, voiceMessages, userCredits, creditTransactions, playerLegacy, npcRelationships, worldEvents, worldEventParticipation, homeInteriors, decisionTrail, seasonProgress } from "@shared/schema";
+import { chroniclesGameState, playerChoices, playerPersonalities, chronicleAccounts, landPlots, cityZones, chatUsers, chatChannels, chatMessages, voiceSamples, voiceMessages, userCredits, creditTransactions, playerLegacy, npcRelationships, worldEvents, worldEventParticipation, homeInteriors, decisionTrail, seasonProgress, playerPets } from "@shared/schema";
 import OpenAI from "openai";
 import { SEASON_ZERO_QUESTS, STARTER_FACTIONS, STARTER_NPCS, ERA_SETTINGS, ERAS, WORLD_ZONES, ZONE_ACTIVITIES, NPC_SCHEDULES, MINIGAME_CONFIGS, getWorldTimeInfo, getZoneAmbientState, getAllZonesForEra } from "./chronicles-service";
 import { zonePresence, minigameSessions } from "@shared/schema";
@@ -3393,5 +3393,388 @@ Write 2-3 vivid sentences of what happens. Include sensory details. If NPCs are 
       ],
       enabled: true,
     });
+  });
+
+  // =====================================================
+  // PET & COMPANION SYSTEM
+  // =====================================================
+
+  const ERA_PETS: Record<string, Array<{ species: string; breed: string; emoji: string; ability: string; secondaryAbility?: string; rarity: string; description: string }>> = {
+    medieval: [
+      { species: "dog", breed: "Wolfhound", emoji: "🐕", ability: "guarding", secondaryAbility: "tracking", rarity: "common", description: "Loyal Irish Wolfhound, fierce in battle and gentle at home" },
+      { species: "dog", breed: "Mastiff", emoji: "🐕", ability: "guarding", rarity: "common", description: "Massive English Mastiff, guardian of the estate" },
+      { species: "horse", breed: "Destrier", emoji: "🐴", ability: "travel", secondaryAbility: "jousting", rarity: "rare", description: "Noble war horse, bred for knights and lords" },
+      { species: "horse", breed: "Palfrey", emoji: "🐴", ability: "travel", rarity: "common", description: "Gentle riding horse for daily journeys" },
+      { species: "falcon", breed: "Peregrine", emoji: "🦅", ability: "hunting", secondaryAbility: "scouting", rarity: "rare", description: "Swift Peregrine Falcon, the hunter's prize" },
+      { species: "falcon", breed: "Gyrfalcon", emoji: "🦅", ability: "hunting", rarity: "legendary", description: "Rare white Gyrfalcon, symbol of royalty" },
+      { species: "cat", breed: "Mouser", emoji: "🐈", ability: "pest_control", secondaryAbility: "companionship", rarity: "common", description: "Quick barn cat, keeps grain stores safe" },
+      { species: "raven", breed: "Tower Raven", emoji: "🐦‍⬛", ability: "messaging", secondaryAbility: "intelligence", rarity: "uncommon", description: "Intelligent raven, carries messages across the realm" },
+    ],
+    wildwest: [
+      { species: "horse", breed: "Mustang", emoji: "🐎", ability: "travel", secondaryAbility: "herding", rarity: "common", description: "Wild Mustang, untamed spirit of the frontier" },
+      { species: "horse", breed: "Quarter Horse", emoji: "🐎", ability: "travel", secondaryAbility: "racing", rarity: "uncommon", description: "Fast Quarter Horse, perfect for cattle work" },
+      { species: "horse", breed: "Appaloosa", emoji: "🐎", ability: "travel", rarity: "rare", description: "Spotted Appaloosa, prized by native tribes" },
+      { species: "dog", breed: "Blue Heeler", emoji: "🐕", ability: "herding", secondaryAbility: "guarding", rarity: "common", description: "Tough cattle dog, tireless worker" },
+      { species: "dog", breed: "Coonhound", emoji: "🐕", ability: "tracking", secondaryAbility: "hunting", rarity: "common", description: "Keen-nosed tracker, follows any trail" },
+      { species: "mule", breed: "Pack Mule", emoji: "🫏", ability: "hauling", secondaryAbility: "travel", rarity: "common", description: "Sturdy mule, carries supplies across rough terrain" },
+      { species: "hawk", breed: "Red-Tail", emoji: "🦅", ability: "scouting", rarity: "uncommon", description: "Sharp-eyed Red-Tailed Hawk, spots danger from miles away" },
+      { species: "snake", breed: "King Snake", emoji: "🐍", ability: "pest_control", rarity: "uncommon", description: "Harmless King Snake, keeps rattlers away from camp" },
+    ],
+    modern: [
+      { species: "dog", breed: "German Shepherd", emoji: "🐕", ability: "guarding", secondaryAbility: "tracking", rarity: "common", description: "Intelligent K9-trained German Shepherd" },
+      { species: "dog", breed: "Golden Retriever", emoji: "🐕", ability: "companionship", secondaryAbility: "therapy", rarity: "common", description: "Loving Golden Retriever, best friend material" },
+      { species: "dog", breed: "Husky", emoji: "🐕", ability: "companionship", secondaryAbility: "travel", rarity: "uncommon", description: "Energetic Siberian Husky, loves adventure" },
+      { species: "cat", breed: "Maine Coon", emoji: "🐈", ability: "companionship", secondaryAbility: "pest_control", rarity: "uncommon", description: "Massive Maine Coon, gentle giant of cats" },
+      { species: "cat", breed: "Siamese", emoji: "🐈", ability: "companionship", rarity: "common", description: "Vocal Siamese cat, always has something to say" },
+      { species: "parrot", breed: "African Grey", emoji: "🦜", ability: "intelligence", secondaryAbility: "messaging", rarity: "rare", description: "Brilliant African Grey Parrot, can learn 1000+ words" },
+      { species: "turtle", breed: "Red-Eared Slider", emoji: "🐢", ability: "zen", rarity: "common", description: "Peaceful turtle, teaches patience and mindfulness" },
+      { species: "ferret", breed: "Sable Ferret", emoji: "🦦", ability: "scouting", secondaryAbility: "companionship", rarity: "uncommon", description: "Playful ferret, curious explorer of every corner" },
+    ],
+  };
+
+  const ABILITY_DESCRIPTIONS: Record<string, { name: string; icon: string; desc: string }> = {
+    guarding: { name: "Guardian", icon: "🛡️", desc: "Protects your home and warns of danger" },
+    tracking: { name: "Tracker", icon: "🔍", desc: "Finds lost items and tracks creatures" },
+    hunting: { name: "Hunter", icon: "🎯", desc: "Helps catch food and game" },
+    scouting: { name: "Scout", icon: "👁️", desc: "Reveals hidden paths and secrets" },
+    travel: { name: "Mount", icon: "🗺️", desc: "Faster travel between locations" },
+    herding: { name: "Herder", icon: "🐄", desc: "Manages livestock and animals" },
+    companionship: { name: "Companion", icon: "💝", desc: "Boosts morale and happiness" },
+    pest_control: { name: "Pest Control", icon: "🪤", desc: "Keeps vermin away from stores" },
+    messaging: { name: "Messenger", icon: "📨", desc: "Delivers messages to NPCs" },
+    intelligence: { name: "Clever", icon: "🧠", desc: "Learns tricks and solves puzzles" },
+    hauling: { name: "Pack Animal", icon: "📦", desc: "Carries extra supplies and goods" },
+    jousting: { name: "War Mount", icon: "⚔️", desc: "Trained for combat situations" },
+    therapy: { name: "Therapy", icon: "🩹", desc: "Heals stress and anxiety" },
+    racing: { name: "Racer", icon: "🏁", desc: "Competes in races for prizes" },
+    zen: { name: "Zen Master", icon: "🧘", desc: "Provides calm and inner peace" },
+  };
+
+  app.get("/api/chronicles/pets", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = req.chroniclesUserId;
+      const era = (req.query.era as string) || undefined;
+      
+      let pets;
+      if (era) {
+        pets = await db.select().from(playerPets)
+          .where(and(eq(playerPets.userId, userId), eq(playerPets.era, era), eq(playerPets.isActive, true)))
+          .orderBy(desc(playerPets.isCompanion), desc(playerPets.bondLevel));
+      } else {
+        pets = await db.select().from(playerPets)
+          .where(and(eq(playerPets.userId, userId), eq(playerPets.isActive, true)))
+          .orderBy(desc(playerPets.isCompanion), desc(playerPets.bondLevel));
+      }
+      
+      const companion = pets.find(p => p.isCompanion);
+      
+      res.json({
+        pets,
+        companion,
+        totalPets: pets.length,
+        abilityDescriptions: ABILITY_DESCRIPTIONS,
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/chronicles/pets/available", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const era = (req.query.era as string) || "modern";
+      const available = ERA_PETS[era] || ERA_PETS.modern;
+      res.json({ pets: available, era, abilityDescriptions: ABILITY_DESCRIPTIONS });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/pets/adopt", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = req.chroniclesUserId;
+      const { era, petIndex, name } = req.body;
+      
+      if (!era || petIndex === undefined || !name) {
+        return res.status(400).json({ error: "Missing era, petIndex, or name" });
+      }
+      
+      const available = ERA_PETS[era];
+      if (!available || !available[petIndex]) {
+        return res.status(400).json({ error: "Invalid pet selection" });
+      }
+      
+      const petTemplate = available[petIndex];
+      
+      const existingPets = await db.select().from(playerPets)
+        .where(and(eq(playerPets.userId, userId), eq(playerPets.era, era), eq(playerPets.isActive, true)));
+      
+      if (existingPets.length >= 5) {
+        return res.status(400).json({ error: "Maximum 5 pets per era. Release one first." });
+      }
+      
+      const alreadyHasBreed = existingPets.find(p => p.breed === petTemplate.breed);
+      if (alreadyHasBreed) {
+        return res.status(400).json({ error: `You already have a ${petTemplate.breed}` });
+      }
+      
+      const randomTraits: string[] = [];
+      const traitPool = ["playful", "loyal", "brave", "curious", "gentle", "fierce", "stubborn", "clever", "lazy", "energetic", "affectionate", "independent"];
+      for (let i = 0; i < 2; i++) {
+        const t = traitPool[Math.floor(Math.random() * traitPool.length)];
+        if (!randomTraits.includes(t)) randomTraits.push(t);
+      }
+      
+      const isFirstPet = existingPets.length === 0;
+      
+      const [newPet] = await db.insert(playerPets).values({
+        userId,
+        era,
+        name: name.trim().substring(0, 30),
+        species: petTemplate.species,
+        breed: petTemplate.breed,
+        emoji: petTemplate.emoji,
+        primaryAbility: petTemplate.ability,
+        secondaryAbility: petTemplate.secondaryAbility || null,
+        traits: JSON.stringify(randomTraits),
+        appearance: JSON.stringify({ rarity: petTemplate.rarity }),
+        isCompanion: isFirstPet,
+        happiness: 70,
+        bondLevel: 10,
+      }).returning();
+      
+      res.json({
+        pet: newPet,
+        message: `${name} has been adopted! ${isFirstPet ? "They are now your active companion." : ""}`,
+        abilityInfo: ABILITY_DESCRIPTIONS[petTemplate.ability],
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/pets/:petId/interact", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = req.chroniclesUserId;
+      const { petId } = req.params;
+      const { action } = req.body;
+      
+      const [pet] = await db.select().from(playerPets)
+        .where(and(eq(playerPets.id, petId), eq(playerPets.userId, userId)))
+        .limit(1);
+      
+      if (!pet) return res.status(404).json({ error: "Pet not found" });
+      
+      const now = new Date();
+      let bondGain = 0;
+      let happinessGain = 0;
+      let energyChange = 0;
+      let message = "";
+      let reward: any = null;
+      
+      const updates: any = { updatedAt: now };
+      
+      switch (action) {
+        case "feed": {
+          const lastFed = pet.lastFed ? new Date(pet.lastFed).getTime() : 0;
+          const hoursSinceFed = (now.getTime() - lastFed) / (1000 * 60 * 60);
+          if (hoursSinceFed < 1) {
+            return res.json({ pet, message: `${pet.name} isn't hungry yet. Check back in a bit!`, changed: false });
+          }
+          bondGain = 3;
+          happinessGain = 10;
+          energyChange = 15;
+          updates.lastFed = now;
+          updates.totalFeedings = pet.totalFeedings + 1;
+          updates.health = Math.min(100, pet.health + 5);
+          const feedReactions = [
+            `${pet.name} gobbles it up happily! ${pet.emoji}`,
+            `${pet.name} nudges your hand for more!`,
+            `${pet.name} wags their tail gratefully!`,
+            `${pet.name} savors every bite!`,
+          ];
+          message = feedReactions[Math.floor(Math.random() * feedReactions.length)];
+          break;
+        }
+        case "train": {
+          if (pet.energy < 20) {
+            return res.json({ pet, message: `${pet.name} is too tired to train. Let them rest!`, changed: false });
+          }
+          const lastTrained = pet.lastTrained ? new Date(pet.lastTrained).getTime() : 0;
+          const hoursSinceTrained = (now.getTime() - lastTrained) / (1000 * 60 * 60);
+          if (hoursSinceTrained < 2) {
+            return res.json({ pet, message: `${pet.name} needs a break between training sessions.`, changed: false });
+          }
+          bondGain = 5;
+          happinessGain = -5;
+          energyChange = -25;
+          updates.lastTrained = now;
+          updates.totalTrainings = pet.totalTrainings + 1;
+          
+          const shouldLevelUp = pet.totalTrainings > 0 && (pet.totalTrainings + 1) % 5 === 0;
+          if (shouldLevelUp && pet.abilityLevel < 10) {
+            updates.abilityLevel = pet.abilityLevel + 1;
+            message = `Training complete! ${pet.name}'s ${ABILITY_DESCRIPTIONS[pet.primaryAbility]?.name || pet.primaryAbility} leveled up to ${pet.abilityLevel + 1}! 🎉`;
+          } else {
+            const trainReactions = [
+              `${pet.name} learns a new trick! Good ${pet.species}!`,
+              `${pet.name} is getting stronger and smarter!`,
+              `Training went well! ${pet.name} is improving fast!`,
+            ];
+            message = trainReactions[Math.floor(Math.random() * trainReactions.length)];
+          }
+          break;
+        }
+        case "play": {
+          if (pet.energy < 10) {
+            return res.json({ pet, message: `${pet.name} is too tired to play right now.`, changed: false });
+          }
+          bondGain = 8;
+          happinessGain = 20;
+          energyChange = -15;
+          updates.lastPlayed = now;
+          updates.totalPlaySessions = pet.totalPlaySessions + 1;
+          const playReactions = [
+            `${pet.name} rolls over excitedly! So much fun!`,
+            `${pet.name} chases after the toy with pure joy!`,
+            `${pet.name} brings you a stick - play again!`,
+            `You and ${pet.name} have an amazing time together!`,
+          ];
+          message = playReactions[Math.floor(Math.random() * playReactions.length)];
+          
+          if (Math.random() < 0.15) {
+            reward = { type: "shells", amount: 10 + Math.floor(Math.random() * 20) };
+            message += ` ${pet.name} found ${reward.amount} shells while playing! 🐚`;
+          }
+          break;
+        }
+        case "rest": {
+          energyChange = 30;
+          happinessGain = 5;
+          message = `${pet.name} takes a peaceful nap and recovers energy. 😴`;
+          break;
+        }
+        default:
+          return res.status(400).json({ error: "Invalid action. Use: feed, train, play, or rest" });
+      }
+      
+      updates.bondLevel = Math.min(pet.maxBond, pet.bondLevel + bondGain);
+      updates.happiness = Math.max(0, Math.min(100, pet.happiness + happinessGain));
+      updates.energy = Math.max(0, Math.min(100, pet.energy + energyChange));
+      
+      const newBond = updates.bondLevel;
+      if (pet.stage === "young" && newBond >= 30) {
+        updates.stage = "adolescent";
+        message += ` ${pet.name} has grown into an adolescent! 🌟`;
+      } else if (pet.stage === "adolescent" && newBond >= 60) {
+        updates.stage = "adult";
+        message += ` ${pet.name} is now a fully grown adult! 💪`;
+      } else if (pet.stage === "adult" && newBond >= 90) {
+        updates.stage = "legendary";
+        message += ` ${pet.name} has reached LEGENDARY status! ✨`;
+      }
+      
+      const [updatedPet] = await db.update(playerPets)
+        .set(updates)
+        .where(eq(playerPets.id, petId))
+        .returning();
+      
+      if (reward?.type === "shells") {
+        await db.update(chroniclesGameState)
+          .set({ shellsEarned: sql`shells_earned + ${reward.amount}` })
+          .where(eq(chroniclesGameState.userId, userId));
+      }
+      
+      res.json({
+        pet: updatedPet,
+        message,
+        reward,
+        changed: true,
+        bondGain,
+        abilityInfo: ABILITY_DESCRIPTIONS[pet.primaryAbility],
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/pets/:petId/companion", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = req.chroniclesUserId;
+      const { petId } = req.params;
+      
+      const [pet] = await db.select().from(playerPets)
+        .where(and(eq(playerPets.id, petId), eq(playerPets.userId, userId)))
+        .limit(1);
+      
+      if (!pet) return res.status(404).json({ error: "Pet not found" });
+      
+      await db.update(playerPets)
+        .set({ isCompanion: false, updatedAt: new Date() })
+        .where(and(eq(playerPets.userId, userId), eq(playerPets.era, pet.era)));
+      
+      const [updated] = await db.update(playerPets)
+        .set({ isCompanion: true, updatedAt: new Date() })
+        .where(eq(playerPets.id, petId))
+        .returning();
+      
+      res.json({
+        pet: updated,
+        message: `${pet.name} is now your active companion! They'll join you on adventures.`,
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/pets/:petId/release", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = req.chroniclesUserId;
+      const { petId } = req.params;
+      
+      const [pet] = await db.select().from(playerPets)
+        .where(and(eq(playerPets.id, petId), eq(playerPets.userId, userId)))
+        .limit(1);
+      
+      if (!pet) return res.status(404).json({ error: "Pet not found" });
+      
+      await db.update(playerPets)
+        .set({ isActive: false, updatedAt: new Date() })
+        .where(eq(playerPets.id, petId));
+      
+      res.json({
+        message: `${pet.name} has been released back into the wild. They'll remember you fondly. 🌿`,
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/chronicles/pets/summary", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = req.chroniclesUserId;
+      const pets = await db.select().from(playerPets)
+        .where(and(eq(playerPets.userId, userId), eq(playerPets.isActive, true)));
+      
+      const byEra: Record<string, any[]> = { medieval: [], wildwest: [], modern: [] };
+      pets.forEach(p => {
+        if (byEra[p.era]) byEra[p.era].push(p);
+      });
+      
+      const companion = pets.find(p => p.isCompanion);
+      const totalBond = pets.reduce((sum, p) => sum + p.bondLevel, 0);
+      const avgBond = pets.length > 0 ? Math.round(totalBond / pets.length) : 0;
+      const legendaryCount = pets.filter(p => p.stage === "legendary").length;
+      
+      res.json({
+        totalPets: pets.length,
+        byEra,
+        companion: companion ? { name: companion.name, emoji: companion.emoji, era: companion.era, bond: companion.bondLevel } : null,
+        avgBond,
+        legendaryCount,
+        needsAttention: pets.filter(p => p.happiness < 30 || p.energy < 20).map(p => ({ name: p.name, emoji: p.emoji, era: p.era })),
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
   });
 }

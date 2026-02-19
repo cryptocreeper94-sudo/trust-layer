@@ -11,12 +11,13 @@ import {
   Trophy, Crown, Users, Heart, Shield, Home, Zap, Link2,
   TreePine, Sword, BookOpen, Star, ChevronRight, Timer,
   Globe, Activity, Sparkles, Gift, ArrowLeft, Lock,
-  CheckCircle2, XCircle, Loader2, Plus, Skull,
+  CheckCircle2, XCircle, Loader2, Plus, Skull, PawPrint,
 } from "lucide-react";
 
 const TABS = [
   { id: "season", label: "Season", icon: Trophy, emoji: "🏆" },
   { id: "legacy", label: "Legacy", icon: TreePine, emoji: "🌳" },
+  { id: "pets", label: "Pets", icon: PawPrint, emoji: "🐾" },
   { id: "relationships", label: "People", icon: Users, emoji: "👥" },
   { id: "events", label: "Events", icon: Globe, emoji: "⚡" },
   { id: "home", label: "Home", icon: Home, emoji: "🏠" },
@@ -884,6 +885,122 @@ function DecisionChainTab() {
   );
 }
 
+function PetsTab() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["/api/chronicles/pets/summary"],
+    queryFn: async () => {
+      const res = await authFetch("/api/chronicles/pets/summary");
+      if (!res.ok) return null;
+      return res.json();
+    },
+    staleTime: 30000,
+  });
+
+  if (isLoading) return <ShimmerLoader />;
+
+  const totalPets = data?.totalPets || 0;
+  const companion = data?.companion;
+  const byEra = data?.byEra || {};
+  const needsAttention = data?.needsAttention || [];
+
+  return (
+    <motion.div variants={stagger} initial="hidden" animate="visible" className="space-y-4">
+      <motion.div variants={fadeUp}>
+        <GlassCard glow className="p-5 border border-pink-500/20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-pink-500/5 to-purple-500/5" />
+          <div className="relative z-10 flex items-center gap-3">
+            <motion.div
+              animate={{ y: [0, -3, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="text-3xl"
+            >
+              🐾
+            </motion.div>
+            <div className="flex-1">
+              <h4 className="text-white font-bold text-lg">Your Companions</h4>
+              <p className="text-xs text-gray-500">{totalPets} pet{totalPets !== 1 ? "s" : ""} adopted &middot; {data?.legendaryCount || 0} legendary</p>
+            </div>
+            <Link href="/chronicles/pets">
+              <Button size="sm" className="bg-gradient-to-r from-pink-600 to-purple-600 text-white min-h-[40px] active:scale-95" data-testid="btn-view-pets">
+                <PawPrint className="w-3.5 h-3.5 mr-1" /> View All
+              </Button>
+            </Link>
+          </div>
+        </GlassCard>
+      </motion.div>
+
+      {companion && (
+        <motion.div variants={fadeUp}>
+          <GlassCard className="p-4 border border-cyan-500/10">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">{companion.emoji}</span>
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <h5 className="text-white font-bold">{companion.name}</h5>
+                  <Badge className="bg-cyan-500/20 text-cyan-400 text-[9px]"><Crown className="w-2.5 h-2.5 mr-0.5" /> Active</Badge>
+                </div>
+                <p className="text-xs text-gray-500">{companion.era} era companion</p>
+              </div>
+              <div className="text-right">
+                <div className="flex items-center gap-1 text-pink-400">
+                  <Heart className="w-3.5 h-3.5" />
+                  <span className="text-sm font-bold">{companion.bond}</span>
+                </div>
+                <p className="text-[9px] text-gray-600">bond</p>
+              </div>
+            </div>
+          </GlassCard>
+        </motion.div>
+      )}
+
+      {totalPets === 0 ? (
+        <motion.div variants={fadeUp}>
+          <GlassCard className="p-8 text-center border border-white/5">
+            <motion.div animate={{ y: [0, -5, 0] }} transition={{ duration: 3, repeat: Infinity }} className="text-5xl mb-3">
+              🐾
+            </motion.div>
+            <p className="text-gray-400 text-sm font-medium">No companions yet</p>
+            <p className="text-gray-600 text-xs mt-1 mb-4">Adopt your first pet and begin your bond!</p>
+            <Link href="/chronicles/pets">
+              <Button className="bg-gradient-to-r from-pink-600 to-purple-600 min-h-[44px] active:scale-95" data-testid="btn-adopt-first-hub">
+                <Plus className="w-4 h-4 mr-1" /> Adopt a Companion
+              </Button>
+            </Link>
+          </GlassCard>
+        </motion.div>
+      ) : (
+        <>
+          <motion.div variants={fadeUp} className="grid grid-cols-3 gap-3">
+            {Object.entries(byEra).map(([era, pets]: [string, any]) => (
+              <GlassCard key={era} className="p-3 text-center border border-white/5">
+                <p className="text-lg mb-1">{era === "medieval" ? "🏰" : era === "wildwest" ? "🤠" : "🏙️"}</p>
+                <p className="text-white font-bold text-lg">{pets.length}</p>
+                <p className="text-[10px] text-gray-500 capitalize">{era}</p>
+              </GlassCard>
+            ))}
+          </motion.div>
+
+          {needsAttention.length > 0 && (
+            <motion.div variants={fadeUp}>
+              <GlassCard className="p-3 border border-amber-500/20 bg-amber-500/5">
+                <div className="flex items-center gap-2 mb-1">
+                  <Heart className="w-3.5 h-3.5 text-amber-400" />
+                  <span className="text-xs text-amber-400 font-medium">Needs Attention</span>
+                </div>
+                <div className="flex gap-2 flex-wrap">
+                  {needsAttention.map((p: any, i: number) => (
+                    <span key={i} className="text-xs text-gray-400">{p.emoji} {p.name}</span>
+                  ))}
+                </div>
+              </GlassCard>
+            </motion.div>
+          )}
+        </>
+      )}
+    </motion.div>
+  );
+}
+
 function LoadingState() {
   return <ShimmerLoader />;
 }
@@ -894,6 +1011,7 @@ export default function ChroniclesSeasonHub() {
   const tabContent: Record<TabId, React.ReactNode> = {
     season: <SeasonProgressTab />,
     legacy: <LegacyTreeTab />,
+    pets: <PetsTab />,
     relationships: <RelationshipsTab />,
     events: <WorldEventsTab />,
     home: <HomeTab />,
