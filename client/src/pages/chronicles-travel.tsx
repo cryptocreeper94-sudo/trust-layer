@@ -217,8 +217,8 @@ export default function ChroniclesTravel() {
   const routeLines = useMemo(() => {
     if (!routes || !cities) return [];
     return routes.map((route: any) => {
-      const fromCity = cities.find((c: CityData) => c.code === route.fromCityCode || c.code === route.toCityCode);
-      const toCity = cities.find((c: CityData) => c.code === route.toCityCode || c.code === route.fromCityCode);
+      const fromCity = cities.find((c: CityData) => c.code === route.fromCityCode);
+      const toCity = cities.find((c: CityData) => c.code === route.toCityCode);
       if (!fromCity || !toCity || fromCity.code === toCity.code) return null;
       const from = latLngToMapPosition(fromCity.latitude, fromCity.longitude, mapWidth, mapHeight);
       const to = latLngToMapPosition(toCity.latitude, toCity.longitude, mapWidth, mapHeight);
@@ -341,7 +341,8 @@ export default function ChroniclesTravel() {
                         {region.seasonLabel && (
                           <text x={pos.x} y={pos.y + 8} textAnchor="middle" fill={theme.border} fontSize="8" opacity="0.4" fontStyle="italic">{region.seasonLabel}</text>
                         )}
-                        <Lock x={pos.x - 6} y={pos.y + 12} width="12" height="12" stroke={theme.border} strokeWidth="1" opacity="0.4" />
+                        <rect x={pos.x - 4} y={pos.y + 14} width="8" height="6" rx="1" fill="none" stroke={theme.border} strokeWidth="1" opacity="0.4" />
+                        <path d={`M${pos.x - 2} ${pos.y + 14} V${pos.y + 12} A2 2 0 0 1 ${pos.x + 2} ${pos.y + 12} V${pos.y + 14}`} fill="none" stroke={theme.border} strokeWidth="1" opacity="0.4" />
                       </g>
                     );
                   })}
