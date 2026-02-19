@@ -282,6 +282,236 @@ function SeasonProgressTab() {
           </div>
         </GlassCard>
       </motion.div>
+
+      <SeasonOneTeaser />
+    </motion.div>
+  );
+}
+
+function SeasonOneTeaser() {
+  const [votes, setVotes] = useState<Record<string, boolean>>({});
+  const [featureVotes, setFeatureVotes] = useState<Record<string, boolean>>({});
+  const [submitted, setSubmitted] = useState(false);
+  const [customSuggestion, setCustomSuggestion] = useState("");
+
+  const ERA_OPTIONS = [
+    { id: "ancient_egypt", emoji: "🏛️", name: "Ancient Egypt", desc: "Build pyramids, navigate pharaoh politics, explore the Nile" },
+    { id: "roman_empire", emoji: "⚔️", name: "Roman Empire", desc: "Gladiator arenas, senate intrigue, legion campaigns" },
+    { id: "viking_age", emoji: "🛡️", name: "Viking Age", desc: "Sail fjords, raid coastlines, forge alliances in the North" },
+    { id: "feudal_japan", emoji: "⛩️", name: "Feudal Japan", desc: "Samurai honor, ninja stealth, shogunate power struggles" },
+    { id: "renaissance", emoji: "🎨", name: "Renaissance Italy", desc: "Art patronage, Medici politics, Da Vinci's inventions" },
+    { id: "victorian", emoji: "🎩", name: "Victorian London", desc: "Industrial revolution, detective work, gaslit mysteries" },
+    { id: "prohibition", emoji: "🥃", name: "Prohibition Era", desc: "Speakeasies, bootlegging, jazz age drama" },
+    { id: "ancient_greece", emoji: "🏺", name: "Ancient Greece", desc: "Philosophy, Olympics, mythic quests" },
+    { id: "biblical", emoji: "📜", name: "Biblical Era", desc: "Walk with prophets, witness miracles, ancient kingdoms" },
+    { id: "prehistoric", emoji: "🦕", name: "Prehistoric", desc: "Survival, tribal leadership, Ice Age exploration" },
+  ];
+
+  const FEATURE_OPTIONS = [
+    { id: "marriage", emoji: "💍", name: "Marriage & Family", desc: "Marry NPCs, raise children, family legacy trees" },
+    { id: "factions", emoji: "⚔️", name: "Faction Wars", desc: "Join factions, territory battles, alliance raids" },
+    { id: "economy", emoji: "💰", name: "Player Economy", desc: "Trade goods, run businesses, build wealth" },
+    { id: "crafting", emoji: "🔨", name: "Deep Crafting", desc: "Era-specific recipes, rare materials, legendary items" },
+    { id: "pvp", emoji: "🏟️", name: "PvP Duels", desc: "Challenge other players in era-appropriate contests" },
+    { id: "guilds", emoji: "🏰", name: "Guild Strongholds", desc: "Build guild bases, co-op missions, shared rewards" },
+    { id: "dynamic_weather", emoji: "🌧️", name: "Dynamic Weather", desc: "Weather affects gameplay, seasons change, natural disasters" },
+    { id: "voice_acting", emoji: "🎙️", name: "Voice-Acted NPCs", desc: "AI-generated voices for all major characters" },
+    { id: "pets_expanded", emoji: "🐉", name: "Mythical Companions", desc: "Era-specific legendary creatures as companions" },
+    { id: "music_system", emoji: "🎵", name: "Music & Instruments", desc: "Learn instruments, perform for crowds, compose songs" },
+  ];
+
+  const toggleVote = (id: string, isEra: boolean) => {
+    if (isEra) {
+      setVotes(prev => {
+        const selected = Object.values(prev).filter(Boolean).length;
+        if (!prev[id] && selected >= 3) return prev;
+        return { ...prev, [id]: !prev[id] };
+      });
+    } else {
+      setFeatureVotes(prev => {
+        const selected = Object.values(prev).filter(Boolean).length;
+        if (!prev[id] && selected >= 3) return prev;
+        return { ...prev, [id]: !prev[id] };
+      });
+    }
+  };
+
+  const handleSubmit = async () => {
+    const selectedEras = Object.entries(votes).filter(([, v]) => v).map(([k]) => k);
+    const selectedFeatures = Object.entries(featureVotes).filter(([, v]) => v).map(([k]) => k);
+    try {
+      await authFetch("/api/chronicles/season/vote", {
+        method: "POST",
+        body: JSON.stringify({ eras: selectedEras, features: selectedFeatures, suggestion: customSuggestion }),
+      });
+    } catch {}
+    setSubmitted(true);
+  };
+
+  const eraCount = Object.values(votes).filter(Boolean).length;
+  const featureCount = Object.values(featureVotes).filter(Boolean).length;
+
+  return (
+    <motion.div variants={fadeUp} className="mt-6">
+      <GlassCard glow className="p-5 border border-purple-500/20 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-purple-500/10 to-transparent rounded-bl-full" />
+        <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-cyan-500/5 to-transparent rounded-tr-full" />
+
+        <div className="relative z-10">
+          <div className="flex items-center gap-3 mb-5">
+            <motion.div
+              animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
+              transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+              className="w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500/30 to-cyan-500/20 flex items-center justify-center border border-purple-500/30"
+            >
+              <Crown className="w-6 h-6 text-purple-400" />
+            </motion.div>
+            <div>
+              <h3 className="text-white font-bold text-lg" data-testid="season1-title">Season One Preview</h3>
+              <p className="text-xs text-gray-400">Shape what comes next — your vote matters</p>
+            </div>
+            <Badge className="ml-auto bg-purple-500/20 text-purple-400 border border-purple-500/20">Coming Soon</Badge>
+          </div>
+
+          {submitted ? (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center py-8"
+            >
+              <motion.div
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 0.5 }}
+                className="text-5xl mb-4"
+              >
+                🎉
+              </motion.div>
+              <h4 className="text-xl font-bold text-white mb-2">Thanks for Voting!</h4>
+              <p className="text-sm text-gray-400 max-w-sm mx-auto">
+                Your choices help shape the future of Chronicles. Season One is being built with the community in mind.
+              </p>
+              <div className="mt-4 flex justify-center gap-2 flex-wrap">
+                {Object.entries(votes).filter(([, v]) => v).map(([id]) => {
+                  const era = ERA_OPTIONS.find(e => e.id === id);
+                  return era ? (
+                    <Badge key={id} className="bg-purple-500/20 text-purple-300 border border-purple-500/20">
+                      {era.emoji} {era.name}
+                    </Badge>
+                  ) : null;
+                })}
+                {Object.entries(featureVotes).filter(([, v]) => v).map(([id]) => {
+                  const feat = FEATURE_OPTIONS.find(f => f.id === id);
+                  return feat ? (
+                    <Badge key={id} className="bg-cyan-500/20 text-cyan-300 border border-cyan-500/20">
+                      {feat.emoji} {feat.name}
+                    </Badge>
+                  ) : null;
+                })}
+              </div>
+            </motion.div>
+          ) : (
+            <div className="space-y-6">
+              <div>
+                <h4 className="text-white font-semibold mb-1 flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-purple-400" />
+                  Which eras should we build next?
+                </h4>
+                <p className="text-[11px] text-gray-500 mb-3">Pick up to 3 eras you want to explore ({eraCount}/3)</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {ERA_OPTIONS.map((era) => {
+                    const selected = votes[era.id];
+                    return (
+                      <motion.button
+                        key={era.id}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => toggleVote(era.id, true)}
+                        className={`text-left p-3 rounded-xl border transition-all min-h-[56px] ${
+                          selected
+                            ? "bg-purple-500/15 border-purple-500/40 shadow-lg shadow-purple-500/10"
+                            : "bg-white/5 border-white/10 hover:border-white/20"
+                        }`}
+                        data-testid={`vote-era-${era.id}`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">{era.emoji}</span>
+                          <div className="min-w-0 flex-1">
+                            <p className={`text-xs font-semibold truncate ${selected ? "text-purple-300" : "text-gray-200"}`}>
+                              {era.name}
+                            </p>
+                            <p className="text-[10px] text-gray-500 truncate">{era.desc}</p>
+                          </div>
+                          {selected && <CheckCircle2 className="w-4 h-4 text-purple-400 flex-shrink-0" />}
+                        </div>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-white font-semibold mb-1 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-cyan-400" />
+                  What features do you want most?
+                </h4>
+                <p className="text-[11px] text-gray-500 mb-3">Pick up to 3 features ({featureCount}/3)</p>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {FEATURE_OPTIONS.map((feat) => {
+                    const selected = featureVotes[feat.id];
+                    return (
+                      <motion.button
+                        key={feat.id}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => toggleVote(feat.id, false)}
+                        className={`text-left p-3 rounded-xl border transition-all min-h-[56px] ${
+                          selected
+                            ? "bg-cyan-500/15 border-cyan-500/40 shadow-lg shadow-cyan-500/10"
+                            : "bg-white/5 border-white/10 hover:border-white/20"
+                        }`}
+                        data-testid={`vote-feat-${feat.id}`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">{feat.emoji}</span>
+                          <div className="min-w-0 flex-1">
+                            <p className={`text-xs font-semibold truncate ${selected ? "text-cyan-300" : "text-gray-200"}`}>
+                              {feat.name}
+                            </p>
+                            <p className="text-[10px] text-gray-500 truncate">{feat.desc}</p>
+                          </div>
+                          {selected && <CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0" />}
+                        </div>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-white font-semibold mb-2 flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-amber-400" />
+                  Have a suggestion?
+                </h4>
+                <textarea
+                  value={customSuggestion}
+                  onChange={(e) => setCustomSuggestion(e.target.value)}
+                  placeholder="Tell us what you'd love to see in Season One..."
+                  className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-cyan-500/40 resize-none h-20"
+                  data-testid="suggestion-input"
+                />
+              </div>
+
+              <Button
+                onClick={handleSubmit}
+                disabled={eraCount === 0 && featureCount === 0 && !customSuggestion.trim()}
+                className="w-full bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white py-3 shadow-lg shadow-purple-500/20 disabled:opacity-40 disabled:shadow-none min-h-[48px]"
+                data-testid="submit-vote-btn"
+              >
+                <Crown className="w-4 h-4 mr-2" />
+                Submit My Votes
+              </Button>
+            </div>
+          )}
+        </div>
+      </GlassCard>
     </motion.div>
   );
 }

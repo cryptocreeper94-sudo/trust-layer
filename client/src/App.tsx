@@ -367,6 +367,7 @@ function ChronoRouter() {
         <Route path="/chronicles/season" component={ChroniclesSeasonHub} />
         <Route path="/chronicles/pets" component={ChroniclesPets} />
         <Route path="/chronicles/daily-life" component={ChroniclesDailyLife} />
+        <Route path="/chronicles/voice" component={ChroniclesVoice} />
         <Route path="/join/:code" component={SyndicateInvite} />
         <Route path="/chronicles-estate" component={ChroniclesEstate} />
         <Route path="/legacy" component={BuildYourLegacy} />

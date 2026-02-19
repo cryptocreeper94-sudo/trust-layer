@@ -3356,6 +3356,22 @@ Write 2-3 vivid sentences of what happens. Include sensory details. If NPCs are 
   });
 
   // =====================================================
+  // SEASON ONE VOTING
+  // =====================================================
+
+  app.post("/api/chronicles/season/vote", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { eras, features, suggestion } = req.body;
+      console.log(`[Season Vote] User ${userId} voted - eras: ${JSON.stringify(eras)}, features: ${JSON.stringify(features)}, suggestion: ${suggestion || "none"}`);
+      res.json({ success: true, message: "Vote recorded! Thank you for shaping Season One." });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // =====================================================
   // VOICE & NARRATION SYSTEM
   // =====================================================
 
