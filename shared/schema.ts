@@ -8807,3 +8807,73 @@ export const chroniclePlayerTravelQuests = pgTable("chronicle_player_travel_ques
 export const insertChroniclePlayerTravelQuestSchema = createInsertSchema(chroniclePlayerTravelQuests).omit({ id: true, startedAt: true });
 export type ChroniclePlayerTravelQuest = typeof chroniclePlayerTravelQuests.$inferSelect;
 export type InsertChroniclePlayerTravelQuest = z.infer<typeof insertChroniclePlayerTravelQuestSchema>;
+
+// =====================================================
+// DAILY LIFE SYSTEM - Career, Needs, Routines
+// =====================================================
+
+export const playerCareers = pgTable("player_careers", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  era: text("era").notNull(),
+  occupation: text("occupation").notNull(),
+  workplace: text("workplace").notNull(),
+  rank: text("rank").notNull().default("apprentice"),
+  shiftPreference: text("shift_preference").notNull().default("morning"),
+  shiftStart: integer("shift_start").notNull().default(8),
+  shiftEnd: integer("shift_end").notNull().default(16),
+  dailyWage: integer("daily_wage").notNull().default(5),
+  daysWorked: integer("days_worked").notNull().default(0),
+  reputation: integer("reputation").notNull().default(50),
+  skillLevel: integer("skill_level").notNull().default(1),
+  specialization: text("specialization"),
+  isActive: boolean("is_active").notNull().default(true),
+  hiredAt: timestamp("hired_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertPlayerCareerSchema = createInsertSchema(playerCareers).omit({ id: true, createdAt: true });
+export type PlayerCareer = typeof playerCareers.$inferSelect;
+export type InsertPlayerCareer = z.infer<typeof insertPlayerCareerSchema>;
+
+export const playerNeeds = pgTable("player_needs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  hunger: integer("hunger").notNull().default(80),
+  energy: integer("energy").notNull().default(100),
+  hygiene: integer("hygiene").notNull().default(90),
+  social: integer("social").notNull().default(70),
+  mood: integer("mood").notNull().default(75),
+  health: integer("health").notNull().default(100),
+  lastMealAt: timestamp("last_meal_at"),
+  lastSleepAt: timestamp("last_sleep_at"),
+  lastBathAt: timestamp("last_bath_at"),
+  lastSocialAt: timestamp("last_social_at"),
+  lastDecayAt: timestamp("last_decay_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertPlayerNeedsSchema = createInsertSchema(playerNeeds).omit({ id: true, updatedAt: true });
+export type PlayerNeeds = typeof playerNeeds.$inferSelect;
+export type InsertPlayerNeeds = z.infer<typeof insertPlayerNeedsSchema>;
+
+export const playerDailyLog = pgTable("player_daily_log", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  era: text("era").notNull(),
+  gameDay: integer("game_day").notNull().default(1),
+  wakeTime: integer("wake_time").notNull().default(7),
+  sleepTime: integer("sleep_time").notNull().default(22),
+  activitiesLog: text("activities_log").notNull().default('[]'),
+  mealsEaten: integer("meals_eaten").notNull().default(0),
+  workShiftCompleted: boolean("work_shift_completed").notNull().default(false),
+  echoesEarned: integer("echoes_earned").notNull().default(0),
+  notableEvents: text("notable_events").notNull().default('[]'),
+  offlineHours: real("offline_hours").notNull().default(0),
+  offlineRecap: text("offline_recap"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertPlayerDailyLogSchema = createInsertSchema(playerDailyLog).omit({ id: true, createdAt: true });
+export type PlayerDailyLog = typeof playerDailyLog.$inferSelect;
+export type InsertPlayerDailyLog = z.infer<typeof insertPlayerDailyLogSchema>;

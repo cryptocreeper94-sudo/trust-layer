@@ -14715,6 +14715,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   const { registerChronicleTravelRoutes } = await import("./chronicles-travel-routes");
   registerChronicleTravelRoutes(app);
 
+  // Register Chronicles Daily Life System (Career, Needs, Session Context)
+  const { registerDailyLifeRoutes } = await import("./chronicles-daily-life-routes");
+  registerDailyLifeRoutes(app);
+
   app.get("/api/chronicles/personality", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;

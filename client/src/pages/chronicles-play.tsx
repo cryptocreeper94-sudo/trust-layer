@@ -20,7 +20,7 @@ import {
   TrendingUp, Activity, Flame, Gift, Target,
   MessageCircle, Volume2, Loader2, Award, Play, Lock,
   RotateCcw, ArrowRight, CheckCircle2, XCircle,
-  ShoppingBag, BookOpen, Bell, Coins, PawPrint,
+  ShoppingBag, BookOpen, Bell, Coins, PawPrint, Briefcase,
 } from "lucide-react";
 
 function WorldClockBanner({ era }: { era: string }) {
@@ -65,6 +65,50 @@ function WorldClockBanner({ era }: { era: string }) {
         </div>
       </GlassCard>
     </motion.div>
+  );
+}
+
+function NeedsIndicator() {
+  const session = getChroniclesSession();
+  const { data } = useQuery({
+    queryKey: ["/api/chronicles/needs"],
+    queryFn: async () => {
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (session?.token) headers["Authorization"] = `Bearer ${session.token}`;
+      const res = await fetch("/api/chronicles/needs", { headers });
+      if (!res.ok) return null;
+      return res.json();
+    },
+    staleTime: 30000,
+    refetchInterval: 120000,
+    enabled: !!session,
+  });
+  if (!data?.needs) return null;
+  const n = data.needs;
+  const items = [
+    { emoji: "🍽️", value: n.hunger, key: "hunger" },
+    { emoji: "⚡", value: n.energy, key: "energy" },
+    { emoji: "💧", value: n.hygiene, key: "hygiene" },
+    { emoji: "💬", value: n.social, key: "social" },
+  ];
+  const anyLow = items.some(i => i.value < 30);
+  return (
+    <Link href="/chronicles/daily-life">
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-3 cursor-pointer active:scale-[0.98] transition-all" data-testid="needs-bar">
+        <div className={`flex items-center gap-2 px-3 py-1.5 rounded-xl ${anyLow ? "bg-red-500/10 border border-red-500/20" : "bg-slate-800/40 border border-white/5"}`}>
+          <Heart className={`w-3 h-3 ${anyLow ? "text-red-400 animate-pulse" : "text-gray-500"}`} />
+          {items.map(i => (
+            <div key={i.key} className="flex items-center gap-0.5">
+              <span className="text-[10px]">{i.emoji}</span>
+              <div className="w-8 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div className={`h-full rounded-full ${i.value >= 60 ? "bg-emerald-500" : i.value >= 30 ? "bg-yellow-500" : "bg-red-500"}`} style={{ width: `${i.value}%` }} />
+              </div>
+            </div>
+          ))}
+          <span className="text-[9px] text-gray-500 ml-auto">{n.mood >= 70 ? "😊" : n.mood >= 40 ? "😐" : "😩"}</span>
+        </div>
+      </motion.div>
+    </Link>
   );
 }
 
@@ -814,6 +858,7 @@ export default function ChroniclesPlay() {
         </div>
 
         <WorldClockBanner era={selectedEra} />
+        <NeedsIndicator />
 
         <div className="relative h-48 sm:h-56 rounded-xl overflow-hidden mb-4">
           <Scene3D era={selectedEra} />
@@ -1005,6 +1050,7 @@ export default function ChroniclesPlay() {
                   { href: "/chronicles/estate", icon: Building, color: "text-amber-400", hoverBorder: "hover:border-amber-500/30", label: "Your Estate", sub: "Build & expand", glow: true, testId: "nav-estate" },
                   { href: "/chronicles/world", icon: Globe, color: "text-green-400", hoverBorder: "hover:border-green-500/30", label: "Your World", sub: "People & places", glow: true, testId: "nav-world" },
                   { href: "/chronicles/pets", icon: PawPrint, color: "text-pink-400", hoverBorder: "hover:border-pink-500/30", label: "Companions", sub: "Pets & bond", glow: true, testId: "nav-pets" },
+                  { href: "/chronicles/daily-life", icon: Briefcase, color: "text-emerald-400", hoverBorder: "hover:border-emerald-500/30", label: "Daily Life", sub: "Work & needs", glow: true, testId: "nav-daily-life" },
                   { href: "/chronicles/city", icon: Home, color: "text-blue-400", hoverBorder: "hover:border-blue-500/30", label: "City", sub: "Build together", glow: false, testId: "nav-city" },
                   { href: "/chronicles/voice", icon: Volume2, color: "text-pink-400", hoverBorder: "hover:border-pink-500/30", label: "Voice", sub: "Voice clone", glow: false, testId: "nav-voice" },
                   { href: "/chronicles/faith", icon: Star, color: "text-amber-400", hoverBorder: "hover:border-amber-500/30", label: "Faith", sub: "Worship & pray", glow: true, testId: "nav-faith" },

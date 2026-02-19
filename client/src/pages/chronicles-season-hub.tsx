@@ -11,13 +11,14 @@ import {
   Trophy, Crown, Users, Heart, Shield, Home, Zap, Link2,
   TreePine, Sword, BookOpen, Star, ChevronRight, Timer,
   Globe, Activity, Sparkles, Gift, ArrowLeft, Lock,
-  CheckCircle2, XCircle, Loader2, Plus, Skull, PawPrint,
+  CheckCircle2, XCircle, Loader2, Plus, Skull, PawPrint, Briefcase,
 } from "lucide-react";
 
 const TABS = [
   { id: "season", label: "Season", icon: Trophy, emoji: "🏆" },
   { id: "legacy", label: "Legacy", icon: TreePine, emoji: "🌳" },
   { id: "pets", label: "Pets", icon: PawPrint, emoji: "🐾" },
+  { id: "life", label: "Life", icon: Briefcase, emoji: "💼" },
   { id: "relationships", label: "People", icon: Users, emoji: "👥" },
   { id: "events", label: "Events", icon: Globe, emoji: "⚡" },
   { id: "home", label: "Home", icon: Home, emoji: "🏠" },
@@ -1001,6 +1002,95 @@ function PetsTab() {
   );
 }
 
+function DailyLifeTab() {
+  const { data, isLoading } = useQuery({
+    queryKey: ["/api/chronicles/daily-life/summary"],
+    queryFn: async () => {
+      const res = await authFetch("/api/chronicles/daily-life/summary?era=medieval");
+      if (!res.ok) return null;
+      return res.json();
+    },
+    staleTime: 30000,
+  });
+
+  if (isLoading) return <ShimmerLoader />;
+
+  const career = data?.career;
+  const needs = data?.needs;
+  const hour = data?.hour || new Date().getHours();
+
+  return (
+    <motion.div variants={stagger} initial="hidden" animate="visible" className="space-y-4">
+      <motion.div variants={fadeUp}>
+        <GlassCard glow className="p-5 border border-emerald-500/20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/5 to-blue-500/5" />
+          <div className="relative z-10 flex items-center gap-3">
+            <span className="text-3xl">💼</span>
+            <div className="flex-1">
+              <h4 className="text-white font-bold text-lg">Daily Life</h4>
+              <p className="text-xs text-gray-500">Career, needs & routines</p>
+            </div>
+            <Link href="/chronicles/daily-life">
+              <Button size="sm" className="bg-gradient-to-r from-emerald-600 to-cyan-600 text-white min-h-[40px] active:scale-95" data-testid="btn-view-daily-life">
+                <Briefcase className="w-3.5 h-3.5 mr-1" /> Full View
+              </Button>
+            </Link>
+          </div>
+        </GlassCard>
+      </motion.div>
+
+      {career ? (
+        <motion.div variants={fadeUp}>
+          <GlassCard className="p-4 border border-white/5">
+            <div className="flex items-center gap-3">
+              <span className="text-3xl">{career.occupationEmoji || "💼"}</span>
+              <div className="flex-1">
+                <h5 className="text-white font-bold">{career.occupation}</h5>
+                <p className="text-xs text-gray-500">{career.workplace}</p>
+              </div>
+              <div className="text-right">
+                <Badge className="bg-emerald-500/20 text-emerald-400 text-[9px] capitalize">{career.rank}</Badge>
+                <p className="text-[9px] text-gray-600 mt-0.5">{career.daysWorked} days</p>
+              </div>
+            </div>
+          </GlassCard>
+        </motion.div>
+      ) : (
+        <motion.div variants={fadeUp}>
+          <GlassCard className="p-6 text-center border border-white/5">
+            <p className="text-4xl mb-2">💼</p>
+            <p className="text-gray-400 text-sm">No career yet</p>
+            <p className="text-gray-600 text-xs mt-1">Visit Daily Life to find work</p>
+          </GlassCard>
+        </motion.div>
+      )}
+
+      {needs && (
+        <motion.div variants={fadeUp}>
+          <GlassCard className="p-4 border border-white/5">
+            <div className="grid grid-cols-4 gap-3">
+              {[
+                { emoji: "🍽️", label: "Hunger", value: needs.hunger },
+                { emoji: "⚡", label: "Energy", value: needs.energy },
+                { emoji: "💧", label: "Hygiene", value: needs.hygiene },
+                { emoji: "💬", label: "Social", value: needs.social },
+              ].map(n => (
+                <div key={n.label} className="text-center">
+                  <p className="text-lg mb-0.5">{n.emoji}</p>
+                  <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden mb-0.5">
+                    <div className={`h-full rounded-full ${n.value >= 60 ? "bg-emerald-500" : n.value >= 30 ? "bg-yellow-500" : "bg-red-500"}`} style={{ width: `${n.value}%` }} />
+                  </div>
+                  <p className="text-[9px] text-gray-600">{n.label}</p>
+                </div>
+              ))}
+            </div>
+          </GlassCard>
+        </motion.div>
+      )}
+    </motion.div>
+  );
+}
+
 function LoadingState() {
   return <ShimmerLoader />;
 }
@@ -1012,6 +1102,7 @@ export default function ChroniclesSeasonHub() {
     season: <SeasonProgressTab />,
     legacy: <LegacyTreeTab />,
     pets: <PetsTab />,
+    life: <DailyLifeTab />,
     relationships: <RelationshipsTab />,
     events: <WorldEventsTab />,
     home: <HomeTab />,
