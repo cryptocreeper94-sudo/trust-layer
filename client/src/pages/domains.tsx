@@ -224,7 +224,7 @@ export default function DomainsPage() {
       ownerAddress,
       ownershipType,
       years: ownershipType === "term" ? selectedYears : undefined,
-      ownerCode: isOwnerAuthenticated ? sessionStorage.getItem("ownerToken") : undefined,
+      ownerCode: isOwnerAuthenticated ? (sessionStorage.getItem("ownerToken") ?? undefined) : undefined,
     });
   };
 
