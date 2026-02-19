@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { GlassCard } from "@/components/glass-card";
@@ -15,12 +15,12 @@ import {
 } from "lucide-react";
 
 const TABS = [
-  { id: "season", label: "Season Progress", icon: Trophy },
-  { id: "legacy", label: "Legacy Tree", icon: TreePine },
-  { id: "relationships", label: "Relationships", icon: Users },
-  { id: "events", label: "World Events", icon: Globe },
-  { id: "home", label: "Home", icon: Home },
-  { id: "chain", label: "Decision Chain", icon: Link2 },
+  { id: "season", label: "Season", icon: Trophy, emoji: "🏆" },
+  { id: "legacy", label: "Legacy", icon: TreePine, emoji: "🌳" },
+  { id: "relationships", label: "People", icon: Users, emoji: "👥" },
+  { id: "events", label: "Events", icon: Globe, emoji: "⚡" },
+  { id: "home", label: "Home", icon: Home, emoji: "🏠" },
+  { id: "chain", label: "Chain", icon: Link2, emoji: "⛓️" },
 ] as const;
 
 type TabId = (typeof TABS)[number]["id"];
@@ -45,6 +45,51 @@ const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
+
+function AmbientBackground() {
+  const particles = useMemo(() =>
+    Array.from({ length: 40 }, (_, i) => ({
+      id: i,
+      x: Math.random() * 100,
+      y: Math.random() * 100,
+      size: Math.random() * 3 + 1,
+      delay: Math.random() * 5,
+      duration: 3 + Math.random() * 4,
+    })), []);
+
+  return (
+    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-cyan-500/[0.03] rounded-full blur-[100px]" />
+      <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-purple-500/[0.04] rounded-full blur-[100px]" />
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-amber-500/[0.02] rounded-full blur-[100px]" />
+      {particles.map(p => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full bg-white/20"
+          style={{ left: `${p.x}%`, top: `${p.y}%`, width: p.size, height: p.size }}
+          animate={{ opacity: [0, 0.8, 0], scale: [0.5, 1.5, 0.5], y: [0, -30, 0] }}
+          transition={{ duration: p.duration, repeat: Infinity, delay: p.delay, ease: "easeInOut" }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function ShimmerLoader() {
+  return (
+    <div className="space-y-4 py-8">
+      {[1, 2, 3].map(i => (
+        <div key={i} className="rounded-xl bg-white/5 overflow-hidden">
+          <motion.div
+            className="h-24 bg-gradient-to-r from-transparent via-white/[0.03] to-transparent"
+            animate={{ x: ["-100%", "200%"] }}
+            transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.2, ease: "easeInOut" }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function SeasonProgressTab() {
   const { data, isLoading } = useQuery({
@@ -75,51 +120,89 @@ function SeasonProgressTab() {
   return (
     <motion.div variants={stagger} initial="hidden" animate="visible" className="space-y-4">
       <motion.div variants={fadeUp}>
-        <GlassCard glow className="p-5 border border-cyan-500/20">
-          <div className="flex items-center gap-2 mb-4">
-            <Trophy className="w-5 h-5 text-yellow-400" />
-            <h3 className="text-white font-bold text-lg" data-testid="season-title">Season Zero</h3>
-            <Badge className="bg-cyan-500/20 text-cyan-400 ml-auto">Score: {seasonScore}</Badge>
-          </div>
-          <div className="grid grid-cols-3 gap-3 mb-4">
-            <div className="text-center p-3 rounded-lg bg-white/5">
-              <p className="text-xl font-bold text-cyan-400" data-testid="stat-score">{seasonScore}</p>
-              <p className="text-[10px] text-gray-500">Season Score</p>
+        <GlassCard glow className="p-5 border border-cyan-500/20 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-cyan-500/10 to-transparent rounded-bl-full" />
+          <div className="relative z-10">
+            <div className="flex items-center gap-2 mb-4">
+              <motion.div animate={{ rotate: [0, -5, 5, 0] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}>
+                <Trophy className="w-6 h-6 text-yellow-400 drop-shadow-[0_0_8px_rgba(250,204,21,0.4)]" />
+              </motion.div>
+              <h3 className="text-white font-bold text-lg" data-testid="season-title">Season Zero</h3>
+              <Badge className="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-400 border border-cyan-500/20 ml-auto">
+                Score: {seasonScore}
+              </Badge>
             </div>
-            <div className="text-center p-3 rounded-lg bg-white/5">
-              <p className="text-xl font-bold text-purple-400" data-testid="stat-legacies">{totalLegacies}</p>
-              <p className="text-[10px] text-gray-500">Total Legacies</p>
-            </div>
-            <div className="text-center p-3 rounded-lg bg-white/5">
-              <p className="text-xl font-bold text-green-400" data-testid="stat-decisions">{totalDecisions}</p>
-              <p className="text-[10px] text-gray-500">Total Decisions</p>
+            <div className="grid grid-cols-3 gap-3 mb-4">
+              {[
+                { value: seasonScore, label: "Season Score", color: "from-cyan-400 to-blue-500", textColor: "text-cyan-400", testId: "stat-score" },
+                { value: totalLegacies, label: "Total Legacies", color: "from-purple-400 to-pink-500", textColor: "text-purple-400", testId: "stat-legacies" },
+                { value: totalDecisions, label: "Decisions", color: "from-green-400 to-emerald-500", textColor: "text-green-400", testId: "stat-decisions" },
+              ].map((stat) => (
+                <motion.div
+                  key={stat.label}
+                  whileHover={{ scale: 1.02 }}
+                  className="text-center p-3 rounded-xl bg-white/5 border border-white/5 hover:border-white/10 transition-colors"
+                >
+                  <motion.p
+                    className={`text-2xl font-black ${stat.textColor} drop-shadow-[0_0_10px_currentColor]`}
+                    data-testid={stat.testId}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", bounce: 0.5 }}
+                  >
+                    {stat.value}
+                  </motion.p>
+                  <p className="text-[10px] text-gray-500 mt-0.5">{stat.label}</p>
+                </motion.div>
+              ))}
             </div>
           </div>
         </GlassCard>
       </motion.div>
 
       <motion.div variants={fadeUp}>
-        <GlassCard className="p-5">
-          <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+        <GlassCard className="p-5 border border-white/5">
+          <h4 className="text-white font-semibold mb-4 flex items-center gap-2">
             <Activity className="w-4 h-4 text-cyan-400" /> Era Progress
           </h4>
-          <div className="space-y-4">
-            {eras.map((era: any, i: number) => (
-              <div key={i} data-testid={`era-progress-${i}`}>
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-300">{era.emoji} {era.name}</span>
-                  <span className="text-gray-400">{era.progress || 0}%</span>
-                </div>
-                <div className="h-2.5 bg-slate-800 rounded-full overflow-hidden">
-                  <motion.div
-                    className={`h-full rounded-full ${era.color || "bg-cyan-500"}`}
-                    initial={{ width: 0 }}
-                    animate={{ width: `${era.progress || 0}%` }}
-                    transition={{ duration: 0.8, delay: i * 0.15 }}
-                  />
-                </div>
-              </div>
-            ))}
+          <div className="space-y-5">
+            {eras.map((era: any, i: number) => {
+              const pct = era.progress || 0;
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.12 }}
+                  data-testid={`era-progress-${i}`}
+                >
+                  <div className="flex justify-between text-sm mb-1.5">
+                    <span className="text-gray-200 font-medium">{era.emoji} {era.name}</span>
+                    <span className={`font-bold ${pct >= 100 ? "text-green-400" : pct > 50 ? "text-cyan-400" : "text-gray-400"}`}>
+                      {pct}%
+                    </span>
+                  </div>
+                  <div className="h-3 bg-slate-800/80 rounded-full overflow-hidden relative">
+                    <motion.div
+                      className={`h-full rounded-full ${era.color || "bg-cyan-500"} relative`}
+                      initial={{ width: 0 }}
+                      animate={{ width: `${pct}%` }}
+                      transition={{ duration: 1, delay: i * 0.15, ease: "easeOut" }}
+                    >
+                      {pct > 10 && (
+                        <div className="absolute inset-0 overflow-hidden rounded-full">
+                          <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                            animate={{ x: ["-100%", "200%"] }}
+                            transition={{ duration: 2, repeat: Infinity, delay: i * 0.3, repeatDelay: 3 }}
+                          />
+                        </div>
+                      )}
+                    </motion.div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
         </GlassCard>
       </motion.div>
@@ -157,10 +240,25 @@ function SeasonProgressTab() {
       </motion.div>
 
       <motion.div variants={fadeUp}>
-        <GlassCard glow={finaleUnlocked} className={`p-5 border ${finaleUnlocked ? "border-yellow-500/30" : "border-white/10"}`}>
-          <div className="flex items-center gap-3">
+        <GlassCard glow={finaleUnlocked} className={`p-5 border relative overflow-hidden ${finaleUnlocked ? "border-yellow-500/30" : "border-white/10"}`}>
+          {finaleUnlocked && (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/5 via-amber-500/10 to-yellow-500/5" />
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-500/10 to-transparent"
+                animate={{ x: ["-100%", "200%"] }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+              />
+            </>
+          )}
+          <div className="flex items-center gap-3 relative z-10">
             {finaleUnlocked ? (
-              <Sparkles className="w-6 h-6 text-yellow-400" />
+              <motion.div
+                animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.1, 1] }}
+                transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+              >
+                <Sparkles className="w-7 h-7 text-yellow-400 drop-shadow-[0_0_12px_rgba(250,204,21,0.5)]" />
+              </motion.div>
             ) : (
               <Lock className="w-6 h-6 text-gray-600" />
             )}
@@ -174,7 +272,7 @@ function SeasonProgressTab() {
             </div>
             <Button
               disabled={!finaleUnlocked}
-              className={finaleUnlocked ? "bg-yellow-500 hover:bg-yellow-600 text-black" : ""}
+              className={`min-h-[44px] ${finaleUnlocked ? "bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-black font-bold shadow-lg shadow-yellow-500/20" : ""}`}
               data-testid="finale-button"
             >
               {finaleUnlocked ? "Enter Finale" : "Locked"}
@@ -663,21 +761,33 @@ function DecisionChainTab() {
   const isValid = data?.isValid ?? true;
   const totalBlocks = data?.totalBlocks ?? (Array.isArray(blocks) ? blocks.length : 0);
 
+  const eraColors: Record<string, string> = {
+    medieval: "from-amber-500/30 to-orange-500/30",
+    wildwest: "from-yellow-500/30 to-amber-500/30",
+    modern: "from-cyan-500/30 to-blue-500/30",
+  };
+
   return (
     <motion.div variants={stagger} initial="hidden" animate="visible" className="space-y-4">
       <motion.div variants={fadeUp}>
-        <GlassCard glow className="p-5 border border-cyan-500/20">
-          <div className="flex items-center gap-3">
-            <Link2 className="w-5 h-5 text-cyan-400" />
+        <GlassCard glow className="p-5 border border-cyan-500/20 relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-purple-500/5" />
+          <div className="relative z-10 flex items-center gap-3">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            >
+              <Link2 className="w-6 h-6 text-cyan-400 drop-shadow-[0_0_8px_rgba(6,182,212,0.4)]" />
+            </motion.div>
             <div className="flex-1">
-              <h4 className="text-white font-bold">Decision Blockchain</h4>
-              <p className="text-xs text-gray-500">Every choice is permanently recorded</p>
+              <h4 className="text-white font-bold text-lg">Decision Blockchain</h4>
+              <p className="text-xs text-gray-500">SHA-256 verified &middot; Immutable &middot; Proof of Authority</p>
             </div>
-            <div className="flex items-center gap-2">
-              <Badge className={`${isValid ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`} data-testid="chain-validity">
-                {isValid ? <><CheckCircle2 className="w-3 h-3 mr-1" /> Valid</> : <><XCircle className="w-3 h-3 mr-1" /> Invalid</>}
+            <div className="flex flex-col sm:flex-row items-end sm:items-center gap-1.5">
+              <Badge className={`${isValid ? "bg-green-500/20 text-green-400 border border-green-500/20" : "bg-red-500/20 text-red-400 border border-red-500/20"}`} data-testid="chain-validity">
+                {isValid ? <><CheckCircle2 className="w-3 h-3 mr-1" /> Valid Chain</> : <><XCircle className="w-3 h-3 mr-1" /> Invalid</>}
               </Badge>
-              <Badge className="bg-white/10 text-gray-300" data-testid="total-blocks">
+              <Badge className="bg-white/10 text-gray-300 border border-white/5" data-testid="total-blocks">
                 {totalBlocks} blocks
               </Badge>
             </div>
@@ -687,47 +797,87 @@ function DecisionChainTab() {
 
       {Array.isArray(blocks) && blocks.length === 0 ? (
         <motion.div variants={fadeUp}>
-          <GlassCard className="p-6 text-center">
-            <Link2 className="w-8 h-8 text-gray-600 mx-auto mb-2" />
-            <p className="text-gray-500 text-sm">No decisions recorded yet. Play the game to build your chain!</p>
+          <GlassCard className="p-8 text-center border border-white/5">
+            <motion.div
+              animate={{ opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
+              <Link2 className="w-12 h-12 text-gray-700 mx-auto mb-3" />
+            </motion.div>
+            <p className="text-gray-400 text-sm font-medium">No decisions recorded yet</p>
+            <p className="text-gray-600 text-xs mt-1">Play the game to build your immutable decision chain</p>
           </GlassCard>
         </motion.div>
       ) : (
         <div className="space-y-0">
-          {Array.isArray(blocks) && blocks.map((block: any, i: number) => (
-            <motion.div
-              key={block.id || i}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: i * 0.06 }}
-              className="flex gap-3"
-              data-testid={`chain-block-${i}`}
-            >
-              <div className="flex flex-col items-center">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500/30 to-purple-500/30 flex items-center justify-center border border-cyan-500/20 text-[10px] font-bold text-cyan-400">
-                  #{block.number || i + 1}
-                </div>
-                {i < blocks.length - 1 && (
-                  <div className="w-px flex-1 bg-gradient-to-b from-cyan-500/30 to-purple-500/30 min-h-[8px]" />
-                )}
-              </div>
-              <GlassCard hover={false} className="flex-1 mb-2">
-                <div className="p-3">
-                  <div className="flex items-start justify-between mb-1">
-                    <h5 className="text-white font-medium text-sm">{block.decisionTitle || block.title || "Decision"}</h5>
-                    {block.era && <Badge className="bg-white/10 text-gray-400 text-[9px]">{block.era}</Badge>}
-                  </div>
-                  {block.choice && (
-                    <p className="text-xs text-cyan-400 mb-1">→ {block.choice}</p>
+          {Array.isArray(blocks) && blocks.map((block: any, i: number) => {
+            const eraGrad = eraColors[block.era] || eraColors.modern;
+            return (
+              <motion.div
+                key={block.id || i}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.06 }}
+                className="flex gap-3"
+                data-testid={`chain-block-${i}`}
+              >
+                <div className="flex flex-col items-center">
+                  <motion.div
+                    className={`w-10 h-10 rounded-lg bg-gradient-to-br ${eraGrad} flex items-center justify-center border border-white/10 relative overflow-hidden`}
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    <span className="text-[10px] font-bold text-white relative z-10">#{block.number || i + 1}</span>
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent"
+                      animate={{ opacity: [0, 0.3, 0] }}
+                      transition={{ duration: 2, repeat: Infinity, delay: i * 0.2 }}
+                    />
+                  </motion.div>
+                  {i < blocks.length - 1 && (
+                    <div className="w-px flex-1 min-h-[12px] relative">
+                      <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/40 to-purple-500/40" />
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-b from-cyan-400/60 to-transparent"
+                        animate={{ opacity: [0, 1, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.1 }}
+                      />
+                    </div>
                   )}
-                  <div className="flex items-center gap-2 text-[10px] text-gray-600">
-                    {block.hash && <span className="font-mono">#{block.hash.substring(0, 12)}...</span>}
-                    {block.timestamp && <span>{new Date(block.timestamp).toLocaleString()}</span>}
-                  </div>
                 </div>
-              </GlassCard>
-            </motion.div>
-          ))}
+                <GlassCard hover={false} className="flex-1 mb-2 border border-white/5 hover:border-white/10 transition-colors">
+                  <div className="p-3.5">
+                    <div className="flex items-start justify-between mb-1.5">
+                      <h5 className="text-white font-medium text-sm">{block.decisionTitle || block.title || "Decision"}</h5>
+                      {block.era && (
+                        <Badge className={`text-[9px] ${
+                          block.era === "medieval" ? "bg-amber-500/20 text-amber-400" :
+                          block.era === "wildwest" ? "bg-yellow-500/20 text-yellow-400" :
+                          "bg-cyan-500/20 text-cyan-400"
+                        }`}>{block.era}</Badge>
+                      )}
+                    </div>
+                    {block.choice && (
+                      <p className="text-xs text-cyan-400 mb-2 flex items-center gap-1">
+                        <ChevronRight className="w-3 h-3" /> {block.choice}
+                      </p>
+                    )}
+                    <div className="flex items-center gap-3 text-[10px]">
+                      {block.hash && (
+                        <span className="font-mono text-gray-600 bg-white/3 px-1.5 py-0.5 rounded">
+                          {block.hash.substring(0, 16)}...
+                        </span>
+                      )}
+                      {block.timestamp && (
+                        <span className="text-gray-600">
+                          {new Date(block.timestamp).toLocaleDateString()}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </GlassCard>
+              </motion.div>
+            );
+          })}
         </div>
       )}
     </motion.div>
@@ -735,12 +885,7 @@ function DecisionChainTab() {
 }
 
 function LoadingState() {
-  return (
-    <div className="flex items-center justify-center py-12">
-      <Loader2 className="w-6 h-6 text-cyan-400 animate-spin" />
-      <span className="ml-2 text-gray-400 text-sm">Loading...</span>
-    </div>
-  );
+  return <ShimmerLoader />;
 }
 
 export default function ChroniclesSeasonHub() {
@@ -756,57 +901,102 @@ export default function ChroniclesSeasonHub() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 pb-20" data-testid="season-hub-page">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-        <div className="flex items-center gap-3 mb-6">
-          <Link href="/chronicles/play">
-            <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white" data-testid="back-to-play">
-              <ArrowLeft className="w-4 h-4 mr-1" /> Back
-            </Button>
-          </Link>
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-white">Season Zero Hub</h1>
-            <p className="text-xs text-gray-500">All game systems at a glance</p>
-          </div>
-          <Badge className="bg-cyan-500/20 text-cyan-400">
-            <Sparkles className="w-3 h-3 mr-1" /> Season 0
-          </Badge>
-        </div>
+    <div className="min-h-screen bg-slate-950 pb-20 relative" data-testid="season-hub-page">
+      <AmbientBackground />
 
-        <div className="overflow-x-auto pb-2 mb-6 -mx-4 px-4 scrollbar-hide">
-          <div className="flex gap-1.5 min-w-max">
-            {TABS.map((tab) => {
-              const isActive = activeTab === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all whitespace-nowrap ${
-                    isActive
-                      ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/30"
-                      : "text-gray-500 hover:text-gray-300 hover:bg-white/5 border border-transparent"
-                  }`}
-                  data-testid={`tab-${tab.id}`}
+      <div className="relative z-10">
+        <div className="pt-4 pb-6 px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto">
+            <div className="flex items-center gap-2 mb-4">
+              <Link href="/chronicles/play">
+                <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white min-h-[44px] min-w-[44px]" data-testid="back-to-play">
+                  <ArrowLeft className="w-5 h-5" />
+                </Button>
+              </Link>
+              <div className="flex-1">
+                <motion.h1
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent leading-tight"
                 >
-                  <tab.icon className="w-4 h-4" />
-                  {tab.label}
-                </button>
-              );
-            })}
+                  Season Zero
+                </motion.h1>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-xs text-gray-500"
+                >
+                  Your journey across all eras
+                </motion.p>
+              </div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.3 }}
+              >
+                <Badge className="bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-400 border border-cyan-500/20 px-3 py-1">
+                  <Sparkles className="w-3 h-3 mr-1 animate-pulse" /> S0
+                </Badge>
+              </motion.div>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              className="overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide"
+            >
+              <div className="flex gap-1 min-w-max">
+                {TABS.map((tab, idx) => {
+                  const isActive = activeTab === tab.id;
+                  return (
+                    <motion.button
+                      key={tab.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.05 * idx }}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all whitespace-nowrap min-h-[44px] relative ${
+                        isActive
+                          ? "bg-gradient-to-r from-cyan-500/20 to-purple-500/20 text-cyan-300 border border-cyan-500/30 shadow-lg shadow-cyan-500/10"
+                          : "text-gray-500 hover:text-gray-300 hover:bg-white/5 border border-transparent active:scale-95"
+                      }`}
+                      data-testid={`tab-${tab.id}`}
+                    >
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeTabGlow"
+                          className="absolute inset-0 rounded-xl bg-cyan-500/10"
+                          transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                        />
+                      )}
+                      <span className="relative z-10 flex items-center gap-1.5">
+                        <tab.icon className="w-4 h-4" />
+                        <span className="hidden sm:inline">{tab.label}</span>
+                        <span className="sm:hidden">{tab.emoji}</span>
+                      </span>
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </motion.div>
           </div>
         </div>
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2 }}
-          >
-            {tabContent[activeTab]}
-          </motion.div>
-        </AnimatePresence>
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+            >
+              {tabContent[activeTab]}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );

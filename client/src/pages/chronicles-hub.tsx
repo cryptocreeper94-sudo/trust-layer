@@ -556,31 +556,31 @@ export default function ChroniclesHub() {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+        <div className="flex items-center justify-between mb-6 sm:mb-8">
+          <div className="flex items-center gap-3 sm:gap-4">
             <Link href="/">
-              <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
+              <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white min-h-[44px] min-w-[44px]">
                 <ChevronRight className="w-5 h-5 rotate-180" />
               </Button>
             </Link>
             <div>
-              <div className="flex items-center gap-2 mb-1">
-                <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">
+              <div className="flex items-center gap-1.5 mb-1">
+                <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-[10px]">
                   Season Zero
                 </Badge>
-                <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+                <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-[10px]">
                   BETA
                 </Badge>
               </div>
-              <h1 className="text-2xl font-bold" data-testid="text-hub-title">Chronicles</h1>
+              <h1 className="text-xl sm:text-2xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent" data-testid="text-hub-title">DarkWave Chronicles</h1>
             </div>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-slate-800/50 px-4 py-2 rounded-full border border-slate-700">
-              <Coins className="w-5 h-5 text-amber-400" />
-              <span className="font-bold text-amber-400" data-testid="text-shells-balance">{shells.toLocaleString()}</span>
-              <span className="text-slate-400 text-sm">Shells</span>
+          <div className="flex items-center">
+            <div className="flex items-center gap-1.5 sm:gap-2 bg-slate-800/50 px-3 sm:px-4 py-2 rounded-full border border-slate-700">
+              <Coins className="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" />
+              <span className="font-bold text-amber-400 text-sm sm:text-base" data-testid="text-shells-balance">{shells.toLocaleString()}</span>
+              <span className="text-slate-400 text-xs sm:text-sm hidden sm:inline">Shells</span>
             </div>
           </div>
         </div>
@@ -664,7 +664,7 @@ export default function ChroniclesHub() {
                     ) : (
                       <Link href={chapter.href || "#"}>
                         <div className={`
-                          flex items-center gap-4 p-4 rounded-lg cursor-pointer transition-all
+                          flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-lg cursor-pointer transition-all active:scale-[0.98] min-h-[56px]
                           ${isCurrent 
                             ? "bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 hover:border-cyan-400/50" 
                             : "bg-slate-800/50 border border-slate-700 hover:border-slate-600"

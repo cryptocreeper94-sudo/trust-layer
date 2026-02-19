@@ -174,15 +174,15 @@ export default function ChroniclesDashboard() {
   return (
     <div className="min-h-screen bg-slate-950 pb-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-        <div className="flex items-center gap-3 mb-6">
+        <div className="flex items-center gap-2 mb-6">
           <Link href="/chronicles/hub">
-            <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white" data-testid="back-to-hub">
-              <ArrowLeft className="w-4 h-4 mr-1" /> Hub
+            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white min-h-[44px] min-w-[44px]" data-testid="back-to-hub">
+              <ArrowLeft className="w-5 h-5" />
             </Button>
           </Link>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-white">Your Parallel Self</h1>
-            <p className="text-xs text-gray-500">Living in real-time — your timezone, your pace</p>
+            <h1 className="text-xl sm:text-2xl font-black bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Your Parallel Self</h1>
+            <p className="text-[10px] text-gray-500">Living in real-time — your timezone, your pace</p>
           </div>
         </div>
 

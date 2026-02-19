@@ -45,7 +45,7 @@ function MiniGame({ gameType, config, era, zoneId, onClose, onSubmit }: {
     if (gameState !== "playing") return;
 
     intervalRef.current = setInterval(() => {
-      setTimeLeft(prev => {
+      setTimeLeft((prev: number) => {
         if (prev <= 1) {
           clearInterval(intervalRef.current);
           clearInterval(spawnRef.current);
@@ -250,7 +250,7 @@ export default function ChroniclesWorld() {
   const [activityResult, setActivityResult] = useState<any>(null);
   const [arrivalNarrative, setArrivalNarrative] = useState<string | null>(null);
 
-  const era = session?.era || "modern";
+  const era = (session as any)?.era || "modern";
   const config = ERA_CONFIG[era] || ERA_CONFIG.modern;
 
   const { data: worldData, isLoading } = useQuery({

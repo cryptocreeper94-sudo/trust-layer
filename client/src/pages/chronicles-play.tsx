@@ -791,24 +791,24 @@ export default function ChroniclesPlay() {
       </AnimatePresence>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex items-center gap-2 mb-4">
           <Link href="/chronicles/hub">
-            <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white" data-testid="back-to-hub">
-              <ArrowLeft className="w-4 h-4 mr-1" /> Hub
+            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white min-h-[44px] min-w-[44px]" data-testid="back-to-hub">
+              <ArrowLeft className="w-5 h-5" />
             </Button>
           </Link>
           <div className="flex-1">
-            <h1 className="text-2xl font-bold text-white">Play Chronicles</h1>
-            <p className="text-xs text-gray-500">Your parallel life — real choices, real consequences</p>
+            <h1 className="text-2xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">DarkWave Chronicles</h1>
+            <p className="text-[10px] text-gray-500">Your parallel life — real choices, real consequences</p>
           </div>
           <Link href="/chronicles/season">
-            <Button variant="ghost" size="sm" className="text-cyan-400 hover:text-cyan-300" data-testid="view-season-hub">
-              <Trophy className="w-4 h-4" />
+            <Button variant="ghost" size="icon" className="text-cyan-400 hover:text-cyan-300 min-h-[44px] min-w-[44px]" data-testid="view-season-hub">
+              <Trophy className="w-5 h-5" />
             </Button>
           </Link>
           <Link href="/chronicles/dashboard">
-            <Button variant="ghost" size="sm" className="text-gray-400" data-testid="view-dashboard">
-              <Activity className="w-4 h-4" />
+            <Button variant="ghost" size="icon" className="text-gray-400 hover:text-white min-h-[44px] min-w-[44px]" data-testid="view-dashboard">
+              <Activity className="w-5 h-5" />
             </Button>
           </Link>
         </div>
@@ -852,14 +852,18 @@ export default function ChroniclesPlay() {
           </div>
         </div>
 
-        <div className="flex gap-2 mb-4 overflow-x-auto pb-1" data-testid="era-selector">
-          {(Object.keys(ERA_CONFIG) as Array<keyof typeof ERA_CONFIG>).map(era => {
+        <div className="flex gap-2 mb-4 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide" data-testid="era-selector">
+          {(Object.keys(ERA_CONFIG) as Array<keyof typeof ERA_CONFIG>).map((era, idx) => {
             const c = ERA_CONFIG[era];
             const locked = !eraUnlocks[era]?.unlocked;
             const ep = eraProgress[era];
+            const isSelected = selectedEra === era;
             return (
-              <button
+              <motion.button
                 key={era}
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: idx * 0.08 }}
                 onClick={() => {
                   if (locked) {
                     toast({ title: `${c.emoji} ${c.name} is Locked`, description: `Reach level ${eraUnlocks[era]?.requiredLevel} to unlock this era`, variant: "destructive" });
@@ -871,21 +875,30 @@ export default function ChroniclesPlay() {
                     setDecisionResult(null);
                   }
                 }}
-                className={`flex-shrink-0 px-4 py-2.5 rounded-full text-sm font-medium transition-all min-h-[44px] relative ${
+                className={`flex-shrink-0 px-5 py-3 rounded-xl text-sm font-medium transition-all min-h-[48px] relative overflow-hidden active:scale-95 ${
                   locked
                     ? "bg-white/3 text-gray-600 border border-white/5 cursor-not-allowed"
-                    : selectedEra === era
-                      ? `bg-gradient-to-r ${c.bgGradient} ${c.textColor} border ${c.borderColor}`
-                      : "bg-white/5 text-gray-400 hover:bg-white/10"
+                    : isSelected
+                      ? `bg-gradient-to-r ${c.bgGradient} ${c.textColor} border ${c.borderColor} shadow-lg`
+                      : "bg-white/5 text-gray-400 hover:bg-white/10 border border-transparent"
                 }`}
                 data-testid={`play-era-btn-${era}`}
               >
-                {locked && <Lock className="w-3 h-3 mr-1 inline" />}
-                {c.emoji} {c.name}
-                {ep && ep.completed > 0 && !locked && (
-                  <span className="ml-1.5 text-[10px] opacity-70">{ep.completed}/{ep.total}</span>
+                {isSelected && !locked && (
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                    animate={{ x: ["-100%", "200%"] }}
+                    transition={{ duration: 3, repeat: Infinity, repeatDelay: 2 }}
+                  />
                 )}
-              </button>
+                <span className="relative z-10">
+                  {locked && <Lock className="w-3 h-3 mr-1 inline" />}
+                  {c.emoji} {c.name}
+                  {ep && ep.completed > 0 && !locked && (
+                    <span className="ml-1.5 text-[10px] opacity-70">{ep.completed}/{ep.total}</span>
+                  )}
+                </span>
+              </motion.button>
             );
           })}
         </div>
@@ -984,70 +997,34 @@ export default function ChroniclesPlay() {
                 )}
               </GlassCard>
 
-              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3">
-                <Link href="/chronicles/npc-chat">
-                  <GlassCard glow className="p-3 cursor-pointer hover:border-cyan-500/30 transition-all h-full">
-                    <MessageCircle className="w-5 h-5 text-cyan-400 mb-1" />
-                    <p className="text-xs text-white font-medium">Talk to NPCs</p>
-                    <p className="text-[10px] text-gray-500">AI conversations</p>
-                  </GlassCard>
-                </Link>
-                <Link href="/chronicles/marketplace">
-                  <GlassCard glow className="p-3 cursor-pointer hover:border-purple-500/30 transition-all h-full">
-                    <ShoppingBag className="w-5 h-5 text-purple-400 mb-1" />
-                    <p className="text-xs text-white font-medium">Marketplace</p>
-                    <p className="text-[10px] text-gray-500">Shop & craft</p>
-                  </GlassCard>
-                </Link>
-                <Link href="/chronicles/estate">
-                  <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
-                    <Building className="w-5 h-5 text-amber-400 mb-1" />
-                    <p className="text-xs text-white font-medium">Your Estate</p>
-                    <p className="text-[10px] text-gray-500">Build & expand</p>
-                  </GlassCard>
-                </Link>
-                <Link href="/chronicles/world">
-                  <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
-                    <Globe className="w-5 h-5 text-green-400 mb-1" />
-                    <p className="text-xs text-white font-medium">Your World</p>
-                    <p className="text-[10px] text-gray-500">People & places</p>
-                  </GlassCard>
-                </Link>
-                <Link href="/chronicles/city">
-                  <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
-                    <Home className="w-5 h-5 text-blue-400 mb-1" />
-                    <p className="text-xs text-white font-medium">City</p>
-                    <p className="text-[10px] text-gray-500">Build together</p>
-                  </GlassCard>
-                </Link>
-                <Link href="/chronicles/voice">
-                  <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
-                    <Volume2 className="w-5 h-5 text-pink-400 mb-1" />
-                    <p className="text-xs text-white font-medium">Voice</p>
-                    <p className="text-[10px] text-gray-500">Train your voice</p>
-                  </GlassCard>
-                </Link>
-                <Link href="/chronicles/faith">
-                  <GlassCard glow className="p-3 cursor-pointer hover:border-amber-500/30 transition-all h-full">
-                    <Star className="w-5 h-5 text-amber-400 mb-1" />
-                    <p className="text-xs text-white font-medium">Faith</p>
-                    <p className="text-[10px] text-gray-500">Worship & scripture</p>
-                  </GlassCard>
-                </Link>
-                <Link href="/chronicles/tutorial">
-                  <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
-                    <BookOpen className="w-5 h-5 text-emerald-400 mb-1" />
-                    <p className="text-xs text-white font-medium">How to Play</p>
-                    <p className="text-[10px] text-gray-500">Tutorial guide</p>
-                  </GlassCard>
-                </Link>
-                <Link href="/chronicles/dashboard">
-                  <GlassCard className="p-3 cursor-pointer hover:bg-white/5 transition-all h-full">
-                    <TrendingUp className="w-5 h-5 text-yellow-400 mb-1" />
-                    <p className="text-xs text-white font-medium">Dashboard</p>
-                    <p className="text-[10px] text-gray-500">Your progress</p>
-                  </GlassCard>
-                </Link>
+              <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-2.5">
+                {[
+                  { href: "/chronicles/season", icon: Trophy, color: "text-yellow-400", hoverBorder: "hover:border-yellow-500/30", label: "Season Hub", sub: "All systems", glow: true, testId: "nav-season" },
+                  { href: "/chronicles/npc-chat", icon: MessageCircle, color: "text-cyan-400", hoverBorder: "hover:border-cyan-500/30", label: "Talk to NPCs", sub: "AI conversations", glow: true, testId: "nav-npc" },
+                  { href: "/chronicles/marketplace", icon: ShoppingBag, color: "text-purple-400", hoverBorder: "hover:border-purple-500/30", label: "Marketplace", sub: "Shop & craft", glow: true, testId: "nav-market" },
+                  { href: "/chronicles/estate", icon: Building, color: "text-amber-400", hoverBorder: "hover:border-amber-500/30", label: "Your Estate", sub: "Build & expand", glow: true, testId: "nav-estate" },
+                  { href: "/chronicles/world", icon: Globe, color: "text-green-400", hoverBorder: "hover:border-green-500/30", label: "Your World", sub: "People & places", glow: true, testId: "nav-world" },
+                  { href: "/chronicles/city", icon: Home, color: "text-blue-400", hoverBorder: "hover:border-blue-500/30", label: "City", sub: "Build together", glow: false, testId: "nav-city" },
+                  { href: "/chronicles/voice", icon: Volume2, color: "text-pink-400", hoverBorder: "hover:border-pink-500/30", label: "Voice", sub: "Voice clone", glow: false, testId: "nav-voice" },
+                  { href: "/chronicles/faith", icon: Star, color: "text-amber-400", hoverBorder: "hover:border-amber-500/30", label: "Faith", sub: "Worship & pray", glow: true, testId: "nav-faith" },
+                  { href: "/chronicles/tutorial", icon: BookOpen, color: "text-emerald-400", hoverBorder: "hover:border-emerald-500/30", label: "How to Play", sub: "Guide", glow: false, testId: "nav-tutorial" },
+                  { href: "/chronicles/dashboard", icon: TrendingUp, color: "text-yellow-400", hoverBorder: "hover:border-yellow-500/30", label: "Dashboard", sub: "Progress", glow: false, testId: "nav-dashboard" },
+                ].map((item, i) => (
+                  <motion.div
+                    key={item.href}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.05 * i }}
+                  >
+                    <Link href={item.href}>
+                      <GlassCard glow={item.glow} className={`p-3 cursor-pointer ${item.hoverBorder} transition-all h-full active:scale-95 min-h-[72px] flex flex-col justify-center`}>
+                        <item.icon className={`w-5 h-5 ${item.color} mb-1`} />
+                        <p className="text-xs text-white font-medium leading-tight">{item.label}</p>
+                        <p className="text-[9px] text-gray-500 leading-tight">{item.sub}</p>
+                      </GlassCard>
+                    </Link>
+                  </motion.div>
+                ))}
               </div>
 
               <GameLog log={recentLog} />
