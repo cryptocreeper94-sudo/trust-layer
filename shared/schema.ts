@@ -2919,6 +2919,9 @@ export const chroniclesGameState = pgTable("chronicles_game_state", {
   lastPrayerAt: timestamp("last_prayer_at"),
   spiritualJournal: text("spiritual_journal").notNull().default('[]'),
 
+  currentZone: text("current_zone"),
+  currentActivity: text("current_activity"),
+
   gameLog: text("game_log").notNull().default('[]'),
   npcRelationships: text("npc_relationships").notNull().default('{}'),
   
@@ -3061,6 +3064,51 @@ export const insertPlotListingSchema = createInsertSchema(plotListings).omit({
 
 export type PlotListing = typeof plotListings.$inferSelect;
 export type InsertPlotListing = z.infer<typeof insertPlotListingSchema>;
+
+// =====================================================
+// LIVING WORLD SYSTEM
+// =====================================================
+
+export const zonePresence = pgTable("zone_presence", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  era: text("era").notNull(),
+  zoneId: text("zone_id").notNull(),
+  activity: text("activity"),
+  enteredAt: timestamp("entered_at").defaultNow().notNull(),
+  lastHeartbeat: timestamp("last_heartbeat").defaultNow().notNull(),
+  isActive: boolean("is_active").notNull().default(true),
+});
+
+export const insertZonePresenceSchema = createInsertSchema(zonePresence).omit({
+  id: true,
+  enteredAt: true,
+  lastHeartbeat: true,
+});
+
+export type ZonePresence = typeof zonePresence.$inferSelect;
+export type InsertZonePresence = z.infer<typeof insertZonePresenceSchema>;
+
+export const minigameSessions = pgTable("minigame_sessions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  era: text("era").notNull(),
+  zoneId: text("zone_id").notNull(),
+  gameType: text("game_type").notNull(),
+  score: integer("score").notNull().default(0),
+  highScore: integer("high_score").notNull().default(0),
+  result: text("result"),
+  echosEarned: integer("echos_earned").notNull().default(0),
+  playedAt: timestamp("played_at").defaultNow().notNull(),
+});
+
+export const insertMinigameSessionSchema = createInsertSchema(minigameSessions).omit({
+  id: true,
+  playedAt: true,
+});
+
+export type MinigameSession = typeof minigameSessions.$inferSelect;
+export type InsertMinigameSession = z.infer<typeof insertMinigameSessionSchema>;
 
 // Daily Login Rewards - Track player streaks and rewards
 export const dailyLoginRewards = pgTable("daily_login_rewards", {

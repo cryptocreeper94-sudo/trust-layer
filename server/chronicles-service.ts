@@ -1350,6 +1350,284 @@ export const ERA_CITY_ZONES = [
 ];
 
 // ============================================
+// LIVING WORLD SYSTEM - Zone Activities, NPC Schedules, Mini-Games
+// ============================================
+
+export interface ZoneActivity {
+  id: string;
+  zoneId: string;
+  name: string;
+  description: string;
+  emoji: string;
+  activityType: "ambient" | "interactive" | "minigame" | "trade" | "social" | "survival" | "training";
+  timeWindows: string[];
+  npcNames: string[];
+  minigameType?: string;
+  echoReward: number;
+  xpReward: number;
+  requiredLevel: number;
+  toolsInvolved?: string[];
+}
+
+export const WORLD_ZONES: Record<string, Array<{
+  id: string; name: string; emoji: string; description: string; zoneType: string;
+  adjacentZones: string[];
+}>> = {
+  modern: [
+    { id: "downtown", name: "Downtown Plaza", emoji: "🏙️", description: "The gleaming heart of the city — corporate towers, coffee shops, and street performers", zoneType: "commercial", adjacentZones: ["park", "residential", "underground"] },
+    { id: "park", name: "Central Park", emoji: "🌳", description: "Green fields, jogging trails, a baseball diamond, and families enjoying the day", zoneType: "nature", adjacentZones: ["downtown", "residential", "campus"] },
+    { id: "residential", name: "Midtown", emoji: "🏘️", description: "Apartments, corner stores, neighborhood bars, and the daily rhythm of city life", zoneType: "residential", adjacentZones: ["downtown", "park", "waterfront"] },
+    { id: "campus", name: "Tech Campus", emoji: "💻", description: "Innovation hub — startups, labs, maker spaces, and the shooting range", zoneType: "civic", adjacentZones: ["park", "underground"] },
+    { id: "underground", name: "The Underground", emoji: "🎭", description: "Hidden clubs, back-alley markets, fight gyms, and secrets", zoneType: "mixed", adjacentZones: ["downtown", "campus"] },
+    { id: "waterfront", name: "Waterfront", emoji: "⛵", description: "Marina, fish market, waterfront restaurants, and sunset views", zoneType: "nature", adjacentZones: ["residential", "downtown"] },
+  ],
+  medieval: [
+    { id: "castle", name: "Castle Ward", emoji: "🏰", description: "The fortified seat of power — the court, the barracks, and the jousting grounds", zoneType: "civic", adjacentZones: ["market", "temple", "artisan"] },
+    { id: "market", name: "Market Square", emoji: "🏪", description: "Bustling bazaar of merchants, performers, and pickpockets", zoneType: "commercial", adjacentZones: ["castle", "peasant", "artisan"] },
+    { id: "peasant", name: "Peasant Quarter", emoji: "🏠", description: "Simple homes, small gardens, and the tavern where everyone gathers", zoneType: "residential", adjacentZones: ["market", "fields", "temple"] },
+    { id: "temple", name: "Temple Grove", emoji: "⛪", description: "Sacred grounds, the monastery herb garden, and ancient standing stones", zoneType: "nature", adjacentZones: ["castle", "peasant", "fields"] },
+    { id: "artisan", name: "Artisan's Row", emoji: "⚒️", description: "Blacksmith, bowyer, leatherworker, and the archery range", zoneType: "mixed", adjacentZones: ["castle", "market"] },
+    { id: "fields", name: "The Outer Fields", emoji: "🌾", description: "Farmlands, hunting woods, and the road to distant villages", zoneType: "nature", adjacentZones: ["peasant", "temple"] },
+  ],
+  wildwest: [
+    { id: "mainstreet", name: "Main Street", emoji: "🤠", description: "The saloon, general store, sheriff's office, and the hitching posts", zoneType: "commercial", adjacentZones: ["depot", "settlers", "gulch"] },
+    { id: "depot", name: "Railroad Depot", emoji: "🚂", description: "Where the iron horse meets the frontier — cargo, passengers, and opportunity", zoneType: "civic", adjacentZones: ["mainstreet", "mining"] },
+    { id: "settlers", name: "Settler's Row", emoji: "🏚️", description: "Homesteads, the schoolhouse, the little league field, and church", zoneType: "residential", adjacentZones: ["mainstreet", "valley", "outskirts"] },
+    { id: "valley", name: "Sacred Valley", emoji: "🦅", description: "Ancestral lands, natural springs, and paths only the First Nations know", zoneType: "nature", adjacentZones: ["settlers", "outskirts"] },
+    { id: "mining", name: "Mining Camp", emoji: "⛏️", description: "Tents, pickaxes, sluice boxes, and the assay office", zoneType: "mixed", adjacentZones: ["depot", "outskirts"] },
+    { id: "outskirts", name: "The Outskirts", emoji: "🌵", description: "Open range, hunting grounds, target practice, and the road out of town", zoneType: "nature", adjacentZones: ["settlers", "valley", "mining"] },
+  ],
+};
+
+export const ZONE_ACTIVITIES: ZoneActivity[] = [
+  // ===== MODERN ERA ACTIVITIES =====
+  { id: "mod_baseball", zoneId: "park", name: "Baseball at the Diamond", description: "Kids are playing ball at the little league field. Step up to bat or watch from the fence.", emoji: "⚾", activityType: "minigame", timeWindows: ["morning", "afternoon"], npcNames: [], minigameType: "baseball", echoReward: 15, xpReward: 20, requiredLevel: 0 },
+  { id: "mod_jogging", zoneId: "park", name: "Jogging Trail", description: "Runners loop the park trail. Fresh air and exercise.", emoji: "🏃", activityType: "interactive", timeWindows: ["dawn", "morning", "afternoon"], npcNames: [], echoReward: 5, xpReward: 10, requiredLevel: 0 },
+  { id: "mod_busking", zoneId: "downtown", name: "Street Musicians", description: "A guitarist plays on the plaza corner, drawing a crowd.", emoji: "🎸", activityType: "ambient", timeWindows: ["morning", "afternoon", "evening"], npcNames: [], echoReward: 3, xpReward: 5, requiredLevel: 0 },
+  { id: "mod_coffee", zoneId: "downtown", name: "Coffee Shop Talk", description: "The coffee shop buzzes with conversation and the smell of fresh espresso.", emoji: "☕", activityType: "social", timeWindows: ["dawn", "morning", "afternoon"], npcNames: ["Mayor Diana Reyes"], echoReward: 5, xpReward: 10, requiredLevel: 0 },
+  { id: "mod_poker", zoneId: "underground", name: "Underground Poker", description: "A high-stakes card game in the back room. Buy in if you dare.", emoji: "🃏", activityType: "minigame", timeWindows: ["evening", "night", "midnight"], npcNames: ["Kai 'Ghost' Reeves"], minigameType: "poker", echoReward: 25, xpReward: 30, requiredLevel: 2 },
+  { id: "mod_shooting_range", zoneId: "campus", name: "Sport Shooting Range", description: "Indoor range with lanes for pistol and rifle practice. Legal, supervised, and competitive.", emoji: "🎯", activityType: "minigame", timeWindows: ["morning", "afternoon", "evening"], npcNames: [], minigameType: "target_shooting", echoReward: 15, xpReward: 20, requiredLevel: 1, toolsInvolved: ["pistol", "rifle"] },
+  { id: "mod_self_defense", zoneId: "campus", name: "Self-Defense Class", description: "Martial arts and self-defense training at the campus gym.", emoji: "🥋", activityType: "training", timeWindows: ["morning", "afternoon"], npcNames: [], echoReward: 10, xpReward: 15, requiredLevel: 0 },
+  { id: "mod_hacking", zoneId: "underground", name: "Hackathon", description: "Coders hunched over laptops, building tools for the Underground.", emoji: "💻", activityType: "interactive", timeWindows: ["night", "midnight"], npcNames: ["Kai 'Ghost' Reeves"], echoReward: 20, xpReward: 25, requiredLevel: 3 },
+  { id: "mod_networking", zoneId: "downtown", name: "Rooftop Networking", description: "A mixer on the penthouse terrace. Deals being made over cocktails.", emoji: "🥂", activityType: "social", timeWindows: ["evening"], npcNames: ["Dr. Elena Voss"], echoReward: 15, xpReward: 20, requiredLevel: 2 },
+  { id: "mod_fishing", zoneId: "waterfront", name: "Pier Fishing", description: "Drop a line off the pier. The water's calm and the fish are biting.", emoji: "🎣", activityType: "interactive", timeWindows: ["dawn", "morning", "afternoon", "evening"], npcNames: [], echoReward: 8, xpReward: 10, requiredLevel: 0 },
+  { id: "mod_farmers_market", zoneId: "park", name: "Farmer's Market", description: "Local vendors selling fresh produce, honey, and homemade goods.", emoji: "🥬", activityType: "trade", timeWindows: ["morning", "afternoon"], npcNames: [], echoReward: 5, xpReward: 8, requiredLevel: 0 },
+  { id: "mod_block_party", zoneId: "residential", name: "Block Party", description: "The neighborhood cookout — grills sizzling, kids running, music playing.", emoji: "🎉", activityType: "social", timeWindows: ["afternoon", "evening"], npcNames: ["Mayor Diana Reyes"], echoReward: 10, xpReward: 15, requiredLevel: 0 },
+  { id: "mod_sunset_walk", zoneId: "waterfront", name: "Sunset Boardwalk", description: "Couples walking, street food vendors, and the sun painting the sky.", emoji: "🌅", activityType: "ambient", timeWindows: ["evening"], npcNames: [], echoReward: 3, xpReward: 5, requiredLevel: 0 },
+  { id: "mod_gym", zoneId: "residential", name: "Neighborhood Gym", description: "Weights clanking, people training, the smell of effort and determination.", emoji: "💪", activityType: "training", timeWindows: ["dawn", "morning", "afternoon", "evening"], npcNames: [], echoReward: 8, xpReward: 12, requiredLevel: 0 },
+
+  // ===== MEDIEVAL ERA ACTIVITIES =====
+  { id: "med_archery", zoneId: "artisan", name: "Archery Practice", description: "The bowyer sets up targets in the yard. Draw your bow and test your aim.", emoji: "🏹", activityType: "minigame", timeWindows: ["morning", "afternoon"], npcNames: [], minigameType: "archery", echoReward: 15, xpReward: 20, requiredLevel: 0, toolsInvolved: ["longbow", "crossbow"] },
+  { id: "med_jousting", zoneId: "castle", name: "Jousting Tournament", description: "Knights clash on horseback while the crowd roars. Will you ride?", emoji: "🐴", activityType: "minigame", timeWindows: ["afternoon"], npcNames: ["Lord Aldric"], minigameType: "jousting", echoReward: 30, xpReward: 35, requiredLevel: 3, toolsInvolved: ["lance", "shield"] },
+  { id: "med_forge", zoneId: "artisan", name: "At the Forge", description: "The blacksmith hammers steel into shape. The ring of metal fills the air.", emoji: "⚒️", activityType: "interactive", timeWindows: ["dawn", "morning", "afternoon"], npcNames: [], echoReward: 10, xpReward: 15, requiredLevel: 0, toolsInvolved: ["hammer", "tongs"] },
+  { id: "med_sword_training", zoneId: "castle", name: "Sword Training", description: "Guards drill in the courtyard with wooden practice swords.", emoji: "⚔️", activityType: "training", timeWindows: ["morning", "afternoon"], npcNames: [], echoReward: 12, xpReward: 18, requiredLevel: 1, toolsInvolved: ["sword", "shield"] },
+  { id: "med_hunting", zoneId: "fields", name: "Hunting in the Woods", description: "Track deer through the forest with bow or spear. Bring back meat for the village.", emoji: "🦌", activityType: "minigame", timeWindows: ["dawn", "morning", "afternoon"], npcNames: [], minigameType: "hunting", echoReward: 20, xpReward: 25, requiredLevel: 1, toolsInvolved: ["bow", "spear", "knife"] },
+  { id: "med_tavern_tales", zoneId: "peasant", name: "Tavern Tales", description: "Ale flows and tongues loosen. Stories, gossip, and the occasional brawl.", emoji: "🍺", activityType: "social", timeWindows: ["evening", "night"], npcNames: ["Marcus Goldhand"], echoReward: 8, xpReward: 12, requiredLevel: 0 },
+  { id: "med_dice", zoneId: "peasant", name: "Dice Game", description: "Peasants huddle over a dice game in the tavern corner. Simple stakes, fierce competition.", emoji: "🎲", activityType: "minigame", timeWindows: ["evening", "night"], npcNames: [], minigameType: "dice", echoReward: 12, xpReward: 15, requiredLevel: 0 },
+  { id: "med_market_haggling", zoneId: "market", name: "Market Day", description: "Merchants shout prices, shoppers haggle, exotic goods from distant lands on display.", emoji: "🏪", activityType: "trade", timeWindows: ["morning", "afternoon"], npcNames: ["Marcus Goldhand"], echoReward: 10, xpReward: 12, requiredLevel: 0 },
+  { id: "med_court_intrigue", zoneId: "castle", name: "Court Session", description: "The chancellor holds court. Petitioners, plots, and political maneuvering.", emoji: "👑", activityType: "social", timeWindows: ["morning"], npcNames: ["Lord Aldric", "Sera Nightwhisper"], echoReward: 15, xpReward: 20, requiredLevel: 2 },
+  { id: "med_herb_gathering", zoneId: "temple", name: "Herb Gathering", description: "Monks and healers gather medicinal herbs in the sacred garden.", emoji: "🌿", activityType: "interactive", timeWindows: ["dawn", "morning"], npcNames: ["Sister Ursula"], echoReward: 8, xpReward: 10, requiredLevel: 0 },
+  { id: "med_farming", zoneId: "fields", name: "Working the Fields", description: "Peasants tend crops under the open sky. Hard work, honest living.", emoji: "🌾", activityType: "interactive", timeWindows: ["dawn", "morning", "afternoon"], npcNames: [], echoReward: 6, xpReward: 8, requiredLevel: 0 },
+  { id: "med_spy_meeting", zoneId: "market", name: "Whispered Meetings", description: "A cloaked figure lingers near the fountain. Information has a price.", emoji: "🗝️", activityType: "social", timeWindows: ["evening", "night"], npcNames: ["Sera Nightwhisper"], echoReward: 20, xpReward: 25, requiredLevel: 3 },
+  { id: "med_prayer", zoneId: "temple", name: "Evening Vespers", description: "The chapel bells ring. The faithful gather for evening prayer.", emoji: "🕯️", activityType: "ambient", timeWindows: ["evening"], npcNames: ["Sister Ursula"], echoReward: 5, xpReward: 8, requiredLevel: 0 },
+  { id: "med_festival", zoneId: "market", name: "Festival Preparations", description: "The town prepares for the seasonal festival. Music, decorations, and excitement.", emoji: "🎪", activityType: "ambient", timeWindows: ["morning", "afternoon"], npcNames: [], echoReward: 5, xpReward: 8, requiredLevel: 0 },
+
+  // ===== WILD WEST ERA ACTIVITIES =====
+  { id: "ww_quickdraw", zoneId: "mainstreet", name: "Quick-Draw Practice", description: "Tin cans lined up on the fence. How fast can you draw and hit your mark?", emoji: "🔫", activityType: "minigame", timeWindows: ["morning", "afternoon"], npcNames: ["Marshal Jake Colton"], minigameType: "quickdraw", echoReward: 15, xpReward: 20, requiredLevel: 0, toolsInvolved: ["revolver"] },
+  { id: "ww_hunting", zoneId: "outskirts", name: "Game Hunting", description: "Track deer and rabbit across the open range. Bring back supper or go hungry.", emoji: "🦌", activityType: "minigame", timeWindows: ["dawn", "morning", "afternoon"], npcNames: [], minigameType: "hunting", echoReward: 20, xpReward: 25, requiredLevel: 0, toolsInvolved: ["rifle", "bow", "knife"] },
+  { id: "ww_poker", zoneId: "mainstreet", name: "Saloon Poker", description: "Cards, whiskey, and bluffing. The saloon's back table is where fortunes change hands.", emoji: "🃏", activityType: "minigame", timeWindows: ["evening", "night", "midnight"], npcNames: ["Rattlesnake Rosa"], minigameType: "poker", echoReward: 25, xpReward: 30, requiredLevel: 1 },
+  { id: "ww_arm_wrestling", zoneId: "mainstreet", name: "Arm Wrestling", description: "Two men lock hands on the bar. The whole saloon watches and bets.", emoji: "💪", activityType: "minigame", timeWindows: ["evening", "night"], npcNames: [], minigameType: "arm_wrestling", echoReward: 12, xpReward: 15, requiredLevel: 0 },
+  { id: "ww_horse_breaking", zoneId: "settlers", name: "Horse Breaking", description: "A wild mustang bucks and kicks. Can you stay in the saddle?", emoji: "🐎", activityType: "minigame", timeWindows: ["morning", "afternoon"], npcNames: [], minigameType: "horse_breaking", echoReward: 18, xpReward: 22, requiredLevel: 1, toolsInvolved: ["lasso"] },
+  { id: "ww_gold_panning", zoneId: "mining", name: "Gold Panning", description: "Kneel by the creek and sift through gravel. Every pan could hold a nugget.", emoji: "✨", activityType: "minigame", timeWindows: ["dawn", "morning", "afternoon"], npcNames: [], minigameType: "gold_panning", echoReward: 10, xpReward: 12, requiredLevel: 0, toolsInvolved: ["pan", "pick"] },
+  { id: "ww_target_practice", zoneId: "outskirts", name: "Rifle Range", description: "Bottles on posts, tin plates on fences. Practice makes perfect out here.", emoji: "🎯", activityType: "minigame", timeWindows: ["morning", "afternoon"], npcNames: [], minigameType: "target_shooting", echoReward: 12, xpReward: 15, requiredLevel: 0, toolsInvolved: ["rifle", "revolver"] },
+  { id: "ww_campfire", zoneId: "outskirts", name: "Campfire Stories", description: "Sit around the fire under the stars. Someone's got a harmonica and a tall tale.", emoji: "🔥", activityType: "social", timeWindows: ["night", "midnight"], npcNames: ["Chief Running Bear", "Mother Ursula"], echoReward: 8, xpReward: 12, requiredLevel: 0 },
+  { id: "ww_patrol", zoneId: "mainstreet", name: "Marshal's Patrol", description: "The Marshal walks his beat. The town's quiet — for now.", emoji: "⭐", activityType: "ambient", timeWindows: ["morning", "afternoon", "evening"], npcNames: ["Marshal Jake Colton"], echoReward: 3, xpReward: 5, requiredLevel: 0 },
+  { id: "ww_general_store", zoneId: "mainstreet", name: "General Store", description: "Supplies, tools, ammunition, and the latest gossip from back east.", emoji: "🏬", activityType: "trade", timeWindows: ["morning", "afternoon"], npcNames: [], echoReward: 5, xpReward: 8, requiredLevel: 0, toolsInvolved: ["provisions"] },
+  { id: "ww_schoolhouse", zoneId: "settlers", name: "Schoolhouse Lessons", description: "Children recite their letters. The schoolmarm keeps order with a firm hand.", emoji: "📚", activityType: "ambient", timeWindows: ["morning"], npcNames: [], echoReward: 3, xpReward: 5, requiredLevel: 0 },
+  { id: "ww_baseball", zoneId: "settlers", name: "Frontier Baseball", description: "A makeshift diamond by the schoolhouse. Settlers' kids play ball in the afternoon dust.", emoji: "⚾", activityType: "minigame", timeWindows: ["afternoon"], npcNames: [], minigameType: "baseball", echoReward: 12, xpReward: 15, requiredLevel: 0 },
+  { id: "ww_tracking", zoneId: "valley", name: "Tracking with the Elders", description: "Chief Running Bear teaches the old ways — reading the land, the wind, the signs.", emoji: "🐾", activityType: "training", timeWindows: ["dawn", "morning"], npcNames: ["Chief Running Bear"], echoReward: 15, xpReward: 20, requiredLevel: 1 },
+  { id: "ww_revival", zoneId: "settlers", name: "Evening Revival Meeting", description: "Mother Ursula preaches by lamplight. Hymns echo across the prairie.", emoji: "⛪", activityType: "social", timeWindows: ["evening"], npcNames: ["Mother Ursula"], echoReward: 8, xpReward: 12, requiredLevel: 0 },
+  { id: "ww_dynamite_mining", zoneId: "mining", name: "Blasting for Ore", description: "Set the charges, clear the tunnel, and pray the mountain cooperates.", emoji: "💥", activityType: "interactive", timeWindows: ["morning", "afternoon"], npcNames: [], echoReward: 15, xpReward: 18, requiredLevel: 2, toolsInvolved: ["dynamite", "pick"] },
+];
+
+export const NPC_SCHEDULES: Array<{
+  npcName: string; era: string; zoneId: string;
+  startHour: number; endHour: number; activity: string;
+}> = [
+  // Modern NPCs
+  { npcName: "Dr. Elena Voss", era: "modern", zoneId: "campus", startHour: 8, endHour: 17, activity: "Working in the Nexus Corp innovation lab" },
+  { npcName: "Dr. Elena Voss", era: "modern", zoneId: "downtown", startHour: 18, endHour: 21, activity: "Networking at a rooftop event" },
+  { npcName: "Kai 'Ghost' Reeves", era: "modern", zoneId: "underground", startHour: 20, endHour: 4, activity: "Running operations in the back room" },
+  { npcName: "Kai 'Ghost' Reeves", era: "modern", zoneId: "park", startHour: 10, endHour: 12, activity: "Jogging with a burner phone, scanning for surveillance" },
+  { npcName: "Mayor Diana Reyes", era: "modern", zoneId: "downtown", startHour: 8, endHour: 16, activity: "At City Hall, meeting with constituents" },
+  { npcName: "Mayor Diana Reyes", era: "modern", zoneId: "residential", startHour: 17, endHour: 20, activity: "Walking the neighborhood, talking to residents" },
+  { npcName: "Ursula", era: "modern", zoneId: "park", startHour: 6, endHour: 10, activity: "Reading scripture on a bench in the garden" },
+  { npcName: "Ursula", era: "modern", zoneId: "residential", startHour: 14, endHour: 18, activity: "Visiting families and offering counsel" },
+
+  // Medieval NPCs
+  { npcName: "Lord Aldric", era: "medieval", zoneId: "castle", startHour: 7, endHour: 18, activity: "Holding court and managing the realm" },
+  { npcName: "Lord Aldric", era: "medieval", zoneId: "castle", startHour: 19, endHour: 22, activity: "Dining in the great hall" },
+  { npcName: "Sera Nightwhisper", era: "medieval", zoneId: "market", startHour: 20, endHour: 3, activity: "Moving through shadows, gathering whispers" },
+  { npcName: "Sera Nightwhisper", era: "medieval", zoneId: "castle", startHour: 10, endHour: 12, activity: "Presenting intelligence to the chancellor" },
+  { npcName: "Marcus Goldhand", era: "medieval", zoneId: "market", startHour: 7, endHour: 17, activity: "Overseeing trade and counting coin" },
+  { npcName: "Marcus Goldhand", era: "medieval", zoneId: "peasant", startHour: 18, endHour: 22, activity: "Enjoying ale and stories at the tavern" },
+  { npcName: "Sister Ursula", era: "medieval", zoneId: "temple", startHour: 5, endHour: 12, activity: "Morning prayers and tending the sacred library" },
+  { npcName: "Sister Ursula", era: "medieval", zoneId: "market", startHour: 14, endHour: 17, activity: "Sharing wisdom and healing herbs" },
+
+  // Wild West NPCs
+  { npcName: "Marshal Jake Colton", era: "wildwest", zoneId: "mainstreet", startHour: 6, endHour: 18, activity: "Walking his beat, keeping the peace" },
+  { npcName: "Marshal Jake Colton", era: "wildwest", zoneId: "mainstreet", startHour: 19, endHour: 22, activity: "Having a quiet whiskey at the saloon bar" },
+  { npcName: "Rattlesnake Rosa", era: "wildwest", zoneId: "outskirts", startHour: 6, endHour: 16, activity: "Running with her gang in the canyons" },
+  { npcName: "Rattlesnake Rosa", era: "wildwest", zoneId: "mainstreet", startHour: 20, endHour: 2, activity: "Playing poker and causing trouble at the saloon" },
+  { npcName: "Chief Running Bear", era: "wildwest", zoneId: "valley", startHour: 5, endHour: 18, activity: "Teaching the young ones and tending the land" },
+  { npcName: "Chief Running Bear", era: "wildwest", zoneId: "outskirts", startHour: 19, endHour: 23, activity: "Sitting by the campfire, sharing stories" },
+  { npcName: "Mother Ursula", era: "wildwest", zoneId: "settlers", startHour: 6, endHour: 12, activity: "Making rounds — healing, praying, counseling" },
+  { npcName: "Mother Ursula", era: "wildwest", zoneId: "settlers", startHour: 18, endHour: 21, activity: "Leading the evening revival meeting" },
+];
+
+export const MINIGAME_CONFIGS: Record<string, {
+  name: string; emoji: string; description: string;
+  instructions: string; durationSeconds: number;
+  maxScore: number; echoMultiplier: number;
+  eras: string[];
+}> = {
+  baseball: {
+    name: "Baseball", emoji: "⚾", description: "Step up to bat and time your swing",
+    instructions: "Tap when the pitch crosses the plate. Time it perfectly for a home run!",
+    durationSeconds: 60, maxScore: 100, echoMultiplier: 0.15, eras: ["modern", "wildwest"],
+  },
+  target_shooting: {
+    name: "Target Shooting", emoji: "🎯", description: "Hit the targets before time runs out",
+    instructions: "Tap targets as they appear. Bullseyes score double. Don't miss!",
+    durationSeconds: 45, maxScore: 100, echoMultiplier: 0.15, eras: ["modern", "wildwest"],
+  },
+  archery: {
+    name: "Archery", emoji: "🏹", description: "Draw your bow and hit the mark",
+    instructions: "Hold to draw, release to fire. Aim for the center ring!",
+    durationSeconds: 60, maxScore: 100, echoMultiplier: 0.15, eras: ["medieval"],
+  },
+  poker: {
+    name: "Poker", emoji: "🃏", description: "Five-card draw against the house",
+    instructions: "Choose which cards to hold, discard the rest. Best hand wins the pot.",
+    durationSeconds: 120, maxScore: 100, echoMultiplier: 0.25, eras: ["modern", "wildwest"],
+  },
+  hunting: {
+    name: "Hunting", emoji: "🦌", description: "Track and bag game for your table",
+    instructions: "Follow the tracks, wait for the shot. Patience and aim win the day.",
+    durationSeconds: 90, maxScore: 100, echoMultiplier: 0.2, eras: ["medieval", "wildwest"],
+  },
+  jousting: {
+    name: "Jousting", emoji: "🐴", description: "Charge your opponent on horseback",
+    instructions: "Time your lance strike as you charge. Unseat your opponent to win!",
+    durationSeconds: 30, maxScore: 100, echoMultiplier: 0.3, eras: ["medieval"],
+  },
+  quickdraw: {
+    name: "Quick-Draw", emoji: "🔫", description: "How fast can you draw and fire?",
+    instructions: "Wait for 'DRAW!' then tap as fast as you can. Fastest hand wins.",
+    durationSeconds: 10, maxScore: 100, echoMultiplier: 0.15, eras: ["wildwest"],
+  },
+  dice: {
+    name: "Dice Game", emoji: "🎲", description: "Roll the bones and test your luck",
+    instructions: "Bet your echoes and roll. Highest total wins the pot.",
+    durationSeconds: 60, maxScore: 100, echoMultiplier: 0.1, eras: ["medieval"],
+  },
+  arm_wrestling: {
+    name: "Arm Wrestling", emoji: "💪", description: "Lock hands and overpower your opponent",
+    instructions: "Tap rapidly to push your opponent's hand down. Don't let up!",
+    durationSeconds: 15, maxScore: 100, echoMultiplier: 0.12, eras: ["wildwest"],
+  },
+  gold_panning: {
+    name: "Gold Panning", emoji: "✨", description: "Sift through creek gravel for nuggets",
+    instructions: "Swirl the pan and tap nuggets as they appear. Watch for fool's gold!",
+    durationSeconds: 60, maxScore: 100, echoMultiplier: 0.15, eras: ["wildwest"],
+  },
+  horse_breaking: {
+    name: "Horse Breaking", emoji: "🐎", description: "Stay on the wild mustang",
+    instructions: "Tilt and tap to keep your balance as the horse bucks. Last 8 seconds to win!",
+    durationSeconds: 15, maxScore: 100, echoMultiplier: 0.18, eras: ["wildwest"],
+  },
+};
+
+export function getWorldTimeInfo(era: string) {
+  const now = new Date();
+  const hour = now.getHours();
+  const minute = now.getMinutes();
+
+  let period: string;
+  if (hour >= 5 && hour < 7) period = "dawn";
+  else if (hour >= 7 && hour < 12) period = "morning";
+  else if (hour >= 12 && hour < 17) period = "afternoon";
+  else if (hour >= 17 && hour < 20) period = "evening";
+  else if (hour >= 20 && hour < 24) period = "night";
+  else period = "midnight";
+
+  return { hour, minute, period, isDaytime: hour >= 6 && hour < 20 };
+}
+
+export function getZoneAmbientState(era: string, zoneId: string) {
+  const time = getWorldTimeInfo(era);
+  const zones = WORLD_ZONES[era] || [];
+  const zone = zones.find(z => z.id === zoneId);
+  if (!zone) return null;
+
+  const activities = ZONE_ACTIVITIES.filter(a =>
+    a.zoneId === zoneId &&
+    ZONE_ACTIVITIES.some(za => za.id === a.id && (za.id.startsWith("mod_") ? era === "modern" : za.id.startsWith("med_") ? era === "medieval" : era === "wildwest")) &&
+    a.timeWindows.includes(time.period)
+  );
+
+  const npcsHere = NPC_SCHEDULES.filter(s => {
+    if (s.era !== era || s.zoneId !== zoneId) return false;
+    if (s.startHour <= s.endHour) {
+      return time.hour >= s.startHour && time.hour < s.endHour;
+    }
+    return time.hour >= s.startHour || time.hour < s.endHour;
+  });
+
+  return {
+    zone,
+    time,
+    activities,
+    npcsPresent: npcsHere.map(s => ({
+      name: s.npcName,
+      activity: s.activity,
+      npcData: STARTER_NPCS.find(n => n.name === s.npcName),
+    })),
+    adjacentZones: zone.adjacentZones.map(id => zones.find(z => z.id === id)).filter(Boolean),
+  };
+}
+
+export function getAllZonesForEra(era: string) {
+  const time = getWorldTimeInfo(era);
+  const zones = WORLD_ZONES[era] || [];
+
+  return zones.map(zone => {
+    const eraPrefix = era === "modern" ? "mod_" : era === "medieval" ? "med_" : "ww_";
+    const activities = ZONE_ACTIVITIES.filter(a =>
+      a.zoneId === zone.id &&
+      a.id.startsWith(eraPrefix) &&
+      a.timeWindows.includes(time.period)
+    );
+
+    const npcsHere = NPC_SCHEDULES.filter(s => {
+      if (s.era !== era || s.zoneId !== zone.id) return false;
+      if (s.startHour <= s.endHour) {
+        return time.hour >= s.startHour && time.hour < s.endHour;
+      }
+      return time.hour >= s.startHour || time.hour < s.endHour;
+    });
+
+    return {
+      ...zone,
+      activeActivities: activities.length,
+      npcsPresent: npcsHere.length,
+      npcNames: npcsHere.map(s => s.npcName),
+      topActivity: activities[0] || null,
+    };
+  });
+}
+
+// ============================================
 // SERVICE IMPLEMENTATION
 // ============================================
 

@@ -2,7 +2,8 @@ import { db } from "./db";
 import { eq, sql, and, desc } from "drizzle-orm";
 import { chroniclesGameState, playerChoices, playerPersonalities, chronicleAccounts, landPlots, cityZones, chatUsers, chatChannels, chatMessages, voiceSamples, voiceMessages, userCredits, creditTransactions } from "@shared/schema";
 import OpenAI from "openai";
-import { SEASON_ZERO_QUESTS, STARTER_FACTIONS, STARTER_NPCS, ERA_SETTINGS, ERAS } from "./chronicles-service";
+import { SEASON_ZERO_QUESTS, STARTER_FACTIONS, STARTER_NPCS, ERA_SETTINGS, ERAS, WORLD_ZONES, ZONE_ACTIVITIES, NPC_SCHEDULES, MINIGAME_CONFIGS, getWorldTimeInfo, getZoneAmbientState, getAllZonesForEra } from "./chronicles-service";
+import { zonePresence, minigameSessions } from "@shared/schema";
 import { generateToken, hashPassword, generateTrustLayerId } from "./trustlayer-sso";
 import type { Express, Request, Response, NextFunction } from "express";
 
@@ -2291,6 +2292,370 @@ Respond as ${ursulaName} in character. Keep responses 2-4 sentences. Be genuine,
     } catch (error: any) {
       console.error("Talk to Ursula error:", error);
       res.status(500).json({ error: "Failed to talk to Ursula" });
+    }
+  });
+
+  // =====================================================
+  // LIVING WORLD SYSTEM ROUTES
+  // =====================================================
+
+  app.get("/api/chronicles/world/zones/:era", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const era = req.params.era;
+      if (!["modern", "medieval", "wildwest"].includes(era)) {
+        return res.status(400).json({ error: "Invalid era" });
+      }
+      const zones = getAllZonesForEra(era);
+      const time = getWorldTimeInfo(era);
+
+      const userId = req.userId;
+      const activePresence = await db.select().from(zonePresence)
+        .where(and(eq(zonePresence.era, era), eq(zonePresence.isActive, true)));
+
+      const playerCounts: Record<string, number> = {};
+      for (const p of activePresence) {
+        const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000);
+        if (p.lastHeartbeat > fiveMinAgo) {
+          playerCounts[p.zoneId] = (playerCounts[p.zoneId] || 0) + 1;
+        }
+      }
+
+      const myPresence = activePresence.find(p => p.userId === userId);
+
+      res.json({
+        era,
+        time,
+        zones: zones.map(z => ({
+          ...z,
+          playersHere: playerCounts[z.id] || 0,
+          isCurrentZone: myPresence?.zoneId === z.id,
+        })),
+        currentZone: myPresence?.zoneId || null,
+      });
+    } catch (error: any) {
+      console.error("Get world zones error:", error);
+      res.status(500).json({ error: "Failed to get world zones" });
+    }
+  });
+
+  app.get("/api/chronicles/world/zone/:era/:zoneId", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const { era, zoneId } = req.params;
+      if (!["modern", "medieval", "wildwest"].includes(era)) {
+        return res.status(400).json({ error: "Invalid era" });
+      }
+
+      const ambient = getZoneAmbientState(era, zoneId);
+      if (!ambient) {
+        return res.status(404).json({ error: "Zone not found" });
+      }
+
+      const fiveMinAgo = new Date(Date.now() - 5 * 60 * 1000);
+      const activePlayers = await db.select().from(zonePresence)
+        .where(and(
+          eq(zonePresence.era, era),
+          eq(zonePresence.zoneId, zoneId),
+          eq(zonePresence.isActive, true),
+        ));
+
+      const recentPlayers = activePlayers.filter(p => p.lastHeartbeat > fiveMinAgo);
+      const userId = req.userId;
+      const state = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId));
+      const playerLevel = state[0]?.level || 1;
+      const relationships = state[0]?.npcRelationships ? JSON.parse(state[0].npcRelationships as string) : {};
+
+      res.json({
+        ...ambient,
+        activities: ambient.activities.map(a => ({
+          ...a,
+          isAvailable: playerLevel >= a.requiredLevel,
+          minigameConfig: a.minigameType ? MINIGAME_CONFIGS[a.minigameType] : undefined,
+        })),
+        npcsPresent: ambient.npcsPresent.map(n => ({
+          ...n,
+          relationshipScore: relationships[n.name] || 0,
+        })),
+        playersPresent: recentPlayers.filter(p => p.userId !== userId).map(p => ({
+          odActivity: p.activity,
+          since: p.enteredAt,
+        })),
+        playerCount: recentPlayers.length,
+      });
+    } catch (error: any) {
+      console.error("Get zone detail error:", error);
+      res.status(500).json({ error: "Failed to get zone" });
+    }
+  });
+
+  app.post("/api/chronicles/world/enter-zone", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = req.userId;
+      const { era, zoneId } = req.body;
+      if (!era || !zoneId) return res.status(400).json({ error: "era and zoneId required" });
+
+      const zones = WORLD_ZONES[era];
+      if (!zones?.find(z => z.id === zoneId)) {
+        return res.status(400).json({ error: "Invalid zone" });
+      }
+
+      await db.update(zonePresence)
+        .set({ isActive: false })
+        .where(and(eq(zonePresence.userId, userId), eq(zonePresence.isActive, true)));
+
+      await db.insert(zonePresence).values({
+        userId,
+        era,
+        zoneId,
+        isActive: true,
+      });
+
+      await db.update(chroniclesGameState)
+        .set({ currentZone: zoneId, updatedAt: new Date() })
+        .where(eq(chroniclesGameState.userId, userId));
+
+      const ambient = getZoneAmbientState(era, zoneId);
+
+      let arrivalNarrative = "";
+      try {
+        const zone = WORLD_ZONES[era]?.find(z => z.id === zoneId);
+        const time = getWorldTimeInfo(era);
+        const npcsHere = ambient?.npcsPresent || [];
+        const activitiesHere = ambient?.activities || [];
+
+        const response = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          messages: [{
+            role: "system",
+            content: `You are narrating a living world scene in a ${era} era parallel life simulation. The player just walked into ${zone?.name}. Describe what they see happening — the ambient life, people doing things, sounds, smells. This is a LIVING scene already in progress. 2-3 vivid sentences. Present tense.
+
+TIME: ${time.period} (${time.hour}:${String(time.minute).padStart(2, "0")})
+ZONE: ${zone?.name} — ${zone?.description}
+${npcsHere.length > 0 ? `NPCs HERE: ${npcsHere.map(n => `${n.name} (${n.activity})`).join(", ")}` : "No notable people around."}
+${activitiesHere.length > 0 ? `ACTIVITIES HAPPENING: ${activitiesHere.map(a => `${a.name} — ${a.description}`).join("; ")}` : ""}
+
+Write the scene as if the player is stepping into it. The world doesn't stop for them — they're joining what's already happening.`
+          }],
+          max_completion_tokens: 200,
+        });
+        arrivalNarrative = response.choices[0]?.message?.content || "";
+      } catch {
+        const zone = WORLD_ZONES[era]?.find(z => z.id === zoneId);
+        arrivalNarrative = `You arrive at ${zone?.name}. ${zone?.description}.`;
+      }
+
+      const gameLog = JSON.parse((await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId)))[0]?.gameLog as string || "[]");
+      gameLog.unshift({
+        timestamp: new Date().toISOString(),
+        type: "zone_enter",
+        message: `Arrived at ${WORLD_ZONES[era]?.find(z => z.id === zoneId)?.name}`,
+      });
+      if (gameLog.length > 50) gameLog.length = 50;
+      await db.update(chroniclesGameState)
+        .set({ gameLog: JSON.stringify(gameLog), updatedAt: new Date() })
+        .where(eq(chroniclesGameState.userId, userId));
+
+      res.json({
+        zoneId,
+        arrivalNarrative,
+        ambient,
+      });
+    } catch (error: any) {
+      console.error("Enter zone error:", error);
+      res.status(500).json({ error: "Failed to enter zone" });
+    }
+  });
+
+  app.post("/api/chronicles/world/heartbeat", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = req.userId;
+      await db.update(zonePresence)
+        .set({ lastHeartbeat: new Date() })
+        .where(and(eq(zonePresence.userId, userId), eq(zonePresence.isActive, true)));
+      res.json({ ok: true });
+    } catch (error: any) {
+      res.status(500).json({ error: "Heartbeat failed" });
+    }
+  });
+
+  app.post("/api/chronicles/world/do-activity", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = req.userId;
+      const { activityId, era } = req.body;
+      if (!activityId || !era) return res.status(400).json({ error: "activityId and era required" });
+
+      const eraPrefix = era === "modern" ? "mod_" : era === "medieval" ? "med_" : "ww_";
+      const activity = ZONE_ACTIVITIES.find(a => a.id === activityId && a.id.startsWith(eraPrefix));
+      if (!activity) return res.status(404).json({ error: "Activity not found" });
+
+      if (activity.activityType === "minigame" && activity.minigameType) {
+        return res.json({
+          type: "minigame",
+          minigameType: activity.minigameType,
+          config: MINIGAME_CONFIGS[activity.minigameType],
+          activity,
+        });
+      }
+
+      const state = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId));
+      if (!state[0]) return res.status(404).json({ error: "No game state" });
+      const playerLevel = state[0].level || 1;
+      if (playerLevel < activity.requiredLevel) {
+        return res.status(403).json({ error: `Requires level ${activity.requiredLevel}` });
+      }
+
+      let narrative = "";
+      try {
+        const time = getWorldTimeInfo(era);
+        const npcContext = activity.npcNames.length > 0
+          ? `NPCs involved: ${activity.npcNames.join(", ")}. Write them in character.`
+          : "";
+
+        const response = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          messages: [{
+            role: "system",
+            content: `You are narrating a ${era} era living world activity. The player is participating in: "${activity.name}" — ${activity.description}. Time: ${time.period}. ${npcContext}
+${activity.toolsInvolved ? `Tools/equipment involved: ${activity.toolsInvolved.join(", ")}` : ""}
+
+Write 2-3 vivid sentences of what happens. Include sensory details. If NPCs are present, show them reacting naturally. The activity should feel authentic to the era. End with a sense of accomplishment or progression.`
+          }],
+          max_completion_tokens: 200,
+        });
+        narrative = response.choices[0]?.message?.content || `You participate in ${activity.name}.`;
+      } catch {
+        narrative = `You spend time at ${activity.name}. ${activity.description}`;
+      }
+
+      const newEchoes = (state[0].echoBalance || 0) + activity.echoReward;
+      const newExperience = (state[0].experience || 0) + activity.xpReward;
+
+      const gameLog = JSON.parse(state[0].gameLog as string || "[]");
+      gameLog.unshift({
+        timestamp: new Date().toISOString(),
+        type: "activity",
+        message: `${activity.emoji} ${activity.name}: +${activity.echoReward} Echoes, +${activity.xpReward} XP`,
+      });
+      if (gameLog.length > 50) gameLog.length = 50;
+
+      await db.update(chroniclesGameState)
+        .set({
+          echoBalance: newEchoes,
+          experience: newExperience,
+          gameLog: JSON.stringify(gameLog),
+          currentActivity: activity.name,
+          updatedAt: new Date(),
+        })
+        .where(eq(chroniclesGameState.userId, userId));
+
+      res.json({
+        type: "activity_complete",
+        narrative,
+        rewards: { echoes: activity.echoReward, xp: activity.xpReward },
+        activity,
+      });
+    } catch (error: any) {
+      console.error("Do activity error:", error);
+      res.status(500).json({ error: "Failed to do activity" });
+    }
+  });
+
+  app.post("/api/chronicles/world/minigame/submit", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = req.userId;
+      const { gameType, score, era, zoneId } = req.body;
+      if (!gameType || score === undefined || !era) {
+        return res.status(400).json({ error: "gameType, score, and era required" });
+      }
+
+      const config = MINIGAME_CONFIGS[gameType];
+      if (!config) return res.status(400).json({ error: "Invalid game type" });
+
+      const clampedScore = Math.min(Math.max(0, score), config.maxScore);
+      const echosEarned = Math.round(clampedScore * config.echoMultiplier);
+      const xpEarned = Math.round(clampedScore * 0.2);
+
+      const existing = await db.select().from(minigameSessions)
+        .where(and(eq(minigameSessions.userId, userId), eq(minigameSessions.gameType, gameType)))
+        .orderBy(desc(minigameSessions.highScore))
+        .limit(1);
+
+      const previousHigh = existing[0]?.highScore || 0;
+      const isNewHigh = clampedScore > previousHigh;
+
+      await db.insert(minigameSessions).values({
+        userId,
+        era,
+        zoneId: zoneId || "unknown",
+        gameType,
+        score: clampedScore,
+        highScore: isNewHigh ? clampedScore : previousHigh,
+        result: clampedScore >= 80 ? "excellent" : clampedScore >= 50 ? "good" : "practice",
+        echosEarned,
+      });
+
+      const state = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId));
+      if (state[0]) {
+        const newEchoes = (state[0].echoBalance || 0) + echosEarned;
+        const newExperience = (state[0].experience || 0) + xpEarned;
+
+        const gameLog = JSON.parse(state[0].gameLog as string || "[]");
+        gameLog.unshift({
+          timestamp: new Date().toISOString(),
+          type: "minigame",
+          message: `${config.emoji} ${config.name}: Score ${clampedScore}${isNewHigh ? " (NEW HIGH SCORE!)" : ""} — +${echosEarned} Echoes`,
+        });
+        if (gameLog.length > 50) gameLog.length = 50;
+
+        await db.update(chroniclesGameState)
+          .set({
+            echoBalance: newEchoes,
+            experience: newExperience,
+            gameLog: JSON.stringify(gameLog),
+            updatedAt: new Date(),
+          })
+          .where(eq(chroniclesGameState.userId, userId));
+      }
+
+      res.json({
+        score: clampedScore,
+        highScore: isNewHigh ? clampedScore : previousHigh,
+        isNewHighScore: isNewHigh,
+        echosEarned,
+        xpEarned,
+        result: clampedScore >= 80 ? "excellent" : clampedScore >= 50 ? "good" : "practice",
+        gameName: config.name,
+      });
+    } catch (error: any) {
+      console.error("Minigame submit error:", error);
+      res.status(500).json({ error: "Failed to submit score" });
+    }
+  });
+
+  app.get("/api/chronicles/world/minigame/scores/:gameType", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = req.userId;
+      const { gameType } = req.params;
+      const config = MINIGAME_CONFIGS[gameType];
+      if (!config) return res.status(400).json({ error: "Invalid game type" });
+
+      const sessions = await db.select().from(minigameSessions)
+        .where(and(eq(minigameSessions.userId, userId), eq(minigameSessions.gameType, gameType)))
+        .orderBy(desc(minigameSessions.playedAt))
+        .limit(10);
+
+      const highScore = sessions.reduce((max, s) => Math.max(max, s.score), 0);
+      const totalEchoes = sessions.reduce((sum, s) => sum + s.echosEarned, 0);
+
+      res.json({
+        gameType,
+        gameName: config.name,
+        sessions,
+        highScore,
+        totalEchoes,
+        gamesPlayed: sessions.length,
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: "Failed to get scores" });
     }
   });
 }
