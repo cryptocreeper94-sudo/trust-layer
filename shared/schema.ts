@@ -1,5 +1,5 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, timestamp, boolean, serial, integer, real, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, varchar, timestamp, boolean, serial, integer, real, jsonb, bigint } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -3112,6 +3112,234 @@ export const insertMinigameSessionSchema = createInsertSchema(minigameSessions).
 
 export type MinigameSession = typeof minigameSessions.$inferSelect;
 export type InsertMinigameSession = z.infer<typeof insertMinigameSessionSchema>;
+
+// =====================================================
+// LEGACY & FAMILY SYSTEM
+// =====================================================
+
+export const playerLegacy = pgTable("player_legacy", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  era: text("era").notNull(),
+  characterName: text("character_name").notNull(),
+  generation: integer("generation").notNull().default(1),
+  parentLegacyId: varchar("parent_legacy_id"),
+  
+  birthYear: integer("birth_year").notNull().default(0),
+  deathYear: integer("death_year"),
+  causeOfDeath: text("cause_of_death"),
+  
+  profession: text("profession"),
+  spouse: text("spouse"),
+  children: integer("children").notNull().default(0),
+  
+  finalWisdom: integer("final_wisdom").notNull().default(10),
+  finalCourage: integer("final_courage").notNull().default(10),
+  finalCompassion: integer("final_compassion").notNull().default(10),
+  finalCunning: integer("final_cunning").notNull().default(10),
+  finalInfluence: integer("final_influence").notNull().default(10),
+  
+  inheritanceTraits: text("inheritance_traits").notNull().default('[]'),
+  legacyScore: integer("legacy_score").notNull().default(0),
+  epitaph: text("epitaph"),
+  keyDecisions: text("key_decisions").notNull().default('[]'),
+  
+  isActive: boolean("is_active").notNull().default(true),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertPlayerLegacySchema = createInsertSchema(playerLegacy).omit({ id: true, createdAt: true });
+export type PlayerLegacy = typeof playerLegacy.$inferSelect;
+export type InsertPlayerLegacy = z.infer<typeof insertPlayerLegacySchema>;
+
+// =====================================================
+// RELATIONSHIP SYSTEM  
+// =====================================================
+
+export const npcRelationships = pgTable("npc_relationships", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  npcId: text("npc_id").notNull(),
+  era: text("era").notNull(),
+  
+  relationshipType: text("relationship_type").notNull().default("acquaintance"),
+  affinity: integer("affinity").notNull().default(0),
+  trust: integer("trust").notNull().default(0),
+  fear: integer("fear").notNull().default(0),
+  romance: integer("romance").notNull().default(0),
+  rivalry: integer("rivalry").notNull().default(0),
+  
+  interactionCount: integer("interaction_count").notNull().default(0),
+  lastInteraction: timestamp("last_interaction"),
+  
+  relationshipHistory: text("relationship_history").notNull().default('[]'),
+  sharedMemories: text("shared_memories").notNull().default('[]'),
+  giftsGiven: text("gifts_given").notNull().default('[]'),
+  
+  isRomanceable: boolean("is_romanceable").notNull().default(false),
+  isRival: boolean("is_rival").notNull().default(false),
+  isAlly: boolean("is_ally").notNull().default(false),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertNpcRelationshipSchema = createInsertSchema(npcRelationships).omit({ id: true, createdAt: true, updatedAt: true });
+export type NpcRelationship = typeof npcRelationships.$inferSelect;
+export type InsertNpcRelationship = z.infer<typeof insertNpcRelationshipSchema>;
+
+// =====================================================
+// DYNAMIC WORLD EVENTS
+// =====================================================
+
+export const worldEvents = pgTable("world_events", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  era: text("era").notNull(),
+  eventType: text("event_type").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  
+  severity: text("severity").notNull().default("minor"),
+  affectedZones: text("affected_zones").notNull().default('[]'),
+  
+  startedAt: timestamp("started_at").defaultNow().notNull(),
+  endsAt: timestamp("ends_at"),
+  isActive: boolean("is_active").notNull().default(true),
+  
+  effects: text("effects").notNull().default('{}'),
+  participantCount: integer("participant_count").notNull().default(0),
+  outcome: text("outcome"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertWorldEventSchema = createInsertSchema(worldEvents).omit({ id: true, createdAt: true });
+export type WorldEvent = typeof worldEvents.$inferSelect;
+export type InsertWorldEvent = z.infer<typeof insertWorldEventSchema>;
+
+export const worldEventParticipation = pgTable("world_event_participation", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  eventId: varchar("event_id").notNull(),
+  userId: text("user_id").notNull(),
+  
+  action: text("action").notNull(),
+  contribution: integer("contribution").notNull().default(0),
+  reward: text("reward"),
+  
+  joinedAt: timestamp("joined_at").defaultNow().notNull(),
+});
+
+export const insertWorldEventParticipationSchema = createInsertSchema(worldEventParticipation).omit({ id: true, joinedAt: true });
+export type WorldEventParticipation = typeof worldEventParticipation.$inferSelect;
+export type InsertWorldEventParticipation = z.infer<typeof insertWorldEventParticipationSchema>;
+
+// =====================================================
+// HOME INTERIORS & PROPERTY SYSTEM
+// =====================================================
+
+export const homeInteriors = pgTable("home_interiors", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  era: text("era").notNull(),
+  
+  homeLevel: integer("home_level").notNull().default(1),
+  homeName: text("home_name").notNull().default("Starter Home"),
+  homeType: text("home_type").notNull().default("cottage"),
+  
+  rooms: text("rooms").notNull().default('["living_room","bedroom","kitchen"]'),
+  furniture: text("furniture").notNull().default('[]'),
+  decorations: text("decorations").notNull().default('[]'),
+  
+  comfortLevel: integer("comfort_level").notNull().default(1),
+  securityLevel: integer("security_level").notNull().default(1),
+  storageCapacity: integer("storage_capacity").notNull().default(10),
+  
+  activeBuffs: text("active_buffs").notNull().default('[]'),
+  visitors: text("visitors").notNull().default('[]'),
+  lastVisitorAt: timestamp("last_visitor_at"),
+  
+  totalUpgrades: integer("total_upgrades").notNull().default(0),
+  shellsInvested: integer("shells_invested").notNull().default(0),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertHomeInteriorSchema = createInsertSchema(homeInteriors).omit({ id: true, createdAt: true, updatedAt: true });
+export type HomeInterior = typeof homeInteriors.$inferSelect;
+export type InsertHomeInterior = z.infer<typeof insertHomeInteriorSchema>;
+
+// =====================================================
+// BLOCKCHAIN DECISION TRAIL
+// =====================================================
+
+export const decisionTrail = pgTable("decision_trail", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  era: text("era").notNull(),
+  
+  decisionType: text("decision_type").notNull(),
+  situationTitle: text("situation_title").notNull(),
+  choiceMade: text("choice_made").notNull(),
+  
+  consequences: text("consequences").notNull().default('{}'),
+  statChanges: text("stat_changes").notNull().default('{}'),
+  
+  blockHash: text("block_hash").notNull(),
+  previousHash: text("previous_hash").notNull().default("0x0"),
+  blockNumber: integer("block_number").notNull().default(0),
+  merkleRoot: text("merkle_root"),
+  
+  nonce: integer("nonce").notNull().default(0),
+  difficulty: integer("difficulty").notNull().default(1),
+  timestamp: bigint("timestamp", { mode: "number" }).notNull(),
+  
+  verified: boolean("verified").notNull().default(true),
+  guardianSignature: text("guardian_signature"),
+  
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertDecisionTrailSchema = createInsertSchema(decisionTrail).omit({ id: true, createdAt: true });
+export type DecisionTrail = typeof decisionTrail.$inferSelect;
+export type InsertDecisionTrail = z.infer<typeof insertDecisionTrailSchema>;
+
+// =====================================================
+// SEASON COMPLETION TRACKING
+// =====================================================
+
+export const seasonProgress = pgTable("season_progress", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  
+  seasonId: text("season_id").notNull().default("season_zero"),
+  
+  erasExplored: text("eras_explored").notNull().default('[]'),
+  questsCompleted: text("quests_completed").notNull().default('[]'),
+  totalDecisions: integer("total_decisions").notNull().default(0),
+  totalLegacies: integer("total_legacies").notNull().default(0),
+  
+  medievalProgress: integer("medieval_progress").notNull().default(0),
+  wildwestProgress: integer("wildwest_progress").notNull().default(0),
+  modernProgress: integer("modern_progress").notNull().default(0),
+  
+  finaleUnlocked: boolean("finale_unlocked").notNull().default(false),
+  finaleCompleted: boolean("finale_completed").notNull().default(false),
+  
+  seasonScore: integer("season_score").notNull().default(0),
+  completionRewards: text("completion_rewards").notNull().default('[]'),
+  
+  seasonOneUnlocked: boolean("season_one_unlocked").notNull().default(false),
+  
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertSeasonProgressSchema = createInsertSchema(seasonProgress).omit({ id: true, createdAt: true, updatedAt: true });
+export type SeasonProgress = typeof seasonProgress.$inferSelect;
+export type InsertSeasonProgress = z.infer<typeof insertSeasonProgressSchema>;
 
 // Daily Login Rewards - Track player streaks and rewards
 export const dailyLoginRewards = pgTable("daily_login_rewards", {

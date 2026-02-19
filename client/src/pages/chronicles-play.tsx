@@ -801,6 +801,11 @@ export default function ChroniclesPlay() {
             <h1 className="text-2xl font-bold text-white">Play Chronicles</h1>
             <p className="text-xs text-gray-500">Your parallel life — real choices, real consequences</p>
           </div>
+          <Link href="/chronicles/season">
+            <Button variant="ghost" size="sm" className="text-cyan-400 hover:text-cyan-300" data-testid="view-season-hub">
+              <Trophy className="w-4 h-4" />
+            </Button>
+          </Link>
           <Link href="/chronicles/dashboard">
             <Button variant="ghost" size="sm" className="text-gray-400" data-testid="view-dashboard">
               <Activity className="w-4 h-4" />

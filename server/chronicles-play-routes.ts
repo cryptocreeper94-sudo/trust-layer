@@ -1,6 +1,6 @@
 import { db } from "./db";
 import { eq, sql, and, desc } from "drizzle-orm";
-import { chroniclesGameState, playerChoices, playerPersonalities, chronicleAccounts, landPlots, cityZones, chatUsers, chatChannels, chatMessages, voiceSamples, voiceMessages, userCredits, creditTransactions } from "@shared/schema";
+import { chroniclesGameState, playerChoices, playerPersonalities, chronicleAccounts, landPlots, cityZones, chatUsers, chatChannels, chatMessages, voiceSamples, voiceMessages, userCredits, creditTransactions, playerLegacy, npcRelationships, worldEvents, worldEventParticipation, homeInteriors, decisionTrail, seasonProgress } from "@shared/schema";
 import OpenAI from "openai";
 import { SEASON_ZERO_QUESTS, STARTER_FACTIONS, STARTER_NPCS, ERA_SETTINGS, ERAS, WORLD_ZONES, ZONE_ACTIVITIES, NPC_SCHEDULES, MINIGAME_CONFIGS, getWorldTimeInfo, getZoneAmbientState, getAllZonesForEra } from "./chronicles-service";
 import { zonePresence, minigameSessions } from "@shared/schema";
@@ -2704,5 +2704,694 @@ Write 2-3 vivid sentences of what happens. Include sensory details. If NPCs are 
     } catch (error: any) {
       res.status(500).json({ error: "Failed to get tutorial status" });
     }
+  });
+
+  // =====================================================
+  // LEGACY & FAMILY SYSTEM
+  // =====================================================
+
+  app.get("/api/chronicles/legacy/tree", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const legacies = await db.select().from(playerLegacy)
+        .where(eq(playerLegacy.userId, userId))
+        .orderBy(playerLegacy.generation);
+      const activeLegacy = legacies.find(l => l.isActive);
+      res.json({
+        legacies,
+        activeLegacy,
+        totalGenerations: legacies.length,
+        legacyScore: legacies.reduce((sum, l) => sum + l.legacyScore, 0),
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/legacy/new-life", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { era, characterName, profession } = req.body;
+      const [activeLegacy] = await db.select().from(playerLegacy)
+        .where(and(eq(playerLegacy.userId, userId), eq(playerLegacy.isActive, true)))
+        .limit(1);
+      let generation = 1;
+      let parentId = null;
+      let inheritanceTraits: string[] = [];
+      if (activeLegacy) {
+        const [gameState] = await db.select().from(chroniclesGameState)
+          .where(eq(chroniclesGameState.userId, userId)).limit(1);
+        await db.update(playerLegacy).set({
+          isActive: false, completedAt: new Date(),
+          deathYear: activeLegacy.birthYear + 40 + Math.floor(Math.random() * 40),
+          finalWisdom: gameState?.wisdom || 10, finalCourage: gameState?.courage || 10,
+          finalCompassion: gameState?.compassion || 10, finalCunning: gameState?.cunning || 10,
+          finalInfluence: gameState?.influence || 10,
+          legacyScore: (gameState?.situationsCompleted || 0) * 10 + (gameState?.level || 1) * 50,
+        }).where(eq(playerLegacy.id, activeLegacy.id));
+        generation = activeLegacy.generation + 1;
+        parentId = activeLegacy.id;
+        const stats = [
+          { name: "wisdom", val: gameState?.wisdom || 10 }, { name: "courage", val: gameState?.courage || 10 },
+          { name: "compassion", val: gameState?.compassion || 10 }, { name: "cunning", val: gameState?.cunning || 10 },
+          { name: "influence", val: gameState?.influence || 10 },
+        ].sort((a, b) => b.val - a.val);
+        inheritanceTraits = stats.slice(0, 2).map(s => s.name);
+        const bonuses: any = { wisdom: 10, courage: 10, compassion: 10, cunning: 10, influence: 10 };
+        for (const trait of inheritanceTraits) {
+          bonuses[trait] = Math.min(20, (gameState as any)?.[trait] || 10) + 2;
+        }
+        await db.update(chroniclesGameState).set({
+          currentEra: era || "modern", level: 1, experience: 0,
+          wisdom: bonuses.wisdom, courage: bonuses.courage, compassion: bonuses.compassion,
+          cunning: bonuses.cunning, influence: bonuses.influence,
+          situationsCompleted: 0, currentZone: null, currentActivity: null,
+          name: characterName || "Traveler", updatedAt: new Date(),
+        }).where(eq(chroniclesGameState.userId, userId));
+      }
+      const eraYears: Record<string, number> = { medieval: 800 + Math.floor(Math.random() * 500), wildwest: 1850 + Math.floor(Math.random() * 50), modern: 1980 + Math.floor(Math.random() * 30) };
+      const [newLegacy] = await db.insert(playerLegacy).values({
+        userId, era: era || "modern", characterName: characterName || "Traveler",
+        generation, parentLegacyId: parentId, birthYear: eraYears[era] || 2000,
+        profession: profession || null, inheritanceTraits: JSON.stringify(inheritanceTraits),
+      }).returning();
+      res.json({
+        legacy: newLegacy, generation, inheritedTraits: inheritanceTraits,
+        message: generation > 1 ? `A new life begins. Generation ${generation}. The echoes of your ancestor guide you.` : `Your first life begins. Make it count.`,
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/legacy/end-life", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { causeOfDeath, epitaph } = req.body;
+      const [activeLegacy] = await db.select().from(playerLegacy)
+        .where(and(eq(playerLegacy.userId, userId), eq(playerLegacy.isActive, true))).limit(1);
+      if (!activeLegacy) return res.status(400).json({ error: "No active life to end" });
+      const [gameState] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, userId)).limit(1);
+      const keyDecisions = await db.select().from(decisionTrail)
+        .where(eq(decisionTrail.userId, userId)).orderBy(desc(decisionTrail.createdAt)).limit(10);
+      const legacyScore = (gameState?.situationsCompleted || 0) * 10 + (gameState?.level || 1) * 50 + (gameState?.faithLevel || 0) * 20;
+      await db.update(playerLegacy).set({
+        isActive: false, completedAt: new Date(),
+        deathYear: activeLegacy.birthYear + 30 + Math.floor(Math.random() * 50),
+        causeOfDeath: causeOfDeath || "natural causes",
+        epitaph: epitaph || `A ${activeLegacy.profession || "traveler"} who lived fully.`,
+        finalWisdom: gameState?.wisdom || 10, finalCourage: gameState?.courage || 10,
+        finalCompassion: gameState?.compassion || 10, finalCunning: gameState?.cunning || 10,
+        finalInfluence: gameState?.influence || 10, legacyScore,
+        keyDecisions: JSON.stringify(keyDecisions.map(d => ({ title: d.situationTitle, choice: d.choiceMade }))),
+        children: Math.floor(Math.random() * 4),
+      }).where(eq(playerLegacy.id, activeLegacy.id));
+      const [sp] = await db.select().from(seasonProgress).where(eq(seasonProgress.userId, userId)).limit(1);
+      if (sp) { await db.update(seasonProgress).set({ totalLegacies: sp.totalLegacies + 1, updatedAt: new Date() }).where(eq(seasonProgress.id, sp.id)); }
+      res.json({ legacy: activeLegacy, legacyScore, message: `${activeLegacy.characterName}'s story has ended. Legacy Score: ${legacyScore}. Their choices echo through time.`, canStartNewLife: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // =====================================================
+  // RELATIONSHIP SYSTEM
+  // =====================================================
+
+  app.get("/api/chronicles/relationships", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const [gameState] = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId)).limit(1);
+      const era = gameState?.currentEra || "modern";
+      const relationships = await db.select().from(npcRelationships)
+        .where(and(eq(npcRelationships.userId, userId), eq(npcRelationships.era, era)));
+      const npcsForEra = STARTER_NPCS.filter(n => n.era === era);
+      const enriched = npcsForEra.map(npc => {
+        const npcKey = npc.name.toLowerCase().replace(/\s+/g, '_');
+        const rel = relationships.find(r => r.npcId === npcKey);
+        const personality = JSON.parse(npc.personality);
+        return {
+          npcId: npcKey, name: npc.name, title: npc.title, faction: npc.factionId,
+          relationship: rel ? {
+            type: rel.relationshipType, affinity: rel.affinity, trust: rel.trust,
+            romance: rel.romance, rivalry: rel.rivalry, fear: rel.fear,
+            interactionCount: rel.interactionCount, isRomanceable: rel.isRomanceable,
+            isRival: rel.isRival, isAlly: rel.isAlly,
+          } : { type: "stranger", affinity: 0, trust: 0, romance: 0, rivalry: 0, fear: 0, interactionCount: 0, isRomanceable: false, isRival: false, isAlly: false },
+          traits: personality.traits || [],
+        };
+      });
+      res.json({ era, relationships: enriched });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/relationships/update", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { npcId, era, interactionType, delta } = req.body;
+      if (!npcId || !era) return res.status(400).json({ error: "npcId and era required" });
+      const clampVal = (v: number) => Math.min(100, Math.max(-100, v));
+      let [rel] = await db.select().from(npcRelationships)
+        .where(and(eq(npcRelationships.userId, userId), eq(npcRelationships.npcId, npcId), eq(npcRelationships.era, era))).limit(1);
+      if (!rel) {
+        [rel] = await db.insert(npcRelationships).values({
+          userId, npcId, era,
+          affinity: clampVal(delta?.affinity || 0), trust: clampVal(delta?.trust || 0),
+          romance: clampVal(delta?.romance || 0), rivalry: clampVal(delta?.rivalry || 0), fear: clampVal(delta?.fear || 0),
+          interactionCount: 1, lastInteraction: new Date(),
+          relationshipHistory: JSON.stringify([{ type: interactionType || "interaction", date: new Date().toISOString() }]),
+        }).returning();
+      } else {
+        const newAffinity = clampVal(rel.affinity + (delta?.affinity || 0));
+        const newTrust = clampVal(rel.trust + (delta?.trust || 0));
+        const newRomance = clampVal(rel.romance + (delta?.romance || 0));
+        const newRivalry = clampVal(rel.rivalry + (delta?.rivalry || 0));
+        const newFear = clampVal(rel.fear + (delta?.fear || 0));
+        let relType = "acquaintance";
+        if (newAffinity >= 60 && newTrust >= 40) relType = "friend";
+        if (newAffinity >= 80 && newTrust >= 60) relType = "close_friend";
+        if (newRomance >= 50 && newAffinity >= 40) relType = "romantic_interest";
+        if (newRomance >= 80 && newTrust >= 60) relType = "partner";
+        if (newRivalry >= 60) relType = "rival";
+        if (newFear >= 60) relType = "feared";
+        if (newAffinity <= -50) relType = "enemy";
+        const history = JSON.parse(rel.relationshipHistory || '[]');
+        history.push({ type: interactionType || "interaction", date: new Date().toISOString(), delta });
+        if (history.length > 50) history.splice(0, history.length - 50);
+        [rel] = await db.update(npcRelationships).set({
+          affinity: newAffinity, trust: newTrust, romance: newRomance, rivalry: newRivalry, fear: newFear,
+          relationshipType: relType, interactionCount: rel.interactionCount + 1, lastInteraction: new Date(),
+          isRomanceable: newRomance >= 30, isRival: newRivalry >= 40, isAlly: newAffinity >= 50 && newTrust >= 40,
+          relationshipHistory: JSON.stringify(history), updatedAt: new Date(),
+        }).where(eq(npcRelationships.id, rel.id)).returning();
+      }
+      res.json({ relationship: rel });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/relationships/gift", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { npcId, era, itemName, itemValue } = req.body;
+      if (!npcId || !era || !itemName) return res.status(400).json({ error: "npcId, era, and itemName required" });
+      const [gameState] = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId)).limit(1);
+      if (!gameState) return res.status(404).json({ error: "No game state" });
+      const inventory = JSON.parse(gameState.inventory || '[]');
+      const itemIdx = inventory.findIndex((i: any) => i.name === itemName || i.id === itemName);
+      if (itemIdx === -1) return res.status(400).json({ error: "Item not in inventory" });
+      inventory.splice(itemIdx, 1);
+      await db.update(chroniclesGameState).set({ inventory: JSON.stringify(inventory), updatedAt: new Date() }).where(eq(chroniclesGameState.userId, userId));
+      const affinityBoost = Math.min(20, (itemValue || 5));
+      const trustBoost = Math.floor(affinityBoost / 2);
+      let [rel] = await db.select().from(npcRelationships)
+        .where(and(eq(npcRelationships.userId, userId), eq(npcRelationships.npcId, npcId), eq(npcRelationships.era, era))).limit(1);
+      if (!rel) {
+        [rel] = await db.insert(npcRelationships).values({
+          userId, npcId, era, affinity: affinityBoost, trust: trustBoost,
+          interactionCount: 1, lastInteraction: new Date(),
+          giftsGiven: JSON.stringify([{ item: itemName, date: new Date().toISOString() }]),
+        }).returning();
+      } else {
+        const gifts = JSON.parse(rel.giftsGiven || '[]');
+        gifts.push({ item: itemName, date: new Date().toISOString() });
+        [rel] = await db.update(npcRelationships).set({
+          affinity: Math.min(100, rel.affinity + affinityBoost), trust: Math.min(100, rel.trust + trustBoost),
+          interactionCount: rel.interactionCount + 1, lastInteraction: new Date(),
+          giftsGiven: JSON.stringify(gifts), updatedAt: new Date(),
+        }).where(eq(npcRelationships.id, rel.id)).returning();
+      }
+      res.json({ relationship: rel, message: `Gift received warmly. Affinity +${affinityBoost}, Trust +${trustBoost}.` });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // =====================================================
+  // DYNAMIC WORLD EVENTS
+  // =====================================================
+
+  const WORLD_EVENT_TEMPLATES: Record<string, Array<{ type: string; title: string; description: string; severity: string; duration: number; effects: any }>> = {
+    medieval: [
+      { type: "plague", title: "The Sweating Sickness", description: "A mysterious illness sweeps through the villages. The sick pile up faster than healers can treat them.", severity: "major", duration: 48, effects: { healthRisk: 20, faithBonus: 5 } },
+      { type: "war", title: "Border War Declared", description: "The neighboring kingdom has marched on the border. The lord calls all able-bodied men to arms.", severity: "critical", duration: 72, effects: { courageTest: true, dangerLevel: "high" } },
+      { type: "festival", title: "Harvest Festival", description: "The harvest is bountiful! The village erupts in celebration — feasting, jousting, and dancing under the stars.", severity: "minor", duration: 24, effects: { happinessBoost: 15, socialOpportunities: true } },
+      { type: "famine", title: "The Lean Winter", description: "Crops failed. Grain stores are dangerously low. People hoard what they have.", severity: "major", duration: 72, effects: { foodScarcity: true, faithTest: true } },
+      { type: "discovery", title: "Ancient Ruins Uncovered", description: "Farmers digging a new well struck stone — the entrance to ancient catacombs.", severity: "minor", duration: 48, effects: { wisdomGain: 5, dangerLevel: "medium" } },
+      { type: "rebellion", title: "Peasant Uprising", description: "The taxes are too high. A charismatic speaker rallies the common folk in the town square.", severity: "major", duration: 48, effects: { courageTest: true, influenceOpportunity: 15 } },
+    ],
+    wildwest: [
+      { type: "gold_rush", title: "Gold Strike at Dead Man's Creek", description: "A prospector stumbled out of the hills with a nugget the size of a fist. Everyone's heading for the creek.", severity: "major", duration: 72, effects: { wealthOpportunity: 30, lawlessness: 20 } },
+      { type: "outlaw_raid", title: "Black Canyon Gang Rides", description: "Riders on the horizon. The Black Canyon Gang is heading straight for town.", severity: "critical", duration: 24, effects: { courageTest: true, combatRisk: "high" } },
+      { type: "drought", title: "The Great Dry", description: "No rain for three months. Cattle are dying. Wells run low. Tempers run high.", severity: "major", duration: 96, effects: { resourceScarcity: true, conflictRisk: 15 } },
+      { type: "railroad", title: "Railroad Coming Through", description: "The Pacific Railroad Company announces a new line through town. Land values soar.", severity: "minor", duration: 48, effects: { economicBoom: 25, landDisputes: true } },
+      { type: "showdown", title: "High Noon Showdown", description: "A notorious gunslinger has called out the sheriff. The whole town holds its breath.", severity: "major", duration: 12, effects: { courageTest: true, cunningOpportunity: 15 } },
+      { type: "stampede", title: "Cattle Stampede", description: "Thunder spooked the herd. Three thousand head of cattle are barreling toward the settlement.", severity: "critical", duration: 6, effects: { dangerLevel: "extreme", quickDecision: true } },
+    ],
+    modern: [
+      { type: "data_breach", title: "Nexus Corp Data Breach", description: "Millions of personal records leaked. The underground claims credit. Everyone's data is exposed.", severity: "critical", duration: 48, effects: { cunningOpportunity: 20, trustCrisis: true } },
+      { type: "protest", title: "City-Wide Protests", description: "The Civic Alliance has organized a massive demonstration. Thousands fill the streets.", severity: "major", duration: 36, effects: { influenceOpportunity: 15, riskLevel: "medium" } },
+      { type: "market_crash", title: "Market Crash", description: "Stock markets plunge 30% overnight. Banks freeze accounts. Some see disaster — others see opportunity.", severity: "critical", duration: 72, effects: { cunningOpportunity: 25, economicCrisis: true } },
+      { type: "tech_breakthrough", title: "Genesis Labs Breakthrough", description: "Genesis Labs announces a breakthrough in gene therapy that could extend life by decades.", severity: "minor", duration: 48, effects: { wisdomGain: 5, ethicalDilemma: true } },
+      { type: "blackout", title: "City-Wide Blackout", description: "The power grid goes down. No phones, no internet, no security systems. In the darkness, alliances shift.", severity: "major", duration: 24, effects: { survivalChallenge: true, crimeIncrease: 25 } },
+      { type: "election", title: "The Election", description: "Election day. Every faction has a candidate. Votes can be bought, stolen, or earned.", severity: "major", duration: 48, effects: { influenceOpportunity: 30, cunningOpportunity: 15 } },
+    ],
+  };
+
+  app.get("/api/chronicles/events/active", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const [gameState] = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId)).limit(1);
+      const era = gameState?.currentEra || "modern";
+      let activeEvents = await db.select().from(worldEvents).where(and(eq(worldEvents.era, era), eq(worldEvents.isActive, true)));
+      const now = new Date();
+      for (const evt of activeEvents) {
+        if (evt.endsAt && new Date(evt.endsAt) < now) {
+          await db.update(worldEvents).set({ isActive: false, outcome: "The event has passed into history." }).where(eq(worldEvents.id, evt.id));
+        }
+      }
+      activeEvents = activeEvents.filter(e => !e.endsAt || new Date(e.endsAt) >= now);
+      if (activeEvents.length === 0 && Math.random() < 0.25) {
+        const templates = WORLD_EVENT_TEMPLATES[era] || [];
+        if (templates.length > 0) {
+          const template = templates[Math.floor(Math.random() * templates.length)];
+          const allZones = WORLD_ZONES[era] || [];
+          const affectedZoneIds = allZones.slice(0, 2 + Math.floor(Math.random() * 3)).map((z: any) => z.id);
+          const [newEvent] = await db.insert(worldEvents).values({
+            era, eventType: template.type, title: template.title, description: template.description,
+            severity: template.severity, affectedZones: JSON.stringify(affectedZoneIds),
+            endsAt: new Date(Date.now() + template.duration * 60 * 60 * 1000), effects: JSON.stringify(template.effects),
+          }).returning();
+          activeEvents.push(newEvent);
+        }
+      }
+      const participations = activeEvents.length > 0
+        ? await db.select().from(worldEventParticipation).where(eq(worldEventParticipation.userId, userId)) : [];
+      res.json({
+        era, events: activeEvents.map(e => ({
+          ...e, effects: JSON.parse(e.effects || '{}'), affectedZones: JSON.parse(e.affectedZones || '[]'),
+          playerParticipated: participations.some(p => p.eventId === e.id),
+          timeRemaining: e.endsAt ? Math.max(0, new Date(e.endsAt).getTime() - Date.now()) : null,
+        })),
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/events/participate", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { eventId, action } = req.body;
+      if (!eventId || !action) return res.status(400).json({ error: "eventId and action required" });
+      const [event] = await db.select().from(worldEvents).where(and(eq(worldEvents.id, eventId), eq(worldEvents.isActive, true))).limit(1);
+      if (!event) return res.status(404).json({ error: "Event not found or expired" });
+      const [existing] = await db.select().from(worldEventParticipation)
+        .where(and(eq(worldEventParticipation.eventId, eventId), eq(worldEventParticipation.userId, userId))).limit(1);
+      if (existing) return res.status(400).json({ error: "Already participated" });
+      const contribution = 10 + Math.floor(Math.random() * 40);
+      const effects = JSON.parse(event.effects || '{}');
+      let rewardText = "";
+      const statUpdates: any = { updatedAt: new Date() };
+      if (effects.wisdomGain) { statUpdates.wisdom = sql`wisdom + ${effects.wisdomGain}`; rewardText += `Wisdom +${effects.wisdomGain}. `; }
+      if (effects.courageTest) { statUpdates.courage = sql`courage + 3`; rewardText += "Courage +3. "; }
+      if (effects.faithBonus) { statUpdates.faithLevel = sql`faith_level + ${effects.faithBonus}`; rewardText += `Faith +${effects.faithBonus}. `; }
+      if (effects.influenceOpportunity) { statUpdates.influence = sql`influence + 5`; rewardText += "Influence +5. "; }
+      if (effects.cunningOpportunity) { statUpdates.cunning = sql`cunning + 3`; rewardText += "Cunning +3. "; }
+      const echoReward = contribution * 2;
+      statUpdates.echoBalance = sql`echo_balance + ${echoReward}`;
+      statUpdates.experience = sql`experience + ${contribution * 5}`;
+      rewardText += `+${echoReward} Echoes. +${contribution * 5} XP.`;
+      await db.update(chroniclesGameState).set(statUpdates).where(eq(chroniclesGameState.userId, userId));
+      await db.insert(worldEventParticipation).values({ eventId, userId, action, contribution, reward: rewardText });
+      await db.update(worldEvents).set({ participantCount: event.participantCount + 1 }).where(eq(worldEvents.id, eventId));
+      res.json({ participation: { action, contribution, reward: rewardText }, message: `You ${action}. Contribution: ${contribution}. ${rewardText}` });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/chronicles/events/history", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const pastEvents = await db.select().from(worldEvents).where(eq(worldEvents.isActive, false)).orderBy(desc(worldEvents.createdAt)).limit(20);
+      const myParticipations = await db.select().from(worldEventParticipation).where(eq(worldEventParticipation.userId, userId));
+      res.json({
+        events: pastEvents.map(e => ({
+          ...e, participated: myParticipations.some(p => p.eventId === e.id),
+          myContribution: myParticipations.find(p => p.eventId === e.id)?.contribution || 0,
+        })),
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // =====================================================
+  // HOME INTERIORS & PROPERTY
+  // =====================================================
+
+  const HOME_UPGRADES: Record<string, Array<{ id: string; name: string; cost: number; type: string; buff?: string; buffValue?: number; description: string }>> = {
+    medieval: [
+      { id: "med_hearth", name: "Stone Hearth", cost: 50, type: "furniture", buff: "comfort", buffValue: 2, description: "A proper stone hearth keeps the cold at bay" },
+      { id: "med_bed", name: "Feather Bed", cost: 80, type: "furniture", buff: "rest_bonus", buffValue: 5, description: "Sleep like nobility on goose-down feathers" },
+      { id: "med_chest", name: "Iron-Bound Chest", cost: 40, type: "furniture", buff: "storage", buffValue: 5, description: "Secure storage for your valuables" },
+      { id: "med_table", name: "Oak Dining Table", cost: 60, type: "furniture", buff: "social", buffValue: 3, description: "A fine table for hosting visitors" },
+      { id: "med_tapestry", name: "Woven Tapestry", cost: 100, type: "decoration", buff: "influence", buffValue: 3, description: "A beautiful tapestry depicting a great hunt" },
+      { id: "med_bookshelf", name: "Scholar's Bookshelf", cost: 120, type: "furniture", buff: "wisdom", buffValue: 5, description: "Fill it with knowledge from across the realm" },
+      { id: "med_forge", name: "Personal Forge", cost: 200, type: "room", buff: "crafting", buffValue: 10, description: "A small forge for metalworking" },
+      { id: "med_chapel", name: "Private Chapel", cost: 250, type: "room", buff: "faith", buffValue: 8, description: "A quiet place for prayer and reflection" },
+      { id: "med_garden", name: "Herb Garden", cost: 80, type: "room", buff: "healing", buffValue: 5, description: "Grow medicinal herbs at home" },
+      { id: "med_guards", name: "Guard Post", cost: 150, type: "security", buff: "security", buffValue: 5, description: "A watchman's post at your gate" },
+    ],
+    wildwest: [
+      { id: "ww_stove", name: "Cast Iron Stove", cost: 60, type: "furniture", buff: "comfort", buffValue: 3, description: "Heats the cabin and cooks your meals" },
+      { id: "ww_bunk", name: "Proper Bunk", cost: 50, type: "furniture", buff: "rest_bonus", buffValue: 4, description: "Better than sleeping on the floor" },
+      { id: "ww_gun_rack", name: "Gun Rack", cost: 40, type: "furniture", buff: "security", buffValue: 3, description: "Keep your weapons ready and organized" },
+      { id: "ww_safe", name: "Iron Safe", cost: 100, type: "furniture", buff: "storage", buffValue: 8, description: "Even outlaws can't crack this" },
+      { id: "ww_stable", name: "Horse Stable", cost: 150, type: "room", buff: "travel", buffValue: 10, description: "House and care for your horse" },
+      { id: "ww_workshop", name: "Workshop", cost: 120, type: "room", buff: "crafting", buffValue: 8, description: "Fix saddles, whittle, and tinker" },
+      { id: "ww_well", name: "Deep Well", cost: 80, type: "room", buff: "sustainability", buffValue: 5, description: "Fresh water even in the driest season" },
+      { id: "ww_porch", name: "Covered Porch", cost: 70, type: "decoration", buff: "social", buffValue: 4, description: "A fine place to entertain visitors" },
+      { id: "ww_watchtower", name: "Watchtower", cost: 200, type: "security", buff: "security", buffValue: 8, description: "See trouble coming from miles away" },
+      { id: "ww_rocking_chair", name: "Rocking Chair", cost: 30, type: "furniture", buff: "comfort", buffValue: 2, description: "Perfect for watching the sunset" },
+    ],
+    modern: [
+      { id: "mod_smart_home", name: "Smart Home System", cost: 100, type: "furniture", buff: "comfort", buffValue: 5, description: "Control everything from your phone" },
+      { id: "mod_gaming_setup", name: "Gaming Setup", cost: 80, type: "furniture", buff: "social", buffValue: 4, description: "High-end PC and streaming rig" },
+      { id: "mod_home_office", name: "Home Office", cost: 120, type: "room", buff: "cunning", buffValue: 5, description: "A proper workspace for serious work" },
+      { id: "mod_gym", name: "Home Gym", cost: 150, type: "room", buff: "courage", buffValue: 5, description: "Stay fit without leaving home" },
+      { id: "mod_security", name: "Security System", cost: 90, type: "security", buff: "security", buffValue: 6, description: "Cameras, alarms, and smart locks" },
+      { id: "mod_art", name: "Art Collection", cost: 200, type: "decoration", buff: "influence", buffValue: 5, description: "Curated contemporary art pieces" },
+      { id: "mod_library", name: "Personal Library", cost: 100, type: "furniture", buff: "wisdom", buffValue: 5, description: "Walls of books, floor to ceiling" },
+      { id: "mod_meditation", name: "Meditation Room", cost: 130, type: "room", buff: "faith", buffValue: 6, description: "A peaceful space for spiritual practice" },
+      { id: "mod_rooftop", name: "Rooftop Terrace", cost: 180, type: "room", buff: "social", buffValue: 8, description: "Entertain guests under the city skyline" },
+      { id: "mod_panic_room", name: "Panic Room", cost: 250, type: "security", buff: "security", buffValue: 10, description: "When things go sideways, you disappear" },
+    ],
+  };
+
+  app.get("/api/chronicles/home", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const [gameState] = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId)).limit(1);
+      const era = gameState?.currentEra || "modern";
+      let [home] = await db.select().from(homeInteriors).where(and(eq(homeInteriors.userId, userId), eq(homeInteriors.era, era))).limit(1);
+      if (!home) {
+        const homeTypes: Record<string, string> = { medieval: "cottage", wildwest: "cabin", modern: "apartment" };
+        const homeNames: Record<string, string> = { medieval: "Humble Cottage", wildwest: "Frontier Cabin", modern: "Studio Apartment" };
+        [home] = await db.insert(homeInteriors).values({ userId, era, homeType: homeTypes[era] || "cottage", homeName: homeNames[era] || "Starter Home" }).returning();
+      }
+      const availableUpgrades = (HOME_UPGRADES[era] || []).filter(u => {
+        const all = [...JSON.parse(home.furniture || '[]'), ...JSON.parse(home.decorations || '[]'), ...JSON.parse(home.rooms || '[]')];
+        return !all.includes(u.id);
+      });
+      let currentVisitor = null;
+      const visitors = JSON.parse(home.visitors || '[]');
+      if (!home.lastVisitorAt || Date.now() - new Date(home.lastVisitorAt).getTime() > 30 * 60 * 1000) {
+        if (Math.random() < 0.3) {
+          const eraNpcs = STARTER_NPCS.filter(n => n.era === era);
+          if (eraNpcs.length > 0) {
+            const v = eraNpcs[Math.floor(Math.random() * eraNpcs.length)];
+            currentVisitor = { name: v.name, title: v.title, reason: "stopped by to visit" };
+            visitors.push({ ...currentVisitor, date: new Date().toISOString() });
+            if (visitors.length > 20) visitors.splice(0, visitors.length - 20);
+            await db.update(homeInteriors).set({ visitors: JSON.stringify(visitors), lastVisitorAt: new Date(), updatedAt: new Date() }).where(eq(homeInteriors.id, home.id));
+          }
+        }
+      }
+      res.json({
+        home: { ...home, rooms: JSON.parse(home.rooms || '[]'), furniture: JSON.parse(home.furniture || '[]'), decorations: JSON.parse(home.decorations || '[]'), activeBuffs: JSON.parse(home.activeBuffs || '[]'), visitors: visitors.slice(-5) },
+        availableUpgrades, currentVisitor,
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/home/upgrade", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { upgradeId } = req.body;
+      if (!upgradeId) return res.status(400).json({ error: "upgradeId required" });
+      const [gameState] = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId)).limit(1);
+      if (!gameState) return res.status(404).json({ error: "No game state" });
+      const era = gameState.currentEra;
+      const upgrade = (HOME_UPGRADES[era] || []).find(u => u.id === upgradeId);
+      if (!upgrade) return res.status(404).json({ error: "Upgrade not found" });
+      if (gameState.echoBalance < upgrade.cost) return res.status(400).json({ error: `Not enough Echoes. Need ${upgrade.cost}, have ${gameState.echoBalance}` });
+      let [home] = await db.select().from(homeInteriors).where(and(eq(homeInteriors.userId, userId), eq(homeInteriors.era, era))).limit(1);
+      if (!home) return res.status(404).json({ error: "No home found" });
+      await db.update(chroniclesGameState).set({ echoBalance: gameState.echoBalance - upgrade.cost, updatedAt: new Date() }).where(eq(chroniclesGameState.userId, userId));
+      const furniture = JSON.parse(home.furniture || '[]');
+      const decorations = JSON.parse(home.decorations || '[]');
+      const rooms = JSON.parse(home.rooms || '[]');
+      const buffs = JSON.parse(home.activeBuffs || '[]');
+      if (upgrade.type === "decoration") decorations.push(upgrade.id);
+      else if (upgrade.type === "room") rooms.push(upgrade.id);
+      else furniture.push(upgrade.id);
+      if (upgrade.buff) buffs.push({ buff: upgrade.buff, value: upgrade.buffValue || 1, source: upgrade.id });
+      const comfortBoost = upgrade.buff === "comfort" ? (upgrade.buffValue || 1) : 0;
+      const securityBoost = upgrade.buff === "security" ? (upgrade.buffValue || 1) : 0;
+      const storageBoost = upgrade.buff === "storage" ? (upgrade.buffValue || 0) : 0;
+      [home] = await db.update(homeInteriors).set({
+        furniture: JSON.stringify(furniture), decorations: JSON.stringify(decorations), rooms: JSON.stringify(rooms),
+        activeBuffs: JSON.stringify(buffs), comfortLevel: home.comfortLevel + comfortBoost,
+        securityLevel: home.securityLevel + securityBoost, storageCapacity: home.storageCapacity + storageBoost,
+        totalUpgrades: home.totalUpgrades + 1, shellsInvested: home.shellsInvested + upgrade.cost,
+        homeLevel: Math.floor((home.totalUpgrades + 1) / 3) + 1, updatedAt: new Date(),
+      }).where(eq(homeInteriors.id, home.id)).returning();
+      res.json({ home, upgrade, message: `${upgrade.name} installed! ${upgrade.description}`, newBalance: gameState.echoBalance - upgrade.cost });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // =====================================================
+  // BLOCKCHAIN DECISION TRAIL
+  // =====================================================
+
+  app.post("/api/chronicles/chain/record", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { era, decisionType, situationTitle, choiceMade, consequences, statChanges } = req.body;
+      if (!situationTitle || !choiceMade) return res.status(400).json({ error: "situationTitle and choiceMade required" });
+      const [lastBlock] = await db.select().from(decisionTrail).where(eq(decisionTrail.userId, userId)).orderBy(desc(decisionTrail.blockNumber)).limit(1);
+      const blockNumber = (lastBlock?.blockNumber || 0) + 1;
+      const previousHash = lastBlock?.blockHash || "0x0000000000000000000000000000000000000000000000000000000000000000";
+      const timestamp = Date.now();
+      const { createHash } = await import("crypto");
+      let nonce = 0;
+      let blockHash = "";
+      const difficulty = Math.min(3, Math.floor(blockNumber / 10) + 1);
+      const target = "0".repeat(difficulty);
+      do {
+        const data = `${previousHash}:${userId}:${situationTitle}:${choiceMade}:${timestamp}:${nonce}`;
+        blockHash = "0x" + createHash("sha256").update(data).digest("hex");
+        nonce++;
+      } while (!blockHash.substring(2, 2 + difficulty).startsWith(target) && nonce < 10000);
+      const merkleData = `${decisionType || "choice"}:${situationTitle}:${choiceMade}:${JSON.stringify(consequences || {})}`;
+      const merkleRoot = "0x" + createHash("sha256").update(merkleData).digest("hex");
+      const guardianSignature = "0x" + createHash("sha256")
+        .update(`guardian:${blockHash}:${merkleRoot}:${process.env.TRUSTLAYER_API_SECRET || "darkwave-guardian"}`)
+        .digest("hex");
+      const [block] = await db.insert(decisionTrail).values({
+        userId, era: era || "modern", decisionType: decisionType || "choice",
+        situationTitle, choiceMade, consequences: JSON.stringify(consequences || {}),
+        statChanges: JSON.stringify(statChanges || {}), blockHash, previousHash,
+        blockNumber, merkleRoot, nonce, difficulty, timestamp, verified: true, guardianSignature,
+      }).returning();
+      const [sp] = await db.select().from(seasonProgress).where(eq(seasonProgress.userId, userId)).limit(1);
+      if (sp) { await db.update(seasonProgress).set({ totalDecisions: sp.totalDecisions + 1, updatedAt: new Date() }).where(eq(seasonProgress.id, sp.id)); }
+      else { await db.insert(seasonProgress).values({ userId, totalDecisions: 1, erasExplored: JSON.stringify([era || "modern"]) }); }
+      res.json({
+        block: { blockNumber: block.blockNumber, blockHash: block.blockHash, previousHash: block.previousHash, merkleRoot: block.merkleRoot, nonce: block.nonce, difficulty: block.difficulty, timestamp: block.timestamp, verified: block.verified, guardianSignature: block.guardianSignature, decision: { type: block.decisionType, title: block.situationTitle, choice: block.choiceMade } },
+        message: `Decision recorded on-chain. Block #${block.blockNumber}. Verified by Guardian.`,
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/chronicles/chain/history", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const chain = await db.select().from(decisionTrail).where(eq(decisionTrail.userId, userId)).orderBy(decisionTrail.blockNumber);
+      let isValid = true;
+      for (let i = 1; i < chain.length; i++) {
+        if (chain[i].previousHash !== chain[i - 1].blockHash) { isValid = false; break; }
+      }
+      res.json({
+        chain: chain.map(b => ({ blockNumber: b.blockNumber, blockHash: b.blockHash, previousHash: b.previousHash, merkleRoot: b.merkleRoot, decision: { type: b.decisionType, title: b.situationTitle, choice: b.choiceMade, era: b.era }, timestamp: b.timestamp, verified: b.verified })),
+        totalBlocks: chain.length, chainValid: isValid, latestBlock: chain.length > 0 ? chain[chain.length - 1].blockHash : null,
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/chronicles/chain/verify/:blockHash", async (req: Request, res: Response) => {
+    try {
+      const { blockHash } = req.params;
+      const [block] = await db.select().from(decisionTrail).where(eq(decisionTrail.blockHash, blockHash)).limit(1);
+      if (!block) return res.status(404).json({ error: "Block not found", verified: false });
+      const { createHash } = await import("crypto");
+      const data = `${block.previousHash}:${block.userId}:${block.situationTitle}:${block.choiceMade}:${block.timestamp}:${block.nonce}`;
+      const recomputedHash = "0x" + createHash("sha256").update(data).digest("hex");
+      res.json({
+        verified: recomputedHash === block.blockHash,
+        block: { blockNumber: block.blockNumber, blockHash: block.blockHash, merkleRoot: block.merkleRoot, decision: { type: block.decisionType, title: block.situationTitle, era: block.era }, timestamp: block.timestamp, guardianSignature: block.guardianSignature },
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // =====================================================
+  // SEASON ZERO COMPLETION
+  // =====================================================
+
+  app.get("/api/chronicles/season/progress", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      let [progress] = await db.select().from(seasonProgress).where(eq(seasonProgress.userId, userId)).limit(1);
+      if (!progress) { [progress] = await db.insert(seasonProgress).values({ userId }).returning(); }
+      const [gameState] = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId)).limit(1);
+      const legacies = await db.select().from(playerLegacy).where(eq(playerLegacy.userId, userId));
+      const chainBlocks = await db.select().from(decisionTrail).where(eq(decisionTrail.userId, userId));
+      const totalQuestsPerEra = Math.max(1, Math.floor(SEASON_ZERO_QUESTS.length / 3));
+      const completedSituations: string[] = gameState?.completedSituations || [];
+      const medievalCompleted = completedSituations.filter(s => s.startsWith("med_")).length;
+      const wildwestCompleted = completedSituations.filter(s => s.startsWith("ww_")).length;
+      const modernCompleted = completedSituations.filter(s => s.startsWith("mod_")).length;
+      const medievalProgress = Math.min(100, Math.round((medievalCompleted / totalQuestsPerEra) * 100));
+      const wildwestProgress = Math.min(100, Math.round((wildwestCompleted / totalQuestsPerEra) * 100));
+      const modernProgress = Math.min(100, Math.round((modernCompleted / totalQuestsPerEra) * 100));
+      const finaleUnlocked = medievalProgress >= 50 && wildwestProgress >= 50 && modernProgress >= 50 && legacies.length >= 3 && chainBlocks.length >= 10;
+      const seasonScore = (gameState?.situationsCompleted || 0) * 10 + legacies.reduce((sum, l) => sum + l.legacyScore, 0) + chainBlocks.length * 5 + (gameState?.faithLevel || 0) * 3;
+      await db.update(seasonProgress).set({
+        medievalProgress, wildwestProgress, modernProgress, totalLegacies: legacies.length,
+        totalDecisions: chainBlocks.length, finaleUnlocked, seasonScore,
+        erasExplored: JSON.stringify(Array.from(new Set(legacies.map(l => l.era)))), updatedAt: new Date(),
+      }).where(eq(seasonProgress.id, progress.id));
+      const rels = await db.select().from(npcRelationships).where(eq(npcRelationships.userId, userId));
+      const homes = await db.select().from(homeInteriors).where(eq(homeInteriors.userId, userId));
+      const totalHomeUpgrades = homes.reduce((sum, h) => sum + h.totalUpgrades, 0);
+      const milestones = [
+        { id: "first_life", title: "First Life Lived", description: "Complete your first legacy", done: legacies.filter(l => !l.isActive).length >= 1 },
+        { id: "three_eras", title: "Time Traveler", description: "Explore all 3 eras", done: Array.from(new Set(legacies.map(l => l.era))).length >= 3 },
+        { id: "chain_started", title: "On the Record", description: "Record 10 decisions on-chain", done: chainBlocks.length >= 10 },
+        { id: "family_tree", title: "Family Tree", description: "Live 3 generations", done: legacies.length >= 3 },
+        { id: "faithful", title: "Person of Faith", description: "Reach Faith Level 5", done: (gameState?.faithLevel || 0) >= 5 },
+        { id: "homemaker", title: "Home Sweet Home", description: "Upgrade your home 5 times", done: totalHomeUpgrades >= 5 },
+        { id: "social_butterfly", title: "Social Butterfly", description: "Have 5+ NPC relationships", done: rels.length >= 5 },
+        { id: "medieval_master", title: "Medieval Master", description: "50%+ Medieval progress", done: medievalProgress >= 50 },
+        { id: "frontier_legend", title: "Frontier Legend", description: "50%+ Wild West progress", done: wildwestProgress >= 50 },
+        { id: "modern_mogul", title: "Modern Mogul", description: "50%+ Modern progress", done: modernProgress >= 50 },
+        { id: "finale_ready", title: "Finale Unlocked", description: "Meet all requirements for the Season Zero Finale", done: finaleUnlocked },
+      ];
+      res.json({
+        seasonId: "season_zero", seasonName: "Season Zero: The Awakening",
+        progress: { medieval: medievalProgress, wildwest: wildwestProgress, modern: modernProgress },
+        totalLegacies: legacies.length, totalDecisions: chainBlocks.length, seasonScore, finaleUnlocked,
+        finaleCompleted: progress.finaleCompleted, seasonOneUnlocked: progress.seasonOneUnlocked,
+        milestones, completedMilestones: milestones.filter(m => m.done).length, totalMilestones: milestones.length,
+      });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/chronicles/season/complete-finale", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const [progress] = await db.select().from(seasonProgress).where(eq(seasonProgress.userId, userId)).limit(1);
+      if (!progress) return res.status(400).json({ error: "No season progress found" });
+      if (!progress.finaleUnlocked) return res.status(400).json({ error: "Finale not yet unlocked" });
+      if (progress.finaleCompleted) return res.status(400).json({ error: "Finale already completed" });
+      const [gameState] = await db.select().from(chroniclesGameState).where(eq(chroniclesGameState.userId, userId)).limit(1);
+      const finalScore = progress.seasonScore + 500;
+      const shellsReward = Math.floor(finalScore / 10);
+      const rewards = [
+        { type: "shells", amount: shellsReward, description: "Season Zero Completion Bonus" },
+        { type: "title", value: "Season Zero Pioneer", description: "Exclusive title" },
+        { type: "badge", value: "season_zero_complete", description: "Season Zero badge" },
+        { type: "legacy_bonus", value: "+5 inheritance stats", description: "Future generations start with +5 to inherited stats" },
+      ];
+      const { createHash } = await import("crypto");
+      const completionHash = "0x" + createHash("sha256").update(`season_zero:complete:${userId}:${finalScore}:${Date.now()}`).digest("hex");
+      await db.update(seasonProgress).set({
+        finaleCompleted: true, seasonOneUnlocked: true, seasonScore: finalScore,
+        completionRewards: JSON.stringify(rewards), completedAt: new Date(), updatedAt: new Date(),
+      }).where(eq(seasonProgress.id, progress.id));
+      if (gameState) {
+        await db.update(chroniclesGameState).set({
+          shellsEarned: gameState.shellsEarned + shellsReward,
+          achievements: [...(gameState.achievements || []), "season_zero_complete", "season_zero_pioneer"],
+          updatedAt: new Date(),
+        }).where(eq(chroniclesGameState.userId, userId));
+      }
+      res.json({ completed: true, finalScore, completionHash, rewards, seasonOneUnlocked: true, message: "Congratulations! You have completed Season Zero: The Awakening. Your legacy echoes across time. Season One awaits." });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // =====================================================
+  // VOICE & NARRATION SYSTEM
+  // =====================================================
+
+  app.post("/api/chronicles/voice/narrate", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+      const { text, voice, era } = req.body;
+      if (!text) return res.status(400).json({ error: "text required" });
+      const voiceMap: Record<string, string> = { medieval: "alloy", wildwest: "echo", modern: "nova", narrator: "onyx", female: "shimmer", male: "fable" };
+      const selectedVoice = voiceMap[voice || era || "narrator"] || "onyx";
+      try {
+        const mp3 = await openai.audio.speech.create({ model: "tts-1", voice: selectedVoice as any, input: text.substring(0, 500) });
+        const buffer = Buffer.from(await mp3.arrayBuffer());
+        res.set({ "Content-Type": "audio/mpeg", "Content-Length": buffer.length.toString() });
+        res.send(buffer);
+      } catch (ttsError: any) {
+        console.error("[Voice] TTS error:", ttsError.message);
+        res.status(503).json({ error: "Voice synthesis unavailable", fallback: text });
+      }
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.get("/api/chronicles/voice/available", async (_req: Request, res: Response) => {
+    res.json({
+      voices: [
+        { id: "narrator", name: "The Narrator", description: "Deep, authoritative narration", era: "all" },
+        { id: "medieval", name: "Medieval Voice", description: "Warm, storytelling tone", era: "medieval" },
+        { id: "wildwest", name: "Frontier Voice", description: "Rugged, weathered tone", era: "wildwest" },
+        { id: "modern", name: "Modern Voice", description: "Clear, contemporary tone", era: "modern" },
+        { id: "female", name: "Female NPC", description: "Gentle, expressive voice", era: "all" },
+        { id: "male", name: "Male NPC", description: "Warm, conversational voice", era: "all" },
+      ],
+      enabled: true,
+    });
   });
 }
