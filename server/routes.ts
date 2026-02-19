@@ -9763,10 +9763,10 @@ const { trustLayerId } = await response.json();`
       }
 
       const result = await subscriptionService.cancelSubscription(userId.toString());
-      if (result.success) {
+      if (result) {
         res.json({ success: true, message: "Subscription cancelled successfully" });
       } else {
-        res.status(400).json({ error: result.error || "Failed to cancel subscription" });
+        res.status(400).json({ error: "Failed to cancel subscription" });
       }
     } catch (error: any) {
       console.error("Cancel subscription error:", error);
@@ -10968,7 +10968,8 @@ const { trustLayerId } = await response.json();`
         return res.status(400).json({ error: "Price ID required" });
       }
 
-      const session = await stripe.checkout.sessions.create({
+      const stripeClient = await getUncachableStripeClient();
+      const session = await stripeClient.checkout.sessions.create({
         mode: "subscription",
         payment_method_types: ["card"],
         line_items: [{ price: priceId, quantity: 1 }],
@@ -20430,7 +20431,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (shellEmail) {
         try {
           const amountPaid = session.amount_total ? (session.amount_total / 100).toFixed(2) : "0.00";
-          await sendShellsPurchaseEmail(shellEmail, shellAmount, amountPaid, balance?.totalShells || shellAmount);
+          await sendShellsPurchaseEmail(shellEmail, shellAmount, amountPaid, balance?.balance || shellAmount);
         } catch (emailErr) { console.error("[Shells] Purchase email error:", emailErr); }
       }
       
