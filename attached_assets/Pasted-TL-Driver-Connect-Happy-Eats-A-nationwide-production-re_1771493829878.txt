@@ -1,0 +1,185 @@
+TL Driver Connect / Happy Eats
+
+A nationwide, production-ready web application built as dual Progressive Web Apps (PWAs) serving commercial and everyday drivers, food truck vendors, office professionals, and franchise operators. The platform delivers food ordering, parts access, concierge services, mileage and expense tracking, entertainment, marketing tools, and real-time communication — all within a multi-tenant franchise architecture launching April 1, 2026, starting with Kathy's Nashville operation.
+
+Codebase: 183,458 lines of code across 5,084 TypeScript/TSX files, 49 database tables, 192 API endpoints, 59 pages, and 79 UI components.
+
+DUAL PWA SYSTEM
+
+Happy Eats PWA: Orange (#FF7849) branded food ordering experience with standalone mobile install, service worker for offline capability, and portrait-optimized layout
+TL Driver Connect PWA: Cyan/lavender/navy themed driver tools and logistics suite
+9-theme switching system allowing users to toggle between brand experiences
+Full manifest.json with icons (192px, 512px, SVG), mobile viewport with viewport-fit cover, and app-like navigation
+ZONE-BASED BATCH ORDERING
+
+11 delivery zones covering Middle Tennessee with the primary hub at Hwy 109 & I-840 (Lebanon area)
+Interactive zone map with color-coded status, zone details, and admin controls
+Multi-vendor batch ordering within a single zone checkout
+Scheduled delivery with selectable time slots
+Vendor star ratings displayed on ordering pages
+Smart ETA calculations on the real-time order tracking page
+One-tap reorder from order history for repeat customers
+LIVE PAYMENT PROCESSING
+
+Stripe live checkout integrated directly into the zone-order flow
+Stripe webhook with cryptographic signature verification for payment confirmation
+Idempotency guard preventing duplicate payment processing
+Automatic order status update to "confirmed" on successful payment
+HTML receipt generation and storage on every completed payment
+Session status retrieval for payment confirmation pages
+REVENUE ANALYTICS DASHBOARD
+
+Total revenue, order count, average order value, and paid vs pending breakdowns
+Revenue-over-time line charts (Recharts) with period filtering (today, week, month, all-time)
+Top-selling items ranked by quantity and revenue
+Vendor performance metrics with ratings and order counts
+Embedded in both Command Center and Admin Dashboard
+CUSTOMER ACCOUNT SYSTEM
+
+Phone + password registration with bcrypt hashing
+JWT authentication with 7-day token expiration
+Customer profile management (name, email, phone, delivery address, delivery instructions)
+Individual and business account types
+Full order history with status tracking
+One-tap reorder functionality
+Web push notification opt-in for order status changes
+CUSTOMER REFERRAL PROGRAM
+
+Auto-generated referral codes (NAME + 4 random digits format)
+$5 credit reward for both referrer and referred friend
+Referral tracking with pending/completed status
+Shareable referral links on the customer account page
+Credits applied automatically on referred customer's first order
+FORGOT PASSWORD / ACCOUNT RECOVERY
+
+Customer multi-step reset: phone number → 6-digit verification code → new password
+Tenant/admin PIN-based password reset for franchise operators
+Rate-limited to 10 attempts per 15 minutes to prevent abuse
+ADMIN COMMAND CENTER
+
+PIN-protected hub (owner/developer access via OWNER_SECRET, tenant access via individual PINs)
+9 admin categories with photorealistic card navigation
+Quick-access tools for managing orders, vendors, zones, drivers, and customers
+Partner links and ecosystem integrations
+Revenue analytics dashboard embedded directly in the center
+VENDOR SELF-SERVICE PORTAL
+
+Vendor registration and login system
+Menu management: add/edit/remove items with pricing, descriptions, availability toggles, and customization options
+Vendor order management dashboard for incoming orders
+Food truck profile management with location and availability
+ORDER FLOW SYSTEM
+
+End-to-end order management across customer, vendor, driver, and admin views
+Multi-truck ordering in a single checkout session
+Real-time order status progression (pending → confirmed → preparing → ready → delivering → delivered)
+Zone-based delivery operations with geographic assignment
+Order review and rating system post-delivery
+REAL-TIME COMMUNICATION
+
+Trucker Talk: WebSocket-powered live chat for drivers with dispatcher role validation
+Signal Chat: 8 dedicated channels including vendor-support help desk, with SSO via JWT
+Web push notifications (VAPID configured) for order status changes
+MARKETING HUB & TOOLS
+
+AI-powered marketing content generation (OpenAI integrated)
+Automated social media posting scheduler (8am–8pm, every 2 hours)
+Advanced flyer editor with image uploads, background galleries, and bilingual support
+Food truck recruitment flyer editor
+Blog system with post creation and management
+Brand assets management
+FOOD TRUCK MAP & MANAGEMENT
+
+Visual truck pins on interactive map with details and availability
+Truck availability scheduling system
+Food truck detail pages with menu previews
+DELIVERY ZONE MAP
+
+Interactive Middle Tennessee zone map
+Zone status indicators (active, inactive, coming soon)
+Admin controls for zone management
+Geographic boundary definitions with coordinate data
+HAPPY EATS KITCHEN (COMMISSARY)
+
+Mobile commissary concept
+Meal browsing with item details
+Kitchen item management for operators
+FUEL FINDER
+
+Curated directory of 6+ fuel and EV charging stations
+GPS-based proximity sorting
+Search and filter functionality
+Direct Google Maps integration for navigation
+CDL PROGRAM DIRECTORY
+
+Searchable directory of CDL training programs
+Referral tracking for CDL sign-ups
+Rate-limited to prevent abuse (5 requests per window per IP)
+BUSINESS SUITE
+
+Expense tracking and categorization
+Mileage trip logging
+Financial reporting tools for drivers and operators
+FRANCHISE SYSTEM
+
+Multi-tenant architecture with isolated data, branding, and configuration per franchise
+Franchise inquiry and onboarding flow
+Franchise dashboard for operators
+Subscription model via Stripe
+INVESTOR & DEMO PAGES
+
+Dedicated investor relations page
+Interactive guided platform demo
+Roadmap page showing development milestones
+OPERATIONS MANUAL
+
+Comprehensive A-Z reference guide
+Searchable content with deep-linking support
+Category-organized operational procedures
+INVITE CODE SYSTEM
+
+Admin-managed vendor signup incentives
+5 perk types with usage tracking and expiration dates
+Code generation and distribution tools
+ADDITIONAL MODULES
+
+Concierge services page
+Weather integration for drivers
+GPS finder tool
+Affiliate dashboard
+Partner agreements and document management
+Promo code system
+Ecosystem app connections (Trust Layer Hub, Orbit Financial Hub)
+Explore Hub for service discovery
+Privacy policy and terms of service pages
+SMS consent management
+Team page
+SECURITY & PRODUCTION HARDENING
+
+Helmet middleware for HTTP security headers
+Express rate limiting: 10 requests/15 min on all auth endpoints, 100 requests/min on general API
+Trust proxy configured for production reverse proxy environments
+bcrypt password hashing (10 salt rounds)
+JWT Bearer token authentication with 7-day expiration
+Stripe webhook signature verification
+Raw body parsing for webhook integrity
+Uncaught exception and unhandled rejection handlers preventing crash loops
+Content Security Policy configured for app requirements
+TECH STACK
+
+Frontend: React 19, TypeScript, Vite 7, Tailwind CSS v4, shadcn/ui (Radix), Framer Motion, Recharts, Wouter routing, TanStack React Query v5
+Backend: Express 5, Node.js, Drizzle ORM, 2 WebSocket servers
+Database: PostgreSQL (Neon-backed), 49 tables
+Payments: Stripe (live)
+AI/ML: OpenAI API
+Storage: Replit Object Storage
+Text-to-Speech: ElevenLabs API
+Push: Web Push with VAPID keys
+Design: Dark theme (#0f172a, #1e293b), glassmorphism with backdrop-blur, photorealistic card images with brightness-110 filter and gradient overlays, mobile-first responsive
+183,458 total lines of code | 49 database tables | 192 API endpoints | 59 pages | 79 components | 35 server modules | 9 themes | 11 delivery zones | 8 chat channels | Dual PWA
+
+
+Scroll to latest
+
+Make, test, iterate…
+
