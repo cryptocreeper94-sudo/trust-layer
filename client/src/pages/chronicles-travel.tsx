@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Link } from "wouter";
 import { getChroniclesSession } from "./chronicles-login";
 import {
-  MapPin, Plane, Car, Train, Ship, Bike, Horse, Footprints,
+  MapPin, Plane, Car, Train, Ship, Bike, Footprints,
   Compass, Clock, Coins, Zap, Shield, Star, Globe, ChevronRight,
   AlertTriangle, ArrowLeft, Navigation, Route, Trophy, Sparkles,
   Eye, Lock, Mountain, TreePine, Building, Waves, Sun, Moon,
@@ -58,9 +58,9 @@ const ERA_MAP_THEMES = {
 const TRANSPORT_ICONS: Record<string, any> = {
   walk: Footprints,
   bicycle: Bike,
-  horse: Horse,
-  horse_cart: Horse,
-  stagecoach: Horse,
+  horse: Compass,
+  horse_cart: Compass,
+  stagecoach: Compass,
   ship: Ship,
   train: Train,
   motorcycle: Bike,
@@ -133,14 +133,14 @@ export default function ChroniclesTravel() {
   const { data: routes } = useQuery({ queryKey: ["/api/chronicles/travel/routes", currentEra], queryFn: () => fetch(`/api/chronicles/travel/routes?era=${currentEra}`).then(r => r.json()) });
   const { data: travelStatus, refetch: refetchStatus } = useQuery({
     queryKey: ["/api/chronicles/travel/status"],
-    queryFn: () => fetch(`/api/chronicles/travel/status?userId=${session?.userId || "demo"}`).then(r => r.json()),
+    queryFn: () => fetch(`/api/chronicles/travel/status?userId=${session?.account?.id || "demo"}`).then(r => r.json()),
     refetchInterval: 15000,
   });
   const { data: stamps } = useQuery({ queryKey: ["/api/chronicles/stamps"], queryFn: () => fetch("/api/chronicles/stamps").then(r => r.json()) });
   const { data: legacyScore } = useQuery({
-    queryKey: ["/api/chronicles/legacy", session?.userId],
-    queryFn: () => fetch(`/api/chronicles/legacy/${session?.userId || "demo"}`).then(r => r.json()),
-    enabled: !!session?.userId,
+    queryKey: ["/api/chronicles/legacy", session?.account?.id],
+    queryFn: () => fetch(`/api/chronicles/legacy/${session?.account?.id || "demo"}`).then(r => r.json()),
+    enabled: !!session?.account?.id,
   });
 
   const planMutation = useMutation({
@@ -193,8 +193,8 @@ export default function ChroniclesTravel() {
   const handleStartTravel = useCallback((travelType: string) => {
     if (!selectedCity || !destinationCity) return;
     startMutation.mutate({
-      userId: session?.userId || "demo",
-      characterId: session?.characterId || "demo",
+      userId: session?.account?.id || "demo",
+      characterId: session?.account?.id || "demo",
       era: currentEra,
       fromCityCode: selectedCity.code,
       toCityCode: destinationCity.code,
@@ -231,22 +231,24 @@ export default function ChroniclesTravel() {
   return (
     <div className="min-h-screen bg-slate-950 text-white">
       <div className="container mx-auto px-4 pt-20 pb-12">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <Link href="/chronicles-hub">
-              <Button variant="ghost" size="icon" data-testid="btn-back-hub"><ArrowLeft className="w-5 h-5" /></Button>
-            </Link>
-            <div>
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent" data-testid="text-travel-title">
-                World Map
-              </h1>
-              <p className="text-slate-400 text-sm">Explore the world across eras</p>
+        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-4 sm:mb-8">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2 sm:gap-4">
+              <Link href="/chronicles-hub">
+                <Button variant="ghost" size="icon" className="min-w-[44px] min-h-[44px]" data-testid="btn-back-hub"><ArrowLeft className="w-5 h-5" /></Button>
+              </Link>
+              <div>
+                <h1 className="text-xl sm:text-3xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent" data-testid="text-travel-title">
+                  World Map
+                </h1>
+                <p className="text-slate-400 text-xs sm:text-sm">Explore the world across eras</p>
+              </div>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 -mx-1 px-1">
             {(["modern", "wildwest", "medieval"] as const).map(era => (
               <Button key={era} variant={currentEra === era ? "default" : "outline"} size="sm"
-                className={currentEra === era ? "bg-cyan-600 hover:bg-cyan-700" : "border-slate-600"} 
+                className={`min-h-[44px] flex-shrink-0 text-xs sm:text-sm ${currentEra === era ? "bg-cyan-600 hover:bg-cyan-700" : "border-slate-600"}`} 
                 onClick={() => setCurrentEra(era)} data-testid={`btn-era-${era}`}>
                 {era === "modern" ? "Modern" : era === "wildwest" ? "Wild West" : "Medieval"}
               </Button>
@@ -257,15 +259,15 @@ export default function ChroniclesTravel() {
         {legacyScore && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mb-6">
             <GlassCard glow className="p-4">
-              <div className="flex items-center justify-between flex-wrap gap-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-3">
-                  <Trophy className="w-6 h-6 text-amber-400" />
+                  <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" />
                   <div>
-                    <p className="text-sm text-slate-400">Legacy</p>
-                    <p className="font-bold text-amber-400" data-testid="text-legacy-title">{legacyScore.legacyTitle}</p>
+                    <p className="text-xs sm:text-sm text-slate-400">Legacy</p>
+                    <p className="font-bold text-sm sm:text-base text-amber-400" data-testid="text-legacy-title">{legacyScore.legacyTitle}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-6 text-sm">
+                <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-6 text-xs sm:text-sm w-full sm:w-auto">
                   <div><span className="text-slate-400">Score: </span><span className="text-cyan-400 font-bold" data-testid="text-legacy-score">{legacyScore.totalScore?.toLocaleString()}</span></div>
                   <div><span className="text-slate-400">Cities: </span><span className="text-green-400 font-bold">{legacyScore.citiesVisited}</span></div>
                   <div><span className="text-slate-400">Miles: </span><span className="text-purple-400 font-bold">{Math.round(legacyScore.travelMilesLogged || 0).toLocaleString()}</span></div>
@@ -277,38 +279,41 @@ export default function ChroniclesTravel() {
         )}
 
         {isActiveTraveling && travelStatus?.session && (
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mb-6">
-            <GlassCard glow className="p-6 border-cyan-500/30">
-              <div className="flex items-center gap-3 mb-4">
-                <Navigation className="w-6 h-6 text-cyan-400 animate-pulse" />
-                <h3 className="text-lg font-bold text-cyan-400">Active Journey</h3>
-                <Badge className="bg-cyan-500/20 text-cyan-400">{travelStatus.session.travelType === "compressed" ? "Time-Compressed" : "Real-Time"}</Badge>
+          <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="mb-4 sm:mb-6">
+            <GlassCard glow className="p-4 sm:p-6 border-cyan-500/30">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                <Navigation className="w-5 h-5 sm:w-6 sm:h-6 text-cyan-400 animate-pulse" />
+                <h3 className="text-sm sm:text-lg font-bold text-cyan-400">Active Journey</h3>
+                <Badge className="bg-cyan-500/20 text-cyan-400 text-[10px] sm:text-xs">{travelStatus.session.travelType === "compressed" ? "Time-Compressed" : "Real-Time"}</Badge>
               </div>
-              <div className="flex items-center gap-2 mb-3 text-sm text-slate-300">
-                <MapPin className="w-4 h-4" /> {travelStatus.session.fromCityCode} <ChevronRight className="w-4 h-4" /> {travelStatus.session.toCityCode}
+              <div className="flex items-center gap-2 mb-3 text-xs sm:text-sm text-slate-300">
+                <MapPin className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" /> 
+                <span className="truncate">{travelStatus.session.fromCityCode}</span> 
+                <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" /> 
+                <span className="truncate">{travelStatus.session.toCityCode}</span>
               </div>
-              <Progress value={travelStatus.session.progressPercent} className="h-3 mb-2" />
-              <div className="flex justify-between text-xs text-slate-400">
-                <span>{Math.round(travelStatus.milesTraveled || 0)} miles traveled</span>
+              <Progress value={travelStatus.session.progressPercent} className="h-2 sm:h-3 mb-2" />
+              <div className="flex justify-between text-[10px] sm:text-xs text-slate-400">
+                <span>{Math.round(travelStatus.milesTraveled || 0)} mi</span>
                 <span>{Math.round(travelStatus.session.progressPercent)}%</span>
-                <span>{Math.round(travelStatus.milesRemaining || 0)} miles remaining</span>
+                <span>{Math.round(travelStatus.milesRemaining || 0)} mi left</span>
               </div>
             </GlassCard>
           </motion.div>
         )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
           <div className="lg:col-span-2">
-            <GlassCard glow className="p-4 overflow-hidden">
-              <div className="flex items-center justify-between mb-3">
+            <GlassCard glow className="p-2 sm:p-4 overflow-hidden">
+              <div className="flex items-center justify-between mb-2 sm:mb-3">
                 <div className="flex items-center gap-2">
-                  <Globe className="w-5 h-5 text-cyan-400" />
-                  <span className={`text-sm ${theme.font} text-slate-300`}>{theme.label}</span>
+                  <Globe className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
+                  <span className={`text-xs sm:text-sm ${theme.font} text-slate-300`}>{theme.label}</span>
                 </div>
-                <div className="flex gap-1">
-                  <Button variant="ghost" size="sm" onClick={() => setMapZoom(z => Math.min(z + 0.3, 3))} data-testid="btn-zoom-in">+</Button>
-                  <Button variant="ghost" size="sm" onClick={() => setMapZoom(1)} data-testid="btn-zoom-reset">Reset</Button>
-                  <Button variant="ghost" size="sm" onClick={() => setMapZoom(z => Math.max(z - 0.3, 0.5))} data-testid="btn-zoom-out">-</Button>
+                <div className="flex gap-0.5 sm:gap-1">
+                  <Button variant="ghost" size="sm" className="min-w-[36px] min-h-[36px] sm:min-w-[40px] sm:min-h-[40px] text-lg" onClick={() => setMapZoom(z => Math.min(z + 0.3, 3))} data-testid="btn-zoom-in">+</Button>
+                  <Button variant="ghost" size="sm" className="min-w-[36px] min-h-[36px] sm:min-w-[40px] sm:min-h-[40px] text-xs" onClick={() => setMapZoom(1)} data-testid="btn-zoom-reset">Reset</Button>
+                  <Button variant="ghost" size="sm" className="min-w-[36px] min-h-[36px] sm:min-w-[40px] sm:min-h-[40px] text-lg" onClick={() => setMapZoom(z => Math.max(z - 0.3, 0.5))} data-testid="btn-zoom-out">-</Button>
                 </div>
               </div>
 
@@ -426,51 +431,51 @@ export default function ChroniclesTravel() {
 
                 {selectedCity && !destinationCity && (
                   <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-                    className="absolute bottom-4 left-4 right-4 bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-xl p-4" data-testid="panel-city-info">
+                    className="absolute bottom-2 left-2 right-2 sm:bottom-4 sm:left-4 sm:right-4 bg-slate-900/95 backdrop-blur-xl border border-white/10 rounded-xl p-3 sm:p-4" data-testid="panel-city-info">
                     <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-5 h-5 text-cyan-400" />
-                        <h3 className="font-bold text-lg" data-testid="text-city-name">{getCityName(selectedCity, currentEra)}</h3>
-                        {selectedCity.isStartingCity && <Badge className="bg-green-500/20 text-green-400 text-xs">Starting City</Badge>}
-                        {selectedCity.isEasterEgg && <Badge className="bg-amber-500/20 text-amber-400 text-xs">Hidden</Badge>}
+                      <div className="flex items-center gap-2 min-w-0">
+                        <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400 flex-shrink-0" />
+                        <h3 className="font-bold text-sm sm:text-lg truncate" data-testid="text-city-name">{getCityName(selectedCity, currentEra)}</h3>
+                        {selectedCity.isStartingCity && <Badge className="bg-green-500/20 text-green-400 text-[10px] sm:text-xs flex-shrink-0">Start</Badge>}
+                        {selectedCity.isEasterEgg && <Badge className="bg-amber-500/20 text-amber-400 text-[10px] sm:text-xs flex-shrink-0">Hidden</Badge>}
                       </div>
-                      <Button variant="ghost" size="icon" onClick={() => setSelectedCity(null)}><X className="w-4 h-4" /></Button>
+                      <Button variant="ghost" size="icon" className="min-w-[44px] min-h-[44px] flex-shrink-0" onClick={() => setSelectedCity(null)}><X className="w-4 h-4" /></Button>
                     </div>
-                    <p className="text-sm text-slate-300 mb-3 line-clamp-3">{getCityDescription(selectedCity, currentEra)}</p>
-                    <p className="text-xs text-cyan-400 mb-1">Select a destination city on the map to plan your journey</p>
+                    <p className="text-xs sm:text-sm text-slate-300 mb-2 sm:mb-3 line-clamp-2 sm:line-clamp-3">{getCityDescription(selectedCity, currentEra)}</p>
+                    <p className="text-[10px] sm:text-xs text-cyan-400">Tap a destination city to plan your journey</p>
                   </motion.div>
                 )}
               </div>
             </GlassCard>
           </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {selectedCity && destinationCity && (
               <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }}>
-                <GlassCard glow className="p-4">
-                  <h3 className="font-bold text-cyan-400 mb-3 flex items-center gap-2">
-                    <Route className="w-5 h-5" /> Plan Journey
+                <GlassCard glow className="p-3 sm:p-4">
+                  <h3 className="font-bold text-cyan-400 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+                    <Route className="w-4 h-4 sm:w-5 sm:h-5" /> Plan Journey
                   </h3>
-                  <div className="flex items-center gap-2 mb-4 text-sm">
-                    <div className="flex items-center gap-1 bg-cyan-500/10 rounded px-2 py-1">
-                      <MapPin className="w-3 h-3 text-cyan-400" />
-                      <span>{getCityName(selectedCity, currentEra)}</span>
+                  <div className="flex items-center gap-2 mb-3 sm:mb-4 text-xs sm:text-sm">
+                    <div className="flex items-center gap-1 bg-cyan-500/10 rounded px-2 py-1 min-w-0">
+                      <MapPin className="w-3 h-3 text-cyan-400 flex-shrink-0" />
+                      <span className="truncate">{getCityName(selectedCity, currentEra)}</span>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-500" />
-                    <div className="flex items-center gap-1 bg-purple-500/10 rounded px-2 py-1">
-                      <MapPin className="w-3 h-3 text-purple-400" />
-                      <span>{getCityName(destinationCity, currentEra)}</span>
+                    <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 text-slate-500 flex-shrink-0" />
+                    <div className="flex items-center gap-1 bg-purple-500/10 rounded px-2 py-1 min-w-0">
+                      <MapPin className="w-3 h-3 text-purple-400 flex-shrink-0" />
+                      <span className="truncate">{getCityName(destinationCity, currentEra)}</span>
                     </div>
                   </div>
 
-                  <p className="text-xs text-slate-400 mb-2">Choose transport:</p>
-                  <div className="grid grid-cols-2 gap-2 mb-4">
+                  <p className="text-[10px] sm:text-xs text-slate-400 mb-2">Choose transport:</p>
+                  <div className="grid grid-cols-2 gap-2 mb-3 sm:mb-4">
                     {transportModes?.map((mode: any) => {
                       const Icon = TRANSPORT_ICONS[mode.code] || Footprints;
                       return (
                         <button key={mode.code} onClick={() => setSelectedTransport(mode.code)}
-                          className={`p-2 rounded-lg border text-left text-xs transition-all ${selectedTransport === mode.code
-                            ? "border-cyan-500 bg-cyan-500/10" : "border-slate-700 hover:border-slate-500"}`}
+                          className={`p-2.5 sm:p-2 rounded-lg border text-left text-xs transition-all min-h-[48px] ${selectedTransport === mode.code
+                            ? "border-cyan-500 bg-cyan-500/10" : "border-slate-700 hover:border-slate-500 active:bg-white/5"}`}
                           data-testid={`btn-transport-${mode.code}`}>
                           <div className="flex items-center gap-1 mb-1">
                             <span>{mode.iconEmoji}</span>
@@ -482,7 +487,7 @@ export default function ChroniclesTravel() {
                     })}
                   </div>
 
-                  <Button className="w-full bg-cyan-600 hover:bg-cyan-700" onClick={handlePlanTravel}
+                  <Button className="w-full bg-cyan-600 hover:bg-cyan-700 min-h-[48px]" onClick={handlePlanTravel}
                     disabled={!selectedTransport || planMutation.isPending} data-testid="btn-plan-travel">
                     <Compass className="w-4 h-4 mr-2" /> {planMutation.isPending ? "Planning..." : "Plan Route"}
                   </Button>
@@ -500,29 +505,29 @@ export default function ChroniclesTravel() {
               </GlassCard>
             )}
 
-            <GlassCard glow className="p-4">
-              <h3 className="font-bold text-amber-400 mb-3 flex items-center gap-2">
-                <Trophy className="w-5 h-5" /> Achievement Stamps
+            <GlassCard glow className="p-3 sm:p-4">
+              <h3 className="font-bold text-amber-400 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+                <Trophy className="w-4 h-4 sm:w-5 sm:h-5" /> Achievement Stamps
               </h3>
-              <div className="grid grid-cols-3 gap-2">
+              <div className="grid grid-cols-4 sm:grid-cols-3 gap-1.5 sm:gap-2">
                 {stamps?.slice(0, 12).map((stamp: any) => (
-                  <div key={stamp.code} className="text-center p-2 rounded-lg bg-slate-800/50 border border-slate-700/50 hover:border-amber-500/30 transition-all"
+                  <div key={stamp.code} className="text-center p-1.5 sm:p-2 rounded-lg bg-slate-800/50 border border-slate-700/50 hover:border-amber-500/30 active:bg-white/5 transition-all"
                     data-testid={`stamp-${stamp.code}`} title={stamp.description}>
-                    <span className="text-xl">{stamp.iconEmoji}</span>
-                    <p className="text-[10px] text-slate-400 mt-1 truncate">{stamp.name}</p>
-                    {stamp.isHidden && <Lock className="w-3 h-3 text-slate-600 mx-auto mt-0.5" />}
+                    <span className="text-lg sm:text-xl">{stamp.iconEmoji}</span>
+                    <p className="text-[8px] sm:text-[10px] text-slate-400 mt-0.5 sm:mt-1 truncate">{stamp.name}</p>
+                    {stamp.isHidden && <Lock className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-slate-600 mx-auto mt-0.5" />}
                   </div>
                 ))}
               </div>
             </GlassCard>
 
-            <GlassCard glow className="p-4">
-              <h3 className="font-bold text-purple-400 mb-3 flex items-center gap-2">
-                <Milestone className="w-5 h-5" /> Transport Guide
+            <GlassCard glow className="p-3 sm:p-4">
+              <h3 className="font-bold text-purple-400 mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+                <Milestone className="w-4 h-4 sm:w-5 sm:h-5" /> Transport Guide
               </h3>
-              <div className="space-y-1 text-xs">
+              <div className="space-y-1 text-[10px] sm:text-xs">
                 {transportModes?.map((mode: any) => (
-                  <div key={mode.code} className="flex items-center justify-between py-1 border-b border-slate-800/50">
+                  <div key={mode.code} className="flex items-center justify-between py-1.5 sm:py-1 border-b border-slate-800/50">
                     <span className="flex items-center gap-1"><span>{mode.iconEmoji}</span> {mode.name}</span>
                     <span className="text-slate-400">{mode.speedMph} mph</span>
                   </div>
@@ -536,26 +541,27 @@ export default function ChroniclesTravel() {
       <AnimatePresence>
         {showTravelPlan && planMutation.data && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setShowTravelPlan(false)}>
-            <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.9, y: 20 }}
-              className="bg-slate-900 border border-white/10 rounded-2xl p-6 max-w-xl w-full max-h-[90vh] overflow-y-auto" onClick={e => e.stopPropagation()} data-testid="modal-travel-plan">
-              <h2 className="text-xl font-bold text-cyan-400 mb-4 flex items-center gap-2">
-                <Navigation className="w-6 h-6" /> Journey Plan
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4" onClick={() => setShowTravelPlan(false)}>
+            <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }}
+              className="bg-slate-900 border border-white/10 rounded-t-2xl sm:rounded-2xl p-4 sm:p-6 max-w-xl w-full max-h-[85vh] overflow-y-auto" onClick={e => e.stopPropagation()} data-testid="modal-travel-plan">
+              <div className="w-10 h-1 bg-slate-600 rounded-full mx-auto mb-3 sm:hidden" />
+              <h2 className="text-lg sm:text-xl font-bold text-cyan-400 mb-3 sm:mb-4 flex items-center gap-2">
+                <Navigation className="w-5 h-5 sm:w-6 sm:h-6" /> Journey Plan
               </h2>
 
-              <div className="flex items-center gap-3 mb-4 p-3 bg-slate-800/50 rounded-lg">
-                <div className="text-center">
-                  <MapPin className="w-5 h-5 text-cyan-400 mx-auto" />
-                  <p className="text-sm font-medium">{planMutation.data.from?.name}</p>
+              <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 p-2 sm:p-3 bg-slate-800/50 rounded-lg">
+                <div className="text-center min-w-0">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400 mx-auto" />
+                  <p className="text-xs sm:text-sm font-medium truncate">{planMutation.data.from?.name}</p>
                 </div>
                 <div className="flex-1 border-t border-dashed border-slate-600 relative">
-                  <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-800 px-2 text-xs text-slate-400">
-                    {planMutation.data.distanceMiles} miles
+                  <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-800 px-1.5 sm:px-2 text-[10px] sm:text-xs text-slate-400 whitespace-nowrap">
+                    {planMutation.data.distanceMiles} mi
                   </span>
                 </div>
-                <div className="text-center">
-                  <MapPin className="w-5 h-5 text-purple-400 mx-auto" />
-                  <p className="text-sm font-medium">{planMutation.data.to?.name}</p>
+                <div className="text-center min-w-0">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400 mx-auto" />
+                  <p className="text-xs sm:text-sm font-medium truncate">{planMutation.data.to?.name}</p>
                 </div>
               </div>
 
@@ -563,37 +569,37 @@ export default function ChroniclesTravel() {
                 <p className="text-sm text-slate-300 mb-4 italic border-l-2 border-cyan-500/30 pl-3">{planMutation.data.routeDescription}</p>
               )}
 
-              <div className="flex items-center gap-2 mb-4 text-sm text-slate-400">
+              <div className="flex items-center gap-2 mb-3 sm:mb-4 text-xs sm:text-sm text-slate-400">
                 <span>{planMutation.data.transport?.emoji}</span>
                 <span>{planMutation.data.transport?.name} at {planMutation.data.transport?.speedMph} mph</span>
               </div>
 
-              <div className="space-y-3">
+              <div className="space-y-2 sm:space-y-3">
                 {Object.values(planMutation.data.options || {}).map((option: any) => (
-                  <div key={option.type} className="p-4 rounded-lg border border-slate-700 hover:border-cyan-500/30 transition-all">
+                  <div key={option.type} className="p-3 sm:p-4 rounded-lg border border-slate-700 hover:border-cyan-500/30 active:bg-white/5 transition-all">
                     <div className="flex items-center justify-between mb-2">
-                      <h4 className="font-bold text-sm">{option.label}</h4>
-                      <Badge className={option.type === "realtime" ? "bg-green-500/20 text-green-400" :
-                        option.type === "compressed" ? "bg-amber-500/20 text-amber-400" : "bg-purple-500/20 text-purple-400"}>
+                      <h4 className="font-bold text-xs sm:text-sm">{option.label}</h4>
+                      <Badge className={`text-[10px] sm:text-xs ${option.type === "realtime" ? "bg-green-500/20 text-green-400" :
+                        option.type === "compressed" ? "bg-amber-500/20 text-amber-400" : "bg-purple-500/20 text-purple-400"}`}>
                         {option.type === "realtime" ? "Best XP" : option.type === "compressed" ? "Balanced" : "Instant"}
                       </Badge>
                     </div>
-                    <p className="text-xs text-slate-400 mb-3">{option.description}</p>
-                    <div className="grid grid-cols-3 gap-2 text-xs mb-3">
-                      <div className="text-center p-2 bg-slate-800/50 rounded">
-                        <Clock className="w-3 h-3 text-cyan-400 mx-auto mb-1" />
+                    <p className="text-[10px] sm:text-xs text-slate-400 mb-2 sm:mb-3">{option.description}</p>
+                    <div className="grid grid-cols-3 gap-1.5 sm:gap-2 text-[10px] sm:text-xs mb-2 sm:mb-3">
+                      <div className="text-center p-1.5 sm:p-2 bg-slate-800/50 rounded">
+                        <Clock className="w-3 h-3 text-cyan-400 mx-auto mb-0.5 sm:mb-1" />
                         <p className="text-slate-300">{option.travelTimeDisplay}</p>
                       </div>
-                      <div className="text-center p-2 bg-slate-800/50 rounded">
-                        <Coins className="w-3 h-3 text-amber-400 mx-auto mb-1" />
-                        <p className="text-slate-300">{option.echoCost} Echoes</p>
+                      <div className="text-center p-1.5 sm:p-2 bg-slate-800/50 rounded">
+                        <Coins className="w-3 h-3 text-amber-400 mx-auto mb-0.5 sm:mb-1" />
+                        <p className="text-slate-300">{option.echoCost} E</p>
                       </div>
-                      <div className="text-center p-2 bg-slate-800/50 rounded">
-                        <Zap className="w-3 h-3 text-green-400 mx-auto mb-1" />
+                      <div className="text-center p-1.5 sm:p-2 bg-slate-800/50 rounded">
+                        <Zap className="w-3 h-3 text-green-400 mx-auto mb-0.5 sm:mb-1" />
                         <p className="text-slate-300">{option.xpMultiplier}x XP</p>
                       </div>
                     </div>
-                    <Button className="w-full" variant={option.type === "realtime" ? "default" : "outline"}
+                    <Button className="w-full min-h-[44px]" variant={option.type === "realtime" ? "default" : "outline"}
                       onClick={() => handleStartTravel(option.type)} disabled={startMutation.isPending}
                       data-testid={`btn-start-${option.type}`}>
                       <PlayCircle className="w-4 h-4 mr-2" /> {startMutation.isPending ? "Starting..." : `Start ${option.label}`}
@@ -602,36 +608,37 @@ export default function ChroniclesTravel() {
                 ))}
               </div>
 
-              <Button variant="ghost" className="w-full mt-4" onClick={() => setShowTravelPlan(false)}>Cancel</Button>
+              <Button variant="ghost" className="w-full mt-3 sm:mt-4 min-h-[44px]" onClick={() => setShowTravelPlan(false)}>Cancel</Button>
             </motion.div>
           </motion.div>
         )}
 
         {showEncounter && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-            <motion.div initial={{ scale: 0.9, rotateY: -10 }} animate={{ scale: 1, rotateY: 0 }}
-              className={`bg-slate-900 border rounded-2xl p-6 max-w-md w-full ${currentEra === "medieval" ? "border-amber-500/30" :
+            className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4">
+            <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }}
+              className={`bg-slate-900 border rounded-t-2xl sm:rounded-2xl p-4 sm:p-6 max-w-md w-full max-h-[85vh] overflow-y-auto ${currentEra === "medieval" ? "border-amber-500/30" :
                 currentEra === "wildwest" ? "border-yellow-500/30" : "border-cyan-500/30"}`} data-testid="modal-encounter">
-              <div className="text-center mb-4">
-                <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full mb-3 ${currentEra === "medieval" ? "bg-amber-500/20" :
+              <div className="w-10 h-1 bg-slate-600 rounded-full mx-auto mb-3 sm:hidden" />
+              <div className="text-center mb-3 sm:mb-4">
+                <div className={`inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 rounded-full mb-2 sm:mb-3 ${currentEra === "medieval" ? "bg-amber-500/20" :
                   currentEra === "wildwest" ? "bg-yellow-500/20" : "bg-cyan-500/20"}`}>
-                  <AlertTriangle className={`w-8 h-8 ${currentEra === "medieval" ? "text-amber-400" :
+                  <AlertTriangle className={`w-6 h-6 sm:w-8 sm:h-8 ${currentEra === "medieval" ? "text-amber-400" :
                     currentEra === "wildwest" ? "text-yellow-400" : "text-cyan-400"}`} />
                 </div>
                 <Badge className="mb-2">{showEncounter.encounterType}</Badge>
-                <h3 className="text-xl font-bold">{showEncounter.title}</h3>
+                <h3 className="text-lg sm:text-xl font-bold">{showEncounter.title}</h3>
               </div>
-              <p className="text-sm text-slate-300 mb-6 text-center">{showEncounter.description}</p>
+              <p className="text-xs sm:text-sm text-slate-300 mb-4 sm:mb-6 text-center">{showEncounter.description}</p>
               <div className="space-y-2">
                 {JSON.parse(showEncounter.choices || "[]").map((choice: string, i: number) => (
-                  <Button key={i} variant="outline" className="w-full justify-start text-left" onClick={() => resolveMutation.mutate({ id: showEncounter.id, choiceIndex: i })}
+                  <Button key={i} variant="outline" className="w-full justify-start text-left min-h-[48px] text-xs sm:text-sm" onClick={() => resolveMutation.mutate({ id: showEncounter.id, choiceIndex: i })}
                     disabled={resolveMutation.isPending} data-testid={`btn-encounter-choice-${i}`}>
                     <ChevronRight className="w-4 h-4 mr-2 flex-shrink-0" /> {choice}
                   </Button>
                 ))}
               </div>
-              <div className="flex items-center justify-center gap-4 mt-4 text-xs text-slate-400">
+              <div className="flex items-center justify-center gap-4 mt-3 sm:mt-4 text-[10px] sm:text-xs text-slate-400">
                 <span className="flex items-center gap-1"><Zap className="w-3 h-3 text-green-400" /> +{showEncounter.xpReward} XP</span>
                 <span className="flex items-center gap-1"><Coins className="w-3 h-3 text-amber-400" /> +{showEncounter.echoReward} Echoes</span>
               </div>
@@ -641,22 +648,22 @@ export default function ChroniclesTravel() {
 
         {showArrival && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 bg-black flex items-center justify-center" onClick={() => setShowArrival(null)}>
+            className="fixed inset-0 z-50 bg-black flex items-center justify-center px-6" onClick={() => setShowArrival(null)}>
             <motion.div initial={{ scale: 1.1, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ duration: 1.5, ease: "easeOut" }}
-              className="text-center max-w-lg px-8" data-testid="modal-arrival">
+              className="text-center max-w-lg w-full" data-testid="modal-arrival">
               <motion.div initial={{ y: 30, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.5 }}>
-                <Sparkles className="w-16 h-16 text-cyan-400 mx-auto mb-6 animate-pulse" />
+                <Sparkles className="w-12 h-12 sm:w-16 sm:h-16 text-cyan-400 mx-auto mb-4 sm:mb-6 animate-pulse" />
               </motion.div>
               <motion.h2 initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1 }}
-                className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-4">
+                className="text-2xl sm:text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-3 sm:mb-4">
                 You Have Arrived
               </motion.h2>
               <motion.p initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 1.5 }}
-                className="text-lg text-slate-300 leading-relaxed italic">
+                className="text-sm sm:text-lg text-slate-300 leading-relaxed italic">
                 {showArrival.cinematic}
               </motion.p>
               <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 3 }}
-                className="text-sm text-slate-500 mt-8">Click anywhere to continue</motion.p>
+                className="text-xs sm:text-sm text-slate-500 mt-6 sm:mt-8">Tap anywhere to continue</motion.p>
             </motion.div>
           </motion.div>
         )}

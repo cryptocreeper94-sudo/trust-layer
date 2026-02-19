@@ -67,7 +67,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 }
 
 const getPlayUserId = (req: any): string | null => {
-  return req.chroniclesUser?.id || req.chroniclesAccount?.userId || req.chroniclesAccount?.id || req.query?.userId as string || null;
+  return req.chroniclesUser?.id || req.chroniclesAccount?.userId || req.chroniclesAccount?.id || null;
 };
 
 const clamp = (val: number, min: number, max: number) => Math.min(max, Math.max(min, val));
@@ -1265,6 +1265,329 @@ export function registerChroniclesChatRoutes(app: Express) {
     } catch (error: any) {
       console.error("Voice train error:", error);
       res.status(500).json({ error: error.message || "Failed to start voice training" });
+    }
+  });
+
+  const STARTER_CITIES = [
+    { id: "nashville", name: "Nashville", state: "TN", desc: "Music City — where creativity meets Southern hospitality", zone: "Downtown Nashville" },
+    { id: "austin", name: "Austin", state: "TX", desc: "Live Music Capital — keep it weird, keep it real", zone: "Downtown Austin" },
+    { id: "denver", name: "Denver", state: "CO", desc: "Mile High City — where the mountains meet ambition", zone: "LoDo District" },
+    { id: "portland", name: "Portland", state: "OR", desc: "Rose City — sustainability meets innovation", zone: "Pearl District" },
+    { id: "atlanta", name: "Atlanta", state: "GA", desc: "The A — culture, hip-hop, and Southern charm", zone: "Midtown Atlanta" },
+    { id: "chicago", name: "Chicago", state: "IL", desc: "The Windy City — deep dish dreams and lakefront living", zone: "River North" },
+    { id: "seattle", name: "Seattle", state: "WA", desc: "Emerald City — tech, coffee, and Pacific Northwest vibes", zone: "Capitol Hill" },
+    { id: "miami", name: "Miami", state: "FL", desc: "Magic City — art deco, ocean breeze, Latin fusion", zone: "Wynwood" },
+    { id: "new_york", name: "New York", state: "NY", desc: "The Big Apple — if you can make it here...", zone: "Brooklyn Heights" },
+    { id: "los_angeles", name: "Los Angeles", state: "CA", desc: "City of Angels — dreams, sun, and endless possibility", zone: "Silver Lake" },
+    { id: "new_orleans", name: "New Orleans", state: "LA", desc: "The Big Easy — jazz, soul food, and deep history", zone: "French Quarter" },
+    { id: "philadelphia", name: "Philadelphia", state: "PA", desc: "City of Brotherly Love — where it all began", zone: "Old City" },
+    { id: "san_francisco", name: "San Francisco", state: "CA", desc: "The Golden City — innovation on the bay", zone: "Mission District" },
+    { id: "detroit", name: "Detroit", state: "MI", desc: "Motor City — resilience, rebirth, and Motown", zone: "Midtown Detroit" },
+    { id: "phoenix", name: "Phoenix", state: "AZ", desc: "Valley of the Sun — desert dreams and desert storms", zone: "Roosevelt Row" },
+  ];
+
+  const STARTER_ITEMS = [
+    { id: "phone", name: "Smartphone", emoji: "📱", desc: "Your connection to the world", category: "essential" },
+    { id: "keys", name: "House Keys", emoji: "🔑", desc: "Keys to your new starter home", category: "essential" },
+    { id: "wallet", name: "Digital Wallet", emoji: "💳", desc: "500 Echoes loaded and ready", category: "essential" },
+    { id: "backpack", name: "Backpack", emoji: "🎒", desc: "For carrying supplies", category: "gear" },
+    { id: "journal", name: "Chronicle Journal", emoji: "📓", desc: "Records your decisions and legacy", category: "special" },
+    { id: "compass", name: "Portal Compass", emoji: "🧭", desc: "Points toward era portals when they unlock", category: "special" },
+  ];
+
+  app.get("/api/chronicles/portal-entry/status", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Auth required" });
+
+      let [state] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, userId)).limit(1);
+
+      if (!state) {
+        const [created] = await db.insert(chroniclesGameState).values({
+          userId,
+          name: req.chroniclesAccount?.username || "Traveler",
+        }).returning();
+        state = created;
+      }
+
+      res.json({
+        portalCompleted: state.portalCompleted,
+        homeCity: state.homeCity,
+        echoBalance: state.echoBalance,
+        level: state.level,
+        cities: STARTER_CITIES,
+      });
+    } catch (error: any) {
+      console.error("Portal status error:", error);
+      res.status(500).json({ error: "Failed to get portal status" });
+    }
+  });
+
+  app.post("/api/chronicles/portal-entry/enter", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Auth required" });
+      const { cityId } = req.body;
+
+      const city = STARTER_CITIES.find(c => c.id === cityId);
+      if (!city) return res.status(400).json({ error: "Invalid city" });
+
+      let [state] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, userId)).limit(1);
+
+      if (!state) {
+        const [created] = await db.insert(chroniclesGameState).values({
+          userId,
+          name: req.chroniclesAccount?.username || "Traveler",
+        }).returning();
+        state = created;
+      }
+
+      if (state.portalCompleted) {
+        return res.json({ alreadyCompleted: true, homeCity: state.homeCity, echoBalance: state.echoBalance });
+      }
+
+      const starterInventory = JSON.stringify(STARTER_ITEMS);
+      const now = new Date();
+      const arrivalLog = JSON.stringify([{
+        title: "Stepped Through the Portal",
+        description: `You arrived in ${city.name}, ${city.state}. A new life begins in the ${city.zone}.`,
+        xpEarned: 100,
+        shellsEarned: 0,
+        timestamp: now.toISOString(),
+      }, {
+        title: "Received Starter Kit",
+        description: "Portal Compass, Chronicle Journal, Backpack, and 500 Echoes",
+        xpEarned: 0,
+        shellsEarned: 0,
+        timestamp: now.toISOString(),
+      }]);
+
+      const [updated] = await db.update(chroniclesGameState)
+        .set({
+          portalCompleted: true,
+          homeCity: cityId,
+          echoBalance: 500,
+          inventory: starterInventory,
+          experience: (state.experience || 0) + 100,
+          lastOfflineCheck: now,
+          lastPlayedAt: now,
+          gameLog: arrivalLog,
+          updatedAt: now,
+        })
+        .where(eq(chroniclesGameState.userId, userId))
+        .returning();
+
+      const playerName = req.chroniclesAccount?.firstName || req.chroniclesAccount?.username || "Traveler";
+
+      res.json({
+        success: true,
+        city,
+        playerName,
+        echoBalance: 500,
+        inventory: STARTER_ITEMS,
+        xpEarned: 100,
+        cinematic: `The portal light fades behind you. You blink against the sudden warmth of a ${city.state === "FL" || city.state === "TX" || city.state === "AZ" ? "blazing" : "gentle"} afternoon sun. The sounds of ${city.name} wash over you — ${
+          city.id === "nashville" ? "distant guitar strings drifting from Broadway, the hum of traffic on 2nd Avenue" :
+          city.id === "austin" ? "live music bleeding from Sixth Street, the click of food truck windows opening" :
+          city.id === "new_york" ? "taxi horns blaring, the rumble of the subway beneath your feet, a thousand conversations" :
+          city.id === "los_angeles" ? "palm trees rustling in the breeze, the distant roar of the 405" :
+          city.id === "chicago" ? "the L train rattling overhead, wind off the lake carrying the scent of deep dish" :
+          city.id === "miami" ? "reggaeton pulsing from a passing car, ocean salt on the breeze" :
+          city.id === "seattle" ? "rain on the pavement, espresso machines hissing, ferry horns in the distance" :
+          city.id === "denver" ? "the crisp mountain air, skateboards on concrete, craft beer conversations" :
+          city.id === "portland" ? "bicycle bells, the aroma of artisan coffee, street musicians finding their groove" :
+          city.id === "atlanta" ? "trap beats from passing cars, cicadas in the peach trees, construction cranes turning" :
+          city.id === "new_orleans" ? "brass bands echoing through the Quarter, the sweet smell of beignets and chicory coffee" :
+          city.id === "philadelphia" ? "cheesesteaks sizzling, church bells ringing, the echo of history in cobblestone streets" :
+          city.id === "san_francisco" ? "cable car bells clanging, fog rolling through the Golden Gate, tech chatter in every cafe" :
+          city.id === "detroit" ? "Motown rhythms from an open window, the hum of electric vehicles, the pulse of rebirth" :
+          "the city alive around you, full of possibility"
+        }. You check your pocket — a phone, house keys to a place in the ${city.zone}, and a digital wallet showing 500 Echoes. Your new life starts now.`,
+      });
+    } catch (error: any) {
+      console.error("Portal entry error:", error);
+      res.status(500).json({ error: error.message || "Failed to enter portal" });
+    }
+  });
+
+  app.get("/api/chronicles/world/offline-summary", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Auth required" });
+
+      const [state] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, userId)).limit(1);
+
+      if (!state || !state.lastOfflineCheck) {
+        return res.json({ events: [], timePassed: 0, summary: null });
+      }
+
+      const lastCheck = new Date(state.lastOfflineCheck);
+      const now = new Date();
+      const hoursOffline = Math.floor((now.getTime() - lastCheck.getTime()) / (1000 * 60 * 60));
+
+      if (hoursOffline < 1) {
+        return res.json({ events: [], timePassed: 0, summary: null });
+      }
+
+      const pendingEvents: any[] = [];
+      const city = STARTER_CITIES.find(c => c.id === state.homeCity) || STARTER_CITIES[0];
+
+      if (hoursOffline >= 4) {
+        pendingEvents.push({
+          id: `offline_mail_${Date.now()}`,
+          type: "mail",
+          title: "You have mail",
+          description: `While you were away, a letter arrived at your place in ${city.zone}. Looks like a community notice about upcoming changes in the neighborhood.`,
+          echoReward: 5,
+          timestamp: now.toISOString(),
+        });
+      }
+
+      if (hoursOffline >= 8) {
+        pendingEvents.push({
+          id: `offline_neighbor_${Date.now()}`,
+          type: "neighbor",
+          title: "Neighbor stopped by",
+          description: `Your neighbor knocked while you were out. They left a note: "Wanted to introduce myself. Hope to catch you around!"`,
+          echoReward: 10,
+          timestamp: now.toISOString(),
+        });
+      }
+
+      if (hoursOffline >= 12) {
+        pendingEvents.push({
+          id: `offline_opportunity_${Date.now()}`,
+          type: "opportunity",
+          title: "Local opportunity",
+          description: `A flyer was left on your door about a community project looking for volunteers in ${city.name}. Could be a way to meet people and build reputation.`,
+          echoReward: 15,
+          timestamp: now.toISOString(),
+        });
+      }
+
+      if (hoursOffline >= 24) {
+        pendingEvents.push({
+          id: `offline_event_${Date.now()}`,
+          type: "city_event",
+          title: `${city.name} City Event`,
+          description: `A ${["block party", "street festival", "community market", "neighborhood cleanup", "local concert"][Math.floor(Math.random() * 5)]} happened in ${city.zone} while you were away. Word is it was quite the scene.`,
+          echoReward: 25,
+          timestamp: now.toISOString(),
+        });
+      }
+
+      const summary = hoursOffline >= 4
+        ? `You've been away for ${hoursOffline >= 24 ? `${Math.floor(hoursOffline / 24)} day${Math.floor(hoursOffline / 24) > 1 ? "s" : ""} and ${hoursOffline % 24} hours` : `${hoursOffline} hours`}. Life in ${city.name} kept moving without you.`
+        : null;
+
+      await db.update(chroniclesGameState)
+        .set({
+          lastOfflineCheck: now,
+          pendingEvents: JSON.stringify(pendingEvents),
+          offlineSummary: summary,
+          updatedAt: now,
+        })
+        .where(eq(chroniclesGameState.userId, userId));
+
+      res.json({
+        events: pendingEvents,
+        timePassed: hoursOffline,
+        summary,
+        city: city.name,
+      });
+    } catch (error: any) {
+      console.error("Offline summary error:", error);
+      res.status(500).json({ error: "Failed to get offline summary" });
+    }
+  });
+
+  app.post("/api/chronicles/world/acknowledge-events", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Auth required" });
+
+      const { eventIds } = req.body;
+      if (!Array.isArray(eventIds)) return res.status(400).json({ error: "Invalid event IDs" });
+
+      const [state] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, userId)).limit(1);
+      if (!state) return res.status(404).json({ error: "No game state" });
+
+      const pending = JSON.parse(state.pendingEvents || '[]');
+      const acknowledged = pending.filter((e: any) => eventIds.includes(e.id));
+      const remaining = pending.filter((e: any) => !eventIds.includes(e.id));
+      const totalEchoes = acknowledged.reduce((sum: number, e: any) => sum + (e.echoReward || 0), 0);
+
+      const existingLog = JSON.parse(state.gameLog || '[]');
+      const newEntries = acknowledged.map((e: any) => ({
+        title: e.title,
+        description: e.description,
+        xpEarned: 0,
+        shellsEarned: 0,
+        timestamp: new Date().toISOString(),
+      }));
+
+      await db.update(chroniclesGameState)
+        .set({
+          pendingEvents: JSON.stringify(remaining),
+          echoBalance: (state.echoBalance || 0) + totalEchoes,
+          offlineSummary: null,
+          gameLog: JSON.stringify([...existingLog, ...newEntries].slice(-50)),
+          updatedAt: new Date(),
+        })
+        .where(eq(chroniclesGameState.userId, userId));
+
+      res.json({ success: true, echoesEarned: totalEchoes, newBalance: (state.echoBalance || 0) + totalEchoes });
+    } catch (error: any) {
+      console.error("Acknowledge events error:", error);
+      res.status(500).json({ error: "Failed to acknowledge events" });
+    }
+  });
+
+  app.post("/api/chronicles/economy/spend", isChroniclesAuthenticated, async (req: any, res: Response) => {
+    try {
+      const userId = getPlayUserId(req);
+      if (!userId) return res.status(401).json({ error: "Auth required" });
+
+      const { amount, itemId, itemName, category } = req.body;
+      if (!amount || amount <= 0) return res.status(400).json({ error: "Invalid amount" });
+
+      const [state] = await db.select().from(chroniclesGameState)
+        .where(eq(chroniclesGameState.userId, userId)).limit(1);
+      if (!state) return res.status(404).json({ error: "No game state" });
+      if ((state.echoBalance || 0) < amount) return res.status(400).json({ error: "Insufficient Echoes", balance: state.echoBalance });
+
+      const inventory = JSON.parse(state.inventory || '[]');
+      if (itemId) {
+        inventory.push({ id: itemId, name: itemName || itemId, category: category || "purchase", acquiredAt: new Date().toISOString() });
+      }
+
+      const existingLog = JSON.parse(state.gameLog || '[]');
+      existingLog.push({
+        title: `Purchased ${itemName || "item"}`,
+        description: `Spent ${amount} Echoes${category ? ` at the ${category}` : ""}`,
+        xpEarned: 10,
+        shellsEarned: 0,
+        timestamp: new Date().toISOString(),
+      });
+
+      await db.update(chroniclesGameState)
+        .set({
+          echoBalance: (state.echoBalance || 0) - amount,
+          inventory: JSON.stringify(inventory),
+          experience: (state.experience || 0) + 10,
+          gameLog: JSON.stringify(existingLog.slice(-50)),
+          updatedAt: new Date(),
+        })
+        .where(eq(chroniclesGameState.userId, userId));
+
+      res.json({ success: true, newBalance: (state.echoBalance || 0) - amount, inventory });
+    } catch (error: any) {
+      console.error("Economy spend error:", error);
+      res.status(500).json({ error: "Failed to process purchase" });
     }
   });
 }

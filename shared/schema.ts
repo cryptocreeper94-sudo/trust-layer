@@ -2901,6 +2901,14 @@ export const chroniclesGameState = pgTable("chronicles_game_state", {
   longestStreak: integer("longest_streak").notNull().default(0),
   lastPlayedAt: timestamp("last_played_at"),
   
+  portalCompleted: boolean("portal_completed").notNull().default(false),
+  homeCity: text("home_city"),
+  echoBalance: integer("echo_balance").notNull().default(0),
+  inventory: text("inventory").notNull().default('[]'),
+  lastOfflineCheck: timestamp("last_offline_check"),
+  pendingEvents: text("pending_events").notNull().default('[]'),
+  offlineSummary: text("offline_summary"),
+
   gameLog: text("game_log").notNull().default('[]'),
   npcRelationships: text("npc_relationships").notNull().default('{}'),
   

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { getChroniclesSession } from "./chronicles-login";
 import { ChroniclesChatPanel } from "@/components/chronicles-chat-panel";
 import {
@@ -20,7 +20,7 @@ import {
   TrendingUp, Activity, Flame, Gift, Target,
   MessageCircle, Volume2, Loader2, Award, Play, Lock,
   RotateCcw, ArrowRight, CheckCircle2, XCircle,
-  ShoppingBag, BookOpen, Bell,
+  ShoppingBag, BookOpen, Bell, Coins,
 } from "lucide-react";
 
 function WorldClockBanner({ era }: { era: string }) {
@@ -648,6 +648,7 @@ function AchievementsList({ achievements }: { achievements: any[] }) {
 export default function ChroniclesPlay() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const [, navigate] = useLocation();
   const [selectedEra, setSelectedEra] = useState<"modern" | "medieval" | "wildwest">("modern");
   const [currentScenario, setCurrentScenario] = useState<any>(null);
   const [decisionResult, setDecisionResult] = useState<any>(null);
@@ -670,6 +671,15 @@ export default function ChroniclesPlay() {
     },
     staleTime: 10000,
   });
+
+  useEffect(() => {
+    if (!stateLoading && gameState) {
+      const state = gameState?.state || gameState?.gameState;
+      if (state && !state.portalCompleted) {
+        navigate("/chronicles/enter");
+      }
+    }
+  }, [stateLoading, gameState, navigate]);
 
   const { data: achievementsData } = useQuery({
     queryKey: ["/api/chronicles/play/achievements"],
@@ -820,6 +830,11 @@ export default function ChroniclesPlay() {
                     <span className="flex items-center gap-1">
                       🐚 {state.shellsEarned || 0}
                     </span>
+                    {state.echoBalance > 0 && (
+                      <span className="flex items-center gap-1 text-amber-400">
+                        <Coins className="w-3 h-3" /> {state.echoBalance} E
+                      </span>
+                    )}
                   </div>
                 )}
               </div>
