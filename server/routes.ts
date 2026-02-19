@@ -3926,7 +3926,7 @@ export async function registerRoutes(
           "GET /api/domains/check/:name": "Check domain availability"
         }
       },
-      cors: ["tlid.io", "dwtl.io", "darkwavestudios.io", "darkwavegames.io", "yourlegacy.io", "chronochat.io"],
+      cors: ["tlid.io", "dwtl.io", "darkwavestudios.io", "darkwavegames.io", "yourlegacy.io", "chronochat.io", "intothevoid.app"],
       integration: `const response = await fetch('https://tlid.io/api/auth/firebase-sync', {
   method: 'POST',
   headers: {
@@ -9030,7 +9030,8 @@ const { trustLayerId } = await response.json();`
     "darkwave", "dw", "dwsc", "chronochat", "chrono", "vedasolus", "veda", 
     "strikeagent", "strike", "yourlegacy", "legacy", "signal", "sig",
     "guardian", "pulse", "jason", "team", "admin", "owner", "official",
-    "darkwavestudios", "darkwavegames", "trustlayer", "trust"
+    "darkwavestudios", "darkwavegames", "trustlayer", "trust",
+    "intothevoid", "thevoid", "void"
   ];
 
   app.get("/api/domains/search/:name", async (req, res) => {
@@ -9148,7 +9149,8 @@ const { trustLayerId } = await response.json();`
         "darkwave", "dw", "dwsc", "chronochat", "chrono", "vedasolus", "veda", 
         "strikeagent", "strike", "yourlegacy", "legacy", "signal", "sig",
         "guardian", "pulse", "jason", "team", "admin", "owner", "official",
-        "darkwavestudios", "darkwavegames", "trustlayer", "trust"
+        "darkwavestudios", "darkwavegames", "trustlayer", "trust",
+        "intothevoid", "thevoid", "void"
       ];
       const isEcosystemReserved = RESERVED_PREFIXES.some(prefix => normalizedName.startsWith(prefix));
       
@@ -22971,6 +22973,8 @@ const APP_URL_MAP: Record<string, string> = {
   "driver-connect": "https://happyeats.app",
   "happyeats": "https://happyeats.app",
   "tldriverconnect": "https://tldriverconnect.com",
+  "the-void": "https://intothevoid.app",
+  "intothevoid": "https://intothevoid.app",
 };
 
 async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
@@ -23289,13 +23293,13 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       id: "the-void",
       name: "The Void",
       category: "Entertainment",
-      description: "Immersive digital experiences and experimental interactive content. Step beyond the known into Trust Layer's creative frontier.",
-      hook: "Beyond the Known",
-      tags: ["Entertainment", "Immersive", "Creative", "Experimental"],
+      description: "Premium membership identity system. Blockchain-verified Void IDs, DW-STAMP hallmarks, and cross-ecosystem SSO for the Trust Layer network.",
+      hook: "Premium Membership Identity",
+      tags: ["Identity", "Premium", "Membership", "Blockchain"],
       gradient: "from-gray-800 to-black",
       verified: true,
       users: "DarkWave Verified",
-      url: "/the-void",
+      url: "https://intothevoid.app",
     },
     {
       id: "trust-layer",

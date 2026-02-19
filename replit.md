@@ -1,7 +1,7 @@
 # DarkWave Trust Layer - Replit Agent Guide
 
 ## Overview
-DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem designed as a Coordinated Trust Layer. Its purpose is to provide verified identity, accountability, and transparent audit trails for real business operations, moving beyond traditional blockchain focuses. The project includes the DarkWave Portal, a comprehensive React web application, and "DarkWave Chronicles," a parallel life simulation where players are themselves living in different historical eras. The core ambition is to deliver a fast, feature-rich trust infrastructure with a premium user experience and innovative gaming across six key domains: dwsc.io, darkwavegames.io, darkwavestudios.io, yourlegacy.io, tlid.io, and trustshield.tech.
+DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem designed as a Coordinated Trust Layer. Its purpose is to provide verified identity, accountability, and transparent audit trails for real business operations, moving beyond traditional blockchain focuses. The project includes the DarkWave Portal, a comprehensive React web application, and "DarkWave Chronicles," a parallel life simulation where players are themselves living in different historical eras. The core ambition is to deliver a fast, feature-rich trust infrastructure with a premium user experience and innovative gaming across seven key domains: dwsc.io, darkwavegames.io, darkwavestudios.io, yourlegacy.io, tlid.io, trustshield.tech, and intothevoid.app.
 
 ## User Preferences
 - Preferred communication style: Simple, everyday language
@@ -94,6 +94,7 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - `yourlegacy.io` — Chronicles (parallel life simulation)
 - `tlid.io` — Blockchain Domain Service (.tlid identity names)
 - `trustshield.tech` — Guardian Shield (enterprise security monitoring)
+- `intothevoid.app` — The Void (premium membership identity system)
 
 **External Ecosystem Apps (separate domains):**
 - `orbitstaffing.io` — ORBIT Staffing OS
@@ -116,7 +117,7 @@ DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (Po
 - `/signal-chat` — Signal Chat
 - `/wallet` — Trust Vault
 - `/my-hub` — Trust Home
-- `/the-void` — The Void
+- `/the-void` — The Void (also standalone at intothevoid.app)
 - `/torque` — Torque (automotive marketplace)
 
 **Hidden (not in public listings):**
