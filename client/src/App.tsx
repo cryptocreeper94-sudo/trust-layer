@@ -187,6 +187,7 @@ const ChroniclesTimePortal = lazy(() => import("@/pages/chronicles-time-portal")
 const ChroniclesLogin = lazy(() => import("@/pages/chronicles-login"));
 const ChroniclesBuilder = lazy(() => import("@/pages/chronicles-builder"));
 const ChroniclesWorld = lazy(() => import("@/pages/chronicles-world"));
+const ChroniclesTravel = lazy(() => import("@/pages/chronicles-travel"));
 const ChroniclesPlay = lazy(() => import("@/pages/chronicles-play"));
 const ChroniclesTutorial = lazy(() => import("@/pages/chronicles-tutorial"));
 const ChroniclesMarketplace = lazy(() => import("@/pages/chronicles-marketplace"));
@@ -349,6 +350,7 @@ function ChronoRouter() {
         <Route path="/chronicles/time-portal" component={ChroniclesTimePortal} />
         <Route path="/chronicles/builder" component={ChroniclesBuilder} />
         <Route path="/chronicles/world" component={ChroniclesWorld} />
+        <Route path="/chronicles/travel" component={ChroniclesTravel} />
         <Route path="/chronicles/play" component={ChroniclesPlay} />
         <Route path="/chronicles/tutorial" component={ChroniclesTutorial} />
         <Route path="/chronicles/marketplace" component={ChroniclesMarketplace} />
@@ -604,6 +606,7 @@ function DWSCRouter() {
         <Route path="/chronicles/time-portal" component={ChroniclesTimePortal} />
         <Route path="/chronicles/builder" component={ChroniclesBuilder} />
         <Route path="/chronicles/world" component={ChroniclesWorld} />
+        <Route path="/chronicles/travel" component={ChroniclesTravel} />
         <Route path="/chronicles/play" component={ChroniclesPlay} />
         <Route path="/chronicles/tutorial" component={ChroniclesTutorial} />
         <Route path="/chronicles/marketplace" component={ChroniclesMarketplace} />

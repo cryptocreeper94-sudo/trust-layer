@@ -8061,3 +8061,399 @@ export type VoidBridgeLink = typeof voidBridgeLinks.$inferSelect;
 export type InsertVoidId = z.infer<typeof insertVoidIdSchema>;
 export type InsertVoidStamp = z.infer<typeof insertVoidStampSchema>;
 export type InsertVoidBridgeLink = z.infer<typeof insertVoidBridgeLinkSchema>;
+
+// =====================================================
+// CHRONICLES GEOGRAPHIC WORLD SYSTEM
+// Regions → Countries → States → Cities
+// Content-pack based expansion system
+// =====================================================
+
+export const chronicleWorldRegions = pgTable("chronicle_world_regions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  code: text("code").notNull().unique(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  contentPack: text("content_pack").notNull().default("base"),
+  seasonLabel: text("season_label"),
+  latitude: real("latitude").notNull().default(0),
+  longitude: real("longitude").notNull().default(0),
+  isUnlocked: boolean("is_unlocked").notNull().default(false),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleWorldRegionSchema = createInsertSchema(chronicleWorldRegions).omit({ id: true, createdAt: true });
+export type ChronicleWorldRegion = typeof chronicleWorldRegions.$inferSelect;
+export type InsertChronicleWorldRegion = z.infer<typeof insertChronicleWorldRegionSchema>;
+
+export const chronicleCountries = pgTable("chronicle_countries", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  code: text("code").notNull().unique(),
+  regionCode: text("region_code").notNull(),
+  name: text("name").notNull(),
+  medievalName: text("medieval_name"),
+  wildwestName: text("wildwest_name"),
+  modernName: text("modern_name"),
+  description: text("description").notNull(),
+  contentPack: text("content_pack").notNull().default("us"),
+  latitude: real("latitude").notNull().default(0),
+  longitude: real("longitude").notNull().default(0),
+  isUnlocked: boolean("is_unlocked").notNull().default(false),
+  isPlayable: boolean("is_playable").notNull().default(false),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleCountrySchema = createInsertSchema(chronicleCountries).omit({ id: true, createdAt: true });
+export type ChronicleCountry = typeof chronicleCountries.$inferSelect;
+export type InsertChronicleCountry = z.infer<typeof insertChronicleCountrySchema>;
+
+export const chronicleStates = pgTable("chronicle_states", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  code: text("code").notNull().unique(),
+  countryCode: text("country_code").notNull(),
+  name: text("name").notNull(),
+  medievalName: text("medieval_name"),
+  wildwestName: text("wildwest_name"),
+  modernName: text("modern_name"),
+  description: text("description").notNull(),
+  latitude: real("latitude").notNull().default(0),
+  longitude: real("longitude").notNull().default(0),
+  isPlayable: boolean("is_playable").notNull().default(false),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleStateSchema = createInsertSchema(chronicleStates).omit({ id: true, createdAt: true });
+export type ChronicleState = typeof chronicleStates.$inferSelect;
+export type InsertChronicleState = z.infer<typeof insertChronicleStateSchema>;
+
+export const chronicleCities = pgTable("chronicle_cities", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  code: text("code").notNull().unique(),
+  stateCode: text("state_code").notNull(),
+  countryCode: text("country_code").notNull(),
+  name: text("name").notNull(),
+  medievalName: text("medieval_name"),
+  wildwestName: text("wildwest_name"),
+  modernName: text("modern_name"),
+  medievalDescription: text("medieval_description"),
+  wildwestDescription: text("wildwest_description"),
+  modernDescription: text("modern_description"),
+  latitude: real("latitude").notNull(),
+  longitude: real("longitude").notNull(),
+  populationTier: text("population_tier").notNull().default("medium"),
+  isCapital: boolean("is_capital").notNull().default(false),
+  isStartingCity: boolean("is_starting_city").notNull().default(false),
+  isDiscoverable: boolean("is_discoverable").notNull().default(true),
+  isEasterEgg: boolean("is_easter_egg").notNull().default(false),
+  easterEggDescription: text("easter_egg_description"),
+  fogOfWar: boolean("fog_of_war").notNull().default(true),
+  arrivalCinematicMedieval: text("arrival_cinematic_medieval"),
+  arrivalCinematicWildwest: text("arrival_cinematic_wildwest"),
+  arrivalCinematicModern: text("arrival_cinematic_modern"),
+  ambientSoundMedieval: text("ambient_sound_medieval"),
+  ambientSoundWildwest: text("ambient_sound_wildwest"),
+  ambientSoundModern: text("ambient_sound_modern"),
+  imageUrlMedieval: text("image_url_medieval"),
+  imageUrlWildwest: text("image_url_wildwest"),
+  imageUrlModern: text("image_url_modern"),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleCitySchema = createInsertSchema(chronicleCities).omit({ id: true, createdAt: true });
+export type ChronicleCity = typeof chronicleCities.$inferSelect;
+export type InsertChronicleCity = z.infer<typeof insertChronicleCitySchema>;
+
+// =====================================================
+// CHRONICLES TRANSPORT & TRAVEL SYSTEM
+// Era-specific modes, route planning, travel sessions
+// =====================================================
+
+export const chronicleTransportModes = pgTable("chronicle_transport_modes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  code: text("code").notNull().unique(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  iconEmoji: text("icon_emoji").notNull().default("🚶"),
+  speedMph: real("speed_mph").notNull(),
+  costPerMile: real("cost_per_mile").notNull().default(0),
+  availableInMedieval: boolean("available_in_medieval").notNull().default(false),
+  availableInWildwest: boolean("available_in_wildwest").notNull().default(false),
+  availableInModern: boolean("available_in_modern").notNull().default(false),
+  routeType: text("route_type").notNull().default("road"),
+  comfortRating: integer("comfort_rating").notNull().default(3),
+  encounterFrequency: real("encounter_frequency").notNull().default(1.0),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleTransportModeSchema = createInsertSchema(chronicleTransportModes).omit({ id: true, createdAt: true });
+export type ChronicleTransportMode = typeof chronicleTransportModes.$inferSelect;
+export type InsertChronicleTransportMode = z.infer<typeof insertChronicleTransportModeSchema>;
+
+export const chronicleTravelRoutes = pgTable("chronicle_travel_routes", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  fromCityCode: text("from_city_code").notNull(),
+  toCityCode: text("to_city_code").notNull(),
+  distanceMiles: real("distance_miles").notNull(),
+  routeType: text("route_type").notNull().default("road"),
+  difficulty: integer("difficulty").notNull().default(1),
+  sceneryRating: integer("scenery_rating").notNull().default(3),
+  dangerRating: integer("danger_rating").notNull().default(1),
+  medievalDescription: text("medieval_description"),
+  wildwestDescription: text("wildwest_description"),
+  modernDescription: text("modern_description"),
+  intermediateStops: text("intermediate_stops"),
+  availableInMedieval: boolean("available_in_medieval").notNull().default(true),
+  availableInWildwest: boolean("available_in_wildwest").notNull().default(true),
+  availableInModern: boolean("available_in_modern").notNull().default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleTravelRouteSchema = createInsertSchema(chronicleTravelRoutes).omit({ id: true, createdAt: true });
+export type ChronicleTravelRoute = typeof chronicleTravelRoutes.$inferSelect;
+export type InsertChronicleTravelRoute = z.infer<typeof insertChronicleTravelRouteSchema>;
+
+export const chronicleTravelSessions = pgTable("chronicle_travel_sessions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  characterId: varchar("character_id").notNull(),
+  era: text("era").notNull(),
+  routeId: varchar("route_id").notNull(),
+  transportModeCode: text("transport_mode_code").notNull(),
+  fromCityCode: text("from_city_code").notNull(),
+  toCityCode: text("to_city_code").notNull(),
+  distanceMiles: real("distance_miles").notNull(),
+  speedMph: real("speed_mph").notNull(),
+  travelType: text("travel_type").notNull().default("realtime"),
+  status: text("status").notNull().default("in_progress"),
+  progressPercent: real("progress_percent").notNull().default(0),
+  currentMileMarker: real("current_mile_marker").notNull().default(0),
+  echoCost: integer("echo_cost").notNull().default(0),
+  xpEarned: integer("xp_earned").notNull().default(0),
+  encountersTriggered: integer("encounters_triggered").notNull().default(0),
+  startedAt: timestamp("started_at").defaultNow().notNull(),
+  estimatedArrival: timestamp("estimated_arrival"),
+  completedAt: timestamp("completed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleTravelSessionSchema = createInsertSchema(chronicleTravelSessions).omit({ id: true, createdAt: true, startedAt: true });
+export type ChronicleTravelSession = typeof chronicleTravelSessions.$inferSelect;
+export type InsertChronicleTravelSession = z.infer<typeof insertChronicleTravelSessionSchema>;
+
+// =====================================================
+// CHRONICLES TRAVEL ENCOUNTERS
+// Random events during journeys
+// =====================================================
+
+export const chronicleTravelEncounters = pgTable("chronicle_travel_encounters", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  travelSessionId: varchar("travel_session_id").notNull(),
+  userId: text("user_id").notNull(),
+  era: text("era").notNull(),
+  encounterType: text("encounter_type").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  choices: text("choices").notNull().default("[]"),
+  choiceMade: text("choice_made"),
+  outcome: text("outcome"),
+  xpReward: integer("xp_reward").notNull().default(0),
+  echoReward: integer("echo_reward").notNull().default(0),
+  reputationChange: integer("reputation_change").notNull().default(0),
+  mileMarker: real("mile_marker").notNull().default(0),
+  isResolved: boolean("is_resolved").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleTravelEncounterSchema = createInsertSchema(chronicleTravelEncounters).omit({ id: true, createdAt: true });
+export type ChronicleTravelEncounter = typeof chronicleTravelEncounters.$inferSelect;
+export type InsertChronicleTravelEncounter = z.infer<typeof insertChronicleTravelEncounterSchema>;
+
+// =====================================================
+// CHRONICLES CITY NPC TEMPLATES
+// Template-driven NPC generation per city/era
+// =====================================================
+
+export const chronicleNpcTemplates = pgTable("chronicle_npc_templates", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  code: text("code").notNull().unique(),
+  archetype: text("archetype").notNull(),
+  medievalRole: text("medieval_role"),
+  wildwestRole: text("wildwest_role"),
+  modernRole: text("modern_role"),
+  personalityTraits: text("personality_traits").notNull().default("[]"),
+  defaultFaction: text("default_faction"),
+  dialogueThemes: text("dialogue_themes").notNull().default("[]"),
+  questHooks: text("quest_hooks").notNull().default("[]"),
+  defaultDisposition: integer("default_disposition").notNull().default(50),
+  isCompanionEligible: boolean("is_companion_eligible").notNull().default(false),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleNpcTemplateSchema = createInsertSchema(chronicleNpcTemplates).omit({ id: true, createdAt: true });
+export type ChronicleNpcTemplate = typeof chronicleNpcTemplates.$inferSelect;
+export type InsertChronicleNpcTemplate = z.infer<typeof insertChronicleNpcTemplateSchema>;
+
+export const chronicleCityNpcs = pgTable("chronicle_city_npcs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  cityCode: text("city_code").notNull(),
+  templateCode: text("template_code").notNull(),
+  era: text("era").notNull(),
+  name: text("name").notNull(),
+  title: text("title"),
+  backstory: text("backstory"),
+  personality: text("personality").notNull().default("{}"),
+  factionId: varchar("faction_id"),
+  disposition: integer("disposition").notNull().default(50),
+  isCompanion: boolean("is_companion").notNull().default(false),
+  isAlive: boolean("is_alive").notNull().default(true),
+  location: text("location").notNull().default("town_center"),
+  schedule: text("schedule").notNull().default("{}"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleCityNpcSchema = createInsertSchema(chronicleCityNpcs).omit({ id: true, createdAt: true });
+export type ChronicleCityNpc = typeof chronicleCityNpcs.$inferSelect;
+export type InsertChronicleCityNpc = z.infer<typeof insertChronicleCityNpcSchema>;
+
+// =====================================================
+// CHRONICLES LEGACY & ACHIEVEMENT SYSTEM
+// Cross-era legacy tracking, achievement stamps
+// =====================================================
+
+export const chronicleLegacyScores = pgTable("chronicle_legacy_scores", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull().unique(),
+  totalScore: integer("total_score").notNull().default(0),
+  erasPlayed: integer("eras_played").notNull().default(0),
+  citiesVisited: integer("cities_visited").notNull().default(0),
+  decisionsRecorded: integer("decisions_recorded").notNull().default(0),
+  questsCompleted: integer("quests_completed").notNull().default(0),
+  npcRelationshipsBuilt: integer("npc_relationships_built").notNull().default(0),
+  travelMilesLogged: real("travel_miles_logged").notNull().default(0),
+  encountersResolved: integer("encounters_resolved").notNull().default(0),
+  factionsJoined: integer("factions_joined").notNull().default(0),
+  legacyTitle: text("legacy_title").notNull().default("Newcomer"),
+  legacyRank: integer("legacy_rank").notNull().default(1),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleLegacyScoreSchema = createInsertSchema(chronicleLegacyScores).omit({ id: true, createdAt: true, updatedAt: true });
+export type ChronicleLegacyScore = typeof chronicleLegacyScores.$inferSelect;
+export type InsertChronicleLegacyScore = z.infer<typeof insertChronicleLegacyScoreSchema>;
+
+export const chronicleAchievementStamps = pgTable("chronicle_achievement_stamps", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  code: text("code").notNull().unique(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  category: text("category").notNull().default("exploration"),
+  iconEmoji: text("icon_emoji").notNull().default("🏛️"),
+  rarity: text("rarity").notNull().default("common"),
+  medievalStyle: text("medieval_style"),
+  wildwestStyle: text("wildwest_style"),
+  modernStyle: text("modern_style"),
+  xpReward: integer("xp_reward").notNull().default(50),
+  echoReward: integer("echo_reward").notNull().default(10),
+  isHidden: boolean("is_hidden").notNull().default(false),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleAchievementStampSchema = createInsertSchema(chronicleAchievementStamps).omit({ id: true, createdAt: true });
+export type ChronicleAchievementStamp = typeof chronicleAchievementStamps.$inferSelect;
+export type InsertChronicleAchievementStamp = z.infer<typeof insertChronicleAchievementStampSchema>;
+
+export const chroniclePlayerStamps = pgTable("chronicle_player_stamps", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  stampCode: text("stamp_code").notNull(),
+  era: text("era").notNull(),
+  cityCode: text("city_code"),
+  earnedAt: timestamp("earned_at").defaultNow().notNull(),
+  shareableImageUrl: text("shareable_image_url"),
+});
+
+export const insertChroniclePlayerStampSchema = createInsertSchema(chroniclePlayerStamps).omit({ id: true, earnedAt: true });
+export type ChroniclePlayerStamp = typeof chroniclePlayerStamps.$inferSelect;
+export type InsertChroniclePlayerStamp = z.infer<typeof insertChroniclePlayerStampSchema>;
+
+export const chronicleCityReputations = pgTable("chronicle_city_reputations", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  cityCode: text("city_code").notNull(),
+  era: text("era").notNull(),
+  reputation: integer("reputation").notNull().default(0),
+  rank: text("rank").notNull().default("stranger"),
+  visitCount: integer("visit_count").notNull().default(0),
+  firstVisitAt: timestamp("first_visit_at"),
+  lastVisitAt: timestamp("last_visit_at"),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertChronicleCityReputationSchema = createInsertSchema(chronicleCityReputations).omit({ id: true, updatedAt: true });
+export type ChronicleCityReputation = typeof chronicleCityReputations.$inferSelect;
+export type InsertChronicleCityReputation = z.infer<typeof insertChronicleCityReputationSchema>;
+
+// =====================================================
+// CHRONICLES TRAVEL QUEST CHAINS
+// Multi-city quest chains requiring geographic travel
+// =====================================================
+
+export const chronicleTravelQuests = pgTable("chronicle_travel_quests", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  code: text("code").notNull().unique(),
+  name: text("name").notNull(),
+  description: text("description").notNull(),
+  era: text("era").notNull(),
+  difficulty: text("difficulty").notNull().default("normal"),
+  totalSteps: integer("total_steps").notNull().default(1),
+  xpReward: integer("xp_reward").notNull().default(100),
+  echoReward: integer("echo_reward").notNull().default(50),
+  stampReward: text("stamp_reward"),
+  isActive: boolean("is_active").notNull().default(true),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleTravelQuestSchema = createInsertSchema(chronicleTravelQuests).omit({ id: true, createdAt: true });
+export type ChronicleTravelQuest = typeof chronicleTravelQuests.$inferSelect;
+export type InsertChronicleTravelQuest = z.infer<typeof insertChronicleTravelQuestSchema>;
+
+export const chronicleTravelQuestSteps = pgTable("chronicle_travel_quest_steps", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  questCode: text("quest_code").notNull(),
+  stepNumber: integer("step_number").notNull(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  targetCityCode: text("target_city_code").notNull(),
+  objectiveType: text("objective_type").notNull().default("arrive"),
+  objectiveData: text("objective_data").notNull().default("{}"),
+  dialogueOnArrival: text("dialogue_on_arrival"),
+  xpReward: integer("xp_reward").notNull().default(25),
+  sortOrder: integer("sort_order").notNull().default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertChronicleTravelQuestStepSchema = createInsertSchema(chronicleTravelQuestSteps).omit({ id: true, createdAt: true });
+export type ChronicleTravelQuestStep = typeof chronicleTravelQuestSteps.$inferSelect;
+export type InsertChronicleTravelQuestStep = z.infer<typeof insertChronicleTravelQuestStepSchema>;
+
+export const chroniclePlayerTravelQuests = pgTable("chronicle_player_travel_quests", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  questCode: text("quest_code").notNull(),
+  currentStep: integer("current_step").notNull().default(1),
+  status: text("status").notNull().default("active"),
+  startedAt: timestamp("started_at").defaultNow().notNull(),
+  completedAt: timestamp("completed_at"),
+});
+
+export const insertChroniclePlayerTravelQuestSchema = createInsertSchema(chroniclePlayerTravelQuests).omit({ id: true, startedAt: true });
+export type ChroniclePlayerTravelQuest = typeof chroniclePlayerTravelQuests.$inferSelect;
+export type InsertChroniclePlayerTravelQuest = z.infer<typeof insertChroniclePlayerTravelQuestSchema>;
