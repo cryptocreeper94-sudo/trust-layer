@@ -31,8 +31,12 @@ import { getStripeSync } from "./stripeClient";
 import { predictionTrackingService } from "./services/pulse/predictionTrackingService";
 import { predictionLearningService } from "./services/pulse/predictionLearningService";
 import { startMembershipReconciliationScheduler } from "./membership-reconciliation-scheduler";
+// @ts-ignore
+import compression from "compression";
 
 const app = express();
+
+app.use(compression());
 
 // Firebase Auth reverse proxy - must be before other middleware
 // This allows Google Sign-In to work with custom domain by avoiding third-party cookie issues

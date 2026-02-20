@@ -101,7 +101,14 @@ export function serveStatic(app: Express) {
     }
   });
 
-  app.use(express.static(distPath));
+  app.use(express.static(distPath, {
+    maxAge: '0',
+    setHeaders: (res, filePath) => {
+      if (filePath.includes('/assets/') && /\-[a-zA-Z0-9]{8,}\.(js|css)$/.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      }
+    }
+  }));
   
   // Serve ebook assets from public/assets
   const publicAssetsPath = path.resolve(process.cwd(), "public/assets");

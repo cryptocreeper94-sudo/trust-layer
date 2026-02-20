@@ -10,6 +10,10 @@ packages = ["cargo", "freetype", "git-filter-repo", "lcms2", "libimagequant", "l
 localPort = 5000
 externalPort = 80
 
+[[ports]]
+localPort = 5003
+externalPort = 3000
+
 [env]
 PORT = "5000"
 
