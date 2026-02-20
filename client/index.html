@@ -95,8 +95,22 @@
       })();
     </script>
   </head>
-  <body>
-    <div id="root"></div>
+  <body style="background:#0a0f1e;margin:0">
+    <div id="root">
+      <div id="initial-loader" style="min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px">
+        <div style="width:40px;height:40px;border:3px solid #22d3ee;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite"></div>
+        <p style="color:#94a3b8;font-family:system-ui,sans-serif;font-size:14px;margin:0">Loading Trust Layer...</p>
+      </div>
+    </div>
+    <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+    <script>
+      window.addEventListener('error', function(e) {
+        var root = document.getElementById('root');
+        if (root && !root.querySelector('[data-reactroot]') && !root.querySelector('[data-testid]')) {
+          root.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:2rem"><div style="text-align:center;max-width:420px"><div style="font-size:48px;margin-bottom:16px">&#9888;</div><h1 style="font-size:22px;margin-bottom:12px;color:#22d3ee">Loading Issue</h1><p style="color:#94a3b8;margin-bottom:24px;line-height:1.6;font-family:system-ui">The app had trouble loading. This can happen with ad-blockers or slow connections. Try refreshing.</p><button onclick="if(window.caches)caches.keys().then(function(k){k.forEach(function(n){caches.delete(n)})});setTimeout(function(){location.reload()},200)" style="background:linear-gradient(135deg,#06b6d4,#8b5cf6);color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:16px;cursor:pointer;font-weight:600">Clear Cache &amp; Reload</button></div></div>';
+        }
+      });
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

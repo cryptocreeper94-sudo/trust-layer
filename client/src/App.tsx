@@ -1,4 +1,4 @@
-import { useEffect, useMemo, lazy, Suspense } from "react";
+import { useEffect, useMemo, lazy, Suspense, Component, type ReactNode } from "react";
 import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -14,6 +14,45 @@ import { GlobalSearch } from "@/components/global-search";
 import { SiteNav } from "@/components/site-nav";
 import { GamesNav } from "@/components/games-nav";
 import { Footer } from "@/components/footer";
+
+class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: Error | null }> {
+  constructor(props: { children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error: Error, info: any) {
+    console.error("[ErrorBoundary]", error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ minHeight: "100vh", background: "#0a0f1e", color: "#fff", fontFamily: "system-ui, sans-serif", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem" }}>
+          <div style={{ textAlign: "center", maxWidth: 420 }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>&#9888;</div>
+            <h1 style={{ fontSize: 22, marginBottom: 12, color: "#22d3ee" }}>Something went wrong</h1>
+            <p style={{ color: "#94a3b8", marginBottom: 24, lineHeight: 1.6 }}>
+              The app encountered an error loading. This can happen if your browser has an ad-blocker or firewall that blocks required services.
+            </p>
+            <button
+              data-testid="button-reload"
+              onClick={() => { if ('caches' in window) { caches.keys().then(k => k.forEach(n => caches.delete(n))); } setTimeout(() => window.location.reload(), 200); }}
+              style={{ background: "linear-gradient(135deg, #06b6d4, #8b5cf6)", color: "#fff", border: "none", borderRadius: 12, padding: "14px 32px", fontSize: 16, cursor: "pointer", fontWeight: 600 }}
+            >
+              Clear Cache &amp; Reload
+            </button>
+            <p style={{ color: "#64748b", fontSize: 12, marginTop: 16 }}>
+              {this.state.error?.message}
+            </p>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 // Critical pages - load immediately
 import Home from "@/pages/home";
@@ -738,20 +777,22 @@ function App() {
   const appType = useMemo(() => getAppFromHost(), []);
   
   return (
-    <QueryClientProvider client={queryClient}>
-      <WalletProvider>
-        <PreferencesProvider>
-          <NotificationsProvider>
-            <FavoritesProvider>
-              <TooltipProvider>
-                <Toaster />
-                <AppShell appType={appType} />
-              </TooltipProvider>
-            </FavoritesProvider>
-          </NotificationsProvider>
-        </PreferencesProvider>
-      </WalletProvider>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <WalletProvider>
+          <PreferencesProvider>
+            <NotificationsProvider>
+              <FavoritesProvider>
+                <TooltipProvider>
+                  <Toaster />
+                  <AppShell appType={appType} />
+                </TooltipProvider>
+              </FavoritesProvider>
+            </NotificationsProvider>
+          </PreferencesProvider>
+        </WalletProvider>
+      </QueryClientProvider>
+    </ErrorBoundary>
   );
 }
 

@@ -83,6 +83,12 @@ export function serveStatic(app: Express) {
     next();
   });
 
+  app.get("/sw.js", (req: Request, res: Response) => {
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Content-Type", "application/javascript");
+    res.sendFile(path.join(distPath, "sw.js"));
+  });
+
   app.get("/manifest.webmanifest", (req: Request, res: Response) => {
     const appConfig = (req as any).appConfig;
     const manifestPath = path.join(distPath, appConfig.manifest.replace("/", ""));
