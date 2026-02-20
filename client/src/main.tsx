@@ -2,6 +2,8 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
+(window as any).__tlScriptStarted = true;
+
 function getManifestForRoute(): string {
   const host = window.location.hostname.toLowerCase();
   const path = window.location.pathname.toLowerCase();
@@ -144,4 +146,5 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+(window as any).__tlLoaded = true;
 createRoot(document.getElementById("root")!).render(<App />);

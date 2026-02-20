@@ -6,14 +6,15 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { PreferencesProvider, NotificationsProvider } from "@/lib/store";
 import { WalletProvider } from "@/hooks/use-wallet";
-import { AIAssistant } from "@/components/ai-assistant";
 import { getAppFromHost } from "@/lib/app-config";
 import { FavoritesProvider } from "@/components/favorites-watchlist";
-import { FloatingChat } from "@/components/floating-chat";
-import { GlobalSearch } from "@/components/global-search";
-import { SiteNav } from "@/components/site-nav";
-import { GamesNav } from "@/components/games-nav";
-import { Footer } from "@/components/footer";
+
+const AIAssistant = lazy(() => import("@/components/ai-assistant").then(m => ({ default: m.AIAssistant })));
+const FloatingChat = lazy(() => import("@/components/floating-chat").then(m => ({ default: m.FloatingChat })));
+const GlobalSearch = lazy(() => import("@/components/global-search").then(m => ({ default: m.GlobalSearch })));
+const SiteNav = lazy(() => import("@/components/site-nav").then(m => ({ default: m.SiteNav })));
+const GamesNav = lazy(() => import("@/components/games-nav").then(m => ({ default: m.GamesNav })));
+const Footer = lazy(() => import("@/components/footer").then(m => ({ default: m.Footer })));
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: Error | null }> {
   constructor(props: { children: ReactNode }) {
@@ -54,13 +55,13 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
   }
 }
 
-// Critical pages - load immediately
-import Home from "@/pages/home";
 import NotFound from "@/pages/not-found";
-import Terms from "@/pages/terms";
-import DevelopersNote from "@/pages/developers-note";
-import VirtualCurrencyTerms from "@/pages/virtual-currency-terms";
-import Privacy from "@/pages/privacy";
+
+const Home = lazy(() => import("@/pages/home"));
+const Terms = lazy(() => import("@/pages/terms"));
+const DevelopersNote = lazy(() => import("@/pages/developers-note"));
+const VirtualCurrencyTerms = lazy(() => import("@/pages/virtual-currency-terms"));
+const Privacy = lazy(() => import("@/pages/privacy"));
 
 // Loading fallback component
 function PageLoader() {
@@ -762,23 +763,23 @@ function AppShell({ appType }: { appType: string }) {
 
   return (
     <>
-      {!isStandalonePWA && appType === "dwsc" && <SiteNav />}
-      {!isStandalonePWA && appType === "games" && <GamesNav />}
+      <Suspense fallback={null}>
+        {!isStandalonePWA && appType === "dwsc" && <SiteNav />}
+        {!isStandalonePWA && appType === "games" && <GamesNav />}
+      </Suspense>
       <Router />
-      {!hideFooter && <Footer />}
-      {!isStandalonePWA && appType === "dwsc" && <AIAssistant />}
-      {!isStandalonePWA && <FloatingChat />}
-      {!isStandalonePWA && <GlobalSearch />}
+      <Suspense fallback={null}>
+        {!hideFooter && <Footer />}
+        {!isStandalonePWA && appType === "dwsc" && <AIAssistant />}
+        {!isStandalonePWA && <FloatingChat />}
+        {!isStandalonePWA && <GlobalSearch />}
+      </Suspense>
     </>
   );
 }
 
 function App() {
   const appType = useMemo(() => getAppFromHost(), []);
-
-  useEffect(() => {
-    (window as any).__tlLoaded = true;
-  }, []);
 
   return (
     <ErrorBoundary>
