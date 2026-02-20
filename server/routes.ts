@@ -21321,6 +21321,135 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
   
   // ==============================================
+  // VEIL E-READER CHAPTERS API (server-side parsing)
+  // ==============================================
+
+  let cachedVeilChapters: any = null;
+
+  function parseVeilMarkdown(markdown: string) {
+    const lines = markdown.split('\n');
+    const chapters: { id: string; title: string; content: string; partTitle: string }[] = [];
+    let currentChapter: { id: string; title: string; content: string; partTitle: string } | null = null;
+    let currentContent: string[] = [];
+    let currentPart = "";
+    let inFrontMatter = true;
+    let frontMatterContent: string[] = [];
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+
+      if (line.match(/^# PART [IVXLC]+[-]?[A-Z]?:/i) || line.match(/^# PART (ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN|ELEVEN|TWELVE)[-]?[A-Z]?:/i)) {
+        currentPart = line.replace(/^# /, '').trim();
+        continue;
+      }
+
+      const chapterMatch = line.match(/^# (CHAPTER \d+[A-Z]?:.+)$/i);
+      const appendixMatch = line.match(/^# (APPENDIX[^:]*:.*)$/i) || line.match(/^# (APPENDIX.*)$/i);
+
+      if (chapterMatch || appendixMatch) {
+        inFrontMatter = false;
+        if (currentChapter) {
+          currentChapter.content = currentContent.join('\n').trim();
+          chapters.push(currentChapter);
+        }
+        const title = (chapterMatch ? chapterMatch[1] : appendixMatch![1]).trim();
+        const id = 'ch-' + title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').substring(0, 50);
+        if (appendixMatch && !currentPart.includes('APPENDIX')) {
+          currentPart = 'APPENDIX: Reference Materials';
+        }
+        currentChapter = { id, title, content: '', partTitle: currentPart };
+        currentContent = [];
+        continue;
+      }
+
+      if (line.match(/^## TABLE OF CONTENTS/i)) {
+        while (i < lines.length - 1 && !lines[i + 1].match(/^# PART/i)) { i++; }
+        continue;
+      }
+
+      if (inFrontMatter && !line.match(/^# PART/)) {
+        frontMatterContent.push(line);
+      }
+
+      if (currentChapter) {
+        currentContent.push(line);
+      }
+    }
+
+    if (currentChapter) {
+      currentChapter.content = currentContent.join('\n').trim();
+      chapters.push(currentChapter);
+    }
+
+    const frontMatter = {
+      id: 'front-matter',
+      title: 'Introduction & Front Matter',
+      content: frontMatterContent.join('\n').trim(),
+      partTitle: 'Front Matter'
+    };
+
+    const partMap = new Map<string, typeof chapters>();
+    partMap.set('Front Matter', [frontMatter]);
+
+    for (const chapter of chapters) {
+      const part = chapter.partTitle || 'Main Content';
+      if (!partMap.has(part)) partMap.set(part, []);
+      partMap.get(part)!.push(chapter);
+    }
+
+    const volumes: { id: string; title: string; subtitle: string; chapters: typeof chapters }[] = [];
+    let volumeIndex = 0;
+
+    for (const [partTitle, partChapters] of partMap.entries()) {
+      if (partChapters.length === 0) continue;
+      volumes.push({
+        id: `volume-${volumeIndex}`,
+        title: partTitle === 'Front Matter' ? 'Front Matter' : partTitle,
+        subtitle: partTitle === 'Front Matter'
+          ? 'Introduction, dedication, and author notes'
+          : `${partChapters.length} chapter${partChapters.length > 1 ? 's' : ''}`,
+        chapters: partChapters
+      });
+      volumeIndex++;
+    }
+
+    return volumes;
+  }
+
+  app.get("/api/veil/chapters", async (_req, res) => {
+    try {
+      if (cachedVeilChapters) {
+        return res.json(cachedVeilChapters);
+      }
+
+      const mdPaths = [
+        path.join(process.cwd(), "client", "public", "through-the-veil.md"),
+        path.join(process.cwd(), "public", "through-the-veil.md"),
+        path.join(process.cwd(), "dist", "public", "through-the-veil.md"),
+      ];
+
+      let mdContent = '';
+      for (const mdPath of mdPaths) {
+        if (fs.existsSync(mdPath)) {
+          mdContent = fs.readFileSync(mdPath, 'utf-8');
+          break;
+        }
+      }
+
+      if (!mdContent) {
+        return res.status(404).json({ error: "Ebook content not found" });
+      }
+
+      const volumes = parseVeilMarkdown(mdContent);
+      cachedVeilChapters = volumes;
+      res.json(volumes);
+    } catch (error: any) {
+      console.error("Veil chapters API error:", error);
+      res.status(500).json({ error: "Failed to parse ebook", details: error.message });
+    }
+  });
+
+  // ==============================================
   // EPUB GENERATION FOR THROUGH THE VEIL
   // ==============================================
   
@@ -21359,12 +21488,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.setHeader("Content-Length", stat.size.toString());
       res.setHeader("Accept-Ranges", "bytes");
       
-      const forceDownload = req.query.dl === '1';
-      if (forceDownload) {
-        res.setHeader("Content-Disposition", 'attachment; filename="Through-The-Veil.pdf"');
-      } else {
-        res.setHeader("Content-Disposition", 'inline; filename="Through-The-Veil.pdf"');
-      }
+      res.setHeader("Content-Disposition", 'attachment; filename="Through-The-Veil.pdf"');
       
       const stream = fs.createReadStream(pdfPath);
       stream.pipe(res);

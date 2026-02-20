@@ -109,113 +109,6 @@ type Volume = {
   chapters: Chapter[];
 };
 
-function parseMarkdownToChapters(markdown: string): Volume[] {
-  const lines = markdown.split('\n');
-  const chapters: Chapter[] = [];
-  let currentChapter: Chapter | null = null;
-  let currentContent: string[] = [];
-  let currentPart = "";
-  let inFrontMatter = true;
-  let frontMatterContent: string[] = [];
-  
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    
-    if (line.match(/^# PART [IVXLC]+[-]?[A-Z]?:/i) || line.match(/^# PART (ONE|TWO|THREE|FOUR|FIVE|SIX|SEVEN|EIGHT|NINE|TEN|ELEVEN|TWELVE)[-]?[A-Z]?:/i)) {
-      currentPart = line.replace(/^# /, '').trim();
-      continue;
-    }
-    
-    const chapterMatch = line.match(/^# (CHAPTER \d+[A-Z]?:.+)$/i);
-    const appendixMatch = line.match(/^# (APPENDIX[^:]*:.*)$/i) || line.match(/^# (APPENDIX.*)$/i);
-    
-    if (chapterMatch || appendixMatch) {
-      inFrontMatter = false;
-      
-      if (currentChapter) {
-        currentChapter.content = currentContent.join('\n').trim();
-        chapters.push(currentChapter);
-      }
-      
-      const title = (chapterMatch ? chapterMatch[1] : appendixMatch![1]).trim();
-      const id = 'ch-' + title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').substring(0, 50);
-      
-      if (appendixMatch && !currentPart.includes('APPENDIX')) {
-        currentPart = 'APPENDIX: Reference Materials';
-      }
-      
-      currentChapter = {
-        id,
-        title,
-        content: '',
-        partTitle: currentPart
-      };
-      currentContent = [];
-      continue;
-    }
-    
-    if (line.match(/^## TABLE OF CONTENTS/i)) {
-      while (i < lines.length - 1 && !lines[i + 1].match(/^# PART/i)) {
-        i++;
-      }
-      continue;
-    }
-    
-    if (inFrontMatter && !line.match(/^# PART/)) {
-      frontMatterContent.push(line);
-    }
-    
-    if (currentChapter) {
-      currentContent.push(line);
-    }
-  }
-  
-  if (currentChapter) {
-    currentChapter.content = currentContent.join('\n').trim();
-    chapters.push(currentChapter);
-  }
-  
-  const frontMatter: Chapter = {
-    id: 'front-matter',
-    title: 'Introduction & Front Matter',
-    content: frontMatterContent.join('\n').trim(),
-    partTitle: 'Front Matter'
-  };
-  
-  const partMap = new Map<string, Chapter[]>();
-  partMap.set('Front Matter', [frontMatter]);
-  
-  for (const chapter of chapters) {
-    const part = chapter.partTitle || 'Main Content';
-    if (!partMap.has(part)) {
-      partMap.set(part, []);
-    }
-    partMap.get(part)!.push(chapter);
-  }
-  
-  const volumes: Volume[] = [];
-  let volumeIndex = 0;
-  
-  const partEntries = Array.from(partMap.entries());
-  for (let i = 0; i < partEntries.length; i++) {
-    const partTitle = partEntries[i][0];
-    const partChapters = partEntries[i][1];
-    if (partChapters.length === 0) continue;
-    
-    volumes.push({
-      id: `volume-${volumeIndex}`,
-      title: partTitle === 'Front Matter' ? 'Front Matter' : partTitle,
-      subtitle: partTitle === 'Front Matter' 
-        ? 'Introduction, dedication, and author notes' 
-        : `${partChapters.length} chapter${partChapters.length > 1 ? 's' : ''}`,
-      chapters: partChapters
-    });
-    volumeIndex++;
-  }
-  
-  return volumes;
-}
-
 export default function VeilReader() {
   useVeilPWA();
   
@@ -241,17 +134,19 @@ export default function VeilReader() {
   useEffect(() => {
     async function loadEbook() {
       try {
-        const response = await fetch('/through-the-veil.md');
+        const response = await fetch('/api/veil/chapters');
         if (!response.ok) {
-          throw new Error('Failed to load ebook');
+          throw new Error(`Failed to load ebook: ${response.status}`);
         }
-        const markdown = await response.text();
-        const parsedVolumes = parseMarkdownToChapters(markdown);
+        const parsedVolumes = await response.json();
+        if (!Array.isArray(parsedVolumes) || parsedVolumes.length === 0) {
+          throw new Error('Invalid ebook data received');
+        }
         setVolumes(parsedVolumes);
         setLoading(false);
-      } catch (err) {
+      } catch (err: any) {
         console.error('Error loading ebook:', err);
-        setError('Failed to load ebook content');
+        setError(err?.message || 'Failed to load ebook content');
         setLoading(false);
       }
     }
@@ -576,7 +471,12 @@ export default function VeilReader() {
   };
 
   const handleDownloadPDF = () => {
-    window.open('/api/veil/pdf', '_blank');
+    const a = document.createElement('a');
+    a.href = '/api/veil/pdf';
+    a.download = 'Through-The-Veil.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   const navigateToUpdate = (volumeIndex?: number, chapterId?: string) => {

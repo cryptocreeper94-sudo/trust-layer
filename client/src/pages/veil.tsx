@@ -83,11 +83,21 @@ export default function Veil() {
   };
 
   const handleDownloadPDF = () => {
-    window.open('/api/veil/pdf', '_blank');
+    const a = document.createElement('a');
+    a.href = '/api/veil/pdf';
+    a.download = 'Through-The-Veil.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   const handleDownloadEPUB = () => {
-    window.open('/api/veil/epub', '_blank');
+    const a = document.createElement('a');
+    a.href = '/api/veil/epub';
+    a.download = 'Through-The-Veil.epub';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   useEffect(() => {
