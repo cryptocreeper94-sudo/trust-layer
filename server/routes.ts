@@ -23399,6 +23399,8 @@ const APP_URL_MAP: Record<string, string> = {
   "tldriverconnect": "https://tldriverconnect.com",
   "the-void": "https://intothevoid.app",
   "intothevoid": "https://intothevoid.app",
+  "verdara": "https://verdara.replit.app",
+  "arbora": "https://verdara.replit.app/arbora",
 };
 
 async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
@@ -23773,6 +23775,31 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       verified: true,
       users: "DarkWave Verified",
       url: "/academy",
+    },
+    {
+      id: "verdara",
+      name: "Verdara",
+      category: "Outdoor & Recreation",
+      description: "AI-powered outdoor recreation super-app with species identification, trail explorer, trip planner, living catalog of 170+ US locations, wood economy marketplace, and wild edibles guide.",
+      hook: "Your AI Outdoor Command Center",
+      tags: ["Outdoors", "AI", "Recreation", "Nature", "PWA"],
+      gradient: "from-emerald-500 to-green-700",
+      verified: true,
+      featured: true,
+      users: "DarkWave Verified",
+      url: "https://verdara.replit.app",
+    },
+    {
+      id: "arbora",
+      name: "Arbora",
+      category: "Services",
+      description: "Professional arborist business management PWA with CRM pipeline, job scheduling, estimates, invoicing, crew management, time tracking, inventory, and GarageBot equipment integration.",
+      hook: "Pro Arborist Business Suite",
+      tags: ["Arborist", "CRM", "Business", "Scheduling", "PWA"],
+      gradient: "from-amber-700 to-orange-900",
+      verified: true,
+      users: "DarkWave Verified",
+      url: "https://verdara.replit.app/arbora",
     },
   ];
 }

@@ -44,7 +44,7 @@ The UI/UX adheres to a "MANDATORY PREMIUM UI PROTOCOL," emphasizing a dark theme
 - **React Native Portability**: Guidelines for shared business logic, data fetching with TanStack Query, React hooks for state, NativeWind for styling, and separating logic from presentation.
 
 ### Ecosystem Domains & Subdomains
-The ecosystem spans 27 verified applications across primary domains (`dwsc.io`, `darkwavegames.io`, `darkwavestudios.io`, `yourlegacy.io`, `tlid.io`, `trustshield.tech`, `intothevoid.app`), external ecosystem apps (e.g., `orbitstaffing.io`, `garagebot.io`), and internal PWA routes (e.g., `/academy`, `/guardian-scanner`, `/signal-chat`).
+The ecosystem spans 30 verified applications across primary domains (`dwsc.io`, `darkwavegames.io`, `darkwavestudios.io`, `yourlegacy.io`, `tlid.io`, `trustshield.tech`, `intothevoid.app`), external ecosystem apps (e.g., `orbitstaffing.io`, `garagebot.io`, `verdara.replit.app`), and internal PWA routes (e.g., `/academy`, `/guardian-scanner`, `/signal-chat`). Verdara (App #28) is an AI-powered outdoor recreation super-app; Arbora (App #29) is a standalone arborist business management PWA running within Verdara at `/arbora/*`.
 
 ### Tokenomics
 - **Native Asset**: Signal (SIG), Total Supply: 1,000,000,000 SIG.
@@ -63,7 +63,7 @@ The ecosystem spans 27 verified applications across primary domains (`dwsc.io`, 
 
 ## Embeddable Ecosystem Widget
 
-The ecosystem includes a self-contained embeddable widget that any app (internal or partner) can add with a single script tag. It renders a floating button that opens a panel showing all 28+ ecosystem apps, live presale stats, and the user's SIG balance and subscription status when authenticated via SSO.
+The ecosystem includes a self-contained embeddable widget that any app (internal or partner) can add with a single script tag. It renders a floating button that opens a panel showing all 30 ecosystem apps, live presale stats, and the user's SIG balance and subscription status when authenticated via SSO.
 
 ### Embed Code (for any web app, React, or plain HTML)
 ```html

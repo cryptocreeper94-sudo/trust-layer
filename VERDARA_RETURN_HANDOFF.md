@@ -10,7 +10,7 @@ Before the per-service details, here is the **universal ecosystem widget** that 
 <script src="https://dwsc.io/api/ecosystem/widget.js"></script>
 ```
 
-This renders a floating action button that opens a panel showing all 28+ ecosystem apps, live presale stats, and the user's SIG balance & subscription status (when authenticated via SSO). It uses Shadow DOM so it won't conflict with your app's CSS.
+This renders a floating action button that opens a panel showing all 30 ecosystem apps, live presale stats, and the user's SIG balance & subscription status (when authenticated via SSO). It uses Shadow DOM so it won't conflict with your app's CSS.
 
 **Customizable base URL** (for dev/staging):
 ```html
@@ -342,7 +342,7 @@ ENDPOINTS:
   - Content-Type: application/javascript
   - Embed: <script src="https://dwsc.io/api/ecosystem/widget.js"></script>
 
-- GET /api/ecosystem/apps — List all 28+ ecosystem applications
+- GET /api/ecosystem/apps — List all 30 ecosystem applications (including Verdara #28, Arbora #29)
   - Output: Array of app objects
 
 - GET /api/ecosystem/connection — Health check / gateway info
@@ -398,6 +398,78 @@ ENDPOINTS:
 
 CORS: Full CORS support (Access-Control-Allow-Origin: *)
 CACHING: 5 min for components, 1 hour for loader script
+```
+
+---
+
+## 9. Verdara (App #28) — Outdoor Recreation Super-App
+
+```
+SERVICE NAME: Verdara
+APP NUMBER: #28
+API BASE URL: https://verdara.replit.app
+AUTHENTICATION METHOD: Custom email/password (bcryptjs), cookie-based sessions
+SUBSCRIPTION TIERS: Explorer (free), Trailblazer ($9/mo), Craftsman Pro ($29/mo), Arborist Starter ($49/mo), Arborist Business ($99/mo), Arborist Enterprise ($199/mo)
+
+CORE FEATURES:
+- AI Species Identification (OpenAI GPT-4o Vision)
+- Trail Explorer with Leaflet interactive maps
+- Living Catalog (170+ US outdoor locations)
+- Trip Planner & GPS Activity Tracking
+- Wood Economy Marketplace
+- Wild Edibles & Natural Medicine Guide
+- Campground Bookings & Reviews
+- Signal Chat (WebSocket real-time messaging)
+- Blog CMS with AI content generation
+- Weather Widget (Open-Meteo)
+
+DATABASE: 25 PostgreSQL tables (users, trails, identifications, marketplace_listings, trip_plans, campgrounds, activity_log, catalog_locations, blog_posts, reviews, etc.)
+
+API ENDPOINTS: 90+ REST endpoints at /api/* (see Verdara handoff doc for full list)
+
+ECOSYSTEM INTEGRATIONS:
+- GarageBot (equipment management)
+- DW-STAMP (blockchain certification)
+- TrustShield (vendor verification)
+- TrustVault (media gallery)
+- Signal (SIG) purchasing
+- TLID (identity resolution)
+- Credits (AI service credits)
+- VedaSolus (wellness integration)
+
+PWA: Service worker with offline caching (v3)
+```
+
+---
+
+## 10. Arbora (App #29) — Arborist Business Management
+
+```
+SERVICE NAME: Arbora
+APP NUMBER: #29
+API BASE URL: https://verdara.replit.app/arbora
+AUTHENTICATION METHOD: Same as Verdara (shared auth system)
+SUBSCRIPTION REQUIRED: Arborist Starter ($49/mo) or higher
+
+BRANDING: Navy (#0a0f1a) + Copper (#c2703e) theme, separate layout from Verdara
+
+CORE FEATURES (10 modules):
+- Dashboard with KPI stat cards
+- Client CRM (CRUD)
+- Deal Pipeline (Kanban board, 6 stages)
+- Job Scheduling with status tracking
+- Estimates with dynamic line items (auto-generated EST-XXXXXX numbers)
+- Invoicing with line items (auto-generated invoice numbers)
+- Calendar (monthly view with job highlights)
+- Crew Management + Time Entry Tracking
+- Inventory Management with low-stock alerts
+- Equipment (GarageBot integration, restyled for Arbora)
+
+DATABASE: 8 tables (arborist_clients, arborist_jobs, arborist_invoices, arborist_deals, arborist_estimates, arborist_crew_members, arborist_time_entries, arborist_inventory)
+
+API ENDPOINTS: 33 endpoints at /api/arborist/* — all require requireAuth + requireTier("Arborist Starter")
+
+ARCHITECTURE: Runs within Verdara monolith but presents as standalone PWA with own layout, navigation, and branding. Routes at /arbora/*
 ```
 
 ---
