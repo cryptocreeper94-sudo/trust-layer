@@ -1,21 +1,23 @@
 import { useState, useEffect } from "react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  BookOpen, Download, FileText, Smartphone, ChevronDown, ChevronRight, 
-  Headphones, ExternalLink, Sparkles, ScrollText, Eye, Star, Quote,
-  Shield, Clock, Users, Layers, Flame, BookMarked, Feather, Crown
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import {
+  BookOpen, Download, FileText, Smartphone, Headphones, ExternalLink,
+  Sparkles, ScrollText, Eye, Star, Shield, Clock, Layers, Flame,
+  BookMarked, Feather, Crown, Quote, ChevronRight, Volume2
 } from "lucide-react";
 
-interface TocSection {
-  title: string;
-  chapters: { name: string; description: string; anchor: string }[];
-}
-
-const tableOfContents: TocSection[] = [
+const tableOfContents = [
   {
+    id: "part-1",
     title: "Part One: The Evidence",
     chapters: [
       { name: "Chapter 1: The Rebellion", description: "The 200 Watchers, the Nephilim, forbidden knowledge", anchor: "chapter-1" },
@@ -28,6 +30,7 @@ const tableOfContents: TocSection[] = [
     ]
   },
   {
+    id: "part-2",
     title: "Part Two: The Patterns",
     chapters: [
       { name: "Chapter 8-15: The Inversions", description: "Medicine, education, government, religion", anchor: "chapter-8" },
@@ -36,6 +39,7 @@ const tableOfContents: TocSection[] = [
     ]
   },
   {
+    id: "part-3",
     title: "Part Three: The Timeline",
     chapters: [
       { name: "Chapter 26-30: The Apostasy", description: "The Great Schism, the falling away", anchor: "chapter-26" },
@@ -44,6 +48,7 @@ const tableOfContents: TocSection[] = [
     ]
   },
   {
+    id: "part-4",
     title: "Part Four: The Journey",
     chapters: [
       { name: "Chapter 38: The Fog and The Lifting", description: "Coming out of addiction into clarity", anchor: "chapter-38" },
@@ -53,6 +58,7 @@ const tableOfContents: TocSection[] = [
     ]
   },
   {
+    id: "appendices",
     title: "Appendices",
     chapters: [
       { name: "Concordance of Terms", description: "Hebrew words, concepts, definitions", anchor: "concordance" },
@@ -62,51 +68,26 @@ const tableOfContents: TocSection[] = [
   }
 ];
 
-const stagger = {
+const container = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.08 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.1 } }
 };
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] } },
+const item = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
-
-function FloatingOrb({ className, delay = 0 }: { className: string; delay?: number }) {
-  return (
-    <motion.div
-      className={`absolute rounded-full pointer-events-none ${className}`}
-      animate={{
-        y: [0, -20, 0],
-        scale: [1, 1.05, 1],
-        opacity: [0.3, 0.5, 0.3],
-      }}
-      transition={{
-        duration: 8,
-        repeat: Infinity,
-        delay,
-        ease: "easeInOut",
-      }}
-    />
-  );
-}
 
 export default function Veil() {
-  const [expandedSections, setExpandedSections] = useState<string[]>(["Part One: The Evidence"]);
-
-  const toggleSection = (title: string) => {
-    setExpandedSections(prev =>
-      prev.includes(title)
-        ? prev.filter(t => t !== title)
-        : [...prev, title]
-    );
+  const handleReadOnline = (anchor?: string) => {
+    window.location.href = anchor ? `/veil/read#${anchor}` : '/veil/read';
   };
 
-  const handleReadOnline = (anchor?: string) => {
-    if (anchor) {
-      window.location.href = `/veil/read#${anchor}`;
-    } else {
-      window.location.href = '/veil/read';
-    }
+  const handleDownloadPDF = () => {
+    window.open('/api/veil/pdf', '_blank');
+  };
+
+  const handleDownloadEPUB = () => {
+    window.open('/api/veil/epub', '_blank');
   };
 
   useEffect(() => {
@@ -128,377 +109,449 @@ export default function Veil() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-950 relative overflow-hidden">
-      <FloatingOrb className="top-20 left-10 w-96 h-96 bg-purple-500/10 blur-3xl" delay={0} />
-      <FloatingOrb className="bottom-40 right-10 w-80 h-80 bg-cyan-500/8 blur-3xl" delay={2} />
-      <FloatingOrb className="top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/5 blur-3xl" delay={4} />
-      <FloatingOrb className="top-[30%] right-[20%] w-64 h-64 bg-amber-500/5 blur-3xl" delay={6} />
+    <div className="min-h-screen pt-20 pb-12" style={{ background: "linear-gradient(180deg, #020617, #0c1222, #020617)" }}>
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
 
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-purple-900/20 via-transparent to-transparent pointer-events-none" />
-
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-28 pb-20 relative z-10">
-
-        <motion.section
-          variants={stagger}
-          initial="hidden"
-          animate="show"
-          className="text-center mb-20 sm:mb-28 max-w-4xl mx-auto"
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-12 sm:mb-16"
         >
-          <motion.div variants={fadeUp} className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-500/15 to-cyan-500/15 border border-purple-500/20 backdrop-blur-sm mb-8 sm:mb-10">
+          <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-500/15 to-pink-500/15 border border-purple-500/20 backdrop-blur-sm mb-6 sm:mb-8">
             <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
-            <span className="text-xs sm:text-sm text-slate-300 uppercase tracking-[0.15em] font-medium">Complete Edition — 2026</span>
+            <span className="text-[10px] sm:text-xs text-slate-300 uppercase tracking-[0.15em] font-medium">Complete Edition — 2026</span>
             <Flame className="w-4 h-4 text-amber-400 animate-pulse" />
-          </motion.div>
+          </div>
 
-          <motion.div variants={fadeUp} className="relative mb-8 sm:mb-10">
-            <div className="absolute -inset-4 bg-gradient-to-r from-purple-500/10 via-cyan-500/10 to-pink-500/10 blur-3xl rounded-full" />
-            <h1 className="text-5xl sm:text-6xl lg:text-8xl font-bold leading-[0.95] relative">
-              <span className="bg-gradient-to-r from-purple-300 via-cyan-300 to-pink-300 bg-clip-text text-transparent drop-shadow-2xl">
-                Through The Veil
-              </span>
-            </h1>
-          </motion.div>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 sm:mb-6">
+            <span className="bg-gradient-to-r from-purple-300 via-pink-300 to-purple-300 bg-clip-text text-transparent">
+              Through The Veil
+            </span>
+          </h1>
 
-          <motion.h2 variants={fadeUp} className="text-xl sm:text-2xl lg:text-3xl text-slate-400 mb-8 sm:mb-10 font-light tracking-wide">
+          <h2 className="text-lg sm:text-xl md:text-2xl text-slate-400 mb-6 sm:mb-8 font-light tracking-wide">
             The Greatest Story Ever Stole?
-          </motion.h2>
+          </h2>
 
-          <motion.div variants={fadeUp} className="flex items-center justify-center gap-3 mb-6">
+          <div className="flex items-center justify-center gap-3 mb-4">
             <div className="w-12 h-px bg-gradient-to-r from-transparent to-purple-500/50" />
             <Feather className="w-4 h-4 text-purple-400/60" />
-            <div className="w-12 h-px bg-gradient-to-l from-transparent to-cyan-500/50" />
-          </motion.div>
+            <div className="w-12 h-px bg-gradient-to-l from-transparent to-pink-500/50" />
+          </div>
 
-          <motion.p variants={fadeUp} className="text-base sm:text-lg text-slate-300/80 max-w-xl mx-auto mb-4 leading-relaxed">
+          <p className="text-sm sm:text-base text-slate-300/80 max-w-xl mx-auto mb-3 leading-relaxed">
             A Journey Through Hidden History, Suppressed Truth, and Spiritual Warfare
-          </motion.p>
+          </p>
+          <p className="text-purple-300 font-semibold text-base sm:text-lg mb-8 sm:mb-10">By Jason Andrews</p>
 
-          <motion.p variants={fadeUp} className="text-purple-300 font-semibold text-lg mb-10 sm:mb-12">By Jason Andrews</motion.p>
-
-          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md sm:max-w-none mx-auto">
             <Button
               onClick={() => handleReadOnline()}
               size="lg"
-              className="relative bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 px-8 sm:px-10 py-6 sm:py-7 text-base sm:text-lg shadow-2xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all hover:scale-[1.02] active:scale-[0.98] group"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 px-8 py-6 text-base shadow-2xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all active:scale-[0.98] min-h-[48px]"
               data-testid="button-read-online"
             >
-              <div className="absolute inset-0 rounded-md bg-gradient-to-r from-purple-400/20 to-pink-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <BookOpen className="w-5 h-5 mr-2 relative z-10" />
-              <span className="relative z-10">Read Online — Free</span>
+              <BookOpen className="w-5 h-5 mr-2" />
+              Read Online — Free
             </Button>
-            <a href="/api/veil/pdf" download="Through-The-Veil.pdf" data-testid="link-download-pdf-hero">
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-purple-500/30 text-purple-300 hover:bg-purple-500/10 hover:border-purple-500/50 px-8 sm:px-10 py-6 sm:py-7 text-base sm:text-lg w-full backdrop-blur-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
-                data-testid="button-download-pdf-hero"
-              >
-                <Download className="w-5 h-5 mr-2" />
-                Download PDF
-              </Button>
-            </a>
-          </motion.div>
-        </motion.section>
+            <Button
+              onClick={handleDownloadPDF}
+              size="lg"
+              variant="outline"
+              className="border-purple-500/30 text-purple-300 hover:bg-purple-500/10 hover:border-purple-500/50 px-8 py-6 text-base backdrop-blur-sm transition-all active:scale-[0.98] min-h-[48px]"
+              data-testid="button-download-pdf-hero"
+            >
+              <Download className="w-5 h-5 mr-2" />
+              Download PDF
+            </Button>
+          </div>
+        </motion.div>
 
-        <motion.section
-          variants={stagger}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5 }}
+          className="mb-12 sm:mb-16"
+        >
+          <div className="relative rounded-2xl overflow-hidden aspect-[16/7] sm:aspect-[16/6] max-w-5xl mx-auto">
+            <img
+              src="/images/veil-hero.png"
+              alt="Through The Veil"
+              className="w-full h-full object-cover"
+              loading="eager"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-900/30 to-pink-900/20" />
+            <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 md:p-10">
+              <p className="text-white/90 text-sm sm:text-base md:text-lg font-medium max-w-lg leading-relaxed">
+                44 chapters. 163+ scripture references. The complete investigation into hidden history, suppressed truth, and spiritual warfare.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          variants={container}
           initial="hidden"
           whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
-          className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-20 sm:mb-28 max-w-4xl mx-auto"
+          viewport={{ once: true, margin: "-50px" }}
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12 sm:mb-16 max-w-4xl mx-auto"
         >
           {[
-            { icon: ScrollText, label: "44+ Chapters", sub: "Complete Edition", color: "text-cyan-400", glow: "shadow-cyan-500/20" },
-            { icon: Shield, label: "163+ Scriptures", sub: "Cited & Referenced", color: "text-purple-400", glow: "shadow-purple-500/20" },
-            { icon: Layers, label: "5 Parts", sub: "Evidence to Journey", color: "text-pink-400", glow: "shadow-pink-500/20" },
-            { icon: Star, label: "Free Forever", sub: "Always Free Here", color: "text-amber-400", glow: "shadow-amber-500/20" },
+            { icon: ScrollText, label: "44+ Chapters", sub: "Complete Edition", color: "text-purple-400" },
+            { icon: Shield, label: "163+ Scriptures", sub: "Cited & Referenced", color: "text-pink-400" },
+            { icon: Layers, label: "5 Parts", sub: "Evidence to Journey", color: "text-cyan-400" },
+            { icon: Star, label: "Free Forever", sub: "Always Free Here", color: "text-amber-400" },
           ].map((stat) => (
-            <motion.div key={stat.label} variants={fadeUp}>
-              <GlassCard glow className={`p-5 sm:p-7 text-center h-full hover:scale-[1.03] transition-transform duration-300 shadow-lg ${stat.glow}`}>
-                <div className={`w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 flex items-center justify-center`}>
+            <motion.div key={stat.label} variants={item}>
+              <GlassCard glow className="p-5 sm:p-6 text-center h-full">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 flex items-center justify-center">
                   <stat.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${stat.color}`} />
                 </div>
                 <p className="text-white font-bold text-sm sm:text-base">{stat.label}</p>
-                <p className="text-slate-500 text-xs mt-1.5">{stat.sub}</p>
+                <p className="text-slate-500 text-[10px] sm:text-xs mt-1.5">{stat.sub}</p>
               </GlassCard>
             </motion.div>
           ))}
-        </motion.section>
+        </motion.div>
 
-        <motion.section
-          variants={stagger}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.1 }}
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8 mb-20 sm:mb-28 max-w-6xl mx-auto"
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5 }}
+          className="mb-12 sm:mb-16"
         >
-          <motion.div variants={fadeUp} className="lg:col-span-2">
-            <GlassCard className="p-6 sm:p-10 h-full relative overflow-hidden group" glow>
-              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-purple-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
-              
-              <div className="flex items-center gap-4 mb-8 relative z-10">
-                <motion.div 
-                  className="p-3.5 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 flex-shrink-0 shadow-lg shadow-purple-500/10"
-                  whileHover={{ rotate: [0, -5, 5, 0], scale: 1.05 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  <Headphones className="w-6 h-6 text-purple-400" />
-                </motion.div>
-                <div>
-                  <h3 className="text-xl sm:text-2xl font-bold text-white">Listen to the Book</h3>
-                  <p className="text-sm text-slate-400 mt-1">Free Audio with Adobe Reader</p>
+          <div className="text-center mb-8">
+            <Badge variant="outline" className="border-purple-500/30 text-purple-400 mb-4 backdrop-blur-sm">
+              <Download className="w-3.5 h-3.5 mr-1.5" />
+              Get Your Copy
+            </Badge>
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">Choose Your Format</h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-5xl mx-auto">
+
+            <GlassCard glow className="md:col-span-2 lg:col-span-2 overflow-hidden">
+              <div className="relative">
+                <img
+                  src="/images/veil-manuscript.png"
+                  alt="Listen to the book"
+                  className="w-full h-40 sm:h-48 object-cover"
+                  loading="lazy"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,18,36,0.95)] via-[rgba(12,18,36,0.5)] to-transparent" />
+                <div className="absolute top-4 left-4">
+                  <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-purple-300 bg-purple-500/15 border border-purple-500/25 rounded-full shadow-[0_0_10px_rgba(168,85,247,0.2)]">
+                    Featured
+                  </span>
                 </div>
               </div>
+              <div className="p-6 sm:p-8">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 flex-shrink-0">
+                    <Headphones className="w-6 h-6 text-purple-400" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-bold text-white">Listen to the Book</h3>
+                    <p className="text-sm text-slate-400 mt-0.5">Free Audio with Adobe Reader</p>
+                  </div>
+                </div>
 
-              <p className="text-slate-300 mb-8 leading-relaxed text-sm sm:text-base relative z-10">
-                Want to listen instead of read? Adobe Acrobat Reader has a built-in "Read Out Loud" feature that will read the entire book to you — completely free, works offline, no internet needed.
-              </p>
+                <p className="text-slate-300 mb-6 leading-relaxed text-sm sm:text-base">
+                  Want to listen instead of read? Adobe Acrobat Reader has a built-in "Read Out Loud" feature that will read the entire book to you — completely free, works offline.
+                </p>
 
-              <div className="bg-slate-900/60 rounded-xl p-5 sm:p-8 mb-8 border border-white/5 relative z-10 backdrop-blur-sm">
-                <h4 className="text-white font-semibold mb-5 text-sm sm:text-base flex items-center gap-2">
-                  <Crown className="w-4 h-4 text-amber-400" />
-                  How to Listen:
-                </h4>
-                <ol className="space-y-4 text-slate-300">
-                  {[
-                    "Download the PDF above and open it in Adobe Acrobat Reader",
-                    <>Go to <strong className="text-white">View → Read Out Loud → Activate Read Out Loud</strong></>,
-                    <>Click <strong className="text-white">"Read This Page Only"</strong> or <strong className="text-white">"Read To End Of Document"</strong></>,
-                    "Sit back and listen — works offline on any device!",
-                  ].map((step, i) => (
-                    <li key={i} className="flex gap-3 items-start">
-                      <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-purple-500/30 to-cyan-500/30 text-purple-300 flex items-center justify-center text-xs font-bold mt-0.5 border border-purple-500/20 shadow-sm shadow-purple-500/10">
-                        {i + 1}
-                      </span>
-                      <span className="text-sm leading-relaxed">{step}</span>
-                    </li>
-                  ))}
-                </ol>
+                <div className="bg-slate-900/60 rounded-xl p-5 sm:p-6 mb-6 border border-white/5 backdrop-blur-sm">
+                  <h4 className="text-white font-semibold mb-4 text-sm sm:text-base flex items-center gap-2">
+                    <Crown className="w-4 h-4 text-amber-400" />
+                    How to Listen:
+                  </h4>
+                  <ol className="space-y-3">
+                    {[
+                      "Download the PDF and open it in Adobe Acrobat Reader",
+                      <>Go to <strong className="text-white">View → Read Out Loud → Activate</strong></>,
+                      <>Click <strong className="text-white">"Read This Page"</strong> or <strong className="text-white">"Read To End"</strong></>,
+                      "Sit back and listen — works offline on any device!",
+                    ].map((step, i) => (
+                      <li key={i} className="flex gap-3 items-start">
+                        <span className="flex-shrink-0 w-7 h-7 rounded-full bg-gradient-to-br from-purple-500/30 to-pink-500/30 text-purple-300 flex items-center justify-center text-xs font-bold border border-purple-500/20">
+                          {i + 1}
+                        </span>
+                        <span className="text-sm text-slate-300 leading-relaxed pt-1">{step}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <a href="https://get.adobe.com/reader/" target="_blank" rel="noopener noreferrer" className="flex-1" data-testid="link-adobe-reader">
+                    <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 py-5 text-sm sm:text-base min-h-[48px]" data-testid="button-adobe-reader">
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      Get Adobe Reader (Free)
+                    </Button>
+                  </a>
+                  <div className="flex-1">
+                    <Button onClick={handleDownloadPDF} variant="outline" className="w-full border-purple-500/30 text-purple-300 hover:bg-purple-500/10 py-5 text-sm sm:text-base min-h-[48px]" data-testid="button-download-pdf-listen">
+                      <Download className="w-4 h-4 mr-2" />
+                      Download PDF
+                    </Button>
+                  </div>
+                </div>
               </div>
+            </GlassCard>
 
-              <div className="flex flex-col sm:flex-row gap-3 relative z-10">
-                <a href="https://get.adobe.com/reader/" target="_blank" rel="noopener noreferrer" className="flex-1" data-testid="link-adobe-reader">
-                  <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 py-5 text-sm sm:text-base shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all" data-testid="button-adobe-reader">
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                    Get Adobe Reader (Free)
-                  </Button>
-                </a>
-                <a href="/api/veil/pdf" download="Through-The-Veil.pdf" className="flex-1" data-testid="link-download-pdf-listen">
-                  <Button variant="outline" className="w-full border-purple-500/30 text-purple-300 hover:bg-purple-500/10 py-5 text-sm sm:text-base" data-testid="button-download-pdf-listen">
+            <div className="flex flex-col gap-4 md:gap-6">
+              <GlassCard glow className="flex-1 overflow-hidden">
+                <div className="relative">
+                  <img
+                    src="/images/veil-evidence.png"
+                    alt="PDF Download"
+                    className="w-full h-28 sm:h-32 object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,18,36,0.95)] via-[rgba(12,18,36,0.4)] to-transparent" />
+                </div>
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2.5 rounded-xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/30 flex-shrink-0">
+                      <FileText className="w-5 h-5 text-red-400" />
+                    </div>
+                    <div>
+                      <h4 className="text-base sm:text-lg font-bold text-white">PDF Download</h4>
+                      <p className="text-[10px] sm:text-xs text-slate-500">Desktop & Print</p>
+                    </div>
+                  </div>
+                  <ul className="space-y-2.5 mb-5">
+                    {["Complete edition", "163+ scripture refs", "Print-ready format"].map((txt) => (
+                      <li key={txt} className="flex items-center gap-2.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex-shrink-0" />
+                        <span className="text-sm text-slate-300">{txt}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button onClick={handleDownloadPDF} className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 py-5 text-sm min-h-[48px]" data-testid="button-download-pdf-card">
                     <Download className="w-4 h-4 mr-2" />
                     Download PDF
                   </Button>
-                </a>
-              </div>
-            </GlassCard>
-          </motion.div>
-
-          <motion.div variants={fadeUp} className="flex flex-col gap-6">
-            <GlassCard className="p-6 sm:p-8 flex-1 relative overflow-hidden group hover:scale-[1.02] transition-transform duration-300" glow>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-red-500/15 transition-colors" />
-              <div className="flex items-center gap-3.5 mb-6 relative z-10">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/30 flex-shrink-0 shadow-lg shadow-red-500/10">
-                  <FileText className="w-5 h-5 text-red-400" />
                 </div>
-                <div>
-                  <h4 className="text-base sm:text-lg font-bold text-white">PDF Download</h4>
-                  <p className="text-xs text-slate-500 mt-0.5">Desktop & Print</p>
+              </GlassCard>
+
+              <GlassCard glow className="flex-1 overflow-hidden">
+                <div className="relative">
+                  <img
+                    src="/images/veil-library.png"
+                    alt="EPUB Download"
+                    className="w-full h-28 sm:h-32 object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(12,18,36,0.95)] via-[rgba(12,18,36,0.4)] to-transparent" />
                 </div>
-              </div>
-
-              <ul className="space-y-3 mb-6 text-slate-300 relative z-10">
-                {["Complete edition", "163+ scripture refs", "Print-ready format"].map((item) => (
-                  <li key={item} className="flex items-center gap-2.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-cyan-400 to-purple-400 flex-shrink-0 shadow-sm shadow-cyan-500/30" />
-                    <span className="text-sm">{item}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <a href="/api/veil/pdf" download="Through-The-Veil.pdf" className="block relative z-10" data-testid="link-download-pdf-card">
-                <Button className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 py-5 text-sm shadow-lg shadow-red-500/20 hover:shadow-red-500/40 transition-all" data-testid="button-download-pdf-card">
-                  <Download className="w-4 h-4 mr-2" />
-                  Download PDF
-                </Button>
-              </a>
-            </GlassCard>
-
-            <GlassCard className="p-6 sm:p-8 flex-1 relative overflow-hidden group hover:scale-[1.02] transition-transform duration-300" glow>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-cyan-500/15 transition-colors" />
-              <div className="flex items-center gap-3.5 mb-6 relative z-10">
-                <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex-shrink-0 shadow-lg shadow-cyan-500/10">
-                  <Smartphone className="w-5 h-5 text-cyan-400" />
+                <div className="p-5 sm:p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2.5 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex-shrink-0">
+                      <Smartphone className="w-5 h-5 text-cyan-400" />
+                    </div>
+                    <div>
+                      <h4 className="text-base sm:text-lg font-bold text-white">EPUB Download</h4>
+                      <p className="text-[10px] sm:text-xs text-slate-500">E-readers & Mobile</p>
+                    </div>
+                  </div>
+                  <ul className="space-y-2.5 mb-5">
+                    {["Complete edition", "Mobile optimized", "Kindle / Kobo / Nook"].map((txt) => (
+                      <li key={txt} className="flex items-center gap-2.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-400 flex-shrink-0" />
+                        <span className="text-sm text-slate-300">{txt}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button onClick={handleDownloadEPUB} className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 py-5 text-sm min-h-[48px]" data-testid="button-download-epub-card">
+                    <Download className="w-4 h-4 mr-2" />
+                    Download EPUB
+                  </Button>
                 </div>
-                <div>
-                  <h4 className="text-base sm:text-lg font-bold text-white">EPUB Download</h4>
-                  <p className="text-xs text-slate-500 mt-0.5">E-readers & Mobile</p>
-                </div>
-              </div>
+              </GlassCard>
+            </div>
 
-              <ul className="space-y-3 mb-6 text-slate-300 relative z-10">
-                {["Complete edition", "Mobile optimized", "Kindle / Kobo / Nook"].map((item) => (
-                  <li key={item} className="flex items-center gap-2.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 flex-shrink-0 shadow-sm shadow-purple-500/30" />
-                    <span className="text-sm">{item}</span>
-                  </li>
-                ))}
-              </ul>
+          </div>
+        </motion.div>
 
-              <a href="/api/veil/epub" download="Through-The-Veil.epub" className="block relative z-10" data-testid="link-download-epub-card">
-                <Button className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 py-5 text-sm shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 transition-all" data-testid="button-download-epub-card">
-                  <Download className="w-4 h-4 mr-2" />
-                  Download EPUB
-                </Button>
-              </a>
-            </GlassCard>
-          </motion.div>
-        </motion.section>
-
-        <motion.section
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.1 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-20 sm:mb-28 max-w-4xl mx-auto"
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5 }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-12 sm:mb-16 max-w-5xl mx-auto"
         >
-          <div className="text-center mb-10 sm:mb-12">
-            <Badge variant="outline" className="border-purple-500/30 text-purple-400 mb-5 backdrop-blur-sm">
+          <GlassCard glow className="p-6 sm:p-8">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 w-fit mb-5">
+              <BookOpen className="w-6 h-6 text-purple-400" />
+            </div>
+            <h4 className="text-lg font-bold text-white mb-3">Read Online</h4>
+            <p className="text-sm text-slate-400 leading-relaxed mb-5">
+              Full interactive e-reader with chapter navigation, progress tracking, and AI voice narration. Works on any device.
+            </p>
+            <Button
+              onClick={() => handleReadOnline()}
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 py-5 text-sm min-h-[48px]"
+              data-testid="button-read-online-card"
+            >
+              <Eye className="w-4 h-4 mr-2" />
+              Open E-Reader
+            </Button>
+          </GlassCard>
+
+          <GlassCard glow className="p-6 sm:p-8">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 w-fit mb-5">
+              <Volume2 className="w-6 h-6 text-cyan-400" />
+            </div>
+            <h4 className="text-lg font-bold text-white mb-3">AI Voice Narration</h4>
+            <p className="text-sm text-slate-400 leading-relaxed mb-5">
+              Nova AI reads each chapter aloud with natural, expressive narration powered by OpenAI. Listen while you commute or relax.
+            </p>
+            <Button
+              onClick={() => handleReadOnline()}
+              variant="outline"
+              className="w-full border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 py-5 text-sm min-h-[48px]"
+              data-testid="button-ai-voice-card"
+            >
+              <Headphones className="w-4 h-4 mr-2" />
+              Listen Now
+            </Button>
+          </GlassCard>
+
+          <GlassCard glow className="p-6 sm:p-8 md:col-span-2 lg:col-span-1">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 w-fit mb-5">
+              <Clock className="w-6 h-6 text-amber-400" />
+            </div>
+            <h4 className="text-lg font-bold text-white mb-3">Always Updated</h4>
+            <p className="text-sm text-slate-400 leading-relaxed mb-5">
+              The online edition stays current with new research, corrections, and expanded chapters. Version tracking built in.
+            </p>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-500/10 border border-green-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+              <span className="text-[10px] text-green-400 font-semibold uppercase tracking-wider">v3.0.0 — Latest</span>
+            </div>
+          </GlassCard>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5 }}
+          className="mb-12 sm:mb-16 max-w-4xl mx-auto"
+        >
+          <div className="text-center mb-8">
+            <Badge variant="outline" className="border-purple-500/30 text-purple-400 mb-4 backdrop-blur-sm">
               <ScrollText className="w-3.5 h-3.5 mr-1.5" />
               Full Table of Contents
             </Badge>
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white">What's Inside</h3>
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">What's Inside</h3>
           </div>
 
-          <GlassCard className="p-4 sm:p-8" glow>
-            <div className="space-y-3">
-              {tableOfContents.map((section, sectionIdx) => (
-                <motion.div
-                  key={section.title}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: sectionIdx * 0.05 }}
-                  className="border border-white/10 rounded-xl overflow-hidden hover:border-purple-500/30 transition-all duration-300 group/section"
+          <GlassCard glow className="p-4 sm:p-6 md:p-8">
+            <Accordion type="single" collapsible defaultValue="part-1" className="space-y-2">
+              {tableOfContents.map((section) => (
+                <AccordionItem
+                  key={section.id}
+                  value={section.id}
+                  className="border border-white/10 rounded-xl overflow-hidden bg-white/[0.03] backdrop-blur-xl"
                 >
-                  <button
-                    onClick={() => toggleSection(section.title)}
-                    className="w-full flex items-center justify-between p-4 sm:p-5 text-left hover:bg-white/[0.03] transition-all duration-300"
-                    data-testid={`toc-section-${section.title.replace(/\s+/g, '-').toLowerCase()}`}
+                  <AccordionTrigger
+                    className="px-4 sm:px-6 py-4 hover:bg-white/5 text-white font-semibold text-sm sm:text-base [&>svg]:text-purple-400"
+                    data-testid={`toc-section-${section.id}`}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/20 flex items-center justify-center flex-shrink-0 group-hover/section:shadow-md group-hover/section:shadow-purple-500/10 transition-shadow">
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/20 flex items-center justify-center flex-shrink-0">
                         <BookMarked className="w-4 h-4 text-purple-400" />
                       </div>
-                      <span className="text-base sm:text-lg font-semibold bg-gradient-to-r from-purple-300 to-cyan-300 bg-clip-text text-transparent">
+                      <span className="bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent text-left">
                         {section.title}
                       </span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <Badge variant="outline" className="border-white/10 text-slate-500 text-[10px] hidden sm:inline-flex">
-                        {section.chapters.length} chapters
-                      </Badge>
-                      <motion.div
-                        animate={{ rotate: expandedSections.includes(section.title) ? 180 : 0 }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <ChevronDown className="w-5 h-5 text-slate-500 group-hover/section:text-purple-400 transition-colors" />
-                      </motion.div>
-                    </div>
-                  </button>
-
-                  {expandedSections.includes(section.title) && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="border-t border-white/5"
-                    >
+                  </AccordionTrigger>
+                  <AccordionContent className="px-4 sm:px-6 pb-4">
+                    <div className="space-y-1">
                       {section.chapters.map((chapter, idx) => (
-                        <motion.button
+                        <button
                           key={idx}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: idx * 0.04 }}
                           onClick={() => handleReadOnline(chapter.anchor)}
-                          className="w-full flex items-start gap-3 p-4 sm:p-5 text-left hover:bg-gradient-to-r hover:from-purple-500/5 hover:to-transparent transition-all duration-300 border-b border-white/[0.03] last:border-b-0 group/ch"
+                          className="w-full flex items-start gap-3 p-3 sm:p-4 text-left hover:bg-gradient-to-r hover:from-purple-500/5 hover:to-transparent transition-all duration-300 rounded-lg group min-h-[44px]"
                           data-testid={`toc-chapter-${chapter.anchor}`}
                         >
-                          <div className="w-1 h-8 rounded-full bg-gradient-to-b from-purple-500/40 to-transparent flex-shrink-0 mt-0.5 group-hover/ch:from-purple-400 group-hover/ch:to-cyan-400/40 transition-all" />
-                          <div>
-                            <span className="text-white font-medium text-sm sm:text-base group-hover/ch:text-purple-200 transition-colors">{chapter.name}</span>
+                          <div className="w-1 h-8 rounded-full bg-gradient-to-b from-purple-500/40 to-transparent flex-shrink-0 mt-0.5 group-hover:from-purple-400 group-hover:to-pink-400/40 transition-all" />
+                          <div className="flex-1 min-w-0">
+                            <span className="text-white font-medium text-sm sm:text-base group-hover:text-purple-200 transition-colors block">{chapter.name}</span>
                             <span className="text-slate-500 text-xs sm:text-sm block mt-1 leading-relaxed">{chapter.description}</span>
                           </div>
-                          <ChevronRight className="w-4 h-4 text-slate-600 flex-shrink-0 mt-1 opacity-0 group-hover/ch:opacity-100 group-hover/ch:text-purple-400 transition-all" />
-                        </motion.button>
+                          <ChevronRight className="w-4 h-4 text-slate-600 flex-shrink-0 mt-1 opacity-0 group-hover:opacity-100 group-hover:text-purple-400 transition-all" />
+                        </button>
                       ))}
-                    </motion.div>
-                  )}
-                </motion.div>
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
               ))}
-            </div>
+            </Accordion>
           </GlassCard>
-        </motion.section>
+        </motion.div>
 
-        <motion.section
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6 }}
-          className="mb-20 sm:mb-28 max-w-3xl mx-auto"
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5 }}
+          className="mb-12 sm:mb-16 max-w-3xl mx-auto"
         >
-          <GlassCard className="p-10 sm:p-14 lg:p-20 text-center relative overflow-hidden" glow>
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-cyan-500/5 pointer-events-none" />
+          <GlassCard glow className="p-8 sm:p-10 md:p-14 text-center relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5 pointer-events-none" />
             <div className="absolute top-6 left-8 opacity-10">
-              <Quote className="w-14 h-14 text-purple-400" />
+              <Quote className="w-12 h-12 text-purple-400" />
             </div>
             <div className="absolute bottom-6 right-8 opacity-10 rotate-180">
-              <Quote className="w-14 h-14 text-cyan-400" />
+              <Quote className="w-12 h-12 text-pink-400" />
             </div>
             <div className="relative z-10">
-              <p className="text-lg sm:text-xl lg:text-2xl text-slate-200 leading-relaxed italic mb-8">
+              <p className="text-base sm:text-lg md:text-xl text-slate-200 leading-relaxed italic mb-6 sm:mb-8">
                 "I do not add to Scripture. I do not take away from it. I simply illuminate what is already written."
               </p>
               <div className="flex items-center justify-center gap-3 mb-2">
                 <div className="w-8 h-px bg-gradient-to-r from-transparent to-purple-500/50" />
                 <Feather className="w-4 h-4 text-purple-400/60" />
-                <div className="w-8 h-px bg-gradient-to-l from-transparent to-cyan-500/50" />
+                <div className="w-8 h-px bg-gradient-to-l from-transparent to-pink-500/50" />
               </div>
               <p className="text-purple-300 font-semibold">— Jason Andrews</p>
             </div>
           </GlassCard>
-        </motion.section>
+        </motion.div>
 
-        <motion.section
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.6 }}
-          className="text-center max-w-2xl mx-auto mb-12"
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5 }}
+          className="text-center max-w-2xl mx-auto mb-8"
         >
-          <h3 className="text-2xl sm:text-3xl font-bold text-white mb-5">Ready to Begin?</h3>
-          <p className="text-slate-400 mb-8 sm:mb-10 leading-relaxed">
+          <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 sm:mb-5">Ready to Begin?</h3>
+          <p className="text-slate-400 text-sm sm:text-base mb-8 leading-relaxed">
             Start reading online for free, or download your copy in PDF or EPUB format.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md sm:max-w-none mx-auto">
             <Button
               onClick={() => handleReadOnline()}
               size="lg"
-              className="relative bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 px-8 sm:px-10 py-6 sm:py-7 text-base sm:text-lg shadow-2xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all hover:scale-[1.02] active:scale-[0.98] group"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 px-8 py-6 text-base shadow-2xl shadow-purple-500/30 hover:shadow-purple-500/50 transition-all active:scale-[0.98] min-h-[48px]"
               data-testid="button-read-online-bottom"
             >
-              <div className="absolute inset-0 rounded-md bg-gradient-to-r from-purple-400/20 to-pink-400/20 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
-              <Eye className="w-5 h-5 mr-2 relative z-10" />
-              <span className="relative z-10">Start Reading</span>
+              <Eye className="w-5 h-5 mr-2" />
+              Start Reading
             </Button>
           </div>
-        </motion.section>
+        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-center mt-16 pb-4"
-        >
+        <div className="text-center mt-12 pb-4">
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="w-16 h-px bg-gradient-to-r from-transparent to-purple-500/30" />
             <div className="w-1 h-1 rounded-full bg-purple-400/40" />
@@ -507,7 +560,7 @@ export default function Veil() {
           <p className="text-slate-600 text-sm">
             All glory to Yahuah, the Most High. HalleluYah.
           </p>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

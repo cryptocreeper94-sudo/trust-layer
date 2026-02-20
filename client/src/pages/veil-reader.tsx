@@ -570,12 +570,7 @@ export default function VeilReader() {
   };
 
   const handleDownloadPDF = () => {
-    const link = document.createElement('a');
-    link.href = '/api/veil/pdf';
-    link.download = 'Through-The-Veil.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    window.open('/api/veil/pdf', '_blank');
   };
 
   const navigateToUpdate = (volumeIndex?: number, chapterId?: string) => {

@@ -21265,75 +21265,48 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   
   app.get("/api/veil/epub", async (_req, res) => {
     try {
-      const epub = await import("epub-gen-memory");
-      const filePath = path.join(process.cwd(), "attached_assets", "Through-The-Veil-COMPLETE-EBOOK.md");
-      const content = fs.readFileSync(filePath, "utf-8");
+      const epubPath = path.join(process.cwd(), "attached_assets", "Through-The-Veil-KINDLE.epub");
       
-      // Parse markdown into chapters
-      const chapters: { title: string; content: string }[] = [];
-      const sections = content.split(/^## /gm);
-      
-      for (const section of sections) {
-        if (!section.trim()) continue;
-        const lines = section.split("\n");
-        const title = lines[0].replace(/^#+ /, "").trim();
-        const body = lines.slice(1).join("\n").trim();
-        
-        if (title && body) {
-          // Convert markdown to basic HTML
-          let html = body
-            .replace(/^### (.+)$/gm, "<h3>$1</h3>")
-            .replace(/^#### (.+)$/gm, "<h4>$1</h4>")
-            .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-            .replace(/\*(.+?)\*/g, "<em>$1</em>")
-            .replace(/^> (.+)$/gm, "<blockquote>$1</blockquote>")
-            .replace(/^- (.+)$/gm, "<li>$1</li>")
-            .replace(/\n\n/g, "</p><p>")
-            .replace(/\n/g, "<br/>");
-          
-          html = `<p>${html}</p>`;
-          
-          chapters.push({
-            title: title,
-            content: html
-          });
-        }
+      if (!fs.existsSync(epubPath)) {
+        return res.status(404).json({ error: "EPUB file not found" });
       }
       
-      const options = {
-        title: "Through The Veil",
-        author: "Jason Andrews",
-        publisher: "DarkWave Studios",
-        cover: undefined
-      };
-      
-      const chapterContent = chapters.length > 0 ? chapters : [{ title: "Through The Veil", content: "<p>Content loading...</p>" }];
-      const epubBuffer = await epub.default(options, chapterContent);
-      
+      const stat = fs.statSync(epubPath);
       res.setHeader("Content-Type", "application/epub+zip");
+      res.setHeader("Content-Length", stat.size.toString());
       res.setHeader("Content-Disposition", 'attachment; filename="Through-The-Veil.epub"');
-      res.send(Buffer.from(epubBuffer));
+      
+      const stream = fs.createReadStream(epubPath);
+      stream.pipe(res);
     } catch (error: any) {
-      console.error("EPUB generation error:", error);
-      res.status(500).json({ error: "Failed to generate EPUB", details: error.message });
+      console.error("EPUB serve error:", error);
+      res.status(500).json({ error: "Failed to serve EPUB", details: error.message });
     }
   });
 
   // PDF GENERATION FOR THROUGH THE VEIL (Dynamic from markdown)
-  app.get("/api/veil/pdf", async (_req, res) => {
+  app.get("/api/veil/pdf", async (req, res) => {
     try {
-      // Serve the pre-formatted PDF file directly for best mobile compatibility
       const pdfPath = path.join(process.cwd(), "attached_assets", "Through-The-Veil-EBOOK.pdf");
       
       if (!fs.existsSync(pdfPath)) {
         return res.status(404).json({ error: "PDF file not found" });
       }
       
+      const stat = fs.statSync(pdfPath);
       res.setHeader("Content-Type", "application/pdf");
-      res.setHeader("Content-Disposition", 'attachment; filename="Through-The-Veil.pdf"');
+      res.setHeader("Content-Length", stat.size.toString());
+      res.setHeader("Accept-Ranges", "bytes");
       
-      const pdfBuffer = fs.readFileSync(pdfPath);
-      return res.send(pdfBuffer);
+      const forceDownload = req.query.dl === '1';
+      if (forceDownload) {
+        res.setHeader("Content-Disposition", 'attachment; filename="Through-The-Veil.pdf"');
+      } else {
+        res.setHeader("Content-Disposition", 'inline; filename="Through-The-Veil.pdf"');
+      }
+      
+      const stream = fs.createReadStream(pdfPath);
+      stream.pipe(res);
     } catch (error: any) {
       console.error("PDF serve error:", error);
       res.status(500).json({ error: "Failed to serve PDF", details: error.message });
