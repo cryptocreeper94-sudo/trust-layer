@@ -4037,6 +4037,144 @@ export async function registerRoutes(
     }
   });
 
+  // ==============================================
+  // SHARED COMPONENTS SYSTEM
+  // ==============================================
+
+  const SHARED_COMPONENT_CORS = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET",
+    "Access-Control-Allow-Headers": "Content-Type",
+  };
+
+  function renderSharedFooter(theme: string): string {
+    const isDark = theme !== "light";
+    const bg = isDark ? "#020617" : "#f8fafc";
+    const border = isDark ? "rgba(255,255,255,0.06)" : "rgba(0,0,0,0.08)";
+    const text = isDark ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)";
+    const textHover = isDark ? "#06b6d4" : "#0891b2";
+    const heading = isDark ? "rgba(255,255,255,0.8)" : "rgba(0,0,0,0.8)";
+    const accent = "#06b6d4";
+
+    return `<footer id="dw-shared-footer" style="background:${bg};border-top:1px solid ${border};padding:48px 24px 24px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;color:${text};font-size:13px">
+  <div style="max-width:1200px;margin:0 auto">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:32px;margin-bottom:32px">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px">
+          <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#06b6d4,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:16px">\u26A1</div>
+          <span style="font-size:15px;font-weight:700;background:linear-gradient(90deg,#06b6d4,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">DarkWave Trust Layer</span>
+        </div>
+        <p style="line-height:1.6;margin:0">Infrastructure where accountability is built in. A coordinated trust layer for real business operations.</p>
+      </div>
+      <div>
+        <h4 style="color:${heading};font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:0 0 12px">Ecosystem</h4>
+        <a href="https://dwsc.io/ecosystem" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">All Apps</a>
+        <a href="https://dwsc.io/presale" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Signal Presale</a>
+        <a href="https://dwsc.io/veil" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Through The Veil</a>
+        <a href="https://darkwavegames.io" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">DarkWave Games</a>
+      </div>
+      <div>
+        <h4 style="color:${heading};font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:0 0 12px">Resources</h4>
+        <a href="https://dwsc.io/academy" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Academy</a>
+        <a href="https://dwsc.io/docs" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Documentation</a>
+        <a href="https://trustshield.tech" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">TrustShield</a>
+        <a href="https://dwsc.io/guardian-scanner" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Guardian Scanner</a>
+      </div>
+      <div>
+        <h4 style="color:${heading};font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:0 0 12px">Connect</h4>
+        <a href="https://twitter.com/DarkWaveTL" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Twitter / X</a>
+        <a href="https://discord.gg/darkwave" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Discord</a>
+        <a href="https://t.me/darkwavetl" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Telegram</a>
+        <a href="mailto:support@dwsc.io" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Contact Us</a>
+      </div>
+    </div>
+    <div style="border-top:1px solid ${border};padding-top:20px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px">
+      <span>\u00A9 ${new Date().getFullYear()} DarkWave Trust Layer. All rights reserved.</span>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <a href="https://dwsc.io/privacy" target="_blank" rel="noopener" style="color:${text};text-decoration:none;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Privacy</a>
+        <a href="https://dwsc.io/terms" target="_blank" rel="noopener" style="color:${text};text-decoration:none;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Terms</a>
+        <span style="color:${accent}">Powered by Trust Layer</span>
+      </div>
+    </div>
+  </div>
+</footer>`;
+  }
+
+  function renderAnnouncementBar(theme: string): string {
+    const isDark = theme !== "light";
+    return `<div id="dw-shared-announcement-bar" style="background:linear-gradient(90deg,#06b6d4,#8b5cf6,#ec4899);padding:10px 16px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;font-weight:600;color:#fff;position:relative;z-index:9999">
+  <span>\uD83D\uDE80 Signal (SIG) Presale is LIVE \u2014 $0.001/SIG \u2014 </span>
+  <a href="https://dwsc.io/presale" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline;font-weight:700;margin-left:4px">Join Now \u2192</a>
+  <button onclick="this.parentElement.style.display='none'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.7);cursor:pointer;font-size:16px;padding:4px 8px" aria-label="Close">\u2715</button>
+</div>`;
+  }
+
+  function renderTrustBadge(theme: string): string {
+    const isDark = theme !== "light";
+    return `<div id="dw-shared-trust-badge" style="position:fixed;bottom:20px;right:20px;z-index:99990;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif">
+  <a href="https://dwsc.io/ecosystem" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;padding:8px 14px;background:${isDark ? "rgba(2,6,23,0.9)" : "rgba(255,255,255,0.95)"};backdrop-filter:blur(12px);border:1px solid ${isDark ? "rgba(6,182,212,0.2)" : "rgba(6,182,212,0.3)"};border-radius:10px;text-decoration:none;box-shadow:0 4px 20px rgba(0,0,0,0.3),0 0 20px rgba(6,182,212,0.1);transition:all .3s ease;cursor:pointer" onmouseover="this.style.borderColor='rgba(6,182,212,0.5)';this.style.boxShadow='0 4px 24px rgba(0,0,0,0.4),0 0 30px rgba(6,182,212,0.2)'" onmouseout="this.style.borderColor='${isDark ? "rgba(6,182,212,0.2)" : "rgba(6,182,212,0.3)"}';this.style.boxShadow='0 4px 20px rgba(0,0,0,0.3),0 0 20px rgba(6,182,212,0.1)'">
+    <div style="width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,#06b6d4,#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:10px">\u26A1</div>
+    <div>
+      <div style="font-size:10px;font-weight:700;color:${isDark ? "#fff" : "#0f172a"};line-height:1.2">Trust Layer</div>
+      <div style="font-size:9px;color:${isDark ? "rgba(255,255,255,0.4)" : "rgba(0,0,0,0.4)"};line-height:1.2">Verified Ecosystem</div>
+    </div>
+    <div style="width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 6px rgba(34,197,94,0.5);flex-shrink:0"></div>
+  </a>
+</div>`;
+  }
+
+  const sharedComponentRenderers: Record<string, (theme: string) => string> = {
+    "footer": renderSharedFooter,
+    "announcement-bar": renderAnnouncementBar,
+    "trust-badge": renderTrustBadge,
+  };
+
+  app.get("/api/ecosystem/shared/render/:component", (req, res) => {
+    Object.entries(SHARED_COMPONENT_CORS).forEach(([k, v]) => res.setHeader(k, v));
+    const { component } = req.params;
+    const theme = (req.query.theme as string) || "dark";
+    const renderer = sharedComponentRenderers[component];
+    if (!renderer) {
+      return res.status(404).json({ error: `Unknown component: ${component}. Available: ${Object.keys(sharedComponentRenderers).join(", ")}` });
+    }
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=300");
+    res.send(renderer(theme));
+  });
+
+  app.get("/api/ecosystem/shared/bundle", (req, res) => {
+    Object.entries(SHARED_COMPONENT_CORS).forEach(([k, v]) => res.setHeader(k, v));
+    const componentsParam = (req.query.components as string) || "all";
+    const theme = (req.query.theme as string) || "dark";
+    const requested = componentsParam === "all" ? Object.keys(sharedComponentRenderers) : componentsParam.split(",").map(c => c.trim());
+
+    const result: Record<string, string | null> = {};
+    for (const name of requested) {
+      const renderer = sharedComponentRenderers[name];
+      result[name] = renderer ? renderer(theme) : null;
+    }
+    res.setHeader("Cache-Control", "public, max-age=300");
+    res.json({ components: result, theme, version: "1.0.0" });
+  });
+
+  app.get("/api/ecosystem/shared/loader.js", (_req, res) => {
+    Object.entries(SHARED_COMPONENT_CORS).forEach(([k, v]) => res.setHeader(k, v));
+    res.setHeader("Content-Type", "application/javascript; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=3600");
+
+    const loaderPath = path.join(process.cwd(), "client", "public", "ecosystem-shared-loader.js");
+    if (fs.existsSync(loaderPath)) {
+      res.sendFile(loaderPath);
+    } else {
+      res.status(404).send("// Shared components loader not found");
+    }
+  });
+
+  app.options("/api/ecosystem/shared/:path(*)", (_req, res) => {
+    Object.entries(SHARED_COMPONENT_CORS).forEach(([k, v]) => res.setHeader(k, v));
+    res.sendStatus(204);
+  });
+
   // Standard health endpoint for load balancers and monitoring
   app.get("/api/ecosystem/connection", async (_req, res) => {
     res.json({

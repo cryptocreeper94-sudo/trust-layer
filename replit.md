@@ -86,3 +86,49 @@ Returns: `{ apps, presale, user, subscription, presaleBalance }`
 - **Widget script**: `client/public/ecosystem-widget.js`
 - **API endpoints**: `server/routes.ts` (search for "EMBEDDABLE ECOSYSTEM WIDGET")
 - **Full integration handoff**: `VERDARA_RETURN_HANDOFF.md`
+
+## Shared Components System
+
+A cross-app shared UI system that lets any ecosystem app load standardized DarkWave components (footer, announcement bar, trust badge) with a single script tag. Components are rendered server-side and auto-placed into the page.
+
+### Embed Code (one line for any app)
+```html
+<script src="https://dwsc.io/api/ecosystem/shared/loader.js"
+  data-components="footer,announcement-bar,trust-badge"
+  data-theme="dark">
+</script>
+```
+
+### Configuration
+- `data-components` — Comma-separated list: `footer`, `announcement-bar`, `trust-badge`, or `all`
+- `data-theme` — `dark` or `light`
+- `data-api` — Custom API base for dev/staging (defaults to `https://dwsc.io`)
+
+### Auto-Placement
+- `announcement-bar` — top of `<body>`
+- `footer` — bottom of `<body>`
+- `trust-badge` — fixed bottom-right corner
+
+### Manual Placement
+Place an empty div with the component's ID to control where it renders:
+```html
+<div id="dw-shared-footer"></div>
+```
+
+### Direct Render URLs (fetch raw HTML)
+```
+GET https://dwsc.io/api/ecosystem/shared/render/footer?theme=dark
+GET https://dwsc.io/api/ecosystem/shared/render/announcement-bar?theme=dark
+GET https://dwsc.io/api/ecosystem/shared/render/trust-badge?theme=dark
+```
+
+### Bundle Endpoint (multiple components as JSON)
+```
+GET https://dwsc.io/api/ecosystem/shared/bundle?components=footer,trust-badge&theme=dark
+```
+Returns: `{ components: { footer: "<html>...", "trust-badge": "<html>..." }, theme, version }`
+
+### Key Files
+- **Loader script**: `client/public/ecosystem-shared-loader.js`
+- **Component renderers & API**: `server/routes.ts` (search for "SHARED COMPONENTS SYSTEM")
+- **Available components**: `footer`, `announcement-bar`, `trust-badge`

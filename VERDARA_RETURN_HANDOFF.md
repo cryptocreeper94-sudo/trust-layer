@@ -353,6 +353,55 @@ CORS: Full CORS support (Access-Control-Allow-Origin: *) for cross-domain embedd
 
 ---
 
+## Shared Components System
+
+Any ecosystem app can load standardized DarkWave UI components (footer, announcement bar, trust badge) with a single script tag. Components are server-rendered and auto-placed.
+
+```
+SERVICE NAME: Shared Components System
+API BASE URL: https://dwsc.io
+AUTHENTICATION METHOD: None required (public)
+
+EMBED CODE (one line for any app):
+<script src="https://dwsc.io/api/ecosystem/shared/loader.js"
+  data-components="footer,announcement-bar,trust-badge"
+  data-theme="dark">
+</script>
+
+CONFIGURATION:
+  data-components — Comma-separated: footer, announcement-bar, trust-badge, or all
+  data-theme — dark or light
+  data-api — Custom API base for dev/staging (defaults to https://dwsc.io)
+
+AUTO-PLACEMENT:
+  announcement-bar → top of <body>
+  footer → bottom of <body>
+  trust-badge → fixed bottom-right corner
+
+MANUAL PLACEMENT (override auto-placement):
+  <div id="dw-shared-footer"></div>
+  <div id="dw-shared-announcement-bar"></div>
+  <div id="dw-shared-trust-badge"></div>
+
+ENDPOINTS:
+- GET /api/ecosystem/shared/render/:component?theme=dark — Render single component as raw HTML
+  - Components: footer, announcement-bar, trust-badge
+  - Output: Raw HTML string
+  - Content-Type: text/html
+
+- GET /api/ecosystem/shared/bundle?components=footer,trust-badge&theme=dark — Bundle multiple components
+  - Output: { components: { footer: "<html>...", "trust-badge": "<html>..." }, theme, version }
+  - Content-Type: application/json
+
+- GET /api/ecosystem/shared/loader.js — Self-contained loader script
+  - Content-Type: application/javascript
+
+CORS: Full CORS support (Access-Control-Allow-Origin: *)
+CACHING: 5 min for components, 1 hour for loader script
+```
+
+---
+
 ## Shared Infrastructure
 
 ### SSO Authentication
@@ -381,3 +430,4 @@ CORS: Full CORS support (Access-Control-Allow-Origin: *) for cross-domain embedd
 **SSO**: Trust Layer JWT (HS256, shared JWT_SECRET)
 **Native Asset**: Signal (SIG) — $0.001/SIG presale price
 **Ecosystem Widget**: `<script src="https://dwsc.io/api/ecosystem/widget.js"></script>`
+**Shared Components**: `<script src="https://dwsc.io/api/ecosystem/shared/loader.js" data-components="all" data-theme="dark"></script>`
