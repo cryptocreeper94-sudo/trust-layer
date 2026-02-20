@@ -3918,6 +3918,125 @@ export async function registerRoutes(
     }
   });
 
+  // ==============================================
+  // EMBEDDABLE ECOSYSTEM WIDGET
+  // ==============================================
+
+  app.get("/api/ecosystem/widget-data", async (req, res) => {
+    try {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Access-Control-Allow-Methods", "GET");
+      res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+
+      const apps = await fetchEcosystemApps();
+
+      let user: any = null;
+      let subscription: any = null;
+      let presaleBalance: any = null;
+
+      const authHeader = req.headers.authorization;
+      if (authHeader?.startsWith("Bearer ")) {
+        const token = authHeader.substring(7);
+        try {
+          let userId: string | null = null;
+          if (/^[a-f0-9]{64}$/.test(token)) {
+            const [tokenUser] = await db.select().from(users).where(eq(users.sessionToken, token)).limit(1);
+            if (tokenUser && tokenUser.sessionTokenExpiry && new Date(tokenUser.sessionTokenExpiry) > new Date()) {
+              userId = tokenUser.id;
+              user = { id: tokenUser.id, email: tokenUser.email, displayName: tokenUser.displayName };
+            }
+          }
+          if (!userId) {
+            const decoded = await verifyFirebaseIdToken(token);
+            if (decoded) {
+              const fbUser = await storage.getUser(decoded.uid);
+              if (fbUser) {
+                userId = fbUser.id;
+                user = { id: fbUser.id, email: fbUser.email, displayName: fbUser.displayName };
+              }
+            }
+          }
+          if (userId) {
+            try {
+              subscription = await subscriptionService.getSubscriptionStatus(userId);
+            } catch {}
+            try {
+              const userResult = await db.execute(sql`SELECT email FROM users WHERE id = ${userId}`);
+              const userEmail = (userResult.rows[0] as any)?.email;
+              if (userEmail) {
+                const presaleResult = await db.execute(sql`
+                  SELECT COALESCE(SUM(token_amount), 0) as total_sig,
+                         COALESCE(SUM(usd_amount_cents), 0) as total_spent_cents
+                  FROM presale_purchases
+                  WHERE LOWER(TRIM(email)) = ${userEmail.toLowerCase().trim()} AND status = 'completed'
+                `);
+                const row = presaleResult.rows[0] as any;
+                presaleBalance = {
+                  totalSig: parseInt(row?.total_sig || "0"),
+                  totalSpent: parseInt(row?.total_spent_cents || "0") / 100,
+                };
+              }
+            } catch {}
+          }
+        } catch {}
+      }
+
+      const presaleStatsResult = await db.execute(sql`
+        SELECT COALESCE(SUM(usd_amount_cents), 0) as total_raised_cents,
+               COALESCE(SUM(token_amount), 0) as total_sold,
+               COALESCE(COUNT(DISTINCT email), 0) as unique_holders
+        FROM presale_purchases WHERE status = 'completed'
+      `);
+      const ps = presaleStatsResult.rows[0] as any;
+      const presaleStats = {
+        totalRaisedUsd: parseInt(ps?.total_raised_cents || "0") / 100,
+        totalSold: parseInt(ps?.total_sold || "0"),
+        uniqueHolders: parseInt(ps?.unique_holders || "0"),
+        currentPrice: 0.001,
+      };
+
+      res.json({
+        apps: apps.map((a: any) => ({
+          id: a.id,
+          name: a.name,
+          description: a.description,
+          url: a.url,
+          category: a.category,
+          verified: a.verified,
+          status: a.status,
+          icon: a.icon,
+        })),
+        presale: presaleStats,
+        user,
+        subscription,
+        presaleBalance,
+      });
+    } catch (error) {
+      console.error("Widget data error:", error);
+      res.status(500).json({ error: "Failed to fetch widget data" });
+    }
+  });
+
+  app.options("/api/ecosystem/widget-data", (_req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET");
+    res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type");
+    res.sendStatus(204);
+  });
+
+  app.get("/api/ecosystem/widget.js", (_req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Content-Type", "application/javascript; charset=utf-8");
+    res.setHeader("Cache-Control", "public, max-age=3600");
+
+    const widgetPath = path.join(process.cwd(), "client", "public", "ecosystem-widget.js");
+    if (fs.existsSync(widgetPath)) {
+      res.sendFile(widgetPath);
+    } else {
+      res.status(404).send("// Widget not found");
+    }
+  });
+
   // Standard health endpoint for load balancers and monitoring
   app.get("/api/ecosystem/connection", async (_req, res) => {
     res.json({
