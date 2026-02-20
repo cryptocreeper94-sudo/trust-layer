@@ -15,6 +15,7 @@ const GlobalSearch = lazy(() => import("@/components/global-search").then(m => (
 const SiteNav = lazy(() => import("@/components/site-nav").then(m => ({ default: m.SiteNav })));
 const GamesNav = lazy(() => import("@/components/games-nav").then(m => ({ default: m.GamesNav })));
 const Footer = lazy(() => import("@/components/footer").then(m => ({ default: m.Footer })));
+const PresaleBanner = lazy(() => import("@/components/presale-banner").then(m => ({ default: m.PresaleBanner })));
 
 class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean; error: Error | null }> {
   constructor(props: { children: ReactNode }) {
@@ -773,7 +774,9 @@ function AppShell({ appType }: { appType: string }) {
         {!isStandalonePWA && appType === "dwsc" && <AIAssistant />}
         {!isStandalonePWA && <FloatingChat />}
         {!isStandalonePWA && <GlobalSearch />}
+        <PresaleBanner />
       </Suspense>
+      <div className="h-14" aria-hidden="true" />
     </>
   );
 }

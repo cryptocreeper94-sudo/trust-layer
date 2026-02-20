@@ -21400,7 +21400,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     const volumes: { id: string; title: string; subtitle: string; chapters: typeof chapters }[] = [];
     let volumeIndex = 0;
 
-    for (const [partTitle, partChapters] of partMap.entries()) {
+    for (const [partTitle, partChapters] of Array.from(partMap.entries())) {
       if (partChapters.length === 0) continue;
       volumes.push({
         id: `volume-${volumeIndex}`,
