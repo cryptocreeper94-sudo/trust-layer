@@ -81,18 +81,24 @@
     <link rel="apple-touch-startup-image" href="/splash/apple-splash-1080x1920.png" media="(device-width: 360px) and (device-height: 640px) and (-webkit-device-pixel-ratio: 3)" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Rajdhani:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js"></script>
     <script>
-      (function initMonaco() {
-        if (typeof require !== 'undefined' && require.config) {
-          require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs' }});
-          window.MonacoEnvironment = { getWorkerUrl: function() { return 'data:text/javascript;charset=utf-8,' + encodeURIComponent('self.MonacoEnvironment={baseUrl:"https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/"};importScripts("https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/base/worker/workerMain.min.js");'); } };
-        } else {
-          setTimeout(initMonaco, 50);
-        }
-      })();
+      window.loadMonaco = function() {
+        if (window.__monacoLoaded) return Promise.resolve();
+        return new Promise(function(resolve) {
+          var s = document.createElement('script');
+          s.src = 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/loader.min.js';
+          s.onload = function() {
+            require.config({ paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs' }});
+            window.MonacoEnvironment = { getWorkerUrl: function() { return 'data:text/javascript;charset=utf-8,' + encodeURIComponent('self.MonacoEnvironment={baseUrl:"https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/"};importScripts("https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.52.2/min/vs/base/worker/workerMain.min.js");'); } };
+            window.__monacoLoaded = true;
+            resolve();
+          };
+          s.onerror = function() { resolve(); };
+          document.head.appendChild(s);
+        });
+      };
     </script>
   </head>
   <body style="background:#0a0f1e;margin:0">

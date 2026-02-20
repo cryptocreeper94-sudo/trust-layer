@@ -50,8 +50,12 @@ export function MonacoEditor({
 
   valueRef.current = value;
 
-  const initMonaco = useCallback(() => {
-    if (!containerRef.current || !window.require) return;
+  const initMonaco = useCallback(async () => {
+    if (!containerRef.current) return;
+    if (typeof (window as any).loadMonaco === 'function') {
+      await (window as any).loadMonaco();
+    }
+    if (!window.require) return;
 
     window.require(['vs/editor/editor.main'], function(monaco: any) {
       if (editorRef.current) {
