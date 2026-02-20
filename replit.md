@@ -60,3 +60,29 @@ The ecosystem spans 27 verified applications across primary domains (`dwsc.io`, 
 - **Hub API**: https://orbitstaffing.io
 - **AI**: OpenAI GPT-4o
 - **Social**: Twitter/X, Discord, Telegram, Facebook automation
+
+## Embeddable Ecosystem Widget
+
+The ecosystem includes a self-contained embeddable widget that any app (internal or partner) can add with a single script tag. It renders a floating button that opens a panel showing all 28+ ecosystem apps, live presale stats, and the user's SIG balance and subscription status when authenticated via SSO.
+
+### Embed Code (for any web app, React, or plain HTML)
+```html
+<script src="https://dwsc.io/api/ecosystem/widget.js"></script>
+```
+
+### Custom API Base (for dev/staging)
+```html
+<script src="https://dwsc.io/api/ecosystem/widget.js" data-api="https://your-app-url.replit.app"></script>
+```
+
+### Widget Data API (for React Native / Expo / backend agents)
+```
+GET https://dwsc.io/api/ecosystem/widget-data
+Authorization: Bearer <sso_token>  (optional, for personalized data)
+```
+Returns: `{ apps, presale, user, subscription, presaleBalance }`
+
+### Key Files
+- **Widget script**: `client/public/ecosystem-widget.js`
+- **API endpoints**: `server/routes.ts` (search for "EMBEDDABLE ECOSYSTEM WIDGET")
+- **Full integration handoff**: `VERDARA_RETURN_HANDOFF.md`
