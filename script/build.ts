@@ -96,16 +96,7 @@ async function buildAll() {
       sourcemap: false,
       rollupOptions: {
         output: {
-          manualChunks(id: string) {
-            if (id.includes('node_modules')) {
-              if (id.includes('react-dom') || id.includes('/react/')) return 'vendor-react';
-              if (id.includes('framer-motion')) return 'vendor-motion';
-              if (id.includes('@radix-ui')) return 'vendor-radix';
-              if (id.includes('recharts') || id.includes('d3-')) return 'vendor-charts';
-              if (id.includes('@tanstack')) return 'vendor-query';
-              if (id.includes('react-markdown') || id.includes('remark') || id.includes('mdast') || id.includes('micromark') || id.includes('unified') || id.includes('hast')) return 'vendor-markdown';
-            }
-          },
+          manualChunks: undefined,
         },
       },
     },
