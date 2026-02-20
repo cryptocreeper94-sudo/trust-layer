@@ -1,3 +1,19 @@
+import { execSync } from "child_process";
+
+if (!process.env.__BUILD_RELAUNCHED && !process.env.NODE_OPTIONS?.includes('max-old-space-size')) {
+  process.env.__BUILD_RELAUNCHED = '1';
+  try {
+    execSync('NODE_OPTIONS="--max-old-space-size=4096" npx tsx script/build.ts', {
+      stdio: 'inherit',
+      cwd: process.cwd(),
+      env: { ...process.env, __BUILD_RELAUNCHED: '1' },
+    });
+    process.exit(0);
+  } catch (e: any) {
+    process.exit(e.status || 1);
+  }
+}
+
 import { build as esbuild } from "esbuild";
 import { build as viteBuild } from "vite";
 import { rm, readFile, writeFile } from "fs/promises";
@@ -72,7 +88,29 @@ async function buildAll() {
   await rm("dist", { recursive: true, force: true });
 
   console.log("building client...");
-  await viteBuild({ mode: 'production' });
+  await viteBuild({ 
+    mode: 'production',
+    build: {
+      chunkSizeWarningLimit: 5000,
+      minify: 'esbuild',
+      sourcemap: false,
+      rollupOptions: {
+        output: {
+          manualChunks(id: string) {
+            if (id.includes('node_modules')) {
+              if (id.includes('react-dom') || id.includes('react/')) return 'vendor-react';
+              if (id.includes('framer-motion')) return 'vendor-motion';
+              if (id.includes('@radix-ui')) return 'vendor-radix';
+              if (id.includes('recharts') || id.includes('d3-')) return 'vendor-charts';
+              if (id.includes('@tanstack')) return 'vendor-query';
+              if (id.includes('react-markdown') || id.includes('remark') || id.includes('mdast') || id.includes('micromark') || id.includes('unified') || id.includes('hast')) return 'vendor-markdown';
+              return 'vendor';
+            }
+          },
+        },
+      },
+    },
+  });
 
   console.log("building server...");
   const pkg = JSON.parse(await readFile("package.json", "utf-8"));
