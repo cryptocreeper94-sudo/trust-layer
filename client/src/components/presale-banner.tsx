@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { Rocket, TrendingUp, Users, Coins, X, ChevronRight, Zap } from "lucide-react";
+import { Rocket, TrendingUp, Users, Coins, X, ChevronRight, Zap, Wallet, Target } from "lucide-react";
+import { useSimpleAuth } from "@/hooks/use-simple-auth";
+import { authFetch } from "@/hooks/use-firebase-auth";
 
 interface PresaleStats {
   totalRaisedUsd: number;
@@ -16,6 +18,12 @@ interface PresaleStats {
   currentTokenPrice: number;
   nextMilestoneUsd: number | null;
   nextTokenPrice: number | null;
+  milestones: { thresholdUsd: number; price: number }[];
+}
+
+interface MyPurchases {
+  purchases: any[];
+  total: { tokens: number; spent: number };
 }
 
 function formatNumber(n: number): string {
@@ -34,6 +42,7 @@ export function PresaleBanner() {
   const [location] = useLocation();
   const [dismissed, setDismissed] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const { user, isAuthenticated } = useSimpleAuth();
 
   const { data: stats } = useQuery<PresaleStats>({
     queryKey: ["/api/presale/stats"],
@@ -46,6 +55,18 @@ export function PresaleBanner() {
     staleTime: 15000,
   });
 
+  const { data: myPurchases } = useQuery<MyPurchases>({
+    queryKey: ["/api/presale/my-purchases"],
+    queryFn: async () => {
+      const res = await authFetch("/api/presale/my-purchases");
+      if (!res.ok) throw new Error("Failed to fetch purchases");
+      return res.json();
+    },
+    enabled: isAuthenticated,
+    refetchInterval: 60000,
+    staleTime: 30000,
+  });
+
   const hiddenPaths = ["/presale", "/presale/success", "/owner-admin"];
   const shouldHide = hiddenPaths.some(p => location.startsWith(p));
 
@@ -53,6 +74,18 @@ export function PresaleBanner() {
 
   const percentNum = parseFloat(stats.percentSold || "0");
   const tokensRemaining = stats.presaleAllocation - stats.tokensSold;
+  const myBalance = myPurchases?.total?.tokens || 0;
+  const mySpent = myPurchases?.total?.spent || 0;
+
+  const milestones = stats.milestones || [];
+  const currentMilestoneIdx = milestones.findIndex(m => m.thresholdUsd > stats.totalRaisedUsd);
+  const prevMilestone = currentMilestoneIdx > 0 ? milestones[currentMilestoneIdx - 1] : { thresholdUsd: 0, price: stats.currentTokenPrice };
+  const nextMilestone = currentMilestoneIdx >= 0 ? milestones[currentMilestoneIdx] : null;
+  const milestoneDenom = nextMilestone ? (nextMilestone.thresholdUsd - prevMilestone.thresholdUsd) : 1;
+  const milestoneProgress = nextMilestone && milestoneDenom > 0
+    ? Math.max(0, Math.min(100, ((stats.totalRaisedUsd - prevMilestone.thresholdUsd) / milestoneDenom) * 100))
+    : 100;
+  const untilNextIncrease = nextMilestone ? Math.max(0, nextMilestone.thresholdUsd - stats.totalRaisedUsd) : 0;
 
   return (
     <AnimatePresence>
@@ -120,29 +153,42 @@ export function PresaleBanner() {
                       <span className="text-white/60">Price:</span>
                       <span className="font-semibold text-white" data-testid="presale-stat-price">${stats.currentTokenPrice}</span>
                     </div>
+                    {isAuthenticated && (
+                      <div className="flex items-center gap-1.5">
+                        <Wallet className="w-3 h-3 text-green-400" />
+                        <span className="text-white/60">My SIG:</span>
+                        <span className="font-semibold text-green-400" data-testid="presale-stat-my-balance">{formatNumber(myBalance)}</span>
+                      </div>
+                    )}
                     <div className="hidden lg:flex items-center gap-1.5">
                       <Users className="w-3 h-3 text-purple-400" />
                       <span className="text-white/60">Holders:</span>
                       <span className="font-semibold text-white" data-testid="presale-stat-holders">{stats.uniqueHolders}</span>
                     </div>
-                    <div className="hidden xl:flex items-center gap-1.5">
-                      <Zap className="w-3 h-3 text-pink-400" />
-                      <span className="text-white/60">Remaining:</span>
-                      <span className="font-semibold text-white" data-testid="presale-stat-remaining">{formatNumber(tokensRemaining)} SIG</span>
-                    </div>
                   </div>
 
-                  <div className="hidden md:flex items-center gap-2 flex-1 max-w-[200px]">
-                    <div className="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden">
-                      <motion.div
-                        initial={{ width: 0 }}
-                        animate={{ width: `${Math.min(percentNum, 100)}%` }}
-                        transition={{ duration: 1.5, ease: "easeOut" }}
-                        className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500"
-                      />
+                  {nextMilestone && (
+                    <div className="hidden md:flex items-center gap-2 flex-1 max-w-[240px]" data-testid="presale-milestone-bar">
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-0.5">
+                          <span className="text-[9px] text-white/40">
+                            {formatUSD(untilNextIncrease)} to price increase
+                          </span>
+                          <span className="text-[9px] text-orange-400 font-medium">
+                            → ${nextMilestone.price}/SIG
+                          </span>
+                        </div>
+                        <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: `${Math.min(milestoneProgress, 100)}%` }}
+                            transition={{ duration: 1.5, ease: "easeOut" }}
+                            className="h-full rounded-full bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500"
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <span className="text-[10px] text-white/40 shrink-0">{percentNum.toFixed(1)}%</span>
-                  </div>
+                  )}
                 </div>
 
                 <div className="flex-1 sm:hidden">
@@ -153,13 +199,26 @@ export function PresaleBanner() {
                     <span className="text-cyan-400 font-medium">
                       ${stats.currentTokenPrice}/SIG
                     </span>
+                    {isAuthenticated && (
+                      <span className="text-green-400 font-medium" data-testid="presale-stat-my-balance-mobile">
+                        {formatNumber(myBalance)} SIG
+                      </span>
+                    )}
                   </div>
-                  <div className="mt-1 h-1 bg-white/5 rounded-full overflow-hidden">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500"
-                      style={{ width: `${Math.min(percentNum, 100)}%` }}
-                    />
-                  </div>
+                  {nextMilestone && (
+                    <div className="mt-1">
+                      <div className="flex items-center justify-between mb-0.5">
+                        <span className="text-[9px] text-white/30">{formatUSD(untilNextIncrease)} to price ↑</span>
+                        <span className="text-[9px] text-orange-400">→ ${nextMilestone.price}</span>
+                      </div>
+                      <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                        <div
+                          className="h-full rounded-full bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500"
+                          style={{ width: `${Math.min(milestoneProgress, 100)}%` }}
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 <Link href="/presale" data-testid="presale-banner-cta">
@@ -184,41 +243,73 @@ export function PresaleBanner() {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden sm:hidden"
                   >
-                    <div className="grid grid-cols-2 gap-2 pb-3 pt-1">
+                    <div className="grid grid-cols-2 gap-2 pb-2 pt-1">
                       <div className="bg-white/5 rounded-lg p-2.5">
                         <div className="flex items-center gap-1 mb-1">
                           <TrendingUp className="w-3 h-3 text-cyan-400" />
                           <span className="text-[10px] text-white/50">Total Raised</span>
                         </div>
-                        <span className="text-sm font-bold text-white">{formatUSD(stats.totalRaisedUsd)}</span>
+                        <span className="text-sm font-bold text-white" data-testid="presale-expanded-raised">{formatUSD(stats.totalRaisedUsd)}</span>
                       </div>
                       <div className="bg-white/5 rounded-lg p-2.5">
                         <div className="flex items-center gap-1 mb-1">
                           <Coins className="w-3 h-3 text-yellow-400" />
-                          <span className="text-[10px] text-white/50">Token Price</span>
+                          <span className="text-[10px] text-white/50">SIG Price</span>
                         </div>
-                        <span className="text-sm font-bold text-white">${stats.currentTokenPrice}</span>
+                        <span className="text-sm font-bold text-white" data-testid="presale-expanded-price">${stats.currentTokenPrice}</span>
                       </div>
                       <div className="bg-white/5 rounded-lg p-2.5">
                         <div className="flex items-center gap-1 mb-1">
                           <Users className="w-3 h-3 text-purple-400" />
                           <span className="text-[10px] text-white/50">Holders</span>
                         </div>
-                        <span className="text-sm font-bold text-white">{stats.uniqueHolders}</span>
+                        <span className="text-sm font-bold text-white" data-testid="presale-expanded-holders">{stats.uniqueHolders}</span>
                       </div>
                       <div className="bg-white/5 rounded-lg p-2.5">
                         <div className="flex items-center gap-1 mb-1">
                           <Zap className="w-3 h-3 text-pink-400" />
-                          <span className="text-[10px] text-white/50">Remaining</span>
+                          <span className="text-[10px] text-white/50">SIG Remaining</span>
                         </div>
-                        <span className="text-sm font-bold text-white">{formatNumber(tokensRemaining)}</span>
+                        <span className="text-sm font-bold text-white" data-testid="presale-expanded-remaining">{formatNumber(tokensRemaining)}</span>
                       </div>
                     </div>
-                    {stats.nextMilestoneUsd && (
-                      <div className="pb-3 text-center">
-                        <span className="text-[10px] text-white/40">
-                          Next price increase at {formatUSD(stats.nextMilestoneUsd)} → ${stats.nextTokenPrice}/SIG
-                        </span>
+
+                    {isAuthenticated && (
+                      <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-2.5 mb-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1.5">
+                            <Wallet className="w-3.5 h-3.5 text-green-400" />
+                            <span className="text-[10px] text-white/50">My Balance</span>
+                          </div>
+                          <span className="text-sm font-bold text-green-400" data-testid="presale-expanded-my-balance">{formatNumber(myBalance)} SIG</span>
+                        </div>
+                        <div className="flex items-center justify-between mt-1">
+                          <span className="text-[10px] text-white/40">Total Invested</span>
+                          <span className="text-[10px] text-white/60">{formatUSD(mySpent)}</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {nextMilestone && (
+                      <div className="bg-white/5 rounded-lg p-2.5 mb-3">
+                        <div className="flex items-center gap-1.5 mb-1.5">
+                          <Target className="w-3 h-3 text-orange-400" />
+                          <span className="text-[10px] text-white/50">Next Price Increase</span>
+                        </div>
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="text-xs text-white/70">{formatUSD(untilNextIncrease)} remaining</span>
+                          <span className="text-xs text-orange-400 font-semibold">→ ${nextMilestone.price}/SIG</span>
+                        </div>
+                        <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                          <div
+                            className="h-full rounded-full bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 transition-all duration-500"
+                            style={{ width: `${Math.min(milestoneProgress, 100)}%` }}
+                          />
+                        </div>
+                        <div className="flex items-center justify-between mt-1">
+                          <span className="text-[9px] text-white/30">{prevMilestone.thresholdUsd > 0 ? formatUSD(prevMilestone.thresholdUsd) : '$0'}</span>
+                          <span className="text-[9px] text-white/30">{formatUSD(nextMilestone.thresholdUsd)}</span>
+                        </div>
                       </div>
                     )}
                   </motion.div>
