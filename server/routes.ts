@@ -16574,8 +16574,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  // OpenAI Text-to-Speech for book reader (public - no auth required for reading)
-  // Uses Nova voice - natural female narrator
+  // Text-to-Speech for book reader (public - no auth required)
+  // Priority: ElevenLabs (Rachel) → OpenAI (Nova) → client browser fallback
   app.post("/api/voice/tts", async (req: any, res) => {
     try {
       const { text } = req.body;
@@ -16584,21 +16584,63 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(400).json({ error: "Text is required" });
       }
       
-      // Limit text length to prevent abuse (OpenAI limit is 4096 chars)
       if (text.length > 4000) {
         return res.status(400).json({ error: "Text too long. Maximum 4000 characters per request." });
       }
       
-      const apiKey = process.env.OPENAI_API_KEY;
-      if (!apiKey) {
+      // Try ElevenLabs first (preferred - higher quality)
+      const elevenLabsKey = process.env.ELEVENLABS_API_KEY;
+      if (elevenLabsKey) {
+        try {
+          const voiceId = "21m00Tcm4TlvDq8ikWAM"; // Rachel - warm, clear narrator
+          const elResponse = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+            method: "POST",
+            headers: {
+              "xi-api-key": elevenLabsKey,
+              "Content-Type": "application/json",
+              "Accept": "audio/mpeg",
+            },
+            body: JSON.stringify({
+              text: text,
+              model_id: "eleven_flash_v2_5",
+              voice_settings: {
+                stability: 0.65,
+                similarity_boost: 0.75,
+                style: 0.3,
+                use_speaker_boost: true,
+              },
+            }),
+          });
+          
+          if (elResponse.ok) {
+            const arrayBuffer = await elResponse.arrayBuffer();
+            if (arrayBuffer.byteLength > 100) {
+              console.log("[TTS] ElevenLabs Rachel served successfully");
+              res.set({
+                "Content-Type": "audio/mpeg",
+                "Cache-Control": "public, max-age=86400",
+                "X-Voice-Provider": "elevenlabs",
+                "X-Voice-Name": "Rachel",
+              });
+              return res.send(Buffer.from(arrayBuffer));
+            }
+          }
+          console.warn("[TTS] ElevenLabs failed, falling back to OpenAI:", elResponse.status);
+        } catch (elErr: any) {
+          console.warn("[TTS] ElevenLabs error, falling back to OpenAI:", elErr.message);
+        }
+      }
+      
+      // Fallback to OpenAI Nova
+      const openaiKey = process.env.OPENAI_API_KEY;
+      if (!openaiKey) {
         return res.status(503).json({ error: "Voice service not configured", fallback: true });
       }
       
-      // Use OpenAI's Nova voice - natural female narrator
       const response = await fetch("https://api.openai.com/v1/audio/speech", {
         method: "POST",
         headers: {
-          "Authorization": `Bearer ${apiKey}`,
+          "Authorization": `Bearer ${openaiKey}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -16611,7 +16653,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("[OpenAI TTS] Error:", response.status, errorText);
+        console.error("[TTS] OpenAI fallback also failed:", response.status, errorText);
         return res.status(response.status).json({ 
           error: "Voice generation failed", 
           fallback: true,
@@ -16619,17 +16661,19 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         });
       }
       
-      // Stream the audio response
+      console.log("[TTS] OpenAI Nova served as fallback");
       res.set({
         "Content-Type": "audio/mpeg",
-        "Cache-Control": "public, max-age=86400", // Cache for 24 hours
+        "Cache-Control": "public, max-age=86400",
+        "X-Voice-Provider": "openai",
+        "X-Voice-Name": "Nova",
       });
       
       const arrayBuffer = await response.arrayBuffer();
       res.send(Buffer.from(arrayBuffer));
       
     } catch (error: any) {
-      console.error("[OpenAI TTS] Error:", error);
+      console.error("[TTS] Error:", error);
       res.status(500).json({ error: error.message || "Voice generation failed", fallback: true });
     }
   });

@@ -337,6 +337,7 @@ export default function VeilReader() {
   }, [currentVolume, currentChapter, hasSeenUpdates, volumes]);
 
   const [ttsError, setTtsError] = useState<string | null>(null);
+  const [voiceProvider, setVoiceProvider] = useState<string>('');
 
   const playWithAIVoice = async (text: string) => {
     setIsLoading(true);
@@ -352,6 +353,10 @@ export default function VeilReader() {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || 'AI voice failed');
       }
+
+      const provider = response.headers.get('X-Voice-Provider') || 'ai';
+      const voiceName = response.headers.get('X-Voice-Name') || '';
+      setVoiceProvider(provider === 'elevenlabs' ? `ElevenLabs ${voiceName}` : `OpenAI ${voiceName}`);
 
       const blob = await response.blob();
       if (blob.size < 100) {
@@ -396,10 +401,11 @@ export default function VeilReader() {
   };
 
   const tryBrowserSpeech = (text: string) => {
+    setVoiceProvider('Browser');
     if ('speechSynthesis' in window) {
       playWithBrowserSpeech(text);
     } else {
-      setTtsError('Voice playback not available. Try downloading the PDF and using Adobe Reader.');
+      setTtsError('Voice not available on this device. Download the PDF and open in Adobe Reader for read-aloud.');
     }
   };
 
@@ -424,14 +430,14 @@ export default function VeilReader() {
       utterance.onerror = (e) => {
         console.error('Browser speech error:', e);
         setIsPlaying(false);
-        setTtsError('Browser voice failed. Try the PDF with Adobe Reader instead.');
+        setTtsError('Browser voice failed. Download PDF and use Adobe Reader for read-aloud.');
       };
       
       window.speechSynthesis.speak(utterance);
       setIsPlaying(true);
     } catch (e) {
       console.error('Browser speech exception:', e);
-      setTtsError('Voice not available. Download PDF and use Adobe Reader.');
+      setTtsError('Voice not available. Download PDF and use Adobe Reader for read-aloud.');
     }
   };
 
@@ -706,7 +712,7 @@ export default function VeilReader() {
                 {isLoading ? (
                   <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/15 border border-purple-500/20 backdrop-blur-sm">
                     <div className="w-3.5 h-3.5 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
-                    <span className="text-xs text-purple-300 hidden sm:inline">Loading Nova...</span>
+                    <span className="text-xs text-purple-300 hidden sm:inline">Loading voice...</span>
                   </div>
                 ) : isPlaying ? (
                   <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-gradient-to-r from-purple-500/15 to-cyan-500/10 border border-purple-500/20 backdrop-blur-sm">
@@ -720,6 +726,9 @@ export default function VeilReader() {
                         />
                       ))}
                     </div>
+                    {voiceProvider && (
+                      <span className="text-[9px] text-purple-300/70 font-mono hidden sm:inline mr-1">{voiceProvider}</span>
+                    )}
                     <Button 
                       size="icon" 
                       onClick={handlePause}
@@ -745,7 +754,7 @@ export default function VeilReader() {
                     onClick={handlePlay}
                     className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white rounded-full w-8 h-8 shadow-lg shadow-purple-500/25 transition-all hover:shadow-purple-500/40 hover:scale-110"
                     data-testid="button-play-chapter"
-                    title={isPaused ? 'Resume' : (useAIVoice ? 'Listen with Nova AI' : 'Listen (Browser Voice)')}
+                    title={isPaused ? 'Resume' : (useAIVoice ? 'Listen with ElevenLabs' : 'Listen (Browser Voice)')}
                   >
                     <Play className="w-4 h-4 ml-0.5" />
                   </Button>
@@ -766,10 +775,15 @@ export default function VeilReader() {
                     <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center shadow-md shadow-purple-500/20">
                       <Volume2 className="w-3 h-3 text-white" />
                     </div>
-                    <p className="text-white font-semibold text-sm">Nova AI Voice</p>
+                    <p className="text-white font-semibold text-sm">AI Narration</p>
                   </div>
-                  <p className="text-slate-400 text-xs leading-relaxed mb-2">Powered by OpenAI. Nova provides natural, expressive narration. Falls back to browser voice if unavailable.</p>
-                  <p className="text-purple-400 text-xs">For offline listening, download and use your device's reader.</p>
+                  <p className="text-slate-400 text-xs leading-relaxed mb-2">
+                    Powered by ElevenLabs Rachel voice with OpenAI Nova as backup. Natural, expressive narration for every chapter.
+                  </p>
+                  {voiceProvider && (
+                    <p className="text-cyan-400 text-[10px] font-mono mb-2">Currently using: {voiceProvider}</p>
+                  )}
+                  <p className="text-purple-400 text-xs">For offline listening, download PDF and use Adobe Reader's read-aloud.</p>
                 </div>
                 {ttsError && (
                   <motion.div 
@@ -777,8 +791,15 @@ export default function VeilReader() {
                     animate={{ opacity: 1, y: 0 }}
                     className="absolute top-full right-0 mt-2 w-72 p-3 bg-red-950/90 backdrop-blur-xl border border-red-500/30 rounded-xl shadow-2xl z-50 text-xs"
                   >
-                    <p className="text-red-200">{ttsError}</p>
-                    <a href="/veil" className="text-cyan-400 hover:text-cyan-300 underline mt-1 block transition-colors">Go to download page</a>
+                    <p className="text-red-200 mb-2">{ttsError}</p>
+                    <button 
+                      onClick={() => handleDownloadPDF()} 
+                      className="text-cyan-400 hover:text-cyan-300 underline block transition-colors mb-1"
+                      data-testid="button-tts-error-pdf"
+                    >
+                      Download PDF for Adobe Reader
+                    </button>
+                    <a href="/veil" className="text-purple-400 hover:text-purple-300 underline block transition-colors">Go to download page</a>
                   </motion.div>
                 )}
               </div>
