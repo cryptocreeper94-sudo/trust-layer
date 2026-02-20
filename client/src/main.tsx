@@ -2,6 +2,11 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./index.css";
 
+const diag = (s: string, d?: string) => {
+  try { (window as any).__diag?.(s, d); } catch {}
+};
+diag('module_exec', 'all imports resolved, main.tsx running');
+
 (window as any).__tlScriptStarted = true;
 
 function getManifestForRoute(): string {
@@ -147,9 +152,19 @@ if ('serviceWorker' in navigator) {
 }
 
 try {
+  diag('pre_render', 'about to call createRoot');
   (window as any).__tlLoaded = true;
-  createRoot(document.getElementById("root")!).render(<App />);
+  const rootEl = document.getElementById("root");
+  if (!rootEl) {
+    diag('no_root', 'root element not found');
+  } else {
+    const root = createRoot(rootEl);
+    diag('root_created', 'createRoot succeeded');
+    root.render(<App />);
+    diag('render_called', 'render() called successfully');
+  }
 } catch (err: any) {
+  diag('render_error', err?.message || String(err));
   const root = document.getElementById("root");
   if (root) {
     root.innerHTML = `<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:2rem;background:#0a0f1e"><div style="text-align:center;max-width:420px"><div style="font-size:48px;margin-bottom:16px">&#9888;</div><h2 style="color:#22d3ee;margin-bottom:8px;font-family:system-ui">Startup Error</h2><p style="color:#94a3b8;font-size:13px;font-family:monospace;word-break:break-all;margin-bottom:16px">${err?.message || err}</p><button onclick="location.reload()" style="background:linear-gradient(135deg,#06b6d4,#8b5cf6);color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:16px;cursor:pointer;font-weight:600">Reload</button></div></div>`;

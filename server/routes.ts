@@ -88,6 +88,10 @@ async function isAuthenticated(req: any, res: Response, next: NextFunction) {
 // Alias for routes using the old name
 const verifyFirebaseToken = isAuthenticated;
 
+// Client-side loading diagnostics - temporary
+const loadDiagnostics: Array<{ ts: number; stage: string; ua: string; detail?: string }> = [];
+
+
 // Chronicles-specific authentication middleware
 // Uses the separate Chronicles account system with session tokens stored in chronicleAccounts
 async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunction) {
@@ -252,6 +256,19 @@ export async function registerRoutes(
   app: Express
 ): Promise<Server> {
   
+  app.post("/api/diag", (req, res) => {
+    const { stage, detail } = req.body || {};
+    const ua = req.headers["user-agent"] || "unknown";
+    const short = ua.length > 80 ? ua.substring(0, 80) : ua;
+    console.log(`[DIAG] ${stage}${detail ? ' | ' + detail : ''} | ${short}`);
+    loadDiagnostics.push({ ts: Date.now(), stage, ua: short, detail });
+    if (loadDiagnostics.length > 100) loadDiagnostics.shift();
+    res.json({ ok: true });
+  });
+  app.get("/api/diag", (_req, res) => {
+    res.json(loadDiagnostics.slice(-50));
+  });
+
   registerChatRoutes(app);
   registerImageRoutes(app);
   registerObjectStorageRoutes(app);

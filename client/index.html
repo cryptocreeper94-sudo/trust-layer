@@ -112,18 +112,35 @@
     <script>
       window.__tlLoaded = false;
       window.__tlScriptStarted = false;
+      window.__diag = function(s, d) {
+        var data = JSON.stringify({stage:s,detail:d});
+        try { navigator.sendBeacon('/api/diag', new Blob([data], {type:'application/json'})); } catch(e) {}
+      };
+      window.__diag('html_parsed', 'inline script executing');
       window.onerror = function(msg, src, line, col, err) {
+        window.__diag('js_error', msg + ' at ' + src + ':' + line);
         var d = document.getElementById('initial-loader');
         if (d) {
           d.innerHTML = '<div style="text-align:center;max-width:420px;padding:20px"><div style="font-size:36px;margin-bottom:12px">&#9888;</div><h2 style="color:#22d3ee;margin-bottom:8px;font-family:system-ui">Load Error</h2><p style="color:#94a3b8;font-size:13px;font-family:monospace;word-break:break-all;margin-bottom:16px">' + (msg || 'Unknown error') + '</p><button onclick="location.reload()" style="background:linear-gradient(135deg,#06b6d4,#8b5cf6);color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:16px;cursor:pointer;font-weight:600">Reload</button></div>';
         }
       };
       window.addEventListener('unhandledrejection', function(e) {
+        window.__diag('promise_reject', String(e.reason));
         var d = document.getElementById('initial-loader');
         if (d && !window.__tlLoaded) {
           d.innerHTML = '<div style="text-align:center;max-width:420px;padding:20px"><div style="font-size:36px;margin-bottom:12px">&#9888;</div><h2 style="color:#22d3ee;margin-bottom:8px;font-family:system-ui">Load Error</h2><p style="color:#94a3b8;font-size:13px;font-family:monospace;word-break:break-all;margin-bottom:16px">' + (e.reason || 'Promise rejection') + '</p><button onclick="location.reload()" style="background:linear-gradient(135deg,#06b6d4,#8b5cf6);color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:16px;cursor:pointer;font-weight:600">Reload</button></div>';
         }
       });
+      setTimeout(function() {
+        if (!window.__tlLoaded) {
+          window.__diag('timeout_15s', 'React not mounted after 15s');
+          var d = document.getElementById('initial-loader');
+          if (d) {
+            var p = d.querySelector('p');
+            if (p) p.textContent = 'Still loading... this is taking longer than expected.';
+          }
+        }
+      }, 15000);
     </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
