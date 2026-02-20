@@ -127,10 +127,16 @@ function updateDomainAssets() {
 updateDomainAssets();
 
 if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    for (const reg of registrations) {
+      reg.update();
+    }
+  });
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
+    navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' })
       .then((registration) => {
         console.log('SW registered:', registration.scope);
+        registration.update();
       })
       .catch((error) => {
         console.log('SW registration failed:', error);

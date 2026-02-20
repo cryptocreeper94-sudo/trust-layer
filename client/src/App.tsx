@@ -775,7 +775,11 @@ function AppShell({ appType }: { appType: string }) {
 
 function App() {
   const appType = useMemo(() => getAppFromHost(), []);
-  
+
+  useEffect(() => {
+    (window as any).__tlLoaded = true;
+  }, []);
+
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>

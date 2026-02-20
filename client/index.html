@@ -107,9 +107,45 @@
       window.addEventListener('error', function(e) {
         var root = document.getElementById('root');
         if (root && !root.querySelector('[data-reactroot]') && !root.querySelector('[data-testid]')) {
-          root.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:2rem"><div style="text-align:center;max-width:420px"><div style="font-size:48px;margin-bottom:16px">&#9888;</div><h1 style="font-size:22px;margin-bottom:12px;color:#22d3ee">Loading Issue</h1><p style="color:#94a3b8;margin-bottom:24px;line-height:1.6;font-family:system-ui">The app had trouble loading. This can happen with ad-blockers or slow connections. Try refreshing.</p><button onclick="if(window.caches)caches.keys().then(function(k){k.forEach(function(n){caches.delete(n)})});setTimeout(function(){location.reload()},200)" style="background:linear-gradient(135deg,#06b6d4,#8b5cf6);color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:16px;cursor:pointer;font-weight:600">Clear Cache &amp; Reload</button></div></div>';
+          window.__tlShowRecovery();
         }
       });
+      window.__tlShowRecovery = function() {
+        var root = document.getElementById('root');
+        if (!root) return;
+        root.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:2rem"><div style="text-align:center;max-width:420px"><div style="font-size:48px;margin-bottom:16px">&#9888;</div><h1 style="font-size:22px;margin-bottom:12px;color:#22d3ee">Loading Issue</h1><p style="color:#94a3b8;margin-bottom:24px;line-height:1.6;font-family:system-ui">Clearing old data and reloading...</p></div></div>';
+        window.__tlDoRecovery();
+      };
+      window.__tlDoRecovery = function() {
+        if (navigator.serviceWorker) {
+          navigator.serviceWorker.getRegistrations().then(function(regs) {
+            regs.forEach(function(r) { r.unregister(); });
+          });
+        }
+        if (window.caches) {
+          caches.keys().then(function(k) {
+            k.forEach(function(n) { caches.delete(n); });
+          });
+        }
+        setTimeout(function() { location.reload(); }, 500);
+      };
+      window.__tlLoaded = false;
+      setTimeout(function() {
+        if (!window.__tlLoaded) {
+          var root = document.getElementById('root');
+          var loader = document.getElementById('initial-loader');
+          if (loader && root && !root.querySelector('[data-testid]')) {
+            var already = sessionStorage.getItem('tl_recovery');
+            if (already) {
+              sessionStorage.removeItem('tl_recovery');
+              root.innerHTML = '<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;padding:2rem"><div style="text-align:center;max-width:420px"><div style="font-size:48px;margin-bottom:16px">&#9888;</div><h1 style="font-size:22px;margin-bottom:12px;color:#22d3ee">Loading Issue</h1><p style="color:#94a3b8;margin-bottom:24px;line-height:1.6;font-family:system-ui">The app is taking longer than expected. This may be due to a slow connection. Please try again.</p><button onclick="location.reload()" style="background:linear-gradient(135deg,#06b6d4,#8b5cf6);color:#fff;border:none;border-radius:12px;padding:14px 32px;font-size:16px;cursor:pointer;font-weight:600">Try Again</button></div></div>';
+            } else {
+              sessionStorage.setItem('tl_recovery', '1');
+              window.__tlDoRecovery();
+            }
+          }
+        }
+      }, 8000);
     </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
