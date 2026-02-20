@@ -206,12 +206,14 @@ export default function Veil() {
             { icon: Star, label: "Free Forever", sub: "Always Free Here", color: "text-amber-400" },
           ].map((stat) => (
             <motion.div key={stat.label} variants={item}>
-              <GlassCard glow className="p-5 sm:p-6 text-center h-full">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 flex items-center justify-center">
-                  <stat.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${stat.color}`} />
+              <GlassCard glow className="text-center h-full">
+                <div className="p-5 sm:p-6">
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 mx-auto mb-3 sm:mb-4 rounded-xl bg-gradient-to-br from-white/5 to-white/[0.02] border border-white/10 flex items-center justify-center">
+                    <stat.icon className={`w-5 h-5 sm:w-6 sm:h-6 ${stat.color}`} />
+                  </div>
+                  <p className="text-white font-bold text-sm sm:text-base">{stat.label}</p>
+                  <p className="text-slate-500 text-[10px] sm:text-xs mt-1.5">{stat.sub}</p>
                 </div>
-                <p className="text-white font-bold text-sm sm:text-base">{stat.label}</p>
-                <p className="text-slate-500 text-[10px] sm:text-xs mt-1.5">{stat.sub}</p>
               </GlassCard>
             </motion.div>
           ))}
@@ -385,54 +387,60 @@ export default function Veil() {
           transition={{ duration: 0.5 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mb-12 sm:mb-16 max-w-5xl mx-auto"
         >
-          <GlassCard glow className="p-6 sm:p-8">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 w-fit mb-5">
-              <BookOpen className="w-6 h-6 text-purple-400" />
+          <GlassCard glow>
+            <div className="p-6 sm:p-8">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30 w-fit mb-5">
+                <BookOpen className="w-6 h-6 text-purple-400" />
+              </div>
+              <h4 className="text-lg font-bold text-white mb-3">Read Online</h4>
+              <p className="text-sm text-slate-400 leading-relaxed mb-5">
+                Full interactive e-reader with chapter navigation, progress tracking, and AI voice narration. Works on any device.
+              </p>
+              <Button
+                onClick={() => handleReadOnline()}
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 py-5 text-sm min-h-[48px]"
+                data-testid="button-read-online-card"
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                Open E-Reader
+              </Button>
             </div>
-            <h4 className="text-lg font-bold text-white mb-3">Read Online</h4>
-            <p className="text-sm text-slate-400 leading-relaxed mb-5">
-              Full interactive e-reader with chapter navigation, progress tracking, and AI voice narration. Works on any device.
-            </p>
-            <Button
-              onClick={() => handleReadOnline()}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 py-5 text-sm min-h-[48px]"
-              data-testid="button-read-online-card"
-            >
-              <Eye className="w-4 h-4 mr-2" />
-              Open E-Reader
-            </Button>
           </GlassCard>
 
-          <GlassCard glow className="p-6 sm:p-8">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 w-fit mb-5">
-              <Volume2 className="w-6 h-6 text-cyan-400" />
+          <GlassCard glow>
+            <div className="p-6 sm:p-8">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 w-fit mb-5">
+                <Volume2 className="w-6 h-6 text-cyan-400" />
+              </div>
+              <h4 className="text-lg font-bold text-white mb-3">AI Voice Narration</h4>
+              <p className="text-sm text-slate-400 leading-relaxed mb-5">
+                Nova AI reads each chapter aloud with natural, expressive narration powered by OpenAI. Listen while you commute or relax.
+              </p>
+              <Button
+                onClick={() => handleReadOnline()}
+                variant="outline"
+                className="w-full border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 py-5 text-sm min-h-[48px]"
+                data-testid="button-ai-voice-card"
+              >
+                <Headphones className="w-4 h-4 mr-2" />
+                Listen Now
+              </Button>
             </div>
-            <h4 className="text-lg font-bold text-white mb-3">AI Voice Narration</h4>
-            <p className="text-sm text-slate-400 leading-relaxed mb-5">
-              Nova AI reads each chapter aloud with natural, expressive narration powered by OpenAI. Listen while you commute or relax.
-            </p>
-            <Button
-              onClick={() => handleReadOnline()}
-              variant="outline"
-              className="w-full border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 py-5 text-sm min-h-[48px]"
-              data-testid="button-ai-voice-card"
-            >
-              <Headphones className="w-4 h-4 mr-2" />
-              Listen Now
-            </Button>
           </GlassCard>
 
-          <GlassCard glow className="p-6 sm:p-8 md:col-span-2 lg:col-span-1">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 w-fit mb-5">
-              <Clock className="w-6 h-6 text-amber-400" />
-            </div>
-            <h4 className="text-lg font-bold text-white mb-3">Always Updated</h4>
-            <p className="text-sm text-slate-400 leading-relaxed mb-5">
-              The online edition stays current with new research, corrections, and expanded chapters. Version tracking built in.
-            </p>
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-500/10 border border-green-500/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-              <span className="text-[10px] text-green-400 font-semibold uppercase tracking-wider">v3.0.0 — Latest</span>
+          <GlassCard glow className="md:col-span-2 lg:col-span-1">
+            <div className="p-6 sm:p-8">
+              <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 w-fit mb-5">
+                <Clock className="w-6 h-6 text-amber-400" />
+              </div>
+              <h4 className="text-lg font-bold text-white mb-3">Always Updated</h4>
+              <p className="text-sm text-slate-400 leading-relaxed mb-5">
+                The online edition stays current with new research, corrections, and expanded chapters. Version tracking built in.
+              </p>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-500/10 border border-green-500/20">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                <span className="text-[10px] text-green-400 font-semibold uppercase tracking-wider">v3.0.0 — Latest</span>
+              </div>
             </div>
           </GlassCard>
         </motion.div>
@@ -452,7 +460,8 @@ export default function Veil() {
             <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white">What's Inside</h3>
           </div>
 
-          <GlassCard glow className="p-4 sm:p-6 md:p-8">
+          <GlassCard glow>
+            <div className="p-4 sm:p-6 md:p-8">
             <Accordion type="single" collapsible defaultValue="part-1" className="space-y-2">
               {tableOfContents.map((section) => (
                 <AccordionItem
@@ -495,6 +504,7 @@ export default function Veil() {
                 </AccordionItem>
               ))}
             </Accordion>
+            </div>
           </GlassCard>
         </motion.div>
 
@@ -505,24 +515,26 @@ export default function Veil() {
           transition={{ duration: 0.5 }}
           className="mb-12 sm:mb-16 max-w-3xl mx-auto"
         >
-          <GlassCard glow className="p-8 sm:p-10 md:p-14 text-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5 pointer-events-none" />
-            <div className="absolute top-6 left-8 opacity-10">
-              <Quote className="w-12 h-12 text-purple-400" />
-            </div>
-            <div className="absolute bottom-6 right-8 opacity-10 rotate-180">
-              <Quote className="w-12 h-12 text-pink-400" />
-            </div>
-            <div className="relative z-10">
-              <p className="text-base sm:text-lg md:text-xl text-slate-200 leading-relaxed italic mb-6 sm:mb-8">
-                "I do not add to Scripture. I do not take away from it. I simply illuminate what is already written."
-              </p>
-              <div className="flex items-center justify-center gap-3 mb-2">
-                <div className="w-8 h-px bg-gradient-to-r from-transparent to-purple-500/50" />
-                <Feather className="w-4 h-4 text-purple-400/60" />
-                <div className="w-8 h-px bg-gradient-to-l from-transparent to-pink-500/50" />
+          <GlassCard glow>
+            <div className="p-8 sm:p-10 md:p-14 text-center relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-pink-500/5 pointer-events-none" />
+              <div className="absolute top-6 left-8 opacity-10">
+                <Quote className="w-12 h-12 text-purple-400" />
               </div>
-              <p className="text-purple-300 font-semibold">— Jason Andrews</p>
+              <div className="absolute bottom-6 right-8 opacity-10 rotate-180">
+                <Quote className="w-12 h-12 text-pink-400" />
+              </div>
+              <div className="relative z-10">
+                <p className="text-base sm:text-lg md:text-xl text-slate-200 leading-relaxed italic mb-6 sm:mb-8">
+                  "I do not add to Scripture. I do not take away from it. I simply illuminate what is already written."
+                </p>
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <div className="w-8 h-px bg-gradient-to-r from-transparent to-purple-500/50" />
+                  <Feather className="w-4 h-4 text-purple-400/60" />
+                  <div className="w-8 h-px bg-gradient-to-l from-transparent to-pink-500/50" />
+                </div>
+                <p className="text-purple-300 font-semibold">— Jason Andrews</p>
+              </div>
             </div>
           </GlassCard>
         </motion.div>
