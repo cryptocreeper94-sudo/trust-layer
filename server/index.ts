@@ -104,7 +104,7 @@ const isProduction = process.env.NODE_ENV === "production";
 const cspDirectives = {
   defaultSrc: ["'self'"],
   scriptSrc: isProduction 
-    ? ["'self'", "'unsafe-eval'", "https://js.stripe.com", "https://www.googletagmanager.com", "https://cdnjs.cloudflare.com"]
+    ? ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://js.stripe.com", "https://www.googletagmanager.com", "https://cdnjs.cloudflare.com"]
     : ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdnjs.cloudflare.com"],
   styleSrc: isProduction
     ? ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"]
@@ -118,6 +118,7 @@ const cspDirectives = {
   baseUri: ["'self'"],
   formAction: ["'self'"],
   frameAncestors: isProduction ? ["'self'"] : ["'self'", "https://*.replit.dev", "https://*.repl.co", "https://replit.com"],
+  scriptSrcAttr: null,
   upgradeInsecureRequests: isProduction ? [] : null,
 };
 
