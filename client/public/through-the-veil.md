@@ -2622,6 +2622,8 @@ But pattern recognition isn't conspiracy. It's discernment. And discernment is e
 
 # CHAPTER 25D: THE CHALLENGER DECEPTION
 
+![The Challenger Crew - STS-51-L, January 1986. Front row: Michael J. Smith, Dick Scobee, Ronald McNair. Back row: Ellison Onizuka, Christa McAuliffe, Gregory Jarvis, Judith Resnik. (NASA/Public Domain)](/images/veil-challenger-crew.jpg)
+
 January 28, 1986. A cold morning at Cape Canaveral. The temperature had dropped to 36 degrees Fahrenheit overnight - well below the safe operating range for the O-ring seals in the solid rocket boosters. Engineers at Morton Thiokol had warned against launching. NASA overruled them.
 
 Seventy-three seconds after liftoff, the Space Shuttle Challenger broke apart on live television. Millions of schoolchildren watched. The entire nation mourned. Seven astronauts were declared dead: Commander Francis "Dick" Scobee, Pilot Michael J. Smith, Mission Specialists Judith Resnik, Ellison Onizuka, and Ronald McNair, Payload Specialist Gregory Jarvis, and Teacher-in-Space Christa McAuliffe.
@@ -2639,6 +2641,8 @@ Here is where the Challenger story enters territory that most people aren't prep
 Let's go through them one by one.
 
 ## 1. Judith Resnik → Judith Resnik (Yale Law Professor)
+
+![Astronaut Judith Resnik - NASA official portrait, 1985. (NASA/Public Domain)](/images/veil-challenger-resnik-nasa.jpg)
 
 Astronaut Judith Resnik was an electrical engineer. PhD from the University of Maryland. She became the second American woman in space when she flew aboard Discovery in 1984. She was 36 years old when the Challenger exploded.
 
@@ -2658,11 +2662,15 @@ Same name. Similar age. Same era. One flew jets; the other settled into a quiet 
 
 ## 3. Dick Scobee → Richard Scobee (Marketing CEO)
 
+![Commander Dick Scobee - NASA official portrait. (NASA/Public Domain)](/images/veil-challenger-scobee-nasa.jpg)
+
 Commander Francis "Dick" Scobee led the Challenger crew. He was 46. A former Air Force fighter pilot who had risen through the ranks to command a Space Shuttle mission.
 
 A man named **Richard Scobee** has been identified as the **CEO of a marketing company in Chicago**. Same name. Same face, decades later. The transition from military commander to corporate executive isn't unusual for someone being given a new identity - it's exactly the kind of respectable, unremarkable career that wouldn't attract attention.
 
 ## 4. Christa McAuliffe → Sharon McAuliffe (Syracuse Law Professor)
+
+![Christa McAuliffe - NASA Teacher in Space portrait. (NASA/Public Domain)](/images/veil-challenger-mcauliffe-nasa.jpg)
 
 This one is particularly notable. Christa McAuliffe - the beloved "Teacher in Space" - was the face of the Challenger mission. Her full name was **Sharon Christa McAuliffe**. She went by her middle name.
 
@@ -2674,6 +2682,8 @@ Christa McAuliffe was born Sharon Christa Corrigan. She took the McAuliffe name 
 
 ## 5. Ronald McNair → Carl McNair
 
+![Ronald McNair - NASA official portrait. (NASA/Public Domain)](/images/veil-challenger-mcnair-nasa.jpg)
+
 Ronald McNair was a physicist. The second African-American to fly in space. He held a PhD from MIT and was a fifth-degree black belt in karate. He was 35 when the Challenger exploded.
 
 His alleged doppelganger is identified as **Carl McNair** - officially his brother. Carl has given interviews, hosted memorial events, and publicly honored Ronald's memory for decades.
@@ -2681,6 +2691,8 @@ His alleged doppelganger is identified as **Carl McNair** - officially his broth
 The establishment says: of course brothers look alike. But the theory asks: what if "Carl" isn't the brother? What if "Carl" *is* Ronald, living under a family member's identity? Brothers share enough resemblance that the transition would be seamless. No one questions a grieving brother who dedicates his life to honoring his fallen sibling.
 
 ## 6. Ellison Onizuka → Claude Onizuka
+
+![Ellison Onizuka - NASA official portrait. (NASA/Public Domain)](/images/veil-challenger-onizuka-nasa.jpg)
 
 Ellison Onizuka was the first Asian-American astronaut. Born in Hawaii. Air Force test pilot. He was 39 when the Challenger broke apart.
 
