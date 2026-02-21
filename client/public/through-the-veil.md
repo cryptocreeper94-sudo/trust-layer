@@ -3769,6 +3769,92 @@ Which leads to gravity. "Gravity keeps us stuck to the ground." There is no such
 
 The belief is it's a theory that was instituted to get people's thoughts away from the reality of our environment, our world, our planet - which is p-l-a-n-e with a T on the end. Plane.
 
+**WHAT SCRIPTURE ACTUALLY DESCRIBES**
+
+So what does the Creator's own word say about the structure of creation? Not what modern "science" says. Not what NASA says. What does the text say?
+
+Start at the beginning. Bere'shiyth (Genesis) 1:6-8: *"And Elohiym said, Let there be a firmament in the midst of the waters, and let it divide the waters from the waters. And Elohiym made the firmament, and divided the waters which were under the firmament from the waters which were above the firmament: and it was so. And Elohiym called the firmament Heaven."*
+
+Read that carefully. There are waters ABOVE the firmament and waters BELOW it. The firmament - the Hebrew word is **raqiya** (רָקִ֫יעַ) - means something beaten out, spread out, hammered flat. Like a metalworker hammering a sheet of metal. It's a solid, physical structure separating the waters above from the waters below. This isn't poetry. This is architecture.
+
+Iyov (Job) 37:18 confirms: *"Have you with him spread out the sky, which is strong, and as a molten looking glass?"* The sky is described as strong - solid - like a molten mirror. Not empty vacuum. Not infinite space. A firm, reflective expanse.
+
+And the luminaries? Bere'shiyth (Genesis) 1:14-17: *"And Elohiym said, Let there be lights in the firmament of the heaven to divide the day from the night; and let them be for signs, and for seasons, and for days, and years... And Elohiym made two great lights; the greater light to rule the day, and the lesser light to rule the night: he made the stars also. And Elohiym set them in the firmament of the heaven to give light upon the earth."*
+
+Set them IN the firmament. Not millions of miles away in infinite space. Set in it. Like jewels set in a ceiling. The sun and moon are not distant objects - they are luminaries placed within the structure of the firmament to serve specific purposes: signs, seasons, days, years.
+
+Tehilliym (Psalm) 19:1-6 describes the sun's movement: *"The heavens declare the glory of El; and the firmament shows his handywork... In them has he set a tabernacle for the sun, which is as a bridegroom coming out of his chamber, and rejoices as a strong man to run a race. His going forth is from the end of the heaven, and his circuit unto the ends of it: and there is nothing hid from the heat thereof."*
+
+The sun has a circuit. It runs a race. It goes forth and returns. This is the sun moving - not the earth spinning. The sun was given a tabernacle - a dwelling place - IN the firmament, and it moves through its appointed course.
+
+Qoheleth (Ecclesiastes) 1:5: *"The sun also rises, and the sun goes down, and hastes to his place where he arose."*
+
+The sun rises, sets, and hastens back to its starting point to do it again. The sun moves. The earth is established.
+
+And established it is. Divrei Hayamiym Ri'shon (1 Chronicles) 16:30: *"Fear before him, all the earth: the world also shall be stable, that it be not moved."*
+
+Tehilliym (Psalm) 93:1: *"Yahuah reigns, he is clothed with majesty; Yahuah is clothed with strength, wherewith he has girded himself: the world also is established, that it cannot be moved."*
+
+Tehilliym (Psalm) 104:5: *"Who laid the foundations of the earth, that it should not be removed forever."*
+
+Three witnesses. The earth is stable. Established. Cannot be moved. Has foundations. Not a spinning ball hurtling through a vacuum at thousands of miles per hour. A plane with foundations, set firm by its Creator.
+
+And those foundations rest on something. Shemu'el Ri'shon (1 Samuel) 2:8: *"For the pillars of the earth are Yahuah's, and he has set the world upon them."*
+
+Iyov (Job) 38:4-6: *"Where were you when I laid the foundations of the earth? Declare, if you have understanding. Who has laid the measures thereof, if you know? Or who has stretched the line upon it? Whereupon are the foundations thereof fastened? Or who laid the corner stone thereof?"*
+
+Foundations. Pillars. Corner stone. Measurements. This is construction language. The Creator built something. He didn't explode something into existence from nothing and let it spin into random order.
+
+And the shape? Yesha'yahu (Isaiah) 40:22: *"It is he that sits upon the circle of the earth, and the inhabitants thereof are as grasshoppers; that stretches out the heavens as a curtain, and spreads them out as a tent to dwell in."*
+
+A circle - not a sphere. The Hebrew word is **chuwg** (חוּג) - a circle, a compass, a boundary drawn round. And the heavens are stretched over it like a curtain, like a tent. A covering. An enclosure.
+
+Iyov (Job) 22:14: *"Thick clouds are a covering to him, that he sees not; and he walks in the circuit of heaven."*
+
+The circuit of heaven. A bounded, circular path above the earth. Not infinite space. A circuit.
+
+And what's beyond the firmament? The waters above. And above those? The throne. Tehilliym (Psalm) 104:2-3: *"Who covers yourself with light as with a garment: who stretches out the heavens like a curtain: Who lays the beams of his chambers in the waters: who makes the clouds his chariot: who walks upon the wings of the wind."*
+
+He lays the beams of His chambers IN THE WATERS. Above the firmament. Above the waters above. That's where the throne room is.
+
+Chizayon (Revelation) 4:6: *"And before the throne there was a sea of glass like unto crystal."*
+
+The sea of glass before the throne. The waters above the firmament. Frozen, crystal clear, like the molten looking glass of Job 37:18. It all connects.
+
+**WHY THE DECEPTION MATTERS**
+
+So why replace this cosmology with a spinning ball in infinite space?
+
+Because the biblical cosmology puts the Creator CLOSE. Right above. Watching. Present. The firmament is not far away - it's the ceiling of the created space, and above it sits the throne. Humanity lives in an enclosed, purposeful creation - designed, measured, built, inhabited, and observed by its Maker.
+
+The heliocentric model does the opposite. It makes Earth a tiny, insignificant speck in an incomprehensibly vast universe. A random accident. One planet among trillions. No special purpose. No ceiling. No throne above. No Creator watching. Just endless, cold, empty space in every direction.
+
+One cosmology says: you are known, you are watched, you are in a created space with a Creator right above.
+
+The other says: you are nothing, you are nowhere, you are an accident on a speck of dust in infinite meaninglessness.
+
+Which cosmology serves the adversary's purposes? Which one makes people forget the Creator? Which one makes prayer feel pointless?
+
+The model matters. It's not about "flat earth" memes and internet arguments. It's about whether people live as though the Creator is near - or as though He's infinitely far away in a universe too vast to care about one little planet.
+
+The firmament was the first thing they had to erase. Because once you remove the ceiling, you remove the One who sits above it.
+
+**THE MAZZAROTH: WHAT THE STARS ACTUALLY ARE**
+
+The stars deserve attention too. Not as distant suns billions of miles away - that's the heliocentric narrative. Scripture describes them differently.
+
+Iyov (Job) 38:31-33: *"Can you bind the sweet influences of Kimah (Pleiades), or loose the bands of Keciyl (Orion)? Can you bring forth Mazzaroth in his season? Or can you guide Ayish (the Bear) with her sons? Know you the ordinances of heaven? Can you set the dominion thereof in the earth?"*
+
+The Mazzaroth - the constellations - have seasons. They have ordinances. They have dominion that connects to the earth. They are for signs and appointed times, as Bere'shiyth (Genesis) 1:14 established.
+
+Tehilliym (Psalm) 147:4: *"He tells the number of the stars; he calls them all by their names."*
+
+Every star has a name. Given by the Creator. Not random balls of gas burning in vacuum. Named luminaries with purposes.
+
+And they move within the firmament in their appointed courses. They are not distant objects - they are close, set within the structure, cycling through their patterns as designed. Ancient navigators sailed by them. Farmers planted by them. The Mazzaroth told the story of redemption across the sky before a single word of scripture was written - from Bethulah (Virgo, the virgin) to Aryeh (Leo, the lion of the tribe of Yahudah).
+
+The adversary took this system and corrupted it into astrology - fortune-telling, horoscopes, the "Age of Aquarius." He took the Creator's star-chart and turned it into a tool of divination. The same pattern as always: take what the Creator made, pervert its purpose, and use it against the people it was designed to guide.
+
 Humanity sees 0.003% of the light spectrum. 99.997% of what's around cannot be seen.
 
 And maybe it's nothing. But how would anyone know?
