@@ -37,6 +37,7 @@ const tableOfContents = [
       { name: "Chapter 16-20: The Control Systems", description: "Fear, addiction, technology, media", anchor: "chapter-16" },
       { name: "Chapter 21-25: The Hidden Rulers", description: "Bloodlines, secret societies, the Hydra", anchor: "chapter-21" },
       { name: "Chapter 25C: The Alcatraz-Apollo Deception", description: "Three prisoners vanish, three astronauts appear", anchor: "chapter-25c" },
+      { name: "Chapter 25D: The Challenger Deception", description: "Seven astronauts die on live TV — six still walk among us", anchor: "chapter-25d" },
     ]
   },
   {
