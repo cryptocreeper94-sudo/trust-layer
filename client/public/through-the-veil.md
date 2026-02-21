@@ -4964,11 +4964,13 @@ But the address matters. The name matters. Scripture couldn't be clearer about t
 
 ### Where This Fits in the Timeline
 
-If the corrected timeline presented in this book holds - if the Millennial Reign already occurred during the period they call the "Dark Ages," if the first resurrection already happened around 1500 AD, if the elect were already called up at the end of that thousand-year reign - then what we're witnessing now takes on a very different character.
+Remember what was documented earlier in this book: the calendar itself was manipulated. Centuries were added, removed, or fabricated to serve a dual purpose - to hide the Millennial Reign that already occurred during the period they compressed into the "Dark Ages," AND to align the calendar with the Age of Aquarius so that "year 2000" arrived precisely when the occult astrological framework demanded a new era. The missing time served both agendas simultaneously. It buried a thousand years of peace under fabricated history while engineering the calendar to deliver humanity to a manufactured "new millennium" - the Age of Aquarius, the age of man, the age where humanity is told it can become its own god.
+
+If that corrected timeline holds - if the Millennial Reign already occurred, if the first resurrection already happened around 1500 AD, if the elect were already called up at the end of that thousand-year reign - then what we're witnessing now takes on a very different character.
 
 The elect are gone. They were called. They answered. The harvest happened.
 
-What remains is Satan's little season. The final deception. And this "revival" - this sudden surge of celebrity Christianity, this cultural embrace of a faith built on the wrong name - isn't the Spirit moving. It's the last act. The final funnel. The system gathering everyone who's left into a version of faith it designed, controlled, and named.
+What remains is Satan's little season. The final deception. And this "revival" - this sudden surge of celebrity Christianity, this cultural embrace of a faith built on the wrong name - isn't the Spirit moving. It's the last act. The final funnel. The system gathering everyone who's left into a version of faith it designed, controlled, and named. Timed to arrive at the manufactured new millennium. Timed to coincide with the "Age of Aquarius." Timed to a calendar that was rewritten specifically to make this moment possible.
 
 The name "Jesus" was always the endgame. Not because the people calling on it are evil. Not because their longing isn't real. But because the name itself is the substitute - the one prophesied in Yahuchanon (John) 5:43. The one that comes in its own name. The one the whole world receives.
 
