@@ -2530,6 +2530,94 @@ This is not paranoia. This is pattern recognition. And pattern recognition is ex
 
 ---
 
+# CHAPTER 25C: THE ALCATRAZ-APOLLO DECEPTION
+
+On the night of June 11, 1962, three men vanished from the most secure prison in America. Frank Morris - a man with a tested IQ of 133, borderline genius - along with brothers John and Clarence Anglin, escaped from Alcatraz Federal Penitentiary. They left behind papier-mâché dummy heads in their bunks, crawled through ventilation shafts they had spent months widening with stolen spoons, and disappeared into the frigid waters of San Francisco Bay on a makeshift raft built from raincoats.
+
+Their bodies were never found. The FBI officially declared them "presumed drowned" in 1979 - but the U.S. Marshals Service kept the case open, and they remained on the wanted fugitive list all the way until September 2026. Sixty-four years. The longest active fugitive case in American history.
+
+Why would the government keep a case open for sixty-four years for three bank robbers they claim are dead?
+
+## The Faces That Launched a Thousand Questions
+
+Seven years after three men vanished from Alcatraz, three men stood before the world as the crew of Apollo 11.
+
+Neil Armstrong. Buzz Aldrin. Michael Collins.
+
+When researchers began placing the Alcatraz prison mugshots next to the official NASA crew portraits, something uncomfortable emerged. The facial structures. The jawlines. The spacing of the eyes. The age progression. Side by side, the resemblances are difficult to dismiss as coincidence.
+
+![Frank Morris - Alcatraz Mugshot (Bureau of Prisons, Public Domain)](/images/veil-frank-morris.jpg)
+
+![John Anglin - Alcatraz Mugshot (Bureau of Prisons, Public Domain)](/images/veil-john-anglin.jpg)
+
+![Clarence Anglin - Alcatraz Mugshot (Bureau of Prisons, Public Domain)](/images/veil-clarence-anglin.jpg)
+
+![Apollo 11 Official Crew Portrait - Armstrong, Collins, Aldrin (NASA, Public Domain)](/images/veil-apollo11-crew.jpg)
+
+Frank Morris, born 1926. Neil Armstrong, born 1930. Four years apart. The Anglin brothers, born 1930 and 1931. Buzz Aldrin, born 1930. Michael Collins, born 1930. The ages align within a year or two - close enough that seven years of aging from 1962 to 1969 could smooth any remaining differences.
+
+## The Perfect Candidates
+
+Consider the logic. If you needed men to play a role in the most watched event in human history - men who would need to maintain that role for the rest of their lives - who would you choose?
+
+You would choose men who no longer officially exist.
+
+Three men who escaped from prison and were declared dead by the federal government are, for all practical purposes, ghosts. No family looking for them publicly. No employer expecting them back. No social connections that could unravel a cover story. They are blank slates - men who can be given new names, new biographies, new histories, and new purposes.
+
+Morris was a genius - IQ 133, top 2% of the population. He had already demonstrated the ability to execute complex plans under pressure, to adapt, to improvise. The Anglin brothers were resourceful, athletic, and inseparable - a team that worked in perfect coordination.
+
+If you were casting a role, could you ask for better candidates?
+
+## The Timeline
+
+The escape: June 11, 1962.
+
+NASA announced the Astronaut Group 2 selection: September 17, 1962 - just three months later. This group included Neil Armstrong (though some records place his selection with the New Nine). The Apollo program was ramping up. The Space Race was in full swing. The pressure to beat the Soviets to the moon was immense.
+
+By 1969, the men who would walk on the moon - or at least stand in front of the cameras and say they did - needed to be unshakable. Men who could keep a secret. Men who had no past that could betray them. Men who had already proven they could disappear.
+
+## The Moon Landing Question
+
+This isn't just about three prisoners and three astronauts. It's about the broader question: did we actually go to the moon?
+
+The anomalies have been catalogued for decades:
+
+- The flag appears to wave in a vacuum where there is no air
+- The photographs show multiple light sources and inconsistent shadows - impossible with a single sun as the light source
+- No blast crater beneath the lunar module despite a 10,000-pound thrust engine
+- The Van Allen radiation belts - a zone of intense radiation that should have been lethal to pass through with 1960s technology
+- The original telemetry data tapes from Apollo 11 were "accidentally" erased and recorded over by NASA
+- Stanley Kubrick, who had just filmed *2001: A Space Odyssey* with revolutionary front-projection technology, was rumored to have been recruited to film the moon landing sequences
+- Buzz Aldrin himself, when asked by a child if he really went to the moon, answered: "We didn't go there." He later claimed it was taken out of context, but the video exists
+
+If the moon landing was staged - and there are compelling reasons to consider that possibility - then the astronauts weren't astronauts at all. They were actors. Playing the role of a lifetime.
+
+And if you needed actors who could never be traced back to their real identities, men whose former lives had been officially erased, men the government had already declared dead... you would need exactly the kind of men who disappeared from Alcatraz on June 11, 1962.
+
+## The Pattern
+
+This connects to the larger pattern documented throughout this book. The system creates narratives. It manufactures heroes. It stages events that serve agendas far beyond what the public is told.
+
+The Space Race wasn't about exploration. It was about dominance - proving to the world and to the Soviet Union that America was superior. The political pressure was enormous. Kennedy had committed the nation to landing on the moon by the end of the decade. Failure was not an option - not because of science, but because of pride and power.
+
+When the stakes are that high, do you trust the outcome to chance? Or do you control every variable, including the men who stand before the cameras?
+
+Three men disappear from Alcatraz. Three men appear at NASA. The old identities are buried. The new identities are manufactured with the full machinery of the federal government behind them. Birth certificates, school records, military service records - all creatable, all verifiable, all unquestionable by a public that trusts its institutions.
+
+## Why This Matters
+
+This isn't about debunking the moon landing for sport. It's about understanding how deep the deception goes.
+
+If they can stage the most celebrated achievement in human history - an event watched by 600 million people worldwide - and maintain the illusion for over fifty years, what else have they staged? What other narratives are built on manufactured events and recycled identities?
+
+The aware observer doesn't claim to have all the answers. The aware observer simply notices: three men vanished, three men appeared. The faces are remarkably similar. The timeline works. The motive is clear. The capability is documented.
+
+And the system's response to anyone who notices? The same as always: ridicule, dismissal, and the magic word - "conspiracy theorist."
+
+But pattern recognition isn't conspiracy. It's discernment. And discernment is exactly what they've been working so hard to suppress.
+
+---
+
 # CHAPTER 26: THE BEAST SYSTEM AND THE CAROUSEL
 
 The system is not a single lie. It is a carousel - a self-contained loop of inversion that spins so smoothly, most never notice they're riding it.
