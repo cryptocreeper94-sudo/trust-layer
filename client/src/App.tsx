@@ -279,6 +279,8 @@ const GuardianPortal = lazy(() => import("@/pages/guardian-portal"));
 const GuardianWhitepaper = lazy(() => import("@/pages/guardian-whitepaper"));
 const ExploreHub = lazy(() => import("@/pages/explore-hub"));
 const CommandCenter = lazy(() => import("@/pages/command-center"));
+const SsoAdmin = lazy(() => import("@/pages/sso-admin"));
+const SsoConsent = lazy(() => import("@/pages/sso-consent"));
 const OwnerAdminPortal = lazy(() => import("@/pages/owner-admin"));
 const OwnerAnalytics = lazy(() => import("@/pages/owner-admin/analytics"));
 const OwnerSeoManager = lazy(() => import("@/pages/owner-admin/seo"));
@@ -549,6 +551,8 @@ function DWSCRouter() {
         <Route path="/api-docs" component={ApiDocs} />
         <Route path="/explore" component={ExploreHub} />
         <Route path="/command-center" component={CommandCenter} />
+        <Route path="/owner-admin/sso" component={SsoAdmin} />
+        <Route path="/sso/consent" component={SsoConsent} />
         <Route path="/owner-admin" component={OwnerAdminPortal} />
         <Route path="/owner-admin/analytics" component={OwnerAnalytics} />
         <Route path="/owner-admin/seo" component={OwnerSeoManager} />

@@ -1345,6 +1345,95 @@ console.log('All successful:', result.allSuccessful);`}
             </p>
           </BentoCard>
         </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4 }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8"
+        >
+          <BentoCard span={3} glow>
+            <div className="flex items-center gap-3 mb-6">
+              <div className="p-3 rounded-xl bg-cyan-400/10 text-cyan-400 border border-cyan-400/30">
+                <Key className="w-6 h-6" />
+              </div>
+              <div>
+                <h3 className="text-xl font-bold text-white">Ecosystem SSO Integration</h3>
+                <p className="text-sm text-muted-foreground">Add "Sign in with DarkWave" to your app in minutes</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h4 className="font-semibold text-white mb-3">1. Add the SDK</h4>
+                <div className="bg-black/40 rounded-xl p-4 font-mono text-cyan-300 text-xs mb-4">
+                  {`<script src="https://dwsc.io/dw-sso.js"></script>`}
+                </div>
+
+                <h4 className="font-semibold text-white mb-3">2. Initialize</h4>
+                <div className="bg-black/40 rounded-xl p-4 font-mono text-cyan-300 text-xs mb-4 whitespace-pre">
+{`const sso = new DarkWaveSSO({
+  appName: 'your-app-name',
+  apiKey: 'dw_your_api_key',
+  callbackPath: '/auth/callback',
+  onLogin: (data) => {
+    console.log('Token:', data.token);
+  }
+});`}
+                </div>
+
+                <h4 className="font-semibold text-white mb-3">3. Add Login Button</h4>
+                <div className="bg-black/40 rounded-xl p-4 font-mono text-cyan-300 text-xs">
+{`// Auto-rendered button
+sso.renderLoginButton('#login-area');
+
+// Or manual trigger
+document.getElementById('myBtn')
+  .onclick = () => sso.login();`}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="font-semibold text-white mb-3">4. Verify Token (Server-Side)</h4>
+                <div className="bg-black/40 rounded-xl p-4 font-mono text-cyan-300 text-xs mb-4 whitespace-pre">
+{`// Node.js / Express
+const DarkWaveSSO = require('./dw-sso-node');
+const sso = new DarkWaveSSO({
+  apiKey: process.env.DW_API_KEY,
+  apiSecret: process.env.DW_API_SECRET
+});
+
+app.get('/auth/callback',
+  sso.expressCallbackHandler({
+    successRedirect: '/dashboard'
+  })
+);`}
+                </div>
+
+                <h4 className="font-semibold text-white mb-3">Available Permissions</h4>
+                <div className="space-y-2">
+                  {[
+                    { perm: "read:profile", desc: "Name, avatar, creation date" },
+                    { perm: "read:email", desc: "Email address" },
+                    { perm: "read:membership", desc: "Trust Card, member tier" },
+                    { perm: "read:wallet", desc: "SIG balance, wallet info" },
+                  ].map(p => (
+                    <div key={p.perm} className="flex items-center gap-2 p-2 rounded-lg bg-white/5">
+                      <code className="text-xs text-cyan-300 bg-cyan-500/10 px-2 py-0.5 rounded">{p.perm}</code>
+                      <span className="text-xs text-muted-foreground">{p.desc}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                  <p className="text-xs text-amber-300">
+                    <strong>Getting Started:</strong> Contact the DarkWave team to register your app and receive your API credentials. Never expose your API Secret in client-side code.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </BentoCard>
+        </motion.div>
       </main>
 
       

@@ -2351,7 +2351,7 @@ export async function registerRoutes(
         createdAt: Date.now()
       };
       
-      // Redirect to login page with SSO context
+      // Redirect to login page with SSO context (app info stored in session, not URL)
       res.redirect(`/login?sso=true&app=${encodeURIComponent(appData.app_display_name)}`);
     } catch (error) {
       console.error("SSO login init error:", error);
@@ -2359,6 +2359,45 @@ export async function registerRoutes(
     }
   });
   
+  // Get pending SSO request info (for consent page)
+  app.get("/api/auth/sso/pending", async (req, res) => {
+    try {
+      const ssoRequest = (req.session as any)?.ssoRequest;
+      if (!ssoRequest) {
+        return res.json({ pending: false });
+      }
+
+      // Check expiry
+      if (Date.now() - ssoRequest.createdAt > 5 * 60 * 1000) {
+        delete (req.session as any).ssoRequest;
+        return res.json({ pending: false });
+      }
+
+      // Get app details
+      const appResult = await db.execute(sql`
+        SELECT app_display_name, app_url, logo_url, permissions FROM ecosystem_apps WHERE id = ${ssoRequest.appId} LIMIT 1
+      `);
+
+      const app = appResult.rows[0] as any;
+      if (!app) {
+        return res.json({ pending: false });
+      }
+
+      res.json({
+        pending: true,
+        app: {
+          displayName: app.app_display_name,
+          url: app.app_url,
+          logoUrl: app.logo_url || null,
+          permissions: app.permissions || ["read:profile"],
+        }
+      });
+    } catch (error) {
+      console.error("SSO pending check error:", error);
+      res.json({ pending: false });
+    }
+  });
+
   // SSO callback after successful login
   app.post("/api/auth/sso/callback", async (req, res) => {
     try {
@@ -2419,7 +2458,7 @@ export async function registerRoutes(
         return res.status(401).json({ error: "Unauthorized" });
       }
       
-      const { appName, appDisplayName, appDescription, appUrl, callbackUrl, logoUrl } = req.body;
+      const { appName, appDisplayName, appDescription, appUrl, callbackUrl, logoUrl, permissions } = req.body;
       
       if (!appName || !appDisplayName || !appUrl || !callbackUrl) {
         return res.status(400).json({ error: "Missing required fields" });
@@ -2428,10 +2467,11 @@ export async function registerRoutes(
       // Generate API credentials
       const apiKey = `dw_${crypto.randomBytes(16).toString('hex')}`;
       const apiSecret = crypto.randomBytes(32).toString('hex');
+      const appPermissions = JSON.stringify(permissions || ["read:profile"]);
       
       await db.execute(sql`
-        INSERT INTO ecosystem_apps (app_name, app_display_name, app_description, app_url, callback_url, api_key, api_secret, logo_url)
-        VALUES (${appName}, ${appDisplayName}, ${appDescription || ''}, ${appUrl}, ${callbackUrl}, ${apiKey}, ${apiSecret}, ${logoUrl || ''})
+        INSERT INTO ecosystem_apps (app_name, app_display_name, app_description, app_url, callback_url, api_key, api_secret, logo_url, permissions)
+        VALUES (${appName}, ${appDisplayName}, ${appDescription || ''}, ${appUrl}, ${callbackUrl}, ${apiKey}, ${apiSecret}, ${logoUrl || ''}, ${appPermissions}::jsonb)
       `);
       
       res.json({
@@ -2452,11 +2492,36 @@ export async function registerRoutes(
     }
   });
   
+  // Toggle app active/inactive status
+  app.post("/api/auth/sso/toggle-app", async (req, res) => {
+    try {
+      const authHeader = req.headers.authorization;
+      const ownerSecret = process.env.OWNER_SECRET;
+      if (!ownerSecret || authHeader !== `Bearer ${ownerSecret}`) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+
+      const { appId, active } = req.body;
+      if (!appId || typeof active !== 'boolean') {
+        return res.status(400).json({ error: "Missing appId or active status" });
+      }
+
+      await db.execute(sql`
+        UPDATE ecosystem_apps SET is_active = ${active}, updated_at = NOW() WHERE id = ${appId}
+      `);
+
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Toggle app error:", error);
+      res.status(500).json({ error: "Toggle failed" });
+    }
+  });
+
   // List registered ecosystem apps
   app.get("/api/auth/sso/apps", async (req, res) => {
     try {
       const apps = await db.execute(sql`
-        SELECT id, app_name, app_display_name, app_description, app_url, logo_url, is_active, created_at
+        SELECT id, app_name, app_display_name, app_description, app_url, callback_url, logo_url, is_active, permissions, created_at
         FROM ecosystem_apps
         ORDER BY created_at DESC
       `);
