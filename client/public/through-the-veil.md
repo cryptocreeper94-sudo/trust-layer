@@ -232,6 +232,7 @@ The journey through the veil begins now.
 - Chapter 34B: The Resurrections Hidden
 - Chapter 35: The Short Season
 - Chapter 36: The Layers of Deception - Redirect Upon Redirect
+- Chapter 36B: The Revival That Isn't
 - Chapter 37: The Coming Deception
 
 **Part Eleven: The Awakening**
@@ -4876,6 +4877,94 @@ Without that direct connection, navigation is nearly impossible. There's always 
 The adversary has had millennia to build this architecture. It's sophisticated. It's comprehensive. And it's designed to catch everyone - from the completely asleep to the almost-awake.
 
 The only escape is upward. Through the veil. To the signal source itself.
+
+---
+
+# CHAPTER 36B: THE REVIVAL THAT ISN'T
+
+Something is happening. And it looks like exactly what people have been praying for.
+
+Jelly Roll walks onto the Grammy stage carrying a Bible and tells millions: "Jesus is for everybody." Russell Brand - the man who built an empire on hedonism - publicly commits to Christ and says the presence became "overwhelming, unavoidable." Kathie Lee Gifford publishes books about biblical history. Hulk Hogan gets baptized. Rob Schneider converts. Kat Von D - the tattoo artist who built a brand on darkness - becomes Christian. Alice Cooper testifies about God healing his alcoholism. Top OnlyFans creators delete their accounts, post baptism videos, and walk away from everything. Grimes posts about getting into Christianity. Ayaan Hirsi Ali - one of the world's most famous atheists - announces her conversion. Even Richard Dawkins and Elon Musk now call themselves "cultural Christians."
+
+The anti-culture is becoming the culture. The industry that mocked faith for decades is suddenly professing it. The people you would never in a million years expect to carry a Bible are carrying Bibles.
+
+And billions are watching it happen and thinking: *finally. Revival. The Spirit is moving.*
+
+But something is wrong with this picture. And it's hiding in the one place nobody is looking.
+
+### The Name Nobody Questions
+
+Every single one of these public conversions - every testimony, every baptism video, every Grammy speech, every social media post - calls on the same name.
+
+**Jesus.**
+
+Not Yahusha. Not the name that contains the Father. Not the name that means "Yahuah is salvation." Not the name that carries the frequency signature of the Creator.
+
+The substitute. The transliteration that traveled through three languages and arrived in English stripped of every connection to Yahuah. The empty label. The replacement.
+
+And the system has no problem with it.
+
+Think about that. The same entertainment industry that serves the adversary - the same system of symbols, contracts, and inversions documented throughout this book - is suddenly allowing, even promoting, public declarations of faith in "Jesus."
+
+Why would the system permit that? Why would the machine that runs on Luciferian symbolism, occult numerology, and ritual sacrifice suddenly tolerate its biggest stars professing Christianity?
+
+Because "Jesus" isn't a threat to the system. **"Jesus" IS the system.**
+
+The name was engineered. The transliteration wasn't accidental. Hebrew (Yahusha) to Greek (Iesous) to Latin (Iesus) to English (Jesus) - each step stripped meaning until only a hollow label remained. A label with no connection to the Father. A label that fulfills the prophecy it was designed to fulfill.
+
+Yahuchanon (John) 5:43: *"I am come in my Father's name, and you receive me not: if another shall come in his own name, him you will receive."*
+
+**Yahusha** contains **Yahuah**. The Father's name is embedded in the Son's name. He came IN the Father's name. Literally. The name itself declares the source of salvation.
+
+**"Jesus"** contains nothing. No connection to Yahuah. No embedded meaning. No frequency signature linking to the Creator. It is a name that comes in its own name. And the whole world receives it.
+
+### The Arc of the Deception
+
+Trace the pattern across history:
+
+**Phase One: Persecution.** Christianity is positioned as the underdog. Believers are martyred, hunted, killed for their faith. This generates deep emotional loyalty. The persecuted faith must be the true faith - why else would the system attack it so viciously?
+
+**Phase Two: Dominance.** Despite becoming the largest religion on earth - with billions of adherents, immense political power, and institutional control across continents - Christianity continues to market itself as persecuted. The victim identity persists even as the faith IS the dominant system. The Crusades, the Inquisition, the burning of "heretics" who dared read scripture in their own language - all done under the banner of the same religion that claims persecution.
+
+**Phase Three: Cultural rejection.** The modern era positions Christianity as backwards, anti-science, anti-progress. Hollywood mocks it. Academia dismisses it. The "cool" culture treats faith as something to outgrow. Believers feel embattled. The persecution narrative intensifies. Us versus them. The world versus the faithful.
+
+**Phase Four: The flip.** And then - seemingly overnight - the culture turns. The celebrities convert. The musicians testify. The influencers get baptized. The anti-culture becomes pro-faith. Christianity goes from mocked to mainstream, from persecuted to promoted, from counter-cultural to the culture itself.
+
+And everyone celebrating this "revival" misses the obvious question: **why is the system allowing it?**
+
+The system doesn't allow things that threaten it. The system crushed the original Hebrew names. The system burned people alive for reading scripture in their own language. The system removed books from the canon that revealed too much. The system replaced the solar calendar with a papal calendar. The system spent centuries ensuring the connection between humanity and the Creator was severed at every possible point.
+
+That system is now promoting "Jesus" on the Grammy stage.
+
+### What the System Fears
+
+The system doesn't fear Christianity. Christianity - as practiced by the vast majority - operates entirely within the framework the system built. The wrong name. The wrong calendar. The wrong eschatology. The wrong cosmology. Sunday instead of Shabbat. Easter instead of Pesach. Christmas instead of Sukkot. "Holy" instead of set-apart. "God" instead of Yahuah. "Jesus" instead of Yahusha.
+
+Every substitution serves the system. Every replacement severs a connection. And the practitioners don't know what they've lost because they've never been shown the original.
+
+What the system fears is **restoration**. The original names. The original calendar. The original covenant. The original frequency. People who bypass the institution entirely and connect directly to the Creator through restored receivers, calling on the name that was given - not the name that was manufactured.
+
+That's why Yahusha's name was targeted. Not because it's one option among many. Because it's the ONLY name that carries the Father. The only name that connects to the source. The only name the adversary needed to bury.
+
+And buried it remains - even in the middle of the biggest "Christian revival" in modern history. Especially in the middle of it.
+
+### The Setup for What Comes Next
+
+This cultural shift toward Christianity isn't the end of the deception. It's the final phase of preparation.
+
+Consider: if the entire Western world is funneled into a version of faith built on the wrong name, the wrong timeline, and the wrong expectations - what happens when the great deception arrives?
+
+They're expecting a rapture that was invented in the 1830s. They're calling on a name that was manufactured through transliteration. They're celebrating a revival that the system is promoting. And they're wide open for what comes next.
+
+When people vanish - however that's accomplished - the "Christians" who remain will think they missed the rapture. The shame and terror will be overwhelming. And when a figure appears offering exactly what they've been programmed to expect - peace, a kingdom, a second chance - they will follow. Willingly. Gratefully. Because the script was written for exactly this moment.
+
+The celebrities carrying Bibles on stage aren't the problem. Many of them may be genuinely searching. Many may have encountered something real in their desperation. The human heart reaching for the Creator is always genuine, even when it's been given the wrong address.
+
+But the address matters. The name matters. Scripture couldn't be clearer about this. And the fact that billions are being directed to the wrong name - even in the middle of what appears to be an awakening - is not a coincidence. It is the capstone of a deception that has been building for centuries.
+
+The elect will not be deceived. Not because they're smarter. Not because they're better. But because they know the name. The real one. The one that contains the Father. The one that was hidden precisely because it carries the power the substitute does not.
+
+Yahusha. Yahuah is salvation. That's the frequency. That's the signal. That's the name above all names - and it isn't "Jesus."
 
 ---
 
