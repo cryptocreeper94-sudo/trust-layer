@@ -129,7 +129,9 @@ export default function VeilReader() {
   const [useAIVoice, setUseAIVoice] = useState(true);
   const [speechSupported, setSpeechSupported] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioElementRef = useRef<HTMLAudioElement | null>(null);
   const lastPlayedChapterRef = useRef<string | null>(null);
+  const blobUrlRef = useRef<string | null>(null);
 
   useEffect(() => {
     async function loadEbook() {
@@ -234,10 +236,46 @@ export default function VeilReader() {
   const [ttsError, setTtsError] = useState<string | null>(null);
   const [voiceProvider, setVoiceProvider] = useState<string>('');
 
+  const cleanupAudio = () => {
+    if (blobUrlRef.current) {
+      URL.revokeObjectURL(blobUrlRef.current);
+      blobUrlRef.current = null;
+    }
+    if (audioElementRef.current) {
+      audioElementRef.current.pause();
+      audioElementRef.current.removeAttribute('src');
+      audioElementRef.current.load();
+    }
+  };
+
+  const getOrCreateAudioElement = (): HTMLAudioElement => {
+    if (audioElementRef.current) return audioElementRef.current;
+    const el = document.createElement('audio');
+    el.setAttribute('playsinline', '');
+    el.setAttribute('preload', 'auto');
+    el.style.display = 'none';
+    document.body.appendChild(el);
+    audioElementRef.current = el;
+    audioRef.current = el;
+    return el;
+  };
+
+  useEffect(() => {
+    return () => {
+      cleanupAudio();
+      if (audioElementRef.current) {
+        audioElementRef.current.remove();
+        audioElementRef.current = null;
+      }
+    };
+  }, []);
+
   const playWithAIVoice = async (text: string) => {
     setIsLoading(true);
     setTtsError(null);
     try {
+      cleanupAudio();
+
       const response = await fetch('/api/voice/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -259,30 +297,38 @@ export default function VeilReader() {
       }
       
       const url = URL.createObjectURL(blob);
+      blobUrlRef.current = url;
       
-      audioRef.current = new Audio(url);
-      audioRef.current.onended = () => {
+      const audio = getOrCreateAudioElement();
+      audio.src = url;
+      
+      audio.onended = () => {
         setIsPlaying(false);
         setIsPaused(false);
-        URL.revokeObjectURL(url);
+        cleanupAudio();
         handleNextChapterAuto();
       };
-      audioRef.current.onerror = (e) => {
+      audio.onerror = (e) => {
         console.error('Audio playback error:', e);
         setIsPlaying(false);
         setIsLoading(false);
-        URL.revokeObjectURL(url);
+        cleanupAudio();
         setUseAIVoice(false);
         tryBrowserSpeech(text);
       };
       
+      await audio.load();
+      
       try {
-        await audioRef.current.play();
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          await playPromise;
+        }
         setIsPlaying(true);
         setIsLoading(false);
       } catch (playErr: any) {
         console.error('Audio play() failed:', playErr);
-        URL.revokeObjectURL(url);
+        cleanupAudio();
         setUseAIVoice(false);
         setIsLoading(false);
         tryBrowserSpeech(text);
@@ -338,7 +384,7 @@ export default function VeilReader() {
 
   useEffect(() => {
     if (ttsError) {
-      const timer = setTimeout(() => setTtsError(null), 8000);
+      const timer = setTimeout(() => setTtsError(null), 4000);
       return () => clearTimeout(timer);
     }
   }, [ttsError]);
@@ -401,11 +447,7 @@ export default function VeilReader() {
       }
     }
     
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.src = '';
-      audioRef.current = null;
-    }
+    cleanupAudio();
     if (typeof window !== 'undefined' && window.speechSynthesis) {
       window.speechSynthesis.cancel();
     }
@@ -436,9 +478,10 @@ export default function VeilReader() {
     lastPlayedChapterRef.current = chapterId;
     
     try {
-      const silentAudio = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA');
-      await silentAudio.play();
-      silentAudio.pause();
+      const unlockEl = getOrCreateAudioElement();
+      unlockEl.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+      await unlockEl.play();
+      unlockEl.pause();
     } catch (e) {}
     
     if (useAIVoice) {
@@ -461,11 +504,10 @@ export default function VeilReader() {
   };
 
   const handleStop = () => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+    cleanupAudio();
+    if (typeof window !== 'undefined' && window.speechSynthesis) {
+      window.speechSynthesis.cancel();
     }
-    window.speechSynthesis.cancel();
     setIsPlaying(false);
     setIsPaused(false);
   };
@@ -689,17 +731,27 @@ export default function VeilReader() {
                   <motion.div 
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="absolute top-full right-0 mt-2 w-72 p-3 bg-red-950/90 backdrop-blur-xl border border-red-500/30 rounded-xl shadow-2xl z-50 text-xs"
+                    exit={{ opacity: 0, y: -5 }}
+                    className="fixed top-16 left-1/2 -translate-x-1/2 w-[90vw] max-w-sm p-3 bg-slate-900/95 backdrop-blur-xl border border-purple-500/30 rounded-xl shadow-2xl z-[200] text-xs"
                   >
-                    <p className="text-red-200 mb-2">{ttsError}</p>
                     <button 
-                      onClick={() => handleDownloadPDF()} 
-                      className="text-cyan-400 hover:text-cyan-300 underline block transition-colors mb-1"
-                      data-testid="button-tts-error-pdf"
+                      onClick={() => setTtsError(null)} 
+                      className="absolute top-1 right-2 text-white/40 hover:text-white text-lg"
+                      data-testid="button-dismiss-tts-error"
                     >
-                      Download PDF for Adobe Reader
+                      &times;
                     </button>
-                    <a href="/veil" className="text-purple-400 hover:text-purple-300 underline block transition-colors">Go to download page</a>
+                    <p className="text-white/80 mb-2 pr-4">{ttsError}</p>
+                    <div className="flex gap-3">
+                      <button 
+                        onClick={() => { setTtsError(null); handleDownloadPDF(); }} 
+                        className="text-cyan-400 hover:text-cyan-300 underline transition-colors text-[10px]"
+                        data-testid="button-tts-error-pdf"
+                      >
+                        Download PDF
+                      </button>
+                      <a href="/veil" className="text-purple-400 hover:text-purple-300 underline transition-colors text-[10px]">Download page</a>
+                    </div>
                   </motion.div>
                 )}
               </div>
