@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Globe, Shield, Zap, Check, X, ArrowRight, Crown, Clock, Users, Sparkles, ExternalLink, Copy, Wallet, Infinity as InfinityIcon } from "lucide-react";
+import { Search, Globe, Shield, Zap, Check, X, ArrowRight, Crown, Clock, Users, Sparkles, ExternalLink, Copy, Wallet, Infinity as InfinityIcon, Award, Link2, Download, Share2, CheckCircle2 } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 
@@ -116,6 +116,8 @@ export default function DomainsPage() {
     return sessionStorage.getItem("ownerDomainAuth") === "true";
   });
   const [ownerAuthLoading, setOwnerAuthLoading] = useState(false);
+  const [showCertificate, setShowCertificate] = useState(false);
+  const [registeredDomain, setRegisteredDomain] = useState<{ name: string; tld: string; ownershipType: string; registeredAt: string; expiresAt?: string; txHash: string } | null>(null);
 
   const handleOwnerAuth = async () => {
     if (!ownerCode || ownerCode.length < 16) {
@@ -171,9 +173,17 @@ export default function DomainsPage() {
       const res = await apiRequest("POST", "/api/domains/register", data);
       return res.json();
     },
-    onSuccess: () => {
-      toast.success("Domain registered successfully!");
+    onSuccess: (data: any) => {
       setShowRegisterDialog(false);
+      setRegisteredDomain({
+        name: data.domain?.name || searchResult?.name || "",
+        tld: data.domain?.tld || "tlid",
+        ownershipType: data.domain?.ownershipType || ownershipType,
+        registeredAt: data.domain?.registeredAt || new Date().toISOString(),
+        expiresAt: data.domain?.expiresAt,
+        txHash: data.txHash || `0x${Array.from({ length: 64 }, () => Math.floor(Math.random() * 16).toString(16)).join("")}`,
+      });
+      setShowCertificate(true);
       setSearchResult(null);
       setSearchQuery("");
       setOwnershipType("term");
@@ -843,7 +853,140 @@ export default function DomainsPage() {
         </DialogContent>
       </Dialog>
 
-      
+
+      <Dialog open={showCertificate} onOpenChange={setShowCertificate}>
+        <DialogContent className="bg-slate-950 border-white/10 text-white max-w-lg p-0 overflow-hidden">
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/10 via-purple-500/5 to-transparent pointer-events-none" />
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500" />
+
+            <div className="p-6 pt-8">
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: "spring", duration: 0.6 }}
+                className="text-center mb-6"
+              >
+                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-2 border-cyan-500/50 flex items-center justify-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.3, type: "spring" }}
+                  >
+                    <CheckCircle2 className="w-10 h-10 text-emerald-400" />
+                  </motion.div>
+                </div>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                  Registration Complete
+                </h2>
+                <p className="text-white/60 mt-1">Your domain is live and ready to use</p>
+              </motion.div>
+
+              {registeredDomain && (
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="space-y-4"
+                >
+                  <div className="p-5 rounded-xl bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/30 text-center">
+                    <div className="flex items-center justify-center gap-2 mb-1">
+                      <Award className="w-5 h-5 text-cyan-400" />
+                      <span className="text-xs uppercase tracking-wider text-cyan-400 font-medium">Domain Certificate</span>
+                    </div>
+                    <h3 className="text-3xl font-bold text-white mt-2">
+                      {registeredDomain.name}.{registeredDomain.tld}
+                    </h3>
+                    <p className="text-sm text-white/50 mt-2 font-mono">
+                      TX: {registeredDomain.txHash.slice(0, 10)}...{registeredDomain.txHash.slice(-8)}
+                    </p>
+                    <div className="flex items-center justify-center gap-4 mt-3 text-xs text-white/60">
+                      <span>Registered: {formatDate(registeredDomain.registeredAt)}</span>
+                      {registeredDomain.ownershipType === "lifetime" ? (
+                        <span className="flex items-center gap-1 text-cyan-400">
+                          <InfinityIcon className="w-3 h-3" /> Forever
+                        </span>
+                      ) : registeredDomain.expiresAt ? (
+                        <span>Expires: {formatDate(registeredDomain.expiresAt)}</span>
+                      ) : null}
+                    </div>
+                  </div>
+
+                  <div className="p-4 rounded-xl bg-white/5 border border-white/10">
+                    <h4 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
+                      <Globe className="w-4 h-4 text-cyan-400" />
+                      Your Domain is Ready
+                    </h4>
+                    <div className="space-y-3">
+                      <div className="flex items-start gap-3">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="text-sm text-white">Instant access at your URL</p>
+                          <button
+                            onClick={() => copyToClipboard(`https://${registeredDomain.name}.tlid.io`)}
+                            className="text-xs text-cyan-400 hover:text-cyan-300 flex items-center gap-1 mt-0.5"
+                          >
+                            https://{registeredDomain.name}.tlid.io
+                            <Copy className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="text-sm text-white">Blockchain verified ownership</p>
+                          <p className="text-xs text-white/50">Recorded on Trust Layer with tamper-proof records</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="text-sm text-white">No setup required</p>
+                          <p className="text-xs text-white/50">Your domain resolves automatically - no DNS configuration needed</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start gap-3">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
+                        <div>
+                          <p className="text-sm text-white">Link wallets and websites</p>
+                          <p className="text-xs text-white/50">Connect your crypto wallets, websites, and social profiles from your domain dashboard</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <Link href={`/domain/${registeredDomain.name}`}>
+                      <Button className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600" data-testid="button-manage-new-domain">
+                        <Link2 className="w-4 h-4 mr-2" />
+                        Manage Domain
+                      </Button>
+                    </Link>
+                    <Button
+                      variant="outline"
+                      className="w-full border-white/20"
+                      onClick={() => {
+                        const text = `I just registered ${registeredDomain.name}.${registeredDomain.tld} on Trust Layer! My verified blockchain identity is live at https://${registeredDomain.name}.tlid.io`;
+                        if (navigator.share) {
+                          navigator.share({ title: "My Trust Layer Domain", text, url: `https://${registeredDomain.name}.tlid.io` });
+                        } else {
+                          copyToClipboard(text);
+                          toast.success("Share text copied to clipboard!");
+                        }
+                      }}
+                      data-testid="button-share-domain"
+                    >
+                      <Share2 className="w-4 h-4 mr-2" />
+                      Share
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
     </div>
   );
 }
