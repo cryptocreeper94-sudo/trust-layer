@@ -2914,11 +2914,23 @@ But these are the same corporations that spend millions on branding research. Wh
 
 **The United Nations** logo deserves particular attention. It is a flat projection of the earth - viewed from directly above the North Pole, with the continents spread outward in a circle, surrounded by olive branches. This is not a globe. This is the **azimuthal equidistant projection** - the same map that flat earth researchers point to as a more accurate representation of the physical world. The organization that governs the nations of the earth chose, as its official emblem, a map that looks nothing like the globe model taught in every school on the planet. They display it on every flag, every document, every podium. And no one asks why.
 
-The Monster Energy logo - three claw marks that form the Hebrew letter Vav (ו). In Hebrew numerology, Vav = 6. Three Vavs = 666. The slogan: "Unleash the beast."
+**Monster Energy** deserves more than a passing mention because the symbolism isn't hidden at all - it's the entire brand.
 
-Lucifer - once the perfect heavenly angel, one of the favorites - is now considered a monster. His number is 666. And here's a drink called Monster, with 666 in Hebrew on the can, telling you to "unleash the beast."
+The logo: three claw marks scratched down the face of the can. Each mark is the Hebrew letter **Vav (ו)**. In Hebrew gematria, Vav has a numerical value of **6**. Three Vavs: **666**. The number of the beast, written in Hebrew, on a can you buy at every gas station in America.
 
-Coincidence? How many coincidences before it becomes a pattern?
+The slogan: **"Unleash the beast."**
+
+The tagline on their website and promotional material has at various times included phrases like "Declare war on the ordinary" and references to unleashing something primal, something *other*. The entire marketing identity is built around the idea that you are summoning a force - a beast - and releasing it into yourself.
+
+The drink itself: a neon green liquid inside a black can. Black and green - the colors associated with death and the underworld across multiple occult traditions. The "M" in Monster is formed by those three claw marks - as if something inhuman scratched its way through the surface. As if the beast is already trying to get out.
+
+Now consider who drinks it. The primary demographic is teenagers and young adults. Children. The product is engineered for the young - marketed in extreme sports, gaming, music festivals. Places where the youth gather. The next generation. Being handed a can with 666 written on it in Hebrew and told to "unleash the beast."
+
+And the cross on the can. Look closely at the "O" in Monster on most cans. There is a cross - and it's been designed to appear as though it is falling, tilting, or inverting. An upside-down cross, embedded in the name. Some dismiss this as a design artifact. But when every other element of the branding points in the same direction, the "accidental" inverted cross becomes very difficult to explain away.
+
+Lucifer - once the most beautiful of the heavenly beings, one of the favorites - is now described as a monster. His number is 666. And here's a drink called Monster, with 666 written in Hebrew on the can, an inverted cross in the name, telling you to "unleash the beast" - being marketed primarily to children.
+
+How many coincidences before it becomes a pattern?
 
 The Google Chrome logo - a stylized 666.
 
