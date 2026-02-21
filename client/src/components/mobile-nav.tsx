@@ -494,17 +494,45 @@ function GamesComingSoonModal({ onClose }: { onClose: () => void }) {
   );
 }
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin: () => void }) {
   const [location] = useLocation();
   const [showGamesModal, setShowGamesModal] = useState(false);
   const { user, isAuthenticated, displayName, logout } = useSimpleAuth();
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
+
+    const installed = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
+    setIsInstalled(!!installed);
+
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e as BeforeInstallPromptEvent);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+
     return () => {
       document.body.style.overflow = '';
+      window.removeEventListener('beforeinstallprompt', handler);
     };
   }, []);
+
+  const handleInstall = async () => {
+    if (!installPrompt) return;
+    await installPrompt.prompt();
+    const result = await installPrompt.userChoice;
+    if (result.outcome === 'accepted') {
+      setIsInstalled(true);
+    }
+    setInstallPrompt(null);
+  };
 
   const handleShowComingSoon = (title: string) => {
     if (title === "Games") {
@@ -775,6 +803,35 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
 
         {/* Divider */}
         <div style={{ height: '1px', background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent)', marginBottom: '16px' }} />
+
+        {/* Install App Button */}
+        {!isInstalled && (
+          <button
+            onClick={installPrompt ? handleInstall : undefined}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+              width: '100%',
+              padding: '12px',
+              marginBottom: '12px',
+              borderRadius: '12px',
+              background: installPrompt ? 'linear-gradient(135deg, #06b6d4, #a855f7)' : 'rgba(6, 182, 212, 0.1)',
+              border: installPrompt ? 'none' : '1px solid rgba(6, 182, 212, 0.3)',
+              color: installPrompt ? '#000' : '#06b6d4',
+              cursor: installPrompt ? 'pointer' : 'default',
+              fontWeight: 700,
+              fontSize: '13px',
+              fontFamily: 'Inter, sans-serif',
+            }}
+            data-testid="button-install-app"
+          >
+            <Rocket style={{ width: '18px', height: '18px', flexShrink: 0 }} />
+            <span style={{ flex: 1, textAlign: 'left' }}>
+              {installPrompt ? 'Install App' : 'Install: Menu → Add to Home Screen'}
+            </span>
+          </button>
+        )}
 
         {/* Nav Categories */}
         <nav style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
