@@ -4213,6 +4213,22 @@ And it works - because nobody cared about linear time in those days. Time was cy
 
 This is a gigantic part of the deception. By making us obsessed with linear time - calendars, clocks, deadlines, schedules - they disconnected us from the natural order Yahuah established. And they made us dependent on their dating system, which they control completely.
 
+**Nobody Knows What Year It Is**
+
+Stop and let that sink in. Nobody - not a single person alive - actually knows what year it is. The number on the calendar is based entirely on a dating system created, maintained, and repeatedly modified by the very hierarchy this book has documented. The AD/BC marker was invented by a monk named Dionysius Exiguus in the sixth century. The Gregorian calendar was imposed by a pope in 1582. At any point in between - and at multiple points that can be documented - the hierarchy could have changed the date to anything that served the narrative. Added centuries. Removed them. Shifted the marker. Compressed or expanded eras. And nobody in the general population would have been the wiser, because nobody in the general population was keeping independent records.
+
+The entire concept of "what year is it?" depends on trusting the record-keepers. And the record-keepers are the same institutions that erased the Creator's name, replaced the solar calendar with a papal one, removed books from the canon, and built a religious system designed to intercept the connection between humanity and Yahuah. These are the timekeepers. These are the ones saying "it's 2026."
+
+And here's the part most people never consider: if the adversary has been executing this plan since before humanity was created - if the celestial rebellion predates Adam, if the council of the fallen has been working across millennia with intelligence and patience beyond human comprehension - then changing a calendar is nothing. Manipulating dates and names across a few centuries is trivial. It's small work compared to the scale of the overall operation.
+
+Think about what this book has already documented. The adversary corrupted human genetics through the Watchers. Engineered a counter-civilization through the Nephilim. Built mystery religions across every culture. Infiltrated and inverted the faith itself. Replaced the Creator's name 6,800 times. Manufactured an entire cosmological model to hide the firmament. Erected a global financial system, a surveillance infrastructure, a media apparatus that controls the perception of billions.
+
+Against that backdrop, adding or removing three hundred years from a calendar isn't even a footnote. It's a clerical adjustment. The kind of detail an ancient intelligence handles without breaking stride on the way to something bigger.
+
+And yet that "clerical adjustment" is the linchpin. Without it, the Millennial Reign is visible. Without it, the timeline doesn't align with Aquarius. Without it, the entire eschatological framework that keeps billions waiting for events that already occurred falls apart.
+
+The smallest manipulation - a number on a calendar - protects the biggest deception. That's how it works. Not through grand, visible schemes that draw attention, but through the quiet alteration of foundational assumptions that nobody thinks to question. "What year is it?" Everyone knows. Everyone's wrong. And nobody asks.
+
 **The Genealogy Goes Silent**
 
 Consider this: scripture traces the genealogy meticulously from Adam through Seth, through Noah, through Abraham, through David, all the way to Yahusha the Messiah. Thousands of years of unbroken lineage, carefully recorded and preserved.
