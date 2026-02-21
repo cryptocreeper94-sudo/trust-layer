@@ -279,34 +279,53 @@ export async function registerRoutes(
   // =====================================================
   // TLID GATEWAY - Handle *.tlid.io subdomain routing
   // =====================================================
+  const TLID_INTERNAL_ROUTES: Record<string, string> = {
+    "trustlayer": "/",
+    "chronicles": "/",
+    "throughtheveil": "/veil",
+    "signalchat": "/signal-chat",
+    "guardianscanner": "/guardian-scanner",
+    "guardianscreener": "/guardian-screener",
+    "trustshield": "/guardian-scanner",
+    "academy": "/academy",
+    "thevoid": "/the-void",
+    "arcade": "/arcade",
+    "tlid": "/domains",
+    "torque": "/torque",
+    "trusthome": "/trust-home",
+    "trustvault": "/trust-vault",
+  };
+
   app.get("*", async (req: Request, res: Response, next: NextFunction) => {
     const host = req.hostname;
     
-    // Check if this is a request to a *.tlid.io subdomain
     if (host && host.endsWith(".tlid.io") && host !== "tlid.io" && !host.startsWith("www.")) {
-      // Extract domain name (e.g., "alice" from "alice.tlid.io")
       const domainName = host.split(".")[0];
       
       try {
-        // Look up the domain in the database
+        const internalRoute = TLID_INTERNAL_ROUTES[domainName];
+        if (internalRoute) {
+          req.url = internalRoute + (req.url === "/" ? "" : req.url);
+          return next();
+        }
+
         const domain = await storage.getDomain(domainName);
         
         if (domain && domain.website) {
-          // Domain found with website URL - redirect to it
+          const targetUrl = new URL(domain.website);
+          if (targetUrl.hostname === host) {
+            return next();
+          }
           return res.redirect(301, domain.website);
         }
         
-        // Domain not found or no website configured - let React handle the error page
-        // Add header so React can detect this is a gateway request
         res.setHeader("X-Gateway-Domain", domainName);
         res.setHeader("X-Gateway-Found", domain ? "true" : "false");
       } catch (error) {
         console.error("Gateway error:", error);
-        // Continue to React app on error
       }
     }
     
-    // Not a gateway request, or gateway request without redirect - continue to React
     next();
   });
 
