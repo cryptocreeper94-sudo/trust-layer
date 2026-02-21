@@ -2892,15 +2892,27 @@ By showing everything in advance - in movies, TV shows, music videos, corporate 
 
 Look at the Apple logo. An apple with a bite taken out of it.
 
-The original Macintosh logo was a whole apple - a rainbow-striped apple, no less. Then it changed. The bite appeared. And now billions of people carry the symbol of the original sin in their pockets, hold it to their faces, worship at its altar.
+The surface-level reading is obvious enough: the fruit of the tree of knowledge. The bite that changed everything. But the deeper meaning runs straight back to the narrative we traced in the earliest chapters of this book.
 
-The fruit of the tree of knowledge. The bite that separated humanity from the Creator. The serpent's victory - marketed as innovation.
+The "original sin" wasn't simply eating a piece of fruit. The Hebrew account describes the Watchers - fallen angels who descended from their station and engaged with the daughters of men. The union was both physical and spiritual. The women lay with these beings and bore the Nephilim - hybrid offspring that were never supposed to exist. And the entire exchange was driven by a promise: that humanity could obtain the power of the Creator. That they could become gods themselves. That the bite was worth taking.
+
+Now look at the logo again. An apple with a bite taken out of it. Carried in the pockets of billions of people. Held to their faces. Placed on their desks and in their children's hands. The most valuable company in human history - built on the symbol of humanity's first and most catastrophic deception.
+
+The original Macintosh logo was a rainbow-striped apple. The rainbow - the covenant sign of the Creator after the flood, the promise that He would not destroy the earth by water again. Co-opted. Inverted. Stamped on a product and sold back to the masses. Then the rainbow was removed. The bite remained. And now billions worship at its altar without ever asking what they're venerating.
+
+The original Apple computer - the Apple I - was priced at **$666.66**. Steve Wozniak has said this was because he "liked repeating digits." The same number that Revelation tells us requires wisdom to count. Priced into the very first product. From the very beginning.
 
 Coincidence? Perhaps. But consider the pattern.
 
 "It's just a logo." "It's just design." "You're reading too much into it."
 
-But these are the same people who spend millions on branding research. Who know that symbols bypass the conscious mind and speak directly to the subconscious. Who understand that logos are sigils - magical symbols designed to influence.
+But these are the same corporations that spend millions on branding research. Who know that symbols bypass the conscious mind and speak directly to the subconscious. Who understand that logos are sigils - symbols designed to influence behavior at a level the consumer never consciously processes.
+
+**Starbucks** - the world's most ubiquitous coffee brand. Their logo is a **two-tailed siren** - a creature pulled directly from medieval alchemical texts and European occult tradition. The original 1971 logo was even more explicit: a bare-breasted melusine with her two tails spread wide. The image comes from the same esoteric tradition that produced Baphomet, the Templars' alleged idol. They've sanitized it over the decades - cropped it, zoomed in, made it "friendlier" - but the symbol remains. A seductive, supernatural creature from occult mythology, printed on a cup that hundreds of millions of people hold to their lips every morning.
+
+**Procter & Gamble** - one of the largest consumer goods companies on earth. For over a century, their logo featured a man-in-the-moon face surrounded by **thirteen stars**. Thirteen - the number associated with rebellion throughout scripture (the first occurrence of the number thirteen in the Bible is in Genesis 14:4, connected to rebellion). By the 1980s, the occult connections became so widely discussed that Procter & Gamble was forced to remove the logo entirely. They fought lawsuits about it. They issued public denials. And then they quietly dropped the symbol they'd used for over 100 years. If it truly meant nothing, why remove it?
+
+**The United Nations** logo deserves particular attention. It is a flat projection of the earth - viewed from directly above the North Pole, with the continents spread outward in a circle, surrounded by olive branches. This is not a globe. This is the **azimuthal equidistant projection** - the same map that flat earth researchers point to as a more accurate representation of the physical world. The organization that governs the nations of the earth chose, as its official emblem, a map that looks nothing like the globe model taught in every school on the planet. They display it on every flag, every document, every podium. And no one asks why.
 
 The Monster Energy logo - three claw marks that form the Hebrew letter Vav (ו). In Hebrew numerology, Vav = 6. Three Vavs = 666. The slogan: "Unleash the beast."
 
