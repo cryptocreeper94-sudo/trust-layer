@@ -103,14 +103,33 @@ function getAppImage(appId: string): string {
 
 const gradientColors: Record<string, { from: string; to: string }> = {
   "from-gray-500 to-gray-700": { from: "#6b7280", to: "#374151" },
+  "from-gray-800 to-black": { from: "#1f2937", to: "#000000" },
   "from-indigo-600 to-violet-800": { from: "#4f46e5", to: "#5b21b6" },
+  "from-indigo-500 to-purple-600": { from: "#6366f1", to: "#9333ea" },
   "from-cyan-400 to-blue-500": { from: "#22d3ee", to: "#3b82f6" },
+  "from-cyan-400 to-blue-600": { from: "#22d3ee", to: "#2563eb" },
+  "from-cyan-500 to-blue-600": { from: "#06b6d4", to: "#2563eb" },
+  "from-cyan-500 to-purple-500": { from: "#06b6d4", to: "#a855f7" },
   "from-slate-600 to-zinc-800": { from: "#475569", to: "#27272a" },
   "from-emerald-600 to-teal-800": { from: "#059669", to: "#115e59" },
+  "from-emerald-500 to-teal-600": { from: "#10b981", to: "#0d9488" },
+  "from-emerald-500 to-green-700": { from: "#10b981", to: "#15803d" },
   "from-amber-600 to-yellow-800": { from: "#d97706", to: "#854d0e" },
+  "from-amber-500 to-orange-600": { from: "#f59e0b", to: "#ea580c" },
+  "from-amber-700 to-orange-900": { from: "#b45309", to: "#7c2d12" },
   "from-cyan-600 to-blue-700": { from: "#0891b2", to: "#1d4ed8" },
   "from-orange-500 to-red-600": { from: "#f97316", to: "#dc2626" },
   "from-red-600 to-rose-700": { from: "#dc2626", to: "#be123c" },
+  "from-red-500 to-rose-600": { from: "#ef4444", to: "#e11d48" },
+  "from-blue-500 to-cyan-600": { from: "#3b82f6", to: "#0891b2" },
+  "from-blue-500 to-indigo-600": { from: "#3b82f6", to: "#4f46e5" },
+  "from-blue-600 to-indigo-700": { from: "#2563eb", to: "#4338ca" },
+  "from-purple-500 to-pink-600": { from: "#a855f7", to: "#db2777" },
+  "from-pink-500 to-rose-600": { from: "#ec4899", to: "#e11d48" },
+  "from-violet-500 to-purple-600": { from: "#8b5cf6", to: "#9333ea" },
+  "from-green-500 to-emerald-600": { from: "#22c55e", to: "#059669" },
+  "from-teal-500 to-cyan-600": { from: "#14b8a6", to: "#0891b2" },
+  "from-zinc-600 to-slate-700": { from: "#52525b", to: "#334155" },
 };
 
 function AppCard({ src, alt, gradient, name, category, verified, tags, url }: { 
@@ -171,7 +190,7 @@ function AppCard({ src, alt, gradient, name, category, verified, tags, url }: {
 }
 
 
-const categories = ["All Apps", "DeFi", "Enterprise", "AI", "Social", "Gaming", "Automotive", "Services"];
+const categories = ["All Apps", "Core", "Security", "DeFi", "Finance", "Gaming", "Enterprise", "AI", "Automotive", "Services", "Identity", "Education", "Analytics", "Community", "Health", "Entertainment", "Outdoor", "Transportation", "Development", "Hospitality"];
 
 export default function Ecosystem() {
   usePageAnalytics();
@@ -245,14 +264,14 @@ export default function Ecosystem() {
             <div className="w-full lg:w-56 space-y-4 lg:sticky lg:top-20 h-fit">
               <div>
                 <h3 className="text-[10px] font-bold text-white/40 uppercase tracking-wider mb-3">Categories</h3>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap lg:flex-col gap-1.5">
                   {categories.map((cat) => (
                     <Button
                       key={cat}
                       variant={selectedCategory === cat ? "secondary" : "ghost"}
                       size="sm"
                       onClick={() => setSelectedCategory(cat)}
-                      className={`h-8 text-[10px] sm:text-xs ${selectedCategory === cat ? 'bg-primary/20 text-primary' : 'text-white/60 hover:text-white'}`}
+                      className={`h-7 text-[10px] sm:text-xs justify-start ${selectedCategory === cat ? 'bg-primary/20 text-primary' : 'text-white/60 hover:text-white'}`}
                     >
                       {cat}
                     </Button>
