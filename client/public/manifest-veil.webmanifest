@@ -1,5 +1,5 @@
 {
-  "id": "/veil",
+  "id": "throughtheveil.tlid.io",
   "name": "Through The Veil",
   "short_name": "The Veil",
   "description": "A Journey Through Hidden History, Suppressed Truth, and Spiritual Warfare. By Jason Andrews.",
@@ -11,6 +11,8 @@
   "scope": "/veil",
   "lang": "en",
   "categories": ["books", "education", "news"],
+  "related_applications": [],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/icons/veil-72x72.png",

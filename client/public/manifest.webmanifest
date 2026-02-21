@@ -1,5 +1,5 @@
 {
-  "id": "/trust-layer",
+  "id": "trustlayer.tlid.io",
   "name": "Trust Layer",
   "short_name": "Trust Layer",
   "description": "The Coordinated Trust Layer for verified identity, accountability, and transparent audit trails. Powered by DarkWave Smart Chain.",
@@ -11,6 +11,8 @@
   "scope": "/",
   "lang": "en",
   "categories": ["finance", "business", "utilities", "security"],
+  "related_applications": [],
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/icons/trustlayer-72.png",
