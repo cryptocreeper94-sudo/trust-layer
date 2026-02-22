@@ -3600,6 +3600,32 @@ But consider this: the Canaanites practiced child sacrifice as organized religio
 
 If these practices existed openly for thousands of years across every major civilization, what evidence exists that they stopped? When, exactly, did the ritual abuse of children by organized groups operating within institutional power structures cease? Nobody can point to the date because nobody can demonstrate it ended. It was driven underground. It was hidden behind institutional walls. It was protected by the same hierarchies that have always protected it.
 
+And then there's Bohemian Grove.
+
+Every July, in a 2,700-acre old-growth redwood forest in Monte Rio, California, approximately 2,500 of the world's most powerful men gather for a two-week private retreat. Presidents. Former presidents. Secretaries of state. Defense secretaries. Supreme Court justices. CEOs of the world's largest corporations. Media moguls. Bankers. Military leaders. The guest list over the decades has included Richard Nixon, Ronald Reagan, both George Bushes, Henry Kissinger, Colin Powell, Dick Cheney, Donald Rumsfeld, Alan Greenspan, and hundreds of Fortune 500 executives.
+
+What do the most powerful men in the world do when they gather privately in the woods?
+
+They perform a ritual called the Cremation of Care.
+
+This is not speculation. It is documented. In July 2000, filmmaker Alex Jones infiltrated the Grove and captured footage of the ceremony. The video is publicly available. It shows robed figures processing through the forest at night, carrying torches, gathering before a forty-foot stone owl. An effigy representing "Care" - described as the burden of conscience - is placed on an altar at the base of the owl. Flames are lit. The effigy is burned. The gathered men cheer.
+
+A mock human sacrifice. Before a giant owl. Performed by the men who run the world.
+
+They call it "mock." They call it tradition. They call it theater. But consider what's actually happening in plain sight: the most powerful leaders on earth gather in secret, don robes, process with torches to a stone idol in the shape of an owl, place an effigy on an altar, burn it, and ceremonially declare themselves free of conscience - free of "care."
+
+The owl. In the ancient Near East, the owl was associated with Lilith - the night creature referenced in Yesha'yahu (Isaiah) 34:14. In Canaanite and Mesopotamian tradition, Molech (also rendered Moloch) was the deity to whom children were sacrificed by fire. Some scholars connect the owl imagery directly to Molech worship. Others associate it with Minerva, the Roman goddess of wisdom - herself a continuation of the Greek Athena, whose symbol was the owl. Either way, the symbolism is unmistakable: a giant idol, a fire, a sacrifice, and the ceremonial shedding of conscience by those in power.
+
+The same owl appears on the one-dollar bill. Examine the upper-right corner of the bill closely, near the "1" - a tiny owl is visible, hidden in the scrollwork. The currency that drives the global economy carries the symbol of the deity before which the world's leaders perform ritual sacrifice. Hidden in plain sight. On every dollar. In every wallet.
+
+They call it a "mock" sacrifice. But scripture doesn't describe Molech worship as mock worship. The fires were real. The children were real. The ceremony was real. And the entity receiving the offering was real.
+
+Now consider this: the men who attend Bohemian Grove return to their positions of power - in government, in finance, in media, in military - and make decisions that affect billions of lives. They have ceremonially burned their conscience. They have declared themselves free of "care." And then they authorize wars, economic policies, surveillance programs, and institutional structures that, as this chapter has documented, systematically enable the abuse of children.
+
+The Cremation of Care isn't the end of the ritual. It's the beginning. It's the permission structure. Once conscience is ceremonially destroyed, everything that follows is possible.
+
+And nobody in the mainstream asks why the most powerful men in the world feel the need to ritualistically sacrifice their conscience before a forty-foot owl in the California redwoods. The answer, according to the pattern this book has been documenting from the first chapter, is that they are continuing what the adversary started. What the Watchers taught. What Molech demanded. What the mystery schools preserved. What the institutions protect. The ritual never stopped. It simply moved to a private forest with a guest list.
+
 The testimony of survivors describes elements that children could not have invented and could not have coordinated across countries and decades:
 
 Specific symbols and sigils used during ceremonies - the same symbols that appear in the occult traditions documented throughout this book. The same inversions. The same mockery of the Creator. Ceremonies timed to specific dates on the pagan calendar - dates this book has already documented as substitutions for the true appointed times of Yahuah. Hierarchical structures within the ritual groups that mirror the hierarchies of the institutions themselves - the church, the government, the military, the entertainment industry.
