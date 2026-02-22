@@ -299,7 +299,16 @@ export async function registerRoutes(
   app.get("*", async (req: Request, res: Response, next: NextFunction) => {
     const host = req.hostname;
     
-    if (host && host.endsWith(".tlid.io") && host !== "tlid.io" && !host.startsWith("www.")) {
+    // Bare tlid.io domain should serve the automated marketing / domains page
+    if (host === "tlid.io" || host === "www.tlid.io") {
+      if (!req.url.startsWith("/api/") && !req.url.startsWith("/assets/") && !req.url.match(/\.\w+$/)) {
+        req.url = "/domains" + (req.url === "/" ? "" : req.url);
+        return next();
+      }
+      return next();
+    }
+    
+    if (host && host.endsWith(".tlid.io") && !host.startsWith("www.")) {
       const domainName = host.split(".")[0];
       
       try {
