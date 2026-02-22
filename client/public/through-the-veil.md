@@ -121,11 +121,11 @@ Yahusha came **in His Father's name** - the name Yahuah is literally embedded in
 
 But another would come **in the name of a man** - and him they would receive. The name "Jesus Christ" is the name of a man. A Greek-Latin-English construction that contains no trace of the Father's name. And it has been received by billions.
 
-**The gematria confirms it:**
+There is mathematical evidence embedded in the Greek text of Revelation itself that connects this substituted name to the number of the beast in a way that cannot be dismissed as coincidence. That evidence will be presented in full later in this book. For now, just sit with the scripture: one comes in the Father's name and is rejected. Another comes in his own name and is received by the whole world.
 
-In Greek gematria, the name "Jesus Christ" (Ἰησοῦς Χριστός) calculates to **666** - the number of the beast, described in Chazon (Revelation) 13:18 as "the number of a man."
+Which one did the whole world receive?
 
-I don't believe this is coincidence. If the pattern holds, it's a signature. And the Roman deception machine - Constantine and those who followed - may have known exactly what they were doing when they replaced the name that connects to the Father with a name that connects to something else entirely.
+The Roman deception machine - Constantine and those who followed - may have known exactly what they were doing when they replaced the name that connects to the Father with a name that connects to something else entirely.
 
 Think about what that means: Praying sincerely, with genuine heart, to a name that routes elsewhere. **Inviting something in** while believing you're connecting to the Messiah.
 
