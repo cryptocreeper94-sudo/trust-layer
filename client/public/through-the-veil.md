@@ -2806,6 +2806,28 @@ The commission's own chairs - Thomas Kean and Lee Hamilton - later wrote a book 
 
 Nineteen hijackers were identified within 72 hours. Their names and photographs were broadcast worldwide. Several of those identified later turned up alive in other countries, stating they had nothing to do with the attacks. The identifications were never corrected. The narrative was set. The war was launched. The questions were buried.
 
+Then there is the matter of the lease.
+
+Larry Silverstein signed a 99-year lease on the World Trade Center complex on July 24, 2001 - six weeks before the attacks. The lease included a $3.55 billion insurance policy that specifically covered terrorist attacks. This was the first time in the complex's 33-year history that it had changed hands from the Port Authority to a private leaseholder. Six weeks. After 33 years of public ownership, the buildings went private six weeks before they were destroyed.
+
+After the attacks, Silverstein argued that the two planes constituted two separate occurrences under his policy - meaning he was entitled to $7.1 billion rather than $3.55 billion. He ultimately received a settlement of $4.55 billion. He had put up $14 million of his own money for the lease. The return on that investment, after the buildings were destroyed, was $4.55 billion. A return of over 32,000 percent - achieved because the buildings no longer existed.
+
+Silverstein was also the owner of Building 7 - the 47-story tower that collapsed at free-fall speed without being hit by anything. In a PBS documentary, Silverstein stated regarding Building 7: "I remember getting a call from the fire department commander, telling me that they were not sure they were gonna be able to contain the fire, and I said, you know, we've had such terrible loss of life, maybe the smartest thing to do is pull it. And they made that decision to pull and then we watched the building collapse." In demolition terminology, "pull it" means to bring a building down through controlled demolition. Silverstein later claimed he meant pulling the firefighting operation. But buildings are not rigged for controlled demolition in an afternoon. If Building 7 was "pulled," the demolition charges had to have been placed before September 11.
+
+Then there are the people who were warned.
+
+San Francisco Mayor Willie Brown received a phone call on the evening of September 10 - approximately eight hours before the attacks - warning him to be cautious about air travel. Brown was scheduled to fly to New York the next morning. He told the San Francisco Chronicle that the call came from "airport security." The source of that warning has never been officially identified.
+
+Attorney General John Ashcroft stopped flying commercial airlines in July 2001 - two months before the attacks. CBS News reported that the decision was based on a "threat assessment" from the FBI. Ashcroft began using chartered government jets instead. The American public continued flying commercial without any such warning.
+
+Newsweek reported on September 24, 2001 that a group of top Pentagon officials had suddenly cancelled travel plans for the morning of September 11, "apparently because of security concerns." The specific source of those concerns was not disclosed.
+
+Author Salman Rushdie was banned from flying in the United States and Canada by the FAA beginning September 3, 2001 - one week before the attacks. Airlines were told they would need to implement special security measures before Rushdie could board. The FAA confirmed the ban but refused to explain why it was issued at that specific time.
+
+Employees of Odigo, an Israeli instant messaging company with offices near the World Trade Center, received anonymous messages two hours before the attacks warning that an attack was coming. Odigo confirmed this to multiple news outlets, including Haaretz, and stated they had provided the information to the FBI. The sender was never publicly identified.
+
+Someone knew. Multiple someones knew. Not vague "chatter" about potential threats - specific warnings to specific people not to fly, not to be in certain places, on that specific day. The warnings went to mayors, attorneys general, Pentagon officials, and employees of a foreign tech company. The warnings did not go to the nearly 3,000 people who died that morning.
+
 The Patriot Act - 342 pages of complex legislation - was introduced to Congress on October 23, 2001, just 42 days after the attacks. Legislation of that complexity is not written in 42 days. It was written before September 11. It was waiting. The attacks provided the emotional trigger to pass legislation that had already been prepared - legislation that fundamentally restructured the relationship between the American government and its citizens, establishing mass surveillance, indefinite detention, and the legal framework for a security state.
 
 This book makes no definitive claims about September 11, 2001. This book states what is documented: steel that melted at temperatures no official explanation can account for. A building that fell at free-fall into its own footprint without being struck by anything. A flight maneuver performed by a pilot who couldn't fly a Cessna. A crash site with no bodies, no blood, and no recognizable aircraft. An investigation led by associates of the investigated, resisted by the administration, and described by its own chairs as "set up to fail." Legislation written before the event it was supposedly a response to. Security footage confiscated and never released. Witnesses who were ignored. Professionals who were silenced. And a label - "conspiracy theorist" - deployed against anyone who noticed.
