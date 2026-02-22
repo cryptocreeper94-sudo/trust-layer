@@ -449,6 +449,25 @@ async function initializeServices() {
     } catch (err: any) {
       console.warn('[Pulse] Prediction services skipped:', err.message);
     }
+
+    // Start Backup Vault - auto-sync predictions to protected backup schema
+    try {
+      const { backupVaultService } = await import('./services/pulse/backupVaultService');
+      await backupVaultService.checkAndAutoRestore();
+      backupVaultService.startAutoSync(60_000);
+      console.log('[BackupVault] Prediction backup vault active (60s sync)');
+    } catch (err: any) {
+      console.warn('[BackupVault] Backup vault skipped:', err.message);
+    }
+
+    // Start Auto Prediction Generator - generates predictions continuously
+    try {
+      const { autoPredictionService } = await import('./services/pulse/autoPredictionService');
+      autoPredictionService.start(30_000);
+      console.log('[AutoPredict] Prediction generator active (30s batches)');
+    } catch (err: any) {
+      console.warn('[AutoPredict] Auto prediction generator skipped:', err.message);
+    }
     
     // Marketing auto-deploy scheduler - DISABLED (rebrand in progress)
     // startScheduler();
