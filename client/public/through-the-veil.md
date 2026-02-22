@@ -1630,7 +1630,15 @@ The Gospels were written in Greek, not Hebrew. In the translation, Yahusha becam
 
 From Greek Iesous came Latin Iesus. From Latin Iesus came English Jesus. A name that never existed in Hebrew. A name that means nothing. A name stripped of the Father.
 
-By the time Constantine formalized doctrine at Nicaea in 325 AD, the substitution was already complete. The Council didn't create the deception - they inherited it, codified it, and enforced it by law.
+And here is a detail that should stop every reader in their tracks: the letter J did not exist in any language until approximately 1524. Not in Hebrew. Not in Greek. Not in Latin. Not in English. The sound "Jee-zus" was never spoken by anyone, anywhere, for the first 1,500 years after the Messiah walked the earth. The name "Jesus" is not ancient. It is not original. It is a sixteenth-century invention.
+
+Now consider the timeline this book has been building. If the Millennial Reign ended around 1500 AD and Satan's little season began at roughly that same period - the Renaissance, the "rebirth" of paganism, the fracturing of the visible church through the Reformation - then the letter J arrived at the exact moment the adversary was released. The final form of the substitute name could not have existed during the Millennial Reign. It was manufactured after. During the little season. By the system the adversary built upon his release.
+
+The name "Jesus" is not a translation that slowly drifted over centuries of innocent linguistic evolution. It is a product of the little season. It appeared when the adversary appeared. It was finalized when the adversary was at work. And it has been the primary name used by billions ever since - covering the exact period this book identifies as Satan's time of maximum deception.
+
+That is not coincidence. That is engineering.
+
+By the time Constantine formalized doctrine at Nicaea in 325 AD, the Greek substitution (Iesous) was already in place. But the final English form - the one the whole world uses today - didn't arrive until the adversary's season began. The capstone was placed on the deception at precisely the moment the deceiver was loosed.
 
 **THE 70-YEAR GAP**
 
