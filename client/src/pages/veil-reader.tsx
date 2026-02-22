@@ -133,25 +133,52 @@ export default function VeilReader() {
   const lastPlayedChapterRef = useRef<string | null>(null);
   const blobUrlRef = useRef<string | null>(null);
 
-  useEffect(() => {
-    async function loadEbook() {
-      try {
-        const response = await fetch('/api/veil/chapters');
-        if (!response.ok) {
-          throw new Error(`Failed to load ebook: ${response.status}`);
-        }
-        const parsedVolumes = await response.json();
-        if (!Array.isArray(parsedVolumes) || parsedVolumes.length === 0) {
-          throw new Error('Invalid ebook data received');
-        }
-        setVolumes(parsedVolumes);
-        setLoading(false);
-      } catch (err: any) {
-        console.error('Error loading ebook:', err);
-        setError(err?.message || 'Failed to load ebook content');
-        setLoading(false);
+  const loadEbook = async (retryCount = 0) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+      
+      const response = await fetch('/api/veil/chapters', {
+        signal: controller.signal,
+        headers: { 'Accept': 'application/json' }
+      });
+      clearTimeout(timeout);
+      
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
       }
+      
+      const text = await response.text();
+      if (!text || text.length < 100) {
+        throw new Error('Empty response from server');
+      }
+      
+      let parsedVolumes;
+      try {
+        parsedVolumes = JSON.parse(text);
+      } catch (parseErr) {
+        throw new Error('Failed to parse book data');
+      }
+      
+      if (!Array.isArray(parsedVolumes) || parsedVolumes.length === 0) {
+        throw new Error('Invalid book data received');
+      }
+      setVolumes(parsedVolumes);
+      setLoading(false);
+    } catch (err: any) {
+      console.error('Error loading ebook (attempt ' + (retryCount + 1) + '):', err);
+      if (retryCount < 2 && err?.name !== 'AbortError') {
+        await new Promise(r => setTimeout(r, 1000 * (retryCount + 1)));
+        return loadEbook(retryCount + 1);
+      }
+      setError(err?.name === 'AbortError' ? 'Loading took too long. Please check your connection and try again.' : (err?.message || 'Failed to load book content'));
+      setLoading(false);
     }
+  };
+
+  useEffect(() => {
     loadEbook();
   }, []);
 
@@ -573,11 +600,20 @@ export default function VeilReader() {
             </div>
             <p className="text-red-300 mb-2 font-medium text-lg">{error || 'Failed to load content'}</p>
             <p className="text-slate-500 text-sm mb-6">Please try again or return to the book page.</p>
-            <Link href="/veil">
-              <Button className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all w-full py-5">
-                Return to Veil
+            <div className="space-y-3">
+              <Button 
+                onClick={() => loadEbook()} 
+                className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all w-full py-5"
+                data-testid="button-retry-load"
+              >
+                Try Again
               </Button>
-            </Link>
+              <Link href="/veil">
+                <Button variant="outline" className="border-white/10 text-slate-400 hover:text-white w-full py-5">
+                  Return to Book Page
+                </Button>
+              </Link>
+            </div>
           </GlassCard>
         </motion.div>
       </div>

@@ -21675,6 +21675,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   // ==============================================
 
   let cachedVeilChapters: any = null;
+  let cachedVeilMtime: number = 0;
 
   function parseVeilMarkdown(markdown: string) {
     const lines = markdown.split('\n');
@@ -21768,10 +21769,6 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
   app.get("/api/veil/chapters", async (_req, res) => {
     try {
-      if (cachedVeilChapters) {
-        return res.json(cachedVeilChapters);
-      }
-
       const mdPaths = [
         path.join(process.cwd(), "client", "public", "through-the-veil.md"),
         path.join(process.cwd(), "public", "through-the-veil.md"),
@@ -21779,8 +21776,15 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       ];
 
       let mdContent = '';
+      let mdMtime = 0;
       for (const mdPath of mdPaths) {
         if (fs.existsSync(mdPath)) {
+          const stat = fs.statSync(mdPath);
+          mdMtime = stat.mtimeMs;
+          if (cachedVeilChapters && mdMtime === cachedVeilMtime) {
+            res.setHeader('Cache-Control', 'public, max-age=60');
+            return res.json(cachedVeilChapters);
+          }
           mdContent = fs.readFileSync(mdPath, 'utf-8');
           break;
         }
@@ -21792,6 +21796,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
       const volumes = parseVeilMarkdown(mdContent);
       cachedVeilChapters = volumes;
+      cachedVeilMtime = mdMtime;
+      res.setHeader('Cache-Control', 'public, max-age=60');
       res.json(volumes);
     } catch (error: any) {
       console.error("Veil chapters API error:", error);
