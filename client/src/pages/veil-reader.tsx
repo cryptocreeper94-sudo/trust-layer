@@ -132,6 +132,10 @@ export default function VeilReader() {
   const audioElementRef = useRef<HTMLAudioElement | null>(null);
   const lastPlayedChapterRef = useRef<string | null>(null);
   const blobUrlRef = useRef<string | null>(null);
+  const audioUnlockedRef = useRef(false);
+  const speechChunksRef = useRef<SpeechSynthesisUtterance[]>([]);
+  const speechChunkIndexRef = useRef(0);
+  const speechKeepAliveRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const loadEbook = async (retryCount = 0) => {
     setLoading(true);
@@ -183,7 +187,14 @@ export default function VeilReader() {
   }, []);
 
   useEffect(() => {
-    setSpeechSupported(typeof window !== 'undefined' && 'speechSynthesis' in window);
+    const supported = typeof window !== 'undefined' && 'speechSynthesis' in window;
+    setSpeechSupported(supported);
+    if (supported) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    }
   }, []);
 
   useEffect(() => {
@@ -273,6 +284,15 @@ export default function VeilReader() {
       audioElementRef.current.removeAttribute('src');
       audioElementRef.current.load();
     }
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    if (speechKeepAliveRef.current) {
+      clearInterval(speechKeepAliveRef.current);
+      speechKeepAliveRef.current = null;
+    }
+    speechChunksRef.current = [];
+    speechChunkIndexRef.current = 0;
   };
 
   const getOrCreateAudioElement = (): HTMLAudioElement => {
@@ -287,8 +307,24 @@ export default function VeilReader() {
     return el;
   };
 
+  const unlockAudio = () => {
+    if (audioUnlockedRef.current) return;
+    try {
+      const el = getOrCreateAudioElement();
+      el.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+      const p = el.play();
+      if (p) p.then(() => { el.pause(); el.currentTime = 0; }).catch(() => {});
+      audioUnlockedRef.current = true;
+    } catch (e) {}
+  };
+
   useEffect(() => {
+    const handler = () => unlockAudio();
+    document.addEventListener('touchstart', handler, { once: true, passive: true });
+    document.addEventListener('click', handler, { once: true });
     return () => {
+      document.removeEventListener('touchstart', handler);
+      document.removeEventListener('click', handler);
       cleanupAudio();
       if (audioElementRef.current) {
         audioElementRef.current.remove();
@@ -302,16 +338,22 @@ export default function VeilReader() {
     setTtsError(null);
     try {
       cleanupAudio();
+      unlockAudio();
+
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 20000);
 
       const response = await fetch('/api/voice/tts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: text.substring(0, 4000) })
+        body: JSON.stringify({ text: text.substring(0, 4000) }),
+        signal: controller.signal
       });
+      clearTimeout(timeout);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || 'AI voice failed');
+        throw new Error(errorData.error || `Voice server error (${response.status})`);
       }
 
       const provider = response.headers.get('X-Voice-Provider') || 'ai';
@@ -327,8 +369,15 @@ export default function VeilReader() {
       blobUrlRef.current = url;
       
       const audio = getOrCreateAudioElement();
-      audio.src = url;
       
+      await new Promise<void>((resolve, reject) => {
+        audio.oncanplaythrough = () => resolve();
+        audio.onerror = () => reject(new Error('Audio decode failed'));
+        audio.src = url;
+        audio.load();
+        setTimeout(() => resolve(), 3000);
+      });
+
       audio.onended = () => {
         setIsPlaying(false);
         setIsPaused(false);
@@ -343,9 +392,7 @@ export default function VeilReader() {
         setUseAIVoice(false);
         tryBrowserSpeech(text);
       };
-      
-      await audio.load();
-      
+
       try {
         const playPromise = audio.play();
         if (playPromise !== undefined) {
@@ -354,7 +401,7 @@ export default function VeilReader() {
         setIsPlaying(true);
         setIsLoading(false);
       } catch (playErr: any) {
-        console.error('Audio play() failed:', playErr);
+        console.error('Audio play() blocked by browser:', playErr.message);
         cleanupAudio();
         setUseAIVoice(false);
         setIsLoading(false);
@@ -364,48 +411,150 @@ export default function VeilReader() {
       console.error('AI voice error:', err);
       setUseAIVoice(false);
       setIsLoading(false);
+      if (err?.name === 'AbortError') {
+        setTtsError('Voice loading timed out. Using browser voice instead.');
+      }
       tryBrowserSpeech(text);
     }
   };
 
+  const [voicePermanentFail, setVoicePermanentFail] = useState(false);
+
   const tryBrowserSpeech = (text: string) => {
     setVoiceProvider('Browser');
     if ('speechSynthesis' in window) {
-      playWithBrowserSpeech(text);
+      const voices = window.speechSynthesis.getVoices();
+      if (voices.length === 0) {
+        const waitForVoices = (): Promise<boolean> => {
+          return new Promise((resolve) => {
+            const check = () => {
+              if (window.speechSynthesis.getVoices().length > 0) {
+                resolve(true);
+              } else {
+                setTimeout(check, 100);
+              }
+            };
+            check();
+            setTimeout(() => resolve(false), 2000);
+          });
+        };
+        waitForVoices().then((hasVoices) => {
+          if (hasVoices) {
+            playWithBrowserSpeech(text);
+          } else {
+            setVoicePermanentFail(true);
+            setIsLoading(false);
+            setTtsError('No voices available on this device. Download the PDF — Adobe Reader can read it aloud.');
+          }
+        });
+      } else {
+        playWithBrowserSpeech(text);
+      }
     } else {
-      setTtsError('Voice not available on this device. Download the PDF and open in Adobe Reader for read-aloud.');
+      setVoicePermanentFail(true);
+      setIsLoading(false);
+      setTtsError('Voice not available on this device. Download the PDF — Adobe Reader can read it aloud.');
     }
+  };
+
+  const splitTextIntoChunks = (text: string, maxLen = 200): string[] => {
+    const sentences = text.match(/[^.!?]+[.!?]+[\s]*/g) || [text];
+    const chunks: string[] = [];
+    let current = '';
+    for (const sentence of sentences) {
+      if ((current + sentence).length > maxLen && current.length > 0) {
+        chunks.push(current.trim());
+        current = sentence;
+      } else {
+        current += sentence;
+      }
+    }
+    if (current.trim()) chunks.push(current.trim());
+    return chunks;
   };
 
   const playWithBrowserSpeech = (text: string) => {
     try {
       window.speechSynthesis.cancel();
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.9;
-      utterance.pitch = 1;
       
-      utterance.onstart = () => {
-        setIsPlaying(true);
-        setTtsError(null);
+      const chunks = splitTextIntoChunks(text, 200);
+      if (chunks.length === 0) {
+        setTtsError('No text to read.');
+        return;
+      }
+
+      speechChunksRef.current = [];
+      speechChunkIndexRef.current = 0;
+
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(v => 
+        v.name.includes('Google') || v.name.includes('Samantha') || v.name.includes('Karen') || v.lang.startsWith('en')
+      ) || voices[0] || null;
+
+      if (speechKeepAliveRef.current) {
+        clearInterval(speechKeepAliveRef.current);
+        speechKeepAliveRef.current = null;
+      }
+      speechKeepAliveRef.current = setInterval(() => {
+        if (window.speechSynthesis.speaking && !window.speechSynthesis.paused) {
+          window.speechSynthesis.pause();
+          window.speechSynthesis.resume();
+        }
+      }, 10000);
+
+      const speakChunk = (index: number) => {
+        if (index >= chunks.length) {
+          setIsPlaying(false);
+          setIsPaused(false);
+          if (speechKeepAliveRef.current) {
+            clearInterval(speechKeepAliveRef.current);
+            speechKeepAliveRef.current = null;
+          }
+          handleNextChapterAuto();
+          return;
+        }
+
+        const utterance = new SpeechSynthesisUtterance(chunks[index]);
+        utterance.rate = 0.95;
+        utterance.pitch = 1;
+        if (preferredVoice) utterance.voice = preferredVoice;
+        
+        utterance.onstart = () => {
+          setIsPlaying(true);
+          setTtsError(null);
+        };
+        
+        utterance.onend = () => {
+          speechChunkIndexRef.current = index + 1;
+          speakChunk(index + 1);
+        };
+        
+        utterance.onerror = (e) => {
+          if ((e as any).error === 'interrupted' || (e as any).error === 'canceled') return;
+          console.error('Browser speech chunk error:', e);
+          if (index === 0) {
+            setIsPlaying(false);
+            setVoicePermanentFail(true);
+            setTtsError('Voice failed on this device. Tap download for the PDF — Adobe Reader can read it aloud.');
+            if (speechKeepAliveRef.current) {
+              clearInterval(speechKeepAliveRef.current);
+              speechKeepAliveRef.current = null;
+            }
+          } else {
+            speechChunkIndexRef.current = index + 1;
+            speakChunk(index + 1);
+          }
+        };
+        
+        speechChunksRef.current.push(utterance);
+        window.speechSynthesis.speak(utterance);
       };
-      
-      utterance.onend = () => {
-        setIsPlaying(false);
-        setIsPaused(false);
-        handleNextChapterAuto();
-      };
-      
-      utterance.onerror = (e) => {
-        console.error('Browser speech error:', e);
-        setIsPlaying(false);
-        setTtsError('Browser voice failed. Download PDF and use Adobe Reader for read-aloud.');
-      };
-      
-      window.speechSynthesis.speak(utterance);
+
+      speakChunk(0);
       setIsPlaying(true);
     } catch (e) {
       console.error('Browser speech exception:', e);
-      setTtsError('Voice not available. Download PDF and use Adobe Reader for read-aloud.');
+      setTtsError('Voice not available. Tap download for the PDF — Adobe Reader can read it aloud.');
     }
   };
 
@@ -450,36 +599,8 @@ export default function VeilReader() {
     }
   }, [currentVolume, currentChapter]);
 
-  const handlePlay = async () => {
-    if (volumes.length === 0) return;
-    
-    setUseAIVoice(true);
-    
-    const volume = volumes[currentVolume];
-    const chapter = volume.chapters[currentChapter];
-    const chapterId = `${currentVolume}-${currentChapter}`;
-    
-    if (isPaused && lastPlayedChapterRef.current === chapterId) {
-      if (audioRef.current) {
-        await audioRef.current.play();
-        setIsPlaying(true);
-        setIsPaused(false);
-        return;
-      }
-      if (window.speechSynthesis.paused) {
-        window.speechSynthesis.resume();
-        setIsPlaying(true);
-        setIsPaused(false);
-        return;
-      }
-    }
-    
-    cleanupAudio();
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-    }
-
-    let text = chapter.content
+  const cleanTextForSpeech = (content: string) => {
+    return content
       .replace(/!\[.*?\]\(.*?\)/g, '')
       .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
       .replace(/https?:\/\/[^\s)]+/g, '')
@@ -496,34 +617,68 @@ export default function VeilReader() {
       .replace(/\n{3,}/g, '\n\n')
       .replace(/\s+/g, ' ')
       .trim();
+  };
+
+  const handlePlay = async () => {
+    if (volumes.length === 0) return;
+    
+    const volume = volumes[currentVolume];
+    const chapter = volume.chapters[currentChapter];
+    const chapterId = `${currentVolume}-${currentChapter}`;
+    
+    if (isPaused && lastPlayedChapterRef.current === chapterId) {
+      if (audioRef.current && audioRef.current.src) {
+        try {
+          await audioRef.current.play();
+          setIsPlaying(true);
+          setIsPaused(false);
+          return;
+        } catch (e) {}
+      }
+      if ('speechSynthesis' in window && window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        setIsPlaying(true);
+        setIsPaused(false);
+        return;
+      }
+    }
+    
+    cleanupAudio();
+
+    const text = cleanTextForSpeech(chapter.content);
     
     if (!text || text.length === 0) {
-      console.error('No text to play');
+      setTtsError('This chapter has no readable text.');
       return;
     }
     
     lastPlayedChapterRef.current = chapterId;
-    
+    setUseAIVoice(true);
+
+    const audio = getOrCreateAudioElement();
     try {
-      const unlockEl = getOrCreateAudioElement();
-      unlockEl.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
-      await unlockEl.play();
-      unlockEl.pause();
-    } catch (e) {}
-    
-    if (useAIVoice) {
-      await playWithAIVoice(text);
-    } else if (speechSupported) {
-      playWithBrowserSpeech(text);
+      audio.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
+      await audio.play();
+      audio.pause();
+      audio.currentTime = 0;
+      audioUnlockedRef.current = true;
+    } catch (e) {
+      audioUnlockedRef.current = false;
     }
+    
+    await playWithAIVoice(text);
   };
 
   const handlePause = () => {
-    if (audioRef.current && isPlaying) {
+    if (speechKeepAliveRef.current) {
+      clearInterval(speechKeepAliveRef.current);
+      speechKeepAliveRef.current = null;
+    }
+    if (audioRef.current && isPlaying && audioRef.current.src) {
       audioRef.current.pause();
       setIsPaused(true);
       setIsPlaying(false);
-    } else if (window.speechSynthesis.speaking) {
+    } else if ('speechSynthesis' in window && window.speechSynthesis.speaking) {
       window.speechSynthesis.pause();
       setIsPaused(true);
       setIsPlaying(false);
@@ -532,11 +687,9 @@ export default function VeilReader() {
 
   const handleStop = () => {
     cleanupAudio();
-    if (typeof window !== 'undefined' && window.speechSynthesis) {
-      window.speechSynthesis.cancel();
-    }
     setIsPlaying(false);
     setIsPaused(false);
+    lastPlayedChapterRef.current = null;
   };
 
   const handleDownloadPDF = () => {
@@ -690,7 +843,7 @@ export default function VeilReader() {
                 {isLoading ? (
                   <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/15 border border-purple-500/20 backdrop-blur-sm">
                     <div className="w-3.5 h-3.5 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
-                    <span className="text-xs text-purple-300 hidden sm:inline">Loading voice...</span>
+                    <span className="text-xs text-purple-300">Loading...</span>
                   </div>
                 ) : isPlaying ? (
                   <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-gradient-to-r from-purple-500/15 to-cyan-500/10 border border-purple-500/20 backdrop-blur-sm">
@@ -768,10 +921,10 @@ export default function VeilReader() {
                     initial={{ opacity: 0, y: -5 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -5 }}
-                    className="fixed top-16 left-1/2 -translate-x-1/2 w-[90vw] max-w-sm p-3 bg-slate-900/95 backdrop-blur-xl border border-purple-500/30 rounded-xl shadow-2xl z-[200] text-xs"
+                    className={`fixed top-16 left-1/2 -translate-x-1/2 w-[90vw] max-w-sm p-3 backdrop-blur-xl border rounded-xl shadow-2xl z-[200] text-xs ${voicePermanentFail ? 'bg-red-950/95 border-red-500/30' : 'bg-slate-900/95 border-purple-500/30'}`}
                   >
                     <button 
-                      onClick={() => setTtsError(null)} 
+                      onClick={() => { setTtsError(null); if (voicePermanentFail) setVoicePermanentFail(false); }} 
                       className="absolute top-1 right-2 text-white/40 hover:text-white text-lg"
                       data-testid="button-dismiss-tts-error"
                     >
@@ -787,6 +940,14 @@ export default function VeilReader() {
                         Download PDF
                       </button>
                       <a href="/veil" className="text-purple-400 hover:text-purple-300 underline transition-colors text-[10px]">Download page</a>
+                      {voicePermanentFail && (
+                        <button 
+                          onClick={() => { setVoicePermanentFail(false); setTtsError(null); }}
+                          className="text-amber-400 hover:text-amber-300 underline transition-colors text-[10px]"
+                        >
+                          Try again
+                        </button>
+                      )}
                     </div>
                   </motion.div>
                 )}
