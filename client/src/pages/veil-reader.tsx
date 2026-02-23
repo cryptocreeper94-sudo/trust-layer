@@ -142,11 +142,14 @@ export default function VeilReader() {
     setError(null);
     try {
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 30000);
+      const timeoutMs = 60000 + (retryCount * 30000);
+      const timeout = setTimeout(() => controller.abort(), timeoutMs);
       
-      const response = await fetch('/api/veil/chapters', {
+      const cacheBust = retryCount > 0 ? `?_t=${Date.now()}` : '';
+      const response = await fetch('/api/veil/chapters' + cacheBust, {
         signal: controller.signal,
-        headers: { 'Accept': 'application/json' }
+        headers: { 'Accept': 'application/json' },
+        cache: retryCount > 0 ? 'no-cache' : 'default'
       });
       clearTimeout(timeout);
       
@@ -173,11 +176,11 @@ export default function VeilReader() {
       setLoading(false);
     } catch (err: any) {
       console.error('Error loading ebook (attempt ' + (retryCount + 1) + '):', err);
-      if (retryCount < 2 && err?.name !== 'AbortError') {
-        await new Promise(r => setTimeout(r, 1000 * (retryCount + 1)));
+      if (retryCount < 3 && err?.name !== 'AbortError') {
+        await new Promise(r => setTimeout(r, 2000 * (retryCount + 1)));
         return loadEbook(retryCount + 1);
       }
-      setError(err?.name === 'AbortError' ? 'Loading took too long. Please check your connection and try again.' : (err?.message || 'Failed to load book content'));
+      setError(err?.name === 'AbortError' ? 'Loading took too long. Try connecting to Wi-Fi or tap Try Again.' : (err?.message || 'Failed to load book content'));
       setLoading(false);
     }
   };
