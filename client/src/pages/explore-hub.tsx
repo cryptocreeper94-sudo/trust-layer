@@ -107,6 +107,7 @@ const categories: Category[] = [
       { label: "Competitive Analysis", description: "Market positioning breakdown", href: "/competitive-analysis", icon: <Target className="size-5" />, image: hubSmartContract, glowColor: "shadow-orange-500/30" },
       { label: "Coming Features", description: "Upcoming feature releases", href: "/coming-features", icon: <Rocket className="size-5" />, image: ccBlockchain, glowColor: "shadow-sky-500/30" },
       { label: "Genesis", description: "The genesis of DarkWave", href: "/genesis", icon: <Flame className="size-5" />, image: hubWallet, glowColor: "shadow-rose-500/30" },
+      { label: "Trust Book", description: "Premium ebook publishing platform", href: "/trust-book", icon: <BookOpen className="size-5" />, image: hubLearn, glowColor: "shadow-cyan-500/30", badge: "New" },
     ]
   },
   {
@@ -282,6 +283,7 @@ const categories: Category[] = [
       { label: "Legacy", description: "Build your digital legacy", href: "/legacy", icon: <Crown className="size-5" />, image: hubMembership, glowColor: "shadow-rose-500/30" },
       { label: "Alerts", description: "Price and event alerts", href: "/alerts", icon: <Radio className="size-5" />, image: hubTrading, glowColor: "shadow-red-500/30" },
       { label: "Economy", description: "Platform economy overview", href: "/economy", icon: <LineChart className="size-5" />, image: hubEarn, glowColor: "shadow-teal-500/30" },
+      { label: "Trust Book", description: "Read & publish ebooks", href: "/trust-book", icon: <BookOpen className="size-5" />, image: hubLearn, glowColor: "shadow-cyan-500/30", badge: "New" },
     ]
   },
   {
