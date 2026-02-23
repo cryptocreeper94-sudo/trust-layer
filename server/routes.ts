@@ -17011,7 +17011,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          model: "tts-1",
+          model: "tts-1-hd",
           input: text,
           voice: "nova",
           response_format: "mp3",

@@ -352,7 +352,7 @@ export default function VeilReader() {
       unlockAudio();
 
       const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 20000);
+      const timeout = setTimeout(() => controller.abort(), 45000);
 
       const response = await fetch('/api/voice/tts', {
         method: 'POST',
@@ -400,7 +400,7 @@ export default function VeilReader() {
         setIsPlaying(false);
         setIsLoading(false);
         cleanupAudio();
-        setUseAIVoice(false);
+        setVoiceProvider('Browser Voice (AI unavailable)');
         tryBrowserSpeech(text);
       };
 
@@ -414,16 +414,18 @@ export default function VeilReader() {
       } catch (playErr: any) {
         console.error('Audio play() blocked by browser:', playErr.message);
         cleanupAudio();
-        setUseAIVoice(false);
         setIsLoading(false);
+        setVoiceProvider('Browser Voice (tap to unlock audio first)');
         tryBrowserSpeech(text);
       }
     } catch (err: any) {
       console.error('AI voice error:', err);
-      setUseAIVoice(false);
       setIsLoading(false);
       if (err?.name === 'AbortError') {
-        setTtsError('Voice loading timed out. Using browser voice instead.');
+        setTtsError('AI voice loading timed out — using browser voice for this chapter. AI will retry on next chapter.');
+        setVoiceProvider('Browser Voice (AI timed out)');
+      } else {
+        setVoiceProvider('Browser Voice');
       }
       tryBrowserSpeech(text);
     }
@@ -869,7 +871,7 @@ export default function VeilReader() {
                       ))}
                     </div>
                     {voiceProvider && (
-                      <span className="text-[9px] text-purple-300/70 font-mono hidden sm:inline mr-1">{voiceProvider}</span>
+                      <span className="text-[9px] text-purple-300/70 font-mono mr-1">{voiceProvider}</span>
                     )}
                     <Button 
                       size="icon" 
