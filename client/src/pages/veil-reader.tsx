@@ -235,6 +235,13 @@ export default function VeilReader() {
     if (saved) {
       try {
         const data = JSON.parse(saved);
+        const structureVersion = 2;
+        if (data.structureVersion !== structureVersion) {
+          localStorage.removeItem(STORAGE_KEY);
+          setCurrentVolume(0);
+          setCurrentChapter(0);
+          return;
+        }
         if (data.currentVolume !== undefined && data.currentVolume < volumes.length) {
           setCurrentVolume(data.currentVolume);
         }
@@ -266,6 +273,7 @@ export default function VeilReader() {
     const data = {
       currentVolume,
       currentChapter,
+      structureVersion: 2,
       lastSeenVersion: hasSeenUpdates ? CURRENT_VERSION : undefined
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));

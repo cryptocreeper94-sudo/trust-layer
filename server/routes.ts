@@ -21732,15 +21732,63 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       chapters.push(currentChapter);
     }
 
-    const frontMatter = {
-      id: 'front-matter',
-      title: 'Introduction & Front Matter',
-      content: frontMatterContent.join('\n').trim(),
-      partTitle: 'Front Matter'
-    };
+    const frontMatterSections: typeof chapters = [];
+    const fmText = frontMatterContent.join('\n');
+    const fmSectionRegex = /^## (.+)$/gm;
+    const fmSectionMatches: { title: string; start: number }[] = [];
+    let fmMatch;
+    while ((fmMatch = fmSectionRegex.exec(fmText)) !== null) {
+      const title = fmMatch[1].trim();
+      if (title.toUpperCase() === 'TABLE OF CONTENTS') continue;
+      fmSectionMatches.push({ title, start: fmMatch.index });
+    }
+
+    const fmSectionNames = new Set(fmSectionMatches.map(s => s.title.toLowerCase()));
+    const titlePageSections = ['the greatest story ever stole?', 'the greatest story ever stole'];
+    let titlePageEnd = fmSectionMatches.length > 0 ? fmSectionMatches[0].start : fmText.length;
+    let firstContentSection = 0;
+    if (fmSectionMatches.length > 0 && titlePageSections.includes(fmSectionMatches[0].title.toLowerCase())) {
+      firstContentSection = 1;
+      titlePageEnd = fmSectionMatches.length > 1 ? fmSectionMatches[1].start : fmText.length;
+    }
+    let titleContent = fmText.substring(0, titlePageEnd).trim();
+    if (!titleContent.startsWith('# ')) {
+      titleContent = '# THROUGH THE VEIL\n\n' + titleContent;
+    }
+    if (titleContent.length > 20) {
+      frontMatterSections.push({
+        id: 'fm-title',
+        title: 'Title Page',
+        content: titleContent,
+        partTitle: 'Front Matter'
+      });
+    }
+
+    for (let s = firstContentSection; s < fmSectionMatches.length; s++) {
+      const sec = fmSectionMatches[s];
+      const nextStart = s + 1 < fmSectionMatches.length ? fmSectionMatches[s + 1].start : fmText.length;
+      const secContent = fmText.substring(sec.start, nextStart).trim();
+      if (secContent.length > 10) {
+        frontMatterSections.push({
+          id: 'fm-' + sec.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').substring(0, 40),
+          title: sec.title,
+          content: secContent,
+          partTitle: 'Front Matter'
+        });
+      }
+    }
+
+    if (frontMatterSections.length === 0 && frontMatterContent.join('\n').trim().length > 0) {
+      frontMatterSections.push({
+        id: 'front-matter',
+        title: 'Introduction & Front Matter',
+        content: frontMatterContent.join('\n').trim(),
+        partTitle: 'Front Matter'
+      });
+    }
 
     const partMap = new Map<string, typeof chapters>();
-    partMap.set('Front Matter', [frontMatter]);
+    partMap.set('Front Matter', frontMatterSections);
 
     for (const chapter of chapters) {
       const part = chapter.partTitle || 'Main Content';
@@ -21757,7 +21805,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         id: `volume-${volumeIndex}`,
         title: partTitle === 'Front Matter' ? 'Front Matter' : partTitle,
         subtitle: partTitle === 'Front Matter'
-          ? 'Introduction, dedication, and author notes'
+          ? `${partChapters.length} sections — introduction, dedication, and author notes`
           : `${partChapters.length} chapter${partChapters.length > 1 ? 's' : ''}`,
         chapters: partChapters
       });
