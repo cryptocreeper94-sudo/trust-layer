@@ -785,8 +785,21 @@ function AppShell({ appType }: { appType: string }) {
   );
 }
 
+function useVeilPWARedirect() {
+  useEffect(() => {
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
+    if (!isStandalone) return;
+    if (window.location.pathname !== '/') return;
+    const isVeilHome = localStorage.getItem('veil-pwa-home') === 'true';
+    if (isVeilHome) {
+      window.location.replace('/veil');
+    }
+  }, []);
+}
+
 function App() {
   const appType = useMemo(() => getAppFromHost(), []);
+  useVeilPWARedirect();
 
   return (
     <ErrorBoundary>

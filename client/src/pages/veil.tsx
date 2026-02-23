@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -80,9 +80,8 @@ const item = {
 };
 
 export default function Veil() {
-  const [installPrompt, setInstallPrompt] = useState<any>(null);
-  const [isInstalled, setIsInstalled] = useState(false);
-  const [showInstallSuccess, setShowInstallSuccess] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   const handleReadOnline = (anchor?: string) => {
     window.location.href = anchor ? `/veil/read#${anchor}` : '/veil/read';
@@ -106,40 +105,14 @@ export default function Veil() {
     document.body.removeChild(a);
   };
 
-  const handleInstallPWA = async () => {
-    if (installPrompt) {
-      installPrompt.prompt();
-      const result = await installPrompt.userChoice;
-      if (result.outcome === 'accepted') {
-        setIsInstalled(true);
-        setShowInstallSuccess(true);
-        setTimeout(() => setShowInstallSuccess(false), 4000);
-      }
-      setInstallPrompt(null);
-    }
-  };
-
   useEffect(() => {
-    if (window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone) {
-      setIsInstalled(true);
-    }
+    localStorage.setItem('veil-pwa-home', 'true');
 
-    const handler = (e: Event) => {
-      e.preventDefault();
-      setInstallPrompt(e);
-    };
-    window.addEventListener('beforeinstallprompt', handler);
+    const standalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
+    setIsStandalone(standalone);
 
-    const installedHandler = () => {
-      setIsInstalled(true);
-      setInstallPrompt(null);
-    };
-    window.addEventListener('appinstalled', installedHandler);
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handler);
-      window.removeEventListener('appinstalled', installedHandler);
-    };
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    setIsIOS(ios);
   }, []);
 
   useEffect(() => {
@@ -219,50 +192,25 @@ export default function Veil() {
             </Button>
           </div>
 
-          {!isInstalled && (
+          {!isStandalone && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8, duration: 0.5 }}
-              className="mt-6"
+              className="mt-6 max-w-sm mx-auto"
             >
-              <Button
-                onClick={installPrompt ? handleInstallPWA : undefined}
-                size="lg"
-                variant="outline"
-                className={`border-amber-500/30 text-amber-300 hover:bg-amber-500/10 hover:border-amber-500/50 px-8 py-5 text-sm backdrop-blur-sm transition-all active:scale-[0.98] min-h-[48px] ${!installPrompt ? 'opacity-70 cursor-default' : 'shadow-lg shadow-amber-500/10'}`}
-                data-testid="button-install-pwa"
-              >
-                <MonitorSmartphone className="w-5 h-5 mr-2" />
-                {installPrompt ? 'Install App on Your Device' : 'Add to Home Screen from Browser Menu'}
-              </Button>
-              {!installPrompt && (
-                <p className="text-slate-500 text-xs mt-2">
-                  Tap your browser's menu (⋮ or share icon) and select "Add to Home Screen" or "Install App"
-                </p>
-              )}
-            </motion.div>
-          )}
-
-          {isInstalled && showInstallSuccess && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-green-500/15 border border-green-500/25"
-            >
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              <span className="text-sm text-green-300 font-medium">App installed successfully!</span>
-            </motion.div>
-          )}
-
-          {isInstalled && !showInstallSuccess && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="mt-6 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20"
-            >
-              <MonitorSmartphone className="w-4 h-4 text-purple-400" />
-              <span className="text-xs text-purple-300">Installed on your device</span>
+              <div className="flex items-center gap-2.5 px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 backdrop-blur-sm">
+                <MonitorSmartphone className="w-5 h-5 text-amber-400 flex-shrink-0" />
+                <div className="text-left">
+                  <p className="text-amber-300 text-sm font-medium">Add to Home Screen</p>
+                  <p className="text-slate-400 text-xs mt-0.5">
+                    {isIOS
+                      ? 'Tap the share icon (box with arrow) then "Add to Home Screen"'
+                      : 'Tap your browser menu (⋮) then "Add to Home Screen"'
+                    }
+                  </p>
+                </div>
+              </div>
             </motion.div>
           )}
         </motion.div>
