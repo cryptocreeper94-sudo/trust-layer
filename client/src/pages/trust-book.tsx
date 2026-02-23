@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import {
@@ -68,6 +69,13 @@ const TESTIMONIALS = [
 ];
 
 export default function TrustBook() {
+  useEffect(() => {
+    const manifestLink = document.querySelector('link[rel="manifest"]');
+    if (manifestLink) manifestLink.setAttribute("href", "/manifest-trustbook.webmanifest");
+    const themeColor = document.querySelector('meta[name="theme-color"]');
+    if (themeColor) themeColor.setAttribute("content", "#06b6d4");
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-950 text-white overflow-x-hidden">
       <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">

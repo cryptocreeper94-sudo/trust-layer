@@ -21,6 +21,9 @@ function getManifestForRoute(): string {
   if (path.startsWith("/guardian-shield")) {
     return "/manifest-guardian-screener.webmanifest";
   }
+  if (path.startsWith("/trust-book")) {
+    return "/manifest-trustbook.webmanifest";
+  }
   if (host.includes("darkwavegames") || host.includes("games.")) {
     return "/manifest-games.webmanifest";
   }
@@ -46,6 +49,9 @@ function getThemeColorForDomain(): string {
     return "#06b6d4";
   }
   if (path.startsWith("/guardian-shield")) {
+    return "#06b6d4";
+  }
+  if (path.startsWith("/trust-book")) {
     return "#06b6d4";
   }
   if (host.includes("darkwavegames") || host.includes("games.")) {
