@@ -193,6 +193,7 @@ const Tetris = lazy(() => import("@/pages/tetris"));
 const Snake = lazy(() => import("@/pages/snake"));
 const Pacman = lazy(() => import("@/pages/pacman"));
 const Genesis = lazy(() => import("@/pages/genesis"));
+const TrustBook = lazy(() => import("@/pages/trust-book"));
 const Veil = lazy(() => import("@/pages/veil"));
 const VeilReader = lazy(() => import("@/pages/veil-reader"));
 const VeilPrintVol2 = lazy(() => import("@/pages/veil-print-vol2"));
@@ -346,6 +347,7 @@ function GamesRouter() {
         <Route path="/snake" component={Snake} />
         <Route path="/pacman" component={Pacman} />
         <Route path="/genesis" component={Genesis} />
+        <Route path="/trust-book" component={TrustBook} />
         <Route path="/veil" component={Veil} />
         <Route path="/veil/read" component={VeilReader} />
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
@@ -424,6 +426,7 @@ function ChronoRouter() {
         <Route path="/executive-summary" component={ChronoExecutiveSummary} />
         <Route path="/roadmap" component={ChronoRoadmap} />
         <Route path="/genesis" component={Genesis} />
+        <Route path="/trust-book" component={TrustBook} />
         <Route path="/veil" component={Veil} />
         <Route path="/veil/read" component={VeilReader} />
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
@@ -628,6 +631,7 @@ function DWSCRouter() {
         <Route path="/snake" component={Snake} />
         <Route path="/pacman" component={Pacman} />
         <Route path="/genesis" component={Genesis} />
+        <Route path="/trust-book" component={TrustBook} />
         <Route path="/veil" component={Veil} />
         <Route path="/veil/read" component={VeilReader} />
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />

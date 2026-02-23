@@ -112,6 +112,7 @@ const ecosystemImages: Record<string, string> = {
   "darkwave-academy": "/ecosystem/darkwave-academy-new.png",
   "verdara": "/ecosystem/verdara-new.png",
   "arbora": "/ecosystem/arbora-new.png",
+  "trust-book": "/ecosystem/trust-book-new.png",
 };
 
 function getAppImage(appId: string): string {

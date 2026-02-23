@@ -23562,6 +23562,7 @@ const APP_URL_MAP: Record<string, string> = {
   "darkwave-academy": "https://academy.tlid.io",
   "torque": "https://torque.tlid.io",
   "through-the-veil": "https://throughtheveil.tlid.io",
+  "trust-book": "https://trustbook.tlid.io",
 };
 
 async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
@@ -23961,6 +23962,18 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       verified: true,
       users: "DarkWave Verified",
       url: "https://arbora.tlid.io",
+    },
+    {
+      id: "trust-book",
+      name: "Trust Book",
+      category: "Publishing",
+      description: "Premium ebook publishing and reading platform with AI narration, multi-format support, and blockchain-verified provenance. Read, listen, and discover truth.",
+      hook: "Censorship-free publishing",
+      tags: ["Publishing", "E-Books", "AI Narration", "Reading"],
+      gradient: "from-cyan-600 to-purple-800",
+      verified: true,
+      users: "DarkWave Verified",
+      url: "https://trustbook.tlid.io",
     },
   ];
 }
