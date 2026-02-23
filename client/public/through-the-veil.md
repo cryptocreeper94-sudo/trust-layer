@@ -82,64 +82,25 @@ What happens next is between you and the Most High.
 
 *Scripture references from the Eth Cepher, which restores the Hebrew names*
 
-To those who believe this book blasphemes the Messiah by questioning the name "Jesus Christ":
+You will notice that this book uses unfamiliar names for familiar figures. Names you were never taught. Names that were systematically removed, replaced, and buried under layers of translation, tradition, and institutional control.
 
-This book does not deny the Messiah. This book exposes **a deception** that has been operating for centuries.
+This is not an accident. And it is not a stylistic choice.
 
-"Jesus Christ" was not his name. It could not have been. The letter "J" did not exist in any language until approximately 1524. The Messiah walked the earth 1,500 years before the sound "Jee-zus" was ever spoken by anyone, anywhere.
+There is a reason the original names were erased. There is a reason you were given substitutes. And there is a reason the substitutes sound nothing like the originals.
 
-His name was **Yahusha** - meaning "Yahuah is salvation." The Father's name is embedded in the Son's name. That connection was intentional. **That connection was severed when the name was changed.**
+**A name is not just a label. A name carries frequency. Identity. Authority. Connection.**
 
-The Father's name - **Yahuah** - appears over 6,800 times in the Hebrew scriptures. It was replaced with "LORD" in English translations. Not translated. **Replaced.** The name was targeted because the name carries power. The name carries identity. The name carries covenant.
+What happens when a name is changed? What is gained - and what is lost? What if the replacement doesn't just fail to connect you to the source... but actively connects you to something else?
 
-**The scriptures themselves declare this - repeatedly, across multiple books and authors:**
+These are not rhetorical questions. The evidence is specific, mathematical, and traceable through scripture, history, and linguistics. It will be presented in full as this investigation unfolds.
 
-In Exodus, Yahuah tells Mosheh: *"This is my name forever, and this is my memorial unto all generations."*
+For now, understand this: when you encounter an unfamiliar name in these pages - when you see a word that looks strange where a comfortable, familiar word used to sit - **that discomfort is the point.** That friction is the feeling of encountering something that was hidden from you.
 
-In Isaiah, He declares: *"I am Yahuah: that is my name: and my glory will I not give to another."*
+Sit with it. The pieces will connect.
 
-In Acts: *"Neither is there salvation in any other: for there is no other name under heaven given among men, whereby we must be saved."*
+The scriptures themselves warned that this substitution would happen. They told us exactly how to identify it. And they told us what it would cost.
 
-In Joel: *"Whosoever shall call on the name of Yahuah shall be delivered."*
-
-And Yahusha Himself said in the book of John: *"I have manifested your name unto the men which you gave me out of the world."*
-
-This is not about pronunciation preferences. **Everything is frequency. Everything is vibration.**
-
-The name **Yahusha** contains the frequency signature of Yahuah - "Yahuah is salvation." It connects to the Father. When spoken aloud, it produces a specific frequency.
-
-The name "Jesus" has a **different frequency**. A different signature. **Potentially connecting to something else entirely.**
-
-This is the deception that could fool even the elect. Not blatant evil. Not obvious darkness. But a name that sounds right, feels right, has been accepted for centuries - **yet connects to the wrong source.**
-
-**The scriptures warned us this would happen:**
-
-> *"I am come in my Father's name, and ye receive me not: if another shall come in his own name, him ye will receive."*
-> — **Yahuchanon (John) 5:43**
-
-Yahusha came **in His Father's name** - the name Yahuah is literally embedded in Yahusha. The Father's name is part of the Son's identity. That's what "coming in my Father's name" means.
-
-But another would come **in the name of a man** - and him they would receive. The name "Jesus Christ" is the name of a man. A Greek-Latin-English construction that contains no trace of the Father's name. And it has been received by billions.
-
-There is mathematical evidence embedded in the Greek text of Revelation itself that connects this substituted name to the number of the beast in a way that cannot be dismissed as coincidence. That evidence will be presented in full later in this book. For now, just sit with the scripture: one comes in the Father's name and is rejected. Another comes in his own name and is received by the whole world.
-
-Which one did the whole world receive?
-
-The Roman deception machine - Constantine and those who followed - may have known exactly what they were doing when they replaced the name that connects to the Father with a name that connects to something else entirely.
-
-Think about what that means: Praying sincerely, with genuine heart, to a name that routes elsewhere. **Inviting something in** while believing you're connecting to the Messiah.
-
-"Jesus" is not a transliteration. A transliteration preserves the sounds:
-- Hebrew: **Yahusha** (Yah-HOO-sha)
-- English: "Jesus" (JEE-zus)
-
-Those are not the same sounds. That is not transliteration. **That is substitution.**
-
-This book brings light to what was hidden. Yes, it will cause heartburn. Yes, it threatens structures built on the deception. Yes, it upsets money-making schemes that depend on you never knowing.
-
-The glory must go to the deserved parties. The Messiah asked to be called by **his** name - not some other made-up name, not some Greek-Latin-English transformation. **His name.** The frequency that name produces when spoken aloud.
-
-Exposing deception is not blasphemy. **The deception is the blasphemy.**
+All of that is ahead.
 
 ---
 
