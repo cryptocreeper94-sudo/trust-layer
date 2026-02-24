@@ -321,6 +321,14 @@ export default function VeilReader() {
   const unlockAudio = () => {
     if (audioUnlockedRef.current) return;
     try {
+      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const buffer = ctx.createBuffer(1, 1, 22050);
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.connect(ctx.destination);
+      source.start(0);
+      ctx.resume().then(() => { setTimeout(() => ctx.close(), 100); });
+
       const el = getOrCreateAudioElement();
       el.src = 'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
       const p = el.play();
@@ -412,11 +420,24 @@ export default function VeilReader() {
         setIsPlaying(true);
         setIsLoading(false);
       } catch (playErr: any) {
-        console.error('Audio play() blocked by browser:', playErr.message);
-        cleanupAudio();
-        setIsLoading(false);
-        setVoiceProvider('Browser Voice (tap to unlock audio first)');
-        tryBrowserSpeech(text);
+        console.error('Audio play() blocked, retrying after unlock:', playErr.message);
+        try {
+          const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+          await ctx.resume();
+          ctx.close();
+          audio.load();
+          await new Promise(r => setTimeout(r, 100));
+          await audio.play();
+          setIsPlaying(true);
+          setIsLoading(false);
+          audioUnlockedRef.current = true;
+        } catch (retryErr: any) {
+          console.error('Audio retry also blocked:', retryErr.message);
+          cleanupAudio();
+          setIsLoading(false);
+          setVoiceProvider('Browser Voice (tap to unlock audio first)');
+          tryBrowserSpeech(text);
+        }
       }
     } catch (err: any) {
       console.error('AI voice error:', err);
