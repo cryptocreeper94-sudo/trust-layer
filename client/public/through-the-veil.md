@@ -2630,7 +2630,7 @@ If humanity is going to progress as a race, technologically, worker bees are nec
 
 But where the whole Communist idea failed is: there is always going to be someone who's in control. Every system ever devised by humanity concentrates power in the hands of the few. The question isn't whether there will be a hierarchy. The question is whether the hierarchy serves the people or feeds on them.
 
-A true system where people are equal will never exist until the return of Yahusha. Not because equality is impossible in theory, but because every human institution is corrupted by the same fallen nature that corrupted the world before the flood.
+A true system where people are equal will never exist until the Day of Judgment — until this age of deception is burned away and the earth is made new. Not because equality is impossible in theory, but because every human institution is corrupted by the same fallen nature that corrupted the world before the flood.
 
 The communist ideal sounds beautiful on paper. Everyone equal. No one elevated above another. Resources shared according to need. Karl Marx and Friedrich Engels published the Communist Manifesto in 1848 - right in the middle of the same period as the orphan trains, the supposed "settling" of frontier cities, and the emergence of the new ruling families. The timing is notable.
 
