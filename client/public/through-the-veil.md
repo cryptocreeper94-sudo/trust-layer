@@ -4784,7 +4784,7 @@ The entire concept of "what year is it?" depends on trusting the record-keepers.
 
 And here's the part most people never consider: if the adversary has been executing this plan since before humanity was created - if the celestial rebellion predates Adam, if the council of the fallen has been working across millennia with intelligence and patience beyond human comprehension - then changing a calendar is nothing. Manipulating dates and names across a few centuries is trivial. It's small work compared to the scale of the overall operation.
 
-Think about what this book has already documented. The adversary corrupted human genetics through the Watchers. Engineered a counter-civilization through the Nephilim. Built mystery religions across every culture. Infiltrated and inverted the faith itself. Replaced the Creator's name 6,800 times. Manufactured an entire cosmological model to hide the firmament. Erected a global financial system, a surveillance infrastructure, a media apparatus that controls the perception of billions.
+Think about what this book has already documented. The adversary corrupted human genetics through the Watchers. Engineered a counter-civilization through the Nephilim. Built mystery religions across every culture. Infiltrated and inverted the faith itself. Replaced the Creator's name 6,800 times. Manufactured an entire cosmological model to hide the firmament. Erected a planetary financial system, a surveillance infrastructure, a media apparatus that controls the perception of billions.
 
 Against that backdrop, adding or removing three hundred years from a calendar isn't even a footnote. It's a clerical adjustment. The kind of detail an ancient intelligence handles without breaking stride on the way to something bigger.
 
@@ -4838,7 +4838,7 @@ Revelation 20 tells us that when Satan is released at the end of the thousand ye
 
 **The Millennium Was A Time Of Choosing**
 
-This changes everything. The thousand years wasn't just peaceful utopia - it was a global opportunity to choose. With Satan bound and unable to orchestrate mass deception, with the knowledge of Yahuah covering the earth, every person faced the clearest choice humanity has ever had:
+This changes everything. The thousand years wasn't just peaceful utopia - it was a planetary opportunity to choose. With Satan bound and unable to orchestrate mass deception, with the knowledge of Yahuah covering the earth, every person faced the clearest choice humanity has ever had:
 
 *The true Messiah, or the institution that claimed His name.*
 
