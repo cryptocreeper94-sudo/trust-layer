@@ -2928,7 +2928,7 @@ This is not paranoia. This is pattern recognition. And pattern recognition is ex
 
 On the night of June 11, 1962, three men vanished from the most secure prison in America. Frank Morris - a man with a tested IQ of 133, borderline genius - along with brothers John and Clarence Anglin, escaped from Alcatraz Federal Penitentiary. They left behind papier-mâché dummy heads in their bunks, crawled through ventilation shafts they had spent months widening with stolen spoons, and disappeared into the frigid waters of San Francisco Bay on a makeshift raft built from raincoats.
 
-Their bodies were never found. The FBI officially declared them "presumed drowned" in 1979 - but the U.S. Marshals Service kept the case open, and they remained on the wanted fugitive list all the way until September 2026. Sixty-four years. The longest active fugitive case in American history.
+Their bodies were never found. The FBI officially declared them "presumed drowned" in 1979 - but the U.S. Marshals Service has kept the case open. As of this writing, they remain on the wanted fugitive list — over sixty years and counting. The longest active fugitive case in American history.
 
 Why would the government keep a case open for sixty-four years for three bank robbers they claim are dead?
 
