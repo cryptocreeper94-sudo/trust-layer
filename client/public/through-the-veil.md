@@ -4535,22 +4535,6 @@ And they move within the firmament in their appointed courses. They are not dist
 
 The adversary took this system and corrupted it into astrology - fortune-telling, horoscopes, the "Age of Aquarius." He took the Creator's star-chart and turned it into a tool of divination. The same pattern as always: take what the Creator made, pervert its purpose, and use it against the people it was designed to guide.
 
-Humanity sees 0.003% of the light spectrum. 99.997% of what's around cannot be seen.
-
-And maybe it's nothing. But how would anyone know?
-
-People believe in ghosts. Their loving loved-one spirits. But the Bible, in fact, says sleep happens until resurrection. So anything encountered in this life will either be an angel or a demon.
-
-There's a spiritual battle going on. And most of it is invisible. The fighting is blind. The navigation is by sound in a world designed to be noisy.
-
-The 99.997% that cannot be seen - what's in it? Angels? Demons? Both? Beings without names?
-
-The answer matters less than the question. Because the question opens the door to humility. To admitting that the confident, materialist worldview might be laughably incomplete. That science, for all its achievements, has only scratched the surface of reality.
-
-If only a tiny fraction of what exists can be perceived, then confidence in what is "known" should be tempered with enormous humility.
-
-If spiritual beings exist in realms that cannot be seen, then the spiritual disciplines - prayer, fasting, meditation on scripture, avoidance of substances that open wrong doors - become not superstition but survival strategies.
-
 ---
 
 # PART NINE: THE HOLLOW WORLD
