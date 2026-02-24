@@ -218,7 +218,7 @@ The journey through the veil begins now.
 
 # CHAPTER 1: THE COUNCIL AND THE FALL
 
-To understand where we are, we have to go back to where it started. Not human history. Before that. The celestial rebellion that set everything in motion.
+To understand where we are, I have to take you back to where it started. Not human history. Before that. The celestial rebellion that set everything in motion.
 
 Scripture speaks of principalities and powers. Of rulers of darkness. Of spiritual wickedness in high places. Sha'ul (Paul) wrote in Eph'siym (Ephesians) 6:12: "For we wrestle not against flesh and blood, but against principalities, against powers, against the rulers of the darkness of this world, against spiritual wickedness in high places." These aren't metaphors. They're descriptions of an organized hierarchy that predates humanity itself.
 
@@ -290,7 +290,7 @@ But Adam was given something more. He was created with the **tselem** and **demu
 
 The **neshamah** (breath) of Yahuah produced the **nephesh** (living soul) - but it also installed the **ruach** (spirit) - the receiver, the antenna, the capacity for divine communion.
 
-This is what the pineal gland represents (as we'll explore in Chapter 27). This is what the adversary targets for calcification and corruption. This is what the Nephilim bloodline dilution was designed to destroy.
+This is what the pineal gland represents (as I'll explore in Chapter 27). This is what the adversary targets for calcification and corruption. This is what the Nephilim bloodline dilution was designed to destroy.
 
 **The question often asked:** Were there intelligent beings before Adam who lacked this divine connection?
 
@@ -482,7 +482,7 @@ I don't add or take away from Scripture (Revelation 22:18-19). I simply note tha
 
 **The Planet X Deception**
 
-While we're on Sitchin, we need to address "Planet X" and "Nibiru" - because they're not the same thing, and the conflation is deliberate.
+While I'm on Sitchin, I need to address "Planet X" and "Nibiru" - because they're not the same thing, and the conflation is deliberate.
 
 **"Planet X" - Modern Astronomy's Search (1902-1930s):**
 Astronomer Percival Lowell proposed "Planet X" in 1902 to explain supposed irregularities in Neptune's orbit. The "X" meant unknown - a mathematical variable. Clyde Tombaugh searched for it and found Pluto in 1930. But Pluto was too small to cause the irregularities Lowell predicted. In 1992, when Voyager 2 provided accurate measurements of Neptune's mass, astronomers realized the "irregularities" were measurement errors. The original Planet X hypothesis was closed. It was never found because it didn't exist.
@@ -542,7 +542,7 @@ The flood was the Creator's response. Not cruelty. Not abandonment. **Surgery**.
 
 But as Bere'shiyth 6:4 warns: the Nephilim were in the earth in those days - **and also afterward**. The corruption survived. The bloodlines continued. And the thread that begins here connects directly to the ruling families, the "divine right of kings," and the elite who believe themselves fundamentally different from the rest of humanity.
 
-Keep that in mind as we move forward.
+Keep that in mind as I move forward.
 
 ---
 
@@ -566,7 +566,7 @@ This only makes sense if the problem was IN the blood.
 
 ## The Corruption Was Biological
 
-We've established that the Nephilim were the offspring of the Watchers and human women. That "all flesh" had corrupted its way upon the earth. That the corruption was so complete the flood became necessary.
+I've established that the Nephilim were the offspring of the Watchers and human women. That "all flesh" had corrupted its way upon the earth. That the corruption was so complete the flood became necessary.
 
 But consider what "all flesh corrupted" actually means. Not "all people behaved badly." The flesh itself - the biological substrate, the genetic material - was corrupted.
 
@@ -1989,7 +1989,7 @@ Understanding this motivation changes everything. The chaos isn't pointless - it
 
 ## The Scripture That Shouldn't Exist
 
-Before we go further, let's address the skeptics - and the believers who dismiss the "extra" books.
+Before I go further, let me address the skeptics - and the believers who dismiss the "extra" books.
 
 The Bible - from Bere'shiyth (Genesis) through Chizayon (Revelation) - was written by approximately 40 different authors. Kings, shepherds, fishermen, tax collectors, prophets, physicians. Different backgrounds. Different centuries. Different continents.
 
@@ -2304,7 +2304,7 @@ The cross - an ancient pagan symbol predating Christianity by millennia - was re
 
 Christianity as most know it today did not exist until well after the Messiah died. It was manufactured. Designed. Implemented by Rome to control the narrative and redirect the growing movement away from the true path.
 
-This is why we believe the name and history were changed - to serve this purpose. To create something that could be controlled. Something with Rome at the center instead of Yahuah.
+This is why I believe the name and history were changed - to serve this purpose. To create something that could be controlled. Something with Rome at the center instead of Yahuah.
 
 This isn't a minor calendrical adjustment. It's a substitution. A replacement of Yahuah's appointment with another entity's celebration. Daniy'el (Daniel) 7:25 prophesied this: "And he shall speak great words against the most High, and shall wear out the saints of the most High, and think to change times and laws."
 
@@ -3137,7 +3137,7 @@ Perhaps because the problem hasn't changed. Perhaps because the problem was neve
 
 ## The Bigger Picture
 
-If you've been reading this book from the beginning, you know we started with the celestial rebellion - the original war in the heavens, the fall, the adversary's long game against creation. Every chapter since has traced the same thread: a system of deception that operates across centuries, across nations, across every institution that shapes how people understand reality.
+If you've been reading this book from the beginning, you know I started with the celestial rebellion - the original war in the heavens, the fall, the adversary's long game against creation. Every chapter since has traced the same thread: a system of deception that operates across centuries, across nations, across every institution that shapes how people understand reality.
 
 The space program fits into that thread. It was never just about national pride or Cold War competition. It was conditioning. Seventy years of building a very specific picture of the cosmos in the public mind - one where humanity is small, random, and alone in an incomprehensibly vast universe. One where the idea of "what's out there" has been carefully managed, decade after decade.
 
@@ -3151,7 +3151,7 @@ That's the kind of deception that requires seventy years of groundwork. Seventy 
 
 And the Challenger? Seven people had to "die" so a chapter could close. Not casualties of a rocket malfunction - casualties of a narrative that had served its purpose and needed to end before the next act could begin.
 
-Is that what happened? We present the evidence. The reader decides.
+Is that what happened? I present the evidence. The reader decides.
 
 ## The Pattern Recognition
 
@@ -3502,7 +3502,7 @@ The CBS eye - the all-seeing eye of surveillance, watching from every television
 
 Disney signatures containing hidden 666s. Movie posters with one-eye symbolism. Music videos dripping with occult imagery.
 
-We're not claiming these companies are consciously serving Satan. We're observing that the symbolism is there - consistently, repeatedly, across industries and decades. Either it's the longest string of coincidences in corporate history, or something else is going on.
+I'm not claiming these companies are consciously serving Satan. I'm observing that the symbolism is there - consistently, repeatedly, across industries and decades. Either it's the longest string of coincidences in corporate history, or something else is going on.
 
 They're not hiding it. They're flaunting it. Because the disclosure is required - and because most people will never see it, no matter how obvious it becomes.
 
@@ -4846,7 +4846,7 @@ The councils, the schisms, the corruption of the visible church - these could al
 
 When Satan was released (~1500 AD), those who had chosen wrong became the foundation of his final army. The Renaissance wasn't just humanism "reborn" - it was the release of satanic influence upon a population already primed by a thousand years of choosing the institution over truth.
 
-And now we understand why the falling away could happen during the millennium: it wasn't caused by satanic deception. It was caused by human choice, made with full knowledge, in the clearest spiritual conditions the world had ever seen.
+And now it becomes clear why the falling away could happen during the millennium: it wasn't caused by satanic deception. It was caused by human choice, made with full knowledge, in the clearest spiritual conditions the world had ever seen.
 
 Can I prove this? No. But then again - who can prove what year it actually is?
 
@@ -4892,7 +4892,7 @@ But of course, this too has been inverted - twisted into astrology, horoscopes, 
 
 **The Pattern Matters More Than The Precise Dates**
 
-We cannot pinpoint exact dates because the calendar itself is demonstrably compromised. But the pattern is striking:
+I cannot pinpoint exact dates because the calendar itself is demonstrably compromised. But the pattern is striking:
 
 - Something corrupted the faith (Nicaea, the Schism)
 - A period was obscured (the "Dark Ages")
@@ -4909,7 +4909,7 @@ Until someone reads the patterns and connects the dots.
 
 Consider the New Age movement and its obsession with the "Age of Aquarius."
 
-The concept of "astrological ages" claims that roughly every 2,160 years, humanity transitions into a new cosmic era. The conventional explanation attributes this to "precession of the equinoxes" - supposedly caused by Earth's axial wobble as it spins through space. But as we've already discussed, that model itself is part of the deception. There is no spinning globe wobbling on an axis. There is the firmament, with luminaries and stars set in their courses by the Creator.
+The concept of "astrological ages" claims that roughly every 2,160 years, humanity transitions into a new cosmic era. The conventional explanation attributes this to "precession of the equinoxes" - supposedly caused by Earth's axial wobble as it spins through space. But as I've already discussed, that model itself is part of the deception. There is no spinning globe wobbling on an axis. There is the firmament, with luminaries and stars set in their courses by the Creator.
 
 So where does the observable shift come from? The stars in the Mazzaroth DO move through their appointed cycles. Ancient astronomers tracked this - long before anyone invented heliocentrism. The movement is real. The explanation they've attached to it is not. And the MEANING they've layered on top of it - that's where the real manipulation lives.
 
@@ -5272,7 +5272,7 @@ What characterized the days of Noah? Genesis 6 tells us: the Nephilim were on th
 
 Sound familiar?
 
-If we're living in Satan's little season, certain patterns make sense - and they're the same patterns that defined Noah's era.
+If you're living in Satan's little season, certain patterns make sense - and they're the same patterns that defined Noah's era.
 
 **THE RETURN OF FORBIDDEN KNOWLEDGE**
 
@@ -5302,7 +5302,7 @@ Every carousel horse moving in the same direction. Every institution singing fro
 
 The little season is characterized by deception so convincing it would deceive, if possible, even the elect. That requires sophistication. That requires technology. That requires the accumulated wisdom of millennia of opposition to the Most High.
 
-We're watching it unfold in real time.
+You're watching it unfold in real time.
 
 If indeed life is happening in Satan's little season - the brief time after the Millennial Reign when the adversary is loosed to deceive the nations - then the end of that season is approaching.
 
@@ -5820,11 +5820,11 @@ Not suggestions. Not outdated laws replaced by grace. Commandments. Still in eff
 
 ### The "Old Testament" Deception
 
-Before we go further, we need to address the terminology itself. The very phrase "Old Testament" is a manipulation.
+Before I go further, I need to address the terminology itself. The very phrase "Old Testament" is a manipulation.
 
 Think about it. When you label something "old," what does that imply? Outdated. Replaced. No longer valid. The "New Testament" supersedes the "Old." The language itself programs Christians to dismiss the Torah before they ever read it.
 
-But this division doesn't exist in the original texts. The Cepher - our source translation - organizes Scripture into ten Hebrew divisions, not two artificial categories:
+But this division doesn't exist in the original texts. The Cepher - my source translation throughout this book - organizes Scripture into ten Hebrew divisions, not two artificial categories:
 
 1. **Torah** - The five books of Mosheh (Genesis through Deuteronomy)
 2. **Sheniy Cepheriym** - Second books (additional Torah-related writings)
