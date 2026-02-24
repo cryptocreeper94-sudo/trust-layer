@@ -5078,7 +5078,7 @@ Two resurrections. Clearly stated. Separated by a thousand years.
 
 **The First Resurrection:** The saints raised to reign with the Messiah during the millennium.
 
-**The Second Resurrection:** Everyone else, raised after the millennium for judgment.
+**The Second Resurrection:** Everyone else, raised after Satan's little season — at the final judgment.
 
 Most churches teach one resurrection at the end. They blend the two together, or skip over the passage entirely. If the millennium already happened, the first resurrection already happened - and that changes everything about what people expect.
 
@@ -5138,7 +5138,7 @@ Only those who reign with the Messiah during the millennium are described as bei
 | What Scripture Says | What Most Christians Believe |
 |---------------------|------------------------------|
 | Dead sleep until resurrection | Dead go straight to heaven or hell |
-| Two resurrections, 1,000 years apart | One resurrection at the end |
+| Two resurrections separated by the millennium and the little season | One resurrection at the end |
 | First resurrection happened at millennium's start | First resurrection is future |
 | Consulting the dead is forbidden because they're asleep | Loved ones are in heaven watching over you |
 | Spiritual body = transformed physical form | Spiritual body = ghost/spirit form |
