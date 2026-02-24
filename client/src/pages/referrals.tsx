@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { Users, Coins , Shield , Shield } from "lucide-react";
+import { Users, Coins, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";
 import { ReferralTracker } from "@/components/referral-tracker";

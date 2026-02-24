@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ArrowLeftRight, Clock , Shield , Shield } from "lucide-react";
+import { ArrowLeftRight, Clock, Shield } from "lucide-react";
 import { Link } from "wouter";
 import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";

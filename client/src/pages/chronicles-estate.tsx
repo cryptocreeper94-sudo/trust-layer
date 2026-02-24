@@ -10,7 +10,7 @@ import {
   Plus, Minus, RotateCcw, Save, Coins, Lock, Sparkles,
   ChevronRight, User, Grid3X3, Eye, ShoppingBag, Crown,
   Rocket, Building2, MapPin, Gift, Briefcase, Calendar, X,
-  Timer, Flame, Clock, Zap, Map, ShoppingCart, DoorOpen, Box, Layers
+  Timer, Flame, Clock, Zap, Map, ShoppingCart, DoorOpen, Box as BoxIcon
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -1638,7 +1638,7 @@ export default function ChroniclesEstate() {
                     className={show3D ? "bg-gradient-to-r from-purple-500 to-pink-500" : "border-slate-600"}
                     data-testid="button-toggle-3d"
                   >
-                    <Box className="w-4 h-4 mr-1" />
+                    <BoxIcon className="w-4 h-4 mr-1" />
                     {show3D ? "2D Grid" : "3D View"}
                   </Button>
                   <Button
@@ -1759,7 +1759,7 @@ export default function ChroniclesEstate() {
                   </div>
                   <div className="absolute top-2 left-2 flex items-center gap-1">
                     <Badge className="bg-purple-500/80 text-white border-purple-400/50 text-xs shadow-lg">
-                      <Box className="w-3 h-3 mr-1" />
+                      <BoxIcon className="w-3 h-3 mr-1" />
                       3D View
                     </Badge>
                   </div>

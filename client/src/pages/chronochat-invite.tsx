@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import type { Community } from '../../shared/chat-types';
+import type { Community } from '@shared/chat-types';
 
 export default function ChronoChatInvitePage({ params }: { params?: { code?: string } }) {
   const inviteCode = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('code') : null;
   const [joined, setJoined] = useState(false);
 
-  const { data: community } = useQuery<Community | null>(['invite', inviteCode], async () => {
-    if (!inviteCode) return null;
-    return { id: 'c-general', name: 'General', description: 'Public community', ownerId: 'u1', privacy: 'invite-only', createdAt: new Date().toISOString() } as Community;
-  }, { enabled: !!inviteCode });
+  const { data: community } = useQuery<Community | null>({
+    queryKey: ['invite', inviteCode],
+    queryFn: async () => {
+      if (!inviteCode) return null;
+      return { id: 'c-general', name: 'General', description: 'Public community', ownerId: 'u1', privacy: 'invite-only', createdAt: new Date().toISOString() } as Community;
+    },
+    enabled: !!inviteCode,
+  });
 
   const join = async () => {
     setJoined(true);
