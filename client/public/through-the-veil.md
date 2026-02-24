@@ -4948,7 +4948,7 @@ Daniel sees two figures: the Ancient of Days on a throne with hair white like wo
 The same vision. The same figures. The same white hair like wool. But Enoch provides what Daniel doesn't - the explicit identification of the Son of Man as the Righteous One, the Chosen One, the Mashiach who will judge.
 
 **1 Enoch 48:2-6:**
-> *"At that hour the Son of Man was named In the presence of the Lord of Spirits, And his name before the Head of Days. Yea, before the sun and the signs were created, Before the stars of the heaven were made, His name was named before the Lord of Spirits... And for this reason hath he been chosen and hidden before Him, Before the creation of the world and for evermore."*
+> *"At that hour the Son of Man was named In the presence of Yahuah of Spirits, And his name before the Head of Days. Yea, before the sun and the signs were created, Before the stars of the heaven were made, His name was named before Yahuah of Spirits... And for this reason hath he been chosen and hidden before Him, Before the creation of the world and for evermore."*
 
 The Son of Man existed before creation. He was named before the stars were made. He was hidden until the appointed time.
 
@@ -4966,7 +4966,7 @@ They knew exactly who he was claiming to be. That's why they tried to kill him.
 Here's where Daniel and Enoch connect in a way that should shake you:
 
 **1 Enoch 10:11-12:**
-> *"And the Lord said unto Miyka'el: 'Go, bind Shemiy'aza and his associates who have united themselves with women so as to have defiled themselves with them in all their uncleanness. And when their sons have slain one another, and they have seen the destruction of their beloved ones, bind them fast for seventy generations in the valleys of the earth, till the day of their judgment and of their consummation, till the judgment that is for ever and ever is consummated.'"*
+> *"And Yahuah said unto Miyka'el: 'Go, bind Shemiy'aza and his associates who have united themselves with women so as to have defiled themselves with them in all their uncleanness. And when their sons have slain one another, and they have seen the destruction of their beloved ones, bind them fast for seventy generations in the valleys of the earth, till the day of their judgment and of their consummation, till the judgment that is for ever and ever is consummated.'"*
 
 The Watchers - the 200 fallen angels from Genesis 6 and 1 Enoch - were bound for **seventy generations** until judgment.
 
