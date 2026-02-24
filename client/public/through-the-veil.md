@@ -5250,13 +5250,17 @@ Each step brought the world further from faith and closer to the beast system:
 
 "But as the days of Noach were, so shall also the coming of the Son of Adam be. For as in the days that were before the flood they were eating and drinking, marrying and giving in marriage, until the day that Noach entered into the ark, And knew not until the flood came, and took them all away; so shall also the coming of the Son of Adam be." *(Cepher, Mattithyahu 24:37-39)*
 
-This passage is usually interpreted as a warning about sudden judgment - people going about their daily lives, unaware of the coming destruction. That's true. But there's a deeper layer.
+Most Christians interpret this as a warning about a future second coming — that when the world looks like Noah's era, the Messiah will return. They teach it as a sign to watch for, proof that "Jesus is coming soon."
+
+But if the framework presented in this book is correct — if the Messiah already returned, the millennium already happened, and we are now living in Satan's little season — then this passage isn't pointing to a future arrival. The "coming of the Son of Adam" already occurred. What this passage describes is the **condition of the world during the little season**, not a countdown to an event still ahead.
+
+The days of Noah aren't coming. They're here. And most will not recognize it because they're waiting for something that already happened.
 
 What characterized the days of Noah? Genesis 6 tells us: the Nephilim were on the earth. The corruption of flesh had spread. Violence filled the earth. The sons of God were taking human wives. Genetic manipulation. Spiritual contamination. The blending of the human with the non-human.
 
 Sound familiar?
 
-If you're living in Satan's little season, certain patterns make sense - and they're the same patterns that defined Noah's era.
+If you're living in Satan's little season, these patterns aren't prophecy waiting to be fulfilled — they're the reality you're standing in.
 
 **THE RETURN OF FORBIDDEN KNOWLEDGE**
 
