@@ -5067,14 +5067,14 @@ And when you bring them back together, the fog lifts. Daniel makes sense. Revela
 
 If the millennial reign already happened, a critical question follows: what about the resurrection?
 
-Scripture describes not one resurrection, but two - separated by a thousand years. This is rarely taught, and when the timeline is understood, the reason for that silence becomes clear.
+Scripture describes not one resurrection, but two - separated by the millennium and the little season that follows it. This is rarely taught, and when the timeline is understood, the reason for that silence becomes clear.
 
 ## WHAT SCRIPTURE ACTUALLY SAYS
 
 **Revelation 20:4-6:**
 > *"And I saw thrones, and they sat upon them, and judgment was given unto them: and I saw the souls of them that were beheaded for the witness of Yahusha, and for the word of Elohiym... and they lived and reigned with Mashiach a thousand years. But the rest of the dead lived not again until the thousand years were finished. This is the first resurrection. Blessed and holy is he that hath part in the first resurrection: on such the second death hath no power, but they shall be priests of Elohiym and of Mashiach, and shall reign with him a thousand years."*
 
-Two resurrections. Clearly stated. Separated by a thousand years.
+Two resurrections. Clearly stated. The first at the start of the millennium, the second after the little season ends.
 
 **The First Resurrection:** The saints raised to reign with the Messiah during the millennium.
 
@@ -5186,7 +5186,7 @@ If the first resurrection already happened and we're in Satan's little season:
 - There is no rapture escape coming
 - There is no thousand-year peace ahead before judgment
 - The final deception is NOW
-- The mark, the beast system, the great falling away - all present tense
+- The mark, the beast system, the great falling away - already set in motion
 - Discernment is survival
 
 The teaching of future millennium, future resurrection, future tribulation creates a passive waiting. "Just hold on until Jesus comes." But if He already came, and the current period is the final battle before judgment, the posture changes entirely.
@@ -5199,7 +5199,7 @@ Wake up. The game is in the fourth quarter, not the first.
 
 Revelation 20 describes Satan being bound for a thousand years, then released "for a little season." What if the millennium has already happened, and we're in the short season now?
 
-The theory suggests: the thousand-year reign of the Messiah occurred during what we call the medieval period. This was the age of cathedral building, of widespread faith, of Christianity spreading across the known world.
+The theory suggests: the thousand-year reign of the Messiah occurred during what we call the medieval period. This was the age of cathedral building, of widespread faith, of The Way spreading across the known world.
 
 ## THE MORTAL HEAD WOUND
 
