@@ -326,7 +326,7 @@ This was not a spontaneous act of lust. It was a **military operation**. Two hun
 
 The Dead Sea Scrolls preserve the account. The Ethiopian church - the only church that maintained the Book of Chanok as canonical scripture without interruption - preserved it. The early church fathers quoted it extensively. Tertullian, Irenaeus, Clement of Alexandria, and Justin Martyr all referenced the Watchers as historical reality.
 
-Then it was excluded from the canon. Made apocryphal. Marginalized. The councils that assembled the approved Bible decided that this book - quoted by Jude under the inspiration of the Spirit, preserved by the oldest continuous Christian community on earth, verified by the Dead Sea Scrolls - should not be read by ordinary believers.
+Then it was excluded from the canon. Made apocryphal. Marginalized. The councils that assembled the approved Bible decided that this book - quoted by Jude under the inspiration of the Spirit, preserved by the oldest continuous community of The Way on earth, verified by the Dead Sea Scrolls - should not be read by ordinary believers.
 
 Why? Perhaps because it explains too much. The bloodlines. The giants. The advanced technology of previous ages. The origins of the ruling families. The source of the forbidden knowledge that still powers the systems of control described in later chapters.
 
@@ -1722,9 +1722,9 @@ The same symbols. The same rituals. The same hierarchy. Different names, differe
 
 **PHASE FIVE: ROME**
 
-When Rome absorbed the Greek world, it also absorbed the mystery traditions. When Christianity spread through the empire, Rome faced a choice: destroy it or absorb it.
+When Rome absorbed the Greek world, it also absorbed the mystery traditions. When The Way spread through the empire, Rome faced a choice: destroy it or absorb it.
 
-Constantine chose absorption. The Council of Nicaea wasn't the birth of Christianity - it was the merger of the faith with the Babylonian system wearing Roman clothes.
+Constantine chose absorption. The Council of Nicaea wasn't the birth of The Way - it was the merger of the faith with the Babylonian system wearing Roman clothes. What emerged was not The Way of Yahusha - it was "Christianity."
 
 The names were changed. The calendar was changed. The symbols were adopted. The Sabbath became Sunday. Passover became Easter. The Messiah's name became a Greek-Latin construct disconnected from the Father.
 
@@ -1931,7 +1931,7 @@ Mattithyahu (Matthew) 24:29-31 is explicit: "Immediately after the tribulation o
 
 After. Not before.
 
-The pre-tribulation rapture doctrine was popularized in the 1830s by John Nelson Darby. It didn't exist in early Christianity. It serves to keep believers passive - why fight the system if you're about to escape it?
+The pre-tribulation rapture doctrine was popularized in the 1830s by John Nelson Darby. It didn't exist in the early assemblies of The Way. It serves to keep believers passive - why fight the system if you're about to escape it?
 
 But if we've already passed the thousand-year reign and are now in Satan's little season, the question becomes moot. There is no future tribulation to escape. The tribulation is the world we're living in.
 
@@ -2133,7 +2133,7 @@ This isn't legalism. This isn't splitting hairs. This is recognizing that names 
 
 ---
 
-### A Critical Clarification: Christ, Mashiach, and Christianity
+### A Critical Clarification: Christ, Mashiach, and "Christianity" vs. The Way
 
 This requires careful explanation because the deception operates on multiple levels.
 
@@ -5501,7 +5501,7 @@ Yahuchanon (John) 5:43: *"I am come in my Father's name, and you receive me not:
 
 Trace the pattern across history:
 
-**Phase One: Persecution.** Christianity is positioned as the underdog. Believers are martyred, hunted, killed for their faith. This generates deep emotional loyalty. The persecuted faith must be the true faith - why else would the system attack it so viciously?
+**Phase One: Persecution.** The Way - the original faith of Yahusha's followers - is positioned as the underdog. Believers are martyred, hunted, killed for their faith. This generates deep emotional loyalty. The persecuted faith must be the true faith - why else would the system attack it so viciously?
 
 **Phase Two: Dominance.** Despite becoming the largest religion on earth - with billions of adherents, immense political power, and institutional control across continents - Christianity continues to market itself as persecuted. The victim identity persists even as the faith IS the dominant system. The Crusades, the Inquisition, the burning of "heretics" who dared read scripture in their own language - all done under the banner of the same religion that claims persecution.
 
@@ -5893,7 +5893,7 @@ If Yahusha came to abolish the Torah, His teachings make no sense:
 
 The Messiah was Torah-observant. His followers were Torah-observant. The first-century assembly was Torah-observant.
 
-The doctrine of "the law is abolished" came later. Much later. Through Rome. Through councils. Through centuries of antisemitic theology that wanted to separate Christianity from its Hebrew roots.
+The doctrine of "the law is abolished" came later. Much later. Through Rome. Through councils. Through centuries of antisemitic theology that wanted to separate The Way from its Hebrew roots - rebranding it as "Christianity" in the process.
 
 ### Why This Matters
 
