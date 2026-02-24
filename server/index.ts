@@ -19,6 +19,7 @@ import { serveStatic } from "./static";
 import { createServer } from "http";
 import { startScheduler } from "./marketing-scheduler";
 import { startShellsAirdropScheduler } from "./shells-airdrop-scheduler";
+import { ecosystemClient } from "./ecosystem-client";
 import { startReferralPayoutScheduler } from "./referral-payout-scheduler";
 import { startEmailUpdateScheduler } from "./email-update-scheduler";
 import { seedDocuments, seedCityZones, seedEraBuildingTemplates } from "./storage";
@@ -485,6 +486,8 @@ async function initializeServices() {
     // Membership reconciliation scheduler - runs every 12 hours to unify accounts
     startMembershipReconciliationScheduler();
     
+    registerEcosystemAppsToOrbit().catch(e => console.error('[Orbit] App registration failed:', e.message));
+    
     servicesReady = true;
     console.log('[Init] All services initialized successfully');
   } catch (err: any) {
@@ -492,6 +495,37 @@ async function initializeServices() {
     initError = err.message;
     throw err;
   }
+}
+
+async function registerEcosystemAppsToOrbit() {
+  if (!ecosystemClient.isConfigured()) {
+    console.log('[Orbit] Skipping app registration — no API credentials configured');
+    return;
+  }
+  
+  const appBaseUrl = process.env.REPLIT_DEPLOYMENT_URL 
+    ? `https://${process.env.REPLIT_DEPLOYMENT_URL}` 
+    : process.env.REPL_SLUG 
+      ? `https://${process.env.REPL_SLUG}.replit.app`
+      : 'https://dwsc.io';
+
+  const apps = [
+    { appName: 'The Void', appSlug: 'the-void', appUrl: 'https://thevoid.tlid.io', description: 'Premium membership identity system with Void IDs and DW-STAMP hallmarks', category: 'entertainment', permissions: ['read:profile', 'read:membership'] },
+    { appName: 'Happy Eats', appSlug: 'happy-eats', appUrl: 'https://happyeats.tlid.io', description: 'Food truck ordering platform with zone-based batch ordering', category: 'food-delivery', permissions: ['read:profile', 'write:orders'] },
+    { appName: 'TL Driver Connect', appSlug: 'driver-connect', appUrl: 'https://driverconnect.tlid.io', description: 'Blockchain-verified driver coordination and logistics platform', category: 'transportation', permissions: ['read:profile', 'write:logistics'] },
+    { appName: 'Trust Home', appSlug: 'trust-home', appUrl: 'https://trusthome.tlid.io', description: 'Personal Trust Layer dashboard for membership, balance, and activity', category: 'core', permissions: ['read:profile', 'read:membership', 'read:balance'] },
+    { appName: 'Trust Vault', appSlug: 'trust-vault', appUrl: 'https://trustvault.tlid.io', description: 'Multi-chain wallet with multi-signature security', category: 'finance', permissions: ['read:profile', 'read:balance', 'write:transactions'] },
+  ];
+
+  for (const app of apps) {
+    try {
+      await ecosystemClient.registerApp({ ...app, metadata: { registeredFrom: appBaseUrl, version: '1.0.0' } });
+      console.log(`[Orbit] Registered: ${app.appName}`);
+    } catch (e: any) {
+      console.log(`[Orbit] ${app.appName}: ${e.message || 'already registered'}`);
+    }
+  }
+  console.log('[Orbit] Ecosystem app registration complete');
 }
 
 const processLog = createLogger("process");

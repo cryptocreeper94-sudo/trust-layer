@@ -138,6 +138,7 @@ import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
 import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications, limitOrders, insertLimitOrderSchema, chatChannels, ecosystemAffiliates, ecosystemReferrals, ecosystemRewardsLedger, chroniclesGameState } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
+import { orbitClient } from "./services/orbitEcosystem";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
 import { trustStamp, getUserTrustStamps } from "./trust-stamp";
@@ -427,6 +428,14 @@ export async function registerRoutes(
             
             console.log(`[Stripe Webhook] Presale recorded: ${customerEmail}, ${totalTokens} tokens from $${(amountCents/100).toFixed(2)}`);
             
+            orbitClient.reportFinancialEvent({
+              eventType: 'revenue',
+              grossAmount: amountCents / 100,
+              description: `Presale purchase: ${totalTokens} SIG tokens (${tier})`,
+              productCode: 'presale-sig',
+              metadata: { email: customerEmail, tokens: totalTokens, tier, bonusPercent, paymentId },
+            }).catch(e => console.error("[Orbit Sync] Presale event failed:", e.message));
+            
             trustStamp("presale-purchase", { email: customerEmail, amountUsd: (amountCents / 100).toFixed(2), tokens: totalTokens, tier, paymentId }).catch(() => {});
             
             if (customerEmail) {
@@ -465,6 +474,14 @@ export async function registerRoutes(
             
             console.log(`[Stripe Webhook] Crowdfund confirmed: ${metadata.contributionId}`);
             
+            orbitClient.reportFinancialEvent({
+              eventType: 'revenue',
+              grossAmount: amountCents / 100,
+              description: `Crowdfund donation (${metadata.tier || 'Supporter'})`,
+              productCode: 'crowdfund',
+              metadata: { email: customerEmail, contributionId: metadata.contributionId, tier: metadata.tier, paymentId },
+            }).catch(e => console.error("[Orbit Sync] Crowdfund event failed:", e.message));
+            
             trustStamp("crowdfund-donation", { email: customerEmail, amountUsd: (amountCents / 100).toFixed(2), contributionId: metadata.contributionId, paymentId }).catch(() => {});
           } catch (dbError) {
             console.error("[Stripe Webhook] DB error for crowdfund:", dbError);
@@ -480,6 +497,14 @@ export async function registerRoutes(
               paymentId as string
             );
             console.log(`[Stripe Webhook] Credits purchased: user=${metadata.userId}, credits=${result.creditsAdded}, balance=${result.newBalance}`);
+            
+            orbitClient.reportFinancialEvent({
+              eventType: 'revenue',
+              grossAmount: amountCents / 100,
+              description: `Credits purchase: ${result.creditsAdded} credits`,
+              productCode: 'credits',
+              metadata: { userId: metadata.userId, credits: result.creditsAdded, packageId: metadata.packageId, paymentId },
+            }).catch(e => console.error("[Orbit Sync] Credits event failed:", e.message));
             
             trustStamp("credits-purchase", { userId: metadata.userId, credits: result.creditsAdded, amountUsd: (amountCents / 100).toFixed(2), paymentId }).catch(() => {});
             
@@ -528,6 +553,14 @@ export async function registerRoutes(
               userId: metadata.userId || null,
             });
             console.log(`[Stripe Webhook] Guardian certification created: ${certification.id}, tier: ${metadata.tier}, project: ${metadata.projectName}`);
+            
+            orbitClient.reportFinancialEvent({
+              eventType: 'revenue',
+              grossAmount: amountCents / 100,
+              description: `Guardian certification: ${metadata.tier} — ${metadata.projectName}`,
+              productCode: 'guardian-cert',
+              metadata: { certId: String(certification.id), tier: metadata.tier, project: metadata.projectName, paymentId },
+            }).catch(e => console.error("[Orbit Sync] Guardian cert event failed:", e.message));
             
             trustStamp("guardian-certification", { certId: String(certification.id), tier: metadata.tier, project: metadata.projectName, amountUsd: (amountCents / 100).toFixed(2), paymentId }).catch(() => {});
             
@@ -611,6 +644,14 @@ export async function registerRoutes(
             );
             
             console.log(`[Stripe Webhook] Subscription activated: user=${userId}, plan=${plan}, cycle=${billingCycle}, price=${priceAmount}`);
+            
+            orbitClient.reportFinancialEvent({
+              eventType: 'revenue',
+              grossAmount: (priceAmount || 0) / 100,
+              description: `Subscription: ${plan} (${billingCycle})`,
+              productCode: `subscription-${plan}`,
+              metadata: { userId, plan, billingCycle, priceAmount, paymentId },
+            }).catch(e => console.error("[Orbit Sync] Subscription event failed:", e.message));
             
             trustStamp("subscription-activated", { userId, plan, billingCycle, amountCents: priceAmount, paymentId }).catch(() => {});
             
@@ -23544,7 +23585,8 @@ const APP_URL_MAP: Record<string, string> = {
   "signal-chat": "https://signalchat.tlid.io",
   "driverconnect": "https://driverconnect.tlid.io",
   "driver-connect": "https://driverconnect.tlid.io",
-  "happyeats": "https://driverconnect.tlid.io",
+  "happyeats": "https://happyeats.tlid.io",
+  "happy-eats": "https://happyeats.tlid.io",
   "tldriverconnect": "https://driverconnect.tlid.io",
   "tl-driver-connect": "https://driverconnect.tlid.io",
   "trust-layer-driver-connect": "https://driverconnect.tlid.io",
@@ -23974,6 +24016,18 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       verified: true,
       users: "DarkWave Verified",
       url: "https://trustbook.tlid.io",
+    },
+    {
+      id: "happy-eats",
+      name: "Happy Eats",
+      category: "Food & Delivery",
+      description: "Food truck ordering platform with zone-based batch ordering. Order from local food trucks in the Nashville I-24 Corridor with 11 AM daily cutoff and blockchain-verified transactions.",
+      hook: "Local Food Truck Orders",
+      tags: ["Food", "Delivery", "Local", "Ordering"],
+      gradient: "from-orange-500 to-red-600",
+      verified: true,
+      users: "DarkWave Verified",
+      url: "https://happyeats.tlid.io",
     },
   ];
 }
