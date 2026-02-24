@@ -1545,7 +1545,7 @@ The same happened with the Messiah's name.
 
 Yahusha. It means "Yahuah is salvation." It contains the divine name. It declares the source of redemption. This is why Ma'asiym (Acts) 4:12 matters so deeply: "Neither is there salvation in any other: for there is no other name under heaven given among men, whereby we must be saved."
 
-The name "Jesus" is a transliteration odyssey: Hebrew (Yeshua/Yahusha) to Greek (Iesous) to Latin (Iesus) to English (Jesus).
+The name "Jesus" is a transformation odyssey: Hebrew (Yeshua/Yahusha) to Greek (Iesous) to Latin (Iesus) to English (Jesus).
 
 By the time it arrives in English, the meaning is gone. The connection to Yahuah is severed. It's just a name - a label without content.
 
@@ -3380,7 +3380,7 @@ This is the inversion pattern. Everything this book has documented - good called
 
 In 1984, the regime doesn't just punish wrong thinking. It eliminates the WORDS needed to think wrong thoughts. Reduce the vocabulary. Simplify the grammar. Remove nuance. Eventually, rebellion becomes literally unthinkable because the language to express it no longer exists.
 
-Now consider what this book has already documented. The name Yahuah - replaced over 6,800 times with "LORD." The name Yahusha - transliterated through three languages until it became an empty label disconnected from its meaning. The Hebrew words for soul, spirit, firmament, set-apart - all replaced with Greek and Latin substitutes that carry different meanings or no meaning at all.
+Now consider what this book has already documented. The name Yahuah - replaced over 6,800 times with "LORD." The name Yahusha - transformed through three languages until it became an empty label disconnected from its meaning. The Hebrew words for soul, spirit, firmament, set-apart - all replaced with Greek and Latin substitutes that carry different meanings or no meaning at all.
 
 That's Newspeak. Applied to scripture. Over centuries. The original language carried power, identity, covenant, and connection to the Creator. The replacement language carries... nothing. And billions speak it without knowing what was lost - because the original words were removed from circulation.
 
@@ -5467,7 +5467,7 @@ Every single one of these public conversions - every testimony, every baptism vi
 
 Not Yahusha. Not the name that contains the Father. Not the name that means "Yahuah is salvation." Not the name that carries the frequency signature of the Creator.
 
-The substitute. The transliteration that traveled through three languages and arrived in English stripped of every connection to Yahuah. The empty label. The replacement.
+The substitute. The manufactured name that traveled through three languages and arrived in English stripped of every connection to Yahuah. The empty label. The replacement.
 
 And the system has no problem with it.
 
@@ -5477,7 +5477,7 @@ Why would the system permit that? Why would the machine that runs on Luciferian 
 
 Because "Jesus" isn't a threat to the system. **"Jesus" IS the system.**
 
-The name was engineered. The transliteration wasn't accidental. Hebrew (Yahusha) to Greek (Iesous) to Latin (Iesus) to English (Jesus) - each step stripped meaning until only a hollow label remained. A label with no connection to the Father. A label that fulfills the prophecy it was designed to fulfill.
+The name was engineered. The transformation wasn't accidental. Hebrew (Yahusha) to Greek (Iesous) to Latin (Iesus) to English (Jesus) - each step stripped meaning until only a hollow label remained. A label with no connection to the Father. A label that fulfills the prophecy it was designed to fulfill.
 
 Yahuchanon (John) 5:43: *"I am come in my Father's name, and you receive me not: if another shall come in his own name, him you will receive."*
 
@@ -5521,7 +5521,7 @@ This cultural shift toward Christianity isn't the end of the deception. It's the
 
 Consider: if the entire Western world is funneled into a version of faith built on the wrong name, the wrong timeline, and the wrong expectations - what happens when the great deception arrives?
 
-They're expecting a rapture that was invented in the 1830s. They're calling on a name that was manufactured through transliteration. They're celebrating a revival that the system is promoting. And they're wide open for what comes next.
+They're expecting a rapture that was invented in the 1830s. They're calling on a name that was manufactured through deliberate transformation. They're celebrating a revival that the system is promoting. And they're wide open for what comes next.
 
 When people vanish - however that's accomplished - the "Christians" who remain will think they missed the rapture. The shame and terror will be overwhelming. And when a figure appears offering exactly what they've been programmed to expect - peace, a kingdom, a second chance - they will follow. Willingly. Gratefully. Because the script was written for exactly this moment.
 
@@ -6142,7 +6142,7 @@ These are not accidents. These are not coincidences. When the same number appear
 
 ## The Transliteration Lie
 
-They changed the names and called it "transliteration."
+They changed the names and called it "translation."
 
 Yahusha → Iesous → Iesus → Jesus.
 
