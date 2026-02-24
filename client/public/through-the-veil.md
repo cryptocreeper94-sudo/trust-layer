@@ -2070,7 +2070,7 @@ People say "Jesus is just the English transliteration of the Hebrew name." They'
 
 Transliteration means taking the sounds of a word in one language and representing them with the letters of another language. The sounds stay the same - only the alphabet changes.
 
-Example: The Hebrew name דָּוִד becomes "David" in English. The sounds are preserved: Dah-veed → David. That's transliteration.
+Example: The Hebrew name דָּוִד becomes "David" in English. The sounds are preserved: Dah-veed becomes David. That's transliteration.
 
 **What happened to Yahusha?**
 
@@ -2087,9 +2087,9 @@ Instead, here's what actually happened:
 5. **English**: Jesus
 
 From Yahusha to Jesus, virtually every sound changed:
-- "Yah" → "Jee" (the Father's name removed)
-- "hu" → disappeared
-- "sha" → "sus"
+- "Yah" became "Jee" (the Father's name removed)
+- "hu" disappeared entirely
+- "sha" became "sus"
 
 That's not transliteration. That's transformation. The sounds don't match. The meaning is lost. The Father's name - embedded in the Son's name - is erased.
 
@@ -3024,7 +3024,7 @@ Here is where the Challenger story enters territory that most people aren't prep
 
 Let's go through them one by one.
 
-## 1. Judith Resnik → Judith Resnik (Yale Law Professor)
+## 1. Judith Resnik — Now Judith Resnik (Yale Law Professor)
 
 ![Astronaut Judith Resnik - NASA official portrait, 1985. (NASA/Public Domain)](/images/veil-challenger-resnik-nasa.jpg)
 
@@ -3036,7 +3036,7 @@ Same name. Same face - aged appropriately. Different field, but both in prestigi
 
 The establishment explains this as coincidence. Two women with the same uncommon name who happen to look strikingly similar. But look at side-by-side photos and tell yourself that's a coincidence. The bone structure. The eyes. The smile. It's not a passing resemblance - it's the kind of match that facial recognition software flags.
 
-## 2. Michael J. Smith → Michael J. Smith (University of Wisconsin Professor)
+## 2. Michael J. Smith — Now Michael J. Smith (University of Wisconsin Professor)
 
 Pilot Michael J. Smith was 40 years old when the Challenger broke apart. Navy captain. Test pilot. Thousands of flight hours.
 
@@ -3044,7 +3044,7 @@ There is a **Michael J. Smith** who became a professor at the **University of Wi
 
 Same name. Similar age. Same era. One flew jets; the other settled into a quiet academic career in the Midwest - exactly the kind of low-profile life you'd give someone who needed to disappear from public view.
 
-## 3. Dick Scobee → Richard Scobee (Marketing CEO)
+## 3. Dick Scobee — Now Richard Scobee (Marketing CEO)
 
 ![Commander Dick Scobee - NASA official portrait. (NASA/Public Domain)](/images/veil-challenger-scobee-nasa.jpg)
 
@@ -3052,7 +3052,7 @@ Commander Francis "Dick" Scobee led the Challenger crew. He was 46. A former Air
 
 A man named **Richard Scobee** has been identified as the **CEO of a marketing company in Chicago**. Same name. Same face, decades later. The transition from military commander to corporate executive isn't unusual for someone being given a new identity - it's exactly the kind of respectable, unremarkable career that wouldn't attract attention.
 
-## 4. Christa McAuliffe → Sharon McAuliffe (Syracuse Law Professor)
+## 4. Christa McAuliffe — Now Sharon McAuliffe (Syracuse Law Professor)
 
 ![Christa McAuliffe - NASA Teacher in Space portrait. (NASA/Public Domain)](/images/veil-challenger-mcauliffe-nasa.jpg)
 
@@ -3064,7 +3064,7 @@ There is a woman named **Sharon A. McAuliffe** who is an adjunct law professor a
 
 Christa McAuliffe was born Sharon Christa Corrigan. She took the McAuliffe name through marriage. For another woman to share the name Sharon McAuliffe - a name that only existed because of a specific marriage - is a coincidence that stretches the boundaries of probability.
 
-## 5. Ronald McNair → Carl McNair
+## 5. Ronald McNair — Now Carl McNair
 
 ![Ronald McNair - NASA official portrait. (NASA/Public Domain)](/images/veil-challenger-mcnair-nasa.jpg)
 
@@ -3074,7 +3074,7 @@ His alleged doppelganger is identified as **Carl McNair** - officially his broth
 
 The establishment says: of course brothers look alike. But the theory asks: what if "Carl" isn't the brother? What if "Carl" *is* Ronald, living under a family member's identity? Brothers share enough resemblance that the transition would be seamless. No one questions a grieving brother who dedicates his life to honoring his fallen sibling.
 
-## 6. Ellison Onizuka → Claude Onizuka
+## 6. Ellison Onizuka — Now Claude Onizuka
 
 ![Ellison Onizuka - NASA official portrait. (NASA/Public Domain)](/images/veil-challenger-onizuka-nasa.jpg)
 
@@ -4641,11 +4641,11 @@ The timeline matters because it changes expectations. If the millennium is futur
 
 **The Reordered Timeline**
 
-What if we've been taught the prophetic timeline in the wrong order? Traditional teaching says: Rapture → Tribulation → Second Coming → 1000 Year Reign → Satan Released → Armageddon → Final Judgment.
+What if we've been taught the prophetic timeline in the wrong order? Traditional teaching says: Rapture, then Tribulation, then Second Coming, then 1000 Year Reign, then Satan Released, then Armageddon, then Final Judgment.
 
 But consider the alternative: What if the true Messiah has already returned? What if the millennial reign has already happened - during what we call the medieval period, when faith spread across the known world and cathedrals rose to heaven? What if history was then erased, reset, and we now find ourselves in Satan's "little season" described in Revelation 20?
 
-This would mean the timeline is: True Messiah returned → 1000 Year Reign occurred → Reset/Erasure → *We are NOW in Satan's little season* → False messiah appears → Mark willingly accepted → Script flips → Tribulation → Final Judgment.
+This would mean the timeline is: True Messiah returned, then the 1000 Year Reign occurred, then the Reset and Erasure, then where *we are NOW — in Satan's little season*, then the false messiah appears, then the Mark is willingly accepted, then the script flips, then Tribulation, then Final Judgment.
 
 *Everyone is looking for something that may have already happened. And the very fact that no one considers this possibility? That everyone dismisses it without examination? That is itself evidence of the deception working exactly as designed.*
 
@@ -5028,10 +5028,10 @@ This is why Enoch was cut. Not because it contradicts scripture - Yahudah (Jude)
 
 ## THE PATTERN CONFIRMS ITSELF
 
-**Enoch's 70 generations** → Completed at Yahusha
-**Daniel's 70 weeks** → Mashiach cut off at the appointed time
-**Luke's 77 generations** → Yahusha as the fulfillment
-**Revelation's 1000 years** → The binding that follows
+**Enoch's 70 generations** — completed at Yahusha
+**Daniel's 70 weeks** — Mashiach cut off at the appointed time
+**Luke's 77 generations** — Yahusha as the fulfillment
+**Revelation's 1000 years** — the binding that follows
 
 Every prophetic countdown points to the same moment. And every countdown suggests what comes after: a period of binding, then a release.
 
@@ -6128,7 +6128,7 @@ These are not accidents. These are not coincidences. When the same number appear
 
 They changed the names and called it "translation."
 
-Yahusha → Iesous → Iesus → Jesus.
+Yahusha became Iesous, became Iesus, became Jesus.
 
 They told you: "It's just how names translate between languages. The meaning is preserved."
 
@@ -6320,7 +6320,7 @@ Seek, and you will find.
 - Pronunciation: Yah-HOO-sha
 - Meaning: "Yahuah is Salvation"
 - Scripture: Matthew 1:21; Acts 4:12
-- Notes: The true name of the Messiah. Transliteration path: Hebrew (Yahusha) → Greek (Iesous) → Latin (Iesus) → English (Jesus). Each step stripped meaning until only an empty label remained. The name declares what "Jesus" cannot - the source of salvation.
+- Notes: The true name of the Messiah. Transformation path: Hebrew (Yahusha) became Greek (Iesous), became Latin (Iesus), became English (Jesus). Each step stripped meaning until only an empty label remained. The name declares what "Jesus" cannot — the source of salvation.
 - See also: Chapter 14, Chapter 15
 
 **Yah** (יָהּ)
@@ -6688,7 +6688,7 @@ Seek, and you will find.
 **Stolen Generations / Memory Erasure Programs**
 - Definition: Government programs that removed children from their families and erased their cultural identity
 - Documented examples: American orphan trains (1854-1929, ~200,000 children), Australian Stolen Generations (1869-1970, ~100,000 Aboriginal children), Canadian residential schools (1880s-1996, ~150,000 Indigenous children)
-- Pattern: Remove children → erase language → erase culture → erase memory → rewrite identity
+- Pattern: Remove children, then erase language, then erase culture, then erase memory, then rewrite identity
 - Global scope: Same method, same timeframe, multiple continents - suggests coordinated erasure rather than independent policy decisions
 - See also: Chapter 21
 
@@ -6703,43 +6703,43 @@ Seek, and you will find.
 
 ## Language Inversions Summary
 
-- **God** → Generic title that may connect to Gadre'el/the serpent
-- **Lord** → Generic title used for Baal and human masters alike
-- **Jesus** → Greek/Latin substitute for Yahusha
-- **Christ** → Greek mystery religion term for "anointed"
-- **Holy** → Greco-Roman replacement for "set-apart" (qodesh)
-- **Church** → Greek "kuriakon" replacing Hebrew "qahal" (assembly)
-- **Hell** → Norse mythology replacing Gehenna (the garbage dump)
-- **Amen** → Possibly invoking Amun, Egyptian sun god
+- **God** — generic title that may connect to Gadre'el/the serpent
+- **Lord** — generic title used for Baal and human masters alike
+- **Jesus** — Greek/Latin substitute for Yahusha
+- **Christ** — Greek mystery religion term for "anointed"
+- **Holy** — Greco-Roman replacement for "set-apart" (qodesh)
+- **Church** — Greek "kuriakon" replacing Hebrew "qahal" (assembly)
+- **Hell** — Norse mythology replacing Gehenna (the garbage dump)
+- **Amen** — possibly invoking Amun, Egyptian sun god
 
 ## Calendar Inversions Summary
 
-- **Sunday** → Day of the sun god, replacing the seventh-day Sabbath
-- **Christmas** → Saturnalia/Sol Invictus birthday, replacing actual birth timing
-- **Easter** → Feast of Ishtar/Eostre, replacing Passover/Firstfruits
-- **Halloween** → Samhain, Celtic festival of the dead, normalized
-- **Valentine's Day** → Lupercalia, Roman fertility festival, rebranded
+- **Sunday** — day of the sun god, replacing the seventh-day Sabbath
+- **Christmas** — Saturnalia/Sol Invictus birthday, replacing actual birth timing
+- **Easter** — Feast of Ishtar/Eostre, replacing Passover/Firstfruits
+- **Halloween** — Samhain, Celtic festival of the dead, normalized
+- **Valentine's Day** — Lupercalia, Roman fertility festival, rebranded
 
 ## Historical Inversions Summary
 
-- **Dark Ages** → Possibly the Millennial Reign, deliberately obscured
-- **Columbus discovery** → Suppresses pre-existing civilizations
-- **Official timeline** → Compresses or expands history to serve narrative
-- **Tartaria erasure** → Removes evidence of previous advanced civilization
-- **Orphan trains** → Covers population replacement after reset events (200,000+ children)
-- **Stolen Generations** → Same pattern in Australia (100,000+ children) and Canada (150,000+ children)
-- **Dinosaurs** → Dragons rebranded (word invented 1842)
-- **Communism** → Presented as workers' liberation, produced largest famines in history
-- **Federal Reserve** → "Federal" institution that is privately owned; "Reserve" with no reserves
-- **Pharmaceutical industry** → Etymologically "sorcery industry" (pharmakeia) presented as healthcare
+- **Dark Ages** — possibly the Millennial Reign, deliberately obscured
+- **Columbus discovery** — suppresses pre-existing civilizations
+- **Official timeline** — compresses or expands history to serve narrative
+- **Tartaria erasure** — removes evidence of previous advanced civilization
+- **Orphan trains** — covers population replacement after reset events (200,000+ children)
+- **Stolen Generations** — same pattern in Australia (100,000+ children) and Canada (150,000+ children)
+- **Dinosaurs** — dragons rebranded (word invented 1842)
+- **Communism** — presented as workers' liberation, produced largest famines in history
+- **Federal Reserve** — "Federal" institution that is privately owned; "Reserve" with no reserves
+- **Pharmaceutical industry** — etymologically "sorcery industry" (pharmakeia) presented as healthcare
 
 ## Cosmological Inversions Summary
 
-- **Globe Earth** → Replaces enclosed realm/plane cosmology
-- **Millions of years** → Replaces young creation timeline
-- **Evolution** → Replaces divine creation and design
-- **Aliens** → Replaces fallen angels as explanation for unexplained phenomena
-- **Gravity** → Theory presented as fact to support globe model
+- **Globe Earth** — replaces enclosed realm/plane cosmology
+- **Millions of years** — replaces young creation timeline
+- **Evolution** — replaces divine creation and design
+- **Aliens** — replaces fallen angels as explanation for unexplained phenomena
+- **Gravity** — theory presented as fact to support globe model
 
 ---
 
@@ -7060,7 +7060,7 @@ The following claims made in this book can be verified through publicly availabl
 - Date: February 28, 1933 (one day after fire)
 - Source: German legal records, "Verordnung des Reichspräsidenten zum Schutz von Volk und Staat"
 - Content: Suspended civil liberties, enabled mass arrests
-- Pattern: Crisis → immediate legislation → expanded powers
+- Pattern: Crisis, then immediate legislation, then expanded powers
 - Verification: German Federal Archives
 
 **Constantine's Sunday Law**
