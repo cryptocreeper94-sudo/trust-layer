@@ -5205,7 +5205,7 @@ The theory suggests: the thousand-year reign of the Messiah occurred during what
 
 Revelation 13:3 describes the beast receiving a mortal head wound that was healed: "And I saw one of his heads as it were wounded to death; and his deadly wound was healed: and all the world wondered after the beast."
 
-What wounded the beast? Consider the timing. Rome - the beast system of its era - dominated the known world. Then Christianity rose. The empire fell. The pagan temples closed. The old gods were abandoned. The beast received a mortal wound.
+What wounded the beast? Consider the timing. Rome - the beast system of its era - dominated the known world. Then The Way rose. The empire fell. The pagan temples closed. The old gods were abandoned. The beast received a mortal wound.
 
 For a thousand years, the wound remained. The medieval period - the so-called "Dark Ages" - was actually an age of faith. Cathedrals rose across Europe. Monasteries preserved knowledge. The church, for all its flaws, kept the memory of the Messiah alive. The beast lay wounded.
 
@@ -5228,7 +5228,7 @@ Look at what was "reborn":
 - **Occult knowledge** resurfaced. Hermeticism, alchemy, Kabbalah - the forbidden knowledge the Watchers taught, packaged as "enlightenment."
 - **Humanism** emerged. Man as the measure of all things. The Creator marginalized. Human reason elevated.
 
-The beast's mortal wound was healing. The pagan system that Christianity had mortally wounded was being resurrected - not openly as paganism, but disguised as culture, art, philosophy, and "enlightenment."
+The beast's mortal wound was healing. The pagan system that The Way had mortally wounded was being resurrected - not openly as paganism, but disguised as culture, art, philosophy, and "enlightenment."
 
 ## THE ACCELERATION
 
