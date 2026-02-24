@@ -111,6 +111,7 @@ const cspDirectives = {
     : ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
   fontSrc: ["'self'", "https://fonts.gstatic.com"],
   imgSrc: ["'self'", "data:", "blob:", "https:"],
+  mediaSrc: ["'self'", "blob:", "data:"],
   connectSrc: ["'self'", "wss:", "https:", "https://cdnjs.cloudflare.com"],
   workerSrc: ["'self'", "blob:", "https://cdnjs.cloudflare.com"],
   frameSrc: ["'self'", "https://js.stripe.com"],
