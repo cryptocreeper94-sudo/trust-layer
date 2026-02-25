@@ -23656,7 +23656,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-cyan-400 to-blue-500",
       verified: true,
       users: "DarkWave Verified",
-      url: "https://orbitstaffing.io/orby",
+      url: "https://getorby.io",
     },
     {
       id: "lotops-pro",
