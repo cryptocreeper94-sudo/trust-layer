@@ -312,6 +312,10 @@ export async function registerRoutes(
     if (host && host.endsWith(".tlid.io") && !host.startsWith("www.")) {
       const domainName = host.split(".")[0];
       
+      if (req.url.startsWith("/api/") || req.url.startsWith("/assets/") || req.url.startsWith("/src/") || req.url.startsWith("/icons/") || req.url.startsWith("/images/") || req.url.startsWith("/ecosystem/") || req.url.startsWith("/marketing/") || req.url.match(/\.\w{2,5}$/)) {
+        return next();
+      }
+      
       try {
         const internalRoute = TLID_INTERNAL_ROUTES[domainName];
         if (internalRoute) {
