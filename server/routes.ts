@@ -23877,7 +23877,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-gray-800 to-black",
       verified: true,
       users: "DarkWave Verified",
-      url: "https://thevoid.app",
+      url: "https://intothevoid.app",
     },
     {
       id: "guardian-screener",
@@ -23963,7 +23963,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-cyan-600 to-purple-800",
       verified: true,
       users: "DarkWave Verified",
-      url: "https://trustbook.tlid.io",
+      url: `${PORTAL_BASE}/trust-book`,
     },
   ];
 }
