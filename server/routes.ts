@@ -23598,8 +23598,8 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       url: "https://dwtl.io",
     },
     {
-      id: "guardian-shield",
-      name: "Guardian Shield / TrustShield",
+      id: "trustshield",
+      name: "TrustShield",
       category: "Security",
       description: "Continuous blockchain security monitoring for enterprises. Guardian certification, real-time threat detection, and compliance dashboards.",
       hook: "Enterprise Security Shield",
@@ -23607,7 +23607,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-red-500 to-rose-600",
       verified: true,
       users: "DarkWave Verified",
-      url: `${PORTAL_BASE}/guardian-shield`,
+      url: "https://trustshield.tech",
     },
     {
       id: "darkwave-pulse",
