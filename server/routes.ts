@@ -23692,7 +23692,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-blue-500 to-cyan-600",
       verified: true,
       users: "DarkWave Verified",
-      url: "https://tradeworks.ai",
+      url: "https://tradeworksai.io",
     },
     {
       id: "paintpros",
