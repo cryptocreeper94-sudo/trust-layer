@@ -23523,6 +23523,8 @@ const APP_URL_MAP: Record<string, string> = {
   "torque": "https://torque.tlid.io",
   "through-the-veil": "https://throughtheveil.tlid.io",
   "trust-book": "https://trustbook.tlid.io",
+  "trust-golf": "https://trustgolf.app",
+  "trustgolf": "https://trustgolf.app",
 };
 
 async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
@@ -23946,6 +23948,18 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       verified: true,
       users: "DarkWave Verified",
       url: "https://happyeats.tlid.io",
+    },
+    {
+      id: "trust-golf",
+      name: "Trust Golf",
+      category: "Sports & Fitness",
+      description: "Premium golf companion with 45+ courses, AI-powered swing analysis, USGA handicap tracking, score logging, exclusive tee time deals, and an AI-driven blog — all in a cinematic glass-morphism UI.",
+      hook: "Your Premium Golf Companion",
+      tags: ["Golf", "Sports", "AI", "Swing Analysis", "PWA"],
+      gradient: "from-green-700 to-emerald-900",
+      verified: true,
+      users: "DarkWave Verified",
+      url: "https://trustgolf.app",
     },
   ];
 }

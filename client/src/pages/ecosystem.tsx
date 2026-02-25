@@ -113,6 +113,8 @@ const ecosystemImages: Record<string, string> = {
   "verdara": "/ecosystem/verdara-new.png",
   "arbora": "/ecosystem/arbora-new.png",
   "trust-book": "/ecosystem/trust-book-new.png",
+  "trust-golf": "/ecosystem/trust-golf-new.png",
+  "trustgolf": "/ecosystem/trust-golf-new.png",
 };
 
 function getAppImage(appId: string): string {

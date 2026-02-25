@@ -1,0 +1,88 @@
+Trust Golf — Full Product Catalog Entry
+Product Name: Trust Golf
+Tagline: Your Premium Golf Companion
+Live URL: https://trustgolf.app
+Company: DarkWave Studios LLC
+Company URL: https://darkwavestudios.io
+Ecosystem: Trust Layer (dwtl.io)
+Copyright: © 2026 DarkWave Studios LLC
+Version: 1.0.0
+Status: Live / Published
+Platforms: Web (PWA), iOS (Expo Go / App Store ready), Android (Expo Go / Google Play ready)
+Category: Sports & Fitness
+Pricing: Free (Premium tier roadmapped)
+
+Marketing Description (Short)
+Trust Golf is a premium mobile-first golf platform featuring 45+ courses, AI-powered swing analysis, USGA handicap tracking, score logging, exclusive tee time deals, and an AI-driven blog — all wrapped in a cinematic, glass-morphism UI. Built for golfers who want more from their app.
+
+Marketing Description (Full)
+Trust Golf is the all-in-one golf companion built by DarkWave Studios LLC for golfers who demand more. Browse a curated catalog of 45+ world-class and regional courses — from Augusta National to Nashville's hidden gems — complete with designer info, gallery images, amenities, and contact details. Track every round with hole-by-hole scorecards, automatic USGA Handicap Index calculation, and detailed stats (putts, fairways hit, greens in regulation). Upload a photo or video of your swing and get instant AI-powered analysis tailored to your specific club — driver, iron, wedge, or putter — with drills and tips to improve. Discover exclusive deals on tee times and packages. Stay informed with an AI-driven golf blog featuring SEO-optimized articles on tips, equipment, course spotlights, fitness, and strategy. Partners and vendors can apply directly through the platform. Installable as a PWA on any device for a native-like experience. Trust Golf: every course, every swing, every score — one app.
+
+Tech Stack
+Layer	Technology
+Frontend Framework	React Native 0.81 + Expo SDK 54
+Routing	Expo Router (file-based)
+State Management	React Query (@tanstack/react-query), React Context, useState
+UI Library	Custom components (GlassCard, BentoGrid, OrbEffect, Carousel, PremiumText, SkeletonLoader)
+Animations	React Native Reanimated 4.1
+Styling	StyleSheet (React Native), glass morphism, orb effects
+Typography	Inter (Google Fonts via @expo-google-fonts)
+Backend	Express.js 5.0 (TypeScript)
+Database	PostgreSQL + Drizzle ORM
+AI	OpenAI GPT-4o (swing analysis + blog generation)
+Auth	bcryptjs password hashing, JWT session management
+Email	Resend (transactional emails — verification, vendor confirmation)
+Media Platform	TrustVault integration (HMAC auth, video/image editing)
+Object Storage	Replit Object Storage
+PWA	Service worker, Web App Manifest, beforeinstallprompt
+SEO	JSON-LD structured data, Open Graph, Twitter Cards, dynamic sitemap.xml, robots.txt
+Analytics	Self-hosted first-party tracking (sessions, page views, events, UTM, device/browser detection)
+Build	esbuild (server), Expo (client)
+Language	TypeScript throughout
+Lines of Code
+Category	Files	LOC
+Server (Express, routes, storage, services)	7	3,352
+Frontend (screens, components, hooks, contexts, lib)	40	9,741
+Web/PWA (HTML, service worker, manifest, robots)	5	808
+Total	52	~13,900
+Features (16 Shipped)
+Cinematic Explorer Page — Video hero with 3 AI-generated golf videos cycling with cross-fade, category carousels, hot deals, top courses, quick actions
+Course Catalog (45+ courses) — 20 world-class + 8 Upstate SC + 17 Middle TN/Nashville, filterable by state, full descriptions, designer info, year built, gallery images, amenities, contact info
+Score Tracking — Log rounds with stats (putts, FIR, GIR), view history, running averages
+USGA Handicap System — Auto-calculated Handicap Index using score differentials, updates per round
+Hole-by-Hole Scorecards — Real par/yardage/handicap data for 17 Middle TN courses
+AI Swing Analyzer — 9 club categories (Driver through Putter), photo + video mode, GPT-4o vision analysis with club-specific feedback, drills, and tips
+Video Swing Playback — Slow-motion (0.25x/0.5x/1x), frame extraction, TrustVault upload + editing
+Exclusive Deals — Discounted tee times and packages with hot deal badges
+AI-Driven Blog — GPT-4o generates SEO-optimized posts by topic/category, Markdown rendering, 6 categories (Tips, Course Spotlights, Equipment, News, Fitness, Strategy), developer dashboard management (generate/edit/publish/unpublish/delete)
+Vendor/Partner Signup — Public application form, business type + partnership tier selection, Resend confirmation email, developer dashboard approve/reject
+Self-Hosted Analytics — First-party tracking: sessions, page views, events, UTM params, device/browser/referrer detection, bounce rate, avg duration, 6 KPI dashboard cards, daily traffic charts, date range filter
+Developer Dashboard — Pin-protected (0424) admin panel: course/deal/blog/vendor management, analytics dashboard, 14 golf affiliate programs directory, partnership pitch guide
+TrustVault Integration — Media storage, video/image/audio editors, HMAC auth, webhook callbacks
+PWA — Service worker for offline caching + installability, install banner, manifest with shortcuts
+Full SEO Stack — JSON-LD (MobileApplication, Organization, WebSite, BlogPosting), Open Graph, Twitter Cards, dynamic sitemap.xml (49+ URLs), robots.txt, canonical URLs, server-rendered blog meta pages
+Auth System — Email registration with Resend verification, bcrypt hashing, login modal only for gated features (browse-first UX)
+API Surface
+53 endpoints across: auth, courses, rounds, deals, swing analysis, stats, blog (CRUD + AI generation), vendor applications, analytics (12 endpoints), TrustVault (8 endpoints), SEO (sitemap, robots, blog-post-meta), and data seeding.
+
+Design System
+Primary: #1B5E20 (forest green) / #4CAF50 (dark mode)
+Accent: #C5A55A (gold)
+UI Pattern: Glass morphism cards, animated orb effects, skeleton loaders, 3-column Bento grid
+Font: Inter (400, 600, 700)
+Theme: Light/Dark/System toggle
+Custom Components: GlassCard, BentoGrid, Carousel, OrbEffect, AccordionItem, PremiumText, SkeletonLoader, InstallBanner, AppSplash, ErrorBoundary
+Roadmap (Phases 3-5)
+Phase 3: GPS Course Navigator (distance-to-tap, hole drawing, shot tracking, offline maps)
+Phase 4: Marketing Hub (social auto-posting, Meta Ads, SEO management)
+Phase 5: Command Center, golf game simulation, tee time booking API, Pro membership, push notifications
+URLs & Links
+Resource	URL
+Live App	https://trustgolf.app
+Company	https://darkwavestudios.io
+Trust Layer	https://dwtl.io
+TrustShield	https://trustshield.tech
+Sitemap	https://trustgolf.app/sitemap.xml
+Robots	https://trustgolf.app/robots.txt
+
+Scroll to latest
