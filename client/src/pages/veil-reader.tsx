@@ -400,7 +400,7 @@ export default function VeilReader() {
 
     const provider = response.headers.get('X-Voice-Provider') || 'ai';
     const voiceName = response.headers.get('X-Voice-Name') || '';
-    setVoiceProvider(provider === 'elevenlabs' ? `ElevenLabs ${voiceName}` : `OpenAI ${voiceName}`);
+    setVoiceProvider(`OpenAI ${voiceName}`);
 
     const blob = await response.blob();
     if (blob.size < 100) throw new Error('Empty audio response');
@@ -963,7 +963,7 @@ export default function VeilReader() {
                     onClick={handlePlay}
                     className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white rounded-full w-8 h-8 shadow-lg shadow-purple-500/25 transition-all hover:shadow-purple-500/40 hover:scale-110"
                     data-testid="button-play-chapter"
-                    title={isPaused ? 'Resume' : (useAIVoice ? 'Listen with ElevenLabs' : 'Listen (Browser Voice)')}
+                    title={isPaused ? 'Resume' : (useAIVoice ? 'Listen with AI Voice' : 'Listen (Browser Voice)')}
                   >
                     <Play className="w-4 h-4 ml-0.5" />
                   </Button>
@@ -987,7 +987,7 @@ export default function VeilReader() {
                     <p className="text-white font-semibold text-sm">AI Narration</p>
                   </div>
                   <p className="text-slate-400 text-xs leading-relaxed mb-2">
-                    Powered by ElevenLabs Rachel voice with OpenAI Nova as backup. Natural, expressive narration for every chapter.
+                    Powered by OpenAI Nova HD voice. Natural, expressive narration for every chapter.
                   </p>
                   {voiceProvider && (
                     <p className="text-cyan-400 text-[10px] font-mono mb-2">Currently using: {voiceProvider}</p>

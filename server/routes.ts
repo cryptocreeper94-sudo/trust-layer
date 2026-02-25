@@ -16996,50 +16996,6 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(400).json({ error: "Text too long. Maximum 4000 characters per request." });
       }
       
-      // Try ElevenLabs first (preferred - higher quality)
-      const elevenLabsKey = process.env.ELEVENLABS_API_KEY;
-      if (elevenLabsKey) {
-        try {
-          const voiceId = "21m00Tcm4TlvDq8ikWAM"; // Rachel - warm, clear narrator
-          const elResponse = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
-            method: "POST",
-            headers: {
-              "xi-api-key": elevenLabsKey,
-              "Content-Type": "application/json",
-              "Accept": "audio/mpeg",
-            },
-            body: JSON.stringify({
-              text: text,
-              model_id: "eleven_flash_v2_5",
-              voice_settings: {
-                stability: 0.65,
-                similarity_boost: 0.75,
-                style: 0.3,
-                use_speaker_boost: true,
-              },
-            }),
-          });
-          
-          if (elResponse.ok) {
-            const arrayBuffer = await elResponse.arrayBuffer();
-            if (arrayBuffer.byteLength > 100) {
-              console.log("[TTS] ElevenLabs Rachel served successfully");
-              res.set({
-                "Content-Type": "audio/mpeg",
-                "Cache-Control": "public, max-age=86400",
-                "X-Voice-Provider": "elevenlabs",
-                "X-Voice-Name": "Rachel",
-              });
-              return res.send(Buffer.from(arrayBuffer));
-            }
-          }
-          console.warn("[TTS] ElevenLabs failed, falling back to OpenAI:", elResponse.status);
-        } catch (elErr: any) {
-          console.warn("[TTS] ElevenLabs error, falling back to OpenAI:", elErr.message);
-        }
-      }
-      
-      // Fallback to OpenAI Nova
       const openaiKey = process.env.OPENAI_API_KEY;
       if (!openaiKey) {
         return res.status(503).json({ error: "Voice service not configured", fallback: true });
@@ -17061,7 +17017,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("[TTS] OpenAI fallback also failed:", response.status, errorText);
+        console.error("[TTS] OpenAI Nova failed:", response.status, errorText);
         return res.status(response.status).json({ 
           error: "Voice generation failed", 
           fallback: true,
@@ -17069,7 +17025,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         });
       }
       
-      console.log("[TTS] OpenAI Nova served as fallback");
+      console.log("[TTS] OpenAI Nova served successfully");
       res.set({
         "Content-Type": "audio/mpeg",
         "Cache-Control": "public, max-age=86400",
@@ -17086,50 +17042,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  // Get available ElevenLabs voices
-  app.get("/api/voice/voices", async (req, res) => {
-    try {
-      const apiKey = process.env.ELEVENLABS_API_KEY;
-      if (!apiKey) {
-        return res.json({ 
-          voices: [],
-          configured: false,
-          defaultVoice: { id: "browser", name: "Browser Voice" }
-        });
-      }
-      
-      const response = await fetch("https://api.elevenlabs.io/v1/voices", {
-        headers: { "xi-api-key": apiKey },
-      });
-      
-      if (!response.ok) {
-        return res.json({ 
-          voices: [],
-          configured: true,
-          error: "Failed to fetch voices",
-          defaultVoice: { id: "21m00Tcm4TlvDq8ikWAM", name: "Rachel" }
-        });
-      }
-      
-      const data = await response.json();
-      res.json({
-        voices: data.voices?.slice(0, 10).map((v: any) => ({
-          id: v.voice_id,
-          name: v.name,
-          category: v.category,
-          preview: v.preview_url,
-        })) || [],
-        configured: true,
-        defaultVoice: { id: "21m00Tcm4TlvDq8ikWAM", name: "Rachel" }
-      });
-    } catch (error: any) {
-      console.error("[ElevenLabs] Get voices error:", error);
-      res.json({ 
-        voices: [],
-        configured: false,
-        defaultVoice: { id: "browser", name: "Browser Voice" }
-      });
-    }
+  app.get("/api/voice/voices", async (_req, res) => {
+    res.json({ 
+      voices: [{ id: "nova", name: "Nova", category: "openai" }],
+      configured: true,
+      defaultVoice: { id: "nova", name: "Nova" }
+    });
   });
 
   // =====================================================
