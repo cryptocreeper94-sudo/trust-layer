@@ -23632,7 +23632,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-red-600 to-rose-700",
       verified: true,
       users: "DarkWave Verified",
-      url: `${PORTAL_BASE}/strike-agent`,
+      url: "https://strikeagent.io",
     },
     {
       id: "orbit-staffing",
