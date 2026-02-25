@@ -11,6 +11,8 @@ import {
 import { Link } from "wouter";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
+import rehypeSlug from 'rehype-slug';
 
 type ChangelogEntry = {
   version: string;
@@ -119,6 +121,7 @@ export default function VeilReader() {
   const [currentVolume, setCurrentVolume] = useState(0);
   const [currentChapter, setCurrentChapter] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [returnPosition, setReturnPosition] = useState<{ vol: number; chap: number; scrollY: number } | null>(null);
   const [showWhatsNew, setShowWhatsNew] = useState(false);
   const [hasSeenUpdates, setHasSeenUpdates] = useState(false);
   const [newUpdatesSinceVisit, setNewUpdatesSinceVisit] = useState<ChangelogEntry[]>([]);
@@ -884,6 +887,52 @@ export default function VeilReader() {
     window.scrollTo(0, 0);
   };
 
+  const navigateToInternalLink = (href: string) => {
+    if (!href.startsWith('#')) return false;
+    const target = href.slice(1);
+    
+    if (target.startsWith('ch-')) {
+      setReturnPosition({ vol: currentVolume, chap: currentChapter, scrollY: window.scrollY });
+      for (let volIdx = 0; volIdx < volumes.length; volIdx++) {
+        for (let chapIdx = 0; chapIdx < volumes[volIdx].chapters.length; chapIdx++) {
+          if (volumes[volIdx].chapters[chapIdx].id === target) {
+            goToChapter(volIdx, chapIdx);
+            return true;
+          }
+        }
+      }
+    }
+    
+    if (target.startsWith('concordance-')) {
+      setReturnPosition({ vol: currentVolume, chap: currentChapter, scrollY: window.scrollY });
+      for (let volIdx = 0; volIdx < volumes.length; volIdx++) {
+        for (let chapIdx = 0; chapIdx < volumes[volIdx].chapters.length; chapIdx++) {
+          const ch = volumes[volIdx].chapters[chapIdx];
+          if (ch.content.includes(`id="${target}"`)) {
+            setCurrentVolume(volIdx);
+            setCurrentChapter(chapIdx);
+            setSidebarOpen(false);
+            setTimeout(() => {
+              const el = document.getElementById(target);
+              if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }, 300);
+            return true;
+          }
+        }
+      }
+    }
+    
+    const el = document.getElementById(target);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      return true;
+    }
+    
+    return false;
+  };
+
   const hasNext = currentChapter < volume.chapters.length - 1 || currentVolume < volumes.length - 1;
   const hasPrev = currentChapter > 0 || currentVolume > 0;
   const progressPercent = Math.round(((currentGlobalIndex + 1) / totalChapters) * 100);
@@ -1334,6 +1383,7 @@ export default function VeilReader() {
             ">
               <ReactMarkdown 
                 remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw, rehypeSlug]}
                 components={{
                   h2: ({ node, children, ...props }) => (
                     <h2 {...props} className="flex items-center gap-3 not-prose">
@@ -1347,6 +1397,29 @@ export default function VeilReader() {
                       {children}
                     </h3>
                   ),
+                  a: ({ node, children, href, ...props }) => {
+                    if (href && href.startsWith('#')) {
+                      return (
+                        <a
+                          {...props}
+                          href={href}
+                          className="text-cyan-400 hover:text-cyan-300 underline decoration-cyan-500/30 hover:decoration-cyan-400/60 transition-all cursor-pointer"
+                          data-testid={`link-internal-${href.slice(1)}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigateToInternalLink(href);
+                          }}
+                        >
+                          {children}
+                        </a>
+                      );
+                    }
+                    return (
+                      <a {...props} href={href} target="_blank" rel="noopener noreferrer" className="text-purple-400 hover:text-purple-300 underline decoration-purple-500/30 transition-colors">
+                        {children}
+                      </a>
+                    );
+                  },
                   blockquote: ({ node, children, ...props }) => (
                     <blockquote {...props} className="not-prose border-l-2 border-l-purple-500/60 bg-gradient-to-r from-purple-500/5 to-transparent backdrop-blur-sm px-4 sm:px-5 py-4 rounded-r-xl my-6 border border-purple-500/10">
                       <div className="text-slate-200 italic text-[16px] sm:text-[17px] leading-relaxed">{children}</div>
@@ -1416,6 +1489,29 @@ export default function VeilReader() {
           </div>
         </motion.div>
       </div>
+
+      <AnimatePresence>
+        {returnPosition && (
+          <motion.button
+            initial={{ opacity: 0, y: 20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.9 }}
+            onClick={() => {
+              const pos = returnPosition;
+              setReturnPosition(null);
+              setCurrentVolume(pos.vol);
+              setCurrentChapter(pos.chap);
+              setSidebarOpen(false);
+              setTimeout(() => window.scrollTo(0, pos.scrollY), 100);
+            }}
+            className="fixed bottom-16 right-4 z-50 flex items-center gap-2 px-4 py-2.5 rounded-full bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border border-cyan-500/30 backdrop-blur-xl shadow-lg shadow-cyan-500/10 hover:border-cyan-400/50 hover:from-cyan-500/30 hover:to-purple-500/30 transition-all min-h-[44px]"
+            data-testid="button-return-to-reading"
+          >
+            <ArrowLeft className="w-4 h-4 text-cyan-400" />
+            <span className="text-sm text-cyan-300 font-medium">Return to reading</span>
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       <div className="fixed bottom-0 left-0 right-0 z-40">
         <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-2xl border-t border-purple-500/15" />
