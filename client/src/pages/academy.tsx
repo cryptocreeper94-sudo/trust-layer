@@ -295,7 +295,7 @@ export default function AcademyPage() {
           >
             <Badge className="mb-4 bg-blue-500/20 text-blue-400 border-blue-500/30 text-xs">
               <GraduationCap className="w-3 h-3 mr-1" />
-              DarkWave Academy
+              Trust Academy
             </Badge>
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6">
               <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent">

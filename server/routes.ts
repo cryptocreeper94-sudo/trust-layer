@@ -11367,7 +11367,7 @@ const { trustLayerId } = await response.json();`
     }
   });
 
-  // ===== DarkWave Academy API Routes =====
+  // ===== Trust Academy API Routes =====
 
   app.post("/api/academy/subscribe", async (req: any, res) => {
     try {
@@ -23894,7 +23894,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
     },
     {
       id: "darkwave-academy",
-      name: "DarkWave Academy",
+      name: "Trust Academy",
       category: "Education",
       description: "Education and certification platform for crypto fundamentals, multi-chain ecosystems, DeFi strategies, security best practices, and Trust Layer operations.",
       hook: "Learn. Certify. Master Crypto.",
