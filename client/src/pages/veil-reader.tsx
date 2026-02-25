@@ -136,6 +136,10 @@ export default function VeilReader() {
   const speechChunksRef = useRef<SpeechSynthesisUtterance[]>([]);
   const speechChunkIndexRef = useRef(0);
   const speechKeepAliveRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const aiChunksRef = useRef<string[]>([]);
+  const aiChunkIndexRef = useRef(0);
+  const aiPlayingRef = useRef(false);
+  const aiCancelledRef = useRef(false);
 
   const loadEbook = async (retryCount = 0) => {
     setLoading(true);
@@ -286,6 +290,10 @@ export default function VeilReader() {
   const [voiceProvider, setVoiceProvider] = useState<string>('');
 
   const cleanupAudio = () => {
+    aiCancelledRef.current = true;
+    aiPlayingRef.current = false;
+    aiChunksRef.current = [];
+    aiChunkIndexRef.current = 0;
     if (blobUrlRef.current) {
       URL.revokeObjectURL(blobUrlRef.current);
       blobUrlRef.current = null;
@@ -352,96 +360,132 @@ export default function VeilReader() {
     };
   }, []);
 
+  const splitTextIntoChunks = (text: string, maxLen = 3800): string[] => {
+    if (text.length <= maxLen) return [text];
+    const chunks: string[] = [];
+    let remaining = text;
+    while (remaining.length > 0) {
+      if (remaining.length <= maxLen) {
+        chunks.push(remaining);
+        break;
+      }
+      let splitAt = remaining.lastIndexOf('. ', maxLen);
+      if (splitAt < maxLen * 0.5) splitAt = remaining.lastIndexOf('? ', maxLen);
+      if (splitAt < maxLen * 0.5) splitAt = remaining.lastIndexOf('! ', maxLen);
+      if (splitAt < maxLen * 0.5) splitAt = remaining.lastIndexOf('\n', maxLen);
+      if (splitAt < maxLen * 0.3) splitAt = remaining.lastIndexOf(' ', maxLen);
+      if (splitAt < 200) splitAt = maxLen;
+      chunks.push(remaining.substring(0, splitAt + 1).trim());
+      remaining = remaining.substring(splitAt + 1).trim();
+    }
+    return chunks.filter(c => c.length > 0);
+  };
+
+  const fetchAndPlayChunk = async (chunkText: string): Promise<void> => {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 45000);
+
+    const response = await fetch('/api/voice/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: chunkText }),
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `Voice server error (${response.status})`);
+    }
+
+    const provider = response.headers.get('X-Voice-Provider') || 'ai';
+    const voiceName = response.headers.get('X-Voice-Name') || '';
+    setVoiceProvider(provider === 'elevenlabs' ? `ElevenLabs ${voiceName}` : `OpenAI ${voiceName}`);
+
+    const blob = await response.blob();
+    if (blob.size < 100) throw new Error('Empty audio response');
+
+    if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
+    const url = URL.createObjectURL(blob);
+    blobUrlRef.current = url;
+
+    const audio = getOrCreateAudioElement();
+
+    await new Promise<void>((resolve, reject) => {
+      audio.oncanplaythrough = () => resolve();
+      audio.onerror = () => reject(new Error('Audio decode failed'));
+      audio.src = url;
+      audio.load();
+      setTimeout(() => resolve(), 3000);
+    });
+
+    await new Promise<void>((resolve, reject) => {
+      audio.onended = () => resolve();
+      audio.onerror = () => reject(new Error('Playback error'));
+
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((playErr: any) => {
+          try {
+            const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+            ctx.resume().then(() => {
+              ctx.close();
+              audio.load();
+              setTimeout(() => {
+                audio.play().catch(reject);
+              }, 100);
+            });
+          } catch {
+            reject(playErr);
+          }
+        });
+      }
+    });
+  };
+
   const playWithAIVoice = async (text: string) => {
     setIsLoading(true);
     setTtsError(null);
+    aiCancelledRef.current = false;
+    
     try {
-      cleanupAudio();
       unlockAudio();
 
-      const controller = new AbortController();
-      const timeout = setTimeout(() => controller.abort(), 45000);
+      const chunks = splitTextIntoChunks(text);
+      aiChunksRef.current = chunks;
+      aiChunkIndexRef.current = 0;
+      aiPlayingRef.current = true;
 
-      const response = await fetch('/api/voice/tts', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: text.substring(0, 4000) }),
-        signal: controller.signal
-      });
-      clearTimeout(timeout);
+      for (let i = 0; i < chunks.length; i++) {
+        if (aiCancelledRef.current) return;
+        
+        aiChunkIndexRef.current = i;
 
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `Voice server error (${response.status})`);
-      }
-
-      const provider = response.headers.get('X-Voice-Provider') || 'ai';
-      const voiceName = response.headers.get('X-Voice-Name') || '';
-      setVoiceProvider(provider === 'elevenlabs' ? `ElevenLabs ${voiceName}` : `OpenAI ${voiceName}`);
-
-      const blob = await response.blob();
-      if (blob.size < 100) {
-        throw new Error('Empty audio response');
-      }
-      
-      const url = URL.createObjectURL(blob);
-      blobUrlRef.current = url;
-      
-      const audio = getOrCreateAudioElement();
-      
-      await new Promise<void>((resolve, reject) => {
-        audio.oncanplaythrough = () => resolve();
-        audio.onerror = () => reject(new Error('Audio decode failed'));
-        audio.src = url;
-        audio.load();
-        setTimeout(() => resolve(), 3000);
-      });
-
-      audio.onended = () => {
-        setIsPlaying(false);
-        setIsPaused(false);
-        cleanupAudio();
-        handleNextChapterAuto();
-      };
-      audio.onerror = (e) => {
-        console.error('Audio playback error:', e);
-        setIsPlaying(false);
-        setIsLoading(false);
-        cleanupAudio();
-        setVoiceProvider('Browser Voice (AI unavailable)');
-        tryBrowserSpeech(text);
-      };
-
-      try {
-        const playPromise = audio.play();
-        if (playPromise !== undefined) {
-          await playPromise;
-        }
-        setIsPlaying(true);
-        setIsLoading(false);
-      } catch (playErr: any) {
-        console.error('Audio play() blocked, retrying after unlock:', playErr.message);
-        try {
-          const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-          await ctx.resume();
-          ctx.close();
-          audio.load();
-          await new Promise(r => setTimeout(r, 100));
-          await audio.play();
+        if (i === 0) {
+          await fetchAndPlayChunk(chunks[i]);
           setIsPlaying(true);
           setIsLoading(false);
-          audioUnlockedRef.current = true;
-        } catch (retryErr: any) {
-          console.error('Audio retry also blocked:', retryErr.message);
-          cleanupAudio();
-          setIsLoading(false);
-          setVoiceProvider('Browser Voice (tap to unlock audio first)');
-          tryBrowserSpeech(text);
+        } else {
+          while (!aiCancelledRef.current) {
+            const audio = audioElementRef.current;
+            if (!audio || audio.paused || audio.ended) break;
+            await new Promise(r => setTimeout(r, 200));
+          }
+          if (aiCancelledRef.current) return;
+          await fetchAndPlayChunk(chunks[i]);
         }
+      }
+
+      if (!aiCancelledRef.current) {
+        setIsPlaying(false);
+        setIsPaused(false);
+        aiPlayingRef.current = false;
+        handleNextChapterAuto();
       }
     } catch (err: any) {
       console.error('AI voice error:', err);
       setIsLoading(false);
+      aiPlayingRef.current = false;
       if (err?.name === 'AbortError') {
         setTtsError('AI voice loading timed out — using browser voice for this chapter. AI will retry on next chapter.');
         setVoiceProvider('Browser Voice (AI timed out)');
