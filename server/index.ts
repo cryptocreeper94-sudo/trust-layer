@@ -37,6 +37,19 @@ import compression from "compression";
 
 const app = express();
 
+let servicesReady = false;
+
+app.get("/", (req, res, next) => {
+  if (!servicesReady) {
+    return res.status(200).send("OK");
+  }
+  next();
+});
+
+app.get("/api/health", (_req, res) => {
+  res.status(200).json({ status: "ok", ready: servicesReady });
+});
+
 app.use(compression());
 
 // Firebase Auth reverse proxy - must be before other middleware
@@ -278,19 +291,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Track initialization state
-let servicesReady = false;
 let initError: string | null = null;
-
-// Immediate health check endpoint - responds before heavy services load
-app.get('/api/health', (_req, res) => {
-  res.json({ 
-    status: 'ok', 
-    servicesReady,
-    initError,
-    timestamp: new Date().toISOString()
-  });
-});
 
 // Graceful shutdown handler
 function gracefulShutdown(signal: string) {
