@@ -23620,7 +23620,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       verified: true,
       featured: true,
       users: "DarkWave Verified",
-      url: `${PORTAL_BASE}/pulse`,
+      url: "https://darkwavepulse.com",
     },
     {
       id: "strike-agent",
@@ -23827,7 +23827,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       verified: true,
       featured: true,
       users: "DarkWave Verified",
-      url: "https://trusthome.io",
+      url: "https://trusthome.replit.app",
     },
     {
       id: "signal-chat",
