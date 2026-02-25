@@ -535,7 +535,7 @@ export default function VeilReader() {
     }
   };
 
-  const splitTextIntoChunks = (text: string, maxLen = 200): string[] => {
+  const splitForBrowserSpeech = (text: string, maxLen = 200): string[] => {
     const sentences = text.match(/[^.!?]+[.!?]+[\s]*/g) || [text];
     const chunks: string[] = [];
     let current = '';
@@ -555,7 +555,7 @@ export default function VeilReader() {
     try {
       window.speechSynthesis.cancel();
       
-      const chunks = splitTextIntoChunks(text, 200);
+      const chunks = splitForBrowserSpeech(text, 200);
       if (chunks.length === 0) {
         setTtsError('No text to read.');
         return;
