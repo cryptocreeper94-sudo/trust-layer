@@ -23680,7 +23680,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-amber-600 to-yellow-800",
       verified: true,
       users: "DarkWave Verified",
-      url: "https://brewandboard.io",
+      url: "https://brewandboard.coffee",
     },
     {
       id: "tradeworks-ai",
