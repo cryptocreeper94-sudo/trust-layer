@@ -23776,7 +23776,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-teal-500 to-cyan-600",
       verified: true,
       users: "DarkWave Verified",
-      url: `${PORTAL_BASE}/marketing`,
+      url: "https://tlid.io",
     },
     {
       id: "chronicles",
