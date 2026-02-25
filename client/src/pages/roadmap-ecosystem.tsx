@@ -74,7 +74,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
       { id: "e15", title: "Global Search", description: "Search all pages, tokens, and features from anywhere", status: "completed", isRequired: false },
       { id: "e16", title: "Feedback System", description: "Bug reports and feature requests from users", status: "completed", isRequired: false },
       { id: "e17", title: "Notification Center", description: "Real-time alerts for price changes and system updates", status: "completed", isRequired: false },
-      { id: "e20", title: "Trust Academy", description: "Crypto education platform with blockchain-verified certifications and subscription tiers", status: "completed", isRequired: true },
+      { id: "e20", title: "DarkWave Academy", description: "Crypto education platform with blockchain-verified certifications and subscription tiers", status: "completed", isRequired: true },
       { id: "e18", title: "Mobile Wallet App", description: "iOS and Android native applications", status: "pending", isRequired: true },
     ],
   },

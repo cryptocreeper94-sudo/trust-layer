@@ -217,7 +217,7 @@ const navCategories = [
       { href: "/guardian-ai", label: "TrustShield.tech", icon: Shield },
       { href: "/arcade", label: "DarkWave Games", icon: Gamepad2 },
       { href: "/studio", label: "Trust Studio", icon: Sparkles },
-      { href: "/academy", label: "Trust Academy", icon: BookOpen },
+      { href: "/academy", label: "DarkWave Academy", icon: BookOpen },
       { href: "/chronicles", label: "YourLegacy.io", icon: Star },
       { href: "/signal-chat", label: "Signal Chat", icon: MessageCircle },
     ]
