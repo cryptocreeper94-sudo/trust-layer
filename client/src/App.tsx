@@ -789,6 +789,37 @@ function AppShell({ appType }: { appType: string }) {
   );
 }
 
+const TLID_SUBDOMAIN_ROUTES: Record<string, string> = {
+  "trustlayer": "/",
+  "chronicles": "/",
+  "throughtheveil": "/veil",
+  "signalchat": "/signal-chat",
+  "guardianscanner": "/guardian-scanner",
+  "guardianscreener": "/guardian-screener",
+  "trustshield": "/guardian-scanner",
+  "academy": "/academy",
+  "thevoid": "/the-void",
+  "arcade": "/arcade",
+  "tlid": "/domains",
+  "torque": "/torque",
+  "trusthome": "/trust-home",
+  "trustvault": "/trust-vault",
+  "trustbook": "/trust-book",
+};
+
+function useTlidSubdomainRedirect() {
+  useEffect(() => {
+    const host = window.location.hostname.toLowerCase();
+    if (!host.endsWith(".tlid.io") || host === "tlid.io" || host === "www.tlid.io") return;
+    const subdomain = host.split(".")[0];
+    const targetRoute = TLID_SUBDOMAIN_ROUTES[subdomain];
+    if (targetRoute && targetRoute !== "/" && window.location.pathname === "/") {
+      window.history.replaceState(null, "", targetRoute);
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    }
+  }, []);
+}
+
 function useVeilPWARedirect() {
   useEffect(() => {
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
@@ -803,6 +834,7 @@ function useVeilPWARedirect() {
 
 function App() {
   const appType = useMemo(() => getAppFromHost(), []);
+  useTlidSubdomainRedirect();
   useVeilPWARedirect();
 
   return (
