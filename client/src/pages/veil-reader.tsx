@@ -149,6 +149,14 @@ export default function VeilReader() {
   const aiCancelledRef = useRef(false);
 
   useEffect(() => {
+    const host = window.location.hostname.toLowerCase();
+    const isPaywalledDomain = host.includes("throughtheveil") || host.includes("trustbook");
+
+    if (!isPaywalledDomain) {
+      setHasPurchased(true);
+      return;
+    }
+
     const checkAuth = async () => {
       try {
         const res = await fetch('/api/auth/me');
