@@ -190,12 +190,12 @@ const TRUST_CENTER_DOCS = [
   },
   {
     icon: Shield,
-    title: "DWSC Self-Audit Report",
+    title: "Trust Layer Self-Audit Report",
     description: "Full transparency report for Trust Layer (78/100)",
     type: "PDF",
     size: "3.2 MB",
     available: true,
-    email: "team@dwsc.io?subject=Request%20DWSC%20Self-Audit%20Report"
+    email: "team@dwsc.io?subject=Request%20Trust%20Layer%20Self-Audit%20Report"
   },
   {
     icon: CheckCircle,
@@ -214,7 +214,7 @@ const ROADMAP_MILESTONES = [
     title: "Internal Readiness",
     date: "Completed",
     status: "completed",
-    items: ["DWSC self-audit complete", "Stripe pricing configured", "Trust Center launched", "Intake workflow ready"]
+    items: ["Trust Layer self-audit complete", "Stripe pricing configured", "Trust Center launched", "Intake workflow ready"]
   },
   {
     phase: "Phase 1", 
@@ -1100,7 +1100,7 @@ export default function GuardianCertificationPage() {
                   <span className="text-cyan-400 text-sm font-medium">Blockchain Security, Redefined</span>
                 </div>
                 <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                  <span className="text-white">DWSC</span>{" "}
+                  <span className="text-white">Trust Layer</span>{" "}
                   <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                     Guardian Certification
                   </span>

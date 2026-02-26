@@ -716,7 +716,7 @@ export default function GuardianPortal() {
                   Blockchain Stamps
                 </h2>
                 <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">
-                  All activities recorded on DWSC
+                  All activities recorded on Trust Layer
                 </Badge>
               </div>
               <p className="text-sm text-white/60 mb-6">

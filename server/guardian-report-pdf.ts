@@ -350,7 +350,7 @@ function renderBlockchainVerification(doc: PDFKit.PDFDocument, cert: any, stamps
   renderPageHeader(doc, "Blockchain Verification");
 
   doc.fontSize(11).fillColor(BRAND_COLORS.text).text(
-    "All Guardian certifications are immutably recorded on the DarkWave Smart Chain. The following blockchain records provide tamper-proof verification of this certification.",
+    "All Guardian certifications are immutably recorded on the Trust Layer blockchain. The following blockchain records provide tamper-proof verification of this certification.",
     50, 120, { width: doc.page.width - 100, lineGap: 6 }
   );
 
@@ -361,7 +361,7 @@ function renderBlockchainVerification(doc: PDFKit.PDFDocument, cert: any, stamps
     { label: "Blockchain TX Hash", value: cert.blockchainTxHash || "Pending confirmation" },
     { label: "NFT Token ID", value: cert.nftTokenId || "Not minted" },
     { label: "Certificate ID", value: cert.id },
-    { label: "Chain", value: "DarkWave Smart Chain (DWSC)" },
+    { label: "Chain", value: "Trust Layer" },
   ];
 
   verificationFields.forEach((field) => {
