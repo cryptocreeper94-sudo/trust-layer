@@ -128,7 +128,7 @@ const LAUNCH_PHASES: LaunchPhase[] = [
     gradient: "from-amber-500 to-orange-600",
     glowColor: "rgba(245,158,11,0.3)",
     items: [
-      { id: "e1", title: "DarkWave Chronicles", description: "Parallel life simulation with AI NPCs across 3+ eras", status: "done", priority: "critical", link: "/chronicles" },
+      { id: "e1", title: "Chronicles", description: "Parallel life simulation with AI NPCs across 3+ eras", status: "done", priority: "critical", link: "/chronicles" },
       { id: "e2", title: "Trust Book Platform", description: "Ebook publishing with Stripe purchases and AI writing agent", status: "done", priority: "high", link: "/trust-book" },
       { id: "e3", title: "DarkWave Academy", description: "Crypto education with blockchain-verified certifications", status: "done", priority: "high", link: "/academy" },
       { id: "e4", title: "Signal Chat", description: "Cross-app messaging with blockchain-verified identities", status: "done", priority: "high", link: "/signal-chat" },

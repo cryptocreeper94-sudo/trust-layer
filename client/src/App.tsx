@@ -355,7 +355,8 @@ function GamesRouter() {
         <Route path="/the-void" component={TheVoid} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
-        <Route path="/signal-chat" component={SignalChat} />
+        <Route path="/signal-chat" component={ChronoChat} />
+        <Route path="/signal-chat/invite/:code" component={ChronoChatInvite} />
         <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/scenario-generator" component={ScenarioGenerator} />
@@ -436,7 +437,8 @@ function ChronoRouter() {
         <Route path="/the-void" component={TheVoid} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
-        <Route path="/signal-chat" component={SignalChat} />
+        <Route path="/signal-chat" component={ChronoChat} />
+        <Route path="/signal-chat/invite/:code" component={ChronoChatInvite} />
         <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/crowdfund" component={Crowdfund} />
@@ -641,7 +643,8 @@ function DWSCRouter() {
         <Route path="/the-void" component={TheVoid} />
         <Route path="/chronochat" component={ChronoChat} />
         <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
-        <Route path="/signal-chat" component={SignalChat} />
+        <Route path="/signal-chat" component={ChronoChat} />
+        <Route path="/signal-chat/invite/:code" component={ChronoChatInvite} />
         <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/scenario-generator" component={ScenarioGenerator} />
@@ -798,6 +801,7 @@ const TLID_SUBDOMAIN_ROUTES: Record<string, string> = {
   "chronicles": "/",
   "throughtheveil": "/veil",
   "signalchat": "/signal-chat",
+  "chronochat": "/signal-chat",
   "guardianscanner": "/guardian-scanner",
   "guardianscreener": "/guardian-ai",
   "trustshield": "/guardian-scanner",

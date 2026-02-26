@@ -1479,12 +1479,12 @@ export default function CommunityHub() {
               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center">
                 <MessageCircle className="w-5 h-5 text-white" />
               </div>
-              About ChronoChat
+              About Signal Chat
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 mt-4 text-sm sm:text-base">
             <p className="text-gray-300 leading-relaxed">
-              ChronoChat is the community hub for the Trust Layer ecosystem. Connect with fellow community members, share ideas, and stay updated on the latest developments.
+              Signal Chat is the community hub for the Trust Layer ecosystem. Connect with fellow community members, share ideas, and stay updated on the latest developments.
             </p>
             
             <div className="p-3 rounded-lg bg-white/5 border border-white/10">

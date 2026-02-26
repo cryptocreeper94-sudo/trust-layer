@@ -86,7 +86,7 @@ function buildNpcSystemPrompt(npc: any, relationshipScore: number, era: string) 
   else if (relationshipScore <= -5) relationshipDesc = "distrusted rival";
   else if (relationshipScore <= -1) relationshipDesc = "someone they view with suspicion";
 
-  return `You are ${npc.name}, ${npc.title}. You are a member of the ${faction} in the ${era} era of DarkWave Chronicles.
+  return `You are ${npc.name}, ${npc.title}. You are a member of the ${faction} in the ${era} era of Chronicles.
 
 WORLD: ${eraSetting?.worldDescription || "A rich, immersive world."}
 ATMOSPHERE: ${eraSetting?.atmosphere || "Detailed and atmospheric."}

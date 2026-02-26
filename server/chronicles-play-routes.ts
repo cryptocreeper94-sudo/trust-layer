@@ -199,7 +199,7 @@ export function registerChroniclesPlayRoutes(app: Express) {
             messages: [
               {
                 role: "system",
-                content: `You generate DAILY LIFE SITUATIONS for DarkWave Chronicles — a parallel life simulation, NOT an RPG.
+                content: `You generate DAILY LIFE SITUATIONS for Chronicles — a parallel life simulation, NOT an RPG.
 
 ERA: ${era} — ${ERA_SETTINGS[era].worldDescription}
 ATMOSPHERE: ${ERA_SETTINGS[era].atmosphere}
@@ -273,7 +273,7 @@ Return JSON:
           messages: [
             {
               role: "system",
-              content: `You are the narrative engine for DarkWave Chronicles — a parallel life simulation where the player is THEMSELVES living in another era. NOT an RPG. No heroes, no villains, no right answers. Just life.
+              content: `You are the narrative engine for Chronicles — a parallel life simulation where the player is THEMSELVES living in another era. NOT an RPG. No heroes, no villains, no right answers. Just life.
 
 ERA: ${era} — ${eraSetting.worldDescription}
 ATMOSPHERE: ${eraSetting.atmosphere}
@@ -398,7 +398,7 @@ Return JSON:
           messages: [
             {
               role: "system",
-              content: `You analyze choices in DarkWave Chronicles — a parallel life simulation. NOT an RPG.
+              content: `You analyze choices in Chronicles — a parallel life simulation. NOT an RPG.
 
 ERA: ${era || state.currentEra} — ${eraSetting.worldDescription}
 ${npcListStr}
@@ -666,7 +666,7 @@ Return JSON:
           messages: [
             {
               role: "system",
-              content: `You are ${npc.name}, ${npc.title}, in the ${era || npc.era} era of DarkWave Chronicles.
+              content: `You are ${npc.name}, ${npc.title}, in the ${era || npc.era} era of Chronicles.
 
 PERSONALITY: ${personality.traits?.join(", ") || "complex"}
 GOALS: ${personality.goals?.join(", ") || "mysterious"}
@@ -1802,7 +1802,7 @@ export function registerChroniclesChatRoutes(app: Express) {
           messages: [
             {
               role: "system",
-              content: `You are generating a reading experience for "${text.book}" from the Cepher Bible in DarkWave Chronicles.
+              content: `You are generating a reading experience for "${text.book}" from the Cepher Bible in Chronicles.
 
 The player is reading this text in the ${era} era. ${ursulaName} is their spiritual guide.
 
@@ -1917,7 +1917,7 @@ Return JSON:
           messages: [
             {
               role: "system",
-              content: `Generate an immersive worship service experience at "${congregation.name}" (${congregation.type}) in the ${era} era of DarkWave Chronicles.
+              content: `Generate an immersive worship service experience at "${congregation.name}" (${congregation.type}) in the ${era} era of Chronicles.
 
 ${congregation.description}
 
@@ -2044,7 +2044,7 @@ Return JSON:
           messages: [
             {
               role: "system",
-              content: `Generate a prayer and meditation moment for a player in the ${era} era of DarkWave Chronicles.
+              content: `Generate a prayer and meditation moment for a player in the ${era} era of Chronicles.
 
 ${intention ? `The player's prayer intention: "${intention}"` : "The player is praying without a specific intention — seeking peace and guidance."}
 
@@ -2250,7 +2250,7 @@ Return JSON:
           messages: [
             {
               role: "system",
-              content: `You are ${ursulaName} in the ${era} era of DarkWave Chronicles.
+              content: `You are ${ursulaName} in the ${era} era of Chronicles.
 
 ${ursulaData?.backstory || "A keeper of sacred texts who guides seekers toward truth."}
 

@@ -303,7 +303,7 @@ export default function DWSCExecutiveSummary() {
                   { title: "Pulse AI", desc: "ML-powered market predictions with verified accuracy tracking. Fear & Greed index, multi-timeframe analysis.", img: pulseImg, href: "/pulse", domain: "dwsc.io" },
                   { title: "Strike Agent", desc: "Solana memecoin sniper with AI risk scoring. Honeypot detection, liquidity analysis, Phantom integration.", img: strikeImg, href: "/strike-agent", domain: "strikeagent.io" },
                   { title: "TrustShield.tech", desc: "World's first AI agent certification. Verify, certify, and protect autonomous AI systems. Free scanning tools and paid Guardian certification.", img: trustShieldImg, href: "/guardian-ai", domain: "trustshield.tech" },
-                  { title: "ChronoChat", desc: "Community platform with real-time messaging, channels, reactions, and Shells virtual currency.", img: chronochatImg, href: "/community-hub", domain: "chronochat.io" },
+                  { title: "Signal Chat", desc: "Community platform with real-time messaging, channels, reactions, and Shells virtual currency.", img: chronochatImg, href: "/signal-chat", domain: "dwsc.io" },
                   { title: "VedaSolus", desc: "Holistic wellness platform connecting practitioners of all traditions - Western, Eastern, Ayurvedic, energy healing.", img: vedasolusImg, href: "/ecosystem", domain: "vedasolus.io" },
                   { title: "Chronicles", desc: "10 verifiable historical eras. AI-powered parallel life simulation. Not a game - a life. YOUR legend.", img: chroniclesImg, href: "/chronicles", domain: "yourlegacy.io" },
                   { title: "Signal Presale", desc: "Signal at $0.001 each. Tiered pricing through launch. Up to 25% early adopter bonus.", img: presaleImg, href: "/presale", domain: "dwsc.io" },
@@ -681,7 +681,7 @@ export default function DWSCExecutiveSummary() {
                   icon: ArrowRightLeft
                 },
                 {
-                  title: "ChronoChat Tiers",
+                  title: "Signal Chat Tiers",
                   source: "Community",
                   description: "Free / $19 / $49 / $99 monthly community tiers. Cloud hosting from $149+/month.",
                   icon: MessageSquare

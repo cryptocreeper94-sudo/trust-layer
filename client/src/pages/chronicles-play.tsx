@@ -854,7 +854,7 @@ export default function ChroniclesPlay() {
             </Button>
           </Link>
           <div className="flex-1">
-            <h1 className="text-2xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">DarkWave Chronicles</h1>
+            <h1 className="text-2xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Chronicles</h1>
             <p className="text-[10px] text-gray-500">Your parallel life — real choices, real consequences</p>
           </div>
           <Link href="/chronicles/season">

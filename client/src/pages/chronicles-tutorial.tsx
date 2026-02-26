@@ -199,7 +199,7 @@ export default function ChroniclesTutorial() {
             className="text-4xl sm:text-5xl lg:text-6xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-4 leading-tight"
             data-testid="hero-title"
           >
-            Welcome to DarkWave Chronicles
+            Welcome to Chronicles
           </motion.h1>
           <motion.p
             variants={fadeUp}

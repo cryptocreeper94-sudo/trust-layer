@@ -24,9 +24,9 @@ const TWITTER_POSTS = [
   { content: `No grind. No filler. Just legend-building.\n\nChronicles puts YOU at the center.\n\nEvery choice echoes. Every action matters. 🔥`, category: 'chronicles' },
   { content: `YOUR parallel self. 70+ eras. One legendary campaign.\n\nChronicles.\n\nNot life simulation. LEGEND building. ⚔️`, category: 'chronicles' },
   { content: `The game that asks: Who will YOU become?\n\nChoices that matter. Consequences that echo.\n\nChronicles 🌊`, category: 'chronicles' },
-  { content: `Ancient empires. Future frontiers. Everything between.\n\nEach era is YOUR chance to prove yourself.\n\n#DarkWaveChronicles 🎯`, category: 'chronicles' },
+  { content: `Ancient empires. Future frontiers. Everything between.\n\nEach era is YOUR chance to prove yourself.\n\n#Chronicles 🎯`, category: 'chronicles' },
   { content: `NPCs that remember. Worlds that evolve. Stories that matter.\n\nChronicles redefines adventure gaming.\n\nComing Beta LIVE 🚀`, category: 'chronicles' },
-  { content: `Every campaign. Every decision. Every moment.\n\nYours to shape. Yours to own. Yours to legend.\n\n#DarkWaveChronicles ⚡`, category: 'chronicles' },
+  { content: `Every campaign. Every decision. Every moment.\n\nYours to shape. Yours to own. Yours to legend.\n\n#Chronicles ⚡`, category: 'chronicles' },
   { content: `Awakening disguised as entertainment.\n\nChronicles challenges how you see the world.\n\nAre you ready? 🌌`, category: 'chronicles' },
   { content: `70+ historical eras await your parallel self.\n\nWrite history. Build legend. Become eternal.\n\nChronicles 🎮`, category: 'chronicles' },
   
@@ -120,11 +120,11 @@ const TWITTER_POSTS = [
   { content: `Guardian Shield: $299-$2,999/month\n\n• 24/7 monitoring\n• Instant alerts\n• Multi-chain coverage\n• SOC operations\n\nQ3 2026 launch 🛡️`, category: 'security' },
   { content: `Sleep well knowing your contracts are protected.\n\nGuardian Shield continuous monitoring coming Q3 2026.\n\ndwsc.io/guardian 🌙`, category: 'security' },
 
-  // ChronoChat Community Platform (4 posts)
-  { content: `💬 ChronoChat: Connect across timelines.\n\nCommunity platform for the DarkWave ecosystem.\n\nReal-time messaging. Orbs integration. Coming Q4 2026.\n\nchronochat.io`, category: 'community' },
-  { content: `Discord alternative built for blockchain communities.\n\nChronoChat. Decentralized. Community-first.\n\nchronochat.io 🌊`, category: 'community' },
-  { content: `Channels. Reactions. File sharing. Bot framework.\n\nChronoChat has it all—and it's built on DWSC.\n\nQ4 2026 launch 💬`, category: 'community' },
-  { content: `Your community deserves better.\n\nChronoChat: Premium community platform. Orbs rewards. No middlemen.\n\nchronochat.io ⚡`, category: 'community' },
+  // Signal Chat Community Platform (4 posts)
+  { content: `💬 Signal Chat: Connect across timelines.\n\nCommunity platform for the DarkWave ecosystem.\n\nReal-time messaging. Orbs integration. Coming Q4 2026.\n\ndwsc.io/signal-chat`, category: 'community' },
+  { content: `Discord alternative built for blockchain communities.\n\nSignal Chat. Decentralized. Community-first.\n\ndwsc.io/signal-chat 🌊`, category: 'community' },
+  { content: `Channels. Reactions. File sharing. Bot framework.\n\nSignal Chat has it all—and it's built on DWSC.\n\nQ4 2026 launch 💬`, category: 'community' },
+  { content: `Your community deserves better.\n\nSignal Chat: Premium community platform. Orbs rewards. No middlemen.\n\ndwsc.io/signal-chat ⚡`, category: 'community' },
 
   // Orbs Economy (3 posts)
   { content: `🔮 Orbs: The DarkWave economy.\n\nEarn Orbs → Convert to SIG at launch.\n\nDaily login: 5 Orbs\nReferral signup: 50 Orbs\n\nStart earning now 💎`, category: 'economy' },
@@ -182,7 +182,7 @@ Beta LIVE ⚡`, category: 'chronicles' },
 
 Each era is YOUR chance to prove yourself. Each mission builds YOUR legend.
 
-#DarkWaveChronicles`, category: 'chronicles' },
+#Chronicles`, category: 'chronicles' },
   { content: `Not a life simulator. A LEGEND BUILDER.
 
 Chronicles asks the question: Who will YOU become?
@@ -236,7 +236,7 @@ Chronicles spans ALL of human experience. Every era is a new battlefield. Every 
 
 Are you ready to discover who you could become?
 
-#DarkWaveChronicles 🎮`, category: 'chronicles' },
+#Chronicles 🎮`, category: 'chronicles' },
   
   // DWSC Blockchain (8 posts)
   { content: `⚡ Trust Layer: The Foundation of Everything
@@ -805,8 +805,8 @@ Coming Q3 2026. Continuous protection for continuous peace of mind.
 
 dwsc.io/guardian 🛡️`, category: 'security' },
 
-  // ChronoChat (2 posts)
-  { content: `💬 ChronoChat - Connect Across Timelines
+  // Signal Chat (2 posts)
+  { content: `💬 Signal Chat - Connect Across Timelines
 
 The community platform built for the DarkWave ecosystem.
 
@@ -819,14 +819,14 @@ Features:
 
 Discord alternative, blockchain-native.
 
-Coming Q4 2026: chronochat.io`, category: 'community' },
+Coming Q4 2026: dwsc.io/signal-chat`, category: 'community' },
   { content: `Your community deserves a platform that rewards engagement.
 
-ChronoChat integrates Orbs economy—earn while you participate.
+Signal Chat integrates Orbs economy—earn while you participate.
 
 No middlemen. No censorship. Pure community.
 
-chronochat.io 🌊`, category: 'community' },
+dwsc.io/signal-chat 🌊`, category: 'community' },
 
   // Orbs Economy (2 posts)
   { content: `🔮 The Orbs Economy - Earn Before Launch
@@ -2082,12 +2082,12 @@ Coming Q3 2026. Sleep well knowing we're watching.
 
 👉 dwsc.io/guardian`, category: 'security' },
 
-  // ChronoChat (2 posts)
-  { content: `💬 **ChronoChat: Connect Across Timelines**
+  // Signal Chat (2 posts)
+  { content: `💬 **Signal Chat: Connect Across Timelines**
 
 The community platform built for the DarkWave ecosystem.
 
-**What Makes ChronoChat Different:**
+**What Makes Signal Chat Different:**
 • 🔗 Built on DWSC blockchain
 • 💎 Integrated Orbs economy
 • 🤖 Bot framework for developers
@@ -2095,20 +2095,20 @@ The community platform built for the DarkWave ecosystem.
 • 💬 Real-time messaging
 
 **Product Tiers Coming:**
-1. ChronoChat for Communities (Q4 2026)
-2. ChronoChat Cloud (Q1 2026)
-3. ChronoChat for Gaming (Q2-Q3 2026)
+1. Signal Chat for Communities (Q4 2026)
+2. Signal Chat Cloud (Q1 2026)
+3. Signal Chat for Gaming (Q2-Q3 2026)
 
 **Discord alternative, blockchain-native.**
 
 Your community deserves better.
 
-👉 chronochat.io`, category: 'community' },
-  { content: `🌊 **ChronoChat = Community + Rewards**
+👉 dwsc.io/signal-chat`, category: 'community' },
+  { content: `🌊 **Signal Chat = Community + Rewards**
 
 What if participating in your community EARNED you rewards?
 
-**ChronoChat + Orbs Economy:**
+**Signal Chat + Orbs Economy:**
 • Send messages → Earn Orbs
 • Receive reactions → Earn Orbs
 • Join communities → Earn Orbs
@@ -2118,7 +2118,7 @@ What if participating in your community EARNED you rewards?
 
 Coming Q4 2026.
 
-👉 chronochat.io`, category: 'community' },
+👉 dwsc.io/signal-chat`, category: 'community' },
 
   // Orbs Economy (2 posts)
   { content: `🔮 **The Orbs Economy - Earn Before Launch**
@@ -3877,8 +3877,8 @@ Be ready when it launches.
 
 👉 dwsc.io/guardian`, category: 'security' },
 
-  // ChronoChat (2 posts)
-  { content: `💬 <b>ChronoChat: Connect Across Timelines</b>
+  // Signal Chat (2 posts)
+  { content: `💬 <b>Signal Chat: Connect Across Timelines</b>
 
 <b>The community platform built for the DarkWave ecosystem.</b>
 
@@ -3892,25 +3892,25 @@ Discord alternative, blockchain-native, rewards-integrated.
 • 🎭 Reactions & replies
 • 👥 Member management
 
-<b>What Makes ChronoChat Different:</b>
+<b>What Makes Signal Chat Different:</b>
 🔗 Built on DWSC blockchain
 💎 Integrated Orbs economy (earn while you chat)
 🚫 No censorship
 🔐 Decentralized infrastructure
 
 <b>Product Roadmap:</b>
-1. ChronoChat for Communities (Q4 2026) - Core platform
-2. ChronoChat Cloud (Q1 2026) - SaaS hosting
-3. ChronoChat for Gaming (Q2-Q3 2026) - Gaming overlays
+1. Signal Chat for Communities (Q4 2026) - Core platform
+2. Signal Chat Cloud (Q1 2026) - SaaS hosting
+3. Signal Chat for Gaming (Q2-Q3 2026) - Gaming overlays
 
 <b>Your community deserves better.</b>
 
-👉 chronochat.io`, category: 'community' },
-  { content: `🌊 <b>ChronoChat = Community + Rewards</b>
+👉 dwsc.io/signal-chat`, category: 'community' },
+  { content: `🌊 <b>Signal Chat = Community + Rewards</b>
 
 <b>What if chatting earned you crypto?</b>
 
-ChronoChat integrates the Orbs economy directly into community participation.
+Signal Chat integrates the Orbs economy directly into community participation.
 
 <b>Earn Orbs by:</b>
 • Sending messages
@@ -3927,7 +3927,7 @@ This means your community engagement today = token holdings tomorrow.
 
 Coming Q4 2026.
 
-👉 chronochat.io`, category: 'community' },
+👉 dwsc.io/signal-chat`, category: 'community' },
 
   // Orbs Economy (2 posts)
   { content: `🔮 <b>The Orbs Economy - Comprehensive Guide</b>

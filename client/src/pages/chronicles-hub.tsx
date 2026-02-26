@@ -197,7 +197,7 @@ export default function ChroniclesHub() {
     enabled: !!chroniclesAccount,
   });
 
-  // ChronoChat community data for preview
+  // Signal Chat community data for preview
   const { data: communitiesData } = useQuery({
     queryKey: ["/api/community/list"],
     queryFn: async () => {
@@ -348,7 +348,7 @@ export default function ChroniclesHub() {
       queryClient.invalidateQueries({ queryKey: ["/api/guilds/my-guilds"] });
       setShowManageModal(false);
       setSelectedSyndicate(null);
-      toast.success("ChronoLink activated! Your syndicate is now connected to ChronoChat.");
+      toast.success("ChronoLink activated! Your syndicate is now connected to Signal Chat.");
     },
     onError: (error: any) => {
       toast.error(getErrorMessage(error, "Failed to activate ChronoLink"));
@@ -442,7 +442,7 @@ export default function ChroniclesHub() {
   const completedChapters = JOURNEY_CHAPTERS.filter(c => c.status === "completed").length;
   const journeyProgress = (completedChapters / JOURNEY_CHAPTERS.length) * 100;
   
-  // ChronoChat preview data
+  // Signal Chat preview data
   const allCommunities = communitiesData?.communities || [];
   const myCommunities = myCommunitiesData?.communities || [];
   const isChronoLinkActive = myCommunities.length > 0;
@@ -573,7 +573,7 @@ export default function ChroniclesHub() {
                   BETA
                 </Badge>
               </div>
-              <h1 className="text-xl sm:text-2xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent" data-testid="text-hub-title">DarkWave Chronicles</h1>
+              <h1 className="text-xl sm:text-2xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent" data-testid="text-hub-title">Chronicles</h1>
             </div>
           </div>
           <div className="flex items-center">
@@ -957,15 +957,15 @@ export default function ChroniclesHub() {
               <div className="flex flex-col sm:flex-row items-center gap-3">
                 <div className="text-center sm:text-right mr-2">
                   <div className="text-xs text-slate-500 uppercase tracking-wider">Community Hub</div>
-                  <div className="text-lg font-bold text-white">ChronoChat</div>
+                  <div className="text-lg font-bold text-white">Signal Chat</div>
                 </div>
-                <Link href="/chronochat">
+                <Link href="/signal-chat">
                   <Button 
                     className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white px-6 py-3 text-lg font-semibold shadow-lg shadow-purple-500/20"
                     data-testid="button-activate-chronolink"
                   >
                     <MessageCircle className="mr-2 w-5 h-5" />
-                    Enter ChronoChat
+                    Enter Signal Chat
                     <ArrowRight className="ml-2 w-5 h-5" />
                   </Button>
                 </Link>
@@ -1000,7 +1000,7 @@ export default function ChroniclesHub() {
                 <p className="text-xs text-slate-500 uppercase tracking-wider mb-3 text-center">Active Communities</p>
                 <div className="flex flex-wrap justify-center gap-2">
                   {featuredCommunities.map((community: any) => (
-                    <Link key={community.id} href="/chronochat">
+                    <Link key={community.id} href="/signal-chat">
                       <div className="flex items-center gap-2 bg-slate-800/50 hover:bg-slate-700/50 px-3 py-2 rounded-full border border-slate-700 hover:border-cyan-500/30 transition-all cursor-pointer">
                         <span className="text-lg">{community.icon || "⚡"}</span>
                         <span className="text-sm text-white">{community.name}</span>
@@ -1184,7 +1184,7 @@ export default function ChroniclesHub() {
                       <div className="flex items-center gap-2 text-sm">
                         <Link2 className="w-4 h-4 text-cyan-400" />
                         <span className="text-cyan-400 font-medium">ChronoLink Bonus:</span>
-                        <span className="text-slate-300">Link your syndicate to ChronoChat for +5% Shells on all activities</span>
+                        <span className="text-slate-300">Link your syndicate to Signal Chat for +5% Shells on all activities</span>
                       </div>
                     </div>
                   </div>

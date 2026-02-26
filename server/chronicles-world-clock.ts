@@ -155,7 +155,7 @@ export async function assignDailySituation(userId: string, era: string) {
         messages: [
           {
             role: "system",
-            content: `You generate daily life situations for DarkWave Chronicles, a parallel life simulation game.
+            content: `You generate daily life situations for Chronicles, a parallel life simulation game.
 ERA: ${era} — ${eraSetting.worldDescription}
 ATMOSPHERE: ${eraSetting.atmosphere}
 

@@ -1095,17 +1095,17 @@ export default function ChroniclesOnboarding() {
                           <MessageCircle className="w-5 h-5 text-cyan-400" />
                         </div>
                         <div className="text-left">
-                          <h4 className="font-semibold text-white text-sm">ChronoChat</h4>
+                          <h4 className="font-semibold text-white text-sm">Signal Chat</h4>
                           <p className="text-xs text-slate-500">Connect with fellow travelers</p>
                         </div>
                       </div>
                       <Button
                         data-testid="button-chronolink"
-                        onClick={() => setLocation("/chronochat")}
+                        onClick={() => setLocation("/signal-chat")}
                         className="w-full bg-gradient-to-r from-purple-600/80 to-cyan-600/80 hover:from-purple-500 hover:to-cyan-500 border border-purple-500/20"
                       >
                         <Users className="w-4 h-4 mr-2" />
-                        Enter ChronoChat
+                        Enter Signal Chat
                       </Button>
                     </GlassCard>
                   </motion.div>

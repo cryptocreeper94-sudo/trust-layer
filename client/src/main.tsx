@@ -30,7 +30,7 @@ function getManifestForRoute(): string {
   if (host.includes("yourlegacy") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
     return "/manifest-chrono.webmanifest";
   }
-  if (host.includes("chronochat") || host === "chronochat.io" || host === "www.chronochat.io") {
+  if (host.includes("chronochat") || host === "chronochat.io" || host === "www.chronochat.io" || host.includes("signalchat") || host.includes("signal-chat")) {
     return "/manifest-chronochat.webmanifest";
   }
   if (host.includes("trustshield") || host === "trustshield.tech" || host === "www.trustshield.tech") {
@@ -60,7 +60,7 @@ function getThemeColorForDomain(): string {
   if (host.includes("yourlegacy") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {
     return "#a855f7";
   }
-  if (host.includes("chronochat") || host === "chronochat.io" || host === "www.chronochat.io") {
+  if (host.includes("chronochat") || host === "chronochat.io" || host === "www.chronochat.io" || host.includes("signalchat") || host.includes("signal-chat")) {
     return "#06b6d4";
   }
   if (host.includes("trustshield") || host === "trustshield.tech" || host === "www.trustshield.tech") {

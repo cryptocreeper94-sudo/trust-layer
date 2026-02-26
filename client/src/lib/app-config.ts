@@ -9,7 +9,7 @@ export function getAppFromHost(): AppDomain {
   if (host.includes("darkwavegames") || host.includes("games.")) {
     return "games";
   }
-  if (host.includes("chronochat") || host === "chronochat.io" || host === "www.chronochat.io") {
+  if (host.includes("chronochat") || host === "chronochat.io" || host === "www.chronochat.io" || host.includes("signalchat") || host.includes("signal-chat")) {
     return "chronochat";
   }
   if (host.includes("yourlegacy") || host.includes("chrono.") || host === "yourlegacy.io" || host === "www.yourlegacy.io") {

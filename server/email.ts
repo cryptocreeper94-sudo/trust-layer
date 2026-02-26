@@ -302,7 +302,7 @@ export async function sendCrowdfundConfirmationEmail(to: string, amountPaid: str
       <ul style="margin:0;padding-left:18px;color:#94a3b8;font-size:14px;line-height:2;">
         <li>Accelerated development of the Trust Layer ecosystem</li>
         <li>Mainnet launch and token generation event</li>
-        <li>Expansion of DarkWave Chronicles and ecosystem apps</li>
+        <li>Expansion of Chronicles and ecosystem apps</li>
         <li>You've earned Early Adopter status with bonus Signal at launch</li>
       </ul>
     `, '#00ff88')}

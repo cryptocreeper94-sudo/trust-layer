@@ -144,7 +144,7 @@ const WHY_GUARDIAN = [
 
 const CERTIFIED_PROJECTS = [
   { name: "Trust Layer", status: "Certified", score: 78, date: "Dec 2024" },
-  { name: "ChronoChat Platform", status: "In Progress", score: null, date: "Coming Soon" },
+  { name: "Signal Chat Platform", status: "In Progress", score: null, date: "Coming Soon" },
   { name: "Chronicles", status: "Community-Driven", score: null, date: "TBD" }
 ];
 

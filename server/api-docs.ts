@@ -20,7 +20,7 @@ const CATEGORY_MAP: Record<string, { tag: string; description: string }> = {
   "/api/nft/": { tag: "NFT", description: "NFT marketplace, minting, and gallery" },
   "/api/faucet/": { tag: "Faucet", description: "Testnet token faucet" },
   "/api/bridge/": { tag: "Bridge", description: "Cross-chain bridge operations" },
-  "/api/chronicles/": { tag: "Chronicles", description: "DarkWave Chronicles parallel life simulation" },
+  "/api/chronicles/": { tag: "Chronicles", description: "Chronicles parallel life simulation" },
   "/api/chat/": { tag: "Signal Chat", description: "Signal Chat messaging platform" },
   "/api/guardian/": { tag: "Guardian", description: "Guardian Scanner and security tools" },
   "/api/screener/": { tag: "Guardian Screener", description: "DEX screener with Pulse Safety Engine" },

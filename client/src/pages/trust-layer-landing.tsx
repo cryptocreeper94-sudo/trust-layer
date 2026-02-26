@@ -91,7 +91,7 @@ const TRUST_BENEFITS = [
   {
     icon: Users,
     title: "Community Hub",
-    description: "Connect with other verified members in ChronoChat",
+    description: "Connect with other verified members in Signal Chat",
   },
 ];
 
@@ -285,7 +285,7 @@ export default function TrustLayerLanding() {
                   Apps
                 </Button>
               </Link>
-              <Link href="/chronochat">
+              <Link href="/signal-chat">
                 <Button variant="ghost" size="sm" className="h-8 text-xs" data-testid="link-nav-chat">
                   Chat
                 </Button>

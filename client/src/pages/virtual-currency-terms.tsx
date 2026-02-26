@@ -11,7 +11,7 @@ export default function VirtualCurrencyTerms() {
     {
       icon: Coins,
       title: "1. Virtual Currency Definition",
-      content: `"Shells" are a virtual currency used within the Trust Layer ecosystem, including Chronicles, ChronoChat, and related applications. Shells have no intrinsic value outside the Trust Layer platform and are not legal tender, securities, or commodities. Shells are licensed, not sold, and remain the property of Trust Layer Studios. Your purchase grants you a limited, non-transferable license to use Shells within our platform.`
+      content: `"Shells" are a virtual currency used within the Trust Layer ecosystem, including Chronicles, Signal Chat, and related applications. Shells have no intrinsic value outside the Trust Layer platform and are not legal tender, securities, or commodities. Shells are licensed, not sold, and remain the property of Trust Layer Studios. Your purchase grants you a limited, non-transferable license to use Shells within our platform.`
     },
     {
       icon: ArrowRightLeft,

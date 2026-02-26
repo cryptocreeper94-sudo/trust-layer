@@ -285,6 +285,7 @@ export async function registerRoutes(
     "chronicles": "/",
     "throughtheveil": "/veil",
     "signalchat": "/signal-chat",
+    "chronochat": "/signal-chat",
     "guardianscanner": "/guardian-scanner",
     "guardianscreener": "/guardian-ai",
     "trustshield": "/guardian-scanner",
