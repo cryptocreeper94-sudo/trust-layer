@@ -59,6 +59,10 @@ ADMIN_PIN = "1111"
 PULSE_API_KEY = "pulse_597f770df05482dd3489f84abc5a076320bcf5430c92370c"
 PULSE_API_SECRET = "91146a5553e0c6ae84b24fc0541b6d22e8d15d197b395c78c66a7828b8edfc70"
 NODE_OPTIONS = "--max-old-space-size=4096"
+TRUSTVAULT_API_KEY = "dw_8f408c9e34765316d7aa7623dbbf437f"
+TRUSTVAULT_API_SECRET = "f791fac3afd4087319505670280e52f4ce2e6fb0addb0b31271a76729b0f6891"
+TRUSTVAULT_API_BASE = "https://trustvault.replit.app/api/studio"
+TRUSTVAULT_WEBHOOK_URL = "https://trustbook.replit.app/api/trustvault/webhook"
 
 [objectStorage]
 defaultBucketID = "replit-objstore-74fd6bf8-9216-4c07-bca9-46f4b21dc323"

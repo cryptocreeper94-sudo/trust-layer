@@ -14,6 +14,7 @@ import { zealyService, type ZealyWebhookPayload } from "./zealy-service";
 import * as blogService from "./blog-service";
 import { getUncachableStripeClient } from "./stripeClient";
 import { membershipReconciliationService } from "./membership-reconciliation-service";
+import { trustVaultClient } from "./trustvault-client";
 
 // Auth request interface for session-based authentication
 interface AuthenticatedRequest extends Request {
@@ -22172,10 +22173,63 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!book) {
         return res.status(404).json({ error: "Book not found" });
       }
+
+      if (action === "approve" && trustVaultClient.isConfigured()) {
+        try {
+          const contentHash = crypto.createHash("sha256").update(
+            `${book.title}:${book.authorName}:${book.slug}:${book.wordCount || 0}`
+          ).digest("hex");
+          const provenanceResult = await trustVaultClient.registerBookProvenance({
+            trustLayerId: book.authorId || "system",
+            bookId: book.slug || String(book.id),
+            title: book.title,
+            authorName: book.authorName || "Unknown",
+            contentHash,
+            wordCount: book.wordCount || 0,
+            publishedAt: new Date().toISOString(),
+          });
+          if (provenanceResult && !provenanceResult.error) {
+            console.log(`[TrustVault] Book provenance registered for "${book.title}":`, provenanceResult.provenanceId || "success");
+          }
+        } catch (pvErr: any) {
+          console.error("[TrustVault] Book provenance registration failed (non-blocking):", pvErr.message);
+        }
+      }
+
       res.json({ book, message: `Book ${action}d successfully` });
     } catch (error: any) {
       console.error("[Ebook] Review error:", error);
       res.status(500).json({ error: "Failed to review book" });
+    }
+  });
+
+  app.post("/api/trustvault/webhook", async (req: Request, res: Response) => {
+    try {
+      const { event, data, timestamp } = req.body;
+      console.log(`[TrustVault Webhook] Received event: ${event}`, JSON.stringify(data || {}).slice(0, 200));
+
+      switch (event) {
+        case "provenance.verified":
+          if (data?.bookId) {
+            console.log(`[TrustVault] Provenance verified for book: ${data.bookId}`);
+          }
+          break;
+        case "identity.anchored":
+          if (data?.trustLayerId) {
+            console.log(`[TrustVault] Identity anchored: ${data.trustLayerId}`);
+          }
+          break;
+        case "trust.updated":
+          console.log(`[TrustVault] Trust score updated for: ${data?.trustLayerId}`);
+          break;
+        default:
+          console.log(`[TrustVault Webhook] Unhandled event type: ${event}`);
+      }
+
+      res.json({ received: true, event, timestamp: Date.now() });
+    } catch (error: any) {
+      console.error("[TrustVault Webhook] Error:", error.message);
+      res.status(500).json({ error: "Webhook processing failed" });
     }
   });
 
