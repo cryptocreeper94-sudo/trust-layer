@@ -21951,9 +21951,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
   app.post("/api/ebook/submit", async (req, res) => {
     try {
-      const { authorId, authorName, title, description, genre, tags, price, coverImageUrl, manuscriptUrl, wordCount, chapterCount } = req.body;
-      if (!authorId || !title || !description || !genre || !price) {
-        return res.status(400).json({ error: "Missing required fields: authorId, title, description, genre, price" });
+      const { authorId, authorName, title, description, genre, category, subcategory, tags, price, coverImageUrl, manuscriptUrl, wordCount, chapterCount } = req.body;
+      if (!authorId || !title || !description || !price) {
+        return res.status(400).json({ error: "Missing required fields: authorId, title, description, price" });
       }
 
       const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -21968,13 +21968,18 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         title,
         slug,
         description,
-        genre,
+        genre: genre || subcategory || "General",
+        category: category || "nonfiction",
+        subcategory: subcategory || null,
         tags: tags || [],
-        price: Math.round(price * 100),
+        price: typeof price === 'number' && price < 100 ? Math.round(price * 100) : (price || 499),
         coverImageUrl: coverImageUrl || null,
         manuscriptUrl: manuscriptUrl || null,
         wordCount: wordCount || null,
         chapterCount: chapterCount || null,
+        rating: "0",
+        reviewCount: 0,
+        sampleChapters: 1,
         status: "pending_review",
         reviewNotes: null,
       });
@@ -22033,6 +22038,207 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error: any) {
       console.error("[Ebook] Review error:", error);
       res.status(500).json({ error: "Failed to review book" });
+    }
+  });
+
+  // ==============================================
+  // BOOK CATALOG - Category browsing
+  // ==============================================
+
+  app.get("/api/ebook/catalog/browse", async (req, res) => {
+    try {
+      const { category, subcategory } = req.query;
+      if (category && typeof category === "string") {
+        const books = await storage.getPublishedBooksByCategory(category, subcategory as string | undefined);
+        return res.json(books);
+      }
+      const books = await storage.getPublishedBooks("published");
+      res.json(books);
+    } catch (error: any) {
+      console.error("[Catalog] Browse error:", error);
+      res.status(500).json({ error: "Failed to browse catalog" });
+    }
+  });
+
+  // ==============================================
+  // USER LIBRARY - Personal book collection
+  // ==============================================
+
+  app.get("/api/ebook/library", async (req, res) => {
+    try {
+      const userId = req.query.userId as string;
+      if (!userId) return res.status(400).json({ error: "userId required" });
+      const library = await storage.getUserLibrary(userId);
+      res.json(library);
+    } catch (error: any) {
+      console.error("[Library] Get error:", error);
+      res.status(500).json({ error: "Failed to get library" });
+    }
+  });
+
+  app.post("/api/ebook/library/add", async (req, res) => {
+    try {
+      const { userId, bookId, bookTitle, bookSlug, coverImageUrl, source } = req.body;
+      if (!userId || !bookId || !bookTitle || !bookSlug) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+      const item = await storage.addToUserLibrary({
+        userId, bookId, bookTitle, bookSlug,
+        coverImageUrl: coverImageUrl || null,
+        source: source || "purchase",
+        progress: 0,
+        lastReadAt: null,
+      });
+      res.json(item);
+    } catch (error: any) {
+      console.error("[Library] Add error:", error);
+      res.status(500).json({ error: "Failed to add to library" });
+    }
+  });
+
+  app.post("/api/ebook/library/progress", async (req, res) => {
+    try {
+      const { userId, bookId, progress } = req.body;
+      if (!userId || !bookId || progress === undefined) {
+        return res.status(400).json({ error: "Missing required fields" });
+      }
+      await storage.updateLibraryProgress(userId, bookId, progress);
+      res.json({ success: true });
+    } catch (error: any) {
+      console.error("[Library] Progress error:", error);
+      res.status(500).json({ error: "Failed to update progress" });
+    }
+  });
+
+  // ==============================================
+  // AI BOOK WRITING ASSISTANT
+  // ==============================================
+
+  app.get("/api/ebook/writing-sessions", async (req, res) => {
+    try {
+      const userId = req.query.userId as string;
+      if (!userId) return res.status(400).json({ error: "userId required" });
+      const sessions = await storage.getUserWritingSessions(userId);
+      res.json(sessions);
+    } catch (error: any) {
+      console.error("[Writing] Sessions error:", error);
+      res.status(500).json({ error: "Failed to get writing sessions" });
+    }
+  });
+
+  app.post("/api/ebook/writing-sessions", async (req, res) => {
+    try {
+      const { userId, title, genre, category } = req.body;
+      if (!userId || !title) {
+        return res.status(400).json({ error: "userId and title required" });
+      }
+      const session = await storage.createAiWritingSession({
+        userId, title, genre: genre || null, category: category || null,
+        outline: null, currentChapter: 0, totalChapters: null,
+        content: null, status: "planning", messages: JSON.stringify([]),
+      });
+      res.json(session);
+    } catch (error: any) {
+      console.error("[Writing] Create error:", error);
+      res.status(500).json({ error: "Failed to create session" });
+    }
+  });
+
+  app.get("/api/ebook/writing-sessions/:id", async (req, res) => {
+    try {
+      const session = await storage.getAiWritingSession(parseInt(req.params.id));
+      if (!session) return res.status(404).json({ error: "Session not found" });
+      res.json(session);
+    } catch (error: any) {
+      res.status(500).json({ error: "Failed to get session" });
+    }
+  });
+
+  app.post("/api/ebook/writing-assistant", async (req, res) => {
+    try {
+      const { sessionId, message, userId } = req.body;
+      if (!sessionId || !message || !userId) {
+        return res.status(400).json({ error: "sessionId, message, and userId required" });
+      }
+
+      const session = await storage.getAiWritingSession(sessionId);
+      if (!session || session.userId !== userId) {
+        return res.status(404).json({ error: "Session not found" });
+      }
+
+      const existingMessages = session.messages ? JSON.parse(session.messages) : [];
+      existingMessages.push({ role: "user", content: message, timestamp: Date.now() });
+
+      const systemPrompt = `You are the DarkWave Book Author Agent — a premium AI writing assistant helping authors craft their books on the Trust Book publishing platform.
+
+Your role:
+- Guide authors through the entire book writing process: concept development, outlining, drafting chapters, and polishing
+- Ask thoughtful questions to understand their vision, target audience, and genre
+- Help develop compelling characters, plot arcs, themes, and structure
+- Provide chapter-by-chapter guidance with specific writing prompts
+- Offer constructive feedback on drafts and suggest improvements
+- Help with pacing, dialogue, world-building, and narrative voice
+
+Current project: "${session.title}"
+Genre: ${session.genre || "Not set yet"}
+Category: ${session.category || "Not set yet"}
+Status: ${session.status}
+${session.outline ? `Outline: ${session.outline}` : "No outline yet"}
+${session.totalChapters ? `Total chapters planned: ${session.totalChapters}` : ""}
+${session.currentChapter ? `Currently on chapter: ${session.currentChapter}` : ""}
+
+Keep responses focused, actionable, and encouraging. Format with markdown. When suggesting outlines, use clear numbered lists. When helping with chapters, provide specific writing prompts and examples.`;
+
+      const OpenAI = (await import("openai")).default;
+      const openai = new OpenAI({
+        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL || "https://api.openai.com/v1",
+        apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY || process.env.OPENAI_API_KEY,
+      });
+
+      const chatMessages = [
+        { role: "system" as const, content: systemPrompt },
+        ...existingMessages.slice(-20).map((m: any) => ({
+          role: m.role as "user" | "assistant",
+          content: m.content,
+        })),
+      ];
+
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: chatMessages,
+        max_tokens: 2000,
+        temperature: 0.8,
+      });
+
+      const assistantMessage = completion.choices[0]?.message?.content || "I'm having trouble generating a response. Please try again.";
+      existingMessages.push({ role: "assistant", content: assistantMessage, timestamp: Date.now() });
+
+      let statusUpdate: any = { messages: JSON.stringify(existingMessages) };
+      if (session.status === "planning" && existingMessages.length > 4) {
+        statusUpdate.status = "outlining";
+      }
+
+      await storage.updateAiWritingSession(sessionId, statusUpdate);
+
+      res.json({
+        message: assistantMessage,
+        session: { ...session, ...statusUpdate },
+      });
+    } catch (error: any) {
+      console.error("[Writing] Assistant error:", error);
+      res.status(500).json({ error: "Failed to get AI response" });
+    }
+  });
+
+  app.post("/api/ebook/writing-sessions/:id/outline", async (req, res) => {
+    try {
+      const { outline, totalChapters } = req.body;
+      const session = await storage.updateAiWritingSession(parseInt(req.params.id), {
+        outline, totalChapters, status: "drafting",
+      });
+      res.json(session);
+    } catch (error: any) {
+      res.status(500).json({ error: "Failed to save outline" });
     }
   });
 

@@ -8901,12 +8901,17 @@ export const publishedBooks = pgTable("published_books", {
   slug: text("slug").notNull().unique(),
   description: text("description").notNull(),
   genre: text("genre").notNull(),
+  category: text("category").default("nonfiction"),
+  subcategory: text("subcategory"),
   tags: text("tags").array().default([]),
   price: integer("price").notNull(),
   coverImageUrl: text("cover_image_url"),
   manuscriptUrl: text("manuscript_url"),
   wordCount: integer("word_count"),
   chapterCount: integer("chapter_count"),
+  rating: text("rating").default("0"),
+  reviewCount: integer("review_count").default(0),
+  sampleChapters: integer("sample_chapters").default(1),
   status: text("status").notNull().default("pending_review"),
   reviewNotes: text("review_notes"),
   submittedAt: timestamp("submitted_at").defaultNow().notNull(),
@@ -8917,3 +8922,59 @@ export const publishedBooks = pgTable("published_books", {
 export const insertPublishedBookSchema = createInsertSchema(publishedBooks).omit({ id: true, submittedAt: true, publishedAt: true, createdAt: true });
 export type PublishedBook = typeof publishedBooks.$inferSelect;
 export type InsertPublishedBook = z.infer<typeof insertPublishedBookSchema>;
+
+export const userLibrary = pgTable("user_library", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  bookId: text("book_id").notNull(),
+  bookTitle: text("book_title").notNull(),
+  bookSlug: text("book_slug").notNull(),
+  coverImageUrl: text("cover_image_url"),
+  source: text("source").notNull().default("purchase"),
+  progress: integer("progress").default(0),
+  lastReadAt: timestamp("last_read_at"),
+  addedAt: timestamp("added_at").defaultNow().notNull(),
+});
+
+export const insertUserLibrarySchema = createInsertSchema(userLibrary).omit({ id: true, addedAt: true });
+export type UserLibraryItem = typeof userLibrary.$inferSelect;
+export type InsertUserLibraryItem = z.infer<typeof insertUserLibrarySchema>;
+
+export const aiWritingSessions = pgTable("ai_writing_sessions", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  title: text("title").notNull(),
+  genre: text("genre"),
+  category: text("category"),
+  outline: text("outline"),
+  currentChapter: integer("current_chapter").default(0),
+  totalChapters: integer("total_chapters"),
+  content: text("content"),
+  status: text("status").notNull().default("planning"),
+  messages: text("messages"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertAiWritingSessionSchema = createInsertSchema(aiWritingSessions).omit({ id: true, createdAt: true, updatedAt: true });
+export type AiWritingSession = typeof aiWritingSessions.$inferSelect;
+export type InsertAiWritingSession = z.infer<typeof insertAiWritingSessionSchema>;
+
+export const BOOK_CATEGORIES = {
+  fiction: {
+    label: "Fiction",
+    subcategories: [
+      "Literary Fiction", "Science Fiction", "Fantasy", "Mystery & Thriller",
+      "Romance", "Horror", "Historical Fiction", "Adventure",
+      "Dystopian", "Young Adult", "Short Stories", "Satire"
+    ]
+  },
+  nonfiction: {
+    label: "Non-Fiction",
+    subcategories: [
+      "Investigation", "History", "Science", "Philosophy", "Spirituality",
+      "Technology", "Business", "Memoir & Biography", "Self-Help",
+      "True Crime", "Politics", "Health & Wellness", "Education"
+    ]
+  }
+} as const;
