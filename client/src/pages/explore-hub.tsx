@@ -492,7 +492,7 @@ export default function ExploreHub() {
           </div>
         </div>
 
-        <EcosystemDirectory compact className="mb-10" />
+        <EcosystemDirectory compact defaultCollapsed className="mb-10" />
 
         {filteredCategories.length === 0 ? (
           <div className="text-center py-20">

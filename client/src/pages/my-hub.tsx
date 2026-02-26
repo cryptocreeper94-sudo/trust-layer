@@ -1042,7 +1042,7 @@ export default function MyHub() {
             transition={{ delay: 0.15 }}
             className="mb-8"
           >
-            <EcosystemDirectory className="mb-6" />
+            <EcosystemDirectory defaultCollapsed className="mb-6" />
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-xl font-bold flex items-center gap-2">
                 <Globe className="w-5 h-5 text-purple-400" />
