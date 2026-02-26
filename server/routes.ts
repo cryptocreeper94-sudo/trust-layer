@@ -4089,6 +4089,46 @@ export async function registerRoutes(
   });
 
   // ==============================================
+  // ECOSYSTEM DIRECTORY (Categorized TOC Widget)
+  // ==============================================
+
+  app.get("/api/ecosystem/directory", async (req, res) => {
+    try {
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader("Access-Control-Allow-Methods", "GET");
+      res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+      res.setHeader("Cache-Control", "public, max-age=300");
+
+      const allApps = await fetchEcosystemApps();
+      const directoryApps = allApps.map(app => ({
+        id: app.id,
+        name: app.name,
+        category: app.category,
+        hook: app.hook || "",
+        url: app.url || undefined,
+        featured: app.featured || false,
+      }));
+
+      res.json({
+        apps: directoryApps,
+        total: directoryApps.length,
+        version: "1.0.0",
+        embed: `<script src="https://dwsc.io/api/ecosystem/directory.js"></script>`,
+      });
+    } catch (error) {
+      console.error("Error fetching ecosystem directory:", error);
+      res.status(500).json({ error: "Failed to fetch ecosystem directory" });
+    }
+  });
+
+  app.get("/api/ecosystem/directory.js", (req, res) => {
+    res.setHeader("Content-Type", "application/javascript");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Cache-Control", "public, max-age=3600");
+    res.sendFile("ecosystem-directory.js", { root: "client/public" });
+  });
+
+  // ==============================================
   // EMBEDDABLE ECOSYSTEM WIDGET
   // ==============================================
 

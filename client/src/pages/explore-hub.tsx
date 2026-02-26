@@ -27,6 +27,7 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
+import { EcosystemDirectory } from "@/components/ecosystem-directory";
 
 import hubTrading from "@/assets/generated_images/hub_trading_defi.png";
 import hubWallet from "@/assets/generated_images/hub_wallet_tokens.png";
@@ -490,6 +491,8 @@ export default function ExploreHub() {
             />
           </div>
         </div>
+
+        <EcosystemDirectory compact className="mb-10" />
 
         {filteredCategories.length === 0 ? (
           <div className="text-center py-20">
