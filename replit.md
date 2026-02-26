@@ -1,7 +1,16 @@
-# DarkWave Trust Layer - Replit Agent Guide
+# Trust Layer - Replit Agent Guide
 
 ## Overview
-DarkWave Trust Layer (DWTL) is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem, envisioned as a Coordinated Trust Layer. Its core purpose is to provide verified identity, accountability, and transparent audit trails for real business operations, extending beyond traditional blockchain applications. The project includes the DarkWave Portal (a React web application) and "DarkWave Chronicles" (a unique life simulation game). DWTL aims to deliver a fast, feature-rich trust infrastructure with a premium user experience and innovative gaming across key domains such as dwsc.io, darkwavegames.io, darkwavestudios.io, yourlegacy.io, tlid.io, trustshield.tech, and intothevoid.app. The overarching goal is to offer a comprehensive, premium, and innovative trust-based ecosystem.
+Trust Layer is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ecosystem, envisioned as a Coordinated Trust Layer. Its core purpose is to provide verified identity, accountability, and transparent audit trails for real business operations. The project includes the Trust Layer Portal (a React web application) and "Chronicles" (a unique life simulation game). The ecosystem delivers a fast, feature-rich trust infrastructure with a premium user experience and innovative gaming across key domains such as dwsc.io, darkwavegames.io, darkwavestudios.io, yourlegacy.io, tlid.io, trustshield.tech, and intothevoid.app. The overarching goal is to offer a comprehensive, premium, and innovative trust-based ecosystem.
+
+## Branding Rules
+- **"Trust Layer"** for all ecosystem branding and user-facing text
+- **"DarkWave Studios"** ONLY for company/legal entity references (the parent company)
+- **"The Arcade"** for the gaming portal at darkwavegames.io (NOT "DarkWave Games")
+- **"Academy"** for the education platform (NOT "DarkWave Academy")
+- **"Chronicles"** for the life simulation game (NOT "DarkWave Chronicles")
+- **"Signal Chat"** for the messaging platform (NOT "ChronoChat")
+- **Customer support email**: team@dwsc.io (consolidated — no other support emails)
 
 ## User Preferences
 - Preferred communication style: Simple, everyday language

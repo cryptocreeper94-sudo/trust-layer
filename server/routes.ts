@@ -9857,24 +9857,6 @@ const { trustLayerId } = await response.json();`
     }
   });
 
-  // === QUESTS ENDPOINTS ===
-  app.get("/api/quests", async (req, res) => {
-    try {
-      const quests = [
-        { id: "1", name: "First Stake", description: "Stake any amount of SIG", xpReward: 50, tokenReward: "10", difficulty: "easy", category: "staking", progress: 0, target: 1, icon: "zap", completed: false },
-        { id: "2", name: "Bridge Pioneer", description: "Complete your first cross-chain bridge", xpReward: 100, tokenReward: "25", difficulty: "medium", category: "bridge", progress: 0, target: 1, icon: "link", completed: false },
-        { id: "3", name: "Swap Master", description: "Complete 10 token swaps", xpReward: 150, tokenReward: "50", difficulty: "medium", category: "defi", progress: 3, target: 10, icon: "repeat", completed: false },
-        { id: "4", name: "NFT Collector", description: "Own 5 DarkWave NFTs", xpReward: 200, tokenReward: "100", difficulty: "hard", category: "nft", progress: 1, target: 5, icon: "image", completed: false },
-        { id: "5", name: "Daily Login", description: "Login 7 days in a row", xpReward: 75, tokenReward: "20", difficulty: "easy", category: "engagement", progress: 4, target: 7, icon: "calendar", completed: false },
-        { id: "6", name: "Liquidity Provider", description: "Provide liquidity to any pool", xpReward: 250, tokenReward: "75", difficulty: "hard", category: "defi", progress: 1, target: 1, icon: "droplet", completed: true },
-      ];
-      res.json({ quests });
-    } catch (error) {
-      console.error("Get quests error:", error);
-      res.status(500).json({ error: "Failed to fetch quests" });
-    }
-  });
-
   app.get("/api/quests/missions", async (req, res) => {
     try {
       const missions = [
@@ -12199,20 +12181,6 @@ Current context:
     } catch (error) {
       console.error("Remove package error:", error);
       res.status(500).json({ error: "Failed to remove package" });
-    }
-  });
-
-  app.patch("/api/studio/deployments/:id/domain", isAuthenticated, async (req: any, res) => {
-    try {
-      const { customDomain } = req.body;
-      const deployment = await storage.updateStudioDeployment(req.params.id, { customDomain });
-      if (!deployment) {
-        return res.status(404).json({ error: "Deployment not found" });
-      }
-      res.json(deployment);
-    } catch (error) {
-      console.error("Update domain error:", error);
-      res.status(500).json({ error: "Failed to update custom domain" });
     }
   });
 
@@ -18675,17 +18643,6 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-  app.get("/api/owner/zealy/events", ownerAuthMiddleware, async (req, res) => {
-    try {
-      const limit = parseInt(req.query.limit as string) || 50;
-      const events = await zealyService.getRecentEvents(limit);
-      res.json(events);
-    } catch (error) {
-      console.error("Failed to fetch Zealy events:", error);
-      res.status(500).json({ error: "Failed to fetch quest events" });
-    }
-  });
-
   // ============================================
   // OWNER DOMAIN MANAGEMENT (NO WALLET REQUIRED)
   // ============================================
@@ -20914,25 +20871,6 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error) {
       console.error("Get bundles error:", error);
       res.status(500).json({ error: "Failed to get bundles" });
-    }
-  });
-
-  // Get user's DWC conversion eligible shells
-  app.get("/api/shells/conversion-info", isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user?.claims?.sub || req.user?.id;
-      if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
-      const conversionInfo = await shellsService.getConversionEligibleShells(userId);
-      res.json({
-        ...conversionInfo,
-        conversionRate: DWC_CONVERSION_RATE,
-        launchDate: DWC_LAUNCH_DATE,
-        message: `Your ${conversionInfo.totalShells.toLocaleString()} Shells will convert to ${conversionInfo.dwcEquivalent.toFixed(2)} SIG on ${DWC_LAUNCH_DATE}`
-      });
-    } catch (error) {
-      console.error("Get conversion info error:", error);
-      res.status(500).json({ error: "Failed to get conversion info" });
     }
   });
 

@@ -110,11 +110,15 @@ const ecosystemImages: Record<string, string> = {
   "tlid": "/ecosystem/tlid-new.png",
   "torque": "/ecosystem/torque-new.png",
   "darkwave-academy": "/ecosystem/darkwave-academy-new.png",
+  "academy": "/ecosystem/darkwave-academy-new.png",
   "verdara": "/ecosystem/verdara-new.png",
   "arbora": "/ecosystem/arbora-new.png",
   "trust-book": "/ecosystem/trust-book-new.png",
   "trust-golf": "/ecosystem/trust-golf-new.png",
   "trustgolf": "/ecosystem/trust-golf-new.png",
+  "veil": "/ecosystem/veil-new.png",
+  "through-the-veil": "/ecosystem/veil-new.png",
+  "happy-eats": "/ecosystem/happy-eats.png",
 };
 
 function getAppImage(appId: string): string {
