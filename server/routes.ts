@@ -296,6 +296,7 @@ export async function registerRoutes(
     "trusthome": "/my-hub",
     "trustvault": "/wallet",
     "trustbook": "/trust-book",
+    "launch": "/launch",
   };
 
   app.get("*", async (req: Request, res: Response, next: NextFunction) => {

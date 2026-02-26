@@ -809,6 +809,7 @@ const TLID_SUBDOMAIN_ROUTES: Record<string, string> = {
   "trusthome": "/my-hub",
   "trustvault": "/wallet",
   "trustbook": "/trust-book",
+  "launch": "/launch",
 };
 
 function useTlidSubdomainRedirect() {
