@@ -7,7 +7,8 @@ import {
   Shield, ShieldCheck, Award, Activity, AlertTriangle, Clock,
   CheckCircle, XCircle, Eye, ExternalLink, Plus, Settings,
   Wallet, ChevronRight, Zap, Lock, Server, Database, Globe,
-  Bell, TrendingUp, BarChart3, FileText, RefreshCw, Loader, Sparkles
+  Bell, TrendingUp, BarChart3, FileText, RefreshCw, Loader, Sparkles,
+  Download, ClipboardCheck
 } from "lucide-react";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -20,11 +21,100 @@ function getTierInfo(tier: string) {
   switch (tier) {
     case "guardian_premier":
       return { name: "Guardian Premier", gradientClass: "from-pink-500 to-pink-700", icon: Award };
+    case "guardian_certified":
+      return { name: "Guardian Certified", gradientClass: "from-purple-500 to-purple-700", icon: ShieldCheck };
+    case "guardian_assurance":
+      return { name: "Guardian Assurance", gradientClass: "from-blue-500 to-blue-700", icon: ShieldCheck };
     case "assurance_lite":
-      return { name: "Assurance Lite", gradientClass: "from-purple-500 to-purple-700", icon: ShieldCheck };
+      return { name: "Guardian Assurance", gradientClass: "from-blue-500 to-blue-700", icon: ShieldCheck };
+    case "guardian_scan":
+      return { name: "Guardian Scan", gradientClass: "from-cyan-500 to-cyan-700", icon: Shield };
     default:
-      return { name: "Self-Cert", gradientClass: "from-cyan-500 to-cyan-700", icon: Shield };
+      return { name: "Guardian Scan", gradientClass: "from-cyan-500 to-cyan-700", icon: Shield };
   }
+}
+
+const PROGRESS_STEPS = [
+  { key: "intake", label: "Intake Received", icon: ClipboardCheck },
+  { key: "pending", label: "Initial Scan", icon: Eye },
+  { key: "in_progress", label: "Deep Analysis", icon: Activity },
+  { key: "review", label: "Expert Review", icon: FileText },
+  { key: "report_generation", label: "Report Generation", icon: Database },
+  { key: "completed", label: "Delivered", icon: Award },
+];
+
+function getStepIndex(status: string): number {
+  const idx = PROGRESS_STEPS.findIndex(s => s.key === status);
+  return idx >= 0 ? idx : 0;
+}
+
+function CertificationProgress({ certification }: { certification: any }) {
+  const currentStep = getStepIndex(certification.status);
+  const isRevoked = certification.status === "revoked";
+
+  if (isRevoked) {
+    return (
+      <div className="flex items-center gap-2 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
+        <XCircle className="w-4 h-4 text-red-400" />
+        <span className="text-sm text-red-400 font-medium">Certification Revoked</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-3" data-testid={`progress-tracker-${certification.id}`}>
+      <div className="flex items-center justify-between">
+        <span className="text-xs text-white/50">Progress</span>
+        {certification.status !== "completed" && (
+          <span className="text-xs text-white/40">Est. 10-14 business days</span>
+        )}
+      </div>
+      <div className="flex items-center gap-1">
+        {PROGRESS_STEPS.map((step, i) => {
+          const StepIcon = step.icon;
+          const isComplete = i < currentStep;
+          const isCurrent = i === currentStep;
+          const isFuture = i > currentStep;
+
+          return (
+            <div key={step.key} className="flex items-center flex-1">
+              <div className="flex flex-col items-center flex-1 min-w-0">
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
+                    isComplete
+                      ? "bg-emerald-500/20 border border-emerald-500/40"
+                      : isCurrent
+                      ? "bg-cyan-500/20 border-2 border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
+                      : "bg-white/5 border border-white/10"
+                  }`}
+                >
+                  {isComplete ? (
+                    <CheckCircle className="w-4 h-4 text-emerald-400" />
+                  ) : isCurrent ? (
+                    <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ repeat: Infinity, duration: 2 }}>
+                      <StepIcon className="w-4 h-4 text-cyan-400" />
+                    </motion.div>
+                  ) : (
+                    <StepIcon className="w-3.5 h-3.5 text-white/20" />
+                  )}
+                </div>
+                <span className={`text-[10px] mt-1.5 text-center leading-tight ${
+                  isComplete ? "text-emerald-400/70" : isCurrent ? "text-cyan-400" : "text-white/25"
+                }`}>
+                  {step.label}
+                </span>
+              </div>
+              {i < PROGRESS_STEPS.length - 1 && (
+                <div className={`h-[2px] flex-shrink-0 w-4 mt-[-16px] ${
+                  isComplete ? "bg-emerald-500/40" : "bg-white/10"
+                }`} />
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 function getStatusColor(status: string) {
@@ -104,6 +194,11 @@ export default function GuardianPortal() {
     queryFn: () => axios.get("/api/guardian/stamps").then(r => r.data.stamps)
   });
 
+  const { data: guardianStats } = useQuery({
+    queryKey: ["guardian-stats"],
+    queryFn: () => axios.get("/api/guardian/stats").then(r => r.data.stats)
+  });
+
   const handleCompleteCertification = async (certId: string, score: number) => {
     try {
       await axios.patch(`/api/guardian/certifications/${certId}`, { status: "completed", score });
@@ -156,27 +251,25 @@ export default function GuardianPortal() {
           <StatsCard
             icon={ShieldCheck}
             label="Active Certifications"
-            value="2"
+            value={String(guardianStats?.activeCertifications ?? certifications.length)}
             color="from-cyan-500 to-blue-600"
           />
           <StatsCard
             icon={Activity}
             label="Monitored Assets"
-            value="3"
-            trend="+1 this week"
+            value={String(guardianStats?.monitoredAssets ?? assets.length)}
             color="from-purple-500 to-pink-600"
           />
           <StatsCard
             icon={AlertTriangle}
             label="Open Incidents"
-            value="1"
+            value={String(guardianStats?.openIncidents ?? 0)}
             color="from-amber-500 to-orange-600"
           />
           <StatsCard
             icon={Database}
             label="Blockchain Stamps"
-            value="47"
-            trend="+12 today"
+            value={String(guardianStats?.blockchainStamps ?? stamps.length)}
             color="from-emerald-500 to-teal-600"
           />
         </motion.div>
@@ -231,58 +324,73 @@ export default function GuardianPortal() {
                       return (
                         <div
                           key={cert.id}
-                          className="flex items-center gap-4 p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-colors"
+                          className="p-4 rounded-xl border border-white/10 bg-white/5 hover:bg-white/[0.07] transition-colors space-y-4"
                           data-testid={`certification-${cert.id}`}
                         >
-                          <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tierInfo.gradientClass} flex items-center justify-center`}>
-                            <TierIcon className="w-6 h-6 text-white" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-semibold text-white truncate">{cert.projectName}</h3>
-                            <div className="flex items-center gap-2 mt-1">
-                              <Badge variant="outline" className="text-xs">{tierInfo.name}</Badge>
-                              <span className={`text-xs capitalize ${getStatusColor(cert.status)}`}>
-                                {cert.status.replace("_", " ")}
-                              </span>
+                          <div className="flex items-center gap-4">
+                            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tierInfo.gradientClass} flex items-center justify-center flex-shrink-0`}>
+                              <TierIcon className="w-6 h-6 text-white" />
                             </div>
-                          </div>
-                          {cert.score && (
-                            <div className="text-right">
-                              <div className="text-2xl font-bold text-emerald-400">{cert.score}</div>
-                              <div className="text-xs text-white/60">Score</div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-semibold text-white truncate">{cert.projectName}</h3>
+                              <div className="flex items-center gap-2 mt-1 flex-wrap">
+                                <Badge variant="outline" className="text-xs">{tierInfo.name}</Badge>
+                                <span className={`text-xs capitalize ${getStatusColor(cert.status)}`}>
+                                  {cert.status.replace(/_/g, " ")}
+                                </span>
+                                {cert.createdAt && (
+                                  <span className="text-[10px] text-white/30">
+                                    Submitted {new Date(cert.createdAt).toLocaleDateString()}
+                                  </span>
+                                )}
+                              </div>
                             </div>
-                          )}
-                          {cert.nftTokenId && (
-                            <Badge className="bg-purple-500/20 text-purple-400">
-                              NFT #{cert.nftTokenId.slice(-8)}
-                            </Badge>
-                          )}
-                          {cert.status === "completed" && !cert.nftTokenId && (
-                            <Button 
-                              size="sm" 
-                              className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white"
-                              onClick={() => handleMintNFT(cert.id)}
-                              disabled={mintingId === cert.id}
-                              data-testid={`button-mint-nft-${cert.id}`}
-                            >
-                              {mintingId === cert.id ? (
-                                <Loader className="w-3 h-3 mr-1 animate-spin" />
-                              ) : (
-                                <Sparkles className="w-3 h-3 mr-1" />
-                              )}
-                              {mintingId === cert.id ? "Minting..." : "Mint NFT"}
-                            </Button>
-                          )}
-                          {cert.status === "in_progress" && (
-                            <Button 
-                              size="sm" 
-                              variant="outline"
-                              className="text-emerald-400 border-emerald-500/30"
-                              onClick={() => handleCompleteCertification(cert.id, 85)}
-                            >
-                              Mark Complete
-                            </Button>
-                          )}
+                            {cert.score != null && (
+                              <div className="text-right flex-shrink-0">
+                                <div className="text-2xl font-bold text-emerald-400">{cert.score}</div>
+                                <div className="text-xs text-white/60">Score</div>
+                              </div>
+                            )}
+                          </div>
+
+                          <CertificationProgress certification={cert} />
+
+                          <div className="flex items-center gap-2 flex-wrap">
+                            {cert.status === "completed" && (
+                              <Button
+                                size="sm"
+                                className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white"
+                                onClick={() => {
+                                  window.open(`/api/guardian/certifications/${cert.id}/report`, "_blank");
+                                }}
+                                data-testid={`button-download-report-${cert.id}`}
+                              >
+                                <Download className="w-3 h-3 mr-1" />
+                                Download Report
+                              </Button>
+                            )}
+                            {cert.status === "completed" && !cert.nftTokenId && (
+                              <Button 
+                                size="sm" 
+                                className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white"
+                                onClick={() => handleMintNFT(cert.id)}
+                                disabled={mintingId === cert.id}
+                                data-testid={`button-mint-nft-${cert.id}`}
+                              >
+                                {mintingId === cert.id ? (
+                                  <Loader className="w-3 h-3 mr-1 animate-spin" />
+                                ) : (
+                                  <Sparkles className="w-3 h-3 mr-1" />
+                                )}
+                                {mintingId === cert.id ? "Minting..." : "Mint NFT"}
+                              </Button>
+                            )}
+                            {cert.nftTokenId && (
+                              <Badge className="bg-purple-500/20 text-purple-400">
+                                NFT #{cert.nftTokenId.slice(-8)}
+                              </Badge>
+                            )}
+                          </div>
                         </div>
                       );
                     })

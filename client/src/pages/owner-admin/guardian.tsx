@@ -40,11 +40,16 @@ interface Certification {
 function getTierInfo(tier: string) {
   switch (tier) {
     case "guardian_premier":
-      return { name: "Guardian Premier", price: "$14,999", gradient: "from-pink-500 to-pink-700", icon: Award };
+      return { name: "Guardian Premier", price: "Custom", gradient: "from-pink-500 to-pink-700", icon: Award };
+    case "guardian_certified":
+      return { name: "Guardian Certified", price: "$2,499", gradient: "from-purple-500 to-purple-700", icon: ShieldCheck };
+    case "guardian_assurance":
     case "assurance_lite":
-      return { name: "Assurance Lite", price: "$5,999", gradient: "from-purple-500 to-purple-700", icon: ShieldCheck };
+      return { name: "Guardian Assurance", price: "$499", gradient: "from-blue-500 to-blue-700", icon: ShieldCheck };
+    case "guardian_scan":
+      return { name: "Guardian Scan", price: "Free", gradient: "from-cyan-500 to-cyan-700", icon: Shield };
     default:
-      return { name: "Self-Cert", price: "Free", gradient: "from-cyan-500 to-cyan-700", icon: Shield };
+      return { name: "Guardian Scan", price: "Free", gradient: "from-cyan-500 to-cyan-700", icon: Shield };
   }
 }
 
@@ -54,11 +59,39 @@ function getStatusBadge(status: string) {
       return { bg: "bg-emerald-500/20", text: "text-emerald-400", border: "border-emerald-500/30", label: "Completed" };
     case "in_progress":
       return { bg: "bg-amber-500/20", text: "text-amber-400", border: "border-amber-500/30", label: "In Progress" };
+    case "review":
+      return { bg: "bg-purple-500/20", text: "text-purple-400", border: "border-purple-500/30", label: "Expert Review" };
+    case "report_generation":
+      return { bg: "bg-cyan-500/20", text: "text-cyan-400", border: "border-cyan-500/30", label: "Report Generation" };
+    case "intake":
+      return { bg: "bg-sky-500/20", text: "text-sky-400", border: "border-sky-500/30", label: "Intake" };
     case "revoked":
       return { bg: "bg-red-500/20", text: "text-red-400", border: "border-red-500/30", label: "Revoked" };
     default:
       return { bg: "bg-blue-500/20", text: "text-blue-400", border: "border-blue-500/30", label: "Pending" };
   }
+}
+
+function getNextStatus(current: string): string | null {
+  const flow: Record<string, string> = {
+    intake: "pending",
+    pending: "in_progress",
+    in_progress: "review",
+    review: "report_generation",
+    report_generation: "completed",
+  };
+  return flow[current] || null;
+}
+
+function getNextStatusLabel(current: string): string | null {
+  const labels: Record<string, string> = {
+    intake: "Start Initial Scan",
+    pending: "Begin Deep Analysis",
+    in_progress: "Move to Expert Review",
+    review: "Generate Report",
+    report_generation: "Mark as Delivered",
+  };
+  return labels[current] || null;
 }
 
 export default function OwnerGuardian() {
@@ -106,12 +139,13 @@ export default function OwnerGuardian() {
 
   const stats = {
     total: certifications.length,
-    pending: certifications.filter(c => c.status === "pending").length,
-    inProgress: certifications.filter(c => c.status === "in_progress").length,
+    active: certifications.filter(c => !["completed", "revoked"].includes(c.status)).length,
+    inProgress: certifications.filter(c => ["in_progress", "review", "report_generation"].includes(c.status)).length,
     completed: certifications.filter(c => c.status === "completed").length,
     revenue: certifications.filter(c => c.stripePaymentId).reduce((sum, c) => {
-      if (c.tier === "guardian_premier") return sum + 14999;
-      if (c.tier === "assurance_lite") return sum + 5999;
+      if (c.tier === "guardian_premier") return sum + 7500;
+      if (c.tier === "guardian_certified") return sum + 2499;
+      if (c.tier === "guardian_assurance" || c.tier === "assurance_lite") return sum + 499;
       return sum;
     }, 0),
   };
@@ -135,6 +169,29 @@ export default function OwnerGuardian() {
       setFindingsInput("");
     } catch (error: any) {
       toast.error(error.message || "Failed to perform action");
+    } finally {
+      setProcessing(null);
+    }
+  };
+
+  const handleAdvance = async (certId: string, currentStatus: string) => {
+    const nextStatus = getNextStatus(currentStatus);
+    if (!nextStatus) return;
+    setProcessing(certId);
+    try {
+      const res = await fetch(`/api/owner/guardian/certifications/${certId}/advance`, {
+        method: "POST",
+        headers: getOwnerHeaders(),
+        body: JSON.stringify({ nextStatus }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to advance");
+      }
+      toast.success(`Advanced to: ${getStatusBadge(nextStatus).label}`);
+      refetch();
+    } catch (error: any) {
+      toast.error(error.message || "Failed to advance certification");
     } finally {
       setProcessing(null);
     }
@@ -175,7 +232,7 @@ export default function OwnerGuardian() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
           {[
             { label: "Total", value: stats.total, icon: <Shield className="w-5 h-5 text-cyan-400" />, color: "from-cyan-500/20 to-cyan-500/5" },
-            { label: "Pending", value: stats.pending, icon: <Clock className="w-5 h-5 text-blue-400" />, color: "from-blue-500/20 to-blue-500/5" },
+            { label: "Active", value: stats.active, icon: <Clock className="w-5 h-5 text-blue-400" />, color: "from-blue-500/20 to-blue-500/5" },
             { label: "In Progress", value: stats.inProgress, icon: <Play className="w-5 h-5 text-amber-400" />, color: "from-amber-500/20 to-amber-500/5" },
             { label: "Completed", value: stats.completed, icon: <CheckCircle2 className="w-5 h-5 text-emerald-400" />, color: "from-emerald-500/20 to-emerald-500/5" },
             { label: "Revenue", value: `$${stats.revenue.toLocaleString()}`, icon: <DollarSign className="w-5 h-5 text-pink-400" />, color: "from-pink-500/20 to-pink-500/5" },
@@ -214,7 +271,7 @@ export default function OwnerGuardian() {
               />
             </div>
             <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0">
-              {["all", "pending", "in_progress", "completed", "revoked"].map(status => (
+              {["all", "intake", "pending", "in_progress", "review", "report_generation", "completed", "revoked"].map(status => (
                 <Button
                   key={status}
                   variant={statusFilter === status ? "default" : "outline"}
@@ -290,19 +347,19 @@ export default function OwnerGuardian() {
                       </div>
 
                       <div className="flex flex-wrap gap-2 lg:justify-end">
-                        {cert.status === "pending" && (
+                        {getNextStatusLabel(cert.status) && cert.status !== "report_generation" && (
                           <Button
                             size="sm"
-                            onClick={() => handleAction(cert.id, "start")}
+                            onClick={() => handleAdvance(cert.id, cert.status)}
                             disabled={processing === cert.id}
                             className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700"
-                            data-testid={`button-start-${cert.id}`}
+                            data-testid={`button-advance-${cert.id}`}
                           >
                             <Play className="w-4 h-4 mr-1" />
-                            Start Audit
+                            {getNextStatusLabel(cert.status)}
                           </Button>
                         )}
-                        {cert.status === "in_progress" && (
+                        {cert.status === "report_generation" && (
                           <Button
                             size="sm"
                             onClick={() => setSelectedCert(cert)}
@@ -311,10 +368,10 @@ export default function OwnerGuardian() {
                             data-testid={`button-complete-${cert.id}`}
                           >
                             <CheckCircle2 className="w-4 h-4 mr-1" />
-                            Mark Complete
+                            Finalize & Deliver
                           </Button>
                         )}
-                        {(cert.status === "pending" || cert.status === "in_progress") && (
+                        {cert.status !== "completed" && cert.status !== "revoked" && (
                           <Button
                             size="sm"
                             variant="outline"
@@ -328,16 +385,27 @@ export default function OwnerGuardian() {
                           </Button>
                         )}
                         {cert.status === "completed" && (
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
-                            data-testid={`button-report-${cert.id}`}
-                            onClick={() => window.open(`/guardian-ai-registry?cert=${cert.id}`, '_blank')}
-                          >
-                            <FileText className="w-4 h-4 mr-1" />
-                            View Report
-                          </Button>
+                          <>
+                            <Button
+                              size="sm"
+                              className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white"
+                              data-testid={`button-report-${cert.id}`}
+                              onClick={() => window.open(`/api/guardian/certifications/${cert.id}/report`, '_blank')}
+                            >
+                              <Download className="w-4 h-4 mr-1" />
+                              Download Report
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
+                              onClick={() => window.open(`/guardian-ai-registry?cert=${cert.id}`, '_blank')}
+                              data-testid={`button-registry-${cert.id}`}
+                            >
+                              <FileText className="w-4 h-4 mr-1" />
+                              Registry
+                            </Button>
+                          </>
                         )}
                       </div>
                     </div>

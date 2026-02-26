@@ -136,14 +136,14 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and, gte } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications, limitOrders, insertLimitOrderSchema, chatChannels, ecosystemAffiliates, ecosystemReferrals, ecosystemRewardsLedger, chroniclesGameState } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, guardianCertifications, guardianMonitoredAssets, guardianIncidents, guardianBlockchainStamps, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications, limitOrders, insertLimitOrderSchema, chatChannels, ecosystemAffiliates, ecosystemReferrals, ecosystemRewardsLedger, chroniclesGameState } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { orbitClient } from "./services/orbitEcosystem";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
 import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
 import { trustStamp, getUserTrustStamps } from "./trust-stamp";
 import { blockchain } from "./blockchain-engine";
-import { sendEmail, sendApiKeyEmail, sendHallmarkEmail, sendPresaleConfirmationEmail, sendEmailVerificationCode, sendBusinessApprovalEmail, sendBusinessRejectionEmail, sendCrowdfundConfirmationEmail, sendSubscriptionActivatedEmail, sendSubscriptionRenewalEmail, sendGoldCoinPurchaseEmail, sendCreditsConfirmationEmail, sendGuardianCertificationEmail, sendDomainRegistrationEmail, sendOrbsPurchaseEmail, sendShellsPurchaseEmail, sendPaymentFailedEmail } from "./email";
+import { sendEmail, sendApiKeyEmail, sendHallmarkEmail, sendPresaleConfirmationEmail, sendEmailVerificationCode, sendBusinessApprovalEmail, sendBusinessRejectionEmail, sendCrowdfundConfirmationEmail, sendSubscriptionActivatedEmail, sendSubscriptionRenewalEmail, sendGoldCoinPurchaseEmail, sendCreditsConfirmationEmail, sendGuardianCertificationEmail, sendGuardianIntakeEmail, sendDomainRegistrationEmail, sendOrbsPurchaseEmail, sendShellsPurchaseEmail, sendPaymentFailedEmail } from "./email";
 import { submitMemoToSolana, isHeliusConfigured, getSolanaTreasuryAddress, getSolanaBalance } from "./helius";
 import { startRegistration, finishRegistration, startAuthentication, finishAuthentication, getUserPasskeys, deletePasskey } from "./webauthn";
 import { bridge } from "./bridge-engine";
@@ -564,7 +564,7 @@ export async function registerRoutes(
               projectName: metadata.projectName || "Unknown Project",
               projectUrl: metadata.projectUrl || null,
               contactEmail: customerEmail || metadata.contactEmail || "",
-              tier: metadata.tier || "assurance_lite",
+              tier: metadata.tier || "guardian_assurance",
               status: "pending",
               stripePaymentId: paymentId as string,
               userId: metadata.userId || null,
@@ -584,7 +584,7 @@ export async function registerRoutes(
             const certEmail = customerEmail || metadata.contactEmail;
             if (certEmail) {
               try {
-                await sendGuardianCertificationEmail(certEmail, metadata.projectName || "Unknown Project", metadata.tier || "assurance_lite", (amountCents / 100).toFixed(2), String(certification.id));
+                await sendGuardianCertificationEmail(certEmail, metadata.projectName || "Unknown Project", metadata.tier || "guardian_assurance", (amountCents / 100).toFixed(2), String(certification.id));
               } catch (emailErr) { console.error("[Stripe Webhook] Guardian cert email error:", emailErr); }
             }
           } catch (dbError) {
@@ -7280,15 +7280,15 @@ const { trustLayerId } = await response.json();`
 
   // === GUARDIAN CERTIFICATION CHECKOUT ROUTES ===
   const GUARDIAN_TIERS = {
-    assurance_lite: {
-      name: "Guardian Assurance Lite",
-      description: "Standard security audit with comprehensive smart contract analysis",
-      price: 599900, // $5,999 in cents
+    guardian_assurance: {
+      name: "Guardian Assurance",
+      description: "Full automated + AI security analysis with professional PDF report",
+      price: 49900, // $499 in cents
     },
-    guardian_premier: {
-      name: "Guardian Premier",
-      description: "Enterprise-grade security certification with penetration testing and full audit",
-      price: 1499900, // $14,999 in cents
+    guardian_certified: {
+      name: "Guardian Certified",
+      description: "Manual expert review + remediation + on-chain badge + 30-day monitoring",
+      price: 249900, // $2,499 in cents
     },
     ai_basic: {
       name: "Guardian AI Basic",
@@ -7308,7 +7308,7 @@ const { trustLayerId } = await response.json();`
   };
 
   const GuardianCheckoutSchema = z.object({
-    tier: z.enum(["assurance_lite", "guardian_premier", "ai_basic", "ai_advanced", "ai_enterprise"]),
+    tier: z.enum(["guardian_assurance", "guardian_certified", "ai_basic", "ai_advanced", "ai_enterprise"]),
     projectName: z.string().min(1).max(200),
     projectUrl: z.string().url().optional(),
     contactEmail: z.string().email(),
@@ -7376,6 +7376,73 @@ const { trustLayerId } = await response.json();`
     });
   });
 
+  app.post("/api/guardian/intake", async (req, res) => {
+    try {
+      const intakeSchema = z.object({
+        projectName: z.string().min(1, "Project name is required").max(200),
+        website: z.string().url().optional(),
+        contactEmail: z.string().email("Valid email is required"),
+        projectType: z.string().max(50).optional(),
+        tier: z.string().max(50).optional(),
+        description: z.string().max(5000).optional(),
+        contractAddresses: z.string().max(2000).optional(),
+      });
+
+      const data = intakeSchema.parse(req.body);
+
+      const tierMap: Record<string, string> = {
+        "Guardian Scan": "guardian_scan",
+        "Guardian Assurance": "guardian_assurance",
+        "Guardian Certified": "guardian_certified",
+        "Guardian Premier": "guardian_premier",
+        "Self-Cert": "self_cert",
+        "Assurance Lite": "assurance_lite",
+      };
+      const mappedTier = tierMap[data.tier || ""] || data.tier || "guardian_scan";
+
+      const metadata: Record<string, string> = {};
+      if (data.projectType) metadata.projectType = data.projectType;
+      if (data.description) metadata.description = data.description;
+      if (data.contractAddresses) metadata.contractAddresses = data.contractAddresses;
+
+      const certification = await guardianService.createCertification({
+        projectName: data.projectName,
+        projectUrl: data.website || null,
+        contactEmail: data.contactEmail,
+        tier: mappedTier,
+        status: "intake",
+        findings: Object.keys(metadata).length > 0 ? JSON.stringify(metadata) : null,
+      });
+
+      try {
+        await sendGuardianIntakeEmail(data.contactEmail, data.projectName, mappedTier, certification.id);
+      } catch (emailErr) {
+        console.error("[Guardian Intake] Email send error:", emailErr);
+      }
+
+      trustStamp("guardian-intake", {
+        certId: certification.id,
+        project: data.projectName,
+        tier: mappedTier,
+        email: data.contactEmail,
+      }).catch(() => {});
+
+      console.log(`[Guardian Intake] Created certification ${certification.id} for ${data.projectName} (${mappedTier})`);
+
+      res.json({
+        certificationId: certification.id,
+        status: "intake",
+        message: "Your certification intake has been submitted successfully.",
+      });
+    } catch (error) {
+      console.error("Guardian intake error:", error);
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ error: "Invalid request data", details: error.errors });
+      }
+      res.status(500).json({ error: "Failed to submit intake form" });
+    }
+  });
+
   app.get("/api/guardian/certifications", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.query.userId as string;
@@ -7409,7 +7476,7 @@ const { trustLayerId } = await response.json();`
         projectName: z.string().min(1),
         projectUrl: z.string().optional(),
         contactEmail: z.string().email(),
-        tier: z.enum(["self_cert", "assurance_lite", "guardian_premier"]),
+        tier: z.enum(["guardian_scan", "guardian_assurance", "guardian_certified", "guardian_premier"]),
         stripePaymentId: z.string().optional()
       });
       const data = schema.parse(req.body);
@@ -7510,6 +7577,34 @@ const { trustLayerId } = await response.json();`
     }
   });
 
+  app.get("/api/guardian/stats", async (req, res) => {
+    try {
+      const allCerts = await db.select().from(guardianCertifications);
+      const allAssets = await db.select().from(guardianMonitoredAssets);
+      const allIncidents = await db.select().from(guardianIncidents);
+      const allStamps = await db.select().from(guardianBlockchainStamps);
+
+      const activeCerts = allCerts.filter(c => c.status === "completed" || c.status === "in_progress" || c.status === "review" || c.status === "report_generation");
+      const openIncidents = allIncidents.filter(i => i.status !== "resolved" && i.status !== "false_positive");
+
+      res.json({
+        stats: {
+          totalCertifications: allCerts.length,
+          activeCertifications: activeCerts.length,
+          completedCertifications: allCerts.filter(c => c.status === "completed").length,
+          monitoredAssets: allAssets.filter(a => a.status === "active").length,
+          openIncidents: openIncidents.length,
+          resolvedIncidents: allIncidents.filter(i => i.status === "resolved").length,
+          blockchainStamps: allStamps.length,
+          confirmedStamps: allStamps.filter(s => s.status === "confirmed").length
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching guardian stats:", error);
+      res.status(500).json({ error: "Failed to fetch stats" });
+    }
+  });
+
   app.post("/api/guardian/certifications/:id/mint-nft", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id;
@@ -7525,6 +7620,28 @@ const { trustLayerId } = await response.json();`
     } catch (error: any) {
       console.error("Error minting NFT:", error);
       res.status(400).json({ error: error.message || "Failed to mint NFT" });
+    }
+  });
+
+  app.get("/api/guardian/certifications/:id/report", async (req, res) => {
+    try {
+      const { generateGuardianReportPDF } = await import("./guardian-report-pdf");
+      const pdfBuffer = await generateGuardianReportPDF(req.params.id);
+      const cert = await guardianService.getCertification(req.params.id);
+      const filename = `guardian-report-${(cert?.projectName || "project").replace(/[^a-zA-Z0-9]/g, "-").toLowerCase()}-${req.params.id.substring(0, 8)}.pdf`;
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+      res.setHeader("Content-Length", pdfBuffer.length);
+      res.send(pdfBuffer);
+    } catch (error: any) {
+      console.error("Error generating report PDF:", error);
+      if (error.message === "Certification not found") {
+        return res.status(404).json({ error: "Certification not found" });
+      }
+      if (error.message === "Report only available for completed certifications") {
+        return res.status(400).json({ error: error.message });
+      }
+      res.status(500).json({ error: "Failed to generate report" });
     }
   });
 
@@ -17899,6 +18016,37 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     } catch (error) {
       console.error("Start certification error:", error);
       res.status(500).json({ error: "Failed to start certification" });
+    }
+  });
+
+  app.post("/api/owner/guardian/certifications/:id/advance", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { nextStatus } = req.body;
+      const validStatuses = ["pending", "in_progress", "review", "report_generation", "completed"];
+      if (!validStatuses.includes(nextStatus)) {
+        return res.status(400).json({ error: "Invalid target status" });
+      }
+      const updateData: any = { status: nextStatus };
+      if (nextStatus === "completed") {
+        updateData.validFrom = new Date();
+        updateData.validUntil = new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
+      }
+      const updated = await guardianService.updateCertification(id, updateData);
+      if (!updated) {
+        return res.status(404).json({ error: "Certification not found" });
+      }
+      try {
+        await storage.createTrustStamp({
+          type: "guardian_certification_advanced",
+          dataHash: `cert-advance-${id}-${nextStatus}`,
+          metadata: JSON.stringify({ certId: id, newStatus: nextStatus, timestamp: new Date().toISOString() }),
+        });
+      } catch (e) {}
+      res.json({ success: true, certification: updated });
+    } catch (error) {
+      console.error("Advance certification error:", error);
+      res.status(500).json({ error: "Failed to advance certification" });
     }
   });
 

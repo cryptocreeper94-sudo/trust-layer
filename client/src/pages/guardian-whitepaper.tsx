@@ -155,16 +155,16 @@ export default function GuardianWhitepaperPage() {
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
                 <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                  <div className="text-3xl font-bold text-purple-400 mb-2">$0</div>
-                  <div className="text-sm text-white/60">Funds Lost in Certified Projects</div>
+                  <div className="text-3xl font-bold text-purple-400 mb-2">6</div>
+                  <div className="text-sm text-white/60">Security Analysis Pillars</div>
                 </div>
                 <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                  <div className="text-3xl font-bold text-pink-400 mb-2">100%</div>
-                  <div className="text-sm text-white/60">Critical Issues Found Before Launch</div>
+                  <div className="text-3xl font-bold text-pink-400 mb-2">200+</div>
+                  <div className="text-sm text-white/60">Vulnerability Patterns Checked</div>
                 </div>
                 <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">24/7</div>
-                  <div className="text-sm text-white/60">Guardian Shield Monitoring</div>
+                  <div className="text-3xl font-bold text-cyan-400 mb-2">On-Chain</div>
+                  <div className="text-sm text-white/60">Verifiable Certification Stamps</div>
                 </div>
               </div>
             </GlassCard>

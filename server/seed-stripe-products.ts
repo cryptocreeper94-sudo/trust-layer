@@ -97,19 +97,19 @@ const PRODUCTS: ProductConfig[] = [
     ],
   },
   {
-    name: "Guardian Assurance Lite",
-    description: "One-time security audit for smart contracts and blockchain projects",
-    metadata: { category: "service", tier: "assurance_lite" },
+    name: "Guardian Assurance",
+    description: "Full automated + AI security analysis with professional PDF report — Launch Pricing",
+    metadata: { category: "service", tier: "guardian_assurance" },
     prices: [
-      { nickname: "Assurance Lite Audit", unit_amount: 599900, currency: "usd" },
+      { nickname: "Guardian Assurance Audit", unit_amount: 49900, currency: "usd" },
     ],
   },
   {
-    name: "Guardian Premier Certification",
-    description: "Comprehensive security certification with full audit, penetration testing, and public registry",
-    metadata: { category: "service", tier: "guardian_premier" },
+    name: "Guardian Certified",
+    description: "Manual expert review + remediation + on-chain badge + 30-day monitoring — Launch Pricing",
+    metadata: { category: "service", tier: "guardian_certified" },
     prices: [
-      { nickname: "Guardian Premier Certification", unit_amount: 1499900, currency: "usd" },
+      { nickname: "Guardian Certified Audit", unit_amount: 249900, currency: "usd" },
     ],
   },
   {

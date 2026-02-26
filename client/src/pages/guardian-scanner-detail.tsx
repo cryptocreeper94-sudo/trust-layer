@@ -214,6 +214,7 @@ function CandlestickChart({ timeRange }: { timeRange: string }) {
       {/* TradingView-style header */}
       <div className="absolute top-2 left-2 z-10 text-[10px] text-white/60">
         <span className="text-cyan-400">◎</span> PENGUIN/SOL on PumpSwap · 15 · dexscreener.com
+        <span className="ml-2 px-1.5 py-0.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded text-[9px] font-medium">Example Analysis</span>
       </div>
       
       {/* Price overlay */}
@@ -349,6 +350,7 @@ function GuardianScorePanel({ token }: { token: TokenDetail }) {
         <div className="flex items-center gap-2">
           <Shield className={`w-5 h-5 ${riskColor}`} />
           <span className="text-sm font-bold text-white">Guardian Score</span>
+          <span className="px-1.5 py-0.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded text-[9px] font-medium">Example</span>
         </div>
         <div className={`text-2xl font-bold ${riskColor}`}>{score}</div>
       </div>
@@ -409,6 +411,7 @@ function MLPredictionPanel({ prediction }: { prediction: TokenDetail["mlPredicti
       <div className="flex items-center gap-2 mb-3">
         <Brain className="w-5 h-5 text-purple-400" />
         <span className="text-sm font-bold text-white">ML Prediction</span>
+        <span className="px-1.5 py-0.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded text-[9px] font-medium">Example</span>
       </div>
       
       <div className="flex items-center gap-3 mb-3">

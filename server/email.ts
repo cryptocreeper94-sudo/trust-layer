@@ -569,6 +569,56 @@ export async function sendGuardianCertificationEmail(to: string, projectName: st
 }
 
 
+export async function sendGuardianIntakeEmail(to: string, projectName: string, tier: string, certificationId: string) {
+  const tierNames: Record<string, string> = {
+    guardian_scan: "Guardian Scan",
+    guardian_assurance: "Guardian Assurance",
+    guardian_certified: "Guardian Certified",
+    guardian_premier: "Guardian Premier",
+    self_cert: "Self-Cert",
+    assurance_lite: "Assurance Lite",
+  };
+  const displayTier = tierNames[tier] || tier;
+
+  const content = `
+    ${heroSection('Intake Received', `We've received your certification request for ${projectName}.`, '#10b981')}
+    
+    ${receiptTable([
+      { label: 'Project', value: projectName },
+      { label: 'Interested Tier', value: displayTier },
+      { label: 'Certification ID', value: certificationId },
+      { label: 'Status', value: 'Intake Received' },
+    ])}
+    
+    ${highlightBox(`
+      <h3 style="margin:0 0 8px;color:#10b981;font-size:15px;font-weight:700;">What Happens Next</h3>
+      <ol style="margin:0;padding-left:18px;color:#94a3b8;font-size:14px;line-height:2;">
+        <li>Our team reviews your submission (1-2 business days)</li>
+        <li>We'll reach out to discuss scope and next steps</li>
+        <li>Once confirmed, your certification process begins</li>
+        <li>Track your progress anytime at the Guardian Portal</li>
+      </ol>
+    `, '#10b981')}
+    
+    ${statCard('Your Certification ID', certificationId, '#06b6d4')}
+    
+    ${ctaButton('Track Your Certification', `${BASE_URL}/guardian-portal`, 'linear-gradient(135deg,#10b981,#06b6d4)')}
+    
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+    <tr><td style="text-align:center;padding-top:4px;">
+      <p style="margin:0;color:#94a3b8;font-size:12px;">Save your Certification ID to check your progress at any time.</p>
+    </td></tr>
+    </table>
+  `;
+
+  return sendEmail({
+    to,
+    subject: `Guardian Certification Intake Received - ${projectName} | ID: ${certificationId}`,
+    html: baseTemplate(content, `Your Guardian certification intake for ${projectName} has been received. Track your progress with ID: ${certificationId}`),
+  });
+}
+
+
 export async function sendDomainRegistrationEmail(to: string, domainName: string, domainTier: string, amountPaid: string, isLifetime: boolean) {
   const content = `
     ${heroSection('Domain Registered!', `${domainName}.tlid is yours.`, '#ec4899')}

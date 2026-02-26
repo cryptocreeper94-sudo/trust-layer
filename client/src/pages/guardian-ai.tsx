@@ -100,17 +100,17 @@ const CERTIFICATION_TIERS = [
 ];
 
 const TRUST_METRICS = [
-  { name: 'Security Score', description: 'Code integrity, vulnerability assessment, access control analysis', icon: Lock, value: '98.7' },
-  { name: 'Transparency Score', description: 'Open source status, documentation quality, audit history', icon: Eye, value: '95.2' },
-  { name: 'Reliability Score', description: 'Uptime history, error handling, edge case management', icon: Activity, value: '99.1' },
-  { name: 'Compliance Score', description: 'Regulatory alignment, data handling, user consent mechanisms', icon: FileCheck, value: '92.8' },
+  { name: 'Security Analysis', description: 'Code integrity, vulnerability assessment, access control analysis', icon: Lock, value: 'Deep' },
+  { name: 'Transparency', description: 'Open methodology, public registry, verifiable on-chain badges', icon: Eye, value: 'Full' },
+  { name: 'Reliability Focus', description: 'Uptime history, error handling, edge case management review', icon: Activity, value: 'Core' },
+  { name: 'Compliance Mapping', description: 'Industry standard alignment, data handling, consent mechanisms', icon: FileCheck, value: 'Built-In' },
 ];
 
 const MARKET_STATS = [
-  { value: '21,000+', label: 'AI Agents Launched', sublabel: 'November 2024 alone' },
-  { value: '1M+', label: 'Projected Agents', sublabel: 'By end of 2025' },
-  { value: '$50.5B', label: 'AI Crypto Market', sublabel: 'Peak 2025' },
-  { value: '0', label: 'Certified Agents', sublabel: 'Industry-wide (until now)' },
+  { value: '21,000+', label: 'AI Agents Launched', sublabel: 'November 2024 (industry)' },
+  { value: '1M+', label: 'Projected Agents', sublabel: 'By end of 2025 (industry est.)' },
+  { value: '$50.5B', label: 'AI Crypto Market', sublabel: 'Peak 2025 (industry est.)' },
+  { value: 'New', label: 'Certification Standard', sublabel: 'Guardian AI pioneering' },
 ];
 
 function BentoCard({ children, className = "", span = "col-span-1", delay = 0 }: { 
@@ -414,10 +414,10 @@ export default function GuardianAI() {
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mt-5">
             {[
-              { label: 'Agents Certified', value: '1,200+', icon: Bot },
-              { label: 'Trust Scores Issued', value: '8,400+', icon: ShieldCheck },
-              { label: 'Threats Blocked', value: '42K+', icon: AlertTriangle },
-              { label: 'Enterprise Clients', value: '180+', icon: Building },
+              { label: 'Vulnerability Patterns', value: '200+', icon: Bug },
+              { label: 'Analysis Pillars', value: '6-Pillar', icon: ShieldCheck },
+              { label: 'Verification', value: 'On-Chain', icon: Database },
+              { label: 'Alert Speed', value: '<1 Min', icon: Zap },
             ].map((stat, i) => (
               <motion.div
                 key={stat.label}

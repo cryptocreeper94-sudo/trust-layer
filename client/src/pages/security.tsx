@@ -13,10 +13,10 @@ const SECURITY_SCORE = 78;
 const INDUSTRY_AVERAGE = 52;
 
 const HERO_STATS = [
-  { label: "Security Score", value: "78/100", icon: Shield, color: "cyan" },
-  { label: "Above Industry Avg", value: "+50%", icon: TrendingUp, color: "green" },
+  { label: "Self-Audit Score", value: "78/100", icon: Shield, color: "cyan" },
+  { label: "Security Approach", value: "Proactive", icon: TrendingUp, color: "green" },
   { label: "Active Protections", value: "12+", icon: ShieldCheck, color: "purple" },
-  { label: "Zero Breaches", value: "0", icon: Ban, color: "pink" },
+  { label: "Known Breaches", value: "0", icon: Ban, color: "pink" },
 ];
 
 const SECURITY_FEATURES = [
@@ -59,12 +59,12 @@ const SECURITY_FEATURES = [
 ];
 
 const COMPARISON_DATA = [
-  { category: "Encryption", dwtl: 95, industry: 60 },
-  { category: "Authentication", dwtl: 85, industry: 55 },
-  { category: "API Protection", dwtl: 80, industry: 45 },
-  { category: "Data Integrity", dwtl: 90, industry: 50 },
-  { category: "Secret Management", dwtl: 90, industry: 40 },
-  { category: "Headers & CORS", dwtl: 85, industry: 35 },
+  { category: "Encryption", dwtl: "AES-256-GCM", industry: "Varies" },
+  { category: "Authentication", dwtl: "WebAuthn + Passkeys", industry: "Password-based" },
+  { category: "API Protection", dwtl: "10+ Rate Limiters", industry: "Basic" },
+  { category: "Data Integrity", dwtl: "HMAC-SHA256 Signed", industry: "Varies" },
+  { category: "Secret Management", dwtl: "Env-Isolated", industry: "Often Exposed" },
+  { category: "Headers & CORS", dwtl: "CSP + Frame Guard", industry: "Minimal" },
 ];
 
 const CERTIFICATIONS_PLANNED = [
@@ -153,7 +153,7 @@ function HeroScoreBadge() {
         >
           <div className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-500/20 to-emerald-500/20 border border-green-500/30 rounded-full">
             <TrendingUp className="w-5 h-5 text-green-400" />
-            <span className="text-green-400 font-semibold">50% Above Industry Average</span>
+            <span className="text-green-400 font-semibold">Self-Audit Score (Internal Assessment)</span>
           </div>
         </motion.div>
       </motion.div>
@@ -161,38 +161,19 @@ function HeroScoreBadge() {
   );
 }
 
-function ComparisonBar({ category, dwtl, industry, index }: { category: string; dwtl: number; industry: number; index: number }) {
+function ComparisonRow({ category, dwtl, industry, index }: { category: string; dwtl: string; industry: string; index: number }) {
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.1 }}
-      className="space-y-2"
+      className="flex items-center justify-between py-3 border-b border-white/5 last:border-0"
     >
-      <div className="flex justify-between text-sm">
-        <span className="text-white/80 font-medium">{category}</span>
-        <div className="flex gap-4">
-          <span className="text-cyan-400">{dwtl}%</span>
-          <span className="text-white/30">{industry}%</span>
-        </div>
-      </div>
-      <div className="relative h-3 bg-white/5 rounded-full overflow-hidden">
-        <motion.div
-          initial={{ width: 0 }}
-          whileInView={{ width: `${industry}%` }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, delay: 0.3 }}
-          className="absolute h-full bg-white/10 rounded-full"
-        />
-        <motion.div
-          initial={{ width: 0 }}
-          whileInView={{ width: `${dwtl}%` }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.2, delay: 0.5 }}
-          className="absolute h-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-full"
-          style={{ boxShadow: "0 0 20px rgba(6, 182, 212, 0.5)" }}
-        />
+      <span className="text-white/80 font-medium text-sm w-1/3">{category}</span>
+      <div className="flex-1 flex items-center justify-end gap-8">
+        <span className="text-cyan-400 font-semibold text-sm text-right">{dwtl}</span>
+        <span className="text-white/30 text-sm text-right w-28">{industry}</span>
       </div>
     </motion.div>
   );
@@ -231,7 +212,7 @@ export default function SecurityPage() {
                 </h1>
                 <p className="text-xl text-white/60 mb-8 leading-relaxed">
                   We don't wait for problems. DWTL implements enterprise-grade security from day one, 
-                  scoring <span className="text-cyan-400 font-semibold">50% higher</span> than the industry average 
+                  with a proactive <span className="text-cyan-400 font-semibold">security-first architecture</span> built 
                   before our first transaction.
                 </p>
                 <div className="flex flex-wrap gap-4">
@@ -294,7 +275,7 @@ export default function SecurityPage() {
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                  How We Compare
+                  Our Approach vs. Common Practices
                 </span>
               </h2>
               <p className="text-white/60 max-w-2xl mx-auto">
@@ -307,16 +288,16 @@ export default function SecurityPage() {
               <div className="flex items-center justify-end gap-6 mb-6 text-sm">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-2 rounded bg-gradient-to-r from-cyan-500 to-pink-500" />
-                  <span className="text-white/80">DWTL</span>
+                  <span className="text-white/80">DWTL Approach</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-2 rounded bg-white/20" />
-                  <span className="text-white/40">Industry Average</span>
+                  <span className="text-white/40">Common Practice</span>
                 </div>
               </div>
-              <div className="space-y-6">
+              <div className="space-y-0">
                 {COMPARISON_DATA.map((item, index) => (
-                  <ComparisonBar
+                  <ComparisonRow
                     key={item.category}
                     category={item.category}
                     dwtl={item.dwtl}

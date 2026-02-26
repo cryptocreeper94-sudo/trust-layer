@@ -19,61 +19,82 @@ import { useToast } from "@/hooks/use-toast";
 
 const CERTIFICATION_TIERS = [
   {
-    name: "Self-Cert",
-    tagline: "For DWSC Ecosystem Projects",
+    name: "Guardian Scan",
+    tagline: "Automated Surface Scan",
     price: "Free",
-    priceNote: "Quarterly reviews",
+    priceNote: "Quick automated score",
     features: [
-      "Automated security scans",
-      "Configuration review",
+      "Automated security surface scan",
+      "Quick security score",
       "Basic threat assessment",
-      "Internal compliance check",
-      "Self-certification badge",
+      "Configuration review",
       "Community visibility"
     ],
     highlight: false,
     icon: Shield,
-    color: "cyan"
+    color: "cyan",
+    launchPricing: false
   },
   {
-    name: "Assurance Lite",
-    tagline: "Essential Security Validation",
-    price: "$5,999",
-    priceNote: "Per audit cycle",
+    name: "Guardian Assurance",
+    tagline: "Full Automated + AI Analysis",
+    price: "$499",
+    priceNote: "One-time audit",
     features: [
-      "Everything in Self-Cert",
+      "Everything in Guardian Scan",
+      "Full automated security analysis",
+      "AI-powered vulnerability detection",
+      "Professional PDF report",
       "Infrastructure hygiene audit",
       "API security review",
-      "Rate limiting verification",
       "Secret management audit",
-      "Guardian Lite badge",
-      "30-day remediation support",
-      "1-year certification validity"
+      "30-day remediation support"
     ],
     highlight: false,
     icon: ShieldCheck,
-    color: "purple"
+    color: "purple",
+    launchPricing: true
   },
   {
-    name: "Guardian Premier",
-    tagline: "Enterprise-Grade Certification",
-    price: "$14,999",
-    priceNote: "Comprehensive audit",
+    name: "Guardian Certified",
+    tagline: "Expert Review + On-Chain Badge",
+    price: "$2,499",
+    priceNote: "Comprehensive certification",
     features: [
-      "Everything in Assurance Lite",
+      "Everything in Guardian Assurance",
+      "Manual expert security review",
+      "Remediation guidance & verification",
+      "On-chain certification badge",
+      "30-day continuous monitoring",
       "Full smart contract review",
       "Penetration testing coordination",
-      "On-chain code analysis",
-      "Cryptographic implementation audit",
-      "Executive security scorecard",
-      "Remediation verification",
-      "Guardian Premier badge",
-      "90-day priority support",
+      "Guardian Certified badge",
       "Featured in Guardian Registry"
     ],
     highlight: true,
     icon: Award,
-    color: "pink"
+    color: "pink",
+    launchPricing: true
+  },
+  {
+    name: "Guardian Premier",
+    tagline: "Enterprise-Grade Security",
+    price: "Custom",
+    priceNote: "Starting at $7,500",
+    features: [
+      "Everything in Guardian Certified",
+      "Dedicated security analyst",
+      "On-chain code analysis",
+      "Cryptographic implementation audit",
+      "Executive security scorecard",
+      "90-day priority support",
+      "Custom engagement scope",
+      "Ongoing advisory relationship"
+    ],
+    highlight: false,
+    icon: Building,
+    color: "cyan",
+    launchPricing: false
   }
 ];
 
@@ -143,9 +164,9 @@ const WHY_GUARDIAN = [
 ];
 
 const CERTIFIED_PROJECTS = [
-  { name: "Trust Layer", status: "Certified", score: 78, date: "Dec 2024" },
-  { name: "Signal Chat Platform", status: "In Progress", score: null, date: "Coming Soon" },
-  { name: "Chronicles", status: "Community-Driven", score: null, date: "TBD" }
+  { name: "Trust Layer (Self-Audit)", status: "Certified", score: 78, date: "Dec 2024" },
+  { name: "Signal Chat Platform", status: "Upcoming", score: null, date: "TBD" },
+  { name: "Chronicles", status: "Upcoming", score: null, date: "TBD" }
 ];
 
 const TRUST_CENTER_DOCS = [
@@ -362,17 +383,61 @@ function IntakeWizard() {
     email: "",
     projectType: "",
     tier: "",
-    description: ""
+    description: "",
+    contractAddresses: ""
   });
   const [submitted, setSubmitted] = useState(false);
+  const [certificationId, setCertificationId] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    const mailtoLink = `mailto:team@dwsc.io?subject=Guardian%20Certification%20Inquiry%20-%20${encodeURIComponent(formData.projectName)}&body=${encodeURIComponent(
-      `Project Name: ${formData.projectName}\nWebsite: ${formData.website}\nEmail: ${formData.email}\nProject Type: ${formData.projectType}\nInterested Tier: ${formData.tier}\n\nDescription:\n${formData.description}`
-    )}`;
-    window.location.href = mailtoLink;
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setError("");
+
+    try {
+      const response = await fetch("/api/guardian/intake", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectName: formData.projectName,
+          website: formData.website || undefined,
+          contactEmail: formData.email,
+          projectType: formData.projectType || undefined,
+          tier: formData.tier || undefined,
+          description: formData.description || undefined,
+          contractAddresses: formData.contractAddresses || undefined,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to submit intake form");
+      }
+
+      setCertificationId(data.certificationId);
+      setSubmitted(true);
+      toast({
+        title: "Intake Submitted",
+        description: `Your certification request has been received. ID: ${data.certificationId}`,
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCopyId = () => {
+    if (certificationId) {
+      navigator.clipboard.writeText(certificationId);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   return (
@@ -404,16 +469,46 @@ function IntakeWizard() {
           viewport={{ once: true }}
         >
           <GlassCard className="p-8">
-            {submitted ? (
+            {submitted && certificationId ? (
               <div className="text-center py-8">
                 <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/20 flex items-center justify-center">
                   <CheckCircle className="w-8 h-8 text-green-400" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">Your email client should open</h3>
-                <p className="text-white/60">If it didn't open, please email us directly at team@dwsc.io</p>
+                <h3 className="text-xl font-bold text-white mb-2" data-testid="text-intake-success">Intake Submitted Successfully</h3>
+                <p className="text-white/60 mb-6">Your certification request has been received. A confirmation email has been sent.</p>
+                
+                <div className="bg-white/5 border border-white/10 rounded-xl p-4 max-w-md mx-auto mb-6">
+                  <p className="text-white/50 text-xs uppercase tracking-wider mb-2">Your Certification ID</p>
+                  <div className="flex items-center justify-center gap-2">
+                    <code className="text-cyan-400 font-mono text-sm" data-testid="text-certification-id">{certificationId}</code>
+                    <button
+                      onClick={handleCopyId}
+                      className="p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+                      data-testid="button-copy-certification-id"
+                    >
+                      {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-white/40" />}
+                    </button>
+                  </div>
+                </div>
+
+                <Link href="/guardian-portal">
+                  <button
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-xl text-white font-semibold transition-all hover:scale-[1.02]"
+                    data-testid="link-track-certification"
+                  >
+                    <FileSearch className="w-5 h-5" />
+                    Track Your Certification
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                </Link>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
+                {error && (
+                  <div className="p-4 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 text-sm" data-testid="text-intake-error">
+                    {error}
+                  </div>
+                )}
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <label className="block text-sm font-medium text-white/70 mb-2">Project Name *</label>
@@ -475,8 +570,8 @@ function IntakeWizard() {
 
                 <div>
                   <label className="block text-sm font-medium text-white/70 mb-2">Interested Tier</label>
-                  <div className="grid grid-cols-3 gap-3">
-                    {["Self-Cert", "Assurance Lite", "Guardian Premier"].map((tier) => (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                    {["Guardian Scan", "Guardian Assurance", "Guardian Certified", "Guardian Premier"].map((tier) => (
                       <button
                         key={tier}
                         type="button"
@@ -506,13 +601,35 @@ function IntakeWizard() {
                   />
                 </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-white/70 mb-2">Contract Addresses <span className="text-white/40">(optional)</span></label>
+                  <textarea
+                    value={formData.contractAddresses}
+                    onChange={(e) => setFormData({ ...formData, contractAddresses: e.target.value })}
+                    rows={3}
+                    className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-xl text-white placeholder-white/30 focus:outline-none focus:border-cyan-500/50 focus:ring-1 focus:ring-cyan-500/50 transition-all resize-none font-mono text-sm"
+                    placeholder="0x... (one per line, or comma-separated)"
+                    data-testid="textarea-contract-addresses"
+                  />
+                </div>
+
                 <button
                   type="submit"
-                  className="w-full py-4 bg-gradient-to-r from-pink-600 via-purple-600 to-cyan-600 hover:from-pink-500 hover:via-purple-500 hover:to-cyan-500 rounded-xl text-white font-semibold text-lg transition-all hover:scale-[1.02] shadow-lg shadow-purple-500/25 flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
+                  className="w-full py-4 bg-gradient-to-r from-pink-600 via-purple-600 to-cyan-600 hover:from-pink-500 hover:via-purple-500 hover:to-cyan-500 rounded-xl text-white font-semibold text-lg transition-all hover:scale-[1.02] shadow-lg shadow-purple-500/25 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   data-testid="button-submit-consultation"
                 >
-                  <Send className="w-5 h-5" />
-                  Request Consultation
+                  {isSubmitting ? (
+                    <>
+                      <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      Submitting...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-5 h-5" />
+                      Submit Intake Form
+                    </>
+                  )}
                 </button>
 
                 <p className="text-center text-white/40 text-sm">
@@ -541,7 +658,7 @@ function CheckoutModal({ tier, isOpen, onClose }: { tier: typeof CERTIFICATION_T
     setIsLoading(true);
     setError("");
 
-    const tierId = tier.name === "Assurance Lite" ? "assurance_lite" : "guardian_premier";
+    const tierId = tier.name === "Guardian Assurance" ? "guardian_assurance" : "guardian_certified";
 
     try {
       const response = await fetch("/api/guardian/checkout", {
@@ -676,7 +793,8 @@ function CheckoutModal({ tier, isOpen, onClose }: { tier: typeof CERTIFICATION_T
 
 function TierCard({ tier, index }: { tier: typeof CERTIFICATION_TIERS[0]; index: number }) {
   const [showCheckout, setShowCheckout] = useState(false);
-  const isPaid = tier.name === "Assurance Lite" || tier.name === "Guardian Premier";
+  const isPaid = tier.name === "Guardian Assurance" || tier.name === "Guardian Certified";
+  const isEnterprise = tier.name === "Guardian Premier";
   
   const colorMap: Record<string, string> = {
     cyan: "from-cyan-500/20 to-cyan-600/20 border-cyan-500/30 hover:border-cyan-400/50",
@@ -715,6 +833,12 @@ function TierCard({ tier, index }: { tier: typeof CERTIFICATION_TIERS[0]; index:
                 {tier.price}
               </div>
               <p className="text-white/40 text-sm mt-1">{tier.priceNote}</p>
+              {tier.launchPricing && (
+                <div className="mt-2 inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/40 rounded-full">
+                  <Rocket className="w-3 h-3 text-amber-400" />
+                  <span className="text-amber-400 text-xs font-bold uppercase tracking-wider">Launch Pricing</span>
+                </div>
+              )}
             </div>
             
             <ul className="space-y-3 flex-grow mb-6">
@@ -738,9 +862,9 @@ function TierCard({ tier, index }: { tier: typeof CERTIFICATION_TIERS[0]; index:
               >
                 Get Started
               </button>
-            ) : (
+            ) : isEnterprise ? (
               <ContactDialog
-                subject="Guardian Self-Cert Inquiry"
+                subject="Guardian Premier Inquiry"
                 trigger={
                   <button
                     className="w-full py-3 rounded-lg font-semibold text-center transition-all bg-white/10 hover:bg-white/20 text-white border border-white/10"
@@ -750,6 +874,15 @@ function TierCard({ tier, index }: { tier: typeof CERTIFICATION_TIERS[0]; index:
                   </button>
                 }
               />
+            ) : (
+              <Link href="/guardian-scanner">
+                <button
+                  className="w-full py-3 rounded-lg font-semibold text-center transition-all bg-white/10 hover:bg-white/20 text-white border border-white/10"
+                  data-testid={`link-tier-${tier.name.toLowerCase().replace(/\s+/g, '-')}`}
+                >
+                  Start Free Scan
+                </button>
+              </Link>
             )}
           </div>
         </div>
@@ -789,7 +922,7 @@ function PaymentSuccessBanner() {
           <div className="flex-grow">
             <h3 className="text-xl font-bold text-white mb-1">Payment Successful!</h3>
             <p className="text-white/60 text-sm">
-              Thank you for purchasing {tier === "assurance_lite" ? "Assurance Lite" : "Guardian Premier"}. 
+              Thank you for purchasing {tier === "guardian_assurance" ? "Guardian Assurance" : "Guardian Certified"}. 
               Our security team will contact you within 1-2 business days to begin your audit.
             </p>
           </div>
@@ -1018,7 +1151,7 @@ export default function GuardianCertificationPage() {
               </p>
             </motion.div>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {CERTIFICATION_TIERS.map((tier, index) => (
                 <TierCard key={tier.name} tier={tier} index={index} />
               ))}
