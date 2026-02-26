@@ -253,7 +253,7 @@ const ChronoRoadmap = lazy(() => import("@/pages/chrono-roadmap"));
 const ChronoDashboard = lazy(() => import("@/pages/chrono-dashboard"));
 const ChronoTeam = lazy(() => import("@/pages/chrono-team"));
 const ChronoCreators = lazy(() => import("@/pages/chrono-creators"));
-const ChronoExecutiveSummary = lazy(() => import("@/pages/chrono-executive-summary"));
+const ChroniclesExecutiveSummary = lazy(() => import("@/pages/chronicles-executive-summary"));
 const SocialFeed = lazy(() => import("@/pages/social-feed"));
 const InnovationHub = lazy(() => import("@/pages/innovation-hub"));
 const Lottery = lazy(() => import("@/pages/lottery"));
@@ -426,7 +426,7 @@ function ChronoRouter() {
         <Route path="/dashboard" component={ChronoDashboard} />
         <Route path="/team" component={ChronoTeam} />
         <Route path="/creators" component={ChronoCreators} />
-        <Route path="/executive-summary" component={ChronoExecutiveSummary} />
+        <Route path="/executive-summary" component={ChroniclesExecutiveSummary} />
         <Route path="/launch" component={LaunchCountdown} />
         <Route path="/roadmap" component={ChronoRoadmap} />
         <Route path="/genesis" component={Genesis} />

@@ -23,7 +23,7 @@ import {
 import { ChronoLayout } from "@/components/chrono-ui";
 
 
-export default function ChronoExecutiveSummary() {
+export default function ChroniclesExecutiveSummary() {
   return (
     <ChronoLayout>
       <main className="pt-20">
