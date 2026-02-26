@@ -5,7 +5,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { 
   Zap, Shield, TrendingUp, Users, Gift, Award, Crown, Sparkles,
   ArrowRight, Clock, CheckCircle, Copy, ExternalLink, Wallet,
-  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator, X, CreditCard, History, User, UserCheck, Activity
+  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator, X, CreditCard, History, User, UserCheck, Activity, Flame, Timer
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { authFetch } from "@/hooks/use-firebase-auth";
@@ -1154,6 +1154,80 @@ interface Purchase {
   date: string;
 }
 
+function LaunchCountdownBanner() {
+  const [now, setNow] = useState(new Date());
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const launchDate = new Date("2026-07-04T00:00:00-05:00");
+  const diff = Math.max(0, launchDate.getTime() - now.getTime());
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.3 }}
+      className="mb-10"
+    >
+      <Link href="/launch" data-testid="link-launch-banner">
+        <div
+          className="relative overflow-hidden rounded-2xl p-5 sm:p-6 cursor-pointer group transition-all hover:scale-[1.01]"
+          style={{
+            background: "linear-gradient(135deg, rgba(239,68,68,0.1) 0%, rgba(245,158,11,0.1) 30%, rgba(6,182,212,0.1) 70%, rgba(139,92,246,0.1) 100%)",
+            border: "1px solid rgba(239,68,68,0.3)",
+            boxShadow: "0 0 40px rgba(239,68,68,0.1), 0 0 80px rgba(6,182,212,0.05)",
+          }}
+        >
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{
+            backgroundImage: "radial-gradient(circle at 1px 1px, white 1px, transparent 0)",
+            backgroundSize: "20px 20px",
+          }} />
+          <div className="absolute top-0 right-0 w-32 h-32 opacity-10 pointer-events-none" style={{
+            background: "radial-gradient(circle, rgba(239,68,68,0.8), transparent 70%)",
+          }} />
+          
+          <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-amber-500 flex items-center justify-center" style={{ boxShadow: "0 0 15px rgba(239,68,68,0.4)" }}>
+                <Rocket className="w-5 h-5 text-white" />
+              </div>
+              <div className="text-left">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm sm:text-base font-bold text-white">Signal Launches July 4th</span>
+                  <Flame className="w-3.5 h-3.5 text-orange-400 animate-pulse" />
+                </div>
+                <span className="text-[11px] text-white/40">Independence Day for Trust</span>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-3 sm:ml-auto">
+              {[
+                { v: days, l: "d" },
+                { v: hours, l: "h" },
+                { v: minutes, l: "m" },
+                { v: seconds, l: "s" },
+              ].map(({ v, l }) => (
+                <div key={l} className="text-center">
+                  <div className="text-lg sm:text-xl font-bold font-mono bg-gradient-to-b from-white to-cyan-300 bg-clip-text text-transparent">
+                    {String(v).padStart(2, "0")}
+                  </div>
+                  <div className="text-[9px] text-white/30 uppercase tracking-wider">{l}</div>
+                </div>
+              ))}
+              <ArrowRight className="w-4 h-4 text-white/30 group-hover:text-cyan-400 transition-colors ml-2" />
+            </div>
+          </div>
+        </div>
+      </Link>
+    </motion.div>
+  );
+}
+
 function MyPurchases({ userEmail, walletAddress }: { userEmail?: string; walletAddress?: string }) {
   const { user } = useAuth();
   const { data, isLoading } = useQuery<{ purchases: Purchase[]; total: { tokens: number; spent: number } }>({
@@ -1380,6 +1454,8 @@ export default function Presale() {
             </Button>
           </Link>
         </motion.div>
+
+        <LaunchCountdownBanner />
 
         {(purchaseEmail || purchaseWallet) && <MyPurchases userEmail={purchaseEmail || undefined} walletAddress={purchaseWallet || undefined} />}
 

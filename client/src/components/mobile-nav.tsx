@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
-import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, ArrowRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap, Globe, ChevronDown, ChevronRight, Layers, Gift, Users, LogIn, User, Wallet, Target, Dice1, Trophy, Crown, BarChart3, BookOpen, Building2, Bell, Vote, Activity, Crosshair, Copy, Bot, Fuel, Eye, RefreshCw, Award, MessageCircle, Lock, BookText, Compass } from "lucide-react";
+import { Menu, X, Home, Box, Code, FileText, Coins, Search as SearchIcon, Sparkles, TrendingUp, ArrowUpRight, ArrowLeftRight, ArrowRight, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Shield, Heart, Gamepad2, Star, Zap, Globe, ChevronDown, ChevronRight, Layers, Gift, Users, LogIn, User, Wallet, Target, Dice1, Trophy, Crown, BarChart3, BookOpen, Building2, Bell, Vote, Activity, Crosshair, Copy, Bot, Fuel, Eye, RefreshCw, Award, MessageCircle, Lock, BookText, Compass, Flame, Timer } from "lucide-react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -19,6 +19,7 @@ const navCategories = [
     icon: Home,
     items: [
       { href: "/", label: "Home", icon: Home },
+      { href: "/launch", label: "July 4th Launch", icon: Rocket, badge: "🔥" },
       { href: "/explore", label: "Explore Everything", icon: Compass, badge: "Hub" },
       { href: "/note", label: "Our Story", icon: Heart },
       { href: "/ecosystem", label: "Ecosystem", icon: Compass },
@@ -195,7 +196,8 @@ const navCategories = [
       { href: "/api-docs", label: "API Docs", icon: FileText },
       { href: "/webhooks", label: "Webhooks API", icon: Webhook },
       { href: "/doc-hub", label: "Documentation Hub", icon: FileText },
-      { href: "/roadmap", label: "Roadmap", icon: Star },
+      { href: "/launch", label: "July 4th Launch Roadmap", icon: Rocket, badge: "🔥" },
+      { href: "/roadmap", label: "Ecosystem Roadmap", icon: Star },
       { href: "/coming-features", label: "Coming Features", icon: Rocket },
       { href: "/feedback", label: "Feedback", icon: MessageCircle },
     ]
@@ -724,6 +726,57 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
             }} 
           />
         </div>
+
+        {/* July 4th Launch Countdown */}
+        <Link href="/launch" style={{ textDecoration: 'none', display: 'block' }}>
+          <div
+            onClick={onClose}
+            data-testid="featured-launch"
+            style={{
+              marginBottom: '12px',
+              padding: '16px',
+              borderRadius: '16px',
+              background: 'linear-gradient(135deg, rgba(239,68,68,0.15) 0%, rgba(245,158,11,0.15) 50%, rgba(6,182,212,0.15) 100%)',
+              border: '2px solid rgba(239,68,68,0.4)',
+              cursor: 'pointer',
+              boxShadow: '0 0 40px rgba(239,68,68,0.15), 0 0 60px rgba(245,158,11,0.1)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '14px',
+              position: 'relative' as const,
+              overflow: 'hidden',
+            }}
+          >
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              opacity: 0.05,
+              backgroundImage: 'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
+              backgroundSize: '16px 16px',
+            }} />
+            <div style={{
+              width: '48px',
+              height: '48px',
+              borderRadius: '14px',
+              background: 'linear-gradient(135deg, #ef4444, #f59e0b)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 0 20px rgba(239,68,68,0.4)',
+              flexShrink: 0,
+            }}>
+              <Rocket style={{ width: '24px', height: '24px', color: '#ffffff' }} />
+            </div>
+            <div style={{ flex: 1, position: 'relative' as const, zIndex: 1 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
+                <span style={{ fontWeight: 700, fontSize: '15px', color: '#ffffff' }}>July 4th Launch</span>
+                <Badge className="text-[9px] px-1.5 py-0 bg-red-500/30 text-red-300 border-red-500/30 animate-pulse">🔥</Badge>
+              </div>
+              <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>Signal goes live — view roadmap</span>
+            </div>
+            <ArrowRight style={{ width: '18px', height: '18px', color: 'rgba(239,68,68,0.8)' }} />
+          </div>
+        </Link>
 
         {/* Presale Featured - Shield at Top */}
         <Link href="/presale" style={{ textDecoration: 'none', display: 'block' }}>

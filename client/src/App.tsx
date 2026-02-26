@@ -129,6 +129,7 @@ const NftMarketplace = lazy(() => import("@/pages/nft-marketplace"));
 const Portfolio = lazy(() => import("@/pages/portfolio"));
 const Transactions = lazy(() => import("@/pages/transactions"));
 const Launchpad = lazy(() => import("@/pages/launchpad"));
+const LaunchCountdown = lazy(() => import("@/pages/launch"));
 const Liquidity = lazy(() => import("@/pages/liquidity"));
 const NftGallery = lazy(() => import("@/pages/nft-gallery"));
 const NftCreator = lazy(() => import("@/pages/nft-creator"));
@@ -364,6 +365,7 @@ function GamesRouter() {
         <Route path="/presale/success" component={PresaleSuccess} />
         <Route path="/founders" component={Founders} />
         <Route path="/investment-simulator" component={InvestmentSimulator} />
+        <Route path="/launch" component={LaunchCountdown} />
         <Route path="/roadmap" component={RoadmapEcosystem} />
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />
@@ -424,6 +426,7 @@ function ChronoRouter() {
         <Route path="/team" component={ChronoTeam} />
         <Route path="/creators" component={ChronoCreators} />
         <Route path="/executive-summary" component={ChronoExecutiveSummary} />
+        <Route path="/launch" component={LaunchCountdown} />
         <Route path="/roadmap" component={ChronoRoadmap} />
         <Route path="/genesis" component={Genesis} />
         <Route path="/trust-book" component={TrustBook} />
@@ -647,6 +650,7 @@ function DWSCRouter() {
         <Route path="/presale" component={Presale} />
         <Route path="/presale/success" component={PresaleSuccess} />
         <Route path="/investment-simulator" component={InvestmentSimulator} />
+        <Route path="/launch" component={LaunchCountdown} />
         <Route path="/roadmap" component={RoadmapEcosystem} />
         <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />
