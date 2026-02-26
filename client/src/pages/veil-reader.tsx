@@ -4,7 +4,7 @@ import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { 
-  BookOpen, ChevronLeft, ChevronRight, Menu, X, Home, 
+  BookOpen, ChevronLeft, ChevronRight, Menu, X, Home, Lock,
   BookMarked, ScrollText, FileText, ExternalLink, Volume2, VolumeX, Pause, Play, Download, ArrowLeft, Sparkles, Bell, Loader2,
   Feather, Crown, Flame, Eye, Star
 } from "lucide-react";
@@ -126,6 +126,10 @@ export default function VeilReader() {
   const [hasSeenUpdates, setHasSeenUpdates] = useState(false);
   const [newUpdatesSinceVisit, setNewUpdatesSinceVisit] = useState<ChangelogEntry[]>([]);
   
+  const [hasPurchased, setHasPurchased] = useState<boolean | null>(null);
+  const [purchaseLoading, setPurchaseLoading] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -144,6 +148,37 @@ export default function VeilReader() {
   const aiPlayingRef = useRef(false);
   const aiCancelledRef = useRef(false);
 
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await fetch('/api/auth/me');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.user?.id) {
+            setUserId(data.user.id);
+            const accessRes = await fetch(`/api/ebook/access/through-the-veil?userId=${data.user.id}`);
+            if (accessRes.ok) {
+              const accessData = await accessRes.json();
+              setHasPurchased(accessData.purchased);
+              return;
+            }
+          }
+        }
+      } catch {}
+      setHasPurchased(false);
+    };
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('purchased') === 'true') {
+      setHasPurchased(true);
+      window.history.replaceState({}, '', window.location.pathname);
+    } else {
+      checkAuth();
+    }
+  }, []);
+
+  const isPreviewOnly = hasPurchased === false;
+  const FREE_PREVIEW_CHAPTERS = 4;
+
   const loadEbook = async (retryCount = 0) => {
     setLoading(true);
     setError(null);
@@ -152,7 +187,8 @@ export default function VeilReader() {
       const timeoutMs = 60000 + (retryCount * 30000);
       const timeout = setTimeout(() => controller.abort(), timeoutMs);
       
-      const cacheBust = retryCount > 0 ? `?_t=${Date.now()}` : '';
+      const previewParam = isPreviewOnly ? '&preview=true' : '';
+      const cacheBust = retryCount > 0 ? `?_t=${Date.now()}${previewParam}` : `?preview=${isPreviewOnly}`;
       const response = await fetch('/api/veil/chapters' + cacheBust, {
         signal: controller.signal,
         headers: { 'Accept': 'application/json' },
@@ -193,8 +229,10 @@ export default function VeilReader() {
   };
 
   useEffect(() => {
-    loadEbook();
-  }, []);
+    if (hasPurchased !== null) {
+      loadEbook();
+    }
+  }, [hasPurchased]);
 
   useEffect(() => {
     const supported = typeof window !== 'undefined' && 'speechSynthesis' in window;
@@ -860,7 +898,19 @@ export default function VeilReader() {
   const totalChapters = volumes.reduce((acc, v) => acc + v.chapters.length, 0);
   const currentGlobalIndex = volumes.slice(0, currentVolume).reduce((acc, v) => acc + v.chapters.length, 0) + currentChapter;
 
+  const getGlobalChapterIndex = (volIdx: number, chapIdx: number) => {
+    let idx = 0;
+    for (let v = 0; v < volIdx; v++) {
+      idx += volumes[v]?.chapters.length || 0;
+    }
+    return idx + chapIdx;
+  };
+
   const goNext = () => {
+    if (isPreviewOnly) {
+      const nextGlobal = getGlobalChapterIndex(currentVolume, currentChapter) + 1;
+      if (nextGlobal >= FREE_PREVIEW_CHAPTERS) return;
+    }
     if (currentChapter < volume.chapters.length - 1) {
       setCurrentChapter(currentChapter + 1);
     } else if (currentVolume < volumes.length - 1) {
@@ -881,6 +931,10 @@ export default function VeilReader() {
   };
 
   const goToChapter = (volIndex: number, chapIndex: number) => {
+    if (isPreviewOnly) {
+      const targetGlobal = getGlobalChapterIndex(volIndex, chapIndex);
+      if (targetGlobal >= FREE_PREVIEW_CHAPTERS) return;
+    }
     setCurrentVolume(volIndex);
     setCurrentChapter(chapIndex);
     setSidebarOpen(false);
@@ -1266,25 +1320,32 @@ export default function VeilReader() {
                       <div className="space-y-0.5">
                         {vol.chapters.map((chap, chapIndex) => {
                           const isActive = currentVolume === volIndex && currentChapter === chapIndex;
+                          const globalIdx = getGlobalChapterIndex(volIndex, chapIndex);
+                          const isLocked = isPreviewOnly && globalIdx >= FREE_PREVIEW_CHAPTERS;
                           return (
                             <motion.button
                               key={chap.id}
                               onClick={() => goToChapter(volIndex, chapIndex)}
                               className={`w-full text-left px-3 py-2.5 rounded-xl text-sm transition-all duration-200 ${
-                                isActive
-                                  ? 'bg-gradient-to-r from-purple-500/20 to-cyan-500/10 text-white border border-purple-500/25 shadow-md shadow-purple-500/10'
-                                  : 'text-slate-400 hover:bg-white/[0.03] hover:text-slate-200'
+                                isLocked
+                                  ? 'text-slate-600 cursor-not-allowed opacity-50'
+                                  : isActive
+                                    ? 'bg-gradient-to-r from-purple-500/20 to-cyan-500/10 text-white border border-purple-500/25 shadow-md shadow-purple-500/10'
+                                    : 'text-slate-400 hover:bg-white/[0.03] hover:text-slate-200'
                               }`}
                               data-testid={`chapter-nav-${volIndex}-${chapIndex}`}
-                              whileHover={{ x: isActive ? 0 : 4 }}
+                              whileHover={{ x: (isActive || isLocked) ? 0 : 4 }}
                               transition={{ duration: 0.15 }}
                             >
                               <div className="flex items-center gap-2.5">
-                                {isActive && (
+                                {isActive && !isLocked && (
                                   <motion.div 
                                     className="w-1 h-5 rounded-full bg-gradient-to-b from-purple-400 to-cyan-400 flex-shrink-0 shadow-sm shadow-purple-500/30"
                                     layoutId="activeChapterIndicator"
                                   />
+                                )}
+                                {isLocked && (
+                                  <Lock className="w-3 h-3 text-slate-600 flex-shrink-0" />
                                 )}
                                 <span className={`text-xs leading-snug ${isActive ? 'font-medium' : ''}`}>{chap.title}</span>
                               </div>
@@ -1453,40 +1514,120 @@ export default function VeilReader() {
             </div>
           </GlassCard>
 
-          <div className="mt-10 sm:mt-14 flex items-center justify-center gap-3">
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent to-purple-500/20" />
-            <div className="flex gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-purple-500/40" />
-              <div className="w-1.5 h-1.5 rounded-full bg-cyan-500/40" />
-              <div className="w-1.5 h-1.5 rounded-full bg-purple-500/40" />
-            </div>
-            <div className="h-px flex-1 bg-gradient-to-l from-transparent to-purple-500/20" />
-          </div>
+          {isPreviewOnly && currentChapter >= FREE_PREVIEW_CHAPTERS - 1 && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-10 sm:mt-14"
+            >
+              <GlassCard glow>
+                <div className="p-6 sm:p-10 text-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-cyan-500/5" />
+                  <div className="relative z-10">
+                    <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-600 to-cyan-600 flex items-center justify-center mx-auto mb-5 shadow-2xl shadow-purple-500/30">
+                      <BookOpen className="w-8 h-8 text-white" />
+                    </div>
+                    <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+                      You've reached the end of the free preview
+                    </h3>
+                    <p className="text-white/50 max-w-md mx-auto mb-2 text-sm">
+                      You've read the first {FREE_PREVIEW_CHAPTERS} chapters. The full book contains 54+ chapters across 15 volumes — 107,000 words of investigation.
+                    </p>
+                    <p className="text-white/30 text-xs mb-6">
+                      Available on Amazon for $9.99 — or get it here for half price.
+                    </p>
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
+                      <Button
+                        size="lg"
+                        disabled={purchaseLoading || !userId}
+                        onClick={async () => {
+                          if (!userId) return;
+                          setPurchaseLoading(true);
+                          try {
+                            const res = await fetch('/api/ebook/checkout', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({ bookId: 'through-the-veil', userId }),
+                            });
+                            const data = await res.json();
+                            if (data.url) {
+                              window.location.href = data.url;
+                            }
+                          } catch (err) {
+                            console.error('Checkout error:', err);
+                          } finally {
+                            setPurchaseLoading(false);
+                          }
+                        }}
+                        className="h-14 px-8 text-base gap-2 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 shadow-2xl shadow-purple-500/25 rounded-xl"
+                        data-testid="button-purchase-ebook"
+                      >
+                        {purchaseLoading ? (
+                          <Loader2 className="w-5 h-5 animate-spin" />
+                        ) : (
+                          <Sparkles className="w-5 h-5" />
+                        )}
+                        Unlock Full Book — $4.99
+                      </Button>
+                    </div>
+                    {!userId && (
+                      <p className="text-amber-400/70 text-xs">
+                        Sign in to purchase the full book
+                      </p>
+                    )}
+                    <div className="flex items-center justify-center gap-4 text-xs text-white/30">
+                      <span>54+ chapters</span>
+                      <span>·</span>
+                      <span>15 volumes</span>
+                      <span>·</span>
+                      <span>107K words</span>
+                      <span>·</span>
+                      <span>AI narration included</span>
+                    </div>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
+          )}
 
-          <div className="mt-8 sm:mt-10 flex items-center justify-between gap-4 max-w-xl mx-auto">
-            {hasPrev ? (
-              <motion.button
-                onClick={goPrev}
-                className="flex items-center gap-2 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/5 hover:border-purple-500/30 hover:bg-purple-500/5 transition-all group min-h-[44px]"
-                whileHover={{ x: -4 }}
-                data-testid="button-prev-inline"
-              >
-                <ChevronLeft className="w-4 h-4 text-slate-500 group-hover:text-purple-400 transition-colors" />
-                <span className="text-sm text-slate-400 group-hover:text-slate-200 transition-colors hidden sm:inline">Previous</span>
-              </motion.button>
-            ) : <div />}
-            {hasNext ? (
-              <motion.button
-                onClick={goNext}
-                className="flex items-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-purple-500/10 to-cyan-500/5 border border-purple-500/20 hover:border-purple-500/40 hover:from-purple-500/15 hover:to-cyan-500/10 transition-all group min-h-[44px]"
-                whileHover={{ x: 4 }}
-                data-testid="button-next-inline"
-              >
-                <span className="text-sm text-slate-300 group-hover:text-white transition-colors hidden sm:inline">Next Chapter</span>
-                <ChevronRight className="w-4 h-4 text-purple-400 group-hover:text-cyan-400 transition-colors" />
-              </motion.button>
-            ) : <div />}
-          </div>
+          {!(isPreviewOnly && currentChapter >= FREE_PREVIEW_CHAPTERS - 1) && (
+            <>
+              <div className="mt-10 sm:mt-14 flex items-center justify-center gap-3">
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent to-purple-500/20" />
+                <div className="flex gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-500/40" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-cyan-500/40" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-purple-500/40" />
+                </div>
+                <div className="h-px flex-1 bg-gradient-to-l from-transparent to-purple-500/20" />
+              </div>
+
+              <div className="mt-8 sm:mt-10 flex items-center justify-between gap-4 max-w-xl mx-auto">
+                {hasPrev ? (
+                  <motion.button
+                    onClick={goPrev}
+                    className="flex items-center gap-2 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/5 hover:border-purple-500/30 hover:bg-purple-500/5 transition-all group min-h-[44px]"
+                    whileHover={{ x: -4 }}
+                    data-testid="button-prev-inline"
+                  >
+                    <ChevronLeft className="w-4 h-4 text-slate-500 group-hover:text-purple-400 transition-colors" />
+                    <span className="text-sm text-slate-400 group-hover:text-slate-200 transition-colors hidden sm:inline">Previous</span>
+                  </motion.button>
+                ) : <div />}
+                {hasNext ? (
+                  <motion.button
+                    onClick={goNext}
+                    className="flex items-center gap-2 px-4 py-3 rounded-xl bg-gradient-to-r from-purple-500/10 to-cyan-500/5 border border-purple-500/20 hover:border-purple-500/40 hover:from-purple-500/15 hover:to-cyan-500/10 transition-all group min-h-[44px]"
+                    whileHover={{ x: 4 }}
+                    data-testid="button-next-inline"
+                  >
+                    <span className="text-sm text-slate-300 group-hover:text-white transition-colors hidden sm:inline">Next Chapter</span>
+                    <ChevronRight className="w-4 h-4 text-purple-400 group-hover:text-cyan-400 transition-colors" />
+                  </motion.button>
+                ) : <div />}
+              </div>
+            </>
+          )}
         </motion.div>
       </div>
 

@@ -1,4 +1,4 @@
-import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type ReferralCode, type InsertReferralCode, type Referral, type InsertReferral, type ReferralEvent, type InsertReferralEvent, type AffiliateTierRecord, type InsertAffiliateTier, type CommissionPayout, type InsertCommissionPayout, type AffiliateProfile, type InsertAffiliateProfile, type FraudFlag, type InsertFraudFlag, type MarketingPost, type InsertMarketingPost, type MarketingDeployLog, type InsertMarketingDeployLog, type MarketingScheduleConfig, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, type ChronicleSponsorshipSlot, type InsertChronicleSponsorshipSlot, type DomainSponsorshipClaim, type InsertDomainSponsorshipClaim, type EarlyAdopterProgram, type TreasuryAllocation, type TreasuryLedgerEntry, type SeoConfig, type InsertSeoConfig, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, webhookLogs, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers, chronicleSponsorshipSlots, domainSponsorshipClaims, earlyAdopterProgram, marketingPosts, marketingDeployLogs, marketingScheduleConfig, treasuryAllocations, treasuryLedger, seoConfigs, referralCodes, referrals, referralEvents, affiliateTiers, commissionPayouts, affiliateProfiles, fraudFlags, signupCounter, arcadeLeaderboard, type ArcadeLeaderboardEntry, type InsertArcadeLeaderboardEntry, cityZones, landPlots, type CityZone, type InsertCityZone, type LandPlot, type InsertLandPlot, chronicleLoginStreaks, chronicleDailyRewards, type ChronicleLoginStreak, type ChronicleDailyReward, aiAgentCertifications } from "@shared/schema";
+import { type User, type UpsertUser, type Document, type InsertDocument, type InsertPageView, type PageView, type AnalyticsOverview, type ApiKey, type InsertApiKey, type TransactionHash, type InsertTransactionHash, type DualChainStamp, type InsertDualChainStamp, type Hallmark, type InsertHallmark, type Waitlist, type InsertWaitlist, type StudioProject, type InsertStudioProject, type StudioFile, type InsertStudioFile, type StudioSecret, type InsertStudioSecret, type StudioConfig, type InsertStudioConfig, type StudioCommit, type InsertStudioCommit, type StudioBranch, type InsertStudioBranch, type StudioRun, type InsertStudioRun, type StudioPreview, type InsertStudioPreview, type StudioDeployment, type InsertStudioDeployment, type StudioCollaborator, type InsertStudioCollaborator, type FaucetClaim, type SwapTransaction, type NftCollection, type Nft, type NftListing, type LiquidityPool, type InsertLiquidityPool, type LiquidityPosition, type InsertLiquidityPosition, type Webhook, type InsertWebhook, type PriceHistory, type InsertPriceHistory, type ChainAccount, type UserStake, type LiquidStakingState, type LiquidStakingPosition, type LiquidStakingEvent, type InsertLiquidStakingPosition, type InsertLiquidStakingEvent, type BetaTesterTier, type InsertBetaTesterTier, type BetaTester, type InsertBetaTester, type AirdropAllocation, type InsertAirdropAllocation, type AirdropClaim, type InsertAirdropClaim, type TokenGift, type InsertTokenGift, type HallmarkProfile, type InsertHallmarkProfile, type HallmarkMint, type InsertHallmarkMint, type PlayerGameHistory, type InsertPlayerGameHistory, type PlayerStats, type InsertPlayerStats, type PlayerDailyProfit, type SweepsBalance, type InsertSweepsBalance, type SweepsPurchase, type InsertSweepsPurchase, type SweepsBonus, type InsertSweepsBonus, type SweepsDailyLogin, type SweepsRedemption, type InsertSweepsRedemption, type SweepsGameHistory, type InsertSweepsGameHistory, type RoadmapFeature, type InsertRoadmapFeature, type RoadmapVote, type ReferralCode, type InsertReferralCode, type Referral, type InsertReferral, type ReferralEvent, type InsertReferralEvent, type AffiliateTierRecord, type InsertAffiliateTier, type CommissionPayout, type InsertCommissionPayout, type AffiliateProfile, type InsertAffiliateProfile, type FraudFlag, type InsertFraudFlag, type MarketingPost, type InsertMarketingPost, type MarketingDeployLog, type InsertMarketingDeployLog, type MarketingScheduleConfig, type InsertRoadmapVote, type CrowdfundCampaign, type InsertCrowdfundCampaign, type CrowdfundFeature, type InsertCrowdfundFeature, type CrowdfundContribution, type InsertCrowdfundContribution, type BlockchainDomain, type InsertBlockchainDomain, type DomainRecord, type InsertDomainRecord, type DomainTransfer, type InsertDomainTransfer, type ChronicleSponsorshipSlot, type InsertChronicleSponsorshipSlot, type DomainSponsorshipClaim, type InsertDomainSponsorshipClaim, type EarlyAdopterProgram, type TreasuryAllocation, type TreasuryLedgerEntry, type SeoConfig, type InsertSeoConfig, HALLMARK_SERIAL_RANGES, users, documents, pageViews, apiKeys, roadmapFeatures, roadmapVotes, crowdfundCampaigns, crowdfundFeatures, crowdfundContributions, transactionHashes, dualChainStamps, hallmarks, hallmarkCounter, waitlist, studioProjects, studioFiles, studioSecrets, studioConfigs, studioCommits, studioBranches, studioRuns, studioPreviews, studioDeployments, studioCollaborators, faucetClaims, swapTransactions, nftCollections, nfts, nftListings, liquidityPools, liquidityPositions, webhooks, webhookLogs, priceHistory, chainAccounts, userStakes, playerGameHistory, playerStats, playerDailyProfit, liquidStakingState, liquidStakingPositions, liquidStakingEvents, betaTesterTiers, betaTesters, airdropAllocations, airdropClaims, tokenGifts, hallmarkProfiles, hallmarkMints, hallmarkGlobalCounter, sweepsBalances, sweepsPurchases, sweepsBonuses, sweepsDailyLogin, sweepsRedemptions, sweepsGameHistory, blockchainDomains, domainRecords, domainTransfers, chronicleSponsorshipSlots, domainSponsorshipClaims, earlyAdopterProgram, marketingPosts, marketingDeployLogs, marketingScheduleConfig, treasuryAllocations, treasuryLedger, seoConfigs, referralCodes, referrals, referralEvents, affiliateTiers, commissionPayouts, affiliateProfiles, fraudFlags, signupCounter, arcadeLeaderboard, type ArcadeLeaderboardEntry, type InsertArcadeLeaderboardEntry, cityZones, landPlots, type CityZone, type InsertCityZone, type LandPlot, type InsertLandPlot, chronicleLoginStreaks, chronicleDailyRewards, type ChronicleLoginStreak, type ChronicleDailyReward, aiAgentCertifications, ebookPurchases, type EbookPurchase, type InsertEbookPurchase, publishedBooks, type PublishedBook, type InsertPublishedBook } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, asc, count, and, lt } from "drizzle-orm";
 import crypto from "crypto";
@@ -326,6 +326,15 @@ export interface IStorage {
   // Shells/Orbs Balance - stub methods for Chronicles game
   updateShellsBalance(userId: string, amount: number, reason: string): Promise<void>;
   updateOrbsBalance(userId: string, amount: number, reason: string): Promise<void>;
+
+  getEbookPurchase(userId: string, bookId: string): Promise<EbookPurchase | undefined>;
+  createEbookPurchase(data: InsertEbookPurchase): Promise<EbookPurchase>;
+  getUserPurchases(userId: string): Promise<EbookPurchase[]>;
+  createPublishedBook(data: InsertPublishedBook): Promise<PublishedBook>;
+  getPublishedBook(slug: string): Promise<PublishedBook | undefined>;
+  getPublishedBooks(status?: string): Promise<PublishedBook[]>;
+  updatePublishedBook(id: number, data: Partial<InsertPublishedBook>): Promise<PublishedBook | undefined>;
+  getAuthorBooks(authorId: string): Promise<PublishedBook[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -2628,6 +2637,46 @@ export class DatabaseStorage implements IStorage {
   async updateOrbsBalance(userId: string, amount: number, reason: string): Promise<void> {
     console.log(`[Orbs] Legacy balance update: user=${userId}, amount=${amount}, reason=${reason}`);
     // Orbs are deprecated in favor of shells - this is a no-op fallback
+  }
+
+  async getEbookPurchase(userId: string, bookId: string): Promise<EbookPurchase | undefined> {
+    const [purchase] = await db.select().from(ebookPurchases).where(and(eq(ebookPurchases.userId, userId), eq(ebookPurchases.bookId, bookId)));
+    return purchase;
+  }
+
+  async createEbookPurchase(data: InsertEbookPurchase): Promise<EbookPurchase> {
+    const [purchase] = await db.insert(ebookPurchases).values(data).returning();
+    return purchase;
+  }
+
+  async getUserPurchases(userId: string): Promise<EbookPurchase[]> {
+    return db.select().from(ebookPurchases).where(eq(ebookPurchases.userId, userId)).orderBy(desc(ebookPurchases.purchasedAt));
+  }
+
+  async createPublishedBook(data: InsertPublishedBook): Promise<PublishedBook> {
+    const [book] = await db.insert(publishedBooks).values(data).returning();
+    return book;
+  }
+
+  async getPublishedBook(slug: string): Promise<PublishedBook | undefined> {
+    const [book] = await db.select().from(publishedBooks).where(eq(publishedBooks.slug, slug));
+    return book;
+  }
+
+  async getPublishedBooks(status?: string): Promise<PublishedBook[]> {
+    if (status) {
+      return db.select().from(publishedBooks).where(eq(publishedBooks.status, status)).orderBy(desc(publishedBooks.publishedAt));
+    }
+    return db.select().from(publishedBooks).orderBy(desc(publishedBooks.createdAt));
+  }
+
+  async updatePublishedBook(id: number, data: Partial<InsertPublishedBook>): Promise<PublishedBook | undefined> {
+    const [book] = await db.update(publishedBooks).set(data).where(eq(publishedBooks.id, id)).returning();
+    return book;
+  }
+
+  async getAuthorBooks(authorId: string): Promise<PublishedBook[]> {
+    return db.select().from(publishedBooks).where(eq(publishedBooks.authorId, authorId)).orderBy(desc(publishedBooks.createdAt));
   }
 }
 

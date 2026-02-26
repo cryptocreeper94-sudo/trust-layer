@@ -580,6 +580,25 @@ export async function registerRoutes(
           }
         }
         
+        if (metadata.type === "ebook_purchase" && metadata.userId && metadata.bookId) {
+          try {
+            const existing = await storage.getEbookPurchase(metadata.userId, metadata.bookId);
+            if (!existing) {
+              await storage.createEbookPurchase({
+                userId: metadata.userId,
+                bookId: metadata.bookId,
+                paymentIntentId: paymentId as string,
+                stripeSessionId: session.id,
+                amount: amountCents,
+                status: "completed",
+              });
+              console.log(`[Stripe Webhook] Ebook purchase recorded: ${metadata.bookId} for user ${metadata.userId}`);
+            }
+          } catch (ebookErr) {
+            console.error("[Stripe Webhook] Ebook purchase error:", ebookErr);
+          }
+        }
+
         // Handle Orbs purchases
         if (metadata.type === "orbs_purchase" && customerEmail) {
           try {
@@ -21779,8 +21798,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     return volumes;
   }
 
-  app.get("/api/veil/chapters", async (_req, res) => {
+  app.get("/api/veil/chapters", async (req, res) => {
     try {
+      const preview = req.query.preview === "true";
       const mdPaths = [
         path.join(process.cwd(), "client", "public", "through-the-veil.md"),
         path.join(process.cwd(), "public", "through-the-veil.md"),
@@ -21794,8 +21814,15 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           const stat = fs.statSync(mdPath);
           mdMtime = stat.mtimeMs;
           if (cachedVeilChapters && mdMtime === cachedVeilMtime) {
+            let volumes = cachedVeilChapters;
+            if (preview && Array.isArray(volumes)) {
+              volumes = volumes.slice(0, 1).map((v: any) => ({
+                ...v,
+                chapters: v.chapters?.slice(0, 4) || [],
+              }));
+            }
             res.setHeader('Cache-Control', 'public, max-age=60');
-            return res.json(cachedVeilChapters);
+            return res.json(volumes);
           }
           mdContent = fs.readFileSync(mdPath, 'utf-8');
           break;
@@ -21806,14 +21833,206 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(404).json({ error: "Ebook content not found" });
       }
 
-      const volumes = parseVeilMarkdown(mdContent);
+      let volumes = parseVeilMarkdown(mdContent);
       cachedVeilChapters = volumes;
       cachedVeilMtime = mdMtime;
+      if (preview && Array.isArray(volumes)) {
+        volumes = volumes.slice(0, 1).map((v: any) => ({
+          ...v,
+          chapters: v.chapters?.slice(0, 4) || [],
+        }));
+      }
       res.setHeader('Cache-Control', 'public, max-age=60');
       res.json(volumes);
     } catch (error: any) {
       console.error("Veil chapters API error:", error);
       res.status(500).json({ error: "Failed to parse ebook", details: error.message });
+    }
+  });
+
+  // =====================================================
+  // EBOOK PURCHASE & AUTHOR PUBLISHING ROUTES
+  // =====================================================
+
+  app.post("/api/ebook/checkout", async (req, res) => {
+    try {
+      const { bookId, userId } = req.body;
+      if (!bookId || !userId) {
+        return res.status(400).json({ error: "bookId and userId are required" });
+      }
+
+      const existing = await storage.getEbookPurchase(userId, bookId);
+      if (existing) {
+        return res.status(400).json({ error: "Already purchased", purchased: true });
+      }
+
+      let price = 499;
+      let bookTitle = "Through The Veil";
+
+      if (bookId !== "through-the-veil") {
+        const book = await storage.getPublishedBook(bookId);
+        if (!book || book.status !== "published") {
+          return res.status(404).json({ error: "Book not found" });
+        }
+        price = book.price;
+        bookTitle = book.title;
+      }
+
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      const domains = process.env.REPLIT_DOMAINS?.split(',') || [];
+      const baseUrl = domains.length > 0 ? `https://${domains[0]}` : `http://localhost:5000`;
+
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [{
+          price_data: {
+            currency: "usd",
+            product_data: {
+              name: bookTitle,
+              description: `Full access to "${bookTitle}" on Trust Book`,
+            },
+            unit_amount: price,
+          },
+          quantity: 1,
+        }],
+        mode: "payment",
+        success_url: `${baseUrl}/veil/read?purchased=true`,
+        cancel_url: `${baseUrl}/trust-book`,
+        metadata: {
+          type: "ebook_purchase",
+          bookId,
+          userId,
+        },
+      });
+
+      res.json({ url: session.url, sessionId: session.id });
+    } catch (error: any) {
+      console.error("[Ebook] Checkout error:", error);
+      res.status(500).json({ error: "Failed to create checkout session" });
+    }
+  });
+
+  app.get("/api/ebook/access/:bookId", async (req, res) => {
+    try {
+      const userId = req.query.userId as string;
+      if (!userId) {
+        return res.json({ purchased: false });
+      }
+      const purchase = await storage.getEbookPurchase(userId, req.params.bookId);
+      res.json({ purchased: !!purchase, purchase: purchase || null });
+    } catch (error: any) {
+      console.error("[Ebook] Access check error:", error);
+      res.status(500).json({ error: "Failed to check access" });
+    }
+  });
+
+  app.get("/api/ebook/my-purchases", async (req, res) => {
+    try {
+      const userId = req.query.userId as string;
+      if (!userId) {
+        return res.json({ purchases: [] });
+      }
+      const purchases = await storage.getUserPurchases(userId);
+      res.json({ purchases });
+    } catch (error: any) {
+      res.status(500).json({ error: "Failed to fetch purchases" });
+    }
+  });
+
+  app.get("/api/ebook/catalog", async (_req, res) => {
+    try {
+      const books = await storage.getPublishedBooks("published");
+      res.json({ books });
+    } catch (error: any) {
+      res.status(500).json({ error: "Failed to fetch catalog" });
+    }
+  });
+
+  app.post("/api/ebook/submit", async (req, res) => {
+    try {
+      const { authorId, authorName, title, description, genre, tags, price, coverImageUrl, manuscriptUrl, wordCount, chapterCount } = req.body;
+      if (!authorId || !title || !description || !genre || !price) {
+        return res.status(400).json({ error: "Missing required fields: authorId, title, description, genre, price" });
+      }
+
+      const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+      const existing = await storage.getPublishedBook(slug);
+      if (existing) {
+        return res.status(400).json({ error: "A book with a similar title already exists" });
+      }
+
+      const book = await storage.createPublishedBook({
+        authorId,
+        authorName: authorName || "Anonymous",
+        title,
+        slug,
+        description,
+        genre,
+        tags: tags || [],
+        price: Math.round(price * 100),
+        coverImageUrl: coverImageUrl || null,
+        manuscriptUrl: manuscriptUrl || null,
+        wordCount: wordCount || null,
+        chapterCount: chapterCount || null,
+        status: "pending_review",
+        reviewNotes: null,
+      });
+
+      res.json({ book, message: "Book submitted for review" });
+    } catch (error: any) {
+      console.error("[Ebook] Submit error:", error);
+      res.status(500).json({ error: "Failed to submit book" });
+    }
+  });
+
+  app.get("/api/ebook/my-books", async (req, res) => {
+    try {
+      const authorId = req.query.authorId as string;
+      if (!authorId) {
+        return res.json({ books: [] });
+      }
+      const books = await storage.getAuthorBooks(authorId);
+      res.json({ books });
+    } catch (error: any) {
+      res.status(500).json({ error: "Failed to fetch author books" });
+    }
+  });
+
+  app.get("/api/ebook/admin/submissions", async (req, res) => {
+    try {
+      const status = (req.query.status as string) || "pending_review";
+      const books = await storage.getPublishedBooks(status);
+      res.json({ books });
+    } catch (error: any) {
+      res.status(500).json({ error: "Failed to fetch submissions" });
+    }
+  });
+
+  app.post("/api/ebook/admin/review/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { action, reviewNotes } = req.body;
+      if (!action || !["approve", "reject"].includes(action)) {
+        return res.status(400).json({ error: "action must be 'approve' or 'reject'" });
+      }
+
+      const updates: any = {
+        status: action === "approve" ? "published" : "rejected",
+        reviewNotes: reviewNotes || null,
+      };
+      if (action === "approve") {
+        updates.publishedAt = new Date();
+      }
+
+      const book = await storage.updatePublishedBook(id, updates);
+      if (!book) {
+        return res.status(404).json({ error: "Book not found" });
+      }
+      res.json({ book, message: `Book ${action}d successfully` });
+    } catch (error: any) {
+      console.error("[Ebook] Review error:", error);
+      res.status(500).json({ error: "Failed to review book" });
     }
   });
 

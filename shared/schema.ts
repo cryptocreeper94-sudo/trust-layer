@@ -8877,3 +8877,43 @@ export const playerDailyLog = pgTable("player_daily_log", {
 export const insertPlayerDailyLogSchema = createInsertSchema(playerDailyLog).omit({ id: true, createdAt: true });
 export type PlayerDailyLog = typeof playerDailyLog.$inferSelect;
 export type InsertPlayerDailyLog = z.infer<typeof insertPlayerDailyLogSchema>;
+
+export const ebookPurchases = pgTable("ebook_purchases", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  bookId: text("book_id").notNull(),
+  paymentIntentId: text("payment_intent_id"),
+  stripeSessionId: text("stripe_session_id"),
+  amount: integer("amount").notNull(),
+  status: text("status").notNull().default("completed"),
+  purchasedAt: timestamp("purchased_at").defaultNow().notNull(),
+});
+
+export const insertEbookPurchaseSchema = createInsertSchema(ebookPurchases).omit({ id: true, purchasedAt: true });
+export type EbookPurchase = typeof ebookPurchases.$inferSelect;
+export type InsertEbookPurchase = z.infer<typeof insertEbookPurchaseSchema>;
+
+export const publishedBooks = pgTable("published_books", {
+  id: serial("id").primaryKey(),
+  authorId: text("author_id").notNull(),
+  authorName: text("author_name").notNull(),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  description: text("description").notNull(),
+  genre: text("genre").notNull(),
+  tags: text("tags").array().default([]),
+  price: integer("price").notNull(),
+  coverImageUrl: text("cover_image_url"),
+  manuscriptUrl: text("manuscript_url"),
+  wordCount: integer("word_count"),
+  chapterCount: integer("chapter_count"),
+  status: text("status").notNull().default("pending_review"),
+  reviewNotes: text("review_notes"),
+  submittedAt: timestamp("submitted_at").defaultNow().notNull(),
+  publishedAt: timestamp("published_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertPublishedBookSchema = createInsertSchema(publishedBooks).omit({ id: true, submittedAt: true, publishedAt: true, createdAt: true });
+export type PublishedBook = typeof publishedBooks.$inferSelect;
+export type InsertPublishedBook = z.infer<typeof insertPublishedBookSchema>;
