@@ -346,11 +346,11 @@ export default function SweepstakesRules() {
             </p>
             <div className="flex flex-wrap gap-4">
               <a 
-                href="mailto:support@darkwavestudios.io" 
+                href="mailto:team@dwsc.io" 
                 className="flex items-center gap-2 text-purple-400 hover:text-purple-300 transition-colors"
               >
                 <Mail className="w-4 h-4" />
-                support@darkwavestudios.io
+                team@dwsc.io
               </a>
             </div>
           </CardContent>

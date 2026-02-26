@@ -163,7 +163,7 @@ export default function VirtualCurrencyTerms() {
             <h3 className="font-semibold text-cyan-400 mb-2">Questions About These Terms?</h3>
             <p className="text-gray-300 text-sm">
               For questions about virtual currency purchases, SIG conversion, or these terms, 
-              please contact us at <a href="mailto:legal@darkwavestudios.io" className="text-cyan-400 hover:underline">legal@darkwavestudios.io</a>
+              please contact us at <a href="mailto:team@dwsc.io" className="text-cyan-400 hover:underline">team@dwsc.io</a>
             </p>
           </GlassCard>
 

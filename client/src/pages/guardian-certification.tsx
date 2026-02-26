@@ -156,7 +156,7 @@ const TRUST_CENTER_DOCS = [
     type: "PDF",
     size: "2.4 MB",
     available: true,
-    email: "guardian@dwsc.io?subject=Request%20Methodology%20Framework%20Document"
+    email: "team@dwsc.io?subject=Request%20Methodology%20Framework%20Document"
   },
   {
     icon: FileSearch,
@@ -165,7 +165,7 @@ const TRUST_CENTER_DOCS = [
     type: "PDF",
     size: "1.8 MB",
     available: false,
-    email: "guardian@dwsc.io?subject=Request%20Sample%20Findings%20Report"
+    email: "team@dwsc.io?subject=Request%20Sample%20Findings%20Report"
   },
   {
     icon: Shield,
@@ -174,7 +174,7 @@ const TRUST_CENTER_DOCS = [
     type: "PDF",
     size: "3.2 MB",
     available: true,
-    email: "guardian@dwsc.io?subject=Request%20DWSC%20Self-Audit%20Report"
+    email: "team@dwsc.io?subject=Request%20DWSC%20Self-Audit%20Report"
   },
   {
     icon: CheckCircle,
@@ -183,7 +183,7 @@ const TRUST_CENTER_DOCS = [
     type: "PDF",
     size: "892 KB",
     available: true,
-    email: "guardian@dwsc.io?subject=Request%20Compliance%20Checklist"
+    email: "team@dwsc.io?subject=Request%20Compliance%20Checklist"
   }
 ];
 
@@ -368,7 +368,7 @@ function IntakeWizard() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const mailtoLink = `mailto:guardian@dwsc.io?subject=Guardian%20Certification%20Inquiry%20-%20${encodeURIComponent(formData.projectName)}&body=${encodeURIComponent(
+    const mailtoLink = `mailto:team@dwsc.io?subject=Guardian%20Certification%20Inquiry%20-%20${encodeURIComponent(formData.projectName)}&body=${encodeURIComponent(
       `Project Name: ${formData.projectName}\nWebsite: ${formData.website}\nEmail: ${formData.email}\nProject Type: ${formData.projectType}\nInterested Tier: ${formData.tier}\n\nDescription:\n${formData.description}`
     )}`;
     window.location.href = mailtoLink;
@@ -410,7 +410,7 @@ function IntakeWizard() {
                   <CheckCircle className="w-8 h-8 text-green-400" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Your email client should open</h3>
-                <p className="text-white/60">If it didn't open, please email us directly at guardian@dwsc.io</p>
+                <p className="text-white/60">If it didn't open, please email us directly at team@dwsc.io</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
@@ -810,7 +810,7 @@ function PaymentSuccessBanner() {
 function ContactDialog({ 
   trigger, 
   subject = "Guardian Certification Inquiry",
-  email = "guardian@dwsc.io"
+  email = "team@dwsc.io"
 }: { 
   trigger: React.ReactNode; 
   subject?: string;

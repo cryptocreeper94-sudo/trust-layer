@@ -643,7 +643,7 @@ export default function ChronoExecutiveSummary() {
             >
               <div className="flex flex-wrap justify-center gap-4 mb-6">
                 <a 
-                  href="mailto:cryptocreeper94@gmail.com?subject=Chronicles%20Investment%20Inquiry"
+                  href="mailto:team@dwsc.io?subject=Chronicles%20Investment%20Inquiry"
                   className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-lg text-white font-semibold transition-colors"
                   data-testid="contact-investor"
                 >
@@ -675,7 +675,7 @@ export default function ChronoExecutiveSummary() {
                 DarkWave Studios • Trust Layer • yourlegacy.io
               </p>
               <p className="text-white/30 text-xs mt-2">
-                Direct inquiries: cryptocreeper94@gmail.com
+                Direct inquiries: team@dwsc.io
               </p>
             </motion.div>
           </div>

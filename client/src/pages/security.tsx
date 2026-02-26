@@ -244,7 +244,7 @@ export default function SecurityPage() {
                     View All Protections
                   </a>
                   <a
-                    href="mailto:security@dwsc.io?subject=Security%20Vulnerability%20Report"
+                    href="mailto:team@dwsc.io?subject=Security%20Vulnerability%20Report"
                     className="inline-flex items-center gap-2 px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-white font-medium transition-all"
                     data-testid="link-report-vulnerability"
                   >
@@ -484,7 +484,7 @@ export default function SecurityPage() {
                     Help us stay secure and earn SIG tokens at mainnet launch.
                   </p>
                   <a
-                    href="mailto:security@dwsc.io?subject=Security%20Vulnerability%20Report"
+                    href="mailto:team@dwsc.io?subject=Security%20Vulnerability%20Report"
                     className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 hover:from-cyan-500 hover:via-purple-500 hover:to-pink-500 rounded-xl text-white font-semibold text-lg transition-all hover:scale-105 shadow-lg shadow-purple-500/25"
                     data-testid="link-report-bug"
                   >
@@ -493,7 +493,7 @@ export default function SecurityPage() {
                     <ExternalLink className="w-5 h-5" />
                   </a>
                   <p className="text-white/30 text-sm mt-6">
-                    security@dwsc.io
+                    team@dwsc.io
                   </p>
                 </div>
               </GlassCard>

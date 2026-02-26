@@ -444,10 +444,10 @@ export default function InfluencerPartnershipPage() {
                   For urgent partnership inquiries or established creators with 500K+ followers:
                 </p>
                 <a 
-                  href="mailto:partnerships@darkwavestudios.io" 
+                  href="mailto:team@dwsc.io" 
                   className="flex items-center gap-2 text-primary hover:text-primary/80 transition-colors"
                 >
-                  <span className="font-mono text-sm">partnerships@darkwavestudios.io</span>
+                  <span className="font-mono text-sm">team@dwsc.io</span>
                   <ArrowRight className="w-4 h-4" />
                 </a>
               </GlassCard>

@@ -63,7 +63,7 @@ export default function Terms() {
     },
     {
       title: "14. Contact",
-      content: `For questions about these Terms of Service, please contact us at legal@darkwavestudios.io`
+      content: `For questions about these Terms of Service, please contact us at team@dwsc.io`
     }
   ];
 
@@ -126,7 +126,7 @@ export default function Terms() {
 
           <div className="text-center text-sm text-muted-foreground py-8" data-testid="text-footer">
             <p>Trust Layer - DarkWave Studios</p>
-            <p>For questions, contact legal@darkwavestudios.io</p>
+            <p>For questions, contact team@dwsc.io</p>
           </div>
         </motion.div>
       </div>

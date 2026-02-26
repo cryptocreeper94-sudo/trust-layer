@@ -3808,7 +3808,7 @@ We're selecting <b>5 pioneer projects</b> for our initial Guardian Certification
 
 <b>Limited spots. Serious projects only.</b>
 
-Interested? Contact: guardian@dwsc.io
+Interested? Contact: team@dwsc.io
 
 👉 dwsc.io/guardian`, category: 'security' },
 

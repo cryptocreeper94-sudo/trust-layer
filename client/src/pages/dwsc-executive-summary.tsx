@@ -844,7 +844,7 @@ export default function DWSCExecutiveSummary() {
               </p>
               <div className="flex flex-wrap justify-center gap-4 mb-6">
                 <a 
-                  href="mailto:cryptocreeper94@gmail.com?subject=DWSC%20Investment%20Inquiry"
+                  href="mailto:team@dwsc.io?subject=DWSC%20Investment%20Inquiry"
                   className="px-6 py-3 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-lg text-white font-semibold transition-colors flex items-center gap-2"
                   data-testid="contact-invest"
                 >
@@ -884,7 +884,7 @@ export default function DWSCExecutiveSummary() {
                 DarkWave Studios • dwsc.io • yourlegacy.io
               </p>
               <p className="text-white/30 text-xs mt-2">
-                Direct inquiries: cryptocreeper94@gmail.com
+                Direct inquiries: team@dwsc.io
               </p>
             </motion.div>
           </div>

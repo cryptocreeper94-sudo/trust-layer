@@ -1000,7 +1000,7 @@ export async function registerRoutes(
       // Send notification email
       try {
         await sendEmail({
-          to: "partners@darkwavestudios.io",
+          to: "team@dwsc.io",
           subject: `New Partner Request: ${studioName}`,
           html: `
             <h2>New Partner Access Request</h2>
@@ -1254,7 +1254,7 @@ export async function registerRoutes(
       // Send email notification
       try {
         await sendEmail({
-          to: "guardian@dwsc.io",
+          to: "team@dwsc.io",
           subject: `[Contact Form] ${subject || "New Inquiry"}`,
           html: `
             <h2>New Contact Form Submission</h2>
@@ -4295,7 +4295,7 @@ export async function registerRoutes(
         <a href="https://twitter.com/DarkWaveTL" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Twitter / X</a>
         <a href="https://discord.gg/darkwave" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Discord</a>
         <a href="https://t.me/darkwavetl" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Telegram</a>
-        <a href="mailto:support@dwsc.io" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Contact Us</a>
+        <a href="mailto:team@dwsc.io" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Contact Us</a>
       </div>
     </div>
     <div style="border-top:1px solid ${border};padding-top:20px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px">
@@ -6893,7 +6893,7 @@ const { trustLayerId } = await response.json();`
       // Try to send notification email to team
       try {
         await sendEmail({
-          to: "partnerships@darkwavestudios.io",
+          to: "team@dwsc.io",
           subject: `New Influencer Application: ${name} (@${handle})`,
           html: `
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #fff; padding: 24px; border-radius: 12px;">

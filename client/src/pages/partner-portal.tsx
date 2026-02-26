@@ -836,11 +836,11 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
             </Button>
             <p className="text-center mt-4">
               <a 
-                href="mailto:partners@darkwavestudios.io" 
+                href="mailto:team@dwsc.io" 
                 className="inline-flex items-center gap-2 text-white/40 hover:text-cyan-400 text-xs transition-colors"
               >
                 <Mail className="w-3 h-3" />
-                partners@darkwavestudios.io
+                team@dwsc.io
               </a>
             </p>
           </div>
@@ -1528,12 +1528,12 @@ function PartnerContent() {
                   
                   <div className="space-y-4 mb-8">
                     <a 
-                      href="mailto:partners@darkwavestudios.io"
+                      href="mailto:team@dwsc.io"
                       className="flex items-center gap-3 text-white hover:text-cyan-400 transition-colors"
                       data-testid="link-partner-email"
                     >
                       <Mail className="w-5 h-5" />
-                      partners@darkwavestudios.io
+                      team@dwsc.io
                     </a>
                   </div>
                   
