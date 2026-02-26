@@ -4281,7 +4281,7 @@ export async function registerRoutes(
         <a href="https://dwsc.io/ecosystem" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">All Apps</a>
         <a href="https://dwsc.io/presale" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Signal Presale</a>
         <a href="https://dwsc.io/veil" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Through The Veil</a>
-        <a href="https://darkwavegames.io" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">DarkWave Games</a>
+        <a href="https://darkwavegames.io" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">The Arcade</a>
       </div>
       <div>
         <h4 style="color:${heading};font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:0 0 12px">Resources</h4>
@@ -4509,7 +4509,7 @@ const { trustLayerId } = await response.json();`
       services.push({
         name: "Dual-Chain Stamping",
         status: "operational",
-        message: "DarkWave + Solana"
+        message: "Trust Layer + Solana"
       });
 
       // Check Hallmark System
@@ -4534,20 +4534,20 @@ const { trustLayerId } = await response.json();`
           const hubStatus = await ecosystemClient.checkStatus();
           const hubLatency = Date.now() - hubStart;
           services.push({
-            name: "DarkWave Hub",
+            name: "Trust Layer Hub",
             status: hubStatus ? "operational" : "degraded",
             latency: hubLatency,
             message: "Ecosystem sync active"
           });
         } else {
           services.push({
-            name: "DarkWave Hub",
+            name: "Trust Layer Hub",
             status: "degraded",
             message: "Credentials not configured"
           });
         }
       } catch {
-        services.push({ name: "DarkWave Hub", status: "down", message: "Connection timeout" });
+        services.push({ name: "Trust Layer Hub", status: "down", message: "Connection timeout" });
       }
 
       // Check Solana/Helius RPC
@@ -5694,7 +5694,7 @@ const { trustLayerId } = await response.json();`
           address: walletAddress,
           privateKey: `0x${privateKey}`,
           balance: "1000.0",
-          network: "DarkWave Devnet",
+          network: "Trust Layer Devnet",
           chainId: 8453,
         },
         message: "Test wallet created and funded with 1000 SIG",
@@ -5732,7 +5732,7 @@ const { trustLayerId } = await response.json();`
           amountSent: `${requestedAmount} SIG`,
           newBalance: account ? (Number(account.balance) / 1e18).toFixed(4) : "0",
           txHash: `0x${crypto.randomBytes(32).toString("hex")}`,
-          network: "DarkWave Devnet",
+          network: "Trust Layer Devnet",
         },
         message: `Sent ${requestedAmount} test SIG to ${address}`,
       });
@@ -5753,7 +5753,7 @@ const { trustLayerId } = await response.json();`
         balance: account ? (Number(account.balance) / 1e18).toFixed(4) : "0",
         balanceWei: account?.balance?.toString() || "0",
         nonce: account?.nonce || 0,
-        network: "DarkWave Devnet",
+        network: "Trust Layer Devnet",
       });
     } catch (error) {
       console.error("Balance check error:", error);
@@ -5798,7 +5798,7 @@ const { trustLayerId } = await response.json();`
           data: data || null,
           status: "confirmed",
           blockHeight,
-          network: "DarkWave Devnet",
+          network: "Trust Layer Devnet",
           gasUsed: "21000",
           gasFee: "0.000021 SIG",
         },
@@ -5814,7 +5814,7 @@ const { trustLayerId } = await response.json();`
     try {
       const stats = blockchain.getStats();
       res.json({
-        network: "DarkWave Devnet",
+        network: "Trust Layer Devnet",
         chainId: 8453,
         status: "operational",
         blockHeight: stats.currentBlock,
@@ -6925,7 +6925,7 @@ const { trustLayerId } = await response.json();`
       try {
         await sendEmail({
           to: email,
-          subject: "DarkWave Partnership Application Received",
+          subject: "Trust Layer Partnership Application Received",
           html: `
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; background: #0d1117; color: #fff; padding: 24px; border-radius: 12px;">
               <h1 style="color: #00ffff; margin-bottom: 20px;">Application Received!</h1>
@@ -7216,7 +7216,7 @@ const { trustLayerId } = await response.json();`
 
       const { createCoinbaseCharge } = await import("./coinbaseClient");
       const charge = await createCoinbaseCharge({
-        name: featureId ? "Feature Funding Contribution" : "DarkWave Dev Fund Contribution",
+        name: featureId ? "Feature Funding Contribution" : "Trust Layer Dev Fund Contribution",
         description: "Transparent blockchain development funding",
         amountUsd: (amountCents / 100).toFixed(2),
         successUrl: `${baseUrl}/crowdfund?success=true&contribution=${contribution.id}&crypto=true`,
@@ -11319,7 +11319,7 @@ const { trustLayerId } = await response.json();`
           price_data: {
             currency: "usd",
             product_data: {
-              name: "DarkWave Legacy Founder",
+              name: "Trust Layer Legacy Founder",
               description: "Lifetime access + 35,000 SIG token airdrop",
             },
             unit_amount: 2400,
@@ -11375,7 +11375,7 @@ const { trustLayerId } = await response.json();`
 
       const { createCoinbaseCharge } = await import("./coinbaseClient");
       const charge = await createCoinbaseCharge({
-        name: "DarkWave Legacy Founder",
+        name: "Trust Layer Legacy Founder",
         description: "Lifetime access + 35,000 SIG token airdrop",
         amountUsd: "24.00",
         successUrl: `${baseUrl}/founder-program?success=true&coinbase_charge={CHECKOUT_ID}`,
@@ -18939,10 +18939,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (guild.leaderId !== userId) return res.status(403).json({ error: "Only the guild leader can activate ChronoLink" });
       if (guild.isChronoLinkActive) return res.status(400).json({ error: "ChronoLink already active" });
       
-      // Create a ChronoChat community for this guild
+      // Create a Signal Chat community for this guild
       const community = await communityHubService.createCommunity({
         name: guild.name,
-        description: `Official ChronoChat for ${guild.name} guild`,
+        description: `Official Signal Chat for ${guild.name} guild`,
         icon: guild.icon || "⚔️",
         ownerId: userId,
         isPublic: guild.isPublic,
@@ -24040,7 +24040,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
           gradient: localMatch?.gradient || app.gradient || "from-gray-500 to-gray-700",
           verified: true,
           featured: localMatch?.featured || app.featured || false,
-          users: "DarkWave Verified",
+          users: "Trust Layer Verified",
           url: APP_URL_MAP[id] || app.appUrl || localMatch?.url || undefined,
         };
       });
@@ -24088,7 +24088,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-cyan-400 to-blue-600",
       verified: true,
       featured: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://dwtl.io",
     },
     {
@@ -24100,7 +24100,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Security", "Enterprise", "Monitoring", "Compliance"],
       gradient: "from-red-500 to-rose-600",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://trustshield.tech",
     },
     {
@@ -24113,7 +24113,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-cyan-600 to-blue-700",
       verified: true,
       featured: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://darkwavepulse.com",
     },
     {
@@ -24125,7 +24125,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["AI", "Trading", "Predictions", "Automation"],
       gradient: "from-red-600 to-rose-700",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://strikeagent.io",
     },
     {
@@ -24137,7 +24137,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["HR", "Payroll", "Enterprise", "Compliance"],
       gradient: "from-emerald-600 to-teal-800",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://orbitstaffing.io",
     },
     {
@@ -24149,7 +24149,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Enterprise", "Operations", "Security", "Geofencing"],
       gradient: "from-cyan-400 to-blue-500",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://getorby.io",
     },
     {
@@ -24161,7 +24161,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Auto", "B2B", "Inventory", "Fleet", "Automation"],
       gradient: "from-indigo-600 to-violet-800",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://lotopspro.io",
     },
     {
@@ -24173,7 +24173,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Social", "Events", "Rewards", "Hospitality"],
       gradient: "from-amber-600 to-yellow-800",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://brewandboard.coffee",
     },
     {
@@ -24185,7 +24185,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["AI", "Trading", "Analytics", "Automation"],
       gradient: "from-blue-500 to-cyan-600",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://tradeworksai.io",
     },
     {
@@ -24197,7 +24197,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Services", "Scheduling", "CRM"],
       gradient: "from-amber-500 to-orange-600",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://paintpros.io",
     },
     {
@@ -24209,7 +24209,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Services", "Scheduling", "CRM", "Contractors"],
       gradient: "from-orange-500 to-red-600",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://nashpaintpros.io",
     },
     {
@@ -24221,7 +24221,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Auto", "IoT", "Maintenance"],
       gradient: "from-slate-600 to-zinc-800",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://garagebot.io",
     },
     {
@@ -24233,7 +24233,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Automotive", "Marketplace", "Verification", "Trust"],
       gradient: "from-zinc-600 to-slate-700",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://garagebot.io/torque",
     },
     {
@@ -24245,7 +24245,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Transportation", "Logistics", "Drivers", "Delivery"],
       gradient: "from-blue-600 to-indigo-700",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://tldriverconnect.com",
     },
     {
@@ -24257,7 +24257,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Health", "Wellness", "Ayurveda", "TCM", "AI"],
       gradient: "from-emerald-500 to-teal-600",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://vedasolus.io",
     },
     {
@@ -24269,7 +24269,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Identity", "Domains", "Blockchain", "Naming"],
       gradient: "from-teal-500 to-cyan-600",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://tlid.io",
     },
     {
@@ -24282,7 +24282,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-purple-500 to-pink-600",
       verified: true,
       featured: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://yourlegacy.io",
     },
     {
@@ -24294,7 +24294,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Gaming", "Blockchain", "Fair", "Entertainment"],
       gradient: "from-pink-500 to-rose-600",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://darkwavegames.io",
     },
     {
@@ -24307,7 +24307,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-indigo-500 to-purple-600",
       verified: true,
       featured: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: `${PORTAL_BASE}/studio`,
     },
     {
@@ -24320,7 +24320,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-cyan-500 to-blue-600",
       verified: true,
       featured: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://trusthome.replit.app",
     },
     {
@@ -24332,7 +24332,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Community", "Chat", "Social", "Messaging"],
       gradient: "from-cyan-500 to-purple-500",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: `${PORTAL_BASE}/signal-chat`,
     },
     {
@@ -24345,7 +24345,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-amber-500 to-orange-600",
       verified: true,
       featured: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://trustvault.replit.app",
     },
     {
@@ -24358,7 +24358,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-green-500 to-emerald-600",
       verified: true,
       featured: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: `${PORTAL_BASE}/guardian`,
     },
     {
@@ -24370,7 +24370,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Identity", "Premium", "Membership", "Blockchain"],
       gradient: "from-gray-800 to-black",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://intothevoid.app",
     },
     {
@@ -24383,19 +24383,19 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-violet-500 to-purple-600",
       verified: true,
       featured: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: `${PORTAL_BASE}/guardian-screener`,
     },
     {
       id: "darkwave-academy",
-      name: "DarkWave Academy",
+      name: "Academy",
       category: "Education",
       description: "Education and certification platform for crypto fundamentals, multi-chain ecosystems, DeFi strategies, security best practices, and Trust Layer operations.",
       hook: "Learn. Certify. Master Crypto.",
       tags: ["Education", "Certification", "Crypto", "Learning"],
       gradient: "from-blue-500 to-indigo-600",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: `${PORTAL_BASE}/academy`,
     },
     {
@@ -24408,7 +24408,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-emerald-500 to-green-700",
       verified: true,
       featured: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://verdara.replit.app",
     },
     {
@@ -24420,7 +24420,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Arborist", "CRM", "Business", "Scheduling", "PWA"],
       gradient: "from-amber-700 to-orange-900",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://verdara.replit.app/arbora",
     },
     {
@@ -24432,7 +24432,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Golf", "Sports", "AI", "Swing Analysis", "PWA"],
       gradient: "from-green-700 to-emerald-900",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://trustgolf.app",
     },
     {
@@ -24444,7 +24444,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Food", "Delivery", "Local", "Ordering"],
       gradient: "from-orange-500 to-red-600",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: "https://happyeats.app",
     },
     {
@@ -24456,7 +24456,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       tags: ["Publishing", "E-Books", "AI Narration", "Reading"],
       gradient: "from-cyan-600 to-purple-800",
       verified: true,
-      users: "DarkWave Verified",
+      users: "Trust Layer Verified",
       url: `${PORTAL_BASE}/trust-book`,
     },
   ];

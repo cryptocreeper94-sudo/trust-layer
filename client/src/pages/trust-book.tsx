@@ -208,7 +208,7 @@ export default function TrustBook() {
           className="relative z-10 text-center max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-500/30 text-white text-sm backdrop-blur-sm" data-testid="badge-trust-book">
             <BookOpen className="w-4 h-4 mr-2 text-cyan-400" />
-            DarkWave Publishing
+            Trust Layer Publishing
           </Badge>
           <h1 className="text-5xl sm:text-6xl md:text-8xl font-display font-black mb-6 leading-tight">
             <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-2xl">Trust</span>

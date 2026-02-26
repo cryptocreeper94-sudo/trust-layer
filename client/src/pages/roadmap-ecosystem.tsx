@@ -74,7 +74,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
       { id: "e15", title: "Global Search", description: "Search all pages, tokens, and features from anywhere", status: "completed", isRequired: false },
       { id: "e16", title: "Feedback System", description: "Bug reports and feature requests from users", status: "completed", isRequired: false },
       { id: "e17", title: "Notification Center", description: "Real-time alerts for price changes and system updates", status: "completed", isRequired: false },
-      { id: "e20", title: "DarkWave Academy", description: "Crypto education platform with blockchain-verified certifications and subscription tiers", status: "completed", isRequired: true },
+      { id: "e20", title: "Academy", description: "Crypto education platform with blockchain-verified certifications and subscription tiers", status: "completed", isRequired: true },
       { id: "e18", title: "Mobile Wallet App", description: "iOS and Android native applications", status: "pending", isRequired: true },
     ],
   },
@@ -143,7 +143,7 @@ const ECOSYSTEM_PHASES: Phase[] = [
       { id: "e23", title: "Chronicles 20+ Eras", description: "Expand from Medieval to 20+ historical eras (community-driven timeline)", status: "pending", isRequired: true },
       { id: "e24", title: "Exchange Listings", description: "CEX and DEX trading availability", status: "pending", isRequired: false },
       { id: "e25", title: "10 Eras Complete", description: "All verifiable historical eras fully playable (community-driven timeline)", status: "pending", isRequired: false },
-      { id: "e26", title: "The Arcade Portal", description: "darkwavegames.io gaming ecosystem launch", status: "pending", isRequired: true },
+      { id: "e26", title: "The Arcade Portal", description: "The Arcade gaming ecosystem launch at darkwavegames.io", status: "pending", isRequired: true },
     ],
   },
 ];

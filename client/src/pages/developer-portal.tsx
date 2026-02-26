@@ -1427,7 +1427,7 @@ app.get('/auth/callback',
 
                 <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
                   <p className="text-xs text-amber-300">
-                    <strong>Getting Started:</strong> Contact the DarkWave team to register your app and receive your API credentials. Never expose your API Secret in client-side code.
+                    <strong>Getting Started:</strong> Contact the Trust Layer team to register your app and receive your API credentials. Never expose your API Secret in client-side code.
                   </p>
                 </div>
               </div>

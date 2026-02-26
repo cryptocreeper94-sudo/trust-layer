@@ -27,7 +27,7 @@ const PRODUCTS: ProductConfig[] = [
   },
   {
     name: "Crowdfund Donation",
-    description: "Support the DarkWave ecosystem development",
+    description: "Support the Trust Layer ecosystem development",
     metadata: { category: "donation", tier: "crowdfund" },
     prices: [
       { nickname: "Supporter Tier", unit_amount: 2500, currency: "usd", metadata: { tier: "supporter" } },
@@ -59,8 +59,8 @@ const PRODUCTS: ProductConfig[] = [
     description: "Full access bundle - Pulse Pro + Strike Agent + Chronicles Pro at discounted rate",
     metadata: { category: "subscription", tier: "complete" },
     prices: [
-      { nickname: "DarkWave Complete Monthly", unit_amount: 3999, currency: "usd", recurring: { interval: "month" } },
-      { nickname: "DarkWave Complete Yearly", unit_amount: 39999, currency: "usd", recurring: { interval: "year" } },
+      { nickname: "Trust Layer Complete Monthly", unit_amount: 3999, currency: "usd", recurring: { interval: "month" } },
+      { nickname: "Trust Layer Complete Yearly", unit_amount: 39999, currency: "usd", recurring: { interval: "year" } },
     ],
   },
   {
@@ -127,7 +127,7 @@ const PRODUCTS: ProductConfig[] = [
   },
   {
     name: "Orbs Currency Pack",
-    description: "Purchase Orbs for use within the DarkWave ecosystem",
+    description: "Purchase Orbs for use within the Trust Layer ecosystem",
     metadata: { category: "orbs" },
     prices: [
       { nickname: "500 Orbs", unit_amount: 499, currency: "usd", metadata: { orbs: "500" } },

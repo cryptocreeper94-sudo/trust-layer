@@ -87,10 +87,10 @@ function updateDomainAssets() {
     if (appleTouchIcon) {
       appleTouchIcon.setAttribute("href", "/icons/games-icon-512.png");
     }
-    document.title = "DarkWave Games - Play & Win";
+    document.title = "The Arcade - Play & Win";
 
     const appTitle = document.querySelector('meta[name="apple-mobile-web-app-title"]');
-    if (appTitle) appTitle.setAttribute("content", "DW Games");
+    if (appTitle) appTitle.setAttribute("content", "The Arcade");
 
     const existingSplash = document.querySelectorAll('link[rel="apple-touch-startup-image"]');
     existingSplash.forEach(el => el.remove());

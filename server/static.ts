@@ -36,7 +36,7 @@ const APP_CONFIG: Record<AppDomain, {
   games: {
     manifest: "/manifest-games.webmanifest",
     themeColor: "#ec4899",
-    title: "DarkWave Games",
+    title: "The Arcade",
     description: "Provably fair blockchain games. Win real SIG with instant payouts.",
     icon: "/icons/games-512x512.png",
   },
@@ -50,8 +50,8 @@ const APP_CONFIG: Record<AppDomain, {
   chronochat: {
     manifest: "/manifest-chronochat.webmanifest",
     themeColor: "#06b6d4",
-    title: "ChronoChat",
-    description: "Connect across timelines. Chat beyond eras. The community hub for DarkWave ecosystem.",
+    title: "Signal Chat",
+    description: "Connect across the ecosystem. The community hub for Trust Layer.",
     icon: "/icons/icon-512x512.png",
   },
 };

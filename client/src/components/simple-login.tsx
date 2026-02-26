@@ -34,7 +34,7 @@ const isPasswordValid = (pwd: string) => {
 
 const ECOSYSTEM_APPS: Record<string, { label: string; color: string }> = {
   garagebot: { label: "GarageBot", color: "from-orange-500 to-amber-500" },
-  darkwavegames: { label: "DarkWave Games", color: "from-purple-500 to-pink-500" },
+  darkwavegames: { label: "The Arcade", color: "from-purple-500 to-pink-500" },
   darkwavestudios: { label: "DarkWave Studios", color: "from-blue-500 to-cyan-500" },
   yourlegacy: { label: "Your Legacy", color: "from-emerald-500 to-teal-500" },
   trustshield: { label: "TrustShield", color: "from-red-500 to-orange-500" },
@@ -309,7 +309,7 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess, ssoApp: ssoAppPro
                 : (view === "login" ? "Welcome Back" : view === "signup" ? "Create Account" : "Reset Password")}
             </h2>
             <p className="text-muted-foreground text-sm">
-              {view === "login" ? "Sign in to your account" : view === "signup" ? "Join DarkWave today" : "Enter your email to reset"}
+              {view === "login" ? "Sign in to your account" : view === "signup" ? "Join Trust Layer today" : "Enter your email to reset"}
             </p>
           </div>
 
@@ -568,7 +568,7 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess, ssoApp: ssoAppPro
               <div className="flex items-start gap-2">
                 <Globe className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
                 <p className="text-xs text-slate-400 leading-relaxed">
-                  Signed up through <span className="text-cyan-400/80">GarageBot</span> or another DarkWave ecosystem app?
+                  Signed up through <span className="text-cyan-400/80">GarageBot</span> or another Trust Layer ecosystem app?
                   Use the same email and password here — one account works across the entire ecosystem.
                 </p>
               </div>

@@ -249,7 +249,7 @@ class ZealyService {
         success: true,
         message: shellsAwarded > 0 
           ? `Awarded ${shellsAwarded} Shells!` 
-          : "Quest completed! (Link your DarkWave account to receive Shells)",
+          : "Quest completed! (Link your Trust Layer account to receive Shells)",
         shellsAwarded,
       };
     } catch (error) {
@@ -481,7 +481,7 @@ class ZealyService {
       return { canWithdraw: false, reason: "No reward profile found" };
     }
     if (!profile.hasWallet || !profile.walletAddress) {
-      return { canWithdraw: false, reason: "Wallet required for withdrawals. Connect your DarkWave wallet to redeem Shells." };
+      return { canWithdraw: false, reason: "Wallet required for withdrawals. Connect your Trust Layer wallet to redeem Shells." };
     }
     return { canWithdraw: true };
   }

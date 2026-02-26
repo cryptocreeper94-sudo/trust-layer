@@ -334,7 +334,7 @@ export function AIAssistant() {
                   />
                 </div>
                 <div>
-                  <h3 className="text-sm font-bold text-white">DarkWave AI</h3>
+                  <h3 className="text-sm font-bold text-white">Trust Layer AI</h3>
                   <p className="text-[10px] text-cyan-400">Your ecosystem guide</p>
                 </div>
               </div>

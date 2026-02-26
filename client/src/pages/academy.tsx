@@ -326,7 +326,7 @@ export default function AcademyPage() {
 
       <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroImg} alt="DarkWave Academy" className="w-full h-full object-cover opacity-25" />
+          <img src={heroImg} alt="Academy" className="w-full h-full object-cover opacity-25" />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-slate-950/80 to-slate-950" />
           <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5" />
         </div>
@@ -374,7 +374,7 @@ export default function AcademyPage() {
           >
             <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-500/30 text-white text-sm backdrop-blur-sm shadow-lg shadow-blue-500/10" data-testid="badge-academy">
               <GraduationCap className="w-4 h-4 mr-2 text-blue-400" />
-              DarkWave Academy
+              Academy
             </Badge>
           </motion.div>
 
@@ -492,7 +492,7 @@ export default function AcademyPage() {
               className="space-y-6"
             >
               <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
-                <Sparkles className="w-3 h-3 mr-1" /> Why DarkWave Academy
+                <Sparkles className="w-3 h-3 mr-1" /> Why Academy
               </Badge>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black">
                 <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">

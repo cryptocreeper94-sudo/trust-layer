@@ -165,7 +165,7 @@ export function FloatingChat() {
             <div className="bg-gradient-to-r from-cyan-600 to-purple-600 px-4 py-3 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <MessageCircle className="w-5 h-5 text-white" />
-                <span className="font-semibold text-white">ChronoChat</span>
+                <span className="font-semibold text-white">Signal Chat</span>
                 <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-yellow-400'}`} />
                 {foundersStatus?.isFounder && (
                   <FoundersBadge tier={foundersStatus.tier as any} size="sm" showLabel={false} />
@@ -275,7 +275,7 @@ export function FloatingChat() {
             className="fixed bottom-44 left-4 bg-slate-900/95 backdrop-blur-xl border border-slate-700/50 rounded-xl shadow-xl px-4 py-2 flex items-center gap-3 z-50"
           >
             <MessageCircle className="w-5 h-5 text-cyan-400" />
-            <span className="text-white text-sm font-medium">ChronoChat</span>
+            <span className="text-white text-sm font-medium">Signal Chat</span>
             <button
               onClick={() => setIsMinimized(false)}
               className="p-1 hover:bg-white/10 rounded transition-colors"

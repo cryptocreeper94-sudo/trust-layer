@@ -513,7 +513,7 @@ export default function Arcade() {
           >
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 mb-4">
               <Gamepad2 className="w-4 h-4 text-cyan-400" />
-              <span className="text-sm font-medium text-cyan-400">DarkWave Games</span>
+              <span className="text-sm font-medium text-cyan-400">The Arcade</span>
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white mb-3">
               <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">

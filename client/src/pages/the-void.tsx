@@ -100,9 +100,9 @@ export default function TheVoid() {
     { icon: Fingerprint, title: "Void ID", desc: "Unique V-XXXXXXXX identity minted on-chain as your premium hallmark", gradient: "from-purple-500 to-indigo-600" },
     { icon: Shield, title: "DW-STAMP-1.0", desc: "SHA-256 hash-chained blockchain stamps with full chain integrity verification", gradient: "from-cyan-500 to-blue-600" },
     { icon: Link2, title: "Bridge Protocol", desc: "Link your Signal Chat identity to your Trust Layer Void ID seamlessly", gradient: "from-emerald-500 to-teal-600" },
-    { icon: Crown, title: "Premium Badge", desc: "Verified Void premium member flair across the entire DarkWave ecosystem", gradient: "from-amber-500 to-orange-600" },
+    { icon: Crown, title: "Premium Badge", desc: "Verified Void premium member flair across the entire Trust Layer ecosystem", gradient: "from-amber-500 to-orange-600" },
     { icon: Users, title: "Affiliate Rewards", desc: "Your Void ID doubles as a referral code — earn 5 bonus credits per Premium referral", gradient: "from-pink-500 to-rose-600" },
-    { icon: Globe, title: "Cross-Ecosystem SSO", desc: "Single sign-on across all 27 DarkWave apps with your Trust Layer ID and Void credentials", gradient: "from-violet-500 to-purple-600" },
+    { icon: Globe, title: "Cross-Ecosystem SSO", desc: "Single sign-on across all 31 Trust Layer apps with your Trust Layer ID and Void credentials", gradient: "from-violet-500 to-purple-600" },
   ];
 
   return (
@@ -141,7 +141,7 @@ export default function TheVoid() {
 
           <motion.p variants={fadeUp} className="text-base sm:text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed mb-10">
             Your Void ID is more than a membership badge — it's a blockchain-verified identity anchor minted with
-            DW-STAMP-1.0, hash-chained on Trust Layer v1, and recognized across the entire DarkWave ecosystem.
+            DW-STAMP-1.0, hash-chained on Trust Layer v1, and recognized across the entire Trust Layer ecosystem.
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-2 sm:px-0">
@@ -523,7 +523,7 @@ export default function TheVoid() {
                 </h3>
                 <p className="text-slate-400 max-w-xl mx-auto mb-8 text-sm sm:text-base leading-relaxed">
                   Premium subscribers receive their Void ID automatically upon activation.
-                  Your identity is minted on-chain and verified across the entire DarkWave ecosystem.
+                  Your identity is minted on-chain and verified across the entire Trust Layer ecosystem.
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 px-2 sm:px-0">
                   <Button

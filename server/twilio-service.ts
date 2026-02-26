@@ -79,7 +79,7 @@ export async function sendVerificationCode(phoneNumber: string): Promise<{ succe
 
   const sent = await sendTwilioSMS(
     normalizedPhone,
-    `Your DarkWave verification code is: ${code}. This code expires in 10 minutes. Never share this code with anyone.`
+    `Your Trust Layer verification code is: ${code}. This code expires in 10 minutes. Never share this code with anyone.`
   );
 
   if (!sent) {
@@ -127,7 +127,7 @@ export async function sendSecurityAlert(phoneNumber: string, message: string): P
   }
 
   const normalizedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+1${phoneNumber}`;
-  return sendTwilioSMS(normalizedPhone, `DarkWave Security: ${message}`);
+  return sendTwilioSMS(normalizedPhone, `Trust Layer Security: ${message}`);
 }
 
 export function isTwilioConfigured(): boolean {

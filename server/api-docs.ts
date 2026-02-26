@@ -34,7 +34,7 @@ const CATEGORY_MAP: Record<string, { tag: string; description: string }> = {
   "/api/stripe/": { tag: "Payments", description: "Stripe payment processing" },
   "/api/coinbase/": { tag: "Payments", description: "Coinbase Commerce integration" },
   "/api/subscription/": { tag: "Subscriptions", description: "Subscription management and billing" },
-  "/api/academy/": { tag: "Academy", description: "DarkWave Academy education platform" },
+  "/api/academy/": { tag: "Academy", description: "Academy education platform" },
   "/api/member/": { tag: "Membership", description: "Trust Layer membership and cards" },
   "/api/business/": { tag: "Business", description: "Business tenant portals" },
   "/api/ecosystem/": { tag: "Ecosystem", description: "Cross-app ecosystem and SSO" },

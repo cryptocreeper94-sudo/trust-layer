@@ -238,7 +238,7 @@ export function WalletButton() {
                   >
                     <Shield className="w-7 h-7 text-cyan-400" />
                     <div className="text-left min-w-0">
-                      <div className="font-medium text-sm">DarkWave Wallet</div>
+                      <div className="font-medium text-sm">Trust Layer Wallet</div>
                       <div className="text-[10px] text-muted-foreground truncate">Create or manage your wallet</div>
                     </div>
                   </Button>

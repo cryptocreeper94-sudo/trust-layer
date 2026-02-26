@@ -64,7 +64,7 @@ class StakingEngine {
       {
         name: "Core Guard 90",
         slug: "core-guard-90",
-        description: "Commit for 90 days and unlock premium yields. Ideal for believers in the DarkWave vision.",
+        description: "Commit for 90 days and unlock premium yields. Ideal for believers in the Trust Layer vision.",
         poolType: "locked",
         apyBase: "18",
         apyBoost: "4",

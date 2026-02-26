@@ -3,7 +3,7 @@ import { chatChannels } from '@shared/schema';
 import { eq } from 'drizzle-orm';
 
 const DEFAULT_CHANNELS = [
-  { name: 'general', description: 'General discussion for the DarkWave ecosystem', category: 'ecosystem', isDefault: true },
+  { name: 'general', description: 'General discussion for the Trust Layer ecosystem', category: 'ecosystem', isDefault: true },
   { name: 'announcements', description: 'Official announcements and updates', category: 'ecosystem', isDefault: true },
   { name: 'darkwavestudios-support', description: 'Support for DarkWave Studios', category: 'app-support', isDefault: false },
   { name: 'garagebot-support', description: 'Support for GarageBot', category: 'app-support', isDefault: false },
