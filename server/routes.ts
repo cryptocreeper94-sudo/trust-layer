@@ -286,15 +286,16 @@ export async function registerRoutes(
     "throughtheveil": "/veil",
     "signalchat": "/signal-chat",
     "guardianscanner": "/guardian-scanner",
-    "guardianscreener": "/guardian-screener",
+    "guardianscreener": "/guardian-ai",
     "trustshield": "/guardian-scanner",
     "academy": "/academy",
     "thevoid": "/the-void",
     "arcade": "/arcade",
     "tlid": "/domains",
-    "torque": "/torque",
-    "trusthome": "/trust-home",
-    "trustvault": "/trust-vault",
+    "torque": "/ecosystem",
+    "trusthome": "/my-hub",
+    "trustvault": "/wallet",
+    "trustbook": "/trust-book",
   };
 
   app.get("*", async (req: Request, res: Response, next: NextFunction) => {
