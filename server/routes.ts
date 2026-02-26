@@ -299,6 +299,11 @@ export async function registerRoutes(
     "launch": "/launch",
   };
 
+  const TLID_EXTERNAL_REDIRECTS: Record<string, string> = {
+    "torque": "https://garagebot.io/torque",
+    "garagebot": "https://garagebot.io",
+  };
+
   app.get("*", async (req: Request, res: Response, next: NextFunction) => {
     const host = req.hostname;
     
@@ -319,6 +324,11 @@ export async function registerRoutes(
       }
       
       try {
+        const externalRedirect = TLID_EXTERNAL_REDIRECTS[domainName];
+        if (externalRedirect) {
+          return res.redirect(301, externalRedirect);
+        }
+
         const internalRoute = TLID_INTERNAL_ROUTES[domainName];
         if (internalRoute) {
           req.url = internalRoute + (req.url === "/" ? "" : req.url);
