@@ -178,7 +178,7 @@ export default function Veil() {
               data-testid="button-read-online"
             >
               <BookOpen className="w-5 h-5 mr-2" />
-              Read Online — Free
+              Read Online
             </Button>
             <Button
               onClick={handleDownloadPDF}
@@ -250,7 +250,7 @@ export default function Veil() {
             { icon: ScrollText, label: "52 Chapters", sub: "Complete Edition", color: "text-purple-400" },
             { icon: Shield, label: "163+ Scriptures", sub: "Cited & Referenced", color: "text-pink-400" },
             { icon: Layers, label: "13 Parts", sub: "Evidence to Journey", color: "text-cyan-400" },
-            { icon: Star, label: "Free Forever", sub: "Always Free Here", color: "text-amber-400" },
+            { icon: Star, label: "107K Words", sub: "Full Investigation", color: "text-amber-400" },
           ].map((stat) => (
             <motion.div key={stat.label} variants={item}>
               <GlassCard glow className="text-center h-full">
@@ -595,7 +595,7 @@ export default function Veil() {
         >
           <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-4 sm:mb-5">Ready to Begin?</h3>
           <p className="text-slate-400 text-sm sm:text-base mb-8 leading-relaxed">
-            Start reading online for free, or download your copy in PDF or EPUB format.
+            Start reading online, or download your copy in PDF or EPUB format.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md sm:max-w-none mx-auto">
             <Button

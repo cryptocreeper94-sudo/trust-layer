@@ -1536,10 +1536,10 @@ export default function VeilReader() {
                       <BookOpen className="w-8 h-8 text-white" />
                     </div>
                     <h3 className="text-2xl sm:text-3xl font-bold text-white mb-3">
-                      You've reached the end of the free preview
+                      You've reached the end of the preview
                     </h3>
                     <p className="text-white/50 max-w-md mx-auto mb-2 text-sm">
-                      You've read the first {FREE_PREVIEW_CHAPTERS} chapters. The full book contains 52 chapters across 13 parts — 107,000 words of investigation.
+                      You've read the first {FREE_PREVIEW_CHAPTERS} chapters. The full book contains 52 chapters across 13 parts — 107,000 words of investigation. Purchase to continue reading.
                     </p>
                     <p className="text-white/30 text-xs mb-6">
                       Available on Amazon for $9.99 — or get it here for half price.

@@ -220,7 +220,7 @@ export default function TrustBook() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/veil/read">
               <Button size="lg" className="h-14 px-8 text-base gap-2 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 shadow-2xl shadow-cyan-500/25 rounded-xl" data-testid="button-read-featured">
-                <Eye className="w-5 h-5" /> Preview Free <ArrowRight className="w-4 h-4" />
+                <Eye className="w-5 h-5" /> Preview <ArrowRight className="w-4 h-4" />
               </Button>
             </Link>
             <Button size="lg" variant="outline" onClick={() => scrollToSection('write')}
@@ -292,7 +292,7 @@ export default function TrustBook() {
                     <div className="flex flex-col sm:flex-row gap-3">
                       <Link href="/veil/read">
                         <Button className="gap-2 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500" data-testid="button-read-now">
-                          <Eye className="w-4 h-4" /> Preview Free
+                          <Eye className="w-4 h-4" /> Preview
                         </Button>
                       </Link>
                       <Link href="/veil/read">
@@ -301,7 +301,7 @@ export default function TrustBook() {
                         </Button>
                       </Link>
                     </div>
-                    <p className="text-white/30 text-xs mt-3">First 4 chapters free · $9.99 on Amazon</p>
+                    <p className="text-white/30 text-xs mt-3">$4.99 on Trust Book · $9.99 on Amazon</p>
                   </div>
                 </div>
               </GlassCard>
@@ -903,13 +903,13 @@ export default function TrustBook() {
               <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">Start Reading Now</span>
             </h2>
             <p className="text-white/50 max-w-md mx-auto mb-2">
-              "Through The Veil" — 107,000 words of investigation. Preview the first 4 chapters free.
+              "Through The Veil" — 107,000 words of investigation. 52 chapters across 13 parts.
             </p>
             <p className="text-white/30 text-sm mb-8">$4.99 on Trust Book · $9.99 on Amazon</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link href="/veil/read">
                 <Button size="lg" className="h-14 px-10 text-base gap-2 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 shadow-2xl shadow-cyan-500/25 rounded-xl" data-testid="button-start-reading">
-                  <Eye className="w-5 h-5" /> Preview Free
+                  <Eye className="w-5 h-5" /> Preview
                 </Button>
               </Link>
               <Link href="/veil/read">
