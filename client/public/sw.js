@@ -1,4 +1,4 @@
-const CACHE_VERSION = 10;
+const CACHE_VERSION = 11;
 const CACHE_NAME = 'trustlayer-v' + CACHE_VERSION;
 
 self.addEventListener('install', (event) => {

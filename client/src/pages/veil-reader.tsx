@@ -850,7 +850,7 @@ export default function VeilReader() {
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="text-center relative z-10"
+          className="text-center relative z-10 px-4"
         >
           <div className="relative w-20 h-20 mx-auto mb-8">
             <div className="absolute inset-0 rounded-full border-2 border-purple-500/20 animate-ping" />
@@ -858,8 +858,9 @@ export default function VeilReader() {
             <div className="absolute inset-2 rounded-full bg-gradient-to-br from-purple-500/10 to-cyan-500/10 backdrop-blur-sm border border-white/5" />
             <BookOpen className="absolute inset-0 m-auto w-7 h-7 text-purple-400" />
           </div>
-          <p className="text-slate-200 text-lg font-medium mb-2">Loading</p>
-          <p className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent font-semibold tracking-wide">Through The Veil</p>
+          <p className="text-slate-200 text-lg font-medium mb-2">Opening your book...</p>
+          <p className="text-sm bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent font-semibold tracking-wide mb-4">Through The Veil</p>
+          <p className="text-slate-500 text-xs">52 chapters · 107,000 words</p>
         </motion.div>
       </div>
     );
@@ -879,14 +880,21 @@ export default function VeilReader() {
               <X className="w-7 h-7 text-red-400" />
             </div>
             <p className="text-red-300 mb-2 font-medium text-lg">{error || 'Failed to load content'}</p>
-            <p className="text-slate-500 text-sm mb-6">Please try again or return to the book page.</p>
+            <p className="text-slate-500 text-sm mb-6">This can happen on slower connections. Tap below to try again.</p>
             <div className="space-y-3">
               <Button 
-                onClick={() => loadEbook()} 
+                onClick={() => {
+                  if ('caches' in window) {
+                    caches.keys().then(k => k.forEach(n => caches.delete(n)));
+                  }
+                  setError(null);
+                  setLoading(true);
+                  setTimeout(() => loadEbook(), 300);
+                }} 
                 className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all w-full py-5"
                 data-testid="button-retry-load"
               >
-                Try Again
+                Clear Cache & Try Again
               </Button>
               <Link href="/veil">
                 <Button variant="outline" className="border-white/10 text-slate-400 hover:text-white w-full py-5">

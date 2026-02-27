@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocation } from "wouter";
 import { motion } from "framer-motion";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -80,11 +81,17 @@ const item = {
 };
 
 export default function Veil() {
+  const [, setLocation] = useLocation();
   const [isStandalone, setIsStandalone] = useState(false);
   const [isIOS, setIsIOS] = useState(false);
 
   const handleReadOnline = (anchor?: string) => {
-    window.location.href = anchor ? `/veil/read#${anchor}` : '/veil/read';
+    if (anchor) {
+      setLocation(`/veil/read#${anchor}`);
+      setTimeout(() => { window.location.hash = anchor; }, 100);
+    } else {
+      setLocation('/veil/read');
+    }
   };
 
   const handleDownloadPDF = () => {
