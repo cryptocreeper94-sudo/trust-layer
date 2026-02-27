@@ -300,11 +300,18 @@ export default function MyHub() {
     setWelcomeDismissed(true);
   };
 
-  // Get user's display name
   const getUserName = () => {
     if (user?.displayName) return user.displayName.split(' ')[0];
     if (user?.email) return user.email.split('@')[0];
     return 'Friend';
+  };
+
+  const getGreeting = () => {
+    const cst = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }));
+    const hour = cst.getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
   };
 
   const generateTrustHash = () => {
@@ -356,8 +363,8 @@ export default function MyHub() {
       <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
         <GlassCard className="p-8 text-center max-w-md">
           <Shield className="w-16 h-16 text-cyan-400 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold mb-2">Welcome to Your Hub</h1>
-          <p className="text-white/60 mb-6">Sign in to access your personal dashboard and track your rewards.</p>
+          <h1 className="text-2xl font-bold mb-2">Your Portal</h1>
+          <p className="text-white/60 mb-6">Sign in to access your personal portal — your balances, membership, and everything that's yours in the Trust Layer ecosystem.</p>
           <Link href="/">
             <Button className="bg-gradient-to-r from-cyan-500 to-purple-500">
               Sign In to Continue
@@ -375,8 +382,10 @@ export default function MyHub() {
       
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/90 backdrop-blur-xl">
         <div className="w-full px-4 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center">
+          <Link href="/" className="flex items-center gap-2">
             <span className="font-display font-bold text-xl tracking-tight">Trust Layer</span>
+            <span className="text-white/30">|</span>
+            <span className="text-cyan-400 text-sm font-medium">Your Portal</span>
           </Link>
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="relative">
@@ -485,12 +494,12 @@ export default function MyHub() {
                         <Crown className="w-8 h-8 text-cyan-400" />
                       </div>
                       <div>
-                        <h1 className="text-3xl md:text-4xl font-bold">
-                          Welcome, Member <span className="text-cyan-400">#{memberData?.memberNumber || '...'}</span>
+                        <h1 className="text-3xl md:text-4xl font-bold" data-testid="text-user-greeting">
+                          {getGreeting()}, <span className="text-cyan-400">{getUserName()}</span>
                         </h1>
                         <p className="text-white/60 flex flex-wrap items-center gap-2">
                           <Shield className="w-4 h-4 text-emerald-400" />
-                          Verified Trust Layer Member
+                          Member <span className="text-cyan-400 font-semibold">#{memberData?.memberNumber || '...'}</span>
                           {tenureBadge && (
                             <Badge className={`${tenureBadge.className} ml-2`}>
                               <span className="mr-1">{tenureBadge.icon}</span> {tenureBadge.label}
