@@ -5,7 +5,7 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { 
   Zap, Shield, TrendingUp, Users, Gift, Award, Crown, Sparkles,
   ArrowRight, Clock, CheckCircle, Copy, ExternalLink, Wallet,
-  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator, X, CreditCard, History, User, UserCheck, Activity, Flame, Timer
+  Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator, X, CreditCard, History, User, UserCheck, Activity, Flame, Timer, Search, Mail
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { authFetch } from "@/hooks/use-firebase-auth";
@@ -1399,6 +1399,105 @@ function ReferralBanner({ referrer }: { referrer: string }) {
   );
 }
 
+function AllocationLookup() {
+  const [lookupEmail, setLookupEmail] = useState("");
+  const [lookupResult, setLookupResult] = useState<{ purchases: any[]; total: { tokens: number; spent: number } } | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
+  const { toast } = useToast();
+
+  const handleLookup = async () => {
+    if (!lookupEmail || !lookupEmail.includes("@")) {
+      toast({ title: "Enter a valid email", variant: "destructive" });
+      return;
+    }
+    setLoading(true);
+    setSearched(true);
+    try {
+      const res = await fetch(`/api/presale/my-purchases?email=${encodeURIComponent(lookupEmail.trim())}`);
+      const data = await res.json();
+      setLookupResult(data);
+    } catch {
+      toast({ title: "Lookup failed", description: "Please try again", variant: "destructive" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <HolographicCard className="p-6 mb-8" glow="cyan">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="p-2 rounded-lg bg-cyan-500/20">
+          <Search className="w-5 h-5 text-cyan-400" />
+        </div>
+        <div>
+          <h3 className="text-lg font-bold text-white">Check My Allocation</h3>
+          <p className="text-sm text-gray-400">Enter the email you used to purchase</p>
+        </div>
+      </div>
+
+      <div className="flex gap-2 mb-4">
+        <div className="flex-1 relative">
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
+          <input
+            type="email"
+            value={lookupEmail}
+            onChange={(e) => setLookupEmail(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleLookup()}
+            placeholder="your@email.com"
+            className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/30 focus:border-cyan-500/50 focus:outline-none"
+            data-testid="input-allocation-lookup"
+          />
+        </div>
+        <Button
+          onClick={handleLookup}
+          disabled={loading}
+          className="bg-cyan-600 hover:bg-cyan-700 px-6"
+          data-testid="button-lookup-allocation"
+        >
+          {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Look Up"}
+        </Button>
+      </div>
+
+      {searched && lookupResult && (
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+          {lookupResult.purchases.length > 0 ? (
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="p-3 rounded-xl bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20">
+                  <p className="text-gray-400 text-xs">Total Signal Tokens</p>
+                  <p className="text-xl font-bold text-cyan-400" data-testid="text-lookup-total-tokens">{lookupResult.total.tokens.toLocaleString()} SIG</p>
+                </div>
+                <div className="p-3 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20">
+                  <p className="text-gray-400 text-xs">Total Invested</p>
+                  <p className="text-xl font-bold text-purple-400">${lookupResult.total.spent.toLocaleString()}</p>
+                </div>
+              </div>
+              <div className="space-y-2">
+                {lookupResult.purchases.map((p: any) => (
+                  <div key={p.id} className="flex items-center justify-between p-2 rounded-lg bg-white/5">
+                    <div className="flex items-center gap-2">
+                      <Badge variant="default" className="text-xs bg-green-500/20 text-green-400 border-green-500/30">{p.status}</Badge>
+                      <span className="text-sm text-gray-300">{p.tokens?.toLocaleString()} SIG</span>
+                    </div>
+                    <span className="text-sm text-gray-500">${p.amount} via {p.method}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-gray-500 text-center mt-2">Tokens will be delivered to your Trust Layer wallet at mainnet launch</p>
+            </div>
+          ) : (
+            <div className="text-center py-4">
+              <p className="text-gray-400">No purchases found for this email.</p>
+              <p className="text-gray-500 text-sm mt-1">Make sure you're using the same email you purchased with.</p>
+            </div>
+          )}
+        </motion.div>
+      )}
+    </HolographicCard>
+  );
+}
+
 export default function Presale() {
   const { user } = useAuth();
   const { evmAddress, solanaAddress } = useWallet();
@@ -1458,6 +1557,8 @@ export default function Presale() {
         <LaunchCountdownBanner />
 
         {(purchaseEmail || purchaseWallet) && <MyPurchases userEmail={purchaseEmail || undefined} walletAddress={purchaseWallet || undefined} />}
+
+        <AllocationLookup />
 
         <div className="grid lg:grid-cols-2 gap-8 mb-8">
           <PresaleProgress />
