@@ -22781,7 +22781,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       const detailsSubmitted = account.details_submitted;
 
       if (detailsSubmitted && !profile.stripeOnboardingComplete) {
-        await markOnboardingComplete(userId);
+        await markOnboardingComplete(userId, payoutsEnabled);
       }
 
       res.json({

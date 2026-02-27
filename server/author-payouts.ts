@@ -28,9 +28,13 @@ export async function updateStripeConnectId(userId: string, stripeConnectId: str
     .where(eq(authorProfiles.userId, userId));
 }
 
-export async function markOnboardingComplete(userId: string) {
+export async function markOnboardingComplete(userId: string, payoutsEnabled: boolean) {
   await db.update(authorProfiles)
-    .set({ stripeOnboardingComplete: true, payoutEnabled: true, updatedAt: new Date() })
+    .set({
+      stripeOnboardingComplete: true,
+      payoutEnabled: payoutsEnabled,
+      updatedAt: new Date(),
+    })
     .where(eq(authorProfiles.userId, userId));
 }
 
@@ -84,25 +88,38 @@ export async function getEligiblePayouts(authorId: string) {
 export async function processAuthorPayout(authorId: string, stripe: any) {
   const profile = await getAuthorProfile(authorId);
   if (!profile || !profile.stripeConnectId || !profile.payoutEnabled) {
-    return { success: false, message: "Author payout not configured" };
+    return { success: false, message: "Payouts are not configured yet. Please complete Stripe Connect onboarding first." };
   }
 
-  const eligible = await getEligiblePayouts(authorId);
-  if (eligible.length === 0) {
-    return { success: false, message: "No eligible earnings to pay out" };
+  const lockResult = await db.update(authorEarnings)
+    .set({ status: "processing" })
+    .where(and(
+      eq(authorEarnings.authorId, authorId),
+      eq(authorEarnings.status, "pending"),
+      sql`${authorEarnings.eligibleAt} <= NOW()`
+    ))
+    .returning();
+
+  if (lockResult.length === 0) {
+    return { success: false, message: "No eligible earnings to pay out. Earnings require a 7-day settlement period." };
   }
 
-  const totalAmount = eligible.reduce((sum, e) => sum + e.authorEarningsCents, 0);
+  const totalAmount = lockResult.reduce((sum, e) => sum + e.authorEarningsCents, 0);
 
   try {
     const transfer = await stripe.transfers.create({
       amount: totalAmount,
       currency: "usd",
       destination: profile.stripeConnectId,
-      description: `Trust Book royalty payout - ${eligible.length} sale(s)`,
+      description: `Trust Book royalty payout - ${lockResult.length} sale(s)`,
+      metadata: {
+        authorId,
+        earningIds: lockResult.map(e => e.id).join(","),
+        platform: "trust_book",
+      },
     });
 
-    for (const earning of eligible) {
+    for (const earning of lockResult) {
       await db.update(authorEarnings)
         .set({
           status: "paid",
@@ -120,10 +137,16 @@ export async function processAuthorPayout(authorId: string, stripe: any) {
       })
       .where(eq(authorProfiles.userId, authorId));
 
-    return { success: true, amount: totalAmount, transferId: transfer.id };
+    console.log(`[Author Payout] Success: $${(totalAmount / 100).toFixed(2)} to ${profile.stripeConnectId} (${lockResult.length} sales)`);
+    return { success: true, amount: totalAmount, transferId: transfer.id, salesCount: lockResult.length };
   } catch (error: any) {
-    console.error("[Author Payout] Transfer failed:", error.message);
-    return { success: false, message: error.message };
+    console.error("[Author Payout] Transfer failed, rolling back:", error.message);
+    for (const earning of lockResult) {
+      await db.update(authorEarnings)
+        .set({ status: "pending" })
+        .where(eq(authorEarnings.id, earning.id));
+    }
+    return { success: false, message: `Payout failed: ${error.message}. Your earnings are safe and you can try again.` };
   }
 }
 
@@ -137,7 +160,7 @@ export async function getAuthorDashboardStats(authorId: string) {
   const totalRevenue = earnings.reduce((sum, e) => sum + e.grossAmountCents, 0);
   const totalRoyalties = earnings.reduce((sum, e) => sum + e.authorEarningsCents, 0);
   const pendingPayout = earnings
-    .filter(e => e.status === "pending")
+    .filter(e => e.status === "pending" || e.status === "processing")
     .reduce((sum, e) => sum + e.authorEarningsCents, 0);
   const eligibleNow = earnings
     .filter(e => e.status === "pending" && e.eligibleAt && new Date(e.eligibleAt) <= new Date())

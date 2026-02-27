@@ -64,6 +64,8 @@ const TABS = [
 function AuthorEarningsDashboard({ userId }: { userId: string }) {
   const [connectLoading, setConnectLoading] = useState(false);
   const [payoutLoading, setPayoutLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const { data: dashboard, isLoading, refetch } = useQuery({
     queryKey: ["/api/ebook/author/dashboard"],
@@ -87,6 +89,7 @@ function AuthorEarningsDashboard({ userId }: { userId: string }) {
 
   const handleConnectOnboarding = async () => {
     setConnectLoading(true);
+    setErrorMessage(null);
     try {
       const res = await authFetch("/api/ebook/author/connect-onboarding", {
         method: "POST",
@@ -94,9 +97,13 @@ function AuthorEarningsDashboard({ userId }: { userId: string }) {
         body: JSON.stringify({ displayName: dashboard?.profile?.displayName || "Author" }),
       });
       const data = await res.json();
-      if (data.url) window.location.href = data.url;
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        setErrorMessage(data.error || "Failed to start bank account setup. Please try again.");
+      }
     } catch (err) {
-      console.error("Connect onboarding error:", err);
+      setErrorMessage("Connection error. Please check your internet and try again.");
     } finally {
       setConnectLoading(false);
     }
@@ -104,14 +111,19 @@ function AuthorEarningsDashboard({ userId }: { userId: string }) {
 
   const handleRequestPayout = async () => {
     setPayoutLoading(true);
+    setErrorMessage(null);
+    setSuccessMessage(null);
     try {
       const res = await authFetch("/api/ebook/author/request-payout", { method: "POST" });
       const data = await res.json();
       if (data.success) {
+        setSuccessMessage(`Payout of $${(data.amount / 100).toFixed(2)} sent to your bank! (${data.salesCount} sale${data.salesCount > 1 ? 's' : ''})`);
         refetch();
+      } else {
+        setErrorMessage(data.message || "Payout failed. Please try again later.");
       }
     } catch (err) {
-      console.error("Payout error:", err);
+      setErrorMessage("Connection error. Your earnings are safe — please try again.");
     } finally {
       setPayoutLoading(false);
     }
@@ -122,6 +134,7 @@ function AuthorEarningsDashboard({ userId }: { userId: string }) {
     if (params.get("connect") === "complete") {
       refetchConnect();
       refetch();
+      setSuccessMessage("Bank account connected successfully!");
     }
   }, []);
 
@@ -171,6 +184,22 @@ function AuthorEarningsDashboard({ userId }: { userId: string }) {
                 </p>
               </div>
             </div>
+
+            {errorMessage && (
+              <div className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 mb-4 flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-red-400 flex-shrink-0" />
+                <p className="text-sm text-red-300">{errorMessage}</p>
+                <button onClick={() => setErrorMessage(null)} className="ml-auto text-red-400 hover:text-red-300 text-xs">Dismiss</button>
+              </div>
+            )}
+
+            {successMessage && (
+              <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 mb-4 flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+                <p className="text-sm text-emerald-300">{successMessage}</p>
+                <button onClick={() => setSuccessMessage(null)} className="ml-auto text-emerald-400 hover:text-emerald-300 text-xs">Dismiss</button>
+              </div>
+            )}
 
             {!connectStatus?.onboardingComplete ? (
               <div className="p-4 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 mb-4">
