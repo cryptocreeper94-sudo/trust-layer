@@ -3548,6 +3548,93 @@ export async function registerRoutes(
     }
   });
 
+  // Get user's token balance (presale allocation + on-chain)
+  app.get("/api/balance", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      if (!userId) return res.json({ totalTokens: 0, stakedTokens: 0, liquidTokens: 0, presaleTokens: 0 });
+
+      let presaleTokens = 0;
+      let onChainTokens = 0;
+
+      // Get presale allocation by email
+      const userResult = await db.execute(sql`SELECT email FROM users WHERE id = ${userId}`);
+      const userEmail = (userResult.rows[0] as any)?.email;
+      if (userEmail) {
+        const presaleResult = await db.execute(sql`
+          SELECT COALESCE(SUM(token_amount), 0) as total_sig
+          FROM presale_purchases
+          WHERE LOWER(TRIM(email)) = ${userEmail.toLowerCase().trim()} AND status = 'completed'
+        `);
+        presaleTokens = parseInt((presaleResult.rows[0] as any)?.total_sig || "0");
+      }
+
+      // Also check by Firebase UID in presale_purchases user_id
+      if (presaleTokens === 0) {
+        const uidResult = await db.execute(sql`
+          SELECT COALESCE(SUM(token_amount), 0) as total_sig
+          FROM presale_purchases
+          WHERE user_id = ${userId} AND status = 'completed'
+        `);
+        presaleTokens = parseInt((uidResult.rows[0] as any)?.total_sig || "0");
+      }
+
+      const totalTokens = presaleTokens + onChainTokens;
+
+      res.json({
+        totalTokens,
+        presaleTokens,
+        stakedTokens: 0,
+        liquidTokens: totalTokens,
+      });
+    } catch (error) {
+      console.error("Balance error:", error);
+      res.json({ totalTokens: 0, stakedTokens: 0, liquidTokens: 0, presaleTokens: 0 });
+    }
+  });
+
+  // Get user's presale purchases for hub display
+  app.get("/api/user/presale-summary", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      if (!userId) return res.json({ totalSig: 0, totalSpent: 0, purchases: [] });
+
+      const userResult = await db.execute(sql`SELECT email FROM users WHERE id = ${userId}`);
+      const userEmail = (userResult.rows[0] as any)?.email;
+
+      let purchases: any[] = [];
+      if (userEmail) {
+        const result = await db.execute(sql`
+          SELECT id, token_amount, usd_amount_cents, tier, status, payment_method, created_at
+          FROM presale_purchases
+          WHERE (LOWER(TRIM(email)) = ${userEmail.toLowerCase().trim()} OR user_id = ${userId}) AND status = 'completed'
+          ORDER BY created_at DESC
+        `);
+        purchases = result.rows as any[];
+      }
+
+      const totalSig = purchases.reduce((sum, p) => sum + Number(p.token_amount || 0), 0);
+      const totalSpent = purchases.reduce((sum, p) => sum + Number(p.usd_amount_cents || 0), 0) / 100;
+
+      res.json({
+        totalSig,
+        totalSpent,
+        purchaseCount: purchases.length,
+        purchases: purchases.map(p => ({
+          id: p.id,
+          tokens: Number(p.token_amount),
+          amount: Number(p.usd_amount_cents) / 100,
+          tier: p.tier,
+          method: p.payment_method,
+          date: p.created_at,
+        })),
+      });
+    } catch (error) {
+      console.error("Presale summary error:", error);
+      res.json({ totalSig: 0, totalSpent: 0, purchases: [] });
+    }
+  });
+
   // Get Trust Layer membership status
   app.get("/api/user/membership", isAuthenticated, async (req: any, res) => {
     try {

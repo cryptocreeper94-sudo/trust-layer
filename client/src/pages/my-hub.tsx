@@ -70,11 +70,12 @@ export default function MyHub() {
     totalTokens: number;
     stakedTokens: number;
     liquidTokens: number;
+    presaleTokens: number;
   }>({
     queryKey: ["/api/balance", user?.id],
     queryFn: async () => {
       const res = await authFetch("/api/balance");
-      if (!res.ok) return { totalTokens: 0, stakedTokens: 0, liquidTokens: 0 };
+      if (!res.ok) return { totalTokens: 0, stakedTokens: 0, liquidTokens: 0, presaleTokens: 0 };
       return res.json();
     },
     enabled: !!user,
@@ -333,7 +334,7 @@ export default function MyHub() {
   ${memberData.isEarlyAdopter ? '<text x="24" y="130" font-family="system-ui, sans-serif" font-size="11" fill="#fbbf24">★ Early Adopter</text>' : ''}
   <text x="24" y="165" font-family="monospace" font-size="10" fill="#94a3b8">Trust Hash</text>
   <text x="24" y="182" font-family="monospace" font-size="12" fill="#22d3ee">${memberData.trustHash}</text>
-  <text x="24" y="210" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Signal Balance: ${(tokenBalance?.totalTokens || 0).toLocaleString()} SIG</text>
+  <text x="24" y="210" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Signal Allocation: ${(tokenBalance?.totalTokens || 0).toLocaleString()} SIG</text>
   <text x="24" y="230" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Generated: ${new Date().toLocaleDateString()}</text>
   <circle cx="360" cy="125" r="30" fill="none" stroke="url(#accent)" stroke-width="2"/>
   <text x="360" y="130" font-family="system-ui, sans-serif" font-size="10" fill="#22d3ee" text-anchor="middle">✓</text>
@@ -511,9 +512,9 @@ export default function MyHub() {
                         <p className="text-xs text-white/40">≈ ${rewardProfile?.conversion?.shellsValue?.toFixed(2) || '0.00'}</p>
                       </div>
                       <div className="p-4 rounded-xl bg-white/5 border border-white/10">
-                        <p className="text-white/50 text-sm mb-1">Signal Balance</p>
-                        <p className="text-2xl font-bold text-purple-400">{tokenBalance?.totalTokens?.toLocaleString() || 0}</p>
-                        <p className="text-xs text-white/40">SIG</p>
+                        <p className="text-white/50 text-sm mb-1">Signal Allocation</p>
+                        <p className="text-2xl font-bold text-purple-400" data-testid="text-sig-balance">{tokenBalance?.totalTokens?.toLocaleString() || 0}</p>
+                        <p className="text-xs text-white/40">{(tokenBalance?.presaleTokens || 0) > 0 ? 'SIG (Presale)' : 'SIG'}</p>
                       </div>
                       <div className="p-4 rounded-xl bg-white/5 border border-white/10">
                         <p className="text-white/50 text-sm mb-1">Your Tier</p>
