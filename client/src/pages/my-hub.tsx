@@ -28,6 +28,7 @@ export default function MyHub() {
   const { data: memberData } = useQuery<{
     memberNumber: number;
     trustHash: string;
+    explorerAddress: string;
     totalMembers: number;
     isEarlyAdopter: boolean;
   }>({
@@ -339,9 +340,9 @@ export default function MyHub() {
   <text x="24" y="70" font-family="system-ui, sans-serif" font-size="12" fill="#94a3b8">VERIFIED MEMBER</text>
   <text x="24" y="105" font-family="system-ui, sans-serif" font-size="32" font-weight="bold" fill="white">#${memberData.memberNumber}</text>
   ${memberData.isEarlyAdopter ? '<text x="24" y="130" font-family="system-ui, sans-serif" font-size="11" fill="#fbbf24">★ Early Adopter</text>' : ''}
-  <text x="24" y="165" font-family="monospace" font-size="10" fill="#94a3b8">Trust Hash</text>
-  <text x="24" y="182" font-family="monospace" font-size="12" fill="#22d3ee">${memberData.trustHash}</text>
-  <text x="24" y="210" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Signal Allocation: ${(tokenBalance?.totalTokens || 0).toLocaleString()} SIG</text>
+  <text x="24" y="160" font-family="monospace" font-size="10" fill="#94a3b8">Explorer Address</text>
+  <text x="24" y="177" font-family="monospace" font-size="10" fill="#22d3ee">${memberData.explorerAddress || memberData.trustHash}</text>
+  <text x="24" y="205" font-family="system-ui, sans-serif" font-size="10" fill="#64748b">Signal Allocation: ${(tokenBalance?.totalTokens || 0).toLocaleString()} SIG</text>
   <text x="24" y="230" font-family="system-ui, sans-serif" font-size="9" fill="#475569">Generated: ${new Date().toLocaleDateString()}</text>
   <circle cx="360" cy="125" r="30" fill="none" stroke="url(#accent)" stroke-width="2"/>
   <text x="360" y="130" font-family="system-ui, sans-serif" font-size="10" fill="#22d3ee" text-anchor="middle">✓</text>
@@ -511,6 +512,24 @@ export default function MyHub() {
                             </Badge>
                           )}
                         </p>
+                        {memberData?.explorerAddress && (
+                          <div className="mt-2 flex items-center gap-2">
+                            <span className="text-white/30 text-xs">Explorer</span>
+                            <code className="text-cyan-400/80 text-xs font-mono bg-white/5 px-2 py-0.5 rounded border border-white/10" data-testid="text-explorer-hash">
+                              {memberData.explorerAddress.slice(0, 6)}...{memberData.explorerAddress.slice(-8)}
+                            </code>
+                            <button 
+                              onClick={() => {
+                                navigator.clipboard.writeText(memberData.explorerAddress);
+                              }}
+                              className="text-white/30 hover:text-cyan-400 transition-colors"
+                              title="Copy full address"
+                              data-testid="button-copy-explorer"
+                            >
+                              <Copy className="w-3 h-3" />
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -550,8 +569,10 @@ export default function MyHub() {
                           </Badge>
                         )}
                         <div className="mt-3 pt-3 border-t border-white/10">
-                          <p className="text-white/40 text-[10px] mb-1">TRUST HASH</p>
-                          <p className="text-cyan-400 text-xs font-mono truncate max-w-[200px]">{generateTrustHash()}</p>
+                          <p className="text-white/40 text-[10px] mb-1">EXPLORER ADDRESS</p>
+                          <p className="text-cyan-400 text-[10px] font-mono truncate max-w-[200px]" data-testid="text-card-explorer">
+                            {memberData?.explorerAddress ? `${memberData.explorerAddress.slice(0, 10)}...${memberData.explorerAddress.slice(-8)}` : 'Generating...'}
+                          </p>
                         </div>
                         <Button 
                           onClick={downloadMemberCard}

@@ -3529,16 +3529,17 @@ export async function registerRoutes(
       const totalResult = await db.execute(sql`SELECT COUNT(*) as total FROM users`);
       const totalMembers = parseInt(totalResult.rows[0]?.total as string) || 0;
       
-      // Generate trust hash (based on user ID)
       const crypto = require('crypto');
-      const trustHash = crypto.createHash('sha256').update(userId).digest('hex').slice(0, 16).toUpperCase();
+      const fullHash = crypto.createHash('sha256').update(`trustlayer:member:${userId}`).digest('hex');
+      const explorerAddress = '0x' + fullHash.slice(0, 40);
+      const trustHash = fullHash.slice(0, 16).toUpperCase();
       
-      // Early adopter if in first 1000
       const isEarlyAdopter = memberNumber <= 1000;
 
       res.json({
         memberNumber,
         trustHash,
+        explorerAddress,
         totalMembers,
         isEarlyAdopter
       });
