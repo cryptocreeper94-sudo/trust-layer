@@ -2490,6 +2490,23 @@ export const insertPresalePurchaseSchema = createInsertSchema(presalePurchases).
 export type PresalePurchase = typeof presalePurchases.$inferSelect;
 export type InsertPresalePurchase = z.infer<typeof insertPresalePurchaseSchema>;
 
+export const userTransactions = pgTable("user_transactions", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  userId: text("user_id").notNull(),
+  type: text("type").notNull(),
+  title: text("title").notNull(),
+  description: text("description"),
+  amountCents: integer("amount_cents").notNull().default(0),
+  tokenAmount: integer("token_amount"),
+  txHash: text("tx_hash"),
+  stripePaymentId: text("stripe_payment_id"),
+  status: text("status").notNull().default("completed"),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export type UserTransaction = typeof userTransactions.$inferSelect;
+
 export const presaleHolders = pgTable("presale_holders", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   walletAddress: text("wallet_address").notNull().unique(),

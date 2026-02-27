@@ -118,7 +118,27 @@ export default function MyHub() {
     { id: 1, type: 'system', title: 'Welcome to Trust Layer', message: 'Your account is ready to explore', time: 'Just now', read: true },
   ];
 
-  const recentActivity: { id: number; type: string; title: string; amount: string; time: string; icon: any }[] = [];
+  const { data: transactionsData } = useQuery<{
+    transactions: Array<{
+      id: string;
+      type: string;
+      title: string;
+      description: string;
+      amount: number;
+      tokenAmount: number | null;
+      txHash: string;
+      status: string;
+      date: string;
+    }>;
+  }>({
+    queryKey: ["/api/user/transactions", user?.id],
+    queryFn: async () => {
+      const res = await authFetch("/api/user/transactions?limit=10");
+      if (!res.ok) return { transactions: [] };
+      return res.json();
+    },
+    enabled: !!user,
+  });
 
   const { data: referralStats } = useQuery<{
     referralCode: { code: string; host: string; clickCount: number; signupCount: number } | null;
@@ -776,18 +796,43 @@ export default function MyHub() {
                   </Link>
                 </div>
                 <div className="space-y-3">
-                  {recentActivity.map(item => (
-                    <div key={item.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-white/5 transition-colors">
-                      <div className="p-2 rounded-lg bg-emerald-500/20">
-                        <item.icon className="w-4 h-4 text-emerald-400" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium">{item.title}</p>
-                        <p className="text-xs text-white/40">{item.time}</p>
-                      </div>
-                      <span className="text-sm font-semibold text-emerald-400">{item.amount}</span>
+                  {(transactionsData?.transactions || []).length > 0 ? (
+                    transactionsData!.transactions.map(tx => {
+                      const typeColors: Record<string, string> = {
+                        presale: 'text-purple-400 bg-purple-500/20',
+                        subscription: 'text-cyan-400 bg-cyan-500/20',
+                        credits: 'text-amber-400 bg-amber-500/20',
+                        guardian: 'text-emerald-400 bg-emerald-500/20',
+                        ebook: 'text-pink-400 bg-pink-500/20',
+                        crowdfund: 'text-blue-400 bg-blue-500/20',
+                      };
+                      const colors = typeColors[tx.type] || 'text-emerald-400 bg-emerald-500/20';
+                      const iconColor = colors.split(' ')[0];
+                      const bgColor = colors.split(' ')[1];
+                      const timeAgo = new Date(tx.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                      return (
+                        <div key={tx.id} className="flex items-center gap-3 p-3 rounded-lg hover:bg-white/5 transition-colors" data-testid={`tx-${tx.id}`}>
+                          <div className={`p-2 rounded-lg ${bgColor}`}>
+                            <CheckCircle className={`w-4 h-4 ${iconColor}`} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium truncate">{tx.title}</p>
+                            <p className="text-xs text-white/40">{timeAgo}</p>
+                            {tx.txHash && (
+                              <p className="text-[10px] text-white/20 font-mono truncate">{tx.txHash.slice(0, 18)}...</p>
+                            )}
+                          </div>
+                          <span className={`text-sm font-semibold ${iconColor}`}>${tx.amount.toFixed(2)}</span>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="text-center py-6">
+                      <Activity className="w-8 h-8 text-white/20 mx-auto mb-2" />
+                      <p className="text-white/40 text-sm">No transactions yet</p>
+                      <p className="text-white/20 text-xs mt-1">Purchases will appear here with blockchain hashes</p>
                     </div>
-                  ))}
+                  )}
                 </div>
               </GlassCard>
             </motion.div>
@@ -1213,29 +1258,46 @@ export default function MyHub() {
                   <Activity className="w-6 h-6 text-cyan-400" />
                 </div>
                 <div>
-                  <h3 className="font-bold">Recent Activity</h3>
-                  <p className="text-sm text-white/60">Your latest actions</p>
+                  <h3 className="font-bold">Transaction History</h3>
+                  <p className="text-sm text-white/60">Every purchase — hashed to the chain</p>
                 </div>
               </div>
               <div className="space-y-3">
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-white/5">
-                  <div className="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center">
-                    <Check className="w-4 h-4 text-emerald-400" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">Signed in</p>
-                    <p className="text-xs text-white/40">Just now</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3 p-3 rounded-lg bg-white/5">
-                  <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center">
-                    <Gift className="w-4 h-4 text-cyan-400" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">Shell airdrop received</p>
-                    <p className="text-xs text-white/40">+25 Shells</p>
-                  </div>
-                </div>
+                {(transactionsData?.transactions || []).length > 0 ? (
+                  transactionsData!.transactions.slice(0, 5).map(tx => (
+                    <div key={tx.id} className="flex items-center gap-3 p-3 rounded-lg bg-white/5" data-testid={`tx-detail-${tx.id}`}>
+                      <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                        <CheckCircle className="w-5 h-5 text-emerald-400" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">{tx.title}</p>
+                        <p className="text-xs text-white/40">{new Date(tx.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
+                        {tx.txHash && (
+                          <button onClick={() => navigator.clipboard.writeText(tx.txHash)} className="text-[10px] text-cyan-400/40 font-mono hover:text-cyan-400 transition-colors cursor-pointer" title="Copy tx hash">
+                            {tx.txHash.slice(0, 22)}...
+                          </button>
+                        )}
+                      </div>
+                      <div className="text-right flex-shrink-0">
+                        <p className="text-sm font-semibold text-emerald-400">${tx.amount.toFixed(2)}</p>
+                        {tx.tokenAmount && <p className="text-[10px] text-white/30">{tx.tokenAmount.toLocaleString()} SIG</p>}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <>
+                    <div className="flex items-center gap-3 p-3 rounded-lg bg-white/5">
+                      <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                        <Check className="w-5 h-5 text-emerald-400" />
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">Account created</p>
+                        <p className="text-xs text-white/40">Welcome to Trust Layer</p>
+                      </div>
+                    </div>
+                    <p className="text-center text-white/30 text-xs py-2">Future purchases will appear here with blockchain verification hashes</p>
+                  </>
+                )}
               </div>
             </GlassCard>
           </motion.div>

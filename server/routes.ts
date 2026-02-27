@@ -392,6 +392,20 @@ export async function registerRoutes(
       
       console.log(`[Stripe Webhook] Event received: ${event.type}`);
       
+      const logUserTransaction = async (userId: string, type: string, title: string, amountCents: number, extras: { description?: string, tokenAmount?: number, stripePaymentId?: string, metadata?: any } = {}) => {
+        try {
+          const crypto = require('crypto');
+          const txHash = '0x' + crypto.createHash('sha256').update(`trustlayer:tx:${type}:${Date.now()}:${userId}:${amountCents}`).digest('hex');
+          await db.execute(sql`
+            INSERT INTO user_transactions (user_id, type, title, description, amount_cents, token_amount, tx_hash, stripe_payment_id, status, metadata, created_at)
+            VALUES (${userId}, ${type}, ${title}, ${extras.description || null}, ${amountCents}, ${extras.tokenAmount || null}, ${txHash}, ${extras.stripePaymentId || null}, 'completed', ${JSON.stringify(extras.metadata || {})}, NOW())
+          `);
+          console.log(`[UserTx] Logged: ${type} for ${userId} — $${(amountCents/100).toFixed(2)}`);
+        } catch (e: any) {
+          console.error(`[UserTx] Failed to log ${type}:`, e.message);
+        }
+      };
+
       // Handle checkout.session.completed
       if (event.type === "checkout.session.completed") {
         const session = event.data.object;
@@ -456,6 +470,10 @@ export async function registerRoutes(
             
             trustStamp("presale-purchase", { email: customerEmail, amountUsd: (amountCents / 100).toFixed(2), tokens: totalTokens, tier, paymentId }).catch(() => {});
             
+            if (metadata.userId) {
+              await logUserTransaction(metadata.userId, 'presale', `Presale: ${totalTokens.toLocaleString()} SIG`, amountCents, { tokenAmount: totalTokens, stripePaymentId: paymentId as string, description: `${tier} tier — ${totalTokens.toLocaleString()} SIG tokens`, metadata: { tier, bonusPercent, email: customerEmail } });
+            }
+
             if (customerEmail) {
               try {
                 await sendPresaleConfirmationEmail(customerEmail, (amountCents / 100).toFixed(2), tier, tokenAmount, bonusTokens);
@@ -501,6 +519,10 @@ export async function registerRoutes(
             }).catch(e => console.error("[Orbit Sync] Crowdfund event failed:", e.message));
             
             trustStamp("crowdfund-donation", { email: customerEmail, amountUsd: (amountCents / 100).toFixed(2), contributionId: metadata.contributionId, paymentId }).catch(() => {});
+            
+            if (metadata.userId) {
+              await logUserTransaction(metadata.userId, 'crowdfund', `Crowdfund Donation`, amountCents, { stripePaymentId: paymentId as string, description: `${metadata.tier || 'Supporter'} tier donation`, metadata: { tier: metadata.tier, contributionId: metadata.contributionId } });
+            }
           } catch (dbError) {
             console.error("[Stripe Webhook] DB error for crowdfund:", dbError);
           }
@@ -526,6 +548,8 @@ export async function registerRoutes(
             
             trustStamp("credits-purchase", { userId: metadata.userId, credits: result.creditsAdded, amountUsd: (amountCents / 100).toFixed(2), paymentId }).catch(() => {});
             
+            await logUserTransaction(metadata.userId, 'credits', `${result.creditsAdded} AI Credits`, amountCents, { stripePaymentId: paymentId as string, description: `${result.creditsAdded} credits — new balance: ${result.newBalance}`, metadata: { credits: result.creditsAdded, newBalance: result.newBalance } });
+
             if (customerEmail) {
               try {
                 await sendCreditsConfirmationEmail(customerEmail, result.creditsAdded, (amountCents / 100).toFixed(2), result.newBalance);
@@ -582,6 +606,10 @@ export async function registerRoutes(
             
             trustStamp("guardian-certification", { certId: String(certification.id), tier: metadata.tier, project: metadata.projectName, amountUsd: (amountCents / 100).toFixed(2), paymentId }).catch(() => {});
             
+            if (metadata.userId) {
+              await logUserTransaction(metadata.userId, 'guardian', `Guardian: ${metadata.projectName}`, amountCents, { stripePaymentId: paymentId as string, description: `${metadata.tier} certification for ${metadata.projectName}`, metadata: { certId: String(certification.id), tier: metadata.tier, project: metadata.projectName } });
+            }
+
             const certEmail = customerEmail || metadata.contactEmail;
             if (certEmail) {
               try {
@@ -606,6 +634,7 @@ export async function registerRoutes(
                 status: "completed",
               });
               console.log(`[Stripe Webhook] Ebook purchase recorded: ${metadata.bookId} for user ${metadata.userId}`);
+              await logUserTransaction(metadata.userId, 'ebook', `TrustBook: ${metadata.bookTitle || metadata.bookId}`, amountCents, { stripePaymentId: paymentId as string, description: `Ebook purchase — ${metadata.bookTitle || metadata.bookId}`, metadata: { bookId: metadata.bookId } });
             }
           } catch (ebookErr) {
             console.error("[Stripe Webhook] Ebook purchase error:", ebookErr);
@@ -692,6 +721,8 @@ export async function registerRoutes(
             
             trustStamp("subscription-activated", { userId, plan, billingCycle, amountCents: priceAmount, paymentId }).catch(() => {});
             
+            await logUserTransaction(userId, 'subscription', `Subscription: ${plan.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}`, priceAmount || amountCents, { stripePaymentId: paymentId as string, description: `${plan} plan — ${billingCycle}`, metadata: { plan, billingCycle } });
+
             if (customerEmail) {
               try {
                 const nextDate = subData.current_period_end ? new Date(subData.current_period_end * 1000).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : undefined;
@@ -3633,6 +3664,39 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Presale summary error:", error);
       res.json({ totalSig: 0, totalSpent: 0, purchases: [] });
+    }
+  });
+
+  app.get("/api/user/transactions", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
+    try {
+      const userId = req.firebaseUser?.uid;
+      if (!userId) return res.json({ transactions: [] });
+
+      const limit = Math.min(parseInt(req.query.limit as string) || 50, 100);
+      const result = await db.execute(sql`
+        SELECT id, type, title, description, amount_cents, token_amount, tx_hash, status, created_at
+        FROM user_transactions
+        WHERE user_id = ${userId}
+        ORDER BY created_at DESC
+        LIMIT ${limit}
+      `);
+
+      res.json({
+        transactions: (result.rows as any[]).map(t => ({
+          id: t.id,
+          type: t.type,
+          title: t.title,
+          description: t.description,
+          amount: Number(t.amount_cents) / 100,
+          tokenAmount: t.token_amount ? Number(t.token_amount) : null,
+          txHash: t.tx_hash,
+          status: t.status,
+          date: t.created_at,
+        })),
+      });
+    } catch (error) {
+      console.error("User transactions error:", error);
+      res.json({ transactions: [] });
     }
   });
 
