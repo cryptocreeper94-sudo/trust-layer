@@ -137,7 +137,7 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and, gte } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, guardianCertifications, guardianMonitoredAssets, guardianIncidents, guardianBlockchainStamps, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications, limitOrders, insertLimitOrderSchema, chatChannels, ecosystemAffiliates, ecosystemReferrals, ecosystemRewardsLedger, chroniclesGameState } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, guardianCertifications, guardianMonitoredAssets, guardianIncidents, guardianBlockchainStamps, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications, limitOrders, insertLimitOrderSchema, chatChannels, ecosystemAffiliates, ecosystemReferrals, ecosystemRewardsLedger, chroniclesGameState, userPhoneSettings } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { orbitClient } from "./services/orbitEcosystem";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
@@ -1949,6 +1949,89 @@ export async function registerRoutes(
   app.get("/api/auth/phone/status", async (req, res) => {
     const { isTwilioConfigured } = await import('./twilio-service');
     res.json({ enabled: isTwilioConfigured() });
+  });
+
+  // Get user phone settings
+  app.get("/api/user/phone-settings", async (req, res) => {
+    try {
+      const userId = (req as any).userId || req.headers["x-user-id"];
+      if (!userId) return res.status(401).json({ error: "Not authenticated" });
+      const result = await db.select().from(userPhoneSettings).where(eq(userPhoneSettings.userId, userId)).limit(1);
+      if (result.length === 0) return res.json({ phone: null, verified: false, smsOptIn: false });
+      const s = result[0];
+      res.json({ phone: s.phoneNumber, verified: s.verified, smsOptIn: s.smsOptIn, verifiedAt: s.verifiedAt });
+    } catch (error: any) {
+      res.status(500).json({ error: "Failed to get phone settings" });
+    }
+  });
+
+  // Save phone number and opt-in, then send verification code
+  app.post("/api/user/phone-settings", authRateLimit, async (req, res) => {
+    try {
+      const userId = (req as any).userId || req.headers["x-user-id"];
+      if (!userId) return res.status(401).json({ error: "Not authenticated" });
+      const { phoneNumber, smsOptIn } = req.body;
+      if (!phoneNumber) return res.status(400).json({ error: "Phone number is required" });
+      if (!smsOptIn) return res.status(400).json({ error: "SMS opt-in consent is required" });
+
+      const normalizedPhone = phoneNumber.startsWith('+') ? phoneNumber : `+1${phoneNumber.replace(/\D/g, '')}`;
+
+      const existing = await db.select().from(userPhoneSettings).where(eq(userPhoneSettings.userId, userId)).limit(1);
+      if (existing.length > 0) {
+        await db.update(userPhoneSettings)
+          .set({ phoneNumber: normalizedPhone, smsOptIn: true, smsOptInAt: new Date(), verified: false, verifiedAt: null, updatedAt: new Date() })
+          .where(eq(userPhoneSettings.userId, userId));
+      } else {
+        await db.insert(userPhoneSettings).values({ userId, phoneNumber: normalizedPhone, smsOptIn: true, smsOptInAt: new Date(), verified: false });
+      }
+
+      const { sendVerificationCode } = await import('./twilio-service');
+      const result = await sendVerificationCode(normalizedPhone);
+      if (!result.success) return res.status(400).json({ error: result.message });
+
+      res.json({ success: true, message: "Verification code sent" });
+    } catch (error: any) {
+      console.error('[Phone Settings] Error:', error.message);
+      res.status(500).json({ error: "Failed to save phone settings" });
+    }
+  });
+
+  // Verify phone number and mark as verified
+  app.post("/api/user/phone-settings/verify", authRateLimit, async (req, res) => {
+    try {
+      const userId = (req as any).userId || req.headers["x-user-id"];
+      if (!userId) return res.status(401).json({ error: "Not authenticated" });
+      const { code } = req.body;
+      if (!code) return res.status(400).json({ error: "Verification code is required" });
+
+      const existing = await db.select().from(userPhoneSettings).where(eq(userPhoneSettings.userId, userId)).limit(1);
+      if (existing.length === 0) return res.status(400).json({ error: "No phone number on file" });
+
+      const { verifyCode } = await import('./twilio-service');
+      const result = await verifyCode(existing[0].phoneNumber, code);
+      if (!result.success) return res.status(400).json({ error: result.message });
+
+      await db.update(userPhoneSettings)
+        .set({ verified: true, verifiedAt: new Date(), updatedAt: new Date() })
+        .where(eq(userPhoneSettings.userId, userId));
+
+      res.json({ success: true, message: "Phone number verified" });
+    } catch (error: any) {
+      console.error('[Phone Verify] Error:', error.message);
+      res.status(500).json({ error: "Failed to verify phone" });
+    }
+  });
+
+  // Remove phone number
+  app.delete("/api/user/phone-settings", async (req, res) => {
+    try {
+      const userId = (req as any).userId || req.headers["x-user-id"];
+      if (!userId) return res.status(401).json({ error: "Not authenticated" });
+      await db.delete(userPhoneSettings).where(eq(userPhoneSettings.userId, userId));
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: "Failed to remove phone settings" });
+    }
   });
 
   // Forgot Password - send reset email

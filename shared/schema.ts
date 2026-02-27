@@ -8960,6 +8960,22 @@ export const insertAiWritingSessionSchema = createInsertSchema(aiWritingSessions
 export type AiWritingSession = typeof aiWritingSessions.$inferSelect;
 export type InsertAiWritingSession = z.infer<typeof insertAiWritingSessionSchema>;
 
+export const userPhoneSettings = pgTable("user_phone_settings", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().unique(),
+  phoneNumber: text("phone_number").notNull(),
+  verified: boolean("verified").notNull().default(false),
+  smsOptIn: boolean("sms_opt_in").notNull().default(false),
+  smsOptInAt: timestamp("sms_opt_in_at"),
+  verifiedAt: timestamp("verified_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertUserPhoneSettingsSchema = createInsertSchema(userPhoneSettings).omit({ id: true, createdAt: true, updatedAt: true });
+export type UserPhoneSettings = typeof userPhoneSettings.$inferSelect;
+export type InsertUserPhoneSettings = z.infer<typeof insertUserPhoneSettingsSchema>;
+
 export const BOOK_CATEGORIES = {
   fiction: {
     label: "Fiction",

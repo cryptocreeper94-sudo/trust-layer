@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   User,
   Shield,
@@ -25,13 +25,19 @@ import {
   Gift,
   ChevronRight,
   Globe,
-  Lock
+  Lock,
+  Phone,
+  Smartphone,
+  Loader2,
+  AlertCircle,
+  Trash2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { authFetch } from "@/hooks/use-firebase-auth";
 
 export default function MemberPortal() {
   const { user } = useAuth();
@@ -376,7 +382,7 @@ export default function MemberPortal() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="max-w-2xl"
+            className="max-w-2xl space-y-6"
           >
             <GlassCard glow className="p-6">
               <h3 className="font-bold text-white text-lg mb-6">Profile Settings</h3>
@@ -414,9 +420,262 @@ export default function MemberPortal() {
                 </Button>
               </div>
             </GlassCard>
+
+            <PhoneSettingsCard />
           </motion.div>
         )}
       </div>
     </div>
+  );
+}
+
+function PhoneSettingsCard() {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [phoneInput, setPhoneInput] = useState("");
+  const [smsOptIn, setSmsOptIn] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
+  const [step, setStep] = useState<"input" | "verify">("input");
+  const [saving, setSaving] = useState(false);
+  const [verifying, setVerifying] = useState(false);
+  const [removing, setRemoving] = useState(false);
+
+  const { data: phoneSettings, isLoading } = useQuery<{
+    phone: string | null;
+    verified: boolean;
+    smsOptIn: boolean;
+    verifiedAt: string | null;
+  }>({
+    queryKey: ["/api/user/phone-settings"],
+    queryFn: async () => {
+      const res = await authFetch("/api/user/phone-settings");
+      if (!res.ok) throw new Error("Failed to load");
+      return res.json();
+    },
+  });
+
+  const formatPhone = (value: string) => {
+    const digits = value.replace(/\D/g, "").slice(0, 10);
+    if (digits.length <= 3) return digits;
+    if (digits.length <= 6) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  };
+
+  const handleSavePhone = async () => {
+    const digits = phoneInput.replace(/\D/g, "");
+    if (digits.length !== 10) {
+      toast({ title: "Invalid phone number", description: "Please enter a 10-digit US phone number", variant: "destructive" });
+      return;
+    }
+    if (!smsOptIn) {
+      toast({ title: "Consent required", description: "Please agree to receive SMS messages", variant: "destructive" });
+      return;
+    }
+    setSaving(true);
+    try {
+      const res = await authFetch("/api/user/phone-settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ phoneNumber: digits, smsOptIn: true }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to save");
+      setStep("verify");
+      toast({ title: "Code sent", description: "Check your phone for the verification code" });
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleVerify = async () => {
+    if (verificationCode.length !== 6) {
+      toast({ title: "Invalid code", description: "Enter the 6-digit code from your text message", variant: "destructive" });
+      return;
+    }
+    setVerifying(true);
+    try {
+      const res = await authFetch("/api/user/phone-settings/verify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: verificationCode }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Verification failed");
+      queryClient.invalidateQueries({ queryKey: ["/api/user/phone-settings"] });
+      setStep("input");
+      setVerificationCode("");
+      toast({ title: "Verified", description: "Your phone number has been verified" });
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    } finally {
+      setVerifying(false);
+    }
+  };
+
+  const handleRemove = async () => {
+    setRemoving(true);
+    try {
+      const res = await authFetch("/api/user/phone-settings", { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to remove");
+      queryClient.invalidateQueries({ queryKey: ["/api/user/phone-settings"] });
+      setPhoneInput("");
+      setSmsOptIn(false);
+      setStep("input");
+      toast({ title: "Removed", description: "Phone number removed" });
+    } catch (err: any) {
+      toast({ title: "Error", description: err.message, variant: "destructive" });
+    } finally {
+      setRemoving(false);
+    }
+  };
+
+  if (isLoading) {
+    return (
+      <GlassCard glow className="p-6">
+        <div className="flex items-center gap-3 text-white/60">
+          <Loader2 className="w-5 h-5 animate-spin" />
+          <span>Loading phone settings...</span>
+        </div>
+      </GlassCard>
+    );
+  }
+
+  if (phoneSettings?.verified) {
+    const masked = phoneSettings.phone ? `(***) ***-${phoneSettings.phone.slice(-4)}` : "Verified";
+    return (
+      <GlassCard glow className="p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <Smartphone className="w-5 h-5 text-cyan-400" />
+          <h3 className="font-bold text-white text-lg">Phone & SMS</h3>
+          <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Verified</Badge>
+        </div>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-white font-medium" data-testid="text-verified-phone">{masked}</p>
+            <p className="text-white/50 text-sm mt-1">SMS notifications enabled</p>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="border-red-500/30 text-red-400 hover:bg-red-500/10"
+            onClick={handleRemove}
+            disabled={removing}
+            data-testid="button-remove-phone"
+          >
+            {removing ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4 mr-1" />}
+            Remove
+          </Button>
+        </div>
+      </GlassCard>
+    );
+  }
+
+  return (
+    <GlassCard glow className="p-6">
+      <div className="flex items-center gap-3 mb-4">
+        <Smartphone className="w-5 h-5 text-cyan-400" />
+        <h3 className="font-bold text-white text-lg">Phone & SMS</h3>
+      </div>
+
+      {step === "input" ? (
+        <div className="space-y-4">
+          <p className="text-white/60 text-sm">
+            Add your phone number to receive verification codes, security alerts, and account notifications via text message.
+          </p>
+
+          <div>
+            <label className="block text-sm text-white/60 mb-2">Phone Number</label>
+            <div className="flex items-center gap-2">
+              <span className="text-white/50 bg-white/5 border border-white/10 rounded-lg p-3 text-sm">+1</span>
+              <input
+                type="tel"
+                value={phoneInput}
+                onChange={(e) => setPhoneInput(formatPhone(e.target.value))}
+                placeholder="(555) 123-4567"
+                className="flex-1 p-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder:text-white/30"
+                data-testid="input-phone-number"
+              />
+            </div>
+          </div>
+
+          <label className="flex items-start gap-3 cursor-pointer group">
+            <input
+              type="checkbox"
+              checked={smsOptIn}
+              onChange={(e) => setSmsOptIn(e.target.checked)}
+              className="mt-1 w-4 h-4 rounded border-white/20 bg-white/5 text-cyan-500 focus:ring-cyan-500/50"
+              data-testid="checkbox-sms-opt-in"
+            />
+            <span className="text-white/70 text-sm leading-relaxed">
+              I agree to receive SMS messages from Trust Layer including verification codes, security alerts, and account notifications.
+              Message and data rates may apply. You can opt out at any time by removing your phone number.
+            </span>
+          </label>
+
+          <Button
+            className="bg-cyan-600 hover:bg-cyan-700 w-full"
+            onClick={handleSavePhone}
+            disabled={saving || !smsOptIn || phoneInput.replace(/\D/g, "").length !== 10}
+            data-testid="button-save-phone"
+          >
+            {saving ? (
+              <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Sending code...</>
+            ) : (
+              <><Phone className="w-4 h-4 mr-2" /> Verify Phone Number</>
+            )}
+          </Button>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          <div className="bg-cyan-500/10 border border-cyan-500/20 rounded-lg p-4">
+            <div className="flex items-center gap-2 text-cyan-400 mb-2">
+              <AlertCircle className="w-4 h-4" />
+              <span className="font-medium text-sm">Verification code sent</span>
+            </div>
+            <p className="text-white/60 text-sm">
+              Enter the 6-digit code we sent to your phone. The code expires in 10 minutes.
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-sm text-white/60 mb-2">Verification Code</label>
+            <input
+              type="text"
+              value={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+              placeholder="000000"
+              maxLength={6}
+              className="w-full p-3 bg-white/5 border border-white/10 rounded-lg text-white text-center text-2xl tracking-[0.5em] font-mono placeholder:text-white/20 placeholder:tracking-[0.5em]"
+              data-testid="input-verification-code"
+            />
+          </div>
+
+          <div className="flex gap-3">
+            <Button
+              variant="outline"
+              className="flex-1 border-white/10"
+              onClick={() => { setStep("input"); setVerificationCode(""); }}
+              data-testid="button-back-to-phone"
+            >
+              Back
+            </Button>
+            <Button
+              className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+              onClick={handleVerify}
+              disabled={verifying || verificationCode.length !== 6}
+              data-testid="button-verify-code"
+            >
+              {verifying ? (
+                <><Loader2 className="w-4 h-4 animate-spin mr-2" /> Verifying...</>
+              ) : (
+                <><CheckCircle className="w-4 h-4 mr-2" /> Verify</>
+              )}
+            </Button>
+          </div>
+        </div>
+      )}
+    </GlassCard>
   );
 }
