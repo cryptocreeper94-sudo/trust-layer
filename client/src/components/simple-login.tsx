@@ -1,11 +1,12 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Loader2, ArrowLeft, Eye, EyeOff, AlertTriangle, Globe, Link2 } from "lucide-react";
+import { X, Loader2, ArrowLeft, Eye, EyeOff, AlertTriangle, Globe, Link2, Fingerprint } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
 import { useToast } from "@/hooks/use-toast";
+import { PasskeyLoginButton } from "./passkey-manager";
 
 interface SimpleLoginModalProps {
   isOpen: boolean;
@@ -52,6 +53,15 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess, ssoApp: ssoAppPro
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
+  const [webauthnAvailable, setWebauthnAvailable] = useState(false);
+
+  useEffect(() => {
+    if (window.PublicKeyCredential) {
+      PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable?.()
+        .then(available => setWebauthnAvailable(available))
+        .catch(() => setWebauthnAvailable(false));
+    }
+  }, []);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
@@ -312,6 +322,20 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess, ssoApp: ssoAppPro
               {view === "login" ? "Sign in to your account" : view === "signup" ? "Join Trust Layer today" : "Enter your email to reset"}
             </p>
           </div>
+
+          {view === "login" && webauthnAvailable && (
+            <div className="mb-5">
+              <PasskeyLoginButton onSuccess={() => { onSuccess?.(); handleClose(); }} />
+              <div className="relative my-4">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-white/10"></div>
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-slate-900 px-2 text-muted-foreground">or sign in with email</span>
+                </div>
+              </div>
+            </div>
+          )}
 
           {view === "forgot" ? (
             <form onSubmit={handleForgotPassword} className="space-y-4">

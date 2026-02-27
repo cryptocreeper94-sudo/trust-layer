@@ -4041,7 +4041,23 @@ export async function registerRoutes(
       const { requestId, ...credential } = req.body;
       const result = await finishAuthentication(credential, requestId);
       if (result.success && result.user) {
-        res.json({ success: true, user: result.user });
+        const crypto = require('crypto');
+        const sessionToken = crypto.randomBytes(32).toString('hex');
+        const userId = result.user.id;
+        await db.execute(sql`
+          INSERT INTO user_sessions (token, user_id, expires_at) 
+          VALUES (${sessionToken}, ${userId}, NOW() + INTERVAL '30 days')
+          ON CONFLICT DO NOTHING
+        `).catch(() => {});
+        
+        res.cookie('session_token', sessionToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: 'lax',
+          maxAge: 30 * 24 * 60 * 60 * 1000,
+        });
+        
+        res.json({ success: true, user: result.user, sessionToken });
       } else {
         res.status(401).json(result);
       }

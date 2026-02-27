@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -30,13 +30,15 @@ import {
   Smartphone,
   Loader2,
   AlertCircle,
-  Trash2
+  Trash2,
+  Fingerprint
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
+import { PasskeyManager } from "@/components/passkey-manager";
 import { authFetch } from "@/hooks/use-firebase-auth";
 
 export default function MemberPortal() {
@@ -422,6 +424,17 @@ export default function MemberPortal() {
             </GlassCard>
 
             <PhoneSettingsCard />
+
+            <GlassCard glow className="p-6">
+              <div className="flex items-center gap-3 mb-4">
+                <Fingerprint className="w-5 h-5 text-cyan-400" />
+                <h3 className="font-bold text-white text-lg">Biometric Login</h3>
+              </div>
+              <p className="text-white/60 text-sm mb-4">
+                Set up fingerprint or Face ID to sign in instantly and go straight to your portal.
+              </p>
+              <PasskeyManager />
+            </GlassCard>
           </motion.div>
         )}
       </div>

@@ -194,8 +194,11 @@ export function PasskeyLoginButton({ onSuccess }: { onSuccess?: (user: any) => v
       
       const result = await finishRes.json();
       if (result.success && result.user) {
+        if (result.sessionToken) {
+          localStorage.setItem("sessionToken", result.sessionToken);
+        }
         onSuccess?.(result.user);
-        window.location.href = "/dashboard";
+        window.location.href = "/my-hub";
       }
     } catch (error: any) {
       toast({
@@ -210,18 +213,17 @@ export function PasskeyLoginButton({ onSuccess }: { onSuccess?: (user: any) => v
 
   return (
     <Button
-      variant="outline"
       onClick={handlePasskeyLogin}
       disabled={isLoading}
-      className="border-primary/30 text-primary hover:bg-primary/10"
+      className="w-full h-14 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white font-bold text-base rounded-xl shadow-lg shadow-cyan-500/20 border border-cyan-500/30"
       data-testid="button-passkey-login"
     >
       {isLoading ? (
-        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+        <Loader2 className="w-5 h-5 mr-3 animate-spin" />
       ) : (
-        <Fingerprint className="w-4 h-4 mr-2" />
+        <Fingerprint className="w-5 h-5 mr-3" />
       )}
-      Sign in with Passkey
+      Sign in with Fingerprint
     </Button>
   );
 }
