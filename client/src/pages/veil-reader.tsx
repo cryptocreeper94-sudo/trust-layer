@@ -31,7 +31,7 @@ const EBOOK_CHANGELOG: ChangelogEntry[] = [
     date: "February 4, 2026",
     updates: [
       { type: 'added', description: 'MAJOR: E-reader now syncs directly with the master ebook file', chapterId: 'v1-introduction', volumeIndex: 0 },
-      { type: 'added', description: 'All 44+ chapters now display complete content from the source document', chapterId: 'v1-introduction', volumeIndex: 0 },
+      { type: 'added', description: 'All 52 chapters now display complete content from the source document', chapterId: 'v1-introduction', volumeIndex: 0 },
       { type: 'added', description: 'Added Leviathan vs Ouroboros distinction - biblical creature vs pagan eternal cycle symbol', chapterId: 'v1-dragons', volumeIndex: 0 },
       { type: 'updated', description: 'Replaced "hell" with "Tartaros" in 2 Peter 2:4 references (accurate to Greek original)', chapterId: 'v1-watchers', volumeIndex: 0 },
     ]
@@ -1539,7 +1539,7 @@ export default function VeilReader() {
                       You've reached the end of the free preview
                     </h3>
                     <p className="text-white/50 max-w-md mx-auto mb-2 text-sm">
-                      You've read the first {FREE_PREVIEW_CHAPTERS} chapters. The full book contains 54+ chapters across 15 volumes — 107,000 words of investigation.
+                      You've read the first {FREE_PREVIEW_CHAPTERS} chapters. The full book contains 52 chapters across 13 parts — 107,000 words of investigation.
                     </p>
                     <p className="text-white/30 text-xs mb-6">
                       Available on Amazon for $9.99 — or get it here for half price.
@@ -1584,9 +1584,9 @@ export default function VeilReader() {
                       </p>
                     )}
                     <div className="flex items-center justify-center gap-4 text-xs text-white/30">
-                      <span>54+ chapters</span>
+                      <span>52 chapters</span>
                       <span>·</span>
-                      <span>15 volumes</span>
+                      <span>13 parts</span>
                       <span>·</span>
                       <span>107K words</span>
                       <span>·</span>

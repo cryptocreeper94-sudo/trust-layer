@@ -233,7 +233,7 @@ export default function Veil() {
             <div className="absolute inset-0 bg-gradient-to-r from-purple-900/30 to-pink-900/20" />
             <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 md:p-10">
               <p className="text-white/90 text-sm sm:text-base md:text-lg font-medium max-w-lg leading-relaxed">
-                44 chapters. 163+ scripture references. The complete investigation into hidden history, suppressed truth, and spiritual warfare.
+                52 chapters. 163+ scripture references. The complete investigation into hidden history, suppressed truth, and spiritual warfare.
               </p>
             </div>
           </div>
@@ -247,9 +247,9 @@ export default function Veil() {
           className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-12 sm:mb-16 max-w-4xl mx-auto"
         >
           {[
-            { icon: ScrollText, label: "44+ Chapters", sub: "Complete Edition", color: "text-purple-400" },
+            { icon: ScrollText, label: "52 Chapters", sub: "Complete Edition", color: "text-purple-400" },
             { icon: Shield, label: "163+ Scriptures", sub: "Cited & Referenced", color: "text-pink-400" },
-            { icon: Layers, label: "5 Parts", sub: "Evidence to Journey", color: "text-cyan-400" },
+            { icon: Layers, label: "13 Parts", sub: "Evidence to Journey", color: "text-cyan-400" },
             { icon: Star, label: "Free Forever", sub: "Always Free Here", color: "text-amber-400" },
           ].map((stat) => (
             <motion.div key={stat.label} variants={item}>

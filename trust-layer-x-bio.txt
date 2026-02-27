@@ -15,7 +15,7 @@ Guardian Security Suite
 AI-powered blockchain security — not just scanning, but full certification. Guardian Scanner verifies agents and URLs in real time. Guardian Screener is a DEX screener with live threat detection. Guardian Certified delivers expert-reviewed security audits with on-chain verification and PDF reports. Guardian Shield provides continuous blockchain monitoring. Every result is immutably stamped on Trust Layer.
 
 Trust Book
-A premium ebook publishing platform. AI-powered writing assistant. Multi-format reading. Blockchain-verified provenance. 70% author royalties. Already live with our flagship title "Through The Veil" — 107K words, 54 chapters, 15 volumes.
+A premium ebook publishing platform. AI-powered writing assistant. Multi-format reading. Blockchain-verified provenance. 70% author royalties. Already live with our flagship title "Through The Veil" — 107K words, 52 chapters, 13 parts.
 
 Chronicles
 A parallel life simulation game where players experience different historical eras. AI-generated personalized scenarios based on your choices. Persistent NPCs. A faith and spiritual life system with era-appropriate congregations. Educational themes woven into real-time gameplay. This isn't a mini-game bolted onto a chain — it's a full gaming experience.

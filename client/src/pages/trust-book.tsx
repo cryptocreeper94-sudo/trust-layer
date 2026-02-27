@@ -264,7 +264,7 @@ export default function TrustBook() {
               <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-red-400 bg-clip-text text-transparent">Through The Veil</span>
             </h2>
             <p className="text-white/50 max-w-xl mx-auto text-sm sm:text-base">
-              A 107,000-word investigation into the hidden architecture of history. 54+ chapters. 15 volumes.
+              A 107,000-word investigation into the hidden architecture of history. 52 chapters. 13 parts.
             </p>
           </motion.div>
 
