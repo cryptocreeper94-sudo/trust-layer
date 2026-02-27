@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useSearch } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { CheckCircle, ArrowRight, Loader2, Sparkles, Wallet, Copy, ExternalLink, Shield } from "lucide-react";
+import { CheckCircle, ArrowRight, Loader2, Sparkles, Wallet, Copy, ExternalLink, Shield, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
@@ -161,21 +161,21 @@ export default function PresaleSuccess() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/my-tokens">
+              <Link href="/my-hub">
                 <Button 
                   className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600"
-                  data-testid="button-view-tokens"
+                  data-testid="button-go-to-hub-existing"
                 >
-                  View My Tokens <ArrowRight className="w-4 h-4 ml-2" />
+                  <LayoutDashboard className="w-4 h-4 mr-2" /> Go to Your Portal
                 </Button>
               </Link>
-              <Link href="/">
+              <Link href="/my-tokens">
                 <Button 
                   variant="outline" 
                   className="border-white/20 hover:bg-white/5"
-                  data-testid="button-explore-ecosystem"
+                  data-testid="button-view-tokens-existing"
                 >
-                  Explore Ecosystem
+                  View My Tokens
                 </Button>
               </Link>
             </div>
@@ -254,7 +254,7 @@ export default function PresaleSuccess() {
                     <span className="text-cyan-400 font-bold text-xs">2</span>
                   </div>
                   <p className="text-gray-300 text-sm">
-                    <span className="text-cyan-400 font-medium">Register:</span> Set up your membership at dwsc.io using this same email
+                    <span className="text-cyan-400 font-medium">Your Portal:</span> View your Signal balance, transaction history, and member card at your personal hub
                   </p>
                 </div>
                 <div className="flex items-start gap-3">
@@ -262,7 +262,7 @@ export default function PresaleSuccess() {
                     <span className="text-purple-400 font-bold text-xs">3</span>
                   </div>
                   <p className="text-gray-300 text-sm">
-                    <span className="text-purple-400 font-medium">Access:</span> Your dashboard, membership card, and Signal will be ready
+                    <span className="text-purple-400 font-medium">Launch Day:</span> Your Signal tokens will be delivered to your wallet on July 4, 2026
                   </p>
                 </div>
               </div>
@@ -272,12 +272,12 @@ export default function PresaleSuccess() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/auth">
+              <Link href="/my-hub">
                 <Button 
-                  className="bg-gradient-to-r from-yellow-500 via-amber-500 to-orange-500 text-black font-bold text-lg px-8 py-3"
-                  data-testid="button-register-membership"
+                  className="bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600 text-white font-bold text-lg px-8 py-3"
+                  data-testid="button-go-to-hub"
                 >
-                  Register Your Membership <ArrowRight className="w-4 h-4 ml-2" />
+                  <LayoutDashboard className="w-4 h-4 mr-2" /> Go to Your Portal <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </Link>
               <Link href="/my-tokens">

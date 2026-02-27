@@ -196,6 +196,7 @@ export default function MyHub() {
   ];
 
   const quickActions = [
+    { href: "/presale", label: "Get Signal", icon: Coins, badge: "Live" },
     { href: "/signal-chat", label: "Signal Chat", icon: MessageCircle, badge: "Live" },
     { href: "/chronicles", label: "Chronicles", icon: Gamepad2, badge: "Play" },
     { href: "/quests", label: "Daily Quests", icon: Target, badge: "Earn" },

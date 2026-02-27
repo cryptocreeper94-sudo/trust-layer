@@ -1284,7 +1284,7 @@ function MyPurchases({ userEmail, walletAddress }: { userEmail?: string; walletA
         <p className="text-[10px] text-green-400/60 mt-2 text-center">Based on projected launch price of $0.01 per SIG</p>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2 mb-4">
         {data.purchases.slice(0, 3).map((purchase) => (
           <div key={purchase.id} className="flex items-center justify-between p-2 rounded-lg bg-white/5">
             <div className="flex items-center gap-2">
@@ -1297,6 +1297,12 @@ function MyPurchases({ userEmail, walletAddress }: { userEmail?: string; walletA
           </div>
         ))}
       </div>
+
+      <Link href="/my-hub">
+        <Button className="w-full bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-700 hover:to-purple-700" data-testid="button-presale-go-to-hub">
+          View Your Portal <ArrowRight className="w-4 h-4 ml-2" />
+        </Button>
+      </Link>
     </HolographicCard>
   );
 }

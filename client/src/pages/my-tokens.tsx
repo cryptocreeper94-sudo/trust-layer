@@ -6,7 +6,7 @@ import {
   Coins, Gift, Clock, TrendingUp, ChevronRight, 
   ShoppingBag, Sparkles, Users, Award, CheckCircle, AlertCircle,
   Home, RefreshCw, CreditCard, Gamepad2, BookOpen, Shield,
-  MessageSquare, Compass, Star, Zap, Trophy, Globe
+  MessageSquare, Compass, Star, Zap, Trophy, Globe, LayoutDashboard
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
 import { authFetch } from "@/hooks/use-firebase-auth";
@@ -50,6 +50,7 @@ interface EarlyAdopterStats {
 }
 
 const QUICK_LINKS = [
+  { href: "/my-hub", icon: LayoutDashboard, label: "Your Portal", color: "purple" },
   { href: "/presale", icon: ShoppingBag, label: "Buy Signal", color: "cyan" },
   { href: "/chronicles", icon: Gamepad2, label: "Chronicles", color: "purple", image: samuraiImage },
   { href: "/rewards", icon: Gift, label: "Rewards", color: "amber" },
