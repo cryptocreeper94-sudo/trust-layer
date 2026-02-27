@@ -146,7 +146,7 @@ const Validators = lazy(() => import("@/pages/validators"));
 const Wallet = lazy(() => import("@/pages/wallet"));
 const Status = lazy(() => import("@/pages/status"));
 const ApiDocs = lazy(() => import("@/pages/api-docs"));
-const ChroniclesAIDemo = lazy(() => import("@/pages/chronicles-ai-demo"));
+const ChroniclesAIDemo = lazy(() => import("@/pages/chronicles-locked"));
 const BuildYourLegacy = lazy(() => import("@/pages/build-your-legacy"));
 const ErrorPage = lazy(() => import("@/pages/error"));
 const ForgotPassword = lazy(() => import("@/pages/forgot-password"));
@@ -213,30 +213,7 @@ const InvestmentSimulator = lazy(() => import("@/pages/investment-simulator"));
 const RoadmapChronicles = lazy(() => import("@/pages/roadmap-chronicles"));
 const RoadmapEcosystem = lazy(() => import("@/pages/roadmap-ecosystem"));
 const TechnicalRoadmap = lazy(() => import("@/pages/technical-roadmap"));
-const Chronicles = lazy(() => import("@/pages/chronicles"));
-const ChroniclesDemo = lazy(() => import("@/pages/chronicles-demo"));
-const ChroniclesOnboarding = lazy(() => import("@/pages/chronicles-onboarding"));
-const ChroniclesEstate = lazy(() => import("@/pages/chronicles-estate"));
-const ChroniclesInterior = lazy(() => import("@/pages/chronicles-interior"));
-const ChroniclesLife = lazy(() => import("@/pages/chronicles-life"));
-const ChroniclesHub = lazy(() => import("@/pages/chronicles-hub"));
-const ChroniclesTimePortal = lazy(() => import("@/pages/chronicles-time-portal"));
-const ChroniclesLogin = lazy(() => import("@/pages/chronicles-login"));
-const ChroniclesBuilder = lazy(() => import("@/pages/chronicles-builder"));
-const ChroniclesWorld = lazy(() => import("@/pages/chronicles-world"));
-const ChroniclesTravel = lazy(() => import("@/pages/chronicles-travel"));
-const ChroniclesPlay = lazy(() => import("@/pages/chronicles-play"));
-const ChroniclesPortalEntry = lazy(() => import("@/pages/chronicles-portal-entry"));
-const ChroniclesTutorial = lazy(() => import("@/pages/chronicles-tutorial"));
-const ChroniclesMarketplace = lazy(() => import("@/pages/chronicles-marketplace"));
-const ChroniclesNpcChat = lazy(() => import("@/pages/chronicles-npc-chat"));
-const ChroniclesCity = lazy(() => import("@/pages/chronicles-city"));
-const ChroniclesDashboardPage = lazy(() => import("@/pages/chronicles-dashboard"));
-const ChroniclesVoice = lazy(() => import("@/pages/chronicles-voice"));
-const ChroniclesFaith = lazy(() => import("@/pages/chronicles-faith"));
-const ChroniclesSeasonHub = lazy(() => import("@/pages/chronicles-season-hub"));
-const ChroniclesPets = lazy(() => import("@/pages/chronicles-pets"));
-const ChroniclesDailyLife = lazy(() => import("@/pages/chronicles-daily-life"));
+const ChroniclesLocked = lazy(() => import("@/pages/chronicles-locked"));
 const SyndicateInvite = lazy(() => import("@/pages/syndicate-invite"));
 const ChronoHome = lazy(() => import("@/pages/chrono-home"));
 const ChronoEras = lazy(() => import("@/pages/chrono-eras"));
@@ -247,7 +224,7 @@ const ChronoRoadmap = lazy(() => import("@/pages/chrono-roadmap"));
 const ChronoDashboard = lazy(() => import("@/pages/chrono-dashboard"));
 const ChronoTeam = lazy(() => import("@/pages/chrono-team"));
 const ChronoCreators = lazy(() => import("@/pages/chrono-creators"));
-const ChroniclesExecutiveSummary = lazy(() => import("@/pages/chronicles-executive-summary"));
+const ChroniclesExecutiveSummary = lazy(() => import("@/pages/chronicles-locked"));
 const SocialFeed = lazy(() => import("@/pages/social-feed"));
 const InnovationHub = lazy(() => import("@/pages/innovation-hub"));
 const Lottery = lazy(() => import("@/pages/lottery"));
@@ -258,7 +235,7 @@ const Achievements = lazy(() => import("@/pages/achievements"));
 const Domains = lazy(() => import("@/pages/domains"));
 const DomainManager = lazy(() => import("@/pages/domain-manager"));
 const PartnerPortal = lazy(() => import("@/pages/partner-portal"));
-const ChroniclesAdmin = lazy(() => import("@/pages/chronicles-admin"));
+const ChroniclesAdmin = lazy(() => import("@/pages/chronicles-locked"));
 const Tokenomics = lazy(() => import("@/pages/tokenomics"));
 const FAQ = lazy(() => import("@/pages/faq"));
 const SupportPage = lazy(() => import("@/pages/support"));
@@ -385,33 +362,10 @@ function ChronoRouter() {
       <ScrollToTop />
       <Switch>
         <Route path="/" component={ChronoHome} />
-        <Route path="/chronicles" component={Chronicles} />
-        <Route path="/chronicles/login" component={ChroniclesLogin} />
-        <Route path="/chronicles/demo" component={ChroniclesDemo} />
-        <Route path="/chronicles/ai" component={ChroniclesAIDemo} />
-        <Route path="/chronicles/onboarding" component={ChroniclesOnboarding} />
-        <Route path="/chronicles/estate" component={ChroniclesEstate} />
-        <Route path="/chronicles/interior" component={ChroniclesInterior} />
-        <Route path="/chronicles/life" component={ChroniclesLife} />
-        <Route path="/chronicles/hub" component={ChroniclesHub} />
-        <Route path="/chronicles/time-portal" component={ChroniclesTimePortal} />
-        <Route path="/chronicles/builder" component={ChroniclesBuilder} />
-        <Route path="/chronicles/world" component={ChroniclesWorld} />
-        <Route path="/chronicles/travel" component={ChroniclesTravel} />
-        <Route path="/chronicles/play" component={ChroniclesPlay} />
-        <Route path="/chronicles/enter" component={ChroniclesPortalEntry} />
-        <Route path="/chronicles/tutorial" component={ChroniclesTutorial} />
-        <Route path="/chronicles/marketplace" component={ChroniclesMarketplace} />
-        <Route path="/chronicles/npc-chat" component={ChroniclesNpcChat} />
-        <Route path="/chronicles/city" component={ChroniclesCity} />
-        <Route path="/chronicles/dashboard" component={ChroniclesDashboardPage} />
-        <Route path="/chronicles/faith" component={ChroniclesFaith} />
-        <Route path="/chronicles/season" component={ChroniclesSeasonHub} />
-        <Route path="/chronicles/pets" component={ChroniclesPets} />
-        <Route path="/chronicles/daily-life" component={ChroniclesDailyLife} />
-        <Route path="/chronicles/voice" component={ChroniclesVoice} />
+        <Route path="/chronicles" component={ChroniclesLocked} />
+        <Route path="/chronicles/:rest*" component={ChroniclesLocked} />
+        <Route path="/chronicles-estate" component={ChroniclesLocked} />
         <Route path="/join/:code" component={SyndicateInvite} />
-        <Route path="/chronicles-estate" component={ChroniclesEstate} />
         <Route path="/legacy" component={BuildYourLegacy} />
         <Route path="/eras" component={ChronoEras} />
         <Route path="/gameplay" component={ChronoGameplay} />
@@ -655,32 +609,9 @@ function DWSCRouter() {
         <Route path="/innovation" component={InnovationHub} />
         <Route path="/ai-agents" component={AIAgentMarketplace} />
         <Route path="/rwa" component={RWATokenization} />
-        <Route path="/chronicles" component={Chronicles} />
-        <Route path="/chronicles/login" component={ChroniclesLogin} />
-        <Route path="/chronicles/demo" component={ChroniclesDemo} />
-        <Route path="/chronicles/ai" component={ChroniclesAIDemo} />
-        <Route path="/chronicles/onboarding" component={ChroniclesOnboarding} />
-        <Route path="/chronicles/estate" component={ChroniclesEstate} />
-        <Route path="/chronicles/interior" component={ChroniclesInterior} />
-        <Route path="/chronicles/life" component={ChroniclesLife} />
-        <Route path="/chronicles/hub" component={ChroniclesHub} />
-        <Route path="/chronicles/time-portal" component={ChroniclesTimePortal} />
-        <Route path="/chronicles/builder" component={ChroniclesBuilder} />
-        <Route path="/chronicles/world" component={ChroniclesWorld} />
-        <Route path="/chronicles/travel" component={ChroniclesTravel} />
-        <Route path="/chronicles/play" component={ChroniclesPlay} />
-        <Route path="/chronicles/enter" component={ChroniclesPortalEntry} />
-        <Route path="/chronicles/tutorial" component={ChroniclesTutorial} />
-        <Route path="/chronicles/marketplace" component={ChroniclesMarketplace} />
-        <Route path="/chronicles/npc-chat" component={ChroniclesNpcChat} />
-        <Route path="/chronicles/city" component={ChroniclesCity} />
-        <Route path="/chronicles/dashboard" component={ChroniclesDashboardPage} />
-        <Route path="/chronicles/faith" component={ChroniclesFaith} />
-        <Route path="/chronicles/season" component={ChroniclesSeasonHub} />
-        <Route path="/chronicles/pets" component={ChroniclesPets} />
-        <Route path="/chronicles/daily-life" component={ChroniclesDailyLife} />
-        <Route path="/chronicles/voice" component={ChroniclesVoice} />
-        <Route path="/chronicles-estate" component={ChroniclesEstate} />
+        <Route path="/chronicles" component={ChroniclesLocked} />
+        <Route path="/chronicles/:rest*" component={ChroniclesLocked} />
+        <Route path="/chronicles-estate" component={ChroniclesLocked} />
         <Route path="/legacy" component={BuildYourLegacy} />
         <Route path="/sweepstakes-rules" component={SweepstakesRules} />
         <Route path="/coin-store" component={CoinStore} />
