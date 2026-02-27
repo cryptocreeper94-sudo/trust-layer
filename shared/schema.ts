@@ -8993,6 +8993,44 @@ export const insertUserPhoneSettingsSchema = createInsertSchema(userPhoneSetting
 export type UserPhoneSettings = typeof userPhoneSettings.$inferSelect;
 export type InsertUserPhoneSettings = z.infer<typeof insertUserPhoneSettingsSchema>;
 
+export const authorProfiles = pgTable("author_profiles", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull().unique(),
+  displayName: text("display_name").notNull(),
+  bio: text("bio"),
+  stripeConnectId: text("stripe_connect_id"),
+  stripeOnboardingComplete: boolean("stripe_onboarding_complete").default(false),
+  payoutEnabled: boolean("payout_enabled").default(false),
+  totalEarningsCents: integer("total_earnings_cents").default(0),
+  totalPaidOutCents: integer("total_paid_out_cents").default(0),
+  pendingBalanceCents: integer("pending_balance_cents").default(0),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const insertAuthorProfileSchema = createInsertSchema(authorProfiles).omit({ id: true, createdAt: true, updatedAt: true });
+export type AuthorProfile = typeof authorProfiles.$inferSelect;
+export type InsertAuthorProfile = z.infer<typeof insertAuthorProfileSchema>;
+
+export const authorEarnings = pgTable("author_earnings", {
+  id: serial("id").primaryKey(),
+  authorId: text("author_id").notNull(),
+  bookId: text("book_id").notNull(),
+  purchaseId: text("purchase_id").notNull(),
+  grossAmountCents: integer("gross_amount_cents").notNull(),
+  platformFeeCents: integer("platform_fee_cents").notNull(),
+  authorEarningsCents: integer("author_earnings_cents").notNull(),
+  status: text("status").notNull().default("pending"),
+  stripeTransferId: text("stripe_transfer_id"),
+  eligibleAt: timestamp("eligible_at"),
+  paidAt: timestamp("paid_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertAuthorEarningSchema = createInsertSchema(authorEarnings).omit({ id: true, createdAt: true });
+export type AuthorEarning = typeof authorEarnings.$inferSelect;
+export type InsertAuthorEarning = z.infer<typeof insertAuthorEarningSchema>;
+
 export const BOOK_CATEGORIES = {
   fiction: {
     label: "Fiction",

@@ -8,8 +8,11 @@ import {
   BookMarked, Volume2, Layers, Award, Heart, Upload, Loader2,
   PenTool, DollarSign, Clock, CheckCircle, XCircle, AlertCircle,
   Library, Bot, Send, Plus, Search, Filter, Grid3X3, List,
-  Bookmark, BarChart3, Pen, MessageSquare, Trash2
+  Bookmark, BarChart3, Pen, MessageSquare, Trash2,
+  CreditCard, TrendingUp, Banknote, ExternalLink
 } from "lucide-react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { authFetch } from "@/hooks/use-firebase-auth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
@@ -57,6 +60,187 @@ const TABS = [
   { id: 'write', label: 'Write', icon: PenTool },
   { id: 'publish', label: 'Publish', icon: Upload },
 ];
+
+function AuthorEarningsDashboard({ userId }: { userId: string }) {
+  const [connectLoading, setConnectLoading] = useState(false);
+  const [payoutLoading, setPayoutLoading] = useState(false);
+
+  const { data: dashboard, isLoading, refetch } = useQuery({
+    queryKey: ["/api/ebook/author/dashboard"],
+    queryFn: async () => {
+      const res = await authFetch("/api/ebook/author/dashboard");
+      if (!res.ok) return null;
+      return res.json();
+    },
+    enabled: !!userId,
+  });
+
+  const { data: connectStatus, refetch: refetchConnect } = useQuery({
+    queryKey: ["/api/ebook/author/connect-status"],
+    queryFn: async () => {
+      const res = await authFetch("/api/ebook/author/connect-status");
+      if (!res.ok) return { connected: false, onboardingComplete: false };
+      return res.json();
+    },
+    enabled: !!userId,
+  });
+
+  const handleConnectOnboarding = async () => {
+    setConnectLoading(true);
+    try {
+      const res = await authFetch("/api/ebook/author/connect-onboarding", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ displayName: dashboard?.profile?.displayName || "Author" }),
+      });
+      const data = await res.json();
+      if (data.url) window.location.href = data.url;
+    } catch (err) {
+      console.error("Connect onboarding error:", err);
+    } finally {
+      setConnectLoading(false);
+    }
+  };
+
+  const handleRequestPayout = async () => {
+    setPayoutLoading(true);
+    try {
+      const res = await authFetch("/api/ebook/author/request-payout", { method: "POST" });
+      const data = await res.json();
+      if (data.success) {
+        refetch();
+      }
+    } catch (err) {
+      console.error("Payout error:", err);
+    } finally {
+      setPayoutLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("connect") === "complete") {
+      refetchConnect();
+      refetch();
+    }
+  }, []);
+
+  const stats = dashboard?.stats;
+  const hasEarnings = stats && stats.totalSales > 0;
+
+  return (
+    <GlassCard glow className="mb-6">
+      <div className="p-6">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="p-2 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600">
+            <Banknote className="w-5 h-5 text-white" />
+          </div>
+          <div>
+            <h3 className="font-bold text-white text-lg" data-testid="text-author-earnings-title">Author Earnings</h3>
+            <p className="text-xs text-white/40">70% royalty on every sale. Get paid directly to your bank.</p>
+          </div>
+        </div>
+
+        {isLoading ? (
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="w-6 h-6 animate-spin text-white/30" />
+          </div>
+        ) : (
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+              <div className="p-3 rounded-xl bg-white/5 border border-white/10">
+                <p className="text-white/40 text-xs">Total Sales</p>
+                <p className="text-xl font-bold text-white" data-testid="text-total-sales">{stats?.totalSales || 0}</p>
+              </div>
+              <div className="p-3 rounded-xl bg-white/5 border border-white/10">
+                <p className="text-white/40 text-xs">Total Royalties</p>
+                <p className="text-xl font-bold text-emerald-400" data-testid="text-total-royalties">
+                  ${((stats?.totalRoyalties || 0) / 100).toFixed(2)}
+                </p>
+              </div>
+              <div className="p-3 rounded-xl bg-white/5 border border-white/10">
+                <p className="text-white/40 text-xs">Pending Payout</p>
+                <p className="text-xl font-bold text-amber-400" data-testid="text-pending-payout">
+                  ${((stats?.pendingPayout || 0) / 100).toFixed(2)}
+                </p>
+              </div>
+              <div className="p-3 rounded-xl bg-white/5 border border-white/10">
+                <p className="text-white/40 text-xs">Paid Out</p>
+                <p className="text-xl font-bold text-cyan-400" data-testid="text-paid-out">
+                  ${((stats?.paidOut || 0) / 100).toFixed(2)}
+                </p>
+              </div>
+            </div>
+
+            {!connectStatus?.onboardingComplete ? (
+              <div className="p-4 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 mb-4">
+                <div className="flex items-start gap-3">
+                  <CreditCard className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-white mb-1">Set Up Payouts</p>
+                    <p className="text-xs text-white/50 mb-3">
+                      Connect your bank account through Stripe to receive your royalties directly. 
+                      Payouts are processed after a 7-day settlement period.
+                    </p>
+                    <Button
+                      onClick={handleConnectOnboarding}
+                      disabled={connectLoading}
+                      size="sm"
+                      className="bg-gradient-to-r from-amber-500 to-orange-500 text-black font-semibold"
+                      data-testid="button-connect-stripe"
+                    >
+                      {connectLoading ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <ExternalLink className="w-4 h-4 mr-1" />}
+                      Connect Bank Account
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-center gap-3 p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 mb-4">
+                <CheckCircle className="w-5 h-5 text-emerald-400" />
+                <div className="flex-1">
+                  <p className="text-sm text-emerald-300 font-medium">Payouts Connected</p>
+                  <p className="text-xs text-white/40">Your bank account is linked. Royalties are deposited automatically.</p>
+                </div>
+                {(stats?.eligibleNow || 0) > 0 && (
+                  <Button
+                    onClick={handleRequestPayout}
+                    disabled={payoutLoading}
+                    size="sm"
+                    className="bg-emerald-600 hover:bg-emerald-700"
+                    data-testid="button-request-payout"
+                  >
+                    {payoutLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Banknote className="w-4 h-4 mr-1" />}
+                    Withdraw ${((stats?.eligibleNow || 0) / 100).toFixed(2)}
+                  </Button>
+                )}
+              </div>
+            )}
+
+            {hasEarnings && dashboard.recentEarnings?.length > 0 && (
+              <div>
+                <p className="text-xs text-white/40 mb-2 font-medium">Recent Sales</p>
+                <div className="space-y-2 max-h-40 overflow-y-auto">
+                  {dashboard.recentEarnings.slice(0, 5).map((earning: any) => (
+                    <div key={earning.id} className="flex items-center justify-between p-2 rounded-lg bg-white/5 text-sm" data-testid={`earning-row-${earning.id}`}>
+                      <div className="flex items-center gap-2">
+                        <Badge className={earning.status === "paid" ? "bg-emerald-500/20 text-emerald-400 text-xs" : "bg-amber-500/20 text-amber-400 text-xs"}>
+                          {earning.status}
+                        </Badge>
+                        <span className="text-white/60 text-xs">Book #{earning.bookId}</span>
+                      </div>
+                      <span className="text-emerald-400 font-medium">+${(earning.authorEarningsCents / 100).toFixed(2)}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </GlassCard>
+  );
+}
 
 export default function TrustBook() {
   const [activeTab, setActiveTab] = useState('discover');
@@ -737,8 +921,10 @@ export default function TrustBook() {
               </GlassCard>
             ) : (
               <>
+                <AuthorEarningsDashboard userId={userId} />
+
                 {!showSubmitForm ? (
-                  <div className="text-center">
+                  <div className="text-center mt-6">
                     <Button onClick={() => setShowSubmitForm(true)} size="lg"
                       className="h-12 px-8 gap-2 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 shadow-2xl shadow-purple-500/25 rounded-xl" data-testid="button-open-submit-form">
                       <Upload className="w-5 h-5" /> Submit New Book

@@ -625,7 +625,7 @@ export async function registerRoutes(
           try {
             const existing = await storage.getEbookPurchase(metadata.userId, metadata.bookId);
             if (!existing) {
-              await storage.createEbookPurchase({
+              const purchase = await storage.createEbookPurchase({
                 userId: metadata.userId,
                 bookId: metadata.bookId,
                 paymentIntentId: paymentId as string,
@@ -635,6 +635,18 @@ export async function registerRoutes(
               });
               console.log(`[Stripe Webhook] Ebook purchase recorded: ${metadata.bookId} for user ${metadata.userId}`);
               await logUserTransaction(metadata.userId, 'ebook', `TrustBook: ${metadata.bookTitle || metadata.bookId}`, amountCents, { stripePaymentId: paymentId as string, description: `Ebook purchase — ${metadata.bookTitle || metadata.bookId}`, metadata: { bookId: metadata.bookId } });
+              
+              try {
+                const book = await storage.getPublishedBook(metadata.bookId);
+                if (book && book.authorId) {
+                  const { recordAuthorEarning, getOrCreateAuthorProfile } = await import("./author-payouts");
+                  await getOrCreateAuthorProfile(book.authorId, book.authorName || "Author");
+                  await recordAuthorEarning(book.authorId, metadata.bookId, String(purchase?.id || session.id), amountCents);
+                  console.log(`[Stripe Webhook] Author earning recorded: ${amountCents}c for author ${book.authorId} on book ${metadata.bookId}`);
+                }
+              } catch (authorErr) {
+                console.error("[Stripe Webhook] Author earning error:", authorErr);
+              }
             }
           } catch (ebookErr) {
             console.error("[Stripe Webhook] Ebook purchase error:", ebookErr);
@@ -22682,6 +22694,132 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       res.json(session);
     } catch (error: any) {
       res.status(500).json({ error: "Failed to save outline" });
+    }
+  });
+
+  // ==============================================
+  // AUTHOR PAYOUT SYSTEM (Stripe Connect)
+  // ==============================================
+
+  app.get("/api/ebook/author/dashboard", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { getAuthorDashboardStats } = await import("./author-payouts");
+      const dashboard = await getAuthorDashboardStats(userId);
+      res.json(dashboard);
+    } catch (error: any) {
+      console.error("[Author Dashboard] Error:", error);
+      res.status(500).json({ error: "Failed to load author dashboard" });
+    }
+  });
+
+  app.post("/api/ebook/author/setup", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const displayName = req.body.displayName || req.user.claims.name || "Author";
+      const { getOrCreateAuthorProfile } = await import("./author-payouts");
+      const profile = await getOrCreateAuthorProfile(userId, displayName);
+      res.json(profile);
+    } catch (error: any) {
+      console.error("[Author Setup] Error:", error);
+      res.status(500).json({ error: "Failed to set up author profile" });
+    }
+  });
+
+  app.post("/api/ebook/author/connect-onboarding", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { getOrCreateAuthorProfile, updateStripeConnectId } = await import("./author-payouts");
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      
+      let profile = await getOrCreateAuthorProfile(userId, req.body.displayName || "Author");
+      
+      let accountId = profile.stripeConnectId;
+      if (!accountId) {
+        const account = await stripe.accounts.create({
+          type: "express",
+          metadata: { userId, platform: "trust_book" },
+        });
+        accountId = account.id;
+        await updateStripeConnectId(userId, accountId);
+      }
+
+      const domains = process.env.REPLIT_DOMAINS?.split(',') || [];
+      const baseUrl = domains.length > 0 ? `https://${domains[0]}` : `http://localhost:5000`;
+
+      const accountLink = await stripe.accountLinks.create({
+        account: accountId,
+        refresh_url: `${baseUrl}/trust-book?tab=publish&connect=refresh`,
+        return_url: `${baseUrl}/trust-book?tab=publish&connect=complete`,
+        type: "account_onboarding",
+      });
+
+      res.json({ url: accountLink.url });
+    } catch (error: any) {
+      console.error("[Author Connect] Error:", error);
+      res.status(500).json({ error: "Failed to start Stripe Connect onboarding" });
+    }
+  });
+
+  app.get("/api/ebook/author/connect-status", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { getAuthorProfile, markOnboardingComplete } = await import("./author-payouts");
+      const profile = await getAuthorProfile(userId);
+      
+      if (!profile || !profile.stripeConnectId) {
+        return res.json({ connected: false, onboardingComplete: false });
+      }
+
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      const account = await stripe.accounts.retrieve(profile.stripeConnectId);
+      
+      const chargesEnabled = account.charges_enabled;
+      const payoutsEnabled = account.payouts_enabled;
+      const detailsSubmitted = account.details_submitted;
+
+      if (detailsSubmitted && !profile.stripeOnboardingComplete) {
+        await markOnboardingComplete(userId);
+      }
+
+      res.json({
+        connected: true,
+        onboardingComplete: detailsSubmitted,
+        chargesEnabled,
+        payoutsEnabled,
+        accountId: profile.stripeConnectId,
+      });
+    } catch (error: any) {
+      console.error("[Author Connect Status] Error:", error);
+      res.status(500).json({ error: "Failed to check connect status" });
+    }
+  });
+
+  app.post("/api/ebook/author/request-payout", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { processAuthorPayout } = await import("./author-payouts");
+      const { getUncachableStripeClient } = await import("./stripeClient");
+      const stripe = await getUncachableStripeClient();
+      const result = await processAuthorPayout(userId, stripe);
+      res.json(result);
+    } catch (error: any) {
+      console.error("[Author Payout] Error:", error);
+      res.status(500).json({ error: "Failed to process payout" });
+    }
+  });
+
+  app.get("/api/ebook/author/earnings", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const { getAuthorEarnings } = await import("./author-payouts");
+      const earnings = await getAuthorEarnings(userId);
+      res.json(earnings);
+    } catch (error: any) {
+      console.error("[Author Earnings] Error:", error);
+      res.status(500).json({ error: "Failed to load earnings" });
     }
   });
 
