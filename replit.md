@@ -39,7 +39,7 @@ The UI/UX adheres to a "MANDATORY PREMIUM UI PROTOCOL," emphasizing a dark theme
 - **Blockchain Core**: BFT-PoA consensus, stake-weighted validators, PostgreSQL state, SHA-256/Merkle trees, 400ms block time, 200K+ TPS. Includes validator staking, slashing, epoch-based finality, and node sync APIs. Native asset: Signal (SIG).
 - **Web Portal Frontend**: React 18, TypeScript, Vite, Wouter, TanStack Query, Tailwind CSS v4, Framer Motion.
 - **Web Portal Backend**: Node.js, Express.js, TypeScript, Drizzle ORM, PostgreSQL.
-- **Authentication**: Firebase Auth (multiple providers), server-side Firebase token verification, WebAuthn/Passkeys, PIN authentication.
+- **Authentication**: Custom email/password auth with Resend email verification, Twilio SMS verification, WebAuthn/Passkeys, PIN authentication. Session-based with Bearer token support for cross-domain. No Firebase dependency.
 - **Multi-PWA**: Host-based routing for ecosystem domains.
 - **DeFi Features**: Testnet Faucet, AMM-style DEX/Token Swap, NFT Marketplace & Gallery, Portfolio Dashboard, Transaction History, Token Launchpad, Liquidity Pools, NFT Creator Tool, Price Charts (Recharts), Webhook/Events API, Liquid Staking (stSIG).
 - **Cross-Chain Bridge**: Lock & mint mechanism for SIG ↔ wSIG across Ethereum (Sepolia), Solana (Devnet), Polygon (Amoy), Arbitrum (Sepolia), Base (Sepolia).

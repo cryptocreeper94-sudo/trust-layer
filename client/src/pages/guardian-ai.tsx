@@ -35,67 +35,66 @@ const AGENT_TYPES = [
 
 const CERTIFICATION_TIERS = [
   {
-    id: 'basic',
-    checkoutTier: 'ai_basic',
-    name: 'Guardian Basic',
-    tagline: 'Essential Trust Verification',
-    price: '$999',
-    priceNote: 'One-time certification',
+    id: 'assurance',
+    checkoutTier: 'guardian_assurance',
+    name: 'Guardian Assurance',
+    tagline: 'Full Automated + AI Analysis',
+    price: '$499',
+    priceNote: 'Launch Pricing',
     features: [
-      'Automated behavioral analysis',
-      'Basic security scan',
-      'Transaction pattern review',
-      'Public registry listing',
-      'Guardian AI badge',
-      '6-month certification validity',
+      'Full automated security analysis',
+      'AI-powered vulnerability detection',
+      'Professional PDF report',
+      'API security review',
+      'Secret management audit',
+      '30-day remediation support',
     ],
     highlight: false,
-    icon: Shield,
-    color: 'cyan',
-    duration: '3-5 days',
-  },
-  {
-    id: 'advanced',
-    checkoutTier: 'ai_advanced',
-    name: 'Guardian Advanced',
-    tagline: 'Comprehensive Trust Assessment',
-    price: '$4,999',
-    priceNote: 'Full audit cycle',
-    features: [
-      'Everything in Basic',
-      'Deep code review',
-      'API security assessment',
-      'Economic attack simulation',
-      'Detailed trust scorecard',
-      'Priority support',
-      '12-month certification validity',
-    ],
-    highlight: true,
     icon: ShieldCheck,
     color: 'purple',
-    duration: '1-2 weeks',
+    duration: '5-7 days',
   },
   {
-    id: 'enterprise',
-    checkoutTier: 'ai_enterprise',
-    name: 'Guardian Enterprise',
-    tagline: 'Maximum Trust Assurance',
-    price: '$14,999',
-    priceNote: 'Complete certification',
+    id: 'certified',
+    checkoutTier: 'guardian_certified',
+    name: 'Guardian Certified',
+    tagline: 'Expert Review + On-Chain Badge',
+    price: '$2,499',
+    priceNote: 'Launch Pricing',
     features: [
-      'Everything in Advanced',
-      'Full source code audit',
-      'Penetration testing',
-      'Formal verification',
-      'Custom compliance review',
-      'Dedicated security analyst',
-      'Guardian Shield monitoring',
-      '24-month certification validity',
+      'Everything in Guardian Assurance',
+      'Manual expert security review',
+      'Remediation guidance & verification',
+      'On-chain certification badge',
+      '30-day continuous monitoring',
+      'Full smart contract review',
+      'Featured in Guardian Registry',
     ],
-    highlight: false,
+    highlight: true,
     icon: Award,
     color: 'pink',
-    duration: '3-4 weeks',
+    duration: '2-3 weeks',
+  },
+  {
+    id: 'premier',
+    checkoutTier: 'guardian_premier',
+    name: 'Guardian Premier',
+    tagline: 'Enterprise-Grade Security',
+    price: 'Custom',
+    priceNote: 'Starting at $7,500',
+    features: [
+      'Everything in Guardian Certified',
+      'Dedicated security analyst',
+      'Penetration testing',
+      'Cryptographic implementation audit',
+      'Custom compliance review',
+      '90-day priority support',
+      'Ongoing advisory relationship',
+    ],
+    highlight: false,
+    icon: Building,
+    color: 'cyan',
+    duration: '4-6 weeks',
   },
 ];
 
@@ -107,10 +106,10 @@ const TRUST_METRICS = [
 ];
 
 const MARKET_STATS = [
-  { value: '21,000+', label: 'AI Agents Launched', sublabel: 'November 2024 (industry)' },
-  { value: '1M+', label: 'Projected Agents', sublabel: 'By end of 2025 (industry est.)' },
-  { value: '$50.5B', label: 'AI Crypto Market', sublabel: 'Peak 2025 (industry est.)' },
-  { value: 'New', label: 'Certification Standard', sublabel: 'Guardian AI pioneering' },
+  { value: '200+', label: 'Vulnerability Patterns', sublabel: 'Checked per audit' },
+  { value: '6', label: 'Analysis Pillars', sublabel: 'Comprehensive coverage' },
+  { value: 'On-Chain', label: 'Verified Badges', sublabel: 'Blockchain-stamped results' },
+  { value: '<1 min', label: 'Alert Response', sublabel: 'Real-time monitoring' },
 ];
 
 function BentoCard({ children, className = "", span = "col-span-1", delay = 0 }: { 
@@ -153,7 +152,7 @@ export default function GuardianAI() {
   usePageAnalytics();
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [selectedTier, setSelectedTier] = useState<string>('advanced');
+  const [selectedTier, setSelectedTier] = useState<string>('certified');
   const [checkoutTier, setCheckoutTier] = useState<typeof CERTIFICATION_TIERS[0] | null>(null);
   const [checkoutData, setCheckoutData] = useState({ agentName: '', email: '', website: '' });
   const [checkoutLoading, setCheckoutLoading] = useState(false);
@@ -199,6 +198,10 @@ export default function GuardianAI() {
 
   const handleCheckout = async () => {
     if (!checkoutTier) return;
+    if (checkoutTier.checkoutTier === 'guardian_premier') {
+      window.location.href = 'mailto:team@dwsc.io?subject=Guardian%20Premier%20Inquiry';
+      return;
+    }
     setCheckoutLoading(true);
     try {
       const response = await fetch('/api/guardian/checkout', {
@@ -563,13 +566,14 @@ export default function GuardianAI() {
             <BentoCard delay={0.1}>
               <div className="p-8 flex flex-col justify-between h-full min-h-[320px]">
                 <div>
-                  <div className="text-xs text-slate-500 uppercase tracking-widest font-semibold mb-6">Market Data</div>
+                  <div className="text-xs text-slate-500 uppercase tracking-widest font-semibold mb-6">Our Capabilities</div>
                   {MARKET_STATS.map((stat, i) => (
                     <div key={i} className={`${i > 0 ? 'mt-5 pt-5 border-t border-white/[0.05]' : ''}`}>
-                      <div className="text-2xl font-black bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+                      <div className="text-2xl font-black bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                         <AnimatedCounter value={stat.value} />
                       </div>
                       <div className="text-xs text-slate-400 mt-1">{stat.label}</div>
+                      <div className="text-[10px] text-slate-500 mt-0.5">{stat.sublabel}</div>
                     </div>
                   ))}
                 </div>
@@ -761,17 +765,28 @@ export default function GuardianAI() {
                     ))}
                   </ul>
                   
-                  <Button 
-                    className={`w-full h-12 text-base font-semibold rounded-xl ${tier.highlight 
-                      ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg shadow-purple-500/20' 
-                      : 'bg-slate-800 hover:bg-slate-700 border border-white/[0.08]'
-                    }`}
-                    onClick={() => { setSelectedTier(tier.id); setCheckoutTier(tier); }}
-                    data-testid={`button-select-${tier.id}`}
-                  >
-                    Get {tier.name}
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
+                  {tier.price === 'Custom' ? (
+                    <a
+                      href="mailto:team@dwsc.io?subject=Guardian%20Premier%20Inquiry"
+                      className={`w-full h-12 text-base font-semibold rounded-xl bg-slate-800 hover:bg-slate-700 border border-white/[0.08] flex items-center justify-center gap-2 text-white transition-colors`}
+                      data-testid={`button-select-${tier.id}`}
+                    >
+                      Contact Us
+                      <ArrowRight className="w-4 h-4" />
+                    </a>
+                  ) : (
+                    <Button 
+                      className={`w-full h-12 text-base font-semibold rounded-xl ${tier.highlight 
+                        ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 shadow-lg shadow-purple-500/20' 
+                        : 'bg-slate-800 hover:bg-slate-700 border border-white/[0.08]'
+                      }`}
+                      onClick={() => { setSelectedTier(tier.id); setCheckoutTier(tier); }}
+                      data-testid={`button-select-${tier.id}`}
+                    >
+                      Get {tier.name}
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </Button>
+                  )}
                 </div>
               </BentoCard>
             ))}

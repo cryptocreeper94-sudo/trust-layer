@@ -50,46 +50,61 @@ const AUDIT_PHASES = [
 
 const CERTIFICATION_TIERS = [
   {
-    id: "assurance_lite",
-    name: "Guardian Assurance Lite",
-    price: "$5,999",
-    duration: "2-3 weeks",
+    id: "guardian_assurance",
+    name: "Guardian Assurance",
+    price: "$499",
+    duration: "5-7 days",
     icon: ShieldCheck,
     color: "from-purple-500 to-purple-700",
-    description: "Comprehensive smart contract security audit for emerging projects",
+    description: "Full automated + AI security analysis with professional PDF report",
     features: [
-      "Full smart contract audit (up to 2,000 lines)",
-      "Automated vulnerability scanning",
-      "Manual code review by 2 auditors",
-      "Detailed findings report with severity ratings",
-      "Remediation guidance",
-      "Public registry listing",
-      "Guardian Verified badge",
-      "30-day post-audit support"
+      "Full automated security analysis",
+      "AI-powered vulnerability detection",
+      "Professional PDF report",
+      "Infrastructure hygiene audit",
+      "API security review",
+      "Secret management audit",
+      "30-day remediation support"
     ],
-    bestFor: "New projects launching on mainnet, DeFi protocols under $1M TVL"
+    bestFor: "New projects, DeFi protocols, and teams wanting a thorough automated review"
+  },
+  {
+    id: "guardian_certified",
+    name: "Guardian Certified",
+    price: "$2,499",
+    duration: "2-3 weeks",
+    icon: ShieldCheck,
+    color: "from-blue-500 to-blue-700",
+    description: "Manual expert review + remediation + on-chain badge + 30-day monitoring",
+    features: [
+      "Everything in Guardian Assurance",
+      "Manual expert security review",
+      "Remediation guidance & verification",
+      "On-chain certification badge",
+      "30-day continuous monitoring",
+      "Full smart contract review",
+      "Penetration testing coordination",
+      "Featured in Guardian Registry"
+    ],
+    bestFor: "Serious projects seeking verified trust with on-chain proof and expert review"
   },
   {
     id: "guardian_premier",
     name: "Guardian Premier",
-    price: "$14,999",
+    price: "Custom",
     duration: "4-6 weeks",
     icon: Award,
     color: "from-pink-500 to-pink-700",
-    description: "Enterprise-grade security certification with comprehensive coverage",
+    description: "Enterprise-grade security certification with dedicated analyst and custom scope",
     features: [
-      "Full smart contract audit (up to 10,000 lines)",
-      "Backend API security assessment",
-      "Penetration testing",
-      "Economic attack simulation",
-      "Multi-chain deployment review",
-      "Formal verification (where applicable)",
-      "4 senior auditors assigned",
-      "Priority remediation support",
-      "Guardian Shield monitoring (3 months)",
-      "Quarterly security reviews",
-      "Emergency response hotline",
-      "Premium public registry listing"
+      "Everything in Guardian Certified",
+      "Dedicated security analyst",
+      "On-chain code analysis",
+      "Cryptographic implementation audit",
+      "Executive security scorecard",
+      "90-day priority support",
+      "Custom engagement scope",
+      "Ongoing advisory relationship"
     ],
     bestFor: "Established protocols, institutional DeFi, bridges, and high-value contracts"
   }

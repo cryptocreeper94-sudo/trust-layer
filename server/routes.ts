@@ -9,7 +9,6 @@ import { setupCommunityWebSocket } from "./community-ws";
 import { z } from "zod";
 import { storage } from "./storage";
 import { db } from "./db";
-import { verifyFirebaseIdToken } from "./firebase-admin";
 import { zealyService, type ZealyWebhookPayload } from "./zealy-service";
 import * as blogService from "./blog-service";
 import { getUncachableStripeClient } from "./stripeClient";
@@ -19,14 +18,13 @@ import { trustVaultClient } from "./trustvault-client";
 // Auth request interface for session-based authentication
 interface AuthenticatedRequest extends Request {
   user?: { id: string; email: string | null; claims: { sub: string } } | any;
-  firebaseUser?: { uid: string; email?: string }; // Legacy compatibility
+  firebaseUser?: { uid: string; email?: string };
 }
 
-// Unified authentication middleware - prioritizes session-based auth
-// Falls back to Firebase token verification for API clients
+// Authentication middleware — session-based + token-based (no Firebase)
 async function isAuthenticated(req: any, res: Response, next: NextFunction) {
   try {
-    // Priority 1: Check session-based authentication (our custom auth system)
+    // Priority 1: Check session-based authentication
     const sessionUserId = (req.session as any)?.userId;
     if (sessionUserId) {
       const user = await storage.getUser(sessionUserId);
@@ -46,7 +44,6 @@ async function isAuthenticated(req: any, res: Response, next: NextFunction) {
     if (authHeader?.startsWith('Bearer ')) {
       const token = authHeader.substring(7);
       
-      // Check if it's a session token (64 char hex string)
       if (/^[a-f0-9]{64}$/.test(token)) {
         const [user] = await db.select().from(users)
           .where(eq(users.sessionToken, token))
@@ -61,68 +58,6 @@ async function isAuthenticated(req: any, res: Response, next: NextFunction) {
           req.firebaseUser = { uid: user.id, email: user.email || undefined };
           return next();
         }
-      }
-      
-      // Try Firebase token verification
-      const decodedToken = await verifyFirebaseIdToken(token);
-      if (decodedToken) {
-        let user = await storage.getUser(decodedToken.uid);
-        
-        // Auto-provision users record for Firebase-authenticated users who don't have one yet
-        if (!user && decodedToken.uid) {
-          try {
-            user = await storage.createUser({
-              id: decodedToken.uid,
-              email: decodedToken.email || null,
-              displayName: decodedToken.name || decodedToken.email?.split('@')[0] || null,
-              firstName: decodedToken.name?.split(' ')[0] || null,
-              lastName: decodedToken.name?.split(' ').slice(1).join(' ') || null,
-              profileImageUrl: decodedToken.picture || null,
-            });
-            console.log(`[Auth] Auto-provisioned user record for Firebase user ${decodedToken.uid} (${decodedToken.email})`);
-            
-            // Link any existing presale purchases to this new user record
-            if (decodedToken.email) {
-              try {
-                await db.execute(sql`
-                  UPDATE presale_purchases 
-                  SET user_id = ${decodedToken.uid} 
-                  WHERE LOWER(TRIM(email)) = ${decodedToken.email.toLowerCase().trim()} 
-                  AND (user_id IS NULL OR user_id = '')
-                `);
-              } catch (linkErr) {
-                // Non-critical — purchases still found by email
-              }
-            }
-          } catch (provisionErr: any) {
-            // If it fails due to duplicate email, try to find by email instead
-            if (decodedToken.email && provisionErr?.message?.includes('unique')) {
-              user = await storage.getUserByEmail(decodedToken.email);
-            }
-            if (!user) {
-              console.error("[Auth] Failed to auto-provision user:", provisionErr?.message);
-            }
-          }
-        }
-        
-        if (user) {
-          req.user = { 
-            claims: { sub: user.id },
-            id: user.id,
-            email: user.email 
-          };
-          req.firebaseUser = { uid: user.id, email: user.email || decodedToken.email || undefined };
-          return next();
-        }
-        
-        // Last resort fallback — token verified but couldn't create/find user record
-        req.user = {
-          claims: { sub: decodedToken.uid },
-          id: decodedToken.uid,
-          email: decodedToken.email || undefined,
-        };
-        req.firebaseUser = { uid: decodedToken.uid, email: decodedToken.email || undefined };
-        return next();
       }
     }
     
@@ -1623,6 +1558,18 @@ export async function registerRoutes(
         // Continue anyway - user can request resend
       }
 
+      // Link any existing presale purchases to this new user record
+      try {
+        await db.execute(sql`
+          UPDATE presale_purchases 
+          SET user_id = ${userId} 
+          WHERE LOWER(TRIM(email)) = ${normalizedEmail} 
+          AND (user_id IS NULL OR user_id = '')
+        `);
+      } catch (linkErr) {
+        // Non-critical
+      }
+
       // Set session (user is logged in but email not verified yet)
       (req.session as any).userId = userId;
       
@@ -1631,7 +1578,12 @@ export async function registerRoutes(
         req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
       }
 
-      res.json({ success: true, userId, signupPosition, emailVerificationRequired: true });
+      // Generate a session token for cross-domain auth
+      const sessionToken = crypto.randomBytes(32).toString('hex');
+      const tokenExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+      await db.update(users).set({ sessionToken, sessionTokenExpiry: tokenExpiry }).where(eq(users.id, userId));
+
+      res.json({ success: true, userId, signupPosition, emailVerificationRequired: true, sessionToken });
     } catch (error) {
       console.error("Registration error:", error);
       res.status(500).json({ error: "Registration failed" });
@@ -1861,7 +1813,9 @@ export async function registerRoutes(
           user: {
             id: user.id,
             email: user.email,
-            displayName: user.displayName,
+            displayName: user.displayName || user.firstName || user.username,
+            firstName: user.firstName || user.displayName?.split(' ')[0] || user.username,
+            lastName: user.lastName || null,
             profileImageUrl: user.profileImageUrl,
           }
         });
@@ -1919,8 +1873,9 @@ export async function registerRoutes(
         user: {
           id: user.id,
           email: user.email,
-          displayName: user.displayName,
-          firstName: user.displayName?.split(' ')[0] || user.username,
+          displayName: user.displayName || user.firstName || user.username,
+          firstName: user.firstName || user.displayName?.split(' ')[0] || user.username,
+          lastName: user.lastName || user.displayName?.split(' ').slice(1).join(' ') || null,
           username: user.username,
           profileImageUrl: user.profileImageUrl,
           emailVerified: (user as any).emailVerified || false,
@@ -4455,16 +4410,6 @@ export async function registerRoutes(
             if (tokenUser && tokenUser.sessionTokenExpiry && new Date(tokenUser.sessionTokenExpiry) > new Date()) {
               userId = tokenUser.id;
               user = { id: tokenUser.id, email: tokenUser.email, displayName: tokenUser.displayName };
-            }
-          }
-          if (!userId) {
-            const decoded = await verifyFirebaseIdToken(token);
-            if (decoded) {
-              const fbUser = await storage.getUser(decoded.uid);
-              if (fbUser) {
-                userId = fbUser.id;
-                user = { id: fbUser.id, email: fbUser.email, displayName: fbUser.displayName };
-              }
             }
           }
           if (userId) {
@@ -7580,36 +7525,21 @@ const { trustLayerId } = await response.json();`
   });
 
   // === GUARDIAN CERTIFICATION CHECKOUT ROUTES ===
-  const GUARDIAN_TIERS = {
+  const GUARDIAN_TIERS: Record<string, { name: string; description: string; price: number }> = {
     guardian_assurance: {
       name: "Guardian Assurance",
-      description: "Full automated + AI security analysis with professional PDF report",
-      price: 49900, // $499 in cents
+      description: "Full automated + AI security analysis with professional PDF report — Launch Pricing",
+      price: 49900,
     },
     guardian_certified: {
       name: "Guardian Certified",
-      description: "Manual expert review + remediation + on-chain badge + 30-day monitoring",
-      price: 249900, // $2,499 in cents
-    },
-    ai_basic: {
-      name: "Guardian AI Basic",
-      description: "Essential AI agent trust verification - automated behavioral analysis, basic security scan, 6-month certification",
-      price: 99900, // $999 in cents
-    },
-    ai_advanced: {
-      name: "Guardian AI Advanced",
-      description: "Comprehensive AI agent trust assessment - deep code review, API security, economic attack simulation, 12-month certification",
-      price: 499900, // $4,999 in cents
-    },
-    ai_enterprise: {
-      name: "Guardian AI Enterprise",
-      description: "Maximum AI agent trust assurance - full source audit, penetration testing, formal verification, dedicated analyst, 24-month certification",
-      price: 1499900, // $14,999 in cents
+      description: "Manual expert review + remediation + on-chain badge + 30-day monitoring — Launch Pricing",
+      price: 249900,
     },
   };
 
   const GuardianCheckoutSchema = z.object({
-    tier: z.enum(["guardian_assurance", "guardian_certified", "ai_basic", "ai_advanced", "ai_enterprise"]),
+    tier: z.enum(["guardian_assurance", "guardian_certified"]),
     projectName: z.string().min(1).max(200),
     projectUrl: z.string().url().optional(),
     contactEmail: z.string().email(),
@@ -11211,18 +11141,6 @@ const { trustLayerId } = await response.json();`
             if (tokenUser && tokenUser.sessionTokenExpiry && new Date(tokenUser.sessionTokenExpiry) > new Date()) {
               userId = tokenUser.id;
             }
-          }
-          // Try Firebase token verification
-          if (!userId) {
-            try {
-              const decodedToken = await verifyFirebaseIdToken(token);
-              if (decodedToken) {
-                const fbUser = await storage.getUser(decodedToken.uid);
-                if (fbUser) {
-                  userId = fbUser.id;
-                }
-              }
-            } catch (e) {}
           }
         }
       }
