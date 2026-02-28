@@ -66,16 +66,63 @@ async function isAuthenticated(req: any, res: Response, next: NextFunction) {
       // Try Firebase token verification
       const decodedToken = await verifyFirebaseIdToken(token);
       if (decodedToken) {
-        const user = await storage.getUser(decodedToken.uid);
+        let user = await storage.getUser(decodedToken.uid);
+        
+        // Auto-provision users record for Firebase-authenticated users who don't have one yet
+        if (!user && decodedToken.uid) {
+          try {
+            user = await storage.createUser({
+              id: decodedToken.uid,
+              email: decodedToken.email || null,
+              displayName: decodedToken.name || decodedToken.email?.split('@')[0] || null,
+              firstName: decodedToken.name?.split(' ')[0] || null,
+              lastName: decodedToken.name?.split(' ').slice(1).join(' ') || null,
+              profileImageUrl: decodedToken.picture || null,
+            });
+            console.log(`[Auth] Auto-provisioned user record for Firebase user ${decodedToken.uid} (${decodedToken.email})`);
+            
+            // Link any existing presale purchases to this new user record
+            if (decodedToken.email) {
+              try {
+                await db.execute(sql`
+                  UPDATE presale_purchases 
+                  SET user_id = ${decodedToken.uid} 
+                  WHERE LOWER(TRIM(email)) = ${decodedToken.email.toLowerCase().trim()} 
+                  AND (user_id IS NULL OR user_id = '')
+                `);
+              } catch (linkErr) {
+                // Non-critical — purchases still found by email
+              }
+            }
+          } catch (provisionErr: any) {
+            // If it fails due to duplicate email, try to find by email instead
+            if (decodedToken.email && provisionErr?.message?.includes('unique')) {
+              user = await storage.getUserByEmail(decodedToken.email);
+            }
+            if (!user) {
+              console.error("[Auth] Failed to auto-provision user:", provisionErr?.message);
+            }
+          }
+        }
+        
         if (user) {
           req.user = { 
             claims: { sub: user.id },
             id: user.id,
             email: user.email 
           };
-          req.firebaseUser = { uid: user.id, email: user.email || undefined };
+          req.firebaseUser = { uid: user.id, email: user.email || decodedToken.email || undefined };
           return next();
         }
+        
+        // Last resort fallback — token verified but couldn't create/find user record
+        req.user = {
+          claims: { sub: decodedToken.uid },
+          id: decodedToken.uid,
+          email: decodedToken.email || undefined,
+        };
+        req.firebaseUser = { uid: decodedToken.uid, email: decodedToken.email || undefined };
+        return next();
       }
     }
     
@@ -3601,27 +3648,17 @@ export async function registerRoutes(
       let presaleTokens = 0;
       let onChainTokens = 0;
 
-      // Get presale allocation by email
+      // Get presale allocation by email (check users table, then Firebase token)
       const userResult = await db.execute(sql`SELECT email FROM users WHERE id = ${userId}`);
-      const userEmail = (userResult.rows[0] as any)?.email;
-      if (userEmail) {
-        const presaleResult = await db.execute(sql`
-          SELECT COALESCE(SUM(token_amount), 0) as total_sig
-          FROM presale_purchases
-          WHERE LOWER(TRIM(email)) = ${userEmail.toLowerCase().trim()} AND status = 'completed'
-        `);
-        presaleTokens = parseInt((presaleResult.rows[0] as any)?.total_sig || "0");
-      }
-
-      // Also check by Firebase UID in presale_purchases user_id
-      if (presaleTokens === 0) {
-        const uidResult = await db.execute(sql`
-          SELECT COALESCE(SUM(token_amount), 0) as total_sig
-          FROM presale_purchases
-          WHERE user_id = ${userId} AND status = 'completed'
-        `);
-        presaleTokens = parseInt((uidResult.rows[0] as any)?.total_sig || "0");
-      }
+      const userEmail = (userResult.rows[0] as any)?.email || req.firebaseUser?.email;
+      
+      const presaleResult = await db.execute(sql`
+        SELECT COALESCE(SUM(token_amount), 0) as total_sig
+        FROM presale_purchases
+        WHERE status = 'completed'
+        AND (user_id = ${userId} ${userEmail ? sql`OR LOWER(TRIM(email)) = ${userEmail.toLowerCase().trim()}` : sql``})
+      `);
+      presaleTokens = parseInt((presaleResult.rows[0] as any)?.total_sig || "0");
 
       const totalTokens = presaleTokens + onChainTokens;
 
@@ -3644,14 +3681,14 @@ export async function registerRoutes(
       if (!userId) return res.json({ totalSig: 0, totalSpent: 0, purchases: [] });
 
       const userResult = await db.execute(sql`SELECT email FROM users WHERE id = ${userId}`);
-      const userEmail = (userResult.rows[0] as any)?.email;
+      const userEmail = (userResult.rows[0] as any)?.email || req.firebaseUser?.email;
 
       let purchases: any[] = [];
-      if (userEmail) {
+      {
         const result = await db.execute(sql`
           SELECT id, token_amount, usd_amount_cents, tier, status, payment_method, created_at
           FROM presale_purchases
-          WHERE (LOWER(TRIM(email)) = ${userEmail.toLowerCase().trim()} OR user_id = ${userId}) AND status = 'completed'
+          WHERE (user_id = ${userId} ${userEmail ? sql`OR LOWER(TRIM(email)) = ${userEmail.toLowerCase().trim()}` : sql``}) AND status = 'completed'
           ORDER BY created_at DESC
         `);
         purchases = result.rows as any[];
@@ -3848,7 +3885,7 @@ export async function registerRoutes(
       }
 
       const user = await storage.getFirebaseUser(userId);
-      const email = user?.email;
+      const email = user?.email || req.firebaseUser?.email;
 
       // Get presale purchases (confirmed only)
       const presaleResult = await db.execute(sql`
@@ -3858,7 +3895,7 @@ export async function registerRoutes(
           COUNT(*) as purchase_count
         FROM presale_purchases 
         WHERE status = 'completed' 
-        AND (user_id = ${userId} OR email = ${email})
+        AND (user_id = ${userId} ${email ? sql`OR LOWER(TRIM(email)) = ${email.toLowerCase().trim()}` : sql``})
       `);
       const presaleTokens = Number(presaleResult.rows[0]?.total_tokens || 0);
       const presaleSpentCents = Number(presaleResult.rows[0]?.total_spent_cents || 0);
