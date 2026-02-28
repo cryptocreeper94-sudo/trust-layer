@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { authFetch } from "@/hooks/use-firebase-auth";
 
 interface DwcBagData {
   totalDwc: number;
@@ -41,9 +42,6 @@ function formatNumber(num: number): string {
   if (num >= 1000000) {
     return (num / 1000000).toFixed(2) + "M";
   }
-  if (num >= 1000) {
-    return (num / 1000).toFixed(1) + "K";
-  }
   return num.toLocaleString();
 }
 
@@ -60,7 +58,7 @@ export function DwcBagDashboard({ compact = false }: { compact?: boolean }) {
   const { data: bagData, isLoading, error } = useQuery<DwcBagData>({
     queryKey: ["/api/user/dwc-bag"],
     queryFn: async () => {
-      const res = await fetch("/api/user/dwc-bag");
+      const res = await authFetch("/api/user/dwc-bag");
       if (!res.ok) throw new Error("Failed to fetch SIG bag");
       return res.json();
     },

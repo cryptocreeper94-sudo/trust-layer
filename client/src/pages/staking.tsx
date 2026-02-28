@@ -86,7 +86,6 @@ interface UserStake {
 function formatNumber(num: string | number): string {
   const n = typeof num === "string" ? parseFloat(num) : num;
   if (n >= 1000000) return `${(n / 1000000).toFixed(2)}M`;
-  if (n >= 1000) return `${(n / 1000).toFixed(1)}K`;
   return n.toLocaleString();
 }
 
