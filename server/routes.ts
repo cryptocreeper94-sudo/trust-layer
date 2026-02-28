@@ -3891,8 +3891,8 @@ export async function registerRoutes(
       // Presale price: $0.001 per SIG, so value = totalDwc * 0.001
       const currentValue = totalDwc * 0.001;
       
-      // Future projected value at launch (estimated $0.10)
-      const launchProjectedValue = totalDwc * 0.10;
+      // Future projected value at launch (estimated $0.01)
+      const launchProjectedValue = totalDwc * 0.01;
 
       res.json({
         totalDwc,
@@ -3919,7 +3919,7 @@ export async function registerRoutes(
           },
         },
         tgeDate: "2026-04-11",
-        launchPrice: 0.10,
+        launchPrice: 0.01,
         currentPrice: 0.001,
       });
     } catch (error) {
@@ -20349,7 +20349,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const conversionRate = DWC_CONVERSION_RATE; // 100 shells = 1 SIG
       const estimatedDwc = Math.floor(shellBalance / conversionRate);
       const shellValue = shellBalance * 0.001; // $0.001 per shell
-      const dwcValue = estimatedDwc * 0.10; // $0.10 per SIG at launch
+      const dwcValue = estimatedDwc * 0.01; // $0.01 per SIG at launch
       
       res.json({
         shellBalance,
