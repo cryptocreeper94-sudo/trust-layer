@@ -57,7 +57,7 @@ The UI/UX adheres to a "MANDATORY PREMIUM UI PROTOCOL," emphasizing a dark theme
 - **React Native Portability**: Guidelines for shared business logic, data fetching with TanStack Query, React hooks for state, NativeWind for styling, and separating logic from presentation.
 
 ### Ecosystem Domains & Subdomains
-The ecosystem spans 30 verified applications across primary domains (`dwsc.io`, `darkwavegames.io`, `darkwavestudios.io`, `yourlegacy.io`, `tlid.io`, `trustshield.tech`, `intothevoid.app`), external ecosystem apps (e.g., `orbitstaffing.io`, `garagebot.io`, `verdara.replit.app`), and internal PWA routes (e.g., `/academy`, `/guardian-scanner`, `/signal-chat`). Verdara (App #28) is an AI-powered outdoor recreation super-app; Arbora (App #29) is a standalone arborist business management PWA running within Verdara at `/arbora/*`.
+The ecosystem spans 32 verified applications across primary domains (`dwsc.io`, `darkwavegames.io`, `darkwavestudios.io`, `yourlegacy.io`, `tlid.io`, `trustshield.tech`, `intothevoid.app`), external ecosystem apps (e.g., `orbitstaffing.io`, `garagebot.io`, `verdara.replit.app`, `bomber.tlid.io`), and internal PWA routes (e.g., `/academy`, `/guardian-scanner`, `/signal-chat`). Verdara (App #28) is an AI-powered outdoor recreation super-app; Arbora (App #29) is a standalone arborist business management PWA running within Verdara at `/arbora/*`. Bomber (App #32) is a 3D long driving golf game built with Three.js, hosted separately on Vercel at `bomber.tlid.io`, connected to Trust Golf via API.
 
 ### Tokenomics
 - **Native Asset**: Signal (SIG), Total Supply: 1,000,000,000 SIG.

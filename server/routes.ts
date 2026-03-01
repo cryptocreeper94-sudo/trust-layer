@@ -24589,6 +24589,7 @@ const APP_URL_MAP: Record<string, string> = {
   "trustshield": "https://trustshield.tech",
   "trust-golf": "https://trustgolf.app",
   "trustgolf": "https://trustgolf.app",
+  "bomber": "https://bomber.tlid.io",
   "lumepaint": "https://lumepaint.co",
   "lotopspro": `${PORTAL_BASE}/ecosystem`,
   "lotops-pro": `${PORTAL_BASE}/ecosystem`,
@@ -25073,6 +25074,19 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       verified: true,
       users: "Trust Layer Verified",
       url: `${PORTAL_BASE}/trust-book`,
+    },
+    {
+      id: "bomber",
+      name: "Bomber",
+      category: "Gaming",
+      description: "3D long driving game built with Three.js. Crush massive drives across stunning courses with real-time physics, leaderboards, and Trust Golf integration.",
+      hook: "Crush It Off the Tee",
+      tags: ["Gaming", "3D", "Three.js", "Golf", "Sports"],
+      gradient: "from-lime-500 to-green-700",
+      verified: true,
+      featured: true,
+      users: "Trust Layer Verified",
+      url: "https://bomber.tlid.io",
     },
   ];
 }
