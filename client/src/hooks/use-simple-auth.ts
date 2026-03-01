@@ -1,4 +1,4 @@
-import { useFirebaseAuth } from "./use-firebase-auth";
+import { useAuth } from "./use-auth";
 
 export function useSimpleAuth() {
   const {
@@ -12,7 +12,7 @@ export function useSimpleAuth() {
     logout,
     resetPassword,
     error,
-  } = useFirebaseAuth();
+  } = useAuth();
 
   const login = async (email: string, password: string, _rememberMe?: boolean) => {
     const result = await firebaseLogin(email, password);

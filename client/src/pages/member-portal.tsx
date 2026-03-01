@@ -39,7 +39,7 @@ import { GlassCard } from "@/components/glass-card";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { PasskeyManager } from "@/components/passkey-manager";
-import { authFetch } from "@/hooks/use-firebase-auth";
+import { authFetch } from "@/hooks/use-auth";
 
 export default function MemberPortal() {
   const { user } = useAuth();

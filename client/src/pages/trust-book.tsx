@@ -12,7 +12,7 @@ import {
   CreditCard, TrendingUp, Banknote, ExternalLink
 } from "lucide-react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { authFetch } from "@/hooks/use-firebase-auth";
+import { authFetch } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";

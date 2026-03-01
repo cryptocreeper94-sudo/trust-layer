@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Loader2, ArrowLeft, Eye, EyeOff, AlertTriangle, Globe, Link2, Fingerprint } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useFirebaseAuth } from "@/hooks/use-firebase-auth";
+import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { PasskeyLoginButton } from "./passkey-manager";
 
@@ -44,7 +44,7 @@ const ECOSYSTEM_APPS: Record<string, { label: string; color: string }> = {
 
 export function SimpleLoginModal({ isOpen, onClose, onSuccess, ssoApp: ssoAppProp }: SimpleLoginModalProps) {
   const { toast } = useToast();
-  const { login, signup, loginWithGoogle, loginWithGithub, resetPassword } = useFirebaseAuth();
+  const { login, signup, loginWithGoogle, loginWithGithub, resetPassword } = useAuth();
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [githubLoading, setGithubLoading] = useState(false);

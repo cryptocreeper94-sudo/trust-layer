@@ -8,7 +8,7 @@ import {
   Coins, Target, Globe, Lock, Star, Rocket, ChevronDown, Loader2, Calculator, X, CreditCard, History, User, UserCheck, Activity, Flame, Timer, Search, Mail
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { authFetch } from "@/hooks/use-firebase-auth";
+import { authFetch } from "@/hooks/use-auth";
 import { useWallet } from "@/hooks/use-wallet";
 
 import { Button } from "@/components/ui/button";

@@ -7,7 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { authFetch } from "@/hooks/use-firebase-auth";
+import { authFetch } from "@/hooks/use-auth";
 
 interface DwcBagData {
   totalDwc: number;

@@ -4,7 +4,7 @@ import { Link, useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Rocket, TrendingUp, Users, Coins, X, ChevronRight, Zap, Wallet, Target } from "lucide-react";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
-import { authFetch } from "@/hooks/use-firebase-auth";
+import { authFetch } from "@/hooks/use-auth";
 
 interface PresaleStats {
   totalRaisedUsd: number;

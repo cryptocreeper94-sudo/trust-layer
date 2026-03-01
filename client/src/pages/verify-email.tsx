@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Mail, CheckCircle2, Loader2, RefreshCw, Gift } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { authFetch } from "@/hooks/use-firebase-auth";
+import { authFetch } from "@/hooks/use-auth";
 
 export default function VerifyEmail() {
   const [code, setCode] = useState("");

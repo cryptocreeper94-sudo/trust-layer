@@ -9,7 +9,7 @@ import {
   MessageSquare, Compass, Star, Zap, Trophy, Globe, LayoutDashboard
 } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
-import { authFetch } from "@/hooks/use-firebase-auth";
+import { authFetch } from "@/hooks/use-auth";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { WalletButton } from "@/components/wallet-button";
