@@ -19111,6 +19111,137 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   // ============================================
+  // OWNER WHITELIST MANAGEMENT
+  // ============================================
+
+  app.post("/api/owner/whitelist/add", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { email, reason } = req.body;
+      if (!email) return res.status(400).json({ error: "Email is required" });
+
+      const userResult = await db.execute(sql`
+        SELECT id, email, display_name FROM users WHERE LOWER(TRIM(email)) = ${email.toLowerCase().trim()} LIMIT 1
+      `);
+      
+      const userId = userResult.rows[0]?.id;
+      const resolvedEmail = (userResult.rows[0] as any)?.email || email;
+      
+      if (!userId) {
+        return res.status(404).json({ error: "No account found with that email. They need to register first." });
+      }
+
+      const existing = await db.execute(sql`
+        SELECT id FROM whitelisted_users WHERE user_id = ${userId}
+      `);
+      if (existing.rows.length > 0) {
+        return res.status(409).json({ error: "User is already whitelisted" });
+      }
+
+      await db.execute(sql`
+        INSERT INTO whitelisted_users (id, user_id, reason, added_by, created_at)
+        VALUES (gen_random_uuid(), ${userId}, ${reason || 'VIP'}, 'owner', NOW())
+      `);
+
+      res.json({ success: true, userId, email: resolvedEmail, displayName: (userResult.rows[0] as any)?.display_name });
+    } catch (error) {
+      console.error("Whitelist add error:", error);
+      res.status(500).json({ error: "Failed to add to whitelist" });
+    }
+  });
+
+  app.post("/api/owner/whitelist/remove", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { id } = req.body;
+      if (!id) return res.status(400).json({ error: "ID is required" });
+
+      await db.execute(sql`DELETE FROM whitelisted_users WHERE id = ${id}`);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Whitelist remove error:", error);
+      res.status(500).json({ error: "Failed to remove from whitelist" });
+    }
+  });
+
+  app.get("/api/owner/whitelist", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const result = await db.execute(sql`
+        SELECT w.id, w.user_id, w.reason, w.added_by, w.created_at,
+               u.email, u.display_name
+        FROM whitelisted_users w
+        LEFT JOIN users u ON w.user_id = u.id
+        ORDER BY w.created_at DESC
+      `);
+      res.json({ whitelistedUsers: result.rows });
+    } catch (error) {
+      console.error("Whitelist list error:", error);
+      res.status(500).json({ error: "Failed to get whitelist" });
+    }
+  });
+
+  // ============================================
+  // OWNER MANUAL SIG CREDIT
+  // ============================================
+
+  app.post("/api/owner/sig-credit", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const { email, amount, reason } = req.body;
+      if (!email || !amount) return res.status(400).json({ error: "Email and amount are required" });
+
+      const tokenAmount = parseInt(amount);
+      if (isNaN(tokenAmount) || tokenAmount <= 0 || tokenAmount > 10000000) {
+        return res.status(400).json({ error: "Amount must be between 1 and 10,000,000 SIG" });
+      }
+
+      const userResult = await db.execute(sql`
+        SELECT id FROM users WHERE LOWER(TRIM(email)) = ${email.toLowerCase().trim()} LIMIT 1
+      `);
+      const userId = userResult.rows[0]?.id || null;
+
+      await db.execute(sql`
+        INSERT INTO presale_purchases (id, email, buyer_name, token_amount, usd_amount_cents, tier, status, payment_method, user_id, created_at)
+        VALUES (gen_random_uuid(), ${email.toLowerCase().trim()}, ${reason || 'Manual Credit'}, ${tokenAmount}, 0, 'founders', 'completed', 'manual_credit', ${userId}, NOW())
+      `);
+
+      const totalResult = await db.execute(sql`
+        SELECT COALESCE(SUM(token_amount), 0) as total
+        FROM presale_purchases
+        WHERE LOWER(TRIM(email)) = ${email.toLowerCase().trim()} AND status = 'completed'
+      `);
+      const newTotal = Number(totalResult.rows[0]?.total || 0);
+
+      console.log(`[Admin] Manual SIG credit: ${tokenAmount.toLocaleString()} SIG to ${email} (new total: ${newTotal.toLocaleString()} SIG) — reason: ${reason || 'Manual Credit'}`);
+
+      res.json({ 
+        success: true, 
+        credited: tokenAmount, 
+        newTotal,
+        email: email.toLowerCase().trim(),
+        hasAccount: !!userId
+      });
+    } catch (error) {
+      console.error("SIG credit error:", error);
+      res.status(500).json({ error: "Failed to credit SIG" });
+    }
+  });
+
+  app.get("/api/owner/sig-credits", ownerAuthMiddleware, async (req, res) => {
+    try {
+      const result = await db.execute(sql`
+        SELECT p.id, p.email, p.buyer_name as reason, p.token_amount, p.user_id, p.created_at,
+               u.display_name
+        FROM presale_purchases p
+        LEFT JOIN users u ON p.user_id = u.id
+        WHERE p.payment_method = 'manual_credit'
+        ORDER BY p.created_at DESC
+      `);
+      res.json({ credits: result.rows });
+    } catch (error) {
+      console.error("SIG credits list error:", error);
+      res.status(500).json({ error: "Failed to get credits" });
+    }
+  });
+
+  // ============================================
   // CHRONICLES GUILDS API
   // ============================================
   // In-game guilds that can optionally link to ChronoChat
