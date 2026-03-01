@@ -1,6 +1,8 @@
 import express, { type Request, Response, NextFunction } from "express";
 import crypto from "crypto";
 import { createLogger } from "./logger";
+import { db } from "./db";
+import { sql } from "drizzle-orm";
 
 // Extend Express Request type for tlid subdomain routing
 declare global {
@@ -489,6 +491,50 @@ async function initializeServices() {
     
     registerEcosystemAppsToOrbit().catch(e => console.error('[Orbit] App registration failed:', e.message));
     
+    // One-time migration: Ensure Kathy's total SIG = 200K
+    try {
+      const { rows: kathyPurchases } = await db.execute(sql`
+        SELECT id, token_amount, payment_method FROM presale_purchases 
+        WHERE LOWER(TRIM(email)) = 'kathytidwell74@gmail.com' AND status = 'completed'
+      `);
+      const currentTotal = kathyPurchases.reduce((sum: number, p: any) => sum + Number(p.token_amount), 0);
+      const hasManualCredit = kathyPurchases.some((p: any) => p.payment_method === 'manual_credit');
+      
+      if (currentTotal < 200000) {
+        const needed = 200000 - currentTotal;
+        const { rows: userRows } = await db.execute(sql`
+          SELECT id FROM users WHERE LOWER(TRIM(email)) = 'kathytidwell74@gmail.com' LIMIT 1
+        `);
+        const userId = userRows[0]?.id || null;
+        
+        if (hasManualCredit) {
+          // Update existing manual credit to the right amount
+          const manualId = kathyPurchases.find((p: any) => p.payment_method === 'manual_credit')?.id;
+          await db.execute(sql`
+            UPDATE presale_purchases SET token_amount = ${needed} WHERE id = ${manualId}
+          `);
+        } else {
+          await db.execute(sql`
+            INSERT INTO presale_purchases (id, email, buyer_name, token_amount, usd_amount_cents, tier, status, payment_method, user_id, created_at)
+            VALUES (gen_random_uuid(), 'kathytidwell74@gmail.com', 'Kathy Grater', ${needed}, 0, 'founders', 'completed', 'manual_credit', ${userId}, NOW())
+          `);
+        }
+        
+        // Link any unlinked purchases to her account
+        if (userId) {
+          await db.execute(sql`
+            UPDATE presale_purchases SET user_id = ${userId}
+            WHERE LOWER(TRIM(email)) = 'kathytidwell74@gmail.com' AND user_id IS NULL
+          `);
+        }
+        console.log(`[Migration] Kathy SIG: was ${currentTotal.toLocaleString()}, added ${needed.toLocaleString()}, now 200,000 total`);
+      } else {
+        console.log(`[Migration] Kathy SIG already at ${currentTotal.toLocaleString()} - no change needed`);
+      }
+    } catch (e: any) {
+      console.warn('[Migration] Kathy credit check:', e.message);
+    }
+
     servicesReady = true;
     console.log('[Init] All services initialized successfully');
   } catch (err: any) {
