@@ -832,7 +832,7 @@ export default function StudioDocs() {
                 <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0">1</div>
                 <div>
                   <p className="text-white font-medium">Get a Vercel Token</p>
-                  <p className="text-white/60 text-sm">Go to vercel.com → Settings → Tokens → Create new token</p>
+                  <p className="text-white/60 text-sm">Go to vercel.com → click your profile icon → Account Settings → Tokens → Create</p>
                 </div>
               </div>
               <div className="flex items-start gap-4">
