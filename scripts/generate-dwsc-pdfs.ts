@@ -174,7 +174,7 @@ async function generateWhitepaper() {
   addBulletList(doc, [
     'Phase 1 (Q1 2026): Testnet launch, core smart contracts, developer SDK',
     'Phase 2 (Q2-Q3 2026): Token Generation Event (Apr 11), DEX/staking launch, bridge deployment',
-    'Phase 3 (Q4 2026+): Chronicles public beta (July 4), third-party developers, cross-chain integrations'
+    'Phase 3 (Q3-Q4 2026): Chronicles public beta (Aug 23 launch), third-party developers, cross-chain integrations'
   ]);
   
   addSection(doc, '6. Conclusion', 
@@ -307,7 +307,7 @@ async function generateExecutiveSummary() {
   addBulletList(doc, [
     'Q1 2026: Presale completion, mainnet preparation',
     'April 11, 2026: Token Generation Event (TGE)',
-    'July 4, 2026: Chronicles public launch',
+    'August 23, 2026: Full ecosystem launch',
     'Q4 2026: Third-party developer onboarding',
     'October 2026: Full mainnet launch'
   ]);

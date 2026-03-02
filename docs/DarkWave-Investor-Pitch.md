@@ -94,7 +94,7 @@ We control the full user experience from infrastructure to entertainment.
 | Guardian Shield Monitoring | Q3 2025 |
 | ChronoChat Communities | Q4 2025 |
 | Token Launch | April 11, 2026 |
-| Chronicles Public Beta | July 4, 2026 |
+| Chronicles Public Beta | August 23, 2026 |
 | DarkWave Script (Custom Language) | 2027+ |
 | Enterprise Apps | Live and operational |
 

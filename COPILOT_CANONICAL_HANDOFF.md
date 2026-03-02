@@ -5,7 +5,7 @@
 - **Parent Company**: DarkWave Studios (legal entity only — never user-facing)
 - **Founder**: Jason (cryptocreeper94@gmail.com)
 - **Support Email**: team@dwsc.io
-- **Launch Date**: July 4, 2026
+- **Launch Date**: August 23, 2026
 
 ---
 

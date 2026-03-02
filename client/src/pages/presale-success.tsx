@@ -262,7 +262,7 @@ export default function PresaleSuccess() {
                     <span className="text-purple-400 font-bold text-xs">3</span>
                   </div>
                   <p className="text-gray-300 text-sm">
-                    <span className="text-purple-400 font-medium">Launch Day:</span> Your Signal tokens will be delivered to your wallet on July 4, 2026
+                    <span className="text-purple-400 font-medium">Launch Day:</span> Your Signal tokens will be delivered to your wallet on August 23, 2026
                   </p>
                 </div>
               </div>

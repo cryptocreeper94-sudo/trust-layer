@@ -12,7 +12,7 @@
 | Parent Company | DarkWave Studios (legal entity — never user-facing branding) |
 | Founder | Jason |
 | Support Email | team@dwsc.io |
-| Launch Date | July 4, 2026 ("Independence Day for Trust") |
+| Launch Date | August 23, 2026 (1-year anniversary & founder's 50th birthday) |
 | Tagline | The Coordinated Trust Layer |
 | Core Mission | Verified identity, accountability, and transparent audit trails for real business operations via a custom Layer 1 blockchain |
 

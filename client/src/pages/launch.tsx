@@ -18,7 +18,7 @@ import gamesImg from "@/assets/generated_images/hub_chronicles_game.png";
 import communityImg from "@/assets/generated_images/hub_community_social.png";
 import bridgeImg from "@/assets/generated_images/hub_bridge_chains.png";
 
-const LAUNCH_DATE = new Date("2026-07-04T00:00:00-05:00");
+const LAUNCH_DATE = new Date("2026-08-23T00:00:00-05:00");
 
 interface ChecklistItem {
   id: string;
@@ -151,7 +151,7 @@ const LAUNCH_PHASES: LaunchPhase[] = [
     id: "launch",
     name: "Launch Preparation",
     subtitle: "Go-Live Checklist",
-    dateRange: "June — July 4, 2026",
+    dateRange: "July — August 23, 2026",
     icon: <Rocket className="w-5 h-5" />,
     image: gamesImg,
     gradient: "from-pink-500 to-fuchsia-600",
@@ -424,7 +424,7 @@ export default function LaunchCountdown() {
               >
                 <Flame className="w-4 h-4 text-orange-400 animate-pulse" />
                 <span className="text-sm font-medium bg-gradient-to-r from-cyan-300 to-purple-300 bg-clip-text text-transparent">
-                  Independence Day for Trust
+                  One Year. One Vision. Launch Day.
                 </span>
                 <Flame className="w-4 h-4 text-orange-400 animate-pulse" style={{ animationDelay: "0.3s" }} />
               </motion.div>
@@ -436,7 +436,7 @@ export default function LaunchCountdown() {
               </h1>
               <h2 className="text-2xl sm:text-3xl md:text-5xl font-black mb-8">
                 <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                  July 4th, 2026
+                  August 23rd, 2026
                 </span>
               </h2>
 
@@ -602,7 +602,7 @@ export default function LaunchCountdown() {
 
         <footer className="border-t border-white/5 py-6 text-center">
           <p className="text-xs text-white/20">
-            DarkWave Trust Layer · Signal (SIG) · Launching July 4, 2026
+            DarkWave Trust Layer · Signal (SIG) · Launching August 23, 2026
           </p>
         </footer>
       </div>

@@ -1160,7 +1160,7 @@ function LaunchCountdownBanner() {
     const t = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(t);
   }, []);
-  const launchDate = new Date("2026-07-04T00:00:00-05:00");
+  const launchDate = new Date("2026-08-23T00:00:00-05:00");
   const diff = Math.max(0, launchDate.getTime() - now.getTime());
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
   const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
@@ -1198,10 +1198,10 @@ function LaunchCountdownBanner() {
               </div>
               <div className="text-left">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm sm:text-base font-bold text-white">Signal Launches July 4th</span>
+                  <span className="text-sm sm:text-base font-bold text-white">Signal Launches August 23rd</span>
                   <Flame className="w-3.5 h-3.5 text-orange-400 animate-pulse" />
                 </div>
-                <span className="text-[11px] text-white/40">Independence Day for Trust</span>
+                <span className="text-[11px] text-white/40">One Year. One Vision. Launch Day.</span>
               </div>
             </div>
             

@@ -5,7 +5,7 @@
 
 ## KEY DATES
 - **TGE Launch**: April 11, 2026
-- **Chronicles Mobile PWA (Google Play)**: July 4, 2026
+- **Chronicles Mobile PWA (Google Play)**: August 23, 2026
 
 ---
 
@@ -172,7 +172,7 @@
 
 ## PRIORITY 6: POST-LAUNCH & CHRONICLES FULL (Q2-Q3 2026)
 
-### Chronicles Full Release (July 4, 2026)
+### Chronicles Full Release (August 23, 2026)
 - [ ] 70+ eras live (using era design template)
 - [ ] Parallel Self AI system fully operational
 - [ ] Voice cloning integration
