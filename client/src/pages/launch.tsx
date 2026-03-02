@@ -121,7 +121,7 @@ const LAUNCH_PHASES: LaunchPhase[] = [
   {
     id: "ecosystem",
     name: "Ecosystem & Apps",
-    subtitle: "31 Connected Products",
+    subtitle: "32+ Connected Products",
     dateRange: "March — June 2026",
     icon: <Globe className="w-5 h-5" />,
     image: communityImg,
@@ -138,6 +138,13 @@ const LAUNCH_PHASES: LaunchPhase[] = [
       { id: "e8", title: "Ecosystem Widget", description: "Embeddable widget for any partner app (one script tag)", status: "done", priority: "medium" },
       { id: "e9", title: "External Domains Verified", description: "All 7 primary domains active and routing correctly", status: "done", priority: "critical" },
       { id: "e10", title: "Mobile App (React Native)", description: "iOS App Store and Google Play standalone apps", status: "pending", priority: "medium" },
+      { id: "e11", title: "DWSC Studio IDE", description: "Cloud IDE with Monaco editor, AI Agent Mode, GitHub, Vercel, TrustHub, CI/CD", status: "done", priority: "critical", link: "/studio" },
+      { id: "e12", title: "Studio: Inline AI Autocomplete", description: "Copilot-style code suggestions as you type", status: "pending", priority: "high" },
+      { id: "e13", title: "Studio: Git Diff Viewer", description: "Visual file diff for tracking changes before commit", status: "pending", priority: "medium" },
+      { id: "e14", title: "Studio: Markdown & Image Preview", description: "Rendered preview for .md files and inline image viewer", status: "pending", priority: "medium" },
+      { id: "e15", title: "Studio: Code Formatting", description: "One-click Prettier/Black formatting for JS, TS, Python", status: "pending", priority: "medium" },
+      { id: "e16", title: "Studio: Project Templates Gallery", description: "Expanded template library with community submissions", status: "pending", priority: "medium" },
+      { id: "e17", title: "Studio: Collaborative Editing", description: "Real-time multi-cursor editing with presence indicators", status: "pending", priority: "high" },
     ],
   },
   {

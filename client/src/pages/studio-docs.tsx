@@ -7,7 +7,9 @@ import {
   Keyboard, Search, File, Save, Undo, Redo, Copy, Clipboard,
   Shield, ArrowLeft, CheckCircle2, Lightbulb, AlertCircle,
   Package, Cloud, Users, Zap, Lock, HelpCircle, Link2, Eye,
-  AlertTriangle, Globe, Workflow, Fingerprint
+  AlertTriangle, Globe, Workflow, Fingerprint, RefreshCw,
+  MonitorSmartphone, CreditCard, UserCheck, MessageSquare,
+  Wrench, FileQuestion, Layers, MousePointerClick
 } from "lucide-react";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -1196,6 +1198,500 @@ export default function StudioDocs() {
               </div>
             </div>
           </div>
+        </div>
+      ),
+    },
+    {
+      id: "search-replace",
+      title: "Search & Replace",
+      icon: <Search className="w-5 h-5" />,
+      subsections: [
+        { id: "search-in-file", title: "Finding Text in a File" },
+        { id: "search-project-wide", title: "Project-Wide Search" },
+        { id: "regex-search", title: "Using Regular Expressions" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="search-in-file">
+            <h3 className="text-2xl font-bold text-white mb-4">Finding Text in a File</h3>
+            <p className="text-white/70 mb-4">
+              Press <kbd className="px-2 py-1 bg-white/10 rounded text-sm">Ctrl+F</kbd> to open the find bar inside the Monaco editor. 
+              Type your search term and use the arrows to jump between matches.
+            </p>
+            <div className="space-y-3">
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Replace One at a Time</p>
+                <p className="text-white/60 text-sm">Press <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-xs">Ctrl+H</kbd> to open Find & Replace. Click the replace icon next to each match, or "Replace All" to change them all at once.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Case Sensitivity</p>
+                <p className="text-white/60 text-sm">Click the "Aa" toggle in the find bar to match exact casing. "hello" won't match "Hello" when this is on.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Whole Word Match</p>
+                <p className="text-white/60 text-sm">Click the "Ab" toggle to only match whole words. Searching "log" won't match "logging" or "blog".</p>
+              </GlassCard>
+            </div>
+          </section>
+          <section id="search-project-wide" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Project-Wide Search</h3>
+            <p className="text-white/70 mb-4">
+              Use the Search panel in the left sidebar to find text across all files in your project. 
+              Enter your search term and results will show grouped by file with line numbers.
+            </p>
+            <GlassCard className="p-4 bg-cyan-500/10 border-cyan-500/30">
+              <div className="flex items-start gap-3">
+                <Lightbulb className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                <p className="text-white/60 text-sm">Click any search result to jump directly to that line in the file. The matching text will be highlighted in the editor.</p>
+              </div>
+            </GlassCard>
+          </section>
+          <section id="regex-search" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Using Regular Expressions</h3>
+            <p className="text-white/70 mb-4">
+              Click the ".*" toggle in the find bar to enable regex mode. Regular expressions let you search 
+              for patterns instead of exact text.
+            </p>
+            <div className="space-y-3">
+              <GlassCard className="p-4">
+                <code className="text-cyan-400 font-mono text-sm">\\d+</code>
+                <p className="text-white/60 text-sm mt-1">Matches any number (one or more digits)</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <code className="text-cyan-400 font-mono text-sm">function\\s+\\w+</code>
+                <p className="text-white/60 text-sm mt-1">Matches function declarations like "function myFunc"</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <code className="text-cyan-400 font-mono text-sm">TODO|FIXME|HACK</code>
+                <p className="text-white/60 text-sm mt-1">Matches any of these comment tags</p>
+              </GlassCard>
+            </div>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: "packages-database",
+      title: "Packages & Database",
+      icon: <Package className="w-5 h-5" />,
+      subsections: [
+        { id: "installing-packages", title: "Installing Packages" },
+        { id: "managing-deps", title: "Managing Dependencies" },
+        { id: "database-explorer", title: "Database Explorer" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="installing-packages">
+            <h3 className="text-2xl font-bold text-white mb-4">Installing Packages</h3>
+            <p className="text-white/70 mb-4">
+              The Packages tab in the bottom panel lets you add libraries to your project. Type a package name 
+              and click Install — no terminal commands needed.
+            </p>
+            <div className="space-y-4">
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0">1</div>
+                <div>
+                  <p className="text-white font-medium">Open the Packages Tab</p>
+                  <p className="text-white/60 text-sm">Click "Packages" in the bottom panel tabs</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0">2</div>
+                <div>
+                  <p className="text-white font-medium">Type the Package Name</p>
+                  <p className="text-white/60 text-sm">For example: "axios", "lodash", "moment", "react-icons"</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0">3</div>
+                <div>
+                  <p className="text-white font-medium">Click Install</p>
+                  <p className="text-white/60 text-sm">The package and its dependencies are installed to your project</p>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section id="managing-deps" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Managing Dependencies</h3>
+            <p className="text-white/70 mb-4">
+              Your installed packages are listed in <code className="text-cyan-400">package.json</code> (Node.js) or <code className="text-cyan-400">requirements.txt</code> (Python). 
+              The Packages panel shows all currently installed packages with version numbers.
+            </p>
+            <GlassCard className="p-4 bg-amber-500/10 border-amber-500/30">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                <p className="text-white/60 text-sm">Be careful about removing packages that other packages depend on. If something breaks after removing a package, reinstall it.</p>
+              </div>
+            </GlassCard>
+          </section>
+          <section id="database-explorer" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Database Explorer</h3>
+            <p className="text-white/70 mb-4">
+              The Database tab lets you run SQL queries directly from Studio. Write your query and click Run 
+              to see results in a formatted table.
+            </p>
+            <div className="space-y-3">
+              <GlassCard className="p-4">
+                <code className="text-cyan-400 font-mono text-sm">SELECT * FROM users LIMIT 10;</code>
+                <p className="text-white/60 text-sm mt-2">View the first 10 rows of the users table</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <code className="text-cyan-400 font-mono text-sm">INSERT INTO notes (title, body) VALUES ('Hello', 'World');</code>
+                <p className="text-white/60 text-sm mt-2">Add a new row to the notes table</p>
+              </GlassCard>
+            </div>
+            <p className="text-white/50 text-sm mt-3">
+              The database explorer is available for projects with a PostgreSQL database configured.
+            </p>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: "account-auth",
+      title: "Your Account",
+      icon: <UserCheck className="w-5 h-5" />,
+      subsections: [
+        { id: "free-vs-signed-in", title: "Free vs Signed-In" },
+        { id: "credits-system", title: "Credits & Billing" },
+        { id: "custom-domains", title: "Custom Domains" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="free-vs-signed-in">
+            <h3 className="text-2xl font-bold text-white mb-4">Free vs Signed-In</h3>
+            <p className="text-white/70 mb-4">
+              You can start coding immediately without creating an account. Here's what's available at each level:
+            </p>
+            <div className="grid gap-4 md:grid-cols-2">
+              <GlassCard className="p-4 bg-white/5">
+                <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+                  <Globe className="w-4 h-4 text-cyan-400" />
+                  Without Account
+                </h4>
+                <ul className="text-white/60 text-sm space-y-2">
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" /><span>Full code editor with all features</span></li>
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" /><span>Run code and see output</span></li>
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" /><span>All 8 project templates</span></li>
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" /><span>File explorer, terminal, preview</span></li>
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" /><span>Command Palette and Split View</span></li>
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-green-400 mt-0.5 flex-shrink-0" /><span>Search & Replace</span></li>
+                </ul>
+              </GlassCard>
+              <GlassCard className="p-4 bg-gradient-to-br from-cyan-500/10 to-purple-500/10">
+                <h4 className="text-white font-semibold mb-3 flex items-center gap-2">
+                  <Lock className="w-4 h-4 text-cyan-400" />
+                  With Account (Free)
+                </h4>
+                <ul className="text-white/60 text-sm space-y-2">
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" /><span>Everything above, plus:</span></li>
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" /><span>Save projects to the cloud</span></li>
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" /><span>AI Assistant and Agent Mode</span></li>
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" /><span>GitHub and Vercel integration</span></li>
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" /><span>TrustHub blockchain stamps</span></li>
+                  <li className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" /><span>Deploy to production</span></li>
+                </ul>
+              </GlassCard>
+            </div>
+          </section>
+          <section id="credits-system" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Credits & Billing</h3>
+            <p className="text-white/70 mb-4">
+              AI features use credits. You start with free credits when you create an account, and can purchase 
+              more from the Credits panel in the right sidebar.
+            </p>
+            <div className="space-y-3">
+              <GlassCard className="p-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-white font-medium">AI Chat</span>
+                  <Badge variant="outline" className="bg-green-500/10 text-green-400 border-green-500/30">$0.05 per request</Badge>
+                </div>
+                <p className="text-white/60 text-sm mt-2">Ask questions, get code suggestions, debug errors</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-white font-medium">Agent Mode</span>
+                  <Badge variant="outline" className="bg-amber-500/10 text-amber-400 border-amber-500/30">$0.25 per session</Badge>
+                </div>
+                <p className="text-white/60 text-sm mt-2">Autonomous multi-file coding, refactoring, feature building</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-white font-medium">Credit Packs</span>
+                  <Badge variant="outline" className="bg-cyan-500/10 text-cyan-400 border-cyan-500/30">From $5</Badge>
+                </div>
+                <p className="text-white/60 text-sm mt-2">Buy credits in packs of $5, $10, $25, or $50</p>
+              </GlassCard>
+            </div>
+          </section>
+          <section id="custom-domains" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Custom Domains</h3>
+            <p className="text-white/70 mb-4">
+              In the Deploy tab, you can configure a custom domain for your deployed project. 
+              Enter your domain name, then update your DNS records to point to the provided deployment URL.
+            </p>
+            <GlassCard className="p-4 bg-cyan-500/10 border-cyan-500/30">
+              <div className="flex items-start gap-3">
+                <Lightbulb className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                <p className="text-white/60 text-sm">Custom domains work with both Vercel deployments and direct Studio deploys. SSL certificates are provisioned automatically.</p>
+              </div>
+            </GlassCard>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: "troubleshooting",
+      title: "Troubleshooting & FAQ",
+      icon: <Wrench className="w-5 h-5" />,
+      subsections: [
+        { id: "common-issues", title: "Common Issues" },
+        { id: "faq", title: "Frequently Asked Questions" },
+        { id: "getting-help", title: "Getting Help" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="common-issues">
+            <h3 className="text-2xl font-bold text-white mb-4">Common Issues</h3>
+            <div className="space-y-4">
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">My code won't run</p>
+                <ul className="text-white/60 text-sm space-y-1">
+                  <li>• Check the Problems panel for syntax errors (red items)</li>
+                  <li>• Make sure you saved the file (Ctrl+S) before running</li>
+                  <li>• Check the console output for error messages</li>
+                  <li>• If using Node.js, make sure dependencies are installed (npm install)</li>
+                </ul>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Preview is blank or not loading</p>
+                <ul className="text-white/60 text-sm space-y-1">
+                  <li>• Click the refresh button in the preview panel</li>
+                  <li>• Make sure your HTML file has the correct structure</li>
+                  <li>• Check that file references (CSS, JS) match your actual filenames</li>
+                  <li>• For React/Vue projects, make sure the dev server is running</li>
+                </ul>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">AI Assistant isn't responding</p>
+                <ul className="text-white/60 text-sm space-y-1">
+                  <li>• Make sure you're signed in (AI requires authentication)</li>
+                  <li>• Check your credit balance in the Credits panel</li>
+                  <li>• Try refreshing the page if the connection was interrupted</li>
+                  <li>• If the loading spinner persists, click "Clear" and try again</li>
+                </ul>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">GitHub push failed</p>
+                <ul className="text-white/60 text-sm space-y-1">
+                  <li>• Verify your GitHub connection in the Integrations Hub (green dot = connected)</li>
+                  <li>• Make sure you selected a target repository</li>
+                  <li>• Check that you have write access to the selected repo</li>
+                  <li>• Try disconnecting and reconnecting your GitHub account</li>
+                </ul>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Vercel deployment failed</p>
+                <ul className="text-white/60 text-sm space-y-1">
+                  <li>• Verify your Vercel token is valid and hasn't expired</li>
+                  <li>• Check the build logs in the Deploy tab for specific errors</li>
+                  <li>• Make sure your project has a valid build configuration</li>
+                  <li>• Go to vercel.com/account/tokens to regenerate your token if needed</li>
+                </ul>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Files disappeared or project is empty</p>
+                <ul className="text-white/60 text-sm space-y-1">
+                  <li>• If you weren't signed in, your work is stored in the browser session only</li>
+                  <li>• Sign in to save projects permanently to the cloud</li>
+                  <li>• Check the file explorer — files might be inside a folder</li>
+                  <li>• Use the "My Projects" page to access saved projects</li>
+                </ul>
+              </GlassCard>
+            </div>
+          </section>
+          <section id="faq" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Frequently Asked Questions</h3>
+            <div className="space-y-4">
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Do I need to install anything?</p>
+                <p className="text-white/60 text-sm">No. Trust Layer Studio runs entirely in your browser. Just open it and start coding.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">What programming languages are supported?</p>
+                <p className="text-white/60 text-sm">The editor supports syntax highlighting for JavaScript, TypeScript, Python, HTML, CSS, JSON, Markdown, Go, Rust, SQL, and many more. Templates are available for React, Node.js, Python, Vue, Next.js, Django, Go, and Rust.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Is my code private?</p>
+                <p className="text-white/60 text-sm">Yes. Your projects are stored securely and only accessible to you. When you push to GitHub, your repo privacy settings determine who else can see it.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">What is a TrustHub stamp?</p>
+                <p className="text-white/60 text-sm">It's a blockchain-verified fingerprint of your code at a specific point in time. It proves when your code existed and what it contained — useful for IP protection and audit trails.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Can I use Studio on my phone?</p>
+                <p className="text-white/60 text-sm">Yes, Studio is mobile-responsive. The layout adapts to smaller screens with a collapsible sidebar and bottom toolbar. For the best experience, we recommend using a tablet or desktop.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">How is this different from VS Code?</p>
+                <p className="text-white/60 text-sm">Studio uses the same Monaco editor engine as VS Code, so the editing experience is similar. The key difference is that Studio runs in your browser with built-in AI, GitHub, Vercel, and blockchain code provenance — no installation or configuration needed.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Can I collaborate with others in real-time?</p>
+                <p className="text-white/60 text-sm">Real-time collaborative editing is on our roadmap. For now, you can share projects by pushing to GitHub and having collaborators clone from there.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">What does Agent Mode do exactly?</p>
+                <p className="text-white/60 text-sm">Agent Mode lets the AI read all your project files, plan changes, and execute them across multiple files autonomously. Instead of answering one question, it works like a developer — analyzing, coding, and iterating until the task is done. You approve changes before they're applied.</p>
+              </GlassCard>
+            </div>
+          </section>
+          <section id="getting-help" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Getting Help</h3>
+            <div className="space-y-3">
+              <GlassCard className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <Sparkles className="w-5 h-5 text-pink-400" />
+                  <span className="text-white font-medium">Ask the AI Assistant</span>
+                </div>
+                <p className="text-white/60 text-sm">The AI can debug your code, explain errors, and suggest fixes. Paste your error message for the best results.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <BookOpen className="w-5 h-5 text-cyan-400" />
+                  <span className="text-white font-medium">Read This Documentation</span>
+                </div>
+                <p className="text-white/60 text-sm">You're already here! Browse the sections in the sidebar to learn about every feature.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <MessageSquare className="w-5 h-5 text-purple-400" />
+                  <span className="text-white font-medium">Contact Support</span>
+                </div>
+                <p className="text-white/60 text-sm">Email team@dwsc.io for account issues, bug reports, or feature requests. We typically respond within 24 hours.</p>
+              </GlassCard>
+            </div>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: "best-practices",
+      title: "Best Practices",
+      icon: <Layers className="w-5 h-5" />,
+      subsections: [
+        { id: "writing-clean-code", title: "Writing Clean Code" },
+        { id: "project-structure", title: "Project Structure Tips" },
+        { id: "workflow-tips", title: "Efficient Workflow" },
+        { id: "security-tips", title: "Security Basics" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="writing-clean-code">
+            <h3 className="text-2xl font-bold text-white mb-4">Writing Clean Code</h3>
+            <div className="space-y-3">
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Use Descriptive Names</p>
+                <p className="text-white/60 text-sm">Name variables and functions clearly: <code className="text-cyan-400">getUserEmail()</code> is better than <code className="text-white/40">getData()</code>. Someone reading your code (including future you) should understand what each name means.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Keep Functions Small</p>
+                <p className="text-white/60 text-sm">Each function should do one thing. If a function is longer than 20-30 lines, consider breaking it into smaller pieces.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Comment the "Why", Not the "What"</p>
+                <p className="text-white/60 text-sm">Good code is self-explanatory about what it does. Use comments to explain why you made a particular decision, not to describe obvious operations.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Handle Errors</p>
+                <p className="text-white/60 text-sm">Always wrap API calls and file operations in try/catch blocks. Show meaningful error messages to users instead of letting the app crash silently.</p>
+              </GlassCard>
+            </div>
+          </section>
+          <section id="project-structure" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Project Structure Tips</h3>
+            <ul className="space-y-3">
+              <li className="flex items-start gap-3">
+                <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 flex-shrink-0 mt-0.5">1</div>
+                <div>
+                  <p className="text-white">Separate concerns</p>
+                  <p className="text-white/50 text-sm">Keep HTML, CSS, and JavaScript in separate files. In React, separate components, pages, and utilities into different folders.</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 flex-shrink-0 mt-0.5">2</div>
+                <div>
+                  <p className="text-white">One component per file</p>
+                  <p className="text-white/50 text-sm">In React/Vue projects, each component should have its own file. This makes them easy to find and reuse.</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 flex-shrink-0 mt-0.5">3</div>
+                <div>
+                  <p className="text-white">Use consistent naming</p>
+                  <p className="text-white/50 text-sm">Pick a convention and stick with it: camelCase for JavaScript, kebab-case for files, PascalCase for components.</p>
+                </div>
+              </li>
+              <li className="flex items-start gap-3">
+                <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 flex-shrink-0 mt-0.5">4</div>
+                <div>
+                  <p className="text-white">Keep configs at the root</p>
+                  <p className="text-white/50 text-sm">Files like package.json, tsconfig.json, and .gitignore belong at the project root, not inside src/.</p>
+                </div>
+              </li>
+            </ul>
+          </section>
+          <section id="workflow-tips" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Efficient Workflow</h3>
+            <div className="space-y-3">
+              <GlassCard className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <Keyboard className="w-5 h-5 text-cyan-400" />
+                  <span className="text-white font-medium">Master Keyboard Shortcuts</span>
+                </div>
+                <p className="text-white/60 text-sm">Learn Ctrl+K (Command Palette), Ctrl+S (Save), Ctrl+F (Find), and Ctrl+I (AI). These four shortcuts alone will double your speed.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <RefreshCw className="w-5 h-5 text-green-400" />
+                  <span className="text-white font-medium">Save Often, Commit Often</span>
+                </div>
+                <p className="text-white/60 text-sm">Save after every meaningful change. Push to GitHub at the end of each coding session. Small, frequent commits are better than one giant one.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <Sparkles className="w-5 h-5 text-pink-400" />
+                  <span className="text-white font-medium">Use AI Strategically</span>
+                </div>
+                <p className="text-white/60 text-sm">Use Chat mode for quick questions. Switch to Agent Mode for bigger tasks like building a new feature or refactoring across files. Be specific in your prompts for better results.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <Code className="w-5 h-5 text-purple-400" />
+                  <span className="text-white font-medium">Use Split View for Reference</span>
+                </div>
+                <p className="text-white/60 text-sm">Open your main file in one pane and a reference file (API docs, types, tests) in the other. This eliminates tab-switching.</p>
+              </GlassCard>
+            </div>
+          </section>
+          <section id="security-tips" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Security Basics</h3>
+            <div className="space-y-3">
+              <GlassCard className="p-4 bg-red-500/10 border-red-500/30">
+                <p className="text-white font-medium mb-2">Never hardcode secrets</p>
+                <p className="text-white/60 text-sm">API keys, passwords, and tokens should never appear in your code. Use environment variables instead. If you accidentally commit a secret, rotate it immediately.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Validate user input</p>
+                <p className="text-white/60 text-sm">Never trust data from users or external sources. Always validate and sanitize input before using it in queries, HTML, or file operations.</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Use HTTPS</p>
+                <p className="text-white/60 text-sm">All Studio deployments use HTTPS by default. When calling external APIs, always use https:// URLs, never http://.</p>
+              </GlassCard>
+            </div>
+          </section>
         </div>
       ),
     },
