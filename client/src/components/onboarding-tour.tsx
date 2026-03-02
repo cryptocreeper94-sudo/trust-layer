@@ -23,8 +23,12 @@ const steps: Step[] = [
     description: "Plug into verified networks for staffing, construction, real estate, events, and more. Your reputation follows you. Bad actors have nowhere to hide.",
   },
   {
-    title: "Build With Us",
-    description: "Use our Studio IDE to build on the Trust Layer. Access documentation, deploy apps, and join a network of verified participants.",
+    title: "Build in DWSC Studio",
+    description: "Our cloud IDE features an AI Agent Mode (Ctrl+Shift+K) that builds across your entire project autonomously. Connect GitHub, deploy to Vercel, and stamp your code on the blockchain with TrustHub — all from one workspace.",
+  },
+  {
+    title: "Integrations & Live Preview",
+    description: "Push to GitHub, deploy to Vercel, and run CI/CD pipelines right from Studio. The live preview auto-refreshes when you save, and the Problems panel catches errors in real time.",
   },
   {
     title: "The Presale is Live",

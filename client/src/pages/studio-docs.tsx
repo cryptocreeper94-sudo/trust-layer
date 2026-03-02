@@ -6,7 +6,8 @@ import {
   Sparkles, FolderTree, Settings, Play, ChevronDown, ChevronRight,
   Keyboard, Search, File, Save, Undo, Redo, Copy, Clipboard,
   Shield, ArrowLeft, CheckCircle2, Lightbulb, AlertCircle,
-  Package, Cloud, Users, Zap, Lock, HelpCircle
+  Package, Cloud, Users, Zap, Lock, HelpCircle, Link2, Eye,
+  AlertTriangle, Globe, Workflow, Fingerprint
 } from "lucide-react";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
@@ -363,6 +364,8 @@ export default function StudioDocs() {
         { id: "ai-basics", title: "Using AI Help" },
         { id: "ai-tips", title: "Tips for Better Results" },
         { id: "ai-credits", title: "Understanding Credits" },
+        { id: "agent-mode", title: "Agent Mode" },
+        { id: "apply-code", title: "Apply Code from AI" },
       ],
       content: (
         <div className="space-y-8">
@@ -708,6 +711,388 @@ export default function StudioDocs() {
                 <div>
                   <p className="text-white font-medium">Share Your URL!</p>
                   <p className="text-white/60 text-sm">Your app is live. Copy the URL and share it with the world</p>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: "github-integration",
+      title: "GitHub Integration",
+      icon: <GitBranch className="w-5 h-5" />,
+      subsections: [
+        { id: "github-connect", title: "Connecting Your GitHub" },
+        { id: "github-repos", title: "Working with Repos" },
+        { id: "github-push", title: "Pushing Changes" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="github-connect">
+            <h3 className="text-2xl font-bold text-white mb-4">Connecting Your GitHub</h3>
+            <p className="text-white/70 mb-4">
+              Link your GitHub account to push code directly from Studio to your repositories. 
+              This lets you version control your work and collaborate with others.
+            </p>
+            <div className="space-y-4">
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0">1</div>
+                <div>
+                  <p className="text-white font-medium">Open Integrations Hub</p>
+                  <p className="text-white/60 text-sm">Click the link icon in the toolbar or use the Command Palette and search "Integrations"</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0">2</div>
+                <div>
+                  <p className="text-white font-medium">Click "Connect" on GitHub</p>
+                  <p className="text-white/60 text-sm">You'll be redirected to GitHub to authorize access to your account</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-green-500/20 flex items-center justify-center text-green-400 flex-shrink-0">
+                  <CheckCircle2 className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-white font-medium">You're Connected</p>
+                  <p className="text-white/60 text-sm">The status bar at the bottom will show a green dot next to "GitHub"</p>
+                </div>
+              </div>
+            </div>
+            <GlassCard className="p-4 bg-amber-500/10 border-amber-500/30 mt-4">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <p className="text-white font-medium">Setup Required</p>
+                  <p className="text-white/60 text-sm">GitHub integration requires a GitHub OAuth App to be configured by the platform admin. Contact team@dwsc.io if the Connect button shows "Configure".</p>
+                </div>
+              </div>
+            </GlassCard>
+          </section>
+
+          <section id="github-repos" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Working with Repos</h3>
+            <p className="text-white/70 mb-4">
+              Once connected, you can browse your repositories and select one to push code to.
+            </p>
+            <ul className="space-y-2 text-white/70">
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-green-400 mt-1 flex-shrink-0" />
+                <span>Open the Integrations Hub and click "View Repos" under GitHub</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-green-400 mt-1 flex-shrink-0" />
+                <span>Click on a repository to select it as your active repo</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-green-400 mt-1 flex-shrink-0" />
+                <span>The selected repo will be highlighted in cyan with a checkmark</span>
+              </li>
+            </ul>
+          </section>
+
+          <section id="github-push" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Pushing Changes</h3>
+            <p className="text-white/70 mb-4">
+              Push your project files to GitHub with one click. Use the Git tab in the bottom panel 
+              or the Command Palette.
+            </p>
+            <div className="space-y-3">
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">From the Git Tab</p>
+                <p className="text-white/60 text-sm">Write a commit message in the Git panel at the bottom, then click "Push"</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">From Command Palette</p>
+                <p className="text-white/60 text-sm">Press Ctrl+K, search "Push to GitHub", and hit Enter</p>
+              </GlassCard>
+            </div>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: "vercel-deploy",
+      title: "Vercel Deploy",
+      icon: <Cloud className="w-5 h-5" />,
+      subsections: [
+        { id: "vercel-connect", title: "Connecting Vercel" },
+        { id: "vercel-deploying", title: "Deploying Your App" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="vercel-connect">
+            <h3 className="text-2xl font-bold text-white mb-4">Connecting Vercel</h3>
+            <p className="text-white/70 mb-4">
+              Deploy your projects to Vercel directly from Studio. You'll need a Vercel API token.
+            </p>
+            <div className="space-y-4">
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0">1</div>
+                <div>
+                  <p className="text-white font-medium">Get a Vercel Token</p>
+                  <p className="text-white/60 text-sm">Go to vercel.com → Settings → Tokens → Create new token</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0">2</div>
+                <div>
+                  <p className="text-white font-medium">Open Integrations Hub</p>
+                  <p className="text-white/60 text-sm">Click the link icon in the toolbar or press Ctrl+K and search "Integrations"</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0">3</div>
+                <div>
+                  <p className="text-white font-medium">Paste Your Token</p>
+                  <p className="text-white/60 text-sm">Enter your token in the Vercel section and click Connect</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="vercel-deploying" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Deploying Your App</h3>
+            <p className="text-white/70 mb-4">
+              Once connected, deploy with one click from the Deploy tab or Command Palette.
+            </p>
+            <GlassCard className="p-4 bg-green-500/10 border-green-500/30">
+              <p className="text-white font-medium mb-2">After deploying:</p>
+              <ul className="text-white/60 text-sm space-y-1">
+                <li>• Your app goes through build → ready → live stages</li>
+                <li>• The deployment URL appears in the Deploy tab</li>
+                <li>• Build logs show in real-time</li>
+                <li>• The status bar shows deployment progress</li>
+              </ul>
+            </GlassCard>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: "live-preview",
+      title: "Live Preview",
+      icon: <Globe className="w-5 h-5" />,
+      subsections: [
+        { id: "preview-start", title: "Starting the Preview" },
+        { id: "preview-auto", title: "Auto-Refresh on Save" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="preview-start">
+            <h3 className="text-2xl font-bold text-white mb-4">Starting the Preview</h3>
+            <p className="text-white/70 mb-4">
+              The right panel shows a live preview of your web project. Click the play button 
+              or use the "Start Preview" button to launch the dev server.
+            </p>
+            <div className="space-y-3">
+              <GlassCard className="p-4">
+                <p className="text-white font-medium mb-2">Preview Controls</p>
+                <ul className="text-white/60 text-sm space-y-1">
+                  <li>• <span className="text-green-400">▶ Play</span> — Start the dev server</li>
+                  <li>• <span className="text-cyan-400">↻ Refresh</span> — Reload the preview</li>
+                  <li>• <span className="text-red-400">■ Stop</span> — Stop the dev server</li>
+                  <li>• <span className="text-white/60">↗ External</span> — Open in a new browser tab</li>
+                </ul>
+              </GlassCard>
+            </div>
+          </section>
+
+          <section id="preview-auto" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Auto-Refresh on Save</h3>
+            <p className="text-white/70 mb-4">
+              When the preview is running and you save a file (Ctrl+S), the preview automatically 
+              refreshes to show your latest changes. No manual refresh needed.
+            </p>
+            <GlassCard className="p-4 bg-cyan-500/10 border-cyan-500/30">
+              <div className="flex items-start gap-3">
+                <Lightbulb className="w-5 h-5 text-cyan-400 flex-shrink-0 mt-0.5" />
+                <p className="text-white/60 text-sm">The green dot next to "Preview" in the panel header means the dev server is running and responding.</p>
+              </div>
+            </GlassCard>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: "problems-diagnostics",
+      title: "Problems & Diagnostics",
+      icon: <AlertTriangle className="w-5 h-5" />,
+      subsections: [
+        { id: "diagnostics-panel", title: "The Problems Panel" },
+        { id: "diagnostics-lint", title: "Linting on Save" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="diagnostics-panel">
+            <h3 className="text-2xl font-bold text-white mb-4">The Problems Panel</h3>
+            <p className="text-white/70 mb-4">
+              The Problems tab in the bottom panel shows errors, warnings, and info messages 
+              from your code. Click the tab to see all issues across your project.
+            </p>
+            <div className="space-y-3">
+              <GlassCard className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-4 h-4 rounded bg-red-500/20 flex items-center justify-center">
+                    <span className="text-red-400 text-xs">✕</span>
+                  </div>
+                  <span className="text-white font-medium">Errors (Red)</span>
+                </div>
+                <p className="text-white/60 text-sm">Code that won't work — must fix before running</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-4 h-4 rounded bg-amber-500/20 flex items-center justify-center">
+                    <AlertTriangle className="w-2.5 h-2.5 text-amber-400" />
+                  </div>
+                  <span className="text-white font-medium">Warnings (Amber)</span>
+                </div>
+                <p className="text-white/60 text-sm">Potential issues — code works but could cause problems</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-4 h-4 rounded bg-blue-500/20 flex items-center justify-center">
+                    <span className="text-blue-400 text-xs">i</span>
+                  </div>
+                  <span className="text-white font-medium">Info (Blue)</span>
+                </div>
+                <p className="text-white/60 text-sm">Suggestions to improve your code style or performance</p>
+              </GlassCard>
+            </div>
+          </section>
+
+          <section id="diagnostics-lint" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Linting on Save</h3>
+            <p className="text-white/70 mb-4">
+              Every time you save a file, Studio automatically runs lint checks and updates 
+              the Problems panel. The tab shows error/warning counts so you can spot issues at a glance.
+            </p>
+            <GlassCard className="p-4 bg-purple-500/10 border-purple-500/30">
+              <div className="flex items-start gap-3">
+                <Zap className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                <p className="text-white/60 text-sm">You can also run lint manually by clicking the "Lint" button in the Problems panel or using the Command Palette (Ctrl+K → "Run Lint Check").</p>
+              </div>
+            </GlassCard>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: "integrations-hub",
+      title: "Integrations Hub",
+      icon: <Link2 className="w-5 h-5" />,
+      subsections: [
+        { id: "hub-overview", title: "Overview" },
+        { id: "hub-status", title: "Status Bar" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="hub-overview">
+            <h3 className="text-2xl font-bold text-white mb-4">Integrations Hub</h3>
+            <p className="text-white/70 mb-4">
+              The Integrations Hub is your central dashboard for connecting external services. 
+              Open it by clicking the link icon in the toolbar or pressing Ctrl+K and searching "Integrations".
+            </p>
+            <div className="space-y-3">
+              <GlassCard className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <GitBranch className="w-5 h-5 text-white" />
+                  <span className="text-white font-medium">GitHub</span>
+                </div>
+                <p className="text-white/60 text-sm">Connect, browse repos, select active repo, push code</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <Rocket className="w-5 h-5 text-white" />
+                  <span className="text-white font-medium">Vercel</span>
+                </div>
+                <p className="text-white/60 text-sm">Connect with API token, deploy projects, view deployment URLs</p>
+              </GlassCard>
+              <GlassCard className="p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <Fingerprint className="w-5 h-5 text-indigo-400" />
+                  <span className="text-white font-medium">TrustHub</span>
+                </div>
+                <p className="text-white/60 text-sm">Built-in blockchain code provenance — always active</p>
+              </GlassCard>
+            </div>
+          </section>
+
+          <section id="hub-status" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Status Bar</h3>
+            <p className="text-white/70 mb-4">
+              The status bar at the very bottom of Studio shows connection indicators for all integrations:
+            </p>
+            <ul className="space-y-2 text-white/70">
+              <li className="flex items-start gap-2">
+                <div className="w-2 h-2 rounded-full bg-green-400 mt-1.5 flex-shrink-0" />
+                <span>Green dot = connected and active</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <div className="w-2 h-2 rounded-full bg-gray-600 mt-1.5 flex-shrink-0" />
+                <span>Gray dot = not connected</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <div className="w-2 h-2 rounded-full bg-indigo-400 mt-1.5 flex-shrink-0" />
+                <span>Purple dot = TrustHub (always active)</span>
+              </li>
+            </ul>
+            <p className="text-white/50 text-sm mt-3">
+              The status bar also shows the current file type, encoding, and Studio version.
+            </p>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: "cicd-pipelines",
+      title: "CI/CD Pipelines",
+      icon: <Workflow className="w-5 h-5" />,
+      subsections: [
+        { id: "cicd-what", title: "What is CI/CD?" },
+        { id: "cicd-run", title: "Running Pipelines" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="cicd-what">
+            <h3 className="text-2xl font-bold text-white mb-4">What is CI/CD?</h3>
+            <p className="text-white/70 mb-4">
+              CI/CD (Continuous Integration / Continuous Deployment) automatically builds, tests, 
+              and deploys your code. Studio includes a real pipeline runner — not a simulation.
+            </p>
+            <GlassCard className="p-4 bg-cyan-500/10 border-cyan-500/30">
+              <p className="text-white font-medium mb-2">Pipeline Templates</p>
+              <ul className="text-white/60 text-sm space-y-1">
+                <li>• <span className="text-white">Node.js Standard</span> — install → lint → test → build</li>
+                <li>• <span className="text-white">Python</span> — install → pytest</li>
+                <li>• <span className="text-white">Rust</span> — cargo check → cargo test → cargo build</li>
+              </ul>
+            </GlassCard>
+          </section>
+
+          <section id="cicd-run" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Running Pipelines</h3>
+            <div className="space-y-4">
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0">1</div>
+                <div>
+                  <p className="text-white font-medium">Open the CI/CD Tab</p>
+                  <p className="text-white/60 text-sm">Click "CI/CD" in the bottom panel tabs</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0">2</div>
+                <div>
+                  <p className="text-white font-medium">Choose or Create a Pipeline</p>
+                  <p className="text-white/60 text-sm">Select from existing pipelines or create from a template</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-8 h-8 rounded-full bg-cyan-500/20 flex items-center justify-center text-cyan-400 font-bold flex-shrink-0">3</div>
+                <div>
+                  <p className="text-white font-medium">Click "Run Pipeline"</p>
+                  <p className="text-white/60 text-sm">Each step runs with real output — you'll see pass/fail for each step with timing</p>
                 </div>
               </div>
             </div>

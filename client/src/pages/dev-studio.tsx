@@ -19,21 +19,23 @@ const systemStats = [
 ];
 
 const ideFeatures = [
-  { title: "AI Agent Mode", desc: "GPT-4o powered autonomous coding agent", icon: Brain },
-  { title: "Live Deploy", desc: "One-click to devnet/mainnet", icon: Rocket },
-  { title: "Command Palette", desc: "Ctrl+K to find any action instantly", icon: Zap },
-  { title: "TrustHub Provenance", desc: "Blockchain-verified code stamps", icon: Shield },
-  { title: "Split View Editor", desc: "Edit two files side by side", icon: Code2 },
-  { title: "Real CI/CD Runner", desc: "Node.js, Python, Rust pipelines", icon: Workflow },
-  { title: "Version Control", desc: "Built-in Git integration", icon: GitBranch },
-  { title: "Cloud Workspaces", desc: "Isolated dev environments", icon: Cloud },
+  { title: "AI Agent Mode", desc: "GPT-4o autonomous coding agent", icon: Brain, live: true },
+  { title: "GitHub + Vercel", desc: "Push & deploy in one click", icon: Rocket, live: true },
+  { title: "Command Palette", desc: "Ctrl+K to find any action", icon: Zap, live: true },
+  { title: "TrustHub Provenance", desc: "Blockchain-verified code stamps", icon: Shield, live: true },
+  { title: "Split View Editor", desc: "Edit two files side by side", icon: Code2, live: true },
+  { title: "Real CI/CD Runner", desc: "Node.js, Python, Rust pipelines", icon: Workflow, live: true },
+  { title: "Live Preview", desc: "Auto-refresh on save", icon: Eye, live: true },
+  { title: "Problems Panel", desc: "Auto-lint errors & warnings", icon: Activity, live: true },
 ];
 
 const carouselSlides = [
   { title: "Agent Mode", desc: "Describe a task and the AI builds it autonomously across your project" },
+  { title: "GitHub + Vercel", desc: "Connect your GitHub, select a repo, push code, and deploy to Vercel in one flow" },
   { title: "TrustHub Stamps", desc: "Blockchain-verified code provenance with every save" },
+  { title: "Live Preview", desc: "Auto-refreshing preview panel with start/stop/restart controls" },
+  { title: "Problems Panel", desc: "Auto-lint on save with error, warning, and info diagnostics" },
   { title: "Real CI/CD", desc: "Run real build, test, and deploy pipelines — not simulations" },
-  { title: "Command Palette", desc: "Ctrl+K brings every action to your fingertips" },
 ];
 
 function GlassCard({ 
@@ -222,10 +224,11 @@ export default function DevStudio() {
             <span className="font-display font-bold text-lg tracking-tight">Trust Layer</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Badge variant="outline" className="border-primary/50 text-primary text-[10px] px-2 py-0.5">
-              <Sparkles className="w-2.5 h-2.5 mr-1" />
-              Coming Soon
-            </Badge>
+            <Link href="/studio">
+              <Button size="sm" className="h-8 bg-primary text-background hover:bg-primary/90 font-semibold text-xs">
+                Open Studio
+              </Button>
+            </Link>
           </div>
         </div>
       </header>
@@ -259,7 +262,7 @@ export default function DevStudio() {
               transition={{ delay: 0.2 }}
               className="text-sm text-muted-foreground mb-6 max-w-lg mx-auto"
             >
-              AI-powered cloud IDE for blockchain developers. Write, test, and deploy smart contracts.
+              AI-powered cloud IDE with autonomous Agent Mode, GitHub integration, Vercel deploys, TrustHub blockchain provenance, and real CI/CD pipelines. All live now.
             </motion.p>
 
             <motion.div 
@@ -392,11 +395,14 @@ export default function DevStudio() {
             </GlassCard>
 
             {ideFeatures.map((feature, i) => (
-              <GlassCard key={i}>
+              <GlassCard key={i} locked={false}>
                 <div className="h-full p-4 flex flex-col justify-center">
-                  <feature.icon className={`w-5 h-5 mb-2 ${
-                    i === 0 ? 'text-purple-400' : i === 1 ? 'text-yellow-400' : i === 2 ? 'text-cyan-400' : 'text-pink-400'
-                  }`} />
+                  <div className="flex items-center justify-between mb-1">
+                    <feature.icon className={`w-5 h-5 ${
+                      i === 0 ? 'text-purple-400' : i === 1 ? 'text-yellow-400' : i === 2 ? 'text-cyan-400' : i === 3 ? 'text-indigo-400' : 'text-pink-400'
+                    }`} />
+                    {feature.live && <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 font-bold uppercase">Live</span>}
+                  </div>
                   <div className="text-xs font-bold text-white">{feature.title}</div>
                   <div className="text-[10px] text-white/40 mt-0.5">{feature.desc}</div>
                 </div>
@@ -410,20 +416,22 @@ export default function DevStudio() {
                 <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-secondary/5" />
                 <div className="relative z-10">
                   <Workflow className="w-10 h-10 text-primary mx-auto mb-4" />
-                  <h2 className="text-xl md:text-2xl font-display font-bold mb-2">Be First in Line</h2>
+                  <h2 className="text-xl md:text-2xl font-display font-bold mb-2">Start Building Now</h2>
                   <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
-                    Join the waitlist for exclusive early access when Dev Studio launches.
+                    DWSC Studio is live. Sign in and start building with AI Agent Mode, GitHub, Vercel, and TrustHub.
                   </p>
                   <div className="flex flex-wrap items-center justify-center gap-2">
-                    <Badge className="bg-primary/20 text-primary border-primary/30 text-xs">
-                      <Sparkles className="w-3 h-3 mr-1" />
-                      Early Access
-                    </Badge>
+                    <Link href="/studio">
+                      <Badge className="bg-primary/20 text-primary border-primary/30 text-xs cursor-pointer hover:bg-primary/30 transition-colors">
+                        <Sparkles className="w-3 h-3 mr-1" />
+                        Open Studio
+                      </Badge>
+                    </Link>
                     <Badge className="bg-white/10 text-white border-white/20 text-xs">
                       Free for SIG Holders
                     </Badge>
                     <Badge className="bg-green-500/20 text-green-400 border-green-500/30 text-xs">
-                      SOC2 Compliant
+                      All Features Live
                     </Badge>
                   </div>
                 </div>
