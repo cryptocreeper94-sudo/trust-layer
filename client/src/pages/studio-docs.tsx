@@ -423,20 +423,167 @@ export default function StudioDocs() {
             <h3 className="text-2xl font-bold text-white mb-4">Understanding Credits</h3>
             <GlassCard className="p-4 bg-purple-500/10 border-purple-500/30">
               <p className="text-white/70 mb-3">
-                AI features use credits. Each message costs credits based on complexity. 
-                You can see your credit balance in the assistant panel.
+                AI features use credits. Each request costs credits based on the mode you use.
               </p>
-              <div className="flex items-center gap-4 text-sm">
+              <div className="flex items-center gap-4 text-sm flex-wrap">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                  <span className="text-white/60">Simple question: ~1 credit</span>
+                  <span className="text-white/60">Chat mode: $0.05/request</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                  <span className="text-white/60">Code generation: ~5 credits</span>
+                  <div className="w-3 h-3 rounded-full bg-amber-500"></div>
+                  <span className="text-white/60">Agent mode: $0.25/session</span>
                 </div>
               </div>
             </GlassCard>
+          </section>
+
+          <section id="agent-mode" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Agent Mode</h3>
+            <p className="text-white/70 mb-4">
+              Agent Mode transforms the AI from a simple chat assistant into an autonomous developer. 
+              Toggle it on in the AI panel and describe a task — the agent will read your files, 
+              plan changes, and execute them across your project.
+            </p>
+            <GlassCard className="p-4 bg-amber-500/10 border-amber-500/30">
+              <p className="text-white font-medium mb-2">What Agent Mode can do:</p>
+              <ul className="text-white/60 text-sm space-y-1">
+                <li>Read and understand all project files</li>
+                <li>Create new files and modify existing ones</li>
+                <li>Refactor code across multiple files</li>
+                <li>Add features based on natural language descriptions</li>
+              </ul>
+            </GlassCard>
+            <p className="text-white/50 text-sm mt-3">
+              Shortcut: <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-xs">Ctrl+Shift+K</kbd> to activate Agent Mode
+            </p>
+          </section>
+
+          <section id="apply-code" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Apply Code from AI</h3>
+            <p className="text-white/70 mb-4">
+              When the AI suggests code, you'll see "Apply" and "Copy" buttons on every code block. 
+              Click "Apply" to insert the code directly into your active editor — no manual copy-pasting needed. 
+              If the AI creates a new file, click "Create" to add it to your project instantly.
+            </p>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: "command-palette",
+      title: "Command Palette",
+      icon: <Keyboard className="w-5 h-5" />,
+      subsections: [
+        { id: "palette-basics", title: "Using the Command Palette" },
+        { id: "palette-actions", title: "Available Actions" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="palette-basics">
+            <h3 className="text-2xl font-bold text-white mb-4">Using the Command Palette</h3>
+            <p className="text-white/70 mb-4">
+              Press <kbd className="px-2 py-1 bg-white/10 rounded text-sm">Ctrl+K</kbd> (or click the command icon in the toolbar) 
+              to open the Command Palette. Start typing to search for any action, file, or command available in the IDE.
+            </p>
+            <GlassCard className="p-4">
+              <p className="text-white font-medium mb-2">Quick Tips</p>
+              <ul className="text-white/60 text-sm space-y-1">
+                <li>Type a filename to quickly open it</li>
+                <li>Type an action like "deploy" or "save" to find commands</li>
+                <li>Press Enter to execute the first matching result</li>
+                <li>Press Escape to close</li>
+              </ul>
+            </GlassCard>
+          </section>
+          <section id="palette-actions" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Available Actions</h3>
+            <div className="grid gap-2">
+              {[
+                { name: "Save File", shortcut: "Ctrl+S" },
+                { name: "Open AI Assistant", shortcut: "Ctrl+I" },
+                { name: "Toggle Agent Mode", shortcut: "Ctrl+Shift+K" },
+                { name: "Split Editor", shortcut: "via palette" },
+                { name: "TrustHub Stamp Code", shortcut: "via palette" },
+                { name: "Deploy Project", shortcut: "via palette" },
+                { name: "Run CI/CD Pipeline", shortcut: "via palette" },
+              ].map(item => (
+                <div key={item.name} className="flex items-center justify-between p-2 rounded bg-white/5 border border-white/10">
+                  <span className="text-sm text-white/70">{item.name}</span>
+                  <kbd className="px-1.5 py-0.5 bg-white/10 rounded text-xs text-cyan-400">{item.shortcut}</kbd>
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: "split-view",
+      title: "Split View",
+      icon: <Code className="w-5 h-5" />,
+      subsections: [
+        { id: "split-basics", title: "Using Split View" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="split-basics">
+            <h3 className="text-2xl font-bold text-white mb-4">Using Split View</h3>
+            <p className="text-white/70 mb-4">
+              Split View lets you work on two files side by side. Click the split icon in the toolbar 
+              or use the Command Palette to split horizontally (side by side) or vertically (top and bottom).
+            </p>
+            <GlassCard className="p-4">
+              <p className="text-white font-medium mb-2">How to Split</p>
+              <ul className="text-white/60 text-sm space-y-1">
+                <li>Click the split icon in the toolbar to split right</li>
+                <li>Open Command Palette and search "Split Editor Right" or "Split Editor Down"</li>
+                <li>Click the X on the split pane header to close it</li>
+                <li>Each pane can independently edit its file</li>
+              </ul>
+            </GlassCard>
+          </section>
+        </div>
+      ),
+    },
+    {
+      id: "trusthub",
+      title: "TrustHub (Blockchain)",
+      icon: <Shield className="w-5 h-5" />,
+      subsections: [
+        { id: "trusthub-what", title: "What is TrustHub?" },
+        { id: "trusthub-stamp", title: "Stamping Your Code" },
+      ],
+      content: (
+        <div className="space-y-8">
+          <section id="trusthub-what">
+            <h3 className="text-2xl font-bold text-white mb-4">What is TrustHub?</h3>
+            <p className="text-white/70 mb-4">
+              TrustHub is blockchain-verified code provenance — every time you stamp your code, 
+              a SHA-256 hash of your project files is recorded on the Trust Layer blockchain. 
+              This creates a permanent, tamper-proof record that proves when your code existed 
+              and what it contained.
+            </p>
+            <GlassCard className="p-4 bg-indigo-500/10 border-indigo-500/30">
+              <p className="text-white font-medium mb-2">Why It Matters</p>
+              <ul className="text-white/60 text-sm space-y-1">
+                <li>Prove code ownership with blockchain verification</li>
+                <li>Tamper-proof audit trail of every version</li>
+                <li>Verify deployed code matches your source</li>
+                <li>Legal-grade timestamping for IP protection</li>
+              </ul>
+            </GlassCard>
+          </section>
+          <section id="trusthub-stamp" className="pt-6">
+            <h3 className="text-2xl font-bold text-white mb-4">Stamping Your Code</h3>
+            <p className="text-white/70 mb-4">
+              Click the "Stamp Code" button in the TrustHub panel (bottom bar) or use the Command Palette. 
+              Each stamp creates a unique transaction hash on the Trust Layer blockchain with your 
+              project's file tree hash, block number, and timestamp.
+            </p>
+            <p className="text-white/50 text-sm">
+              View your stamps history in the TrustHub tab at the bottom of the IDE.
+            </p>
           </section>
         </div>
       ),
@@ -637,7 +784,15 @@ export default function StudioDocs() {
                 </div>
                 <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
                   <span className="text-white/70">Command Palette</span>
-                  <kbd className="px-2 py-1 bg-slate-700 rounded text-cyan-400 font-mono text-sm">Ctrl+Shift+P</kbd>
+                  <kbd className="px-2 py-1 bg-slate-700 rounded text-cyan-400 font-mono text-sm">Ctrl+K</kbd>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                  <span className="text-white/70">AI Assistant</span>
+                  <kbd className="px-2 py-1 bg-slate-700 rounded text-cyan-400 font-mono text-sm">Ctrl+I</kbd>
+                </div>
+                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                  <span className="text-white/70">Agent Mode</span>
+                  <kbd className="px-2 py-1 bg-slate-700 rounded text-cyan-400 font-mono text-sm">Ctrl+Shift+K</kbd>
                 </div>
               </div>
             </div>

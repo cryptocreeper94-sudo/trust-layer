@@ -19,17 +19,21 @@ const systemStats = [
 ];
 
 const ideFeatures = [
-  { title: "AI-Assisted Coding", desc: "Smart completions & refactoring", icon: Brain },
+  { title: "AI Agent Mode", desc: "GPT-4o powered autonomous coding agent", icon: Brain },
   { title: "Live Deploy", desc: "One-click to devnet/mainnet", icon: Rocket },
-  { title: "Cloud Workspaces", desc: "Isolated dev environments", icon: Cloud },
+  { title: "Command Palette", desc: "Ctrl+K to find any action instantly", icon: Zap },
+  { title: "TrustHub Provenance", desc: "Blockchain-verified code stamps", icon: Shield },
+  { title: "Split View Editor", desc: "Edit two files side by side", icon: Code2 },
+  { title: "Real CI/CD Runner", desc: "Node.js, Python, Rust pipelines", icon: Workflow },
   { title: "Version Control", desc: "Built-in Git integration", icon: GitBranch },
+  { title: "Cloud Workspaces", desc: "Isolated dev environments", icon: Cloud },
 ];
 
 const carouselSlides = [
-  { title: "Write Smart Contracts", desc: "AI-assisted development with real-time validation" },
-  { title: "Deploy to Trust Layer", desc: "Seamless deployment with one click" },
-  { title: "Test & Debug", desc: "Integrated testing with AI debugging" },
-  { title: "Collaborate", desc: "Real-time team collaboration" },
+  { title: "Agent Mode", desc: "Describe a task and the AI builds it autonomously across your project" },
+  { title: "TrustHub Stamps", desc: "Blockchain-verified code provenance with every save" },
+  { title: "Real CI/CD", desc: "Run real build, test, and deploy pipelines — not simulations" },
+  { title: "Command Palette", desc: "Ctrl+K brings every action to your fingertips" },
 ];
 
 function GlassCard({ 

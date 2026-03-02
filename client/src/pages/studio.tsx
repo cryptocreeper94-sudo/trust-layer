@@ -9,7 +9,8 @@ import {
   Rocket, Cloud, Link2, Users, Info, Zap, Shield, Database,
   ExternalLink, Copy, CheckCircle, Loader2, Send, Search, Replace, Keyboard,
   Upload, Download, Filter, Mic, MicOff, Bot, Sparkles, MessageSquare, Eye,
-  HelpCircle, BookOpen, Video, GraduationCap
+  HelpCircle, BookOpen, Video, GraduationCap, Command, SplitSquareHorizontal,
+  AlertTriangle, CheckCircle2, ArrowRight, Cpu, Fingerprint, Hash
 } from "lucide-react";
 import { MonacoEditor } from "@/components/monaco-editor";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -473,7 +474,7 @@ export default function Studio() {
   const [running, setRunning] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [commitMessage, setCommitMessage] = useState("");
-  const [bottomTab, setBottomTab] = useState<"console" | "git" | "terminal" | "deploy" | "packages" | "cicd">("console");
+  const [bottomTab, setBottomTab] = useState<"console" | "git" | "terminal" | "deploy" | "packages" | "cicd" | "trusthub">("console");
   
   // CI/CD Pipeline state
   const [pipelines, setPipelines] = useState<{id: string, name: string, trigger: string, status: string, lastRun: string}[]>([
@@ -506,6 +507,22 @@ export default function Studio() {
   const aiPanelRef = useRef<HTMLDivElement>(null);
   const [aiCredits, setAiCredits] = useState<{ balanceCents: number; balanceUSD: string } | null>(null);
   const [buyingCredits, setBuyingCredits] = useState(false);
+  const [agentMode, setAgentMode] = useState(false);
+  const [agentTask, setAgentTask] = useState("");
+
+  // Command Palette state (T012)
+  const [showCommandPalette, setShowCommandPalette] = useState(false);
+  const [commandSearch, setCommandSearch] = useState("");
+  const commandInputRef = useRef<HTMLInputElement>(null);
+
+  // Split View state (T013)
+  const [splitView, setSplitView] = useState<"none" | "horizontal" | "vertical">("none");
+  const [splitFile, setSplitFile] = useState<FileNode | null>(null);
+  const [splitEditorContent, setSplitEditorContent] = useState("");
+
+  // TrustHub state (T005)
+  const [trustHubStamps, setTrustHubStamps] = useState<any[]>([]);
+  const [stampingCode, setStampingCode] = useState(false);
 
   // Fetch AI credits on mount
   useEffect(() => {
@@ -934,10 +951,13 @@ console.log('Trust Layer Studio loaded!');`,
 
   // AI Assistant function
   const askAiAssistant = async () => {
+    if (agentMode) return runAgentMode();
     if (!aiPrompt.trim() || aiLoading) return;
     
     setAiLoading(true);
     setAiResponse("");
+    
+    const projectFilePayload = files.filter(f => !f.isFolder).map(f => ({ name: f.name, content: f.content }));
     
     try {
       const response = await fetch("/api/studio/ai/assist", {
@@ -948,6 +968,7 @@ console.log('Trust Layer Studio loaded!');`,
           code: editorContent,
           language: activeFile?.language || getLanguageFromFileName(activeFile?.name || ""),
           context: `File: ${activeFile?.name || "untitled"}`,
+          projectFiles: projectFilePayload,
         }),
       });
 
@@ -1000,6 +1021,141 @@ console.log('Trust Layer Studio loaded!');`,
         .catch(() => {});
     }
   };
+
+  // Agent Mode execution (T006)
+  const runAgentMode = async () => {
+    if (!aiPrompt.trim() || aiLoading) return;
+    setAiLoading(true);
+    setAiResponse("");
+    const projectFilePayload = files.filter(f => !f.isFolder).map(f => ({ name: f.name, content: f.content }));
+    try {
+      const response = await fetch("/api/studio/ai/agent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          task: aiPrompt,
+          projectFiles: projectFilePayload,
+          activeFile: activeFile?.name,
+        }),
+      });
+      if (response.status === 402) {
+        const errorData = await response.json();
+        setAiResponse(`⚠️ ${errorData.message}`);
+        setAiLoading(false);
+        return;
+      }
+      if (!response.ok) throw new Error("Agent request failed");
+      const reader = response.body?.getReader();
+      const decoder = new TextDecoder();
+      while (reader) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const text = decoder.decode(value);
+        for (const line of text.split("\n")) {
+          if (line.startsWith("data: ")) {
+            try {
+              const data = JSON.parse(line.slice(6));
+              if (data.content) setAiResponse(prev => prev + data.content);
+              if (data.done) break;
+            } catch {}
+          }
+        }
+      }
+    } catch (error) {
+      setAiResponse("Agent encountered an error. Please try again.");
+    } finally {
+      setAiLoading(false);
+      fetch("/api/assistant/credits").then(r => r.ok ? r.json() : null).then(d => d && setAiCredits(d)).catch(() => {});
+    }
+  };
+
+  // TrustHub stamp (T005)
+  const stampCode = async () => {
+    if (!projectId || stampingCode) return;
+    setStampingCode(true);
+    try {
+      const res = await fetch("/api/studio/trusthub/stamp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId, message: `Stamp at ${new Date().toLocaleString()}` }),
+      });
+      if (res.ok) {
+        const stamp = await res.json();
+        setTrustHubStamps(prev => [stamp, ...prev]);
+        setConsoleOutput(prev => [...prev, `> TrustHub: Code stamped — ${stamp.txHash?.slice(0, 18)}...`]);
+      }
+    } catch (error) {
+      console.error("Stamp error:", error);
+    } finally {
+      setStampingCode(false);
+    }
+  };
+
+  const loadTrustHubStamps = async () => {
+    if (!projectId) return;
+    try {
+      const res = await fetch(`/api/studio/trusthub/stamps/${projectId}`);
+      if (res.ok) setTrustHubStamps(await res.json());
+    } catch {}
+  };
+
+  // Apply AI code to editor (T002)
+  const applyCodeBlock = (code: string, filename?: string) => {
+    if (filename && filename.startsWith("NEW FILE:")) {
+      const newName = filename.replace("NEW FILE:", "").trim();
+      handleCreateFileWithContent(newName, code);
+      return;
+    }
+    if (activeFile) {
+      setEditorContent(code);
+      setFiles(prev => prev.map(f => f.id === activeFile.id ? { ...f, content: code } : f));
+      setUnsavedFiles(prev => { const s = new Set(prev); s.add(activeFile.id); return s; });
+    }
+  };
+
+  const handleCreateFileWithContent = async (name: string, content: string) => {
+    if (!projectId) return;
+    try {
+      const res = await fetch(`/api/studio/projects/${projectId}/files`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, content, language: getLanguageFromFileName(name) }),
+      });
+      if (res.ok) {
+        const newFile = await res.json();
+        setFiles(prev => [...prev, newFile]);
+        setOpenTabs(prev => [...prev, newFile]);
+        setActiveFile(newFile);
+        setEditorContent(content);
+      }
+    } catch {}
+  };
+
+  // Command palette actions (T012)
+  const commandPaletteActions = [
+    { id: "save", label: "Save File", shortcut: "Ctrl+S", icon: Save, action: () => handleSaveFile() },
+    { id: "run", label: "Run Project", shortcut: "Ctrl+Enter", icon: Play, action: () => { /* trigger run */ } },
+    { id: "deploy", label: "Deploy Project", icon: Rocket, action: () => handleDeploy() },
+    { id: "ai", label: "Open AI Assistant", shortcut: "Ctrl+I", icon: Sparkles, action: () => setShowAiPanel(true) },
+    { id: "agent", label: "Toggle Agent Mode", icon: Cpu, action: () => { setAgentMode(!agentMode); setShowAiPanel(true); } },
+    { id: "terminal", label: "Show Terminal", icon: Terminal, action: () => setBottomTab("terminal") },
+    { id: "console", label: "Show Console", icon: Info, action: () => setBottomTab("console") },
+    { id: "git", label: "Show Git", icon: GitBranch, action: () => setBottomTab("git") },
+    { id: "cicd", label: "Run CI/CD Pipeline", icon: Zap, action: () => setBottomTab("cicd") },
+    { id: "stamp", label: "TrustHub — Stamp Code", icon: Fingerprint, action: () => stampCode() },
+    { id: "split-h", label: "Split Editor Right", icon: SplitSquareHorizontal, action: () => { if (activeFile) { setSplitFile(activeFile); setSplitView("horizontal"); setSplitEditorContent(editorContent); } } },
+    { id: "split-v", label: "Split Editor Down", icon: SplitSquareHorizontal, action: () => { if (activeFile) { setSplitFile(activeFile); setSplitView("vertical"); setSplitEditorContent(editorContent); } } },
+    { id: "close-split", label: "Close Split View", icon: X, action: () => { setSplitView("none"); setSplitFile(null); } },
+    { id: "settings", label: "Project Settings", icon: Settings, action: () => setShowSettings(true) },
+    { id: "shortcuts", label: "Keyboard Shortcuts", icon: Keyboard, action: () => setShowShortcuts(true) },
+    ...files.filter(f => !f.isFolder).map(f => ({
+      id: `file-${f.id}`, label: f.name, icon: FileCode, action: () => { setActiveFile(f); setEditorContent(f.content); if (!openTabs.find(t => t.id === f.id)) setOpenTabs(prev => [...prev, f]); },
+    })),
+  ];
+
+  const filteredCommands = commandSearch.trim()
+    ? commandPaletteActions.filter(c => c.label.toLowerCase().includes(commandSearch.toLowerCase()))
+    : commandPaletteActions.slice(0, 12);
 
   const getLanguageFromFileName = (name: string): string => {
     const ext = name.split('.').pop()?.toLowerCase() || '';
@@ -1790,7 +1946,13 @@ console.log('Trust Layer Studio loaded!');`,
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     const isCmd = e.metaKey || e.ctrlKey;
     
-    if (isCmd && e.key === "s") {
+    if (isCmd && e.key === "k") {
+      e.preventDefault();
+      e.stopPropagation();
+      setShowCommandPalette(true);
+      setCommandSearch("");
+      setTimeout(() => commandInputRef.current?.focus(), 50);
+    } else if (isCmd && e.key === "s") {
       e.preventDefault();
       e.stopPropagation();
       handleSave();
@@ -1798,6 +1960,15 @@ console.log('Trust Layer Studio loaded!');`,
       e.preventDefault();
       e.stopPropagation();
       setActiveTab("search");
+    } else if (isCmd && e.key === "i") {
+      e.preventDefault();
+      e.stopPropagation();
+      setShowAiPanel(prev => !prev);
+    } else if (isCmd && e.shiftKey && e.key === "K") {
+      e.preventDefault();
+      e.stopPropagation();
+      setAgentMode(true);
+      setShowAiPanel(true);
     } else if (isCmd && e.key === "b") {
       e.preventDefault();
       e.stopPropagation();
@@ -1808,6 +1979,7 @@ console.log('Trust Layer Studio loaded!');`,
       setShowShortcuts(prev => !prev);
     } else if (e.key === "Escape") {
       e.preventDefault();
+      setShowCommandPalette(false);
       setShowShortcuts(false);
       setRenamingFile(null);
     }
@@ -1820,7 +1992,7 @@ console.log('Trust Layer Studio loaded!');`,
 
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center bg-[#0a0a0f]">
+      <div className="h-screen flex items-center justify-center bg-[#050508]">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-muted-foreground">Loading Trust Layer Studio...</p>
@@ -1833,10 +2005,10 @@ console.log('Trust Layer Studio loaded!');`,
   const isViewOnly = !user;
 
   return (
-    <div className="h-screen flex flex-col bg-[#0a0a0f] text-foreground overflow-hidden">
+    <div className="h-screen flex flex-col bg-[#050508] text-foreground overflow-hidden">
       {/* View-Only Banner for non-logged-in users */}
       {isViewOnly && (
-        <div className="bg-slate-900/80 border-b border-white/5 px-4 py-1.5 flex items-center justify-between shrink-0">
+        <div className="bg-slate-900/80 border-b border-[#1a1b2e] px-4 py-1.5 flex items-center justify-between shrink-0">
           <div className="flex items-center gap-2">
             <Eye className="w-3 h-3 text-slate-400" />
             <span className="text-xs text-slate-400">View-Only Mode</span>
@@ -1854,7 +2026,7 @@ console.log('Trust Layer Studio loaded!');`,
       )}
       
       {/* Top Bar - Desktop */}
-      <header className="hidden md:flex h-12 border-b border-white/5 bg-background/95 items-center justify-between px-4 shrink-0">
+      <header className="hidden md:flex h-12 border-b border-[#1a1b2e] bg-background/95 items-center justify-between px-4 shrink-0">
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2" data-testid="link-home">
             <Shield className="w-7 h-7 text-cyan-400" />
@@ -1885,10 +2057,10 @@ console.log('Trust Layer Studio loaded!');`,
             </Button>
             {showHelpMenu && (
               <div 
-                className="absolute top-full left-0 mt-1 w-56 bg-slate-900 border border-white/10 rounded-lg shadow-xl z-50 overflow-hidden"
+                className="absolute top-full left-0 mt-1 w-56 bg-slate-900 border border-[#1a1b2e] rounded-lg shadow-xl z-50 overflow-hidden"
                 onMouseLeave={() => setShowHelpMenu(false)}
               >
-                <div className="p-2 border-b border-white/5">
+                <div className="p-2 border-b border-[#1a1b2e]">
                   <p className="text-xs text-white/40 uppercase">Help & Resources</p>
                 </div>
                 <div className="py-1">
@@ -1900,7 +2072,7 @@ console.log('Trust Layer Studio loaded!');`,
                     <Keyboard className="w-4 h-4 text-cyan-400" />
                     <div>
                       <p className="font-medium">Keyboard Shortcuts</p>
-                      <p className="text-xs text-white/40">Ctrl+Shift+P for commands</p>
+                      <p className="text-xs text-white/40">Ctrl+K for commands</p>
                     </div>
                   </button>
                   <Link href="/studio/docs" onClick={() => setShowHelpMenu(false)}>
@@ -1931,7 +2103,7 @@ console.log('Trust Layer Studio loaded!');`,
                     </div>
                   </a>
                 </div>
-                <div className="p-2 border-t border-white/5 bg-white/5">
+                <div className="p-2 border-t border-[#1a1b2e] bg-white/5">
                   <div className="flex items-center gap-2 text-xs text-white/40">
                     <GraduationCap className="w-3 h-3" />
                     <span>Press F1 in editor for quick help</span>
@@ -1990,6 +2162,43 @@ console.log('Trust Layer Studio loaded!');`,
               </TooltipContent>
             </Tooltip>
           )}
+          {/* Command Palette Button */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={() => { setShowCommandPalette(true); setCommandSearch(""); setTimeout(() => commandInputRef.current?.focus(), 50); }}
+                className="h-8 w-8 p-0 hover:bg-cyan-500/10"
+                data-testid="button-command-palette"
+              >
+                <Command className="w-4 h-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Command Palette (Ctrl+K)</p>
+            </TooltipContent>
+          </Tooltip>
+          {/* Split View Button */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="sm"
+                variant={splitView !== "none" ? "default" : "ghost"}
+                onClick={() => {
+                  if (splitView !== "none") { setSplitView("none"); setSplitFile(null); }
+                  else if (activeFile) { setSplitFile(activeFile); setSplitView("horizontal"); setSplitEditorContent(editorContent); }
+                }}
+                className={`h-8 w-8 p-0 ${splitView !== "none" ? "bg-cyan-500/20 text-cyan-400" : ""}`}
+                data-testid="button-split-view"
+              >
+                <SplitSquareHorizontal className="w-4 h-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{splitView !== "none" ? "Close Split View" : "Split Editor"}</p>
+            </TooltipContent>
+          </Tooltip>
           {/* AI Assistant Button */}
           <Tooltip>
             <TooltipTrigger asChild>
@@ -2004,7 +2213,7 @@ console.log('Trust Layer Studio loaded!');`,
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>AI Code Assistant</p>
+              <p>AI Assistant (Ctrl+I)</p>
             </TooltipContent>
           </Tooltip>
           <Button
@@ -2062,9 +2271,9 @@ console.log('Trust Layer Studio loaded!');`,
       </header>
 
       {/* Mobile Header - Clean stacked layout */}
-      <div className="md:hidden border-b border-white/5 bg-background/95 shrink-0">
+      <div className="md:hidden border-b border-[#1a1b2e] bg-background/95 shrink-0">
         {/* Row 1: Project info */}
-        <div className="flex items-center justify-between px-3 py-2 border-b border-white/5">
+        <div className="flex items-center justify-between px-3 py-2 border-b border-[#1a1b2e]">
           <div className="flex items-center gap-2 min-w-0">
             <Link href="/" className="shrink-0" data-testid="link-home-mobile">
               <Shield className="w-7 h-7 text-cyan-400" />
@@ -2127,7 +2336,7 @@ console.log('Trust Layer Studio loaded!');`,
         </div>
         
         {/* Row 2: View tabs */}
-        <div className="flex bg-black/40">
+        <div className="flex bg-[#0a0b10]">
           <button
             className={`flex-1 py-2.5 text-xs font-medium flex items-center justify-center gap-1.5 transition-colors ${mobileView === "files" ? "bg-primary/20 text-primary border-b-2 border-primary" : "text-muted-foreground"}`}
             onClick={() => setMobileView("files")}
@@ -2158,9 +2367,9 @@ console.log('Trust Layer Studio loaded!');`,
       {/* Main Content */}
       <div className="flex-1 flex overflow-hidden">
         {/* Sidebar - Hidden on mobile, shown based on mobileView */}
-        <aside className={`w-full md:w-64 border-r border-white/5 bg-black/40 flex flex-col shrink-0 ${mobileView === "files" ? "flex" : "hidden"} md:flex`}>
+        <aside className={`w-full md:w-64 border-r border-[#1a1b2e] bg-[#0a0b10] flex flex-col shrink-0 ${mobileView === "files" ? "flex" : "hidden"} md:flex`}>
           <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col h-full">
-            <TabsList className="w-full grid grid-cols-5 h-10 bg-transparent border-b border-white/5 rounded-none">
+            <TabsList className="w-full grid grid-cols-5 h-10 bg-transparent border-b border-[#1a1b2e] rounded-none">
               <TabsTrigger value="files" className="text-xs data-[state=active]:bg-white/5 rounded-none" data-testid="tab-files">
                 <FolderOpen className="w-3.5 h-3.5 mr-1" /> Files
               </TabsTrigger>
@@ -2220,7 +2429,7 @@ console.log('Trust Layer Studio loaded!');`,
                         key={key}
                         size="sm"
                         variant="outline"
-                        className="w-full justify-start text-xs h-8 bg-black/20 border-white/10 hover:bg-white/5 hover:border-cyan-400/50"
+                        className="w-full justify-start text-xs h-8 bg-[#0f1018] border-[#1a1b2e] hover:bg-white/5 hover:border-cyan-400/50"
                         onClick={() => applyTemplate(key as keyof typeof PROJECT_TEMPLATES)}
                         data-testid={`template-${key}`}
                       >
@@ -2238,7 +2447,7 @@ console.log('Trust Layer Studio loaded!');`,
                     value={newFileName}
                     onChange={(e) => setNewFileName(e.target.value)}
                     placeholder="filename.js"
-                    className="h-7 text-xs bg-black/30"
+                    className="h-7 text-xs bg-[#0a0b10]"
                     onKeyDown={(e) => e.key === "Enter" && handleCreateFile()}
                     autoFocus
                     data-testid="input-new-filename"
@@ -2272,7 +2481,7 @@ console.log('Trust Layer Studio loaded!');`,
                           if (e.key === "Escape") { setRenamingFile(null); setRenameInput(""); }
                         }}
                         onBlur={handleRename}
-                        className="flex-1 h-5 text-xs py-0 px-1 bg-black/30"
+                        className="flex-1 h-5 text-xs py-0 px-1 bg-[#0a0b10]"
                         autoFocus
                         onClick={(e) => e.stopPropagation()}
                         data-testid="input-rename-file"
@@ -2330,7 +2539,7 @@ console.log('Trust Layer Studio loaded!');`,
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                     placeholder="Search..."
-                    className="h-8 text-xs bg-black/30 pl-8"
+                    className="h-8 text-xs bg-[#0a0b10] pl-8"
                     data-testid="input-search"
                   />
                 </div>
@@ -2340,7 +2549,7 @@ console.log('Trust Layer Studio loaded!');`,
                     value={replaceQuery}
                     onChange={(e) => setReplaceQuery(e.target.value)}
                     placeholder="Replace with..."
-                    className="h-8 text-xs bg-black/30 pl-8"
+                    className="h-8 text-xs bg-[#0a0b10] pl-8"
                     data-testid="input-replace"
                   />
                 </div>
@@ -2374,7 +2583,7 @@ console.log('Trust Layer Studio loaded!');`,
                       <div
                         key={idx}
                         onClick={() => jumpToSearchResult(result)}
-                        className="p-2 rounded bg-black/30 text-xs cursor-pointer hover:bg-white/5 transition-colors"
+                        className="p-2 rounded bg-[#0a0b10] text-xs cursor-pointer hover:bg-white/5 transition-colors"
                         data-testid={`search-result-${idx}`}
                       >
                         <div className="flex items-center gap-2 text-cyan-400 mb-1">
@@ -2398,7 +2607,7 @@ console.log('Trust Layer Studio loaded!');`,
                     <TooltipTrigger>
                       <Info className="w-3 h-3 text-muted-foreground hover:text-cyan-400 transition-colors cursor-help" />
                     </TooltipTrigger>
-                    <TooltipContent side="right" className="max-w-xs bg-black/90 border-white/10">
+                    <TooltipContent side="right" className="max-w-xs bg-black/90 border-[#1a1b2e]">
                       <p className="text-xs">Browse tables, view data, and run SQL queries on your project database.</p>
                     </TooltipContent>
                   </Tooltip>
@@ -2456,7 +2665,7 @@ console.log('Trust Layer Studio loaded!');`,
                       }
                     }}
                     className={`flex items-center justify-between gap-2 p-2 rounded cursor-pointer text-xs transition-colors ${
-                      selectedTable === table.name ? "bg-cyan-500/20 text-cyan-400" : "bg-black/30 hover:bg-white/5"
+                      selectedTable === table.name ? "bg-cyan-500/20 text-cyan-400" : "bg-[#0a0b10] hover:bg-white/5"
                     }`}
                     data-testid={`table-${table.name}`}
                   >
@@ -2469,13 +2678,13 @@ console.log('Trust Layer Studio loaded!');`,
                 ))}
               </div>
 
-              <div className="border-t border-white/5 pt-2">
+              <div className="border-t border-[#1a1b2e] pt-2">
                 <span className="text-xs text-muted-foreground block mb-2">SQL Query</span>
                 <textarea
                   value={dbQuery}
                   onChange={(e) => setDbQuery(e.target.value)}
                   placeholder="SELECT * FROM users LIMIT 10;"
-                  className="w-full h-16 text-xs bg-black/30 border border-white/10 rounded p-2 font-mono resize-none focus:outline-none focus:border-cyan-400/50"
+                  className="w-full h-16 text-xs bg-[#0a0b10] border border-[#1a1b2e] rounded p-2 font-mono resize-none focus:outline-none focus:border-cyan-400/50"
                   data-testid="input-sql-query"
                 />
                 <Button
@@ -2513,7 +2722,7 @@ console.log('Trust Layer Studio loaded!');`,
               </div>
 
               {dbQueryResult && (
-                <div className="mt-2 p-2 bg-black/30 rounded text-xs border border-white/5 max-h-32 overflow-auto">
+                <div className="mt-2 p-2 bg-[#0a0b10] rounded text-xs border border-[#1a1b2e] max-h-32 overflow-auto">
                   <pre className="text-gray-300 whitespace-pre-wrap">{JSON.stringify(dbQueryResult, null, 2)}</pre>
                 </div>
               )}
@@ -2527,14 +2736,14 @@ console.log('Trust Layer Studio loaded!');`,
                     <TooltipTrigger>
                       <Info className="w-3 h-3 text-muted-foreground hover:text-cyan-400 transition-colors cursor-help" />
                     </TooltipTrigger>
-                    <TooltipContent side="right" className="max-w-xs bg-black/90 border-white/10">
+                    <TooltipContent side="right" className="max-w-xs bg-black/90 border-[#1a1b2e]">
                       <p className="text-xs">{PROTOCOL_DEFINITIONS["Secret"]}</p>
                     </TooltipContent>
                   </Tooltip>
                 </span>
               </div>
               
-              <div className="flex items-center gap-1 mb-3 p-1 rounded bg-black/30 border border-white/5">
+              <div className="flex items-center gap-1 mb-3 p-1 rounded bg-[#0a0b10] border border-[#1a1b2e]">
                 <Button
                   size="sm"
                   variant={envMode === "dev" ? "secondary" : "ghost"}
@@ -2565,7 +2774,7 @@ console.log('Trust Layer Studio loaded!');`,
                 {secrets
                   .filter((s: any) => !s.environment || s.environment === "shared" || s.environment === envMode)
                   .map((secret) => (
-                    <div key={secret.id} className="flex items-center gap-2 p-2 rounded bg-black/30 text-xs">
+                    <div key={secret.id} className="flex items-center gap-2 p-2 rounded bg-[#0a0b10] text-xs">
                       <Lock className="w-3 h-3 text-amber-400 shrink-0" />
                       <span className="font-mono">{secret.key}</span>
                       <span className="text-muted-foreground">= ••••••</span>
@@ -2583,7 +2792,7 @@ console.log('Trust Layer Studio loaded!');`,
                   value={newSecretKey}
                   onChange={(e) => setNewSecretKey(e.target.value)}
                   placeholder="SECRET_KEY"
-                  className="h-8 text-xs bg-black/30 font-mono"
+                  className="h-8 text-xs bg-[#0a0b10] font-mono"
                   data-testid="input-secret-key"
                 />
                 <Input
@@ -2591,7 +2800,7 @@ console.log('Trust Layer Studio loaded!');`,
                   value={newSecretValue}
                   onChange={(e) => setNewSecretValue(e.target.value)}
                   placeholder="Value"
-                  className="h-8 text-xs bg-black/30"
+                  className="h-8 text-xs bg-[#0a0b10]"
                   data-testid="input-secret-value"
                 />
                 <Button
@@ -2613,7 +2822,7 @@ console.log('Trust Layer Studio loaded!');`,
                     <TooltipTrigger>
                       <Info className="w-3 h-3 text-muted-foreground hover:text-cyan-400 transition-colors cursor-help" />
                     </TooltipTrigger>
-                    <TooltipContent side="right" className="max-w-xs bg-black/90 border-white/10">
+                    <TooltipContent side="right" className="max-w-xs bg-black/90 border-[#1a1b2e]">
                       <p className="text-xs">{PROTOCOL_DEFINITIONS["Config"]}</p>
                     </TooltipContent>
                   </Tooltip>
@@ -2629,7 +2838,7 @@ console.log('Trust Layer Studio loaded!');`,
                 {configs
                   .filter((c: any) => !c.environment || c.environment === "shared" || c.environment === envMode)
                   .map((config) => (
-                    <div key={config.id} className="flex items-center gap-2 p-2 rounded bg-black/30 text-xs">
+                    <div key={config.id} className="flex items-center gap-2 p-2 rounded bg-[#0a0b10] text-xs">
                       <Settings className="w-3 h-3 text-blue-400 shrink-0" />
                       <span className="font-mono">{config.key}</span>
                       <span className="text-muted-foreground">= {config.value}</span>
@@ -2647,14 +2856,14 @@ console.log('Trust Layer Studio loaded!');`,
                   value={newConfigKey}
                   onChange={(e) => setNewConfigKey(e.target.value)}
                   placeholder="CONFIG_KEY"
-                  className="h-8 text-xs bg-black/30 font-mono"
+                  className="h-8 text-xs bg-[#0a0b10] font-mono"
                   data-testid="input-config-key"
                 />
                 <Input
                   value={newConfigValue}
                   onChange={(e) => setNewConfigValue(e.target.value)}
                   placeholder="Value"
-                  className="h-8 text-xs bg-black/30"
+                  className="h-8 text-xs bg-[#0a0b10]"
                   data-testid="input-config-value"
                 />
                 <Button
@@ -2673,12 +2882,12 @@ console.log('Trust Layer Studio loaded!');`,
         {/* Editor Area - Hidden on mobile unless mobileView is "editor" or "console" */}
         <main className={`flex-1 flex flex-col overflow-hidden min-w-0 ${mobileView === "files" ? "hidden" : "flex"} md:flex`}>
           {/* File Tabs - Hidden on mobile when viewing console */}
-          <div className={`h-9 border-b border-white/5 bg-black/20 flex items-center px-1 shrink-0 overflow-x-auto ${mobileView === "console" ? "hidden" : ""} md:flex`}>
+          <div className={`h-9 border-b border-[#1a1b2e] bg-[#0f1018] flex items-center px-1 shrink-0 overflow-x-auto ${mobileView === "console" ? "hidden" : ""} md:flex`}>
             {openTabs.map(tab => (
               <div
                 key={tab.id}
                 onClick={() => handleFileSelect(tab)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs cursor-pointer border-r border-white/5 transition-all group hover:bg-white/5 ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs cursor-pointer border-r border-[#1a1b2e] transition-all group hover:bg-white/5 ${
                   activeFile?.id === tab.id 
                     ? "bg-white/10 text-white border-t-2 border-t-cyan-400" 
                     : "text-gray-400"
@@ -2706,21 +2915,44 @@ console.log('Trust Layer Studio loaded!');`,
 
           {/* Code Editor with Optional Preview Split */}
           <div className={`flex-1 overflow-hidden ${mobileView === "console" ? "hidden" : ""} ${mobileView === "preview" ? "flex" : ""} md:flex flex-row`}>
-            {/* Editor Pane - Hidden on mobile when in preview mode */}
-            <div className={`${showPreview ? "hidden md:block md:w-1/2 border-r border-white/10" : "w-full"} h-full transition-all duration-300`}>
-              {activeFile ? (
-                <MonacoEditor
-                  value={editorContent}
-                  onChange={setEditorContent}
-                  language={getLanguage(activeFile.name)}
-                  data-testid="editor-monaco"
-                />
-              ) : (
-                <div className="flex items-center justify-center h-full text-muted-foreground">
-                  <div className="text-center">
-                    <FileCode className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                    <p className="text-sm">Select a file to edit</p>
-                    <p className="text-xs text-muted-foreground mt-1">or create a new file</p>
+            {/* Editor Pane with Split View (T013) */}
+            <div className={`${showPreview ? "hidden md:block md:w-1/2 border-r border-[#1a1b2e]" : "w-full"} h-full transition-all duration-300 ${splitView !== "none" ? (splitView === "horizontal" ? "flex flex-row" : "flex flex-col") : ""}`}>
+              <div className={`${splitView !== "none" ? (splitView === "horizontal" ? "w-1/2 border-r border-[#1a1b2e]" : "h-1/2 border-b border-[#1a1b2e]") : "w-full h-full"}`}>
+                {activeFile ? (
+                  <MonacoEditor
+                    value={editorContent}
+                    onChange={setEditorContent}
+                    language={getLanguage(activeFile.name)}
+                    data-testid="editor-monaco"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full text-muted-foreground">
+                    <div className="text-center">
+                      <FileCode className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                      <p className="text-sm">Select a file to edit</p>
+                      <p className="text-xs text-muted-foreground mt-1">or create a new file</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+              {splitView !== "none" && splitFile && (
+                <div className={`${splitView === "horizontal" ? "w-1/2" : "h-1/2"} flex flex-col`}>
+                  <div className="flex items-center justify-between px-3 py-1 bg-[#0a0b10] border-b border-[#1a1b2e] shrink-0">
+                    <div className="flex items-center gap-1.5">
+                      <SplitSquareHorizontal className="w-3 h-3 text-cyan-400" />
+                      <span className="text-xs text-white/60">{splitFile.name}</span>
+                    </div>
+                    <Button size="sm" variant="ghost" className="h-5 w-5 p-0" onClick={() => { setSplitView("none"); setSplitFile(null); }} data-testid="button-close-split">
+                      <X className="w-3 h-3" />
+                    </Button>
+                  </div>
+                  <div className="flex-1">
+                    <MonacoEditor
+                      value={splitEditorContent}
+                      onChange={setSplitEditorContent}
+                      language={getLanguage(splitFile.name)}
+                      data-testid="editor-split-monaco"
+                    />
                   </div>
                 </div>
               )}
@@ -2732,10 +2964,10 @@ console.log('Trust Layer Studio loaded!');`,
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 20 }}
-                className="w-full md:w-1/2 h-full flex flex-col bg-gray-900"
+                className="w-full md:w-1/2 h-full flex flex-col bg-[#0a0b10]"
               >
                 {/* Preview Header */}
-                <div className="flex items-center justify-between px-3 py-2 border-b border-white/10 bg-black/40 shrink-0">
+                <div className="flex items-center justify-between px-3 py-2 border-b border-[#1a1b2e] bg-[#0a0b10] shrink-0">
                   <div className="flex items-center gap-2">
                     <Globe className="w-4 h-4 text-cyan-400" />
                     <span className="text-sm font-medium text-white">Live Preview</span>
@@ -2805,8 +3037,8 @@ console.log('Trust Layer Studio loaded!');`,
           </div>
 
           {/* Bottom Bar / Console, Git, Terminal & Deploy - Full height on mobile when viewing console */}
-          <div className={`border-t border-white/5 bg-gradient-to-b from-black/60 to-black/40 flex flex-col shrink-0 backdrop-blur-sm ${mobileView === "console" ? "flex-1" : "h-48 hidden md:flex"}`}>
-            <div className="flex items-center px-1 py-1 border-b border-white/10 gap-1">
+          <div className={`border-t border-[#1a1b2e] bg-gradient-to-b from-black/60 to-black/40 flex flex-col shrink-0 backdrop-blur-sm ${mobileView === "console" ? "flex-1" : "h-48 hidden md:flex"}`}>
+            <div className="flex items-center px-1 py-1 border-b border-[#1a1b2e] gap-1">
               <Button
                 size="sm"
                 variant={bottomTab === "console" ? "secondary" : "ghost"}
@@ -2861,6 +3093,15 @@ console.log('Trust Layer Studio loaded!');`,
               >
                 <Zap className="w-3 h-3 mr-1" /> CI/CD
               </Button>
+              <Button
+                size="sm"
+                variant={bottomTab === "trusthub" ? "secondary" : "ghost"}
+                onClick={() => { setBottomTab("trusthub"); loadTrustHubStamps(); }}
+                className={`h-6 text-xs px-2 transition-all duration-200 ${bottomTab === "trusthub" ? "bg-indigo-500/20 text-indigo-400 shadow-[0_0_10px_rgba(99,102,241,0.3)]" : "hover:bg-white/5"}`}
+                data-testid="button-trusthub-tab"
+              >
+                <Fingerprint className="w-3 h-3 mr-1" /> TrustHub
+              </Button>
             </div>
 
             <AnimatePresence mode="wait">
@@ -2872,13 +3113,13 @@ console.log('Trust Layer Studio loaded!');`,
                   exit={{ opacity: 0, y: -10 }}
                   className="flex-1 flex flex-col overflow-hidden"
                 >
-                  <div className="flex items-center gap-2 px-2 pt-2 pb-1 border-b border-white/5">
+                  <div className="flex items-center gap-2 px-2 pt-2 pb-1 border-b border-[#1a1b2e]">
                     <Filter className="w-3 h-3 text-muted-foreground" />
                     <Input
                       value={consoleFilter}
                       onChange={(e) => setConsoleFilter(e.target.value)}
                       placeholder="Filter logs..."
-                      className="flex-1 h-6 text-xs bg-black/20 border-white/10"
+                      className="flex-1 h-6 text-xs bg-[#0f1018] border-[#1a1b2e]"
                       data-testid="input-console-filter"
                     />
                     <Button
@@ -2909,14 +3150,14 @@ console.log('Trust Layer Studio loaded!');`,
                   exit={{ opacity: 0, y: -10 }}
                   className="flex-1 flex flex-col overflow-hidden"
                 >
-                  <div ref={terminalRef} className="flex-1 p-2 font-mono text-xs overflow-auto bg-black/30">
+                  <div ref={terminalRef} className="flex-1 p-2 font-mono text-xs overflow-auto bg-[#0a0b10]">
                     {terminalHistory.map((line, i) => (
                       <p key={i} className={`${line.type === "input" ? "text-cyan-400" : line.type === "error" ? "text-red-400" : "text-gray-300"}`}>
                         {line.content}
                       </p>
                     ))}
                   </div>
-                  <div className="flex items-center gap-2 p-2 border-t border-white/5">
+                  <div className="flex items-center gap-2 p-2 border-t border-[#1a1b2e]">
                     <span className="text-cyan-400 font-mono text-xs">$</span>
                     <Input
                       value={terminalInput}
@@ -2951,7 +3192,7 @@ console.log('Trust Layer Studio loaded!');`,
                       value={commitMessage}
                       onChange={(e) => setCommitMessage(e.target.value)}
                       placeholder="Commit message..."
-                      className="h-7 text-xs bg-black/30 flex-1 border-white/10 focus:border-cyan-500/50 transition-colors"
+                      className="h-7 text-xs bg-[#0a0b10] flex-1 border-[#1a1b2e] focus:border-cyan-500/50 transition-colors"
                       onKeyDown={(e) => e.key === "Enter" && handleCommit()}
                       data-testid="input-commit-message"
                     />
@@ -2971,7 +3212,7 @@ console.log('Trust Layer Studio loaded!');`,
                       commits.slice(0, 5).map((commit) => (
                         <div 
                           key={commit.id} 
-                          className="flex items-center gap-2 p-1.5 rounded bg-black/30 border border-white/5 hover:border-cyan-500/30 hover:bg-cyan-500/5 transition-all cursor-pointer group"
+                          className="flex items-center gap-2 p-1.5 rounded bg-[#0a0b10] border border-[#1a1b2e] hover:border-cyan-500/30 hover:bg-cyan-500/5 transition-all cursor-pointer group"
                         >
                           <GitCommit className="w-3 h-3 text-cyan-400 shrink-0 group-hover:scale-110 transition-transform" />
                           <span className="font-mono text-cyan-400">{commit.hash}</span>
@@ -2993,7 +3234,7 @@ console.log('Trust Layer Studio loaded!');`,
                 >
                   {currentDeployment ? (
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-white/10">
+                      <div className="flex items-center justify-between p-3 rounded-lg bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-[#1a1b2e]">
                         <div className="flex items-center gap-3">
                           {currentDeployment.status === "live" ? (
                             <CheckCircle className="w-5 h-5 text-green-400" />
@@ -3020,7 +3261,7 @@ console.log('Trust Layer Studio loaded!');`,
                         )}
                       </div>
                       {currentDeployment.url && (
-                        <div className="flex items-center gap-2 p-2 rounded bg-black/30 border border-white/5">
+                        <div className="flex items-center gap-2 p-2 rounded bg-[#0a0b10] border border-[#1a1b2e]">
                           <Link2 className="w-3 h-3 text-muted-foreground" />
                           <code className="text-xs text-cyan-400 flex-1 truncate">{currentDeployment.url}</code>
                           <Button
@@ -3041,14 +3282,14 @@ console.log('Trust Layer Studio loaded!');`,
                         </div>
                       )}
                       {currentDeployment.status === "live" && !currentDeployment.customDomain && (
-                        <div className="mt-2 p-2 rounded bg-black/30 border border-white/5">
+                        <div className="mt-2 p-2 rounded bg-[#0a0b10] border border-[#1a1b2e]">
                           <p className="text-xs text-muted-foreground mb-2">Link a custom domain:</p>
                           <div className="flex gap-2">
                             <Input
                               value={customDomainInput}
                               onChange={(e) => setCustomDomainInput(e.target.value)}
                               placeholder="yourdomain.com"
-                              className="h-7 text-xs bg-black/30 flex-1 border-white/10 focus:border-emerald-500/50 transition-colors"
+                              className="h-7 text-xs bg-[#0a0b10] flex-1 border-[#1a1b2e] focus:border-emerald-500/50 transition-colors"
                               onKeyDown={(e) => e.key === "Enter" && handleSaveCustomDomain()}
                               data-testid="input-custom-domain"
                             />
@@ -3092,7 +3333,7 @@ console.log('Trust Layer Studio loaded!');`,
                       value={newPackageName}
                       onChange={(e) => setNewPackageName(e.target.value)}
                       placeholder={packageManager === "pip" ? "package-name" : "package-name@version"}
-                      className="h-7 text-xs bg-black/30 flex-1 border-white/10 focus:border-amber-500/50 transition-colors"
+                      className="h-7 text-xs bg-[#0a0b10] flex-1 border-[#1a1b2e] focus:border-amber-500/50 transition-colors"
                       onKeyDown={(e) => e.key === "Enter" && handleInstallPackage()}
                       data-testid="input-package-name"
                     />
@@ -3126,7 +3367,7 @@ console.log('Trust Layer Studio loaded!');`,
                       packages.map((pkg) => (
                         <div 
                           key={pkg.name}
-                          className="flex items-center justify-between p-1.5 rounded bg-black/30 border border-white/5 hover:border-amber-500/30 hover:bg-amber-500/5 transition-all group"
+                          className="flex items-center justify-between p-1.5 rounded bg-[#0a0b10] border border-[#1a1b2e] hover:border-amber-500/30 hover:bg-amber-500/5 transition-all group"
                         >
                           <div className="flex items-center gap-2">
                             <Package className="w-3 h-3 text-amber-400 shrink-0" />
@@ -3157,56 +3398,71 @@ console.log('Trust Layer Studio loaded!');`,
                   className="flex-1 p-3 overflow-auto"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs text-muted-foreground uppercase">CI/CD Pipelines</span>
-                    <Button
-                      size="sm"
-                      variant="ghost"
-                      className="h-6 text-xs"
-                      onClick={() => {
-                        if (newPipelineName.trim()) {
-                          setPipelines(prev => [...prev, {
-                            id: Math.random().toString(36).substring(2) + Date.now().toString(36),
-                            name: newPipelineName,
-                            trigger: newPipelineTrigger,
-                            status: "pending",
-                            lastRun: "Never",
-                          }]);
-                          setNewPipelineName("");
-                        }
-                      }}
-                      data-testid="button-add-pipeline"
-                    >
-                      <Plus className="w-3 h-3 mr-1" /> Add Pipeline
-                    </Button>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 mb-3">
-                    <Input
-                      value={newPipelineName}
-                      onChange={(e) => setNewPipelineName(e.target.value)}
-                      placeholder="Pipeline name..."
-                      className="flex-1 h-7 text-xs bg-black/30 border-white/10"
-                      data-testid="input-pipeline-name"
-                    />
-                    <select
-                      value={newPipelineTrigger}
-                      onChange={(e) => setNewPipelineTrigger(e.target.value)}
-                      className="h-7 text-xs bg-black/30 border border-white/10 rounded px-2 text-gray-300"
-                      data-testid="select-pipeline-trigger"
-                    >
-                      <option value="on_push">On Push</option>
-                      <option value="on_merge">On Merge</option>
-                      <option value="on_tag">On Tag</option>
-                      <option value="manual">Manual</option>
-                      <option value="scheduled">Scheduled</option>
-                    </select>
+                    <span className="text-xs text-muted-foreground uppercase">CI/CD Pipeline Runner</span>
+                    <div className="flex items-center gap-2">
+                      <select
+                        value={newPipelineTrigger}
+                        onChange={(e) => setNewPipelineTrigger(e.target.value)}
+                        className="h-6 text-[10px] bg-[#0a0b10] border border-[#1a1b2e] rounded px-2 text-gray-300"
+                        data-testid="select-pipeline-template"
+                      >
+                        <option value="node">Node.js Standard</option>
+                        <option value="python">Python</option>
+                        <option value="rust">Rust</option>
+                        <option value="custom">Custom</option>
+                      </select>
+                      <Button
+                        size="sm"
+                        className="h-6 text-xs px-3 bg-emerald-600 hover:bg-emerald-700"
+                        onClick={async () => {
+                          if (!projectId) return;
+                          setConsoleOutput(prev => [...prev, "> Starting CI/CD pipeline..."]);
+                          try {
+                            const res = await fetch("/api/studio/pipeline/run", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ projectId, template: newPipelineTrigger }),
+                            });
+                            if (res.ok) {
+                              const reader = res.body?.getReader();
+                              const decoder = new TextDecoder();
+                              while (reader) {
+                                const { done, value } = await reader.read();
+                                if (done) break;
+                                const text = decoder.decode(value);
+                                for (const line of text.split("\n")) {
+                                  if (line.startsWith("data: ")) {
+                                    try {
+                                      const data = JSON.parse(line.slice(6));
+                                      if (data.step) {
+                                        setPipelines(prev => {
+                                          const existing = prev.find(p => p.id === data.runId);
+                                          if (existing) return prev.map(p => p.id === data.runId ? { ...p, status: data.status, lastRun: data.step } : p);
+                                          return [...prev, { id: data.runId || "run", name: data.step, trigger: newPipelineTrigger, status: data.status, lastRun: "Now" }];
+                                        });
+                                      }
+                                      if (data.output) setConsoleOutput(prev => [...prev, `> ${data.output}`]);
+                                    } catch {}
+                                  }
+                                }
+                              }
+                            }
+                          } catch (error) {
+                            setConsoleOutput(prev => [...prev, "> Pipeline error: " + String(error)]);
+                          }
+                        }}
+                        data-testid="button-run-pipeline"
+                      >
+                        <Play className="w-3 h-3 mr-1" /> Run Pipeline
+                      </Button>
+                    </div>
                   </div>
 
                   <div className="space-y-2">
                     {pipelines.map((pipeline) => (
                       <div
                         key={pipeline.id}
-                        className="flex items-center justify-between p-2 rounded bg-black/30 border border-white/5 hover:border-emerald-500/30 transition-all group"
+                        className="flex items-center justify-between p-2 rounded bg-[#0a0b10] border border-[#1a1b2e] hover:border-emerald-500/30 transition-all group"
                         data-testid={`pipeline-${pipeline.id}`}
                       >
                         <div className="flex items-center gap-3">
@@ -3219,49 +3475,80 @@ console.log('Trust Layer Studio loaded!');`,
                           <div>
                             <p className="text-xs text-gray-200">{pipeline.name}</p>
                             <p className="text-xs text-muted-foreground">
-                              {pipeline.trigger.replace("_", " ")} • {pipeline.lastRun}
+                              {pipeline.trigger} {pipeline.lastRun}
                             </p>
                           </div>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="h-6 text-xs px-2"
-                            onClick={() => {
-                              setPipelines(prev => prev.map(p => 
-                                p.id === pipeline.id 
-                                  ? { ...p, status: "running", lastRun: "Just now" }
-                                  : p
-                              ));
-                              setTimeout(() => {
-                                setPipelines(prev => prev.map(p =>
-                                  p.id === pipeline.id
-                                    ? { ...p, status: Math.random() > 0.2 ? "success" : "failed" }
-                                    : p
-                                ));
-                              }, 2000);
-                            }}
-                            data-testid={`button-run-pipeline-${pipeline.id}`}
-                          >
-                            <Play className="w-3 h-3 mr-1" /> Run
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-                            onClick={() => setPipelines(prev => prev.filter(p => p.id !== pipeline.id))}
-                            data-testid={`button-delete-pipeline-${pipeline.id}`}
-                          >
-                            <X className="w-3 h-3 text-red-400" />
-                          </Button>
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded ${
+                            pipeline.status === "success" ? "bg-green-500/20 text-green-400" :
+                            pipeline.status === "failed" ? "bg-red-500/20 text-red-400" :
+                            pipeline.status === "running" ? "bg-cyan-500/20 text-cyan-400" :
+                            "bg-gray-500/20 text-gray-400"
+                          }`}>{pipeline.status}</span>
                         </div>
                       </div>
                     ))}
                     {pipelines.length === 0 && (
                       <p className="text-xs text-muted-foreground text-center py-4">
-                        No pipelines configured. Add a pipeline to automate your builds and deployments.
+                        Select a template and run your first pipeline.
                       </p>
+                    )}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* TrustHub Panel (T005) */}
+              {bottomTab === "trusthub" && (
+                <motion.div
+                  key="trusthub"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex-1 p-3 overflow-auto"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground uppercase">Blockchain Code Provenance</span>
+                      <span className="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">{trustHubStamps.length} stamps</span>
+                    </div>
+                    <Button
+                      size="sm"
+                      className="h-6 text-xs px-3 bg-indigo-600 hover:bg-indigo-700"
+                      onClick={stampCode}
+                      disabled={stampingCode || !projectId}
+                      data-testid="button-stamp-code"
+                    >
+                      {stampingCode ? <Loader2 className="w-3 h-3 mr-1 animate-spin" /> : <Fingerprint className="w-3 h-3 mr-1" />}
+                      Stamp Code
+                    </Button>
+                  </div>
+                  <div className="space-y-2">
+                    {trustHubStamps.map((stamp: any, i: number) => (
+                      <div key={stamp.id || i} className="flex items-center justify-between p-2 rounded bg-[#0a0b10] border border-[#1a1b2e] hover:border-indigo-500/30 transition-all" data-testid={`stamp-${i}`}>
+                        <div className="flex items-center gap-3">
+                          <div className="w-6 h-6 rounded bg-indigo-500/20 flex items-center justify-center">
+                            <Hash className="w-3 h-3 text-indigo-400" />
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-200 font-mono">{stamp.txHash?.slice(0, 20)}...</p>
+                            <p className="text-[10px] text-muted-foreground">
+                              Block #{stamp.blockNumber} {stamp.createdAt ? new Date(stamp.createdAt).toLocaleString() : ""}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <CheckCircle2 className="w-3 h-3 text-green-400" />
+                          <span className="text-[10px] text-green-400">Verified</span>
+                        </div>
+                      </div>
+                    ))}
+                    {trustHubStamps.length === 0 && (
+                      <div className="text-center py-6">
+                        <Fingerprint className="w-8 h-8 mx-auto mb-2 text-indigo-400/30" />
+                        <p className="text-xs text-muted-foreground">No code stamps yet.</p>
+                        <p className="text-[10px] text-white/20 mt-1">Stamp your code to register it on the Trust Layer blockchain.</p>
+                      </div>
                     )}
                   </div>
                 </motion.div>
@@ -3271,8 +3558,8 @@ console.log('Trust Layer Studio loaded!');`,
         </main>
 
         {/* Right Panel - Preview */}
-        <aside className="w-80 border-l border-white/5 bg-black/40 flex flex-col shrink-0 hidden lg:flex">
-          <div className="flex items-center justify-between px-3 py-2 border-b border-white/5">
+        <aside className="w-80 border-l border-[#1a1b2e] bg-[#0a0b10] flex flex-col shrink-0 hidden lg:flex">
+          <div className="flex items-center justify-between px-3 py-2 border-b border-[#1a1b2e]">
             <span className="text-xs text-muted-foreground uppercase flex items-center gap-2">
               <Globe className="w-3.5 h-3.5" /> Preview
             </span>
@@ -3313,7 +3600,7 @@ console.log('Trust Layer Studio loaded!');`,
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-gray-900 border border-white/10 rounded-lg shadow-xl p-4 max-w-md w-full mx-4"
+            className="bg-[#0a0b10] border border-[#1a1b2e] rounded-lg shadow-xl p-4 max-w-md w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
@@ -3338,7 +3625,7 @@ console.log('Trust Layer Studio loaded!');`,
                   value={editingProjectName}
                   onChange={(e) => setEditingProjectName(e.target.value)}
                   placeholder="Project name..."
-                  className="bg-black/30 border-white/10"
+                  className="bg-[#0a0b10] border-[#1a1b2e]"
                   data-testid="input-project-name"
                 />
               </div>
@@ -3346,7 +3633,7 @@ console.log('Trust Layer Studio loaded!');`,
               <div>
                 <label className="text-xs text-muted-foreground block mb-1">Project ID</label>
                 <div className="flex items-center gap-2">
-                  <code className="flex-1 text-xs font-mono bg-black/30 p-2 rounded border border-white/5 text-muted-foreground">
+                  <code className="flex-1 text-xs font-mono bg-[#0a0b10] p-2 rounded border border-[#1a1b2e] text-muted-foreground">
                     {projectId}
                   </code>
                   <Button
@@ -3363,11 +3650,11 @@ console.log('Trust Layer Studio loaded!');`,
               <div>
                 <label className="text-xs text-muted-foreground block mb-1">Statistics</label>
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="bg-black/30 p-2 rounded border border-white/5">
+                  <div className="bg-[#0a0b10] p-2 rounded border border-[#1a1b2e]">
                     <span className="text-muted-foreground">Files:</span>
                     <span className="ml-2 text-white">{files.length}</span>
                   </div>
-                  <div className="bg-black/30 p-2 rounded border border-white/5">
+                  <div className="bg-[#0a0b10] p-2 rounded border border-[#1a1b2e]">
                     <span className="text-muted-foreground">Commits:</span>
                     <span className="ml-2 text-white">{commits.length}</span>
                   </div>
@@ -3402,7 +3689,7 @@ console.log('Trust Layer Studio loaded!');`,
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-gray-900 border border-white/10 rounded-lg shadow-xl p-4 max-w-md w-full mx-4"
+            className="bg-[#0a0b10] border border-[#1a1b2e] rounded-lg shadow-xl p-4 max-w-md w-full mx-4"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-4">
@@ -3421,26 +3708,86 @@ console.log('Trust Layer Studio loaded!');`,
             </div>
             <div className="space-y-2">
               {[
+                { keys: "Ctrl + K", desc: "Command Palette" },
                 { keys: "Ctrl + S", desc: "Save current file" },
                 { keys: "Ctrl + F", desc: "Open search" },
+                { keys: "Ctrl + I", desc: "Toggle AI Assistant" },
+                { keys: "Ctrl + Shift + K", desc: "Agent Mode" },
                 { keys: "Ctrl + B", desc: "Open console" },
                 { keys: "Ctrl + /", desc: "Toggle shortcuts panel" },
                 { keys: "Escape", desc: "Close panels/modals" },
               ].map((shortcut) => (
-                <div key={shortcut.keys} className="flex items-center justify-between p-2 rounded bg-black/40 border border-white/5">
+                <div key={shortcut.keys} className="flex items-center justify-between p-2 rounded bg-[#0a0b10] border border-[#1a1b2e]">
                   <span className="text-sm text-gray-300">{shortcut.desc}</span>
-                  <kbd className="px-2 py-1 text-xs font-mono bg-gray-800 rounded border border-gray-600 text-cyan-400">
+                  <kbd className="px-2 py-1 text-xs font-mono bg-[#1a1b2e] rounded border border-[#2a2b3e] text-cyan-400">
                     {shortcut.keys}
                   </kbd>
                 </div>
               ))}
             </div>
             <p className="mt-4 text-xs text-muted-foreground text-center">
-              Press <kbd className="px-1 bg-gray-800 rounded border border-gray-600">Ctrl + /</kbd> or <kbd className="px-1 bg-gray-800 rounded border border-gray-600">Esc</kbd> to close
+              Press <kbd className="px-1 bg-[#1a1b2e] rounded border border-[#2a2b3e]">Ctrl + /</kbd> or <kbd className="px-1 bg-[#1a1b2e] rounded border border-[#2a2b3e]">Esc</kbd> to close
             </p>
           </motion.div>
         </div>
       )}
+
+      {/* Command Palette (T012) */}
+      <AnimatePresence>
+        {showCommandPalette && (
+          <div className="fixed inset-0 z-[60] flex items-start justify-center pt-[15vh] bg-black/60 backdrop-blur-sm" onClick={() => setShowCommandPalette(false)}>
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -20, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              className="w-full max-w-lg bg-[#0a0b10] border border-[#1a1b2e] rounded-xl shadow-2xl shadow-cyan-500/5 overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+              data-testid="command-palette"
+            >
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-[#1a1b2e]">
+                <Command className="w-4 h-4 text-cyan-400" />
+                <input
+                  ref={commandInputRef}
+                  value={commandSearch}
+                  onChange={(e) => setCommandSearch(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") setShowCommandPalette(false);
+                    if (e.key === "Enter" && filteredCommands.length > 0) {
+                      filteredCommands[0].action();
+                      setShowCommandPalette(false);
+                    }
+                  }}
+                  placeholder="Type a command or file name..."
+                  className="flex-1 bg-transparent text-white text-sm outline-none placeholder:text-white/30"
+                  autoFocus
+                  data-testid="input-command-search"
+                />
+                <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-[#1a1b2e] rounded text-white/40">ESC</kbd>
+              </div>
+              <div className="max-h-80 overflow-auto py-1">
+                {filteredCommands.map((cmd) => (
+                  <button
+                    key={cmd.id}
+                    onClick={() => { cmd.action(); setShowCommandPalette(false); }}
+                    className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-300 hover:bg-cyan-500/10 hover:text-white transition-colors group"
+                    data-testid={`command-${cmd.id}`}
+                  >
+                    <cmd.icon className="w-4 h-4 text-white/30 group-hover:text-cyan-400 transition-colors" />
+                    <span className="flex-1 text-left">{cmd.label}</span>
+                    {cmd.shortcut && (
+                      <kbd className="px-1.5 py-0.5 text-[10px] font-mono bg-[#1a1b2e] rounded text-white/30">{cmd.shortcut}</kbd>
+                    )}
+                  </button>
+                ))}
+                {filteredCommands.length === 0 && (
+                  <p className="px-4 py-6 text-sm text-white/30 text-center">No matching commands</p>
+                )}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* AI Assistant Panel */}
       <AnimatePresence>
@@ -3449,33 +3796,44 @@ console.log('Trust Layer Studio loaded!');`,
             initial={{ opacity: 0, x: 300 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 300 }}
-            className="fixed right-0 top-0 h-full w-full md:w-96 z-50 bg-gray-900/95 border-l border-white/10 backdrop-blur-xl shadow-2xl flex flex-col"
+            className="fixed right-0 top-0 h-full w-full md:w-[420px] z-50 bg-[#0a0b10]/98 border-l border-[#1a1b2e] backdrop-blur-xl shadow-2xl flex flex-col"
             ref={aiPanelRef}
           >
             {/* AI Panel Header */}
-            <div className="flex items-center justify-between p-4 border-b border-white/10 bg-gradient-to-r from-purple-500/10 to-cyan-500/10">
+            <div className="flex items-center justify-between p-4 border-b border-[#1a1b2e] bg-gradient-to-r from-purple-500/10 to-cyan-500/10">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-white" />
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${agentMode ? "bg-gradient-to-r from-amber-500 to-orange-500" : "bg-gradient-to-r from-purple-500 to-cyan-500"}`}>
+                  {agentMode ? <Cpu className="w-5 h-5 text-white" /> : <Sparkles className="w-5 h-5 text-white" />}
                 </div>
                 <div>
-                  <h3 className="font-medium text-white">AI Code Assistant</h3>
-                  <p className="text-xs text-muted-foreground">$0.05/request • GPT-4o</p>
+                  <h3 className="font-medium text-white">{agentMode ? "Agent Mode" : "AI Assistant"}</h3>
+                  <p className="text-xs text-muted-foreground">{agentMode ? "$0.25/session • GPT-4o" : "$0.05/request • GPT-4o"}</p>
                 </div>
               </div>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={() => setShowAiPanel(false)}
-                className="h-8 w-8 p-0"
-                data-testid="button-close-ai"
-              >
-                <X className="w-4 h-4" />
-              </Button>
+              <div className="flex items-center gap-1">
+                <Button
+                  size="sm"
+                  variant={agentMode ? "default" : "ghost"}
+                  onClick={() => setAgentMode(!agentMode)}
+                  className={`h-7 text-xs px-2 ${agentMode ? "bg-amber-500/20 text-amber-400 border border-amber-500/30" : "hover:bg-white/5"}`}
+                  data-testid="button-toggle-agent"
+                >
+                  <Cpu className="w-3 h-3 mr-1" /> Agent
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setShowAiPanel(false)}
+                  className="h-8 w-8 p-0"
+                  data-testid="button-close-ai"
+                >
+                  <X className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
 
             {/* Credits Display */}
-            <div className="px-4 py-2 bg-black/30 border-b border-white/5 flex items-center justify-between">
+            <div className="px-4 py-2 bg-[#050508] border-b border-[#1a1b2e] flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-xs text-muted-foreground">Credits:</span>
                 <span className={`text-sm font-medium ${aiCredits && aiCredits.balanceCents > 0 ? "text-green-400" : "text-red-400"}`}>
@@ -3495,35 +3853,59 @@ console.log('Trust Layer Studio loaded!');`,
               </Button>
             </div>
 
-            {/* AI Response Area */}
+            {/* AI Response Area with Apply Buttons (T002) */}
             <div className="flex-1 overflow-auto p-4">
               {aiResponse ? (
                 <div className="prose prose-invert prose-sm max-w-none">
-                  <div className="whitespace-pre-wrap text-sm text-gray-300 font-mono bg-black/30 rounded-lg p-4 border border-white/10">
-                    {aiResponse}
-                  </div>
+                  {aiResponse.split(/(```[\s\S]*?```)/g).map((part, i) => {
+                    const codeMatch = part.match(/```(\w+)?\n?([\s\S]*?)```/);
+                    if (codeMatch) {
+                      const lang = codeMatch[1] || "";
+                      const code = codeMatch[2].trim();
+                      const firstLine = code.split("\n")[0] || "";
+                      const isNewFile = firstLine.includes("NEW FILE:");
+                      const filename = isNewFile ? firstLine.replace(/\/\/\s*NEW FILE:\s*/, "").trim() : undefined;
+                      return (
+                        <div key={i} className="relative my-3 group">
+                          <div className="flex items-center justify-between px-3 py-1.5 bg-[#0f1018] rounded-t border border-[#1a1b2e] border-b-0">
+                            <span className="text-[10px] font-mono text-white/40">{lang}{filename ? ` — ${filename}` : ""}</span>
+                            <div className="flex gap-1">
+                              <Button size="sm" variant="ghost" className="h-5 text-[10px] px-1.5 text-cyan-400 hover:bg-cyan-500/20" onClick={() => navigator.clipboard.writeText(code)} data-testid={`button-copy-code-${i}`}>
+                                <Copy className="w-3 h-3 mr-0.5" /> Copy
+                              </Button>
+                              <Button size="sm" variant="ghost" className="h-5 text-[10px] px-1.5 text-green-400 hover:bg-green-500/20" onClick={() => applyCodeBlock(code, isNewFile ? `NEW FILE: ${filename}` : undefined)} data-testid={`button-apply-code-${i}`}>
+                                <Check className="w-3 h-3 mr-0.5" /> {isNewFile ? "Create" : "Apply"}
+                              </Button>
+                            </div>
+                          </div>
+                          <pre className="text-xs font-mono bg-[#050508] p-3 rounded-b border border-[#1a1b2e] border-t-0 overflow-x-auto text-gray-300 whitespace-pre-wrap">{isNewFile ? code.split("\n").slice(1).join("\n") : code}</pre>
+                        </div>
+                      );
+                    }
+                    return part ? <p key={i} className="text-sm text-gray-300 whitespace-pre-wrap leading-relaxed">{part}</p> : null;
+                  })}
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-r from-purple-500/20 to-cyan-500/20 flex items-center justify-center">
-                    <MessageSquare className="w-8 h-8 text-cyan-400" />
+                  <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${agentMode ? "bg-gradient-to-r from-amber-500/20 to-orange-500/20" : "bg-gradient-to-r from-purple-500/20 to-cyan-500/20"}`}>
+                    {agentMode ? <Cpu className="w-8 h-8 text-amber-400" /> : <MessageSquare className="w-8 h-8 text-cyan-400" />}
                   </div>
-                  <h4 className="text-lg font-medium text-white mb-2">Ask me anything!</h4>
+                  <h4 className="text-lg font-medium text-white mb-2">{agentMode ? "Agent Ready" : "Ask me anything!"}</h4>
                   <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-                    I can help you write code, debug issues, explain concepts, or refactor your code.
+                    {agentMode
+                      ? "Describe a task and I'll autonomously read, plan, edit, and create files across your project."
+                      : "I can help you write code, debug issues, explain concepts, or refactor your code."}
                   </p>
                   <div className="mt-6 space-y-2">
                     <p className="text-xs text-muted-foreground">Try asking:</p>
-                    {[
-                      "Explain this code",
-                      "Fix the bug in this function",
-                      "Add error handling",
-                      "Optimize performance",
-                    ].map((suggestion) => (
+                    {(agentMode
+                      ? ["Add authentication to my app", "Refactor this into separate components", "Add unit tests for all functions", "Create a REST API for this data model"]
+                      : ["Explain this code", "Fix the bug in this function", "Add error handling", "Optimize performance"]
+                    ).map((suggestion) => (
                       <button
                         key={suggestion}
                         onClick={() => setAiPrompt(suggestion)}
-                        className="block w-full text-left px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-gray-300 transition-colors border border-white/5"
+                        className="block w-full text-left px-3 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-sm text-gray-300 transition-colors border border-[#1a1b2e]"
                       >
                         "{suggestion}"
                       </button>
@@ -3534,14 +3916,14 @@ console.log('Trust Layer Studio loaded!');`,
             </div>
 
             {/* AI Input Area */}
-            <div className="p-4 border-t border-white/10 bg-black/30">
+            <div className="p-4 border-t border-[#1a1b2e] bg-[#050508]">
               <div className="flex gap-2">
                 <Input
                   value={aiPrompt}
                   onChange={(e) => setAiPrompt(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && askAiAssistant()}
-                  placeholder="Ask AI about your code..."
-                  className="flex-1 bg-white/5 border-white/10 focus:border-cyan-500/50"
+                  placeholder={agentMode ? "Describe a task for the agent..." : "Ask AI about your code..."}
+                  className="flex-1 bg-white/5 border-[#1a1b2e] focus:border-cyan-500/50"
                   disabled={aiLoading}
                   data-testid="input-ai-prompt"
                 />
@@ -3560,7 +3942,7 @@ console.log('Trust Layer Studio loaded!');`,
                   size="sm"
                   onClick={askAiAssistant}
                   disabled={aiLoading || !aiPrompt.trim()}
-                  className="h-10 px-4 bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400"
+                  className={`h-10 px-4 ${agentMode ? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400" : "bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400"}`}
                   data-testid="button-ask-ai"
                 >
                   {aiLoading ? (

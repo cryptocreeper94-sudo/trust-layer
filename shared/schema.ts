@@ -9031,6 +9031,45 @@ export const insertAuthorEarningSchema = createInsertSchema(authorEarnings).omit
 export type AuthorEarning = typeof authorEarnings.$inferSelect;
 export type InsertAuthorEarning = z.infer<typeof insertAuthorEarningSchema>;
 
+export const studioCodeStamps = pgTable("studio_code_stamps", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: text("project_id").notNull(),
+  userId: text("user_id").notNull(),
+  commitHash: text("commit_hash"),
+  treeHash: text("tree_hash").notNull(),
+  provenanceId: text("provenance_id"),
+  txHash: text("tx_hash"),
+  blockNumber: integer("block_number"),
+  message: text("message"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertStudioCodeStampSchema = createInsertSchema(studioCodeStamps).omit({
+  id: true,
+  createdAt: true,
+});
+export type InsertStudioCodeStamp = z.infer<typeof insertStudioCodeStampSchema>;
+export type StudioCodeStamp = typeof studioCodeStamps.$inferSelect;
+
+export const studioPipelineRuns = pgTable("studio_pipeline_runs", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  projectId: text("project_id").notNull(),
+  userId: text("user_id").notNull(),
+  pipelineName: text("pipeline_name").notNull(),
+  status: text("status").notNull().default("pending"),
+  steps: text("steps").notNull().default("[]"),
+  logs: text("logs").notNull().default(""),
+  duration: integer("duration"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertStudioPipelineRunSchema = createInsertSchema(studioPipelineRuns).omit({
+  id: true,
+  createdAt: true,
+});
+export type InsertStudioPipelineRun = z.infer<typeof insertStudioPipelineRunSchema>;
+export type StudioPipelineRun = typeof studioPipelineRuns.$inferSelect;
+
 export const BOOK_CATEGORIES = {
   fiction: {
     label: "Fiction",

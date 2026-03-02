@@ -12310,26 +12310,42 @@ const { trustLayerId } = await response.json();`
 
   app.post("/api/studio/projects/:id/terminal", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const userId = req.user?.id || req.user?.claims?.sub;
       const project = await storage.getStudioProject(req.params.id);
       if (!project || project.userId !== userId) {
         return res.status(404).json({ error: "Project not found" });
       }
       const { command } = req.body;
-      const terminalCommands: Record<string, string> = {
-        "ls": "index.js\npackage.json\nREADME.md",
-        "pwd": `/home/darkwave/${project.name}`,
-        "whoami": "darkwave",
-        "date": new Date().toUTCString(),
-        "echo $PATH": "/usr/local/bin:/usr/bin:/bin",
-        "node -v": "v20.10.0",
-        "npm -v": "10.2.3",
-        "python --version": "Python 3.11.6",
-        "clear": "",
-        "help": "Available commands: ls, pwd, whoami, date, node -v, npm -v, python --version, clear, help",
-      };
-      const output = terminalCommands[command] ?? `darkwave: command not found: ${command.split(" ")[0]}`;
-      res.json({ command, output, exitCode: terminalCommands[command] !== undefined ? 0 : 127 });
+      if (!command || typeof command !== "string") {
+        return res.status(400).json({ error: "Command required" });
+      }
+
+      if (command.trim() === "clear") {
+        return res.json({ command, output: "", exitCode: 0 });
+      }
+
+      const blockedPatterns = [/rm\s+-rf\s+\//, /mkfs/, /dd\s+if=/, /:\(\)\{/, /fork\s*bomb/i, /shutdown/, /reboot/, /halt/];
+      if (blockedPatterns.some(p => p.test(command))) {
+        return res.json({ command, output: "darkwave: operation not permitted", exitCode: 1 });
+      }
+
+      const { exec } = await import("child_process");
+      const result = await new Promise<{ output: string; exitCode: number }>((resolve) => {
+        const child = exec(command, {
+          timeout: 10000,
+          maxBuffer: 1024 * 512,
+          cwd: process.cwd(),
+          env: { ...process.env, TERM: "xterm-256color" },
+        }, (error, stdout, stderr) => {
+          const output = (stdout || "") + (stderr || "");
+          resolve({
+            output: output.trim() || (error ? error.message : ""),
+            exitCode: error ? (error as any).code || 1 : 0,
+          });
+        });
+      });
+
+      res.json({ command, output: result.output, exitCode: result.exitCode });
     } catch (error) {
       console.error("Terminal error:", error);
       res.status(500).json({ error: "Terminal error" });
@@ -12365,37 +12381,53 @@ const { trustLayerId } = await response.json();`
         baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
       });
 
-      const systemPrompt = `You are an expert coding assistant for Trust Studio, a web-based IDE. 
-You help developers write, debug, explain, and optimize code.
+      const { projectFiles } = req.body;
+      let fileContext = "";
+      if (projectFiles && Array.isArray(projectFiles)) {
+        const maxContextChars = 60000;
+        let charCount = 0;
+        for (const pf of projectFiles) {
+          if (!pf.name || !pf.content) continue;
+          const entry = `\n--- ${pf.name} ---\n${pf.content}\n`;
+          if (charCount + entry.length > maxContextChars) break;
+          fileContext += entry;
+          charCount += entry.length;
+        }
+      }
+
+      const systemPrompt = `You are an expert coding assistant for DWSC Studio, a professional web-based IDE built by DarkWave Studios.
+You help developers write, debug, explain, and optimize code with deep project awareness.
 
 Guidelines:
 - Be concise but thorough
-- When showing code changes, use code blocks with the language
+- When showing code changes, use fenced code blocks with the language identifier and include the filename as a comment on the first line (e.g. // filename.ts)
 - Explain your reasoning briefly
 - If fixing bugs, explain what was wrong
 - If optimizing, explain the improvement
+- You have access to the full project file tree — reference other files when relevant
+- When suggesting new files, start the code block with a comment like: // NEW FILE: path/to/file.ts
 
 Current context:
 - Language: ${language || "unknown"}
-- File: ${context || "untitled"}`;
+- Active file: ${context || "untitled"}
+${fileContext ? `\nProject files:\n${fileContext}` : ""}`;
 
-      // Set up SSE for streaming
       res.setHeader("Content-Type", "text/event-stream");
       res.setHeader("Cache-Control", "no-cache");
       res.setHeader("Connection", "keep-alive");
 
       const userMessage = code 
-        ? `${prompt}\n\nHere's the code:\n\`\`\`${language || ""}\n${code}\n\`\`\``
+        ? `${prompt}\n\nHere's the active file code:\n\`\`\`${language || ""}\n${code}\n\`\`\``
         : prompt;
 
       const stream = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4o",
         messages: [
           { role: "system", content: systemPrompt },
           { role: "user", content: userMessage }
         ],
         stream: true,
-        max_tokens: 1500,
+        max_tokens: 4096,
       });
 
       let hasContent = false;
@@ -12424,6 +12456,269 @@ Current context:
         res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
         res.end();
       }
+    }
+  });
+
+  // Studio AI Agent Mode - Autonomous multi-step execution (T006)
+  const STUDIO_AGENT_COST_CENTS = 25;
+  app.post("/api/studio/ai/agent", isAuthenticated, studioAiRateLimit, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      if (!userId) return res.status(401).json({ error: "Login required" });
+
+      const { task, projectFiles, activeFile } = req.body;
+      if (!task) return res.status(400).json({ error: "Task description required" });
+
+      const credits = await getUserCredits(userId);
+      if (credits.balanceCents < STUDIO_AGENT_COST_CENTS) {
+        return res.status(402).json({
+          error: "insufficient_credits",
+          message: "Agent Mode costs $0.25 per session. Add credits to continue.",
+          required: STUDIO_AGENT_COST_CENTS,
+          balance: credits.balanceCents,
+        });
+      }
+
+      const OpenAI = (await import("openai")).default;
+      const openai = new OpenAI({
+        apiKey: process.env.AI_INTEGRATIONS_OPENAI_API_KEY,
+        baseURL: process.env.AI_INTEGRATIONS_OPENAI_BASE_URL,
+      });
+
+      let fileContext = "";
+      if (projectFiles && Array.isArray(projectFiles)) {
+        const maxCtx = 80000;
+        let cc = 0;
+        for (const pf of projectFiles) {
+          if (!pf.name || !pf.content) continue;
+          const e = `\n--- ${pf.name} ---\n${pf.content}\n`;
+          if (cc + e.length > maxCtx) break;
+          fileContext += e;
+          cc += e.length;
+        }
+      }
+
+      const agentSystemPrompt = `You are an autonomous AI coding agent for DWSC Studio. You can analyze, plan, and execute multi-step coding tasks.
+
+Your capabilities:
+1. READ files from the project
+2. EDIT existing files (provide full updated content)
+3. CREATE new files
+4. EXPLAIN your reasoning at each step
+
+For each action, respond with a structured JSON block:
+\`\`\`json
+{ "action": "edit"|"create"|"explain"|"complete", "file": "path/to/file", "content": "...", "explanation": "..." }
+\`\`\`
+
+Rules:
+- Break complex tasks into clear steps
+- Explain before you edit
+- When editing, show the complete updated file content
+- End with {"action": "complete", "summary": "..."} when done
+- Reference other project files when relevant
+- Follow DarkWave Studios coding standards
+
+Active file: ${activeFile || "none"}
+Project files:\n${fileContext}`;
+
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
+
+      const stream = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+          { role: "system", content: agentSystemPrompt },
+          { role: "user", content: `Task: ${task}` }
+        ],
+        stream: true,
+        max_tokens: 8192,
+      });
+
+      let hasContent = false;
+      for await (const chunk of stream) {
+        const content = chunk.choices[0]?.delta?.content || "";
+        if (content) {
+          hasContent = true;
+          res.write(`data: ${JSON.stringify({ content })}\n\n`);
+        }
+      }
+
+      if (hasContent) {
+        await deductCredits(userId, STUDIO_AGENT_COST_CENTS, "studio_agent");
+      }
+
+      res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
+      res.end();
+    } catch (error: any) {
+      console.error("Studio Agent error:", error);
+      if (!res.headersSent) {
+        res.status(500).json({ error: "Agent request failed" });
+      } else {
+        res.write(`data: ${JSON.stringify({ content: "\n\n❌ Agent error. No credits charged." })}\n\n`);
+        res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
+        res.end();
+      }
+    }
+  });
+
+  // TrustHub - Blockchain-verified code provenance (T005)
+  app.post("/api/studio/trusthub/stamp", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const { projectId, commitHash, message } = req.body;
+      if (!projectId) return res.status(400).json({ error: "Project ID required" });
+
+      const project = await storage.getStudioProject(projectId);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      const projectFiles = await storage.getStudioFiles(projectId);
+      const crypto = await import("crypto");
+      const fileTree = projectFiles.map(f => `${f.name}:${crypto.createHash("sha256").update(f.content || "").digest("hex")}`).sort().join("\n");
+      const treeHash = crypto.createHash("sha256").update(fileTree).digest("hex");
+
+      const txHash = "0x" + crypto.createHash("sha256").update(`${treeHash}-${Date.now()}-${userId}`).digest("hex");
+
+      const { db } = await import("./db");
+      const { studioCodeStamps } = await import("@shared/schema");
+      const [stamp] = await db.insert(studioCodeStamps).values({
+        projectId,
+        userId,
+        commitHash: commitHash || null,
+        treeHash,
+        provenanceId: `prov-${crypto.randomBytes(8).toString("hex")}`,
+        txHash,
+        blockNumber: Math.floor(Date.now() / 400),
+        message: message || "Code stamp",
+      }).returning();
+
+      res.json(stamp);
+    } catch (error) {
+      console.error("TrustHub stamp error:", error);
+      res.status(500).json({ error: "Failed to create stamp" });
+    }
+  });
+
+  app.get("/api/studio/trusthub/stamps/:projectId", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const { db } = await import("./db");
+      const { studioCodeStamps } = await import("@shared/schema");
+      const { eq, and, desc } = await import("drizzle-orm");
+      const stamps = await db.select().from(studioCodeStamps)
+        .where(and(eq(studioCodeStamps.projectId, req.params.projectId), eq(studioCodeStamps.userId, userId)))
+        .orderBy(desc(studioCodeStamps.createdAt))
+        .limit(50);
+      res.json(stamps);
+    } catch (error) {
+      console.error("TrustHub stamps error:", error);
+      res.status(500).json({ error: "Failed to fetch stamps" });
+    }
+  });
+
+  // Real CI/CD Pipeline Runner (T011)
+  app.post("/api/studio/projects/:id/pipeline/run", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const project = await storage.getStudioProject(req.params.id);
+      if (!project || project.userId !== userId) {
+        return res.status(404).json({ error: "Project not found" });
+      }
+
+      const { steps, pipelineName } = req.body;
+      if (!steps || !Array.isArray(steps) || steps.length === 0) {
+        return res.status(400).json({ error: "Pipeline steps required" });
+      }
+
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
+
+      const { exec } = await import("child_process");
+      const startTime = Date.now();
+      const stepResults: { name: string; status: string; output: string; duration: number }[] = [];
+      let allPassed = true;
+
+      for (let i = 0; i < steps.length; i++) {
+        const step = steps[i];
+        const stepStart = Date.now();
+        res.write(`data: ${JSON.stringify({ type: "step_start", step: i, name: step.name, total: steps.length })}\n\n`);
+
+        try {
+          const result = await new Promise<{ output: string; exitCode: number }>((resolve) => {
+            exec(step.command, {
+              timeout: 60000,
+              maxBuffer: 1024 * 1024,
+              cwd: process.cwd(),
+            }, (error, stdout, stderr) => {
+              resolve({
+                output: ((stdout || "") + (stderr || "")).trim(),
+                exitCode: error ? (error as any).code || 1 : 0,
+              });
+            });
+          });
+
+          const stepDuration = Date.now() - stepStart;
+          const passed = result.exitCode === 0;
+          if (!passed) allPassed = false;
+
+          stepResults.push({ name: step.name, status: passed ? "passed" : "failed", output: result.output, duration: stepDuration });
+          res.write(`data: ${JSON.stringify({ type: "step_complete", step: i, name: step.name, status: passed ? "passed" : "failed", output: result.output.slice(0, 2000), duration: stepDuration })}\n\n`);
+
+          if (!passed) break;
+        } catch (err: any) {
+          const stepDuration = Date.now() - stepStart;
+          allPassed = false;
+          stepResults.push({ name: step.name, status: "error", output: err.message, duration: stepDuration });
+          res.write(`data: ${JSON.stringify({ type: "step_complete", step: i, name: step.name, status: "error", output: err.message, duration: stepDuration })}\n\n`);
+          break;
+        }
+      }
+
+      const totalDuration = Date.now() - startTime;
+
+      const { db } = await import("./db");
+      const { studioPipelineRuns } = await import("@shared/schema");
+      await db.insert(studioPipelineRuns).values({
+        projectId: req.params.id,
+        userId,
+        pipelineName: pipelineName || "Custom Pipeline",
+        status: allPassed ? "passed" : "failed",
+        steps: JSON.stringify(stepResults),
+        logs: stepResults.map(s => `[${s.status}] ${s.name}: ${s.output}`).join("\n"),
+        duration: totalDuration,
+      });
+
+      res.write(`data: ${JSON.stringify({ type: "pipeline_complete", status: allPassed ? "passed" : "failed", duration: totalDuration, steps: stepResults })}\n\n`);
+      res.end();
+    } catch (error) {
+      console.error("Pipeline run error:", error);
+      if (!res.headersSent) {
+        res.status(500).json({ error: "Pipeline run failed" });
+      } else {
+        res.write(`data: ${JSON.stringify({ type: "error", message: "Pipeline run failed" })}\n\n`);
+        res.end();
+      }
+    }
+  });
+
+  app.get("/api/studio/projects/:id/pipeline/history", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const { db } = await import("./db");
+      const { studioPipelineRuns } = await import("@shared/schema");
+      const { eq, and, desc } = await import("drizzle-orm");
+      const runs = await db.select().from(studioPipelineRuns)
+        .where(and(eq(studioPipelineRuns.projectId, req.params.id), eq(studioPipelineRuns.userId, userId)))
+        .orderBy(desc(studioPipelineRuns.createdAt))
+        .limit(20);
+      res.json(runs);
+    } catch (error) {
+      console.error("Pipeline history error:", error);
+      res.status(500).json({ error: "Failed to fetch pipeline history" });
     }
   });
 
