@@ -257,6 +257,9 @@ export async function registerRoutes(
   registerImageRoutes(app);
   registerObjectStorageRoutes(app);
 
+  const { registerStudioIntegrations } = await import("./studio-integrations");
+  registerStudioIntegrations(app, isAuthenticated);
+
   const { registerApiDocs } = await import("./api-docs");
   registerApiDocs(app);
 

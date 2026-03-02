@@ -10,7 +10,8 @@ import {
   ExternalLink, Copy, CheckCircle, Loader2, Send, Search, Replace, Keyboard,
   Upload, Download, Filter, Mic, MicOff, Bot, Sparkles, MessageSquare, Eye,
   HelpCircle, BookOpen, Video, GraduationCap, Command, SplitSquareHorizontal,
-  AlertTriangle, CheckCircle2, ArrowRight, Cpu, Fingerprint, Hash
+  AlertTriangle, CheckCircle2, ArrowRight, Cpu, Fingerprint, Hash,
+  Square, RefreshCw
 } from "lucide-react";
 import { MonacoEditor } from "@/components/monaco-editor";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
@@ -474,7 +475,7 @@ export default function Studio() {
   const [running, setRunning] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [commitMessage, setCommitMessage] = useState("");
-  const [bottomTab, setBottomTab] = useState<"console" | "git" | "terminal" | "deploy" | "packages" | "cicd" | "trusthub">("console");
+  const [bottomTab, setBottomTab] = useState<"console" | "git" | "terminal" | "deploy" | "packages" | "cicd" | "trusthub" | "problems">("console");
   
   // CI/CD Pipeline state
   const [pipelines, setPipelines] = useState<{id: string, name: string, trigger: string, status: string, lastRun: string}[]>([
@@ -523,6 +524,174 @@ export default function Studio() {
   // TrustHub state (T005)
   const [trustHubStamps, setTrustHubStamps] = useState<any[]>([]);
   const [stampingCode, setStampingCode] = useState(false);
+
+  // GitHub Integration state (T003)
+  const [githubConnected, setGithubConnected] = useState(false);
+  const [githubConfigured, setGithubConfigured] = useState(false);
+  const [selectedGithubRepo, setSelectedGithubRepo] = useState<string>("");
+  const [githubRepos, setGithubRepos] = useState<any[]>([]);
+  const [loadingRepos, setLoadingRepos] = useState(false);
+  const [pushingToGithub, setPushingToGithub] = useState(false);
+
+  // Vercel Integration state (T004)
+  const [vercelConnected, setVercelConnected] = useState(false);
+  const [vercelToken, setVercelToken] = useState("");
+  const [vercelDeploying, setVercelDeploying] = useState(false);
+  const [vercelDeployUrl, setVercelDeployUrl] = useState<string | null>(null);
+
+  // Integration Hub state (T007)
+  const [showIntegrations, setShowIntegrations] = useState(false);
+
+  // Live Preview state (T008)
+  const [previewHtml, setPreviewHtml] = useState<string | null>(null);
+  const [previewRunning, setPreviewRunning] = useState(false);
+
+  // Diagnostics state (T014)
+  const [diagnostics, setDiagnostics] = useState<{ line: number; column: number; severity: string; message: string; source: string }[]>([]);
+  const [diagnosticsSummary, setDiagnosticsSummary] = useState<{ errors: number; warnings: number; info: number }>({ errors: 0, warnings: 0, info: 0 });
+
+  // Fetch integration status on mount (T007)
+  useEffect(() => {
+    if (user) {
+      fetch("/api/studio/integrations/status")
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (data) {
+            setGithubConnected(data.github?.connected || false);
+            setGithubConfigured(data.github?.configured || false);
+            setVercelConnected(data.vercel?.connected || false);
+          }
+        })
+        .catch(() => {});
+    }
+  }, [user]);
+
+  // Lint on save (T014)
+  const runLint = useCallback(async (code: string, filename: string) => {
+    try {
+      const res = await fetch("/api/studio/lint", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code, language: getLanguageFromFileName(filename), filename }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setDiagnostics(data.diagnostics || []);
+        setDiagnosticsSummary(data.summary || { errors: 0, warnings: 0, info: 0 });
+      }
+    } catch {}
+  }, []);
+
+  // GitHub functions (T003)
+  const connectGithub = async () => {
+    try {
+      const res = await fetch("/api/studio/github/auth");
+      if (res.ok) {
+        const { url } = await res.json();
+        window.location.href = url;
+      }
+    } catch {}
+  };
+
+  const disconnectGithub = async () => {
+    await fetch("/api/studio/github/disconnect", { method: "POST" });
+    setGithubConnected(false);
+    setGithubRepos([]);
+  };
+
+  const loadGithubRepos = async () => {
+    setLoadingRepos(true);
+    try {
+      const res = await fetch("/api/studio/github/repos");
+      if (res.ok) setGithubRepos(await res.json());
+    } catch {}
+    setLoadingRepos(false);
+  };
+
+  const pushToGithub = async () => {
+    if (!projectId || pushingToGithub) return;
+    if (!selectedGithubRepo) {
+      setConsoleOutput(prev => [...prev, `> GitHub: No repo selected. Open Integrations Hub to choose a repo.`]);
+      return;
+    }
+    setPushingToGithub(true);
+    try {
+      const [owner, repo] = selectedGithubRepo.split("/");
+      const projectFiles = files.filter(f => !f.isFolder);
+      const res = await fetch("/api/studio/github/push", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          owner, repo, message: commitMessage || "Update from DWSC Studio",
+          files: projectFiles.map(f => ({ name: f.name, content: f.content })),
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setConsoleOutput(prev => [...prev, `> GitHub: Pushed to ${selectedGithubRepo} — commit ${data.commitSha?.slice(0, 8)}`]);
+      }
+    } catch {}
+    setPushingToGithub(false);
+  };
+
+  // Vercel functions (T004)
+  const connectVercel = async (token: string) => {
+    try {
+      const res = await fetch("/api/studio/vercel/connect", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token }),
+      });
+      if (res.ok) setVercelConnected(true);
+    } catch {}
+  };
+
+  const disconnectVercel = async () => {
+    await fetch("/api/studio/vercel/disconnect", { method: "POST" });
+    setVercelConnected(false);
+  };
+
+  const deployToVercel = async () => {
+    if (vercelDeploying) return;
+    setVercelDeploying(true);
+    setVercelDeployUrl(null);
+    try {
+      const projectFiles = files.filter(f => !f.isFolder);
+      const res = await fetch("/api/studio/vercel/deploy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          projectName: projectName || "studio-deploy",
+          files: projectFiles.map(f => ({ name: f.name, content: f.content })),
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setVercelDeployUrl(data.url);
+        setConsoleOutput(prev => [...prev, `> Vercel: Deployed to ${data.url}`]);
+      }
+    } catch {}
+    setVercelDeploying(false);
+  };
+
+  // Live Preview (T008)
+  const startPreview = async () => {
+    if (!projectId) return;
+    setPreviewRunning(true);
+    try {
+      const projectFiles = files.filter(f => !f.isFolder);
+      const res = await fetch("/api/studio/preview/start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectId, files: projectFiles.map(f => ({ name: f.name, content: f.content })) }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.html) setPreviewHtml(data.html);
+        if (data.url) setPreviewUrl(data.url);
+      }
+    } catch {}
+  };
 
   // Fetch AI credits on mount
   useEffect(() => {
@@ -1146,6 +1315,12 @@ console.log('Trust Layer Studio loaded!');`,
     { id: "split-h", label: "Split Editor Right", icon: SplitSquareHorizontal, action: () => { if (activeFile) { setSplitFile(activeFile); setSplitView("horizontal"); setSplitEditorContent(editorContent); } } },
     { id: "split-v", label: "Split Editor Down", icon: SplitSquareHorizontal, action: () => { if (activeFile) { setSplitFile(activeFile); setSplitView("vertical"); setSplitEditorContent(editorContent); } } },
     { id: "close-split", label: "Close Split View", icon: X, action: () => { setSplitView("none"); setSplitFile(null); } },
+    { id: "github-push", label: "Push to GitHub", icon: GitBranch, action: () => pushToGithub() },
+    { id: "vercel-deploy", label: "Deploy to Vercel", icon: Cloud, action: () => deployToVercel() },
+    { id: "preview", label: "Start Live Preview", icon: Eye, action: () => { setShowPreview(true); startPreview(); } },
+    { id: "lint", label: "Run Lint Check", icon: AlertTriangle, action: () => { if (activeFile) runLint(editorContent, activeFile.name); setBottomTab("problems"); } },
+    { id: "problems", label: "Show Problems", icon: AlertTriangle, action: () => setBottomTab("problems") },
+    { id: "integrations", label: "Integrations Hub", icon: Link2, action: () => setShowIntegrations(true) },
     { id: "settings", label: "Project Settings", icon: Settings, action: () => setShowSettings(true) },
     { id: "shortcuts", label: "Keyboard Shortcuts", icon: Keyboard, action: () => setShowShortcuts(true) },
     ...files.filter(f => !f.isFolder).map(f => ({
@@ -1415,6 +1590,10 @@ console.log('Trust Layer Studio loaded!');`,
         next.delete(activeFile.id);
         return next;
       });
+      // Auto-lint on save (T014)
+      runLint(editorContent, activeFile.name);
+      // Auto-refresh preview (T008)
+      if (showPreview && previewRunning) startPreview();
     } catch (error) {
       console.error("Save error:", error);
     }
@@ -2005,7 +2184,7 @@ console.log('Trust Layer Studio loaded!');`,
   const isViewOnly = !user;
 
   return (
-    <div className="h-screen flex flex-col bg-[#050508] text-foreground overflow-hidden">
+    <div className="h-screen flex flex-col bg-[#050508] text-foreground overflow-hidden pb-6">
       {/* View-Only Banner for non-logged-in users */}
       {isViewOnly && (
         <div className="bg-slate-900/80 border-b border-[#1a1b2e] px-4 py-1.5 flex items-center justify-between shrink-0">
@@ -2197,6 +2376,23 @@ console.log('Trust Layer Studio loaded!');`,
             </TooltipTrigger>
             <TooltipContent>
               <p>{splitView !== "none" ? "Close Split View" : "Split Editor"}</p>
+            </TooltipContent>
+          </Tooltip>
+          {/* Integrations Hub Button */}
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="sm"
+                variant={showIntegrations ? "default" : "ghost"}
+                onClick={() => setShowIntegrations(!showIntegrations)}
+                className={`h-8 w-8 p-0 ${showIntegrations ? "bg-cyan-500/20 text-cyan-400" : ""}`}
+                data-testid="button-integrations"
+              >
+                <Link2 className="w-4 h-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Integrations Hub</p>
             </TooltipContent>
           </Tooltip>
           {/* AI Assistant Button */}
@@ -3102,6 +3298,22 @@ console.log('Trust Layer Studio loaded!');`,
               >
                 <Fingerprint className="w-3 h-3 mr-1" /> TrustHub
               </Button>
+              <Button
+                size="sm"
+                variant={bottomTab === "problems" ? "secondary" : "ghost"}
+                onClick={() => setBottomTab("problems")}
+                className={`h-6 text-xs px-2 transition-all duration-200 ${bottomTab === "problems" ? "bg-red-500/20 text-red-400 shadow-[0_0_10px_rgba(239,68,68,0.3)]" : "hover:bg-white/5"}`}
+                data-testid="button-problems-tab"
+              >
+                <AlertTriangle className="w-3 h-3 mr-1" />
+                {diagnosticsSummary.errors > 0 ? (
+                  <span className="text-red-400">{diagnosticsSummary.errors}E</span>
+                ) : diagnosticsSummary.warnings > 0 ? (
+                  <span className="text-amber-400">{diagnosticsSummary.warnings}W</span>
+                ) : (
+                  "Problems"
+                )}
+              </Button>
             </div>
 
             <AnimatePresence mode="wait">
@@ -3553,28 +3765,106 @@ console.log('Trust Layer Studio loaded!');`,
                   </div>
                 </motion.div>
               )}
+
+              {/* Problems Panel (T014) */}
+              {bottomTab === "problems" && (
+                <motion.div
+                  key="problems"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="flex-1 p-3 overflow-auto"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-muted-foreground uppercase">Diagnostics</span>
+                      {diagnosticsSummary.errors > 0 && <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-400">{diagnosticsSummary.errors} errors</span>}
+                      {diagnosticsSummary.warnings > 0 && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400">{diagnosticsSummary.warnings} warnings</span>}
+                      {diagnosticsSummary.info > 0 && <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400">{diagnosticsSummary.info} info</span>}
+                    </div>
+                    <Button
+                      size="sm"
+                      className="h-6 text-xs px-3 bg-purple-600 hover:bg-purple-700"
+                      onClick={() => { if (activeFile) runLint(editorContent, activeFile.name); }}
+                      data-testid="button-run-lint"
+                    >
+                      <Zap className="w-3 h-3 mr-1" /> Lint
+                    </Button>
+                  </div>
+                  <div className="space-y-1">
+                    {diagnostics.map((d, i) => (
+                      <div
+                        key={i}
+                        className={`flex items-start gap-2 p-2 rounded text-xs border transition-all cursor-pointer hover:bg-white/5 ${
+                          d.severity === "error" ? "border-red-500/20 bg-red-500/5" :
+                          d.severity === "warning" ? "border-amber-500/20 bg-amber-500/5" :
+                          "border-blue-500/20 bg-blue-500/5"
+                        }`}
+                        data-testid={`diagnostic-${i}`}
+                      >
+                        <div className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                          d.severity === "error" ? "bg-red-500/20 text-red-400" :
+                          d.severity === "warning" ? "bg-amber-500/20 text-amber-400" :
+                          "bg-blue-500/20 text-blue-400"
+                        }`}>
+                          {d.severity === "error" ? <X className="w-2.5 h-2.5" /> : d.severity === "warning" ? <AlertTriangle className="w-2.5 h-2.5" /> : <Info className="w-2.5 h-2.5" />}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-gray-200">{d.message}</p>
+                          <p className="text-[10px] text-muted-foreground mt-0.5">Line {d.line}:{d.column} [{d.source}]</p>
+                        </div>
+                      </div>
+                    ))}
+                    {diagnostics.length === 0 && (
+                      <div className="text-center py-6">
+                        <CheckCircle2 className="w-8 h-8 mx-auto mb-2 text-green-400/30" />
+                        <p className="text-xs text-muted-foreground">No problems detected.</p>
+                        <p className="text-[10px] text-white/20 mt-1">Save a file to run diagnostics.</p>
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )}
             </AnimatePresence>
           </div>
         </main>
 
-        {/* Right Panel - Preview */}
+        {/* Right Panel - Preview (T008) */}
         <aside className="w-80 border-l border-[#1a1b2e] bg-[#0a0b10] flex flex-col shrink-0 hidden lg:flex">
           <div className="flex items-center justify-between px-3 py-2 border-b border-[#1a1b2e]">
             <span className="text-xs text-muted-foreground uppercase flex items-center gap-2">
-              <Globe className="w-3.5 h-3.5" /> Preview
+              <Globe className="w-3.5 h-3.5" />
+              Preview
+              {previewRunning && <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />}
             </span>
-            {previewUrl && (
-              <Button
-                size="sm"
-                variant="ghost"
-                className="h-5 text-xs px-1"
-                onClick={() => setPreviewUrl(null)}
-                data-testid="button-close-preview"
-              >
-                <X className="w-3 h-3" />
-              </Button>
-            )}
+            <div className="flex items-center gap-1">
+              {previewRunning ? (
+                <>
+                  <Button size="sm" variant="ghost" className="h-5 text-xs px-1" onClick={startPreview} data-testid="button-refresh-preview" title="Refresh">
+                    <RefreshCw className="w-3 h-3" />
+                  </Button>
+                  <Button size="sm" variant="ghost" className="h-5 text-xs px-1 text-red-400 hover:text-red-300" onClick={() => { setPreviewRunning(false); setPreviewUrl(null); }} data-testid="button-stop-preview" title="Stop">
+                    <Square className="w-3 h-3" />
+                  </Button>
+                </>
+              ) : (
+                <Button size="sm" variant="ghost" className="h-5 text-xs px-1 text-green-400 hover:text-green-300" onClick={startPreview} data-testid="button-start-preview" title="Start Dev Server">
+                  <Play className="w-3 h-3" />
+                </Button>
+              )}
+              {previewUrl && (
+                <Button size="sm" variant="ghost" className="h-5 text-xs px-1" onClick={() => window.open(previewUrl, "_blank")} data-testid="button-open-external" title="Open in new tab">
+                  <ExternalLink className="w-3 h-3" />
+                </Button>
+              )}
+            </div>
           </div>
+          {previewUrl && (
+            <div className="flex items-center gap-1 px-2 py-1 border-b border-[#1a1b2e] bg-[#050508]">
+              <Globe className="w-3 h-3 text-muted-foreground flex-shrink-0" />
+              <span className="text-[10px] text-muted-foreground font-mono truncate">{previewUrl}</span>
+            </div>
+          )}
           <div className="flex-1 flex items-center justify-center text-muted-foreground overflow-hidden">
             {previewUrl ? (
               <iframe
@@ -3586,8 +3876,11 @@ console.log('Trust Layer Studio loaded!');`,
             ) : (
               <div className="text-center p-4">
                 <Globe className="w-10 h-10 mx-auto mb-3 opacity-30" />
-                <p className="text-xs">Click "Run" to preview</p>
-                <p className="text-xs text-muted-foreground mt-1">Requires an HTML file</p>
+                <p className="text-xs">Start the dev server to preview</p>
+                <p className="text-xs text-muted-foreground mt-1">Click <Play className="w-3 h-3 inline" /> or use the command palette</p>
+                <Button size="sm" className="mt-3 h-7 text-xs bg-green-600 hover:bg-green-700" onClick={startPreview} data-testid="button-start-preview-main">
+                  <Play className="w-3 h-3 mr-1" /> Start Preview
+                </Button>
               </div>
             )}
           </div>
@@ -3728,6 +4021,148 @@ console.log('Trust Layer Studio loaded!');`,
             <p className="mt-4 text-xs text-muted-foreground text-center">
               Press <kbd className="px-1 bg-[#1a1b2e] rounded border border-[#2a2b3e]">Ctrl + /</kbd> or <kbd className="px-1 bg-[#1a1b2e] rounded border border-[#2a2b3e]">Esc</kbd> to close
             </p>
+          </motion.div>
+        </div>
+      )}
+
+      {/* Integrations Hub (T007) */}
+      {showIntegrations && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={() => setShowIntegrations(false)}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="bg-[#0a0b10] border border-[#1a1b2e] rounded-xl shadow-2xl p-6 max-w-lg w-full mx-4"
+            onClick={(e) => e.stopPropagation()}
+            data-testid="integrations-hub"
+          >
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold text-white flex items-center gap-2">
+                <Link2 className="w-5 h-5 text-cyan-400" />
+                Integrations Hub
+              </h3>
+              <Button size="sm" variant="ghost" onClick={() => setShowIntegrations(false)} className="h-7 w-7 p-0">
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+            <div className="space-y-4">
+              {/* GitHub */}
+              <div className="p-4 rounded-lg bg-[#050508] border border-[#1a1b2e]">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center">
+                      <GitBranch className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-white">GitHub</p>
+                      <p className="text-xs text-muted-foreground">{githubConnected ? "Connected" : githubConfigured ? "Ready to connect" : "Not configured"}</p>
+                    </div>
+                  </div>
+                  {githubConnected ? (
+                    <Button size="sm" variant="outline" onClick={disconnectGithub} className="h-7 text-xs border-red-500/30 text-red-400 hover:bg-red-500/10" data-testid="button-disconnect-github">
+                      Disconnect
+                    </Button>
+                  ) : (
+                    <Button size="sm" onClick={connectGithub} disabled={!githubConfigured} className="h-7 text-xs bg-white/10 hover:bg-white/20" data-testid="button-connect-github">
+                      {githubConfigured ? "Connect" : "Configure"}
+                    </Button>
+                  )}
+                </div>
+                {githubConnected && (
+                  <div className="mt-3 pt-3 border-t border-[#1a1b2e]">
+                    <Button size="sm" variant="ghost" onClick={loadGithubRepos} disabled={loadingRepos} className="h-6 text-xs" data-testid="button-load-repos">
+                      {loadingRepos ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <FolderOpen className="w-3 h-3 mr-1" />}
+                      {loadingRepos ? "Loading..." : "View Repos"}
+                    </Button>
+                    {selectedGithubRepo && (
+                      <div className="mt-2 flex items-center gap-2">
+                        <span className="text-[10px] text-muted-foreground">Active:</span>
+                        <span className="text-xs text-cyan-400 font-mono">{selectedGithubRepo}</span>
+                      </div>
+                    )}
+                    {githubRepos.length > 0 && (
+                      <div className="mt-2 max-h-32 overflow-auto space-y-1">
+                        {githubRepos.slice(0, 10).map((repo: any) => {
+                          const fullName = repo.full_name || repo.name;
+                          const isSelected = selectedGithubRepo === fullName;
+                          return (
+                            <div
+                              key={repo.id || repo.name}
+                              className={`text-xs p-1.5 rounded flex items-center justify-between cursor-pointer transition-all ${isSelected ? "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20" : "bg-white/5 text-gray-300 hover:bg-white/10"}`}
+                              onClick={() => setSelectedGithubRepo(fullName)}
+                              data-testid={`repo-${fullName}`}
+                            >
+                              <span>{fullName}</span>
+                              <div className="flex items-center gap-1">
+                                {isSelected && <CheckCircle2 className="w-3 h-3 text-cyan-400" />}
+                                <span className="text-[10px] text-white/30">{repo.language}</span>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Vercel */}
+              <div className="p-4 rounded-lg bg-[#050508] border border-[#1a1b2e]">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center">
+                      <Rocket className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-white">Vercel</p>
+                      <p className="text-xs text-muted-foreground">{vercelConnected ? "Connected" : "Token required"}</p>
+                    </div>
+                  </div>
+                  {vercelConnected ? (
+                    <Button size="sm" variant="outline" onClick={disconnectVercel} className="h-7 text-xs border-red-500/30 text-red-400 hover:bg-red-500/10" data-testid="button-disconnect-vercel">
+                      Disconnect
+                    </Button>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="password"
+                        value={vercelToken}
+                        onChange={(e) => setVercelToken(e.target.value)}
+                        placeholder="Vercel token..."
+                        className="h-7 w-32 text-xs bg-white/5 border-[#1a1b2e]"
+                        data-testid="input-vercel-token"
+                      />
+                      <Button size="sm" onClick={() => connectVercel(vercelToken)} disabled={!vercelToken} className="h-7 text-xs bg-white/10 hover:bg-white/20" data-testid="button-connect-vercel">
+                        Connect
+                      </Button>
+                    </div>
+                  )}
+                </div>
+                {vercelConnected && vercelDeployUrl && (
+                  <div className="mt-3 pt-3 border-t border-[#1a1b2e]">
+                    <p className="text-xs text-green-400">Last deploy: <a href={vercelDeployUrl} target="_blank" rel="noopener noreferrer" className="underline">{vercelDeployUrl}</a></p>
+                  </div>
+                )}
+              </div>
+
+              {/* TrustHub */}
+              <div className="p-4 rounded-lg bg-[#050508] border border-[#1a1b2e]">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center">
+                      <Fingerprint className="w-5 h-5 text-indigo-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium text-white">TrustHub</p>
+                      <p className="text-xs text-muted-foreground">Blockchain code provenance</p>
+                    </div>
+                  </div>
+                  <span className="text-xs text-green-400 flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3" /> Active
+                  </span>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       )}
@@ -3967,6 +4402,39 @@ console.log('Trust Layer Studio loaded!');`,
         isOpen={showLoginModal} 
         onClose={() => setShowLoginModal(false)} 
       />
+
+      {/* Status Bar (T007) */}
+      <div className="fixed bottom-0 left-0 right-0 h-6 bg-[#050508] border-t border-[#1a1b2e] flex items-center justify-between px-3 text-[10px] z-40">
+        <div className="flex items-center gap-3">
+          <span className="flex items-center gap-1">
+            <div className={`w-1.5 h-1.5 rounded-full ${githubConnected ? "bg-green-400" : "bg-gray-600"}`} />
+            <span className="text-muted-foreground">GitHub</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <div className={`w-1.5 h-1.5 rounded-full ${vercelConnected ? "bg-green-400" : "bg-gray-600"}`} />
+            <span className="text-muted-foreground">Vercel</span>
+          </span>
+          <span className="flex items-center gap-1">
+            <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+            <span className="text-muted-foreground">TrustHub</span>
+          </span>
+          {diagnosticsSummary.errors > 0 && (
+            <span className="text-red-400 cursor-pointer" onClick={() => setBottomTab("problems")}>
+              {diagnosticsSummary.errors} error{diagnosticsSummary.errors > 1 ? "s" : ""}
+            </span>
+          )}
+          {diagnosticsSummary.warnings > 0 && (
+            <span className="text-amber-400 cursor-pointer" onClick={() => setBottomTab("problems")}>
+              {diagnosticsSummary.warnings} warning{diagnosticsSummary.warnings > 1 ? "s" : ""}
+            </span>
+          )}
+        </div>
+        <div className="flex items-center gap-3 text-muted-foreground">
+          {activeFile && <span>{activeFile.name.endsWith(".ts") || activeFile.name.endsWith(".tsx") ? "TypeScript" : activeFile.name.endsWith(".js") || activeFile.name.endsWith(".jsx") ? "JavaScript" : activeFile.name.endsWith(".py") ? "Python" : activeFile.name.endsWith(".css") ? "CSS" : activeFile.name.endsWith(".html") ? "HTML" : activeFile.name.endsWith(".json") ? "JSON" : "Plain Text"}</span>}
+          <span>UTF-8</span>
+          <span>DWSC Studio v2.0</span>
+        </div>
+      </div>
     </div>
   );
 }
