@@ -584,6 +584,7 @@ export default function Studio() {
 
   // GitHub functions (T003)
   const connectGithub = async () => {
+    if (!user) { setShowLoginModal(true); return; }
     try {
       const res = await fetch("/api/studio/github/auth");
       if (res.ok) {
@@ -636,6 +637,7 @@ export default function Studio() {
 
   // Vercel functions (T004)
   const connectVercel = async (token: string) => {
+    if (!user) { setShowLoginModal(true); return; }
     try {
       const res = await fetch("/api/studio/vercel/connect", {
         method: "POST",
@@ -760,7 +762,7 @@ export default function Studio() {
 <body>
   <div class="container">
     <h1>Welcome to Trust Layer Studio</h1>
-    <p>Sign in to create your own projects!</p>
+    <p>Start coding right here — no account needed!</p>
     <button onclick="showMessage()">Click Me</button>
     <div id="output"></div>
   </div>
@@ -849,7 +851,7 @@ console.log('Trust Layer Studio loaded!');`,
 <body>
   <div class="container">
     <h1>Welcome to Trust Layer Studio</h1>
-    <p>Sign in to create your own projects!</p>
+    <p>Start coding right here — no account needed!</p>
     <button onclick="showMessage()">Click Me</button>
     <div id="output"></div>
   </div>
@@ -1120,6 +1122,7 @@ console.log('Trust Layer Studio loaded!');`,
 
   // AI Assistant function
   const askAiAssistant = async () => {
+    if (!user) { setShowLoginModal(true); return; }
     if (agentMode) return runAgentMode();
     if (!aiPrompt.trim() || aiLoading) return;
     
@@ -1240,6 +1243,7 @@ console.log('Trust Layer Studio loaded!');`,
 
   // TrustHub stamp (T005)
   const stampCode = async () => {
+    if (!user) { setShowLoginModal(true); return; }
     if (!projectId || stampingCode) return;
     setStampingCode(true);
     try {
@@ -2180,23 +2184,20 @@ console.log('Trust Layer Studio loaded!');`,
     );
   }
 
-  // Demo mode for non-logged-in users - they can view but not save/run
-  const isViewOnly = !user;
+  const isViewOnly = false;
+  const requiresAuth = !user;
 
   return (
     <div className="h-screen flex flex-col bg-[#050508] text-foreground overflow-hidden pb-6">
-      {/* View-Only Banner for non-logged-in users */}
-      {isViewOnly && (
-        <div className="bg-slate-900/80 border-b border-[#1a1b2e] px-4 py-1.5 flex items-center justify-between shrink-0">
-          <div className="flex items-center gap-2">
-            <Eye className="w-3 h-3 text-slate-400" />
-            <span className="text-xs text-slate-400">View-Only Mode</span>
-          </div>
+      {/* Sign-in prompt bar for guests */}
+      {requiresAuth && (
+        <div className="bg-[#0a0b10] border-b border-[#1a1b2e] px-4 py-1 flex items-center justify-between shrink-0">
+          <span className="text-[10px] text-slate-500">Sign in to save projects, use AI, and connect integrations</span>
           <Button
             size="sm"
             variant="ghost"
             onClick={() => setShowLoginModal(true)}
-            className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 text-xs h-6 px-3"
+            className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-500/10 text-xs h-5 px-2"
             data-testid="button-login-banner"
           >
             Sign In
@@ -2416,10 +2417,9 @@ console.log('Trust Layer Studio loaded!');`,
             size="sm"
             variant="ghost"
             onClick={handleSave}
-            disabled={saving || isViewOnly}
+            disabled={saving}
             className="gap-2 text-xs"
             data-testid="button-save"
-            title={isViewOnly ? "Sign in to save" : undefined}
           >
             <Save className="w-3.5 h-3.5" />
             {saving ? "Saving..." : "Save"}
@@ -2445,9 +2445,8 @@ console.log('Trust Layer Studio loaded!');`,
             size="sm"
             className="gap-2 bg-green-600 hover:bg-green-700 text-xs transition-all duration-300 hover:shadow-[0_0_15px_rgba(34,197,94,0.5)] hover:scale-105"
             onClick={handleRun}
-            disabled={running || isViewOnly}
+            disabled={running}
             data-testid="button-run"
-            title={isViewOnly ? "Sign in to run" : undefined}
           >
             <Play className="w-3.5 h-3.5" />
             {running ? "Running..." : "Run"}
@@ -2455,10 +2454,9 @@ console.log('Trust Layer Studio loaded!');`,
           <Button
             size="sm"
             className="gap-2 bg-gradient-to-r from-purple-600 to-cyan-500 hover:from-purple-500 hover:to-cyan-400 text-xs transition-all duration-300 hover:shadow-[0_0_20px_rgba(139,92,246,0.6)] hover:scale-105"
-            onClick={handleDeploy}
-            disabled={deploying || isViewOnly}
+            onClick={() => { if (requiresAuth) { setShowLoginModal(true); return; } handleDeploy(); }}
+            disabled={deploying}
             data-testid="button-deploy"
-            title={isViewOnly ? "Sign in to deploy" : undefined}
           >
             <Rocket className="w-3.5 h-3.5" />
             {deploying ? "Deploying..." : "Deploy"}
@@ -2512,7 +2510,7 @@ console.log('Trust Layer Studio loaded!');`,
               size="sm"
               variant="ghost"
               onClick={handleSave}
-              disabled={saving || isViewOnly}
+              disabled={saving}
               className="h-8 w-8 p-0"
               data-testid="button-save-mobile"
             >
@@ -2522,7 +2520,7 @@ console.log('Trust Layer Studio loaded!');`,
               size="sm"
               className="h-8 px-3 bg-green-600 hover:bg-green-700 text-xs"
               onClick={handleRun}
-              disabled={running || isViewOnly}
+              disabled={running}
               data-testid="button-run-mobile"
             >
               <Play className="w-3.5 h-3.5 mr-1" />
