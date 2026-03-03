@@ -2292,6 +2292,46 @@ export async function registerRoutes(
   });
 
   // ============================================================
+  // SSO TOKEN EXCHANGE - Trust Hub cross-app authentication
+  // ============================================================
+
+  app.post("/api/auth/exchange-token", authRateLimit, async (req, res) => {
+    try {
+      const { hubSessionToken } = req.body;
+      if (!hubSessionToken || typeof hubSessionToken !== 'string') {
+        return res.status(400).json({ error: "hubSessionToken is required" });
+      }
+
+      const [tokenUser] = await db.select().from(users)
+        .where(eq(users.sessionToken, hubSessionToken))
+        .limit(1);
+
+      if (!tokenUser || !tokenUser.sessionTokenExpiry || new Date(tokenUser.sessionTokenExpiry) < new Date()) {
+        return res.status(401).json({ error: "Invalid or expired session token" });
+      }
+
+      const ecosystemToken = crypto.randomBytes(32).toString('hex');
+      const expiresAt = new Date(Date.now() + 3600 * 1000);
+
+      await db.update(users).set({
+        sessionToken: ecosystemToken,
+        sessionTokenExpiry: expiresAt,
+      }).where(eq(users.id, tokenUser.id));
+
+      res.json({
+        ecosystemToken,
+        expiresIn: 3600,
+        userId: tokenUser.id,
+        email: tokenUser.email,
+        displayName: tokenUser.displayName || tokenUser.firstName || tokenUser.username,
+      });
+    } catch (error) {
+      console.error("Token exchange error:", error);
+      res.status(500).json({ error: "Token exchange failed" });
+    }
+  });
+
+  // ============================================================
   // SSO ENDPOINTS - Cross-app authentication for DarkWave Ecosystem
   // ============================================================
 
@@ -12932,6 +12972,46 @@ Project files:\n${fileContext}`;
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
       const stamps = await getUserTrustStamps(userId);
+      res.json({ stamps });
+    } catch (error) {
+      console.error("Trust stamps fetch error:", error);
+      res.json({ stamps: [] });
+    }
+  });
+
+  app.post("/api/trust-stamp", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.claims?.sub || req.user?.id;
+      if (!userId) return res.status(401).json({ error: "Authentication required" });
+
+      const schema = z.object({
+        category: z.string().min(1).max(100),
+        data: z.record(z.any()).optional().default({}),
+      });
+
+      const parsed = schema.safeParse(req.body);
+      if (!parsed.success) {
+        return res.status(400).json({ error: "Invalid request", details: parsed.error.errors });
+      }
+
+      const { category, data } = parsed.data;
+      const result = await trustStamp(category, { ...data, userId });
+      res.json(result);
+    } catch (error) {
+      console.error("Trust stamp creation error:", error);
+      res.status(500).json({ error: "Failed to create trust stamp" });
+    }
+  });
+
+  app.get("/api/trust-stamps/:userId", isAuthenticated, async (req: any, res) => {
+    try {
+      const requestingUserId = req.user?.claims?.sub || req.user?.id;
+      const targetUserId = req.params.userId;
+      if (!requestingUserId) return res.status(401).json({ error: "Authentication required" });
+      if (requestingUserId.toString() !== targetUserId.toString()) {
+        return res.status(403).json({ error: "Can only view your own trust stamps" });
+      }
+      const stamps = await getUserTrustStamps(targetUserId);
       res.json({ stamps });
     } catch (error) {
       console.error("Trust stamps fetch error:", error);
