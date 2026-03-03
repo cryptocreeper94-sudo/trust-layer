@@ -403,11 +403,37 @@ function ChronoRouter() {
 }
 
 function DWSCRouter() {
+  const tlidRoute = useMemo(() => getTlidSubdomainRoute(), []);
+  
   return (
     <Suspense fallback={<PageLoader />}>
       <ScrollToTop />
       <Switch>
-        <Route path="/" component={ExploreHub} />
+        {tlidRoute && tlidRoute !== "/" ? (
+          <Route path="/">{() => {
+            const RouteComponent = (() => {
+              switch(tlidRoute) {
+                case "/influencer": return InfluencerShowcase;
+                case "/launch": return LaunchCountdown;
+                case "/trust-book": return TrustBook;
+                case "/wallet": return Wallet;
+                case "/my-hub": return MyHub;
+                case "/academy": return Academy;
+                case "/the-void": return TheVoid;
+                case "/guardian-scanner": return GuardianScanner;
+                case "/guardian-ai": return GuardianAI;
+                case "/signal-chat": return SignalCore;
+                case "/domains": return Domains;
+                case "/arcade": return Arcade;
+                case "/veil/read": return VeilReader;
+                default: return ExploreHub;
+              }
+            })();
+            return <RouteComponent />;
+          }}</Route>
+        ) : (
+          <Route path="/" component={ExploreHub} />
+        )}
         <Route path="/presale" component={Presale} />
         <Route path="/trust-layer" component={TrustLayerLanding} />
         <Route path="/portal" component={Home} />
@@ -745,14 +771,22 @@ const TLID_SUBDOMAIN_ROUTES: Record<string, string> = {
   "ecosystem": "/influencer",
 };
 
+function getTlidSubdomainRoute(): string | null {
+  const host = window.location.hostname.toLowerCase();
+  if (!host.endsWith(".tlid.io") || host === "tlid.io" || host === "www.tlid.io") return null;
+  const subdomain = host.split(".")[0];
+  const targetRoute = TLID_SUBDOMAIN_ROUTES[subdomain];
+  if (targetRoute && window.location.pathname === "/") {
+    return targetRoute;
+  }
+  return null;
+}
+
 function useTlidSubdomainRedirect() {
   useEffect(() => {
-    const host = window.location.hostname.toLowerCase();
-    if (!host.endsWith(".tlid.io") || host === "tlid.io" || host === "www.tlid.io") return;
-    const subdomain = host.split(".")[0];
-    const targetRoute = TLID_SUBDOMAIN_ROUTES[subdomain];
-    if (targetRoute && targetRoute !== "/" && window.location.pathname === "/") {
-      window.history.replaceState(null, "", targetRoute);
+    const route = getTlidSubdomainRoute();
+    if (route && route !== "/") {
+      window.history.replaceState(null, "", route);
       window.dispatchEvent(new PopStateEvent("popstate"));
     }
   }, []);
