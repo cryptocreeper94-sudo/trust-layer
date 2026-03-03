@@ -17675,41 +17675,45 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(400).json({ error: "Text too long. Maximum 4000 characters per request." });
       }
 
-      // ElevenLabs Integration — primary TTS provider
+      const elevenLabsKey = process.env.ELEVEN_LABS_API_KEY;
       const elevenLabsVoiceId = voice || "pFZP5JQG7iQjIQuC4Bku"; // Lily — warm, clear narrator voice
-      try {
-        const connectors = new ReplitConnectors();
-        const elResponse = await connectors.proxy("elevenlabs", `/v1/text-to-speech/${elevenLabsVoiceId}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            text,
-            model_id: "eleven_multilingual_v2",
-            voice_settings: {
-              stability: 0.5,
-              similarity_boost: 0.75,
-              style: 0.4,
-              use_speaker_boost: true,
+      if (elevenLabsKey) {
+        try {
+          const elResponse = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${elevenLabsVoiceId}`, {
+            method: "POST",
+            headers: {
+              "xi-api-key": elevenLabsKey,
+              "Content-Type": "application/json",
             },
-          }),
-        });
-
-        if (elResponse.ok) {
-          console.log("[TTS] ElevenLabs served successfully");
-          const arrayBuffer = await elResponse.arrayBuffer();
-          res.set({
-            "Content-Type": "audio/mpeg",
-            "Cache-Control": "public, max-age=86400",
-            "X-Voice-Provider": "elevenlabs",
-            "X-Voice-Name": "Lily",
+            body: JSON.stringify({
+              text,
+              model_id: "eleven_multilingual_v2",
+              voice_settings: {
+                stability: 0.5,
+                similarity_boost: 0.75,
+                style: 0.4,
+                use_speaker_boost: true,
+              },
+            }),
           });
-          return res.send(Buffer.from(arrayBuffer));
-        }
 
-        const elError = await elResponse.text().catch(() => "");
-        console.error("[TTS] ElevenLabs failed, falling back to OpenAI:", elResponse.status, elError);
-      } catch (elErr: any) {
-        console.error("[TTS] ElevenLabs error, falling back to OpenAI:", elErr.message);
+          if (elResponse.ok) {
+            console.log("[TTS] ElevenLabs served successfully");
+            const arrayBuffer = await elResponse.arrayBuffer();
+            res.set({
+              "Content-Type": "audio/mpeg",
+              "Cache-Control": "public, max-age=86400",
+              "X-Voice-Provider": "elevenlabs",
+              "X-Voice-Name": "Lily",
+            });
+            return res.send(Buffer.from(arrayBuffer));
+          }
+
+          const elError = await elResponse.text().catch(() => "");
+          console.error("[TTS] ElevenLabs failed, falling back to OpenAI:", elResponse.status, elError);
+        } catch (elErr: any) {
+          console.error("[TTS] ElevenLabs error, falling back to OpenAI:", elErr.message);
+        }
       }
       
       // OpenAI fallback
@@ -17760,27 +17764,31 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   app.get("/api/voice/voices", async (_req, res) => {
-    try {
-      const connectors = new ReplitConnectors();
-      const elResponse = await connectors.proxy("elevenlabs", "/v1/voices", { method: "GET" });
-      if (elResponse.ok) {
-        const data = await elResponse.json() as any;
-        const voices = (data.voices || []).map((v: any) => ({
-          id: v.voice_id,
-          name: v.name,
-          category: v.category || "elevenlabs",
-          preview: v.preview_url,
-          labels: v.labels,
-        }));
-        return res.json({
-          voices,
-          configured: true,
-          provider: "elevenlabs",
-          defaultVoice: { id: "pFZP5JQG7iQjIQuC4Bku", name: "Lily" },
+    const elevenLabsKey = process.env.ELEVEN_LABS_API_KEY;
+    if (elevenLabsKey) {
+      try {
+        const elResponse = await fetch("https://api.elevenlabs.io/v1/voices", {
+          headers: { "xi-api-key": elevenLabsKey },
         });
+        if (elResponse.ok) {
+          const data = await elResponse.json() as any;
+          const voices = (data.voices || []).map((v: any) => ({
+            id: v.voice_id,
+            name: v.name,
+            category: v.category || "elevenlabs",
+            preview: v.preview_url,
+            labels: v.labels,
+          }));
+          return res.json({
+            voices,
+            configured: true,
+            provider: "elevenlabs",
+            defaultVoice: { id: "pFZP5JQG7iQjIQuC4Bku", name: "Lily" },
+          });
+        }
+      } catch (err: any) {
+        console.error("[Voices] ElevenLabs list failed:", err.message);
       }
-    } catch (err: any) {
-      console.error("[Voices] ElevenLabs list failed:", err.message);
     }
     res.json({ 
       voices: [{ id: "nova", name: "Nova", category: "openai" }],
