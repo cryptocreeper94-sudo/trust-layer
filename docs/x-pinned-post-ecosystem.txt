@@ -56,7 +56,8 @@ Here's what's already built:
 • Happy Eats — food truck ordering
 • PaintPros, Trust Golf, Verdara, Arbora + more
 
-THE TOKEN: Signal (SIG)
+THE NATIVE ASSET: Signal (SIG)
+• The native currency of the Trust Layer chain (like ETH is to Ethereum)
 • 1 Billion total supply
 • Pre-launch currency: Shells ($0.001 each → convert to SIG at launch)
 • Presale is LIVE right now
