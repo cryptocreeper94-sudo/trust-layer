@@ -1,9 +1,8 @@
-import { useState, useEffect, useRef, Suspense, useMemo, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, Stars, Float, Text3D, Center } from "@react-three/drei";
-import * as THREE from "three";
+import { ChroniclesEngine } from "@/components/chronicles-3d";
+import type { EraType, LocationType } from "@/components/chronicles-3d";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -120,8 +119,6 @@ const ERA_CONFIG = {
     borderColor: "border-cyan-500/30",
     textColor: "text-cyan-400",
     badgeClass: "bg-cyan-500/20 text-cyan-400",
-    skyColor: "#0a1628", groundColor: "#1a1a2e",
-    fogColor: "#0a1628", particleColor: "#06b6d4",
   },
   medieval: {
     name: "Medieval Era", color: "amber", emoji: "🏰",
@@ -129,8 +126,6 @@ const ERA_CONFIG = {
     borderColor: "border-amber-500/30",
     textColor: "text-amber-400",
     badgeClass: "bg-amber-500/20 text-amber-400",
-    skyColor: "#1a0f00", groundColor: "#2d1f0e",
-    fogColor: "#1a0f00", particleColor: "#d97706",
   },
   wildwest: {
     name: "Wild West", color: "yellow", emoji: "🤠",
@@ -138,195 +133,8 @@ const ERA_CONFIG = {
     borderColor: "border-yellow-500/30",
     textColor: "text-yellow-400",
     badgeClass: "bg-yellow-500/20 text-yellow-400",
-    skyColor: "#1a1200", groundColor: "#3d2b10",
-    fogColor: "#1a1200", particleColor: "#eab308",
   },
 };
-
-function EraEnvironment({ era }: { era: keyof typeof ERA_CONFIG }) {
-  const config = ERA_CONFIG[era];
-  const groupRef = useRef<THREE.Group>(null);
-  const particlesRef = useRef<THREE.Points>(null);
-
-  const particles = useMemo(() => {
-    const count = 200;
-    const positions = new Float32Array(count * 3);
-    for (let i = 0; i < count; i++) {
-      positions[i * 3] = (Math.random() - 0.5) * 30;
-      positions[i * 3 + 1] = Math.random() * 15;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 30;
-    }
-    return positions;
-  }, []);
-
-  useFrame((state) => {
-    if (particlesRef.current) {
-      particlesRef.current.rotation.y = state.clock.elapsedTime * 0.02;
-      const positions = particlesRef.current.geometry.attributes.position.array as Float32Array;
-      for (let i = 0; i < positions.length / 3; i++) {
-        positions[i * 3 + 1] += Math.sin(state.clock.elapsedTime * 0.5 + i) * 0.002;
-      }
-      particlesRef.current.geometry.attributes.position.needsUpdate = true;
-    }
-    if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.1) * 0.05;
-    }
-  });
-
-  const structures = useMemo(() => {
-    if (era === "medieval") {
-      return (
-        <>
-          <mesh position={[0, 1.5, -8]} castShadow>
-            <boxGeometry args={[3, 3, 3]} />
-            <meshStandardMaterial color="#8B7355" roughness={0.9} />
-          </mesh>
-          <mesh position={[0, 3.5, -8]} castShadow>
-            <coneGeometry args={[2.5, 2, 4]} />
-            <meshStandardMaterial color="#5C3A1E" roughness={0.8} />
-          </mesh>
-          <mesh position={[-6, 1, -5]} castShadow>
-            <boxGeometry args={[2, 2, 2]} />
-            <meshStandardMaterial color="#A0855B" roughness={0.9} />
-          </mesh>
-          <mesh position={[-6, 2.5, -5]} castShadow>
-            <coneGeometry args={[1.8, 1.5, 4]} />
-            <meshStandardMaterial color="#6B4226" roughness={0.8} />
-          </mesh>
-          <mesh position={[5, 2.5, -6]} castShadow>
-            <cylinderGeometry args={[0.8, 1, 5, 8]} />
-            <meshStandardMaterial color="#696969" roughness={0.7} />
-          </mesh>
-          <mesh position={[5, 5.5, -6]} castShadow>
-            <coneGeometry args={[1.2, 1.5, 8]} />
-            <meshStandardMaterial color="#4A4A4A" roughness={0.6} />
-          </mesh>
-          {[-3, 3, 7, -7].map((x, i) => (
-            <group key={i} position={[x, 0, -3 + i * 2]}>
-              <mesh position={[0, 1.5, 0]}>
-                <cylinderGeometry args={[0.15, 0.2, 3, 6]} />
-                <meshStandardMaterial color="#5C4033" roughness={0.9} />
-              </mesh>
-              <mesh position={[0, 3.2, 0]}>
-                <sphereGeometry args={[1.2, 8, 6]} />
-                <meshStandardMaterial color="#2D5016" roughness={0.8} />
-              </mesh>
-            </group>
-          ))}
-        </>
-      );
-    }
-    if (era === "wildwest") {
-      return (
-        <>
-          <mesh position={[0, 1.5, -7]} castShadow>
-            <boxGeometry args={[4, 3, 3]} />
-            <meshStandardMaterial color="#C4A574" roughness={0.95} />
-          </mesh>
-          <mesh position={[0, 3.2, -6]}>
-            <boxGeometry args={[4.5, 0.5, 0.3]} />
-            <meshStandardMaterial color="#8B6914" roughness={0.9} />
-          </mesh>
-          <mesh position={[-5, 1, -5]} castShadow>
-            <boxGeometry args={[3, 2, 2.5]} />
-            <meshStandardMaterial color="#B8956A" roughness={0.95} />
-          </mesh>
-          <mesh position={[6, 0.5, -4]} castShadow>
-            <cylinderGeometry args={[1.5, 1.5, 1, 12]} />
-            <meshStandardMaterial color="#8B7355" roughness={0.9} />
-          </mesh>
-          {[4, -4, 8, -8].map((x, i) => (
-            <group key={i} position={[x, 0, -2 + i]}>
-              <mesh position={[0, 1.8, 0]}>
-                <cylinderGeometry args={[0.08, 0.15, 3.5, 5]} />
-                <meshStandardMaterial color="#5C8A3C" roughness={0.8} />
-              </mesh>
-              <mesh position={[0, 3, 0.3]}>
-                <sphereGeometry args={[0.5, 6, 6]} />
-                <meshStandardMaterial color="#2D6B16" roughness={0.8} />
-              </mesh>
-              <mesh position={[0.3, 2.5, 0]}>
-                <sphereGeometry args={[0.4, 6, 6]} />
-                <meshStandardMaterial color="#3D7B26" roughness={0.8} />
-              </mesh>
-            </group>
-          ))}
-        </>
-      );
-    }
-    return (
-      <>
-        <mesh position={[0, 3, -8]} castShadow>
-          <boxGeometry args={[3, 6, 3]} />
-          <meshStandardMaterial color="#334155" roughness={0.3} metalness={0.6} />
-        </mesh>
-        {Array.from({ length: 6 }).map((_, i) => (
-          <mesh key={i} position={[0.8 * (i % 2 === 0 ? 1 : -1), 1 + i, -6.49]} castShadow>
-            <boxGeometry args={[0.8, 0.6, 0.05]} />
-            <meshStandardMaterial color="#06b6d4" emissive="#06b6d4" emissiveIntensity={0.3} />
-          </mesh>
-        ))}
-        <mesh position={[-5, 2, -6]} castShadow>
-          <boxGeometry args={[2.5, 4, 2.5]} />
-          <meshStandardMaterial color="#475569" roughness={0.4} metalness={0.5} />
-        </mesh>
-        <mesh position={[5, 1.5, -5]} castShadow>
-          <boxGeometry args={[2, 3, 2]} />
-          <meshStandardMaterial color="#1e293b" roughness={0.3} metalness={0.7} />
-        </mesh>
-        <mesh position={[5, 3.5, -5]}>
-          <cylinderGeometry args={[0.05, 0.05, 2, 8]} />
-          <meshStandardMaterial color="#64748b" />
-        </mesh>
-        <mesh position={[5, 4.6, -5]}>
-          <sphereGeometry args={[0.15, 8, 8]} />
-          <meshStandardMaterial color="#ef4444" emissive="#ef4444" emissiveIntensity={0.5} />
-        </mesh>
-      </>
-    );
-  }, [era]);
-
-  return (
-    <group ref={groupRef}>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
-        <planeGeometry args={[40, 40]} />
-        <meshStandardMaterial color={config.groundColor} roughness={0.95} />
-      </mesh>
-      {structures}
-      <points ref={particlesRef}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" args={[particles, 3]} />
-        </bufferGeometry>
-        <pointsMaterial size={0.05} color={config.particleColor} transparent opacity={0.6} sizeAttenuation />
-      </points>
-      <Stars radius={50} depth={50} count={1000} factor={2} saturation={0} fade speed={0.5} />
-      <fog attach="fog" args={[config.fogColor, 10, 30]} />
-      <ambientLight intensity={0.3} />
-      <directionalLight position={[5, 8, 5]} intensity={0.8} castShadow />
-      <pointLight position={[0, 5, 0]} intensity={0.4} color={config.particleColor} />
-    </group>
-  );
-}
-
-function Scene3D({ era }: { era: keyof typeof ERA_CONFIG }) {
-  return (
-    <div className="absolute inset-0 rounded-xl overflow-hidden" data-testid="3d-scene">
-      <Canvas shadows camera={{ position: [0, 4, 12], fov: 55 }} gl={{ antialias: true }}>
-        <Suspense fallback={null}>
-          <EraEnvironment era={era} />
-        </Suspense>
-        <OrbitControls
-          enableZoom={false}
-          enablePan={false}
-          autoRotate
-          autoRotateSpeed={0.3}
-          maxPolarAngle={Math.PI / 2.2}
-          minPolarAngle={Math.PI / 4}
-        />
-      </Canvas>
-    </div>
-  );
-}
 
 function XPBar({ xp, nextLevelXp, level }: { xp: number; nextLevelXp: number; level: number }) {
   const pct = Math.min(100, (xp / nextLevelXp) * 100);
@@ -872,41 +680,48 @@ export default function ChroniclesPlay() {
         <WorldClockBanner era={selectedEra} />
         <NeedsIndicator />
 
-        <div className="relative h-48 sm:h-56 rounded-xl overflow-hidden mb-4">
-          <Scene3D era={selectedEra} />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent pointer-events-none" />
-          <div className="absolute bottom-0 left-0 right-0 p-4">
-            <div className="flex items-center gap-3">
-              <div className="flex-1">
-                <h2 className={`text-lg font-bold ${config.textColor}`} data-testid="era-title">
-                  {config.emoji} {config.name}
-                </h2>
-                {state && (
-                  <div className="flex items-center gap-3 text-xs text-gray-400 mt-1">
-                    <span className="flex items-center gap-1">
-                      <Star className="w-3 h-3 text-yellow-400" /> Level {state.level || 1}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <Target className="w-3 h-3 text-cyan-400" /> {state.situationsCompleted || 0} decisions
-                    </span>
-                    <span className="flex items-center gap-1">
-                      🐚 {state.shellsEarned || 0}
-                    </span>
-                    {state.echoBalance > 0 && (
-                      <span className="flex items-center gap-1 text-amber-400">
-                        <Coins className="w-3 h-3" /> {state.echoBalance} E
+        <div className="relative mb-4">
+          <ChroniclesEngine
+            era={selectedEra as EraType}
+            location={(sessionContext?.location || "home") as LocationType}
+            level={state?.level}
+            xp={state?.experience}
+            shells={state?.shellsEarned}
+            height="h-48 sm:h-56 md:h-64"
+          >
+            <div className="absolute bottom-0 left-0 right-0 p-4 pointer-events-none z-10">
+              <div className="flex items-center gap-3">
+                <div className="flex-1">
+                  <h2 className={`text-lg font-bold ${config.textColor}`} data-testid="era-title">
+                    {config.emoji} {config.name}
+                  </h2>
+                  {state && (
+                    <div className="flex items-center gap-3 text-xs text-gray-400 mt-1">
+                      <span className="flex items-center gap-1">
+                        <Star className="w-3 h-3 text-yellow-400" /> Level {state.level || 1}
                       </span>
-                    )}
-                  </div>
+                      <span className="flex items-center gap-1">
+                        <Target className="w-3 h-3 text-cyan-400" /> {state.situationsCompleted || 0} decisions
+                      </span>
+                      <span className="flex items-center gap-1">
+                        🐚 {state.shellsEarned || 0}
+                      </span>
+                      {state.echoBalance > 0 && (
+                        <span className="flex items-center gap-1 text-amber-400">
+                          <Coins className="w-3 h-3" /> {state.echoBalance} E
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+                {state?.currentStreak > 0 && (
+                  <Badge className="bg-orange-500/20 text-orange-400 flex items-center gap-1">
+                    <Flame className="w-3 h-3" /> {state.currentStreak} day streak
+                  </Badge>
                 )}
               </div>
-              {state?.currentStreak > 0 && (
-                <Badge className="bg-orange-500/20 text-orange-400 flex items-center gap-1">
-                  <Flame className="w-3 h-3" /> {state.currentStreak} day streak
-                </Badge>
-              )}
             </div>
-          </div>
+          </ChroniclesEngine>
         </div>
 
         <div className="flex gap-2 mb-4 overflow-x-auto pb-1 -mx-1 px-1 scrollbar-hide" data-testid="era-selector">
