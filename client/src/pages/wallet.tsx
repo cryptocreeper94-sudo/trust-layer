@@ -934,11 +934,11 @@ export default function WalletPage() {
               className="mt-6 max-w-lg mx-auto"
             >
               <Link href="/multisig">
-                <Card className="bg-white/5 backdrop-blur-xl border-white/10 overflow-hidden cursor-pointer hover:border-amber-500/40 transition-all group" data-testid="card-multisig-signup">
-                  <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5 group-hover:from-amber-500/10 group-hover:to-orange-500/10 transition-all" />
+                <Card className="bg-white/5 backdrop-blur-xl border-white/10 overflow-hidden cursor-pointer hover:border-cyan-500/40 transition-all group" data-testid="card-multisig-signup">
+                  <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-purple-500/5 group-hover:from-cyan-500/10 group-hover:to-purple-500/10 transition-all" />
                   <CardContent className="relative p-5">
                     <div className="flex items-center gap-4">
-                      <div className="p-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 flex-shrink-0">
+                      <div className="p-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-500 flex-shrink-0">
                         <Users className="w-6 h-6 text-white" />
                       </div>
                       <div className="flex-1 min-w-0">
@@ -947,12 +947,12 @@ export default function WalletPage() {
                           M-of-N multi-signature security for teams, DAOs, and institutional custody
                         </p>
                       </div>
-                      <ArrowRight className="w-5 h-5 text-amber-400 group-hover:translate-x-1 transition-transform flex-shrink-0" />
+                      <ArrowRight className="w-5 h-5 text-cyan-400 group-hover:translate-x-1 transition-transform flex-shrink-0" />
                     </div>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      <span className="px-2 py-0.5 text-[10px] rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">Multi-Chain</span>
-                      <span className="px-2 py-0.5 text-[10px] rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">Validator Voting</span>
-                      <span className="px-2 py-0.5 text-[10px] rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">Institutional Grade</span>
+                      <span className="px-2 py-0.5 text-[10px] rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Multi-Chain</span>
+                      <span className="px-2 py-0.5 text-[10px] rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Validator Voting</span>
+                      <span className="px-2 py-0.5 text-[10px] rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">Institutional Grade</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -1670,11 +1670,11 @@ export default function WalletPage() {
           className="mt-10 max-w-4xl mx-auto"
         >
           <Link href="/multisig">
-            <Card className="bg-white/5 backdrop-blur-xl border-white/10 overflow-hidden cursor-pointer hover:border-amber-500/40 transition-all group" data-testid="card-multisig-cta">
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5 group-hover:from-amber-500/10 group-hover:to-orange-500/10 transition-all" />
+            <Card className="bg-white/5 backdrop-blur-xl border-white/10 overflow-hidden cursor-pointer hover:border-cyan-500/40 transition-all group" data-testid="card-multisig-cta">
+              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-purple-500/5 group-hover:from-cyan-500/10 group-hover:to-purple-500/10 transition-all" />
               <CardContent className="relative p-6">
                 <div className="flex flex-col sm:flex-row items-center gap-5">
-                  <div className="p-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 flex-shrink-0 shadow-lg shadow-amber-500/20">
+                  <div className="p-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-purple-500 flex-shrink-0 shadow-lg shadow-cyan-500/20">
                     <Users className="w-8 h-8 text-white" />
                   </div>
                   <div className="flex-1 text-center sm:text-left">
@@ -1683,17 +1683,17 @@ export default function WalletPage() {
                       Need shared custody? Set up an M-of-N multi-signature wallet for teams, DAOs, or institutional asset management with validator-based approval workflows.
                     </p>
                     <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
-                      <span className="px-2.5 py-1 text-[10px] rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">Multi-Chain Support</span>
-                      <span className="px-2.5 py-1 text-[10px] rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">Validator Voting</span>
-                      <span className="px-2.5 py-1 text-[10px] rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">Institutional Grade</span>
-                      <span className="px-2.5 py-1 text-[10px] rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium">Time-Locked Operations</span>
+                      <span className="px-2.5 py-1 text-[10px] rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-medium">Multi-Chain Support</span>
+                      <span className="px-2.5 py-1 text-[10px] rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-medium">Validator Voting</span>
+                      <span className="px-2.5 py-1 text-[10px] rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-medium">Institutional Grade</span>
+                      <span className="px-2.5 py-1 text-[10px] rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 font-medium">Time-Locked Operations</span>
                     </div>
                   </div>
-                  <div className="flex-shrink-0 hidden sm:flex items-center gap-2 text-amber-400 font-medium text-sm">
+                  <div className="flex-shrink-0 hidden sm:flex items-center gap-2 text-cyan-400 font-medium text-sm">
                     <span>Set Up</span>
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </div>
-                  <Button className="sm:hidden bg-gradient-to-r from-amber-500 to-orange-500 text-white w-full" data-testid="button-multisig-mobile-cta">
+                  <Button className="sm:hidden bg-gradient-to-r from-cyan-500 to-purple-500 text-white w-full" data-testid="button-multisig-mobile-cta">
                     Set Up Multi-SIG Wallet
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
