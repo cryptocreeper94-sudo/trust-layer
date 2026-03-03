@@ -1,23 +1,44 @@
 # Trust Layer Hub — React Native + Expo App Specification
 
-## Agent Handoff Document — Complete Build Reference
+## Complete Agent Handoff — One Unified Document
 
-This document contains everything needed to build the **Trust Layer Hub** — a single React Native + Expo app that serves as the front door to the entire 32-app Trust Layer ecosystem. This app will be submitted to the Google Play Store and Apple App Store.
+This is the SINGLE handoff document for building the **Trust Layer Hub** mobile app. Everything the building agent needs is in this file — tech stack, UI protocol, all 32 apps with accurate descriptions, API endpoints, auth flow, app store requirements, build plan, and critical rules. No other documents needed.
 
 ---
 
 ## 1. WHAT THIS APP IS
 
-**Trust Layer Hub** is a native mobile app that:
-- Showcases all 32 ecosystem apps with descriptions, images, and deep links
-- Has REAL functionality (dashboard, wallet, chat, news) so Apple/Google accept it
-- Drives SIG presale traffic with Shell purchases built in
+**Trust Layer Hub** is a native mobile app that serves as the front door to a 32-app blockchain ecosystem. It goes into the Google Play Store and Apple App Store as a single download that gives users access to everything Trust Layer offers.
+
+**What it does:**
+- Showcases all 32 ecosystem apps organized by category with real descriptions, images, and one-tap launch
+- Has REAL standalone functionality — dashboard, wallet, encrypted messaging, security scanner, news feed
+- Drives presale traffic with Shell purchases built in
 - Provides single sign-on — log in once, authenticated across all apps
-- Push notifications for ecosystem-wide announcements
+- Push notifications for ecosystem announcements, balance changes, and security alerts
+- Real-time countdown to Launch Day
 
-**Think of it like:** The Google app linking to Gmail/Drive/Maps, or Meta Suite linking to Instagram/WhatsApp/Threads. One app, one download, one identity — gateway to everything.
+**Think of it like:** Google's app linking to Gmail/Drive/Maps, or Meta Suite linking to Instagram/WhatsApp. One app, one download, one identity — gateway to everything.
 
-**This is NOT a link farm.** Store reviewers reject apps that are just directories. This app has genuine standalone utility through its dashboard, wallet, messaging, and news features.
+### Why This App Is Worth Downloading (Not Just a Link Directory)
+
+This is NOT a link farm. Both app stores reject apps that are just directories of links. This app has genuine daily-use utility:
+
+1. **Live Wallet** — Check your Signal (SIG) balance, Shell balance, and portfolio value at a glance. Buy Shells directly. Track every transaction with blockchain-verified records.
+
+2. **Signal Chat** — Encrypted real-time messaging with blockchain-verified identities. Public channels and DMs. This alone is a standalone chat app.
+
+3. **Guardian Scanner** — Scan any URL, smart contract, or AI agent for threats across 13+ chains. Instant security scores. People in crypto use tools like this daily.
+
+4. **Launch Countdown** — Real-time countdown to August 23, 2026 with milestone notifications. Early adopters check this constantly.
+
+5. **News & Alerts** — Push notifications for presale milestones, new app launches, security alerts, and ecosystem updates. Once it's on their phone, you have home screen real estate.
+
+6. **Ecosystem Discovery** — 32 apps across DeFi, AI trading, security, gaming, publishing, wellness, enterprise, automotive, and more. Users discover products they didn't know existed.
+
+7. **Identity Hub** — Your Trust Layer ID, THE VOID membership, Guardian Security Score, and linked accounts — all in one place.
+
+The app store pitch is simple: "One chain. 32 apps. Your complete blockchain ecosystem in your pocket." That's compelling. And once someone downloads it, they're exposed to everything you've built.
 
 ---
 
@@ -49,7 +70,7 @@ To pass review, these screens MUST be built with React Native components:
 4. **Profile / Settings**
 5. **Login / Registration**
 
-Everything else CAN be WebView if needed (individual ecosystem apps open in an in-app browser).
+Everything else CAN use WebView if needed (individual ecosystem apps open in an in-app browser).
 
 ---
 
@@ -106,7 +127,6 @@ Every card in the app uses glassmorphism. Build a reusable `GlassCard` component
 import { View, StyleSheet } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { LinearGradient } from 'expo-linear-gradient';
-import Animated, { useAnimatedStyle, withSpring } from 'react-native-reanimated';
 
 interface GlassCardProps {
   children: React.ReactNode;
@@ -162,29 +182,22 @@ const styles = StyleSheet.create({
 **Rule: Groups of 4+ same-type cards MUST be horizontal ScrollViews (carousels), never vertical lists.**
 
 ```tsx
-// Horizontal card carousel inside a section
-<View>
-  <Text style={styles.sectionTitle}>Featured Apps</Text>
-  <ScrollView
-    horizontal
-    showsHorizontalScrollIndicator={false}
-    contentContainerStyle={{ paddingHorizontal: 16, gap: 12 }}
-    snapToInterval={280}
-    decelerationRate="fast"
-  >
-    {apps.map(app => (
-      <View key={app.id} style={{ width: 260 }}>
-        <GlassCard>
-          {/* card content */}
-        </GlassCard>
-      </View>
-    ))}
-  </ScrollView>
-</View>
+<ScrollView
+  horizontal
+  showsHorizontalScrollIndicator={false}
+  contentContainerStyle={{ paddingHorizontal: 16, gap: 12 }}
+  snapToInterval={280}
+  decelerationRate="fast"
+>
+  {apps.map(app => (
+    <View key={app.id} style={{ width: 260 }}>
+      <GlassCard>{/* card content */}</GlassCard>
+    </View>
+  ))}
+</ScrollView>
 ```
 
 ### 4.4 Grid Layout
-Use `flexWrap` for bento-style grids:
 ```tsx
 <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 12, padding: 16 }}>
   {items.map(item => (
@@ -193,11 +206,6 @@ Use `flexWrap` for bento-style grids:
     </View>
   ))}
 </View>
-```
-
-For true bento spanning (one card takes full width, others half):
-```tsx
-<View style={{ width: item.large ? '100%' : '48%' }}>
 ```
 
 ### 4.5 Gradient Text
@@ -231,7 +239,6 @@ function Skeleton({ width, height, borderRadius = 8 }) {
 ```
 
 ### 4.7 Animations
-Use Reanimated 3 + Moti for all animations:
 ```tsx
 import { MotiView } from 'moti';
 
@@ -250,7 +257,6 @@ import { MotiView } from 'moti';
 
 ### 4.8 Background Glow Orbs
 ```tsx
-// Positioned absolute behind content
 <View style={StyleSheet.absoluteFill} pointerEvents="none">
   <LinearGradient
     colors={['rgba(0,255,255,0.06)', 'transparent']}
@@ -265,7 +271,6 @@ import { MotiView } from 'moti';
 
 ### 4.9 Buttons
 ```tsx
-// Primary CTA
 <LinearGradient colors={['#06b6d4', '#2563eb']} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
   style={{ borderRadius: 12, overflow: 'hidden' }}>
   <Pressable style={{ paddingVertical: 14, paddingHorizontal: 24, alignItems: 'center' }}
@@ -290,10 +295,8 @@ import { MotiView } from 'moti';
 👤 Profile     — Settings, identity, membership
 ```
 
-### Screen Breakdown
-
-#### 5.1 HOME (Dashboard)
-**Purpose:** At-a-glance ecosystem overview. This is the first thing users see.
+### 5.1 HOME (Dashboard)
+**Purpose:** At-a-glance ecosystem overview. First thing users see.
 
 **Content:**
 - **Welcome header** with user name and Trust Layer ID
@@ -304,21 +307,22 @@ import { MotiView } from 'moti';
 - **Activity feed** — Recent transactions, achievements, notifications (vertical list, max 5 items with "See All")
 - **Launch countdown** — Days/Hours/Min/Sec to August 23, 2026
 
-**Native requirement:** This screen MUST be 100% native React Native. No WebView.
+**Native requirement:** 100% native React Native. No WebView.
 
-#### 5.2 EXPLORE (App Directory)
+### 5.2 EXPLORE (App Directory)
 **Purpose:** Browse and launch all 32 ecosystem apps.
 
 **Content:**
 - **Search bar** at top (filter apps by name)
-- **Category tabs** (horizontal scroll): All, Core, DeFi, Security, Gaming, AI, Social, Business, Health, Services
+- **Category tabs** (horizontal scroll): All, Core, Security, DeFi, Gaming, Enterprise, Automotive, Publishing, Health & Services, Food & Hospitality, Development
 - **App cards in grid** (2-column) — each card shows: icon, name, one-line description, category badge, "Open" button
 - **Tapping an app** → opens detail modal with full description, screenshots, and "Launch" button
-- **Launch button** → opens the app URL in an in-app browser (react-native-webview) or Expo WebBrowser
+- **Launch button** → opens the app URL in an in-app browser or Expo WebBrowser
+- **SSO** — pass auth token when launching ecosystem apps so user doesn't log in again
 
-**Native requirement:** This screen MUST be 100% native. The launched apps can open in WebView.
+**Native requirement:** 100% native. Launched apps can open in WebView.
 
-#### 5.3 WALLET
+### 5.3 WALLET
 **Purpose:** View balances, buy Shells, see transaction history.
 
 **Content:**
@@ -326,9 +330,7 @@ import { MotiView } from 'moti';
 - **Shell balance** with "Buy Shells" button
 - **Portfolio breakdown** — pie chart showing SIG, stSIG, NFTs
 - **Transaction history** — scrollable list with icons, amounts, timestamps
-- **Buy Shells flow** — uses Stripe (web) or Apple IAP / Google Play Billing (native) depending on platform
-
-**IMPORTANT — Apple IAP Rule:** If selling Shells (digital currency) on iOS, you MUST use Apple In-App Purchases. Apple takes 30%. On Android, you can use Google Play Billing OR direct Stripe (though Play Store prefers their billing for digital goods). Plan pricing tiers accordingly.
+- **Buy Shells flow** — uses Apple IAP on iOS, Google Play Billing or Stripe on Android
 
 **Shell purchase tiers:**
 | Tier | Shells | Price |
@@ -338,38 +340,286 @@ import { MotiView } from 'moti';
 | Whale | 100,000 | $100.00 |
 | Custom | Variable | Variable |
 
-**Native requirement:** This screen MUST be 100% native.
+**IMPORTANT:** Apple requires Apple In-App Purchases for digital goods on iOS. You cannot use Stripe directly for Shells on iOS.
 
-#### 5.4 CHAT (Signal Chat)
+**Native requirement:** 100% native.
+
+### 5.4 CHAT (Signal Chat)
 **Purpose:** Real-time encrypted messaging with blockchain-verified identities.
 
 **Content:**
 - **Channel list** — public channels + DMs
 - **Message view** — real-time messages with user avatars, timestamps
 - **Message input** — text input with send button
-- **Typing indicators** — real-time "user is typing..."
+- **Typing indicators**
 - **Connection:** WebSocket to `wss://{server}/ws/chat`
 
-This gives the app genuine social utility — a key factor for store approval.
+**Native requirement:** Chat UI should be native. WebSocket to existing backend.
 
-**Native requirement:** Chat UI should be native. WebSocket connection to existing backend.
-
-#### 5.5 PROFILE
+### 5.5 PROFILE
 **Purpose:** User identity, settings, membership.
 
 **Content:**
 - **Profile header** — avatar, name, Trust Layer ID, member number
 - **THE VOID membership** status and tier
 - **Guardian Security Score**
-- **Settings** — notifications, security (PIN/biometrics), display preferences
+- **Settings** — notifications, security (PIN/biometrics), display
 - **Linked accounts** — which ecosystem apps are connected
 - **Sign out**
 
-**Native requirement:** This screen MUST be 100% native.
+**Native requirement:** 100% native.
 
 ---
 
-## 6. AUTHENTICATION
+## 6. ALL 32 ECOSYSTEM APPS — ACCURATE DESCRIPTIONS
+
+These are the EXACT descriptions from the Trust Layer codebase. Use these verbatim. Do NOT paraphrase, summarize, or guess at what an app does.
+
+### Core Infrastructure
+
+**1. Trust Layer**
+- **Hook:** The Foundation of Trust
+- **Description:** High-performance Layer 1 Proof-of-Authority blockchain. The coordinated trust layer powering verified identity, accountability, and transparent audit trails for real business operations.
+- **URL:** https://dwtl.io
+- **Category:** Core
+- **Tags:** Blockchain, L1, Core, Infrastructure
+
+**2. TrustHome**
+- **Hook:** Real Estate Powered by Trust
+- **Description:** Real estate agent super tool with blockchain-verified agent profiles, property listings, client management, and Trust Layer trust scores for transparent real estate transactions. This is NOT a personal dashboard — it is a professional platform for real estate agents.
+- **URL:** https://trusthome.replit.app
+- **Category:** Core
+- **Tags:** Real Estate, Agents, Listings, Trust Scores
+
+**3. TrustVault**
+- **Hook:** Your Multi-Chain Secure Vault
+- **Description:** Multi-chain wallet with M-of-N multi-signature security. Manage Signal, staked assets, NFTs, and cross-chain bridges from a single secure vault.
+- **URL:** https://trustvault.replit.app
+- **Category:** Finance
+- **Tags:** Wallet, Multi-Sig, Finance, Security
+
+**4. TLID.io**
+- **Hook:** Your Blockchain Identity Name
+- **Description:** Blockchain domain service for Trust Layer IDs. Claim your .tlid identity name — a blockchain-verified, human-readable address tied to your trust profile.
+- **URL:** https://tlid.io
+- **Category:** Identity
+- **Tags:** Identity, Domains, Blockchain, Naming
+
+**5. THE VOID**
+- **Hook:** Premium Membership Identity
+- **Description:** Premium membership identity system. Blockchain-verified Void IDs, DW-STAMP hallmarks, and cross-ecosystem SSO for the Trust Layer network.
+- **URL:** https://intothevoid.app
+- **Category:** Entertainment
+- **Tags:** Identity, Premium, Membership, Blockchain
+
+**6. Signal Chat**
+- **Hook:** Connect Across the Network
+- **Description:** Connect across the Trust Layer network. Real-time messaging with blockchain-verified identities.
+- **URL:** [portal]/signal-chat
+- **Category:** Community
+- **Tags:** Community, Chat, Social, Messaging
+
+**7. DWSC Studio**
+- **Hook:** Build. Create. Deploy.
+- **Description:** The architectural hub for Trust Layer ecosystem development. Build, deploy, and manage blockchain-integrated applications.
+- **URL:** [portal]/studio
+- **Category:** Development
+- **Tags:** Development, Architecture, IDE, Blockchain
+
+### Security & Guardian Suite
+
+**8. TrustShield**
+- **Hook:** Enterprise Security Shield
+- **Description:** Continuous blockchain security monitoring for enterprises. Guardian certification, real-time threat detection, and compliance dashboards.
+- **URL:** https://trustshield.tech
+- **Category:** Security
+- **Tags:** Security, Enterprise, Monitoring, Compliance
+
+**9. Guardian Scanner**
+- **Hook:** Verify Any AI Agent Instantly
+- **Description:** AI agent verification across 13+ chains. Scan any autonomous agent for trust score, security posture, and behavioral analysis with blockchain-certified results.
+- **URL:** [portal]/guardian
+- **Category:** Security
+- **Tags:** Security, AI, Verification, Multi-Chain
+
+**10. Guardian Screener**
+- **Hook:** AI-Powered DEX Intelligence
+- **Description:** DEX screener with AI-powered threat detection. Real-time token analysis, rug pull alerts, and smart contract audits launching at TGE.
+- **URL:** [portal]/guardian-screener
+- **Category:** DeFi
+- **Tags:** DeFi, Security, Trading, AI
+
+### DeFi & AI Trading
+
+**11. TradeWorks AI**
+- **Hook:** AI-Powered Trading Intelligence
+- **Description:** Advanced AI-powered trading intelligence and market analysis platform with automated strategies.
+- **URL:** https://tradeworksai.io
+- **Category:** AI Trading
+- **Tags:** AI, Trading, Analytics, Automation
+
+**12. StrikeAgent**
+- **Hook:** Automated Trading Intelligence
+- **Description:** AI sentient bot with multiple trading settings, hashed predictions and verified results.
+- **URL:** https://strikeagent.io
+- **Category:** AI Trading
+- **Tags:** AI, Trading, Predictions, Automation
+
+**13. Pulse**
+- **Hook:** Auto-Trade with AI Precision
+- **Description:** Predictive market intelligence powered by AI systems.
+- **URL:** https://darkwavepulse.com
+- **Category:** Analytics
+- **Tags:** AI, Auto-Trading, Predictive, Analytics
+
+### Gaming & Entertainment
+
+**14. Chronicles**
+- **Hook:** Live Your Legacy
+- **Description:** Not a game. A life. Live your legacy through a persistent parallel world with emotion-driven AI and living political simulation.
+- **URL:** https://yourlegacy.io
+- **Category:** Gaming
+- **Tags:** Gaming, Simulation, AI, Social
+
+**15. The Arcade**
+- **Hook:** Provably Fair Gaming
+- **Description:** Provably fair blockchain games with verifiable randomness and transparent outcomes.
+- **URL:** https://darkwavegames.io
+- **Category:** Gaming
+- **Tags:** Gaming, Blockchain, Fair, Entertainment
+
+**16. Bomber**
+- **Hook:** Crush It Off the Tee
+- **Description:** 3D long driving game built with Three.js. Crush massive drives across stunning courses with real-time physics, leaderboards, and Trust Golf integration.
+- **URL:** https://bomber.tlid.io
+- **Category:** Gaming
+- **Tags:** Gaming, 3D, Sports, Golf
+
+**17. Trust Golf**
+- **Hook:** Your Premium Golf Companion
+- **Description:** Premium golf companion with 45+ courses, AI-powered swing analysis, USGA handicap tracking, score logging, exclusive tee time deals, and an AI-driven blog — all in a cinematic glassmorphism UI.
+- **URL:** https://trustgolf.app
+- **Category:** Sports & Fitness
+- **Tags:** Golf, Sports, AI, Swing Analysis
+
+### Enterprise & Workforce
+
+**18. ORBIT Staffing OS**
+- **Hook:** Blockchain-Powered HR
+- **Description:** Complete workforce management platform with blockchain-verified employment records.
+- **URL:** https://orbitstaffing.io
+- **Category:** Enterprise
+- **Tags:** HR, Payroll, Enterprise, Compliance
+
+**19. Orby Commander**
+- **Hook:** Venue & Event Operations Command Suite
+- **Description:** Dual blockchain verified venue and event operations command suite with geofencing, facial recognition clock-in for fraud protection, and direct integration with ORBIT Staffing OS.
+- **URL:** https://getorby.io
+- **Category:** Enterprise
+- **Tags:** Enterprise, Operations, Security, Geofencing
+
+### Automotive & Transport
+
+**20. GarageBot**
+- **Hook:** IoT-Powered Garage Automation
+- **Description:** Smart automation for vehicle maintenance and garage management.
+- **URL:** https://garagebot.io
+- **Category:** Automotive
+- **Tags:** Auto, IoT, Maintenance
+
+**21. Lot Ops Pro**
+- **Hook:** Autonomous Lot Management System
+- **Description:** Autonomous lot management system for auto auctions, dealers, manufacturers, and businesses with lot inventory and operations personnel.
+- **URL:** https://lotopspro.io
+- **Category:** Automotive
+- **Tags:** Auto, B2B, Inventory, Fleet, Automation
+
+**22. TORQUE**
+- **Hook:** Verified Automotive Trust
+- **Description:** Blockchain-verified automotive marketplace and vehicle history platform. Buy, sell, and verify vehicles with immutable trust records.
+- **URL:** https://garagebot.io/torque
+- **Category:** Automotive
+- **Tags:** Automotive, Marketplace, Verification, Trust
+
+**23. TL Driver Connect**
+- **Hook:** Verified Driver Coordination
+- **Description:** Blockchain-verified driver coordination and logistics platform with real-time tracking and transparent earnings.
+- **URL:** https://tldriverconnect.com
+- **Category:** Transportation
+- **Tags:** Transportation, Logistics, Drivers, Delivery
+
+### Health, Outdoor & Services
+
+**24. VedaSolus**
+- **Hook:** Ancient Wisdom Meets Modern Wellness
+- **Description:** Holistic health platform blending Ayurveda & TCM with modern science. Features AI wellness coach, health passport, practitioner marketplace, and voice-enabled guidance.
+- **URL:** https://vedasolus.io
+- **Category:** Health & Wellness
+- **Tags:** Health, Wellness, Ayurveda, TCM, AI
+
+**25. Verdara**
+- **Hook:** Your AI Outdoor Command Center
+- **Description:** AI-powered outdoor recreation super-app with species identification, trail explorer, trip planner, living catalog of 170+ US locations, wood economy marketplace, and wild edibles guide.
+- **URL:** https://verdara.replit.app
+- **Category:** Outdoor & Recreation
+- **Tags:** Outdoors, AI, Recreation, Nature
+
+**26. Arbora**
+- **Hook:** Pro Arborist Business Suite
+- **Description:** Professional arborist business management PWA with CRM pipeline, job scheduling, estimates, invoicing, crew management, time tracking, inventory, and GarageBot equipment integration.
+- **URL:** https://verdara.replit.app/arbora
+- **Category:** Services
+- **Tags:** Arborist, CRM, Business, Scheduling
+
+**27. PaintPros**
+- **Hook:** Streamlined Painting Business
+- **Description:** Professional painting service management platform.
+- **URL:** https://paintpros.io
+- **Category:** Services
+- **Tags:** Services, Scheduling, CRM, Contractors
+
+**28. Nashville Painting Professionals**
+- **Hook:** Nashville's Premier Painting Pros
+- **Description:** Professional painting service management platform for Nashville's premier painting contractors.
+- **URL:** https://nashpaintpros.io
+- **Category:** Services
+- **Tags:** Services, Nashville, Painters, Contractors
+
+### Publishing & Education
+
+**29. Trust Book**
+- **Hook:** Censorship-Free Publishing
+- **Description:** Premium ebook publishing and reading platform with AI narration, multi-format support, and blockchain-verified provenance. Read, listen, and discover truth.
+- **URL:** [portal]/trust-book
+- **Category:** Publishing
+- **Tags:** Publishing, E-Books, AI Narration, Reading
+
+**30. Academy**
+- **Hook:** Learn. Certify. Master Crypto.
+- **Description:** Education and certification platform for crypto fundamentals, multi-chain ecosystems, DeFi strategies, security best practices, and Trust Layer operations.
+- **URL:** [portal]/academy
+- **Category:** Education
+- **Tags:** Education, Certification, Crypto, Learning
+
+### Food & Hospitality
+
+**31. Happy Eats**
+- **Hook:** Local Food Truck Orders
+- **Description:** Food truck ordering platform with zone-based batch ordering. Order from local food trucks in the Nashville I-24 Corridor with 11 AM daily cutoff and blockchain-verified transactions.
+- **URL:** https://happyeats.app
+- **Category:** Food & Delivery
+- **Tags:** Food, Delivery, Local, Ordering
+
+**32. Brew & Board Coffee**
+- **Hook:** Social Gaming Meets Craft Coffee
+- **Description:** Community platform for coffee shops with loyalty rewards.
+- **URL:** https://brewandboard.coffee
+- **Category:** Hospitality
+- **Tags:** Social, Events, Rewards, Hospitality
+
+---
+
+## 7. AUTHENTICATION
 
 ### Login Flow
 The app connects to the existing Trust Layer backend API.
@@ -392,17 +642,17 @@ POST /api/auth/logout
   Headers: { Authorization: "Bearer {sessionToken}" }
 ```
 
-**Token storage:** Store the `sessionToken` in Expo SecureStore (encrypted on-device storage). Auto-attach it as a Bearer token on every API request.
+**Token storage:** Store `sessionToken` in Expo SecureStore (encrypted on-device). Auto-attach as Bearer token on every API request.
 
 **Session duration:** 30 days. Auto-refresh or re-prompt login on expiry.
 
-**SSO for ecosystem apps:** When opening an ecosystem app in WebView, inject the session token via URL parameter or cookie so the user doesn't have to log in again:
+**SSO for ecosystem apps:** When opening an ecosystem app in WebView, inject the session token so the user doesn't log in again:
 ```
 https://app.tlid.io?sso_token={token}
 ```
 
 ### Biometric Auth
-After initial login, offer Face ID / Touch ID / fingerprint for quick re-authentication:
+After initial login, offer Face ID / Touch ID / fingerprint:
 ```tsx
 import * as LocalAuthentication from 'expo-local-authentication';
 
@@ -414,91 +664,9 @@ const result = await LocalAuthentication.authenticateAsync({
 
 ---
 
-## 7. ALL 32 ECOSYSTEM APPS
+## 8. API ENDPOINTS
 
-Each app needs an entry in the app directory. Here is the complete list with categories:
-
-### Core Infrastructure
-| App | Description | URL |
-|-----|-------------|-----|
-| Trust Layer | Layer 1 PoA Blockchain — 200K+ TPS, 400ms blocks | dwtl.io |
-| TrustHome | Real estate agent super tool with Trust Layer-verified agent profiles, property listings, and blockchain-backed trust scores | trusthome.replit.app |
-| TrustVault | Multi-chain wallet with multi-sig security | trustvault.replit.app |
-| TLID.io | Blockchain domain names (.tlid identity) | tlid.io |
-| THE VOID | Premium membership identity and ecosystem SSO | intothevoid.app |
-| DWSC Studio | Development IDE for ecosystem builders | [portal]/studio |
-
-### DeFi & Finance
-| App | Description | URL |
-|-----|-------------|-----|
-| Guardian Screener | DEX screener with AI rug pull detection | [portal]/guardian-screener |
-| TradeWorks AI | AI-powered trading intelligence and analysis | tradeworksai.io |
-| StrikeAgent | Sentient AI trading bot with verified predictions | strikeagent.io |
-| Pulse | Predictive market analytics powered by ML | darkwavepulse.com |
-
-### Security
-| App | Description | URL |
-|-----|-------------|-----|
-| TrustShield | Enterprise blockchain security monitoring | trustshield.tech |
-| Guardian Scanner | AI agent verification across 13+ chains | [portal]/guardian |
-
-### Gaming & Entertainment
-| App | Description | URL |
-|-----|-------------|-----|
-| Chronicles | 3D life simulation across 13 historical epochs | yourlegacy.io |
-| The Arcade | Provably fair blockchain games | darkwavegames.io |
-| Bomber | 3D long driving golf game | bomber.tlid.io |
-
-### Social & Community
-| App | Description | URL |
-|-----|-------------|-----|
-| Signal Chat | Encrypted real-time messaging | [portal]/signal-chat |
-| Academy | Crypto education and certification | [portal]/academy |
-
-### Health & Lifestyle
-| App | Description | URL |
-|-----|-------------|-----|
-| VedaSolus | AI holistic wellness (Ayurveda + TCM) | vedasolus.io |
-| Verdara | AI outdoor recreation super-app | verdara.replit.app |
-| Trust Golf | Premium golf companion with AI swing analysis | trustgolf.app |
-
-### Enterprise & Business
-| App | Description | URL |
-|-----|-------------|-----|
-| ORBIT Staffing OS | Blockchain HR, payroll, and workforce mgmt | orbitstaffing.io |
-| Orby Commander | Venue and event operations command suite | getorby.io |
-
-### Automotive
-| App | Description | URL |
-|-----|-------------|-----|
-| GarageBot | Smart vehicle maintenance automation | garagebot.io |
-| Lot Ops Pro | Autonomous auto lot management | lotopspro.io |
-| TORQUE | Blockchain-verified auto marketplace | garagebot.io/torque |
-| TL Driver Connect | Verified driver coordination and logistics | tldriverconnect.com |
-
-### Services
-| App | Description | URL |
-|-----|-------------|-----|
-| PaintPros | Professional painting service management | paintpros.io |
-| Nashville Painting Professionals | Premier Nashville painting contractor | nashpaintpros.io |
-| Arbora | Professional arborist business suite | verdara.replit.app/arbora |
-
-### Food & Hospitality
-| App | Description | URL |
-|-----|-------------|-----|
-| Happy Eats | Food truck ordering with zone-based batching | happyeats.app |
-| Brew & Board Coffee | Coffee shop loyalty and community platform | brewandboard.coffee |
-
-### Publishing
-| App | Description | URL |
-|-----|-------------|-----|
-| Trust Book | Censorship-free ebook publishing, 70% royalties | [portal]/trust-book |
-
----
-
-## 8. API ENDPOINTS THE APP NEEDS
-
-All requests go to the Trust Layer backend. Base URL will be the production deployment URL.
+All requests go to the Trust Layer backend. Base URL is the production deployment URL.
 
 ### Auth
 ```
@@ -543,15 +711,14 @@ POST   /api/guardian/scan         → { url } → { score, threats, details }
 
 ## 9. PUSH NOTIFICATIONS
 
-Use Expo Notifications to register the device token with the backend:
-
+Register device token with backend:
 ```
 POST /api/notifications/register
 Body: { pushToken, platform: "ios" | "android" }
 ```
 
 **Notification types:**
-- Presale milestones (e.g., "50% of Shells sold!")
+- Presale milestones ("50% of Shells sold!")
 - New ecosystem app launches
 - SIG/Shell balance changes
 - Signal Chat messages
@@ -584,11 +751,11 @@ Body: { pushToken, platform: "ios" | "android" }
 
 ## 11. LAUNCH DATE
 
-**August 23, 2026** — Jason's 50th birthday. This is final. Never change it.
+**August 23, 2026** — This is final. Never change it.
 
 Tagline: **"One Year. One Vision. Launch Day."**
 
-The app should display a real-time countdown to this date on the dashboard.
+The app displays a real-time countdown to this date on the dashboard. Timezone: CST (America/Chicago).
 
 ---
 
@@ -605,7 +772,7 @@ Trust Layer is the most complete blockchain ecosystem ever built — 32 intercon
 
 With Trust Layer Hub, you get:
 
-DASHBOARD — Your ecosystem at a glance. SIG balance, Shell balance, portfolio value, and real-time activity across all connected apps.
+DASHBOARD — Your ecosystem at a glance. Signal balance, Shell balance, portfolio value, and real-time activity across all connected apps.
 
 32 APPS — Browse the full ecosystem organized by category. DeFi trading tools, AI-powered market intelligence, blockchain security scanners, 3D gaming, censorship-free publishing, enterprise workforce management, and more. Launch any app with one tap.
 
@@ -618,7 +785,7 @@ GUARDIAN SECURITY — Scan any URL, smart contract, or AI agent for threats acro
 Trust Layer launches August 23, 2026. Get in early. Build your position. Be part of the future of trust.
 
 ### Keywords
-blockchain, crypto, defi, wallet, trading, ai, security, gaming, nft, web3
+blockchain, defi, wallet, trading, ai, security, gaming, nft, web3, ecosystem
 
 ### Category
 Finance (primary), Productivity (secondary)
@@ -687,24 +854,9 @@ trust-layer-hub/
 
 ---
 
-## 15. THINGS TO AVOID
+## 15. BUILD SESSION PLAN
 
-1. **Calling SIG a "token"** — it is a native asset
-2. **Light mode** — dark theme only, no toggle
-3. **Vertical card lists** — use horizontal carousels for 4+ same-type items
-4. **Plain white cards** — everything uses GlassCard with glassmorphism
-5. **Missing animations** — every screen transition and list entry should animate
-6. **WebView for core screens** — Dashboard, Explore, Wallet, Profile, Login must be native
-7. **Direct Stripe on iOS** — digital goods on iOS MUST use Apple IAP
-8. **Link farm appearance** — the app must have real utility, not just a list of links
-9. **Placeholder images** — every app card needs a real icon/image
-10. **Changing the launch date** — August 23, 2026. Period.
-
----
-
-## 16. BUILD SESSION PLAN
-
-This is the execution plan. Follow it in order. Each task lists what to build, what files to create, and what "done" looks like.
+Follow this in order. Each task lists what to build, files to create, and what "done" looks like.
 
 ### Phase 1: Project Scaffolding
 
@@ -712,8 +864,8 @@ This is the execution plan. Follow it in order. Each task lists what to build, w
 - **Blocked By**: []
 - **Details**:
   - Run `npx create-expo-app trust-layer-hub --template blank-typescript`
-  - Install all dependencies from Section 3 (NativeWind, Reanimated, Moti, expo-blur, expo-linear-gradient, expo-haptics, expo-secure-store, @tanstack/react-query, axios, react-native-webview, lucide-react-native, @react-native-masked-view/masked-view)
-  - Configure NativeWind v4 with the dark theme color tokens from Section 4.1
+  - Install all dependencies from Section 3
+  - Configure NativeWind v4 with dark theme tokens from Section 4.1
   - Set up Expo Router file-based navigation in `app/` directory
   - Configure `app.json` with app name "Trust Layer", slug, scheme for deep linking, iOS/Android bundle IDs
   - Files: `package.json`, `app.json`, `tailwind.config.js`, `global.css`, `app/_layout.tsx`, `metro.config.js`, `babel.config.js`, `tsconfig.json`
@@ -722,14 +874,14 @@ This is the execution plan. Follow it in order. Each task lists what to build, w
 #### T002: Create Shared UI Components
 - **Blocked By**: [T001]
 - **Details**:
-  - Build `GlassCard` exactly as specified in Section 4.2 (expo-blur + LinearGradient glow border)
+  - Build `GlassCard` exactly as specified in Section 4.2
   - Build `GradientText` using MaskedView + LinearGradient as in Section 4.5
   - Build `Skeleton` loading component as in Section 4.6
   - Build `BackgroundGlow` orb component as in Section 4.8
   - Build gradient `Button` component as in Section 4.9 (44px min touch target)
   - All components dark theme only
   - Files: `components/GlassCard.tsx`, `components/GradientText.tsx`, `components/Skeleton.tsx`, `components/BackgroundGlow.tsx`, `components/Button.tsx`
-  - Acceptance: Each component renders correctly in isolation. GlassCard has visible blur and glow. Buttons have 44px+ touch targets.
+  - Acceptance: Each component renders correctly. GlassCard has visible blur and glow. Buttons have 44px+ touch targets.
 
 #### T003: Create Theme & API Layer
 - **Blocked By**: [T001]
@@ -739,21 +891,21 @@ This is the execution plan. Follow it in order. Each task lists what to build, w
   - Create TanStack Query client with default stale/cache times
   - Create SecureStore helper (save/get/delete session token)
   - Files: `lib/colors.ts`, `lib/api.ts`, `lib/queryClient.ts`, `lib/storage.ts`
-  - Acceptance: API client can make authenticated requests. Token persists across app restarts.
+  - Acceptance: API client can make authenticated requests. Token persists across restarts.
 
 ### Phase 2: Authentication
 
 #### T004: Build Auth Screens & Hook
 - **Blocked By**: [T002, T003]
 - **Details**:
-  - Login screen: email + password fields, gradient "Sign In" button, link to register
-  - Register screen: email + username + password fields, gradient "Create Account" button
+  - Login screen: email + password, gradient "Sign In" button, link to register
+  - Register screen: email + username + password, gradient "Create Account" button
   - `useAuth` hook: login mutation, register mutation, logout, `useQuery` for `/api/auth/me`
-  - On successful login, store sessionToken in SecureStore, redirect to home tab
-  - On app launch, check SecureStore for token, auto-login if valid
+  - Store sessionToken in SecureStore on login, redirect to home
+  - Auto-login on app launch if token exists and is valid
   - Biometric auth option after first login (expo-local-authentication)
   - Files: `app/login.tsx`, `app/register.tsx`, `hooks/useAuth.ts`
-  - Acceptance: Can register, login, persist session, auto-login on restart. Biometric prompt works.
+  - Acceptance: Can register, login, persist session, auto-login on restart
 
 ### Phase 3: Tab Navigation & Core Screens
 
@@ -763,135 +915,132 @@ This is the execution plan. Follow it in order. Each task lists what to build, w
   - 5-tab bottom navigator: Home, Explore, Wallet, Chat, Profile
   - Tab bar: dark background (#0c1224), cyan active icon, gray inactive
   - Icons from Lucide: Home, Search, Wallet, MessageCircle, User
-  - Tab bar should have subtle top border (rgba(255,255,255,0.08))
   - Haptic feedback on tab press (expo-haptics)
   - Files: `app/(tabs)/_layout.tsx`
-  - Acceptance: All 5 tabs render, switching works, haptic on press, correct icons/colors
+  - Acceptance: All 5 tabs render, switching works, haptic on press
 
 #### T006: Build Home Dashboard
 - **Blocked By**: [T002, T005]
 - **Details**:
   - Welcome header with user name + Trust Layer ID
   - Balance card (GlassCard glow): SIG balance, Shell balance, fiat estimate
-  - Quick actions row: Buy Shells, Send, Scan, Bridge — 4 icon buttons in a row
-  - News carousel: horizontal ScrollView with snap, each card is GlassCard
-  - Featured apps carousel: horizontal ScrollView, app cards with icon + name + description
-  - Activity feed: last 5 transactions, vertical list with "See All" link
-  - Launch countdown: real-time countdown to August 23, 2026 (America/Chicago timezone)
-  - All sections use MotiView staggered fade-in animations
+  - Quick actions row: Buy Shells, Send, Scan, Bridge
+  - News carousel: horizontal ScrollView with snap
+  - Featured apps carousel: horizontal ScrollView
+  - Activity feed: last 5 transactions with "See All"
+  - Launch countdown to August 23, 2026 (America/Chicago timezone)
+  - All sections use MotiView staggered fade-in
   - Files: `app/(tabs)/index.tsx`, `components/BalanceCard.tsx`, `components/CountdownTimer.tsx`, `components/NewsCard.tsx`
-  - Acceptance: Dashboard renders with all sections. Countdown is accurate. Carousels scroll horizontally with snap. Data loads from API.
+  - Acceptance: Dashboard renders all sections. Countdown is accurate. Carousels scroll with snap.
 
 #### T007: Build Explore (App Directory)
 - **Blocked By**: [T002, T005]
 - **Details**:
-  - Search bar at top (TextInput with search icon, dark background)
-  - Category filter: horizontal ScrollView of pill buttons (All, Core, DeFi, Security, Gaming, AI, Social, Business, Health, Services)
-  - App grid: 2-column FlatList, each cell is GlassCard with app icon, name, one-line description, category badge
-  - All 32 apps from Section 7 with correct names, descriptions, URLs, categories
-  - Tapping a card opens detail modal (`app/app/[id].tsx`) with full description + "Launch" button
-  - Launch button opens URL in react-native-webview or Expo WebBrowser
-  - Pass SSO token when launching ecosystem apps
+  - Search bar at top
+  - Category filter: horizontal ScrollView of pill buttons
+  - App grid: 2-column FlatList with GlassCard for each app
+  - All 32 apps from Section 6 with EXACT descriptions — do not paraphrase
+  - Tapping opens detail modal with full description + "Launch" button
+  - Launch opens URL in in-app browser with SSO token
   - MotiView staggered grid animation
   - Files: `app/(tabs)/explore.tsx`, `app/app/[id].tsx`, `components/AppCard.tsx`, `hooks/useEcosystemApps.ts`
-  - Acceptance: All 32 apps show. Search filters by name. Category pills filter correctly. Tapping opens detail. Launch opens in-app browser with SSO.
+  - Acceptance: All 32 apps show with correct descriptions. Search works. Category filter works. Launch opens in-app browser.
 
 #### T008: Build Wallet Screen
 - **Blocked By**: [T002, T005]
 - **Details**:
-  - Balance hero: large SIG amount with gradient text, fiat estimate below
-  - Shell balance card with "Buy Shells" CTA button
-  - Portfolio breakdown: simple visual (pie chart or segmented bar) — SIG, stSIG, NFTs
-  - Transaction history: FlatList of TransactionRow items (icon, description, amount, timestamp, tx hash)
-  - "Buy Shells" flow: navigate to purchase screen with Shell tier options from Section 5.3
-  - Note: On iOS, digital purchases must use Apple IAP. On Android, can use Stripe or Google Play Billing.
+  - Balance hero with gradient text
+  - Shell balance card with "Buy Shells" CTA
+  - Portfolio breakdown visual
+  - Transaction history FlatList
+  - Buy Shells flow with tier options
+  - iOS: Apple IAP. Android: Google Play Billing or Stripe.
   - Files: `app/(tabs)/wallet.tsx`, `components/TransactionRow.tsx`, `hooks/useBalance.ts`
-  - Acceptance: Balances display correctly. Transaction history loads and scrolls. Buy Shells flow starts.
+  - Acceptance: Balances display. Transactions load. Buy Shells flow starts.
 
 #### T009: Build Chat Screen (Signal Chat)
 - **Blocked By**: [T002, T005]
 - **Details**:
-  - Channel list: FlatList of channels (public channels + DMs)
-  - Message view: ScrollView of messages with user avatar (colored circle + initial), username, timestamp, message text
-  - Message input bar: TextInput + Send button, fixed at bottom
-  - WebSocket connection to `wss://{baseUrl}/ws/chat`
-  - Typing indicators: "User is typing..." text
-  - Real-time message updates
+  - Channel list FlatList
+  - Message view with avatars, timestamps
+  - Message input bar fixed at bottom
+  - WebSocket connection to existing backend
+  - Typing indicators
   - Files: `app/(tabs)/chat.tsx`, `hooks/useChat.ts`
-  - Acceptance: Can connect to chat, see messages in real-time, send messages, see typing indicators.
+  - Acceptance: Can connect, see messages, send messages real-time
 
 #### T010: Build Profile Screen
 - **Blocked By**: [T002, T005]
 - **Details**:
-  - Profile header: avatar (colored circle), name, email, Trust Layer ID, member number
-  - THE VOID membership status badge
-  - Guardian Security Score display
-  - Settings section: Notifications toggle, Security (PIN/biometrics), appearance preferences
-  - Linked accounts: list of connected ecosystem apps
-  - Sign Out button (clears SecureStore, redirects to login)
+  - Profile header with avatar, name, Trust Layer ID, member number
+  - THE VOID membership badge
+  - Guardian Security Score
+  - Settings: notifications, security, appearance
+  - Sign Out (clears SecureStore, redirects to login)
   - Files: `app/(tabs)/profile.tsx`
-  - Acceptance: Profile data displays correctly. Sign out works. Settings toggles function.
+  - Acceptance: Profile data displays. Sign out works.
 
 ### Phase 4: Polish & Store Prep
 
 #### T011: Push Notifications
 - **Blocked By**: [T005]
 - **Details**:
-  - Request notification permissions on first launch
-  - Register Expo push token with backend: `POST /api/notifications/register`
-  - Handle incoming notifications (navigate to relevant screen)
+  - Request permissions on first launch
+  - Register Expo push token: `POST /api/notifications/register`
+  - Handle incoming notifications
   - Files: `lib/notifications.ts`, update `app/_layout.tsx`
-  - Acceptance: Push token registers with backend. Notifications appear when app is backgrounded.
+  - Acceptance: Push token registers. Notifications appear when backgrounded.
 
 #### T012: App Store Assets & Config
 - **Blocked By**: [T006, T007, T008, T009, T010]
 - **Details**:
-  - `eas.json` config for EAS Build (development, preview, production profiles)
-  - App icon: 1024x1024 Trust Layer logo on dark background
+  - `eas.json` for EAS Build (dev, preview, production profiles)
+  - App icon: 1024x1024 Trust Layer logo, dark background
   - Splash screen: Trust Layer logo centered, #0c1224 background
-  - App Store screenshots (can be generated from simulator)
-  - Privacy policy URL (required for both stores)
+  - Privacy policy URL
   - App Store listing copy from Section 12
   - Files: `eas.json`, `assets/icon.png`, `assets/splash.png`, `assets/adaptive-icon.png`
-  - Acceptance: `eas build --platform all` succeeds. App icon and splash screen render correctly.
+  - Acceptance: `eas build --platform all` succeeds. Icon and splash render.
 
 ---
 
-## 17. API BASE URL
-
-The Trust Layer backend is deployed at the production URL. The app should read this from an environment variable or config:
+## 16. API BASE URL
 
 ```typescript
 // lib/api.ts
 const API_BASE = process.env.EXPO_PUBLIC_API_URL || 'https://your-deployment-url.replit.app';
 ```
 
-The agent building this will need to set `EXPO_PUBLIC_API_URL` to the correct production deployment URL.
+Set `EXPO_PUBLIC_API_URL` to the production Trust Layer deployment URL.
 
 ---
 
-## 18. CRITICAL REMINDERS FOR THE BUILDING AGENT
+## 17. CRITICAL REMINDERS — READ THESE OR FAIL
 
-1. **Signal (SIG) is a NATIVE ASSET.** Not a token. Not a cryptocurrency. It is the native currency of the Trust Layer blockchain. Like ETH to Ethereum. If you write the word "token" anywhere in the app referring to SIG, you have failed.
+1. **Signal (SIG) is a NATIVE ASSET.** Not a token. Not a cryptocurrency. It is the native currency of the Trust Layer blockchain. Like ETH to Ethereum. If you write "token" referring to SIG anywhere in the app, you have failed.
 
 2. **Dark theme ONLY.** No light mode. No toggle. Background is #0c1224. Every screen. Every modal. Every component.
 
-3. **GlassCard padding rule.** Padding goes INSIDE the card content (`<View style={{padding: 20}}>` inside the card), never on the GlassCard wrapper itself. The blur and glow border must extend to the edges.
+3. **GlassCard padding rule.** Padding goes INSIDE the card content, never on the GlassCard wrapper itself. The blur and glow border must extend to the edges.
 
-4. **Horizontal carousels, not vertical lists.** When you have 4+ cards of the same type (apps, news, features), they go in a horizontal ScrollView with snap behavior. Vertical stacking of many same-type cards is forbidden.
+4. **Horizontal carousels, not vertical lists.** 4+ cards of the same type = horizontal ScrollView with snap. Vertical stacking of same-type cards is forbidden.
 
-5. **44px minimum touch targets.** Every button, every tab, every tappable element. Apple and Google both require this for accessibility.
+5. **44px minimum touch targets.** Every button, tab, tappable element. Required for accessibility on both stores.
 
-6. **Animations on everything.** Every screen transition fades in. Every list uses staggered MotiView. Every card has a subtle scale on press. No static, lifeless screens.
+6. **Animations on everything.** Every screen transition fades in. Every list uses staggered MotiView. Every card has a subtle scale on press. No static screens.
 
-7. **Launch date is August 23, 2026.** The countdown timer on the dashboard counts down to this exact date in CST (America/Chicago). This date cannot change. Tagline: "One Year. One Vision. Launch Day."
+7. **Launch date is August 23, 2026.** Countdown on dashboard. CST (America/Chicago). This date cannot change. Tagline: "One Year. One Vision. Launch Day."
 
-8. **No Replit branding.** This is white-labeled. The only company name that appears is "DarkWave Studios" in the copyright footer. Everything else says "Trust Layer."
+8. **No Replit branding.** White-labeled. Only "DarkWave Studios" in the copyright footer. Everything else says "Trust Layer."
 
-9. **Apple IAP for digital goods on iOS.** If you're selling Shells (which are a digital currency), Apple requires you use their In-App Purchase system on iOS. You cannot use Stripe directly for digital goods on iOS. Android has more flexibility.
+9. **Apple IAP for digital goods on iOS.** Shells are a digital currency. Apple requires their In-App Purchase system. Cannot use Stripe directly on iOS.
 
-10. **This app must have REAL functionality.** Apple/Google reject apps that are just link directories. The dashboard, wallet, chat, and profile screens are genuinely functional — they pull real data, real balances, real messages. The app directory is ONE feature, not the entire app.
+10. **App descriptions must be EXACT.** Use the descriptions from Section 6 verbatim. Do not guess, paraphrase, or make up what an app does. If you don't know, use what's in Section 6. TrustHome is a real estate agent tool, not a dashboard. Brew & Board is a coffee shop community platform, not a coffee distributor. Happy Eats is a food truck ordering platform, not a food delivery service. Get them right.
+
+11. **This app must have REAL functionality.** Apple/Google reject link directories. Dashboard, wallet, chat, and profile are genuinely functional with real data, real balances, real messages. The app directory is ONE feature, not the whole app.
+
+12. **TrustHome is a real estate agent super tool.** It is NOT a personal dashboard, NOT a membership portal, NOT a home screen. It is a professional platform for real estate agents with blockchain-verified profiles, property listings, client management, and trust scores.
 
 ---
 
-*This document is the complete specification for building the Trust Layer Hub mobile app. The agent receiving this should have everything needed to begin development without additional context.*
+*This is the complete, unified specification for building the Trust Layer Hub mobile app. Everything is in this one file. No other documents are needed.*
