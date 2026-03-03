@@ -46,6 +46,7 @@
     "@radix-ui/react-tooltip": "^1.2.8",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.5.0",
+    "@replit/connectors-sdk": "^0.2.0",
     "@scure/bip32": "^2.0.1",
     "@scure/bip39": "^2.0.1",
     "@simplewebauthn/browser": "^13.2.2",
