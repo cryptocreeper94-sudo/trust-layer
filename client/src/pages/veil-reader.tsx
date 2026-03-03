@@ -471,7 +471,7 @@ export default function VeilReader() {
 
     const provider = response.headers.get('X-Voice-Provider') || 'ai';
     const voiceName = response.headers.get('X-Voice-Name') || '';
-    setVoiceProvider(`OpenAI ${voiceName}`);
+    setVoiceProvider(provider === 'elevenlabs' ? `ElevenLabs ${voiceName}` : `OpenAI ${voiceName}`);
 
     const blob = await response.blob();
     if (blob.size < 100) throw new Error('Empty audio response');
@@ -1128,7 +1128,7 @@ export default function VeilReader() {
                     <p className="text-white font-semibold text-sm">AI Narration</p>
                   </div>
                   <p className="text-slate-400 text-xs leading-relaxed mb-2">
-                    Powered by OpenAI Nova HD voice. Natural, expressive narration for every chapter.
+                    AI-powered narration with natural, expressive voice. Every chapter read aloud for you.
                   </p>
                   {voiceProvider && (
                     <p className="text-cyan-400 text-[10px] font-mono mb-2">Currently using: {voiceProvider}</p>
