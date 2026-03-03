@@ -387,19 +387,21 @@ export default function InfluencerShowcasePage() {
               <p className="text-white/40 max-w-xl mx-auto">Not just a token. A fully operational ecosystem with real products, real users, and real revenue streams.</p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
               {PILLARS.map((pillar, i) => (
                 <motion.div key={i} variants={fadeUp}>
-                  <GlassCard glow className="p-6 h-full">
-                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${pillar.gradient} flex items-center justify-center mb-4 shadow-lg`}>
-                      <pillar.icon className="w-6 h-6 text-white" />
+                  <GlassCard glow className="h-full">
+                    <div className="p-5 sm:p-7">
+                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${pillar.gradient} flex items-center justify-center mb-5 shadow-lg`}>
+                        <pillar.icon className="w-6 h-6 text-white" />
+                      </div>
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <h3 className="text-lg font-bold text-white">{pillar.title}</h3>
+                        <Badge className="bg-white/5 text-white/50 border-white/10 text-[10px] px-2 py-0">{pillar.stats}</Badge>
+                      </div>
+                      <p className="text-xs text-cyan-400/70 mb-3 font-medium">{pillar.subtitle}</p>
+                      <p className="text-sm text-white/50 leading-relaxed">{pillar.description}</p>
                     </div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="text-lg font-bold text-white">{pillar.title}</h3>
-                      <Badge className="bg-white/5 text-white/50 border-white/10 text-[10px] px-2 py-0">{pillar.stats}</Badge>
-                    </div>
-                    <p className="text-xs text-cyan-400/70 mb-3 font-medium">{pillar.subtitle}</p>
-                    <p className="text-sm text-white/50 leading-relaxed">{pillar.description}</p>
                   </GlassCard>
                 </motion.div>
               ))}
@@ -424,8 +426,8 @@ export default function InfluencerShowcasePage() {
             </motion.div>
 
             <motion.div variants={fadeUp}>
-              <GlassCard glow className="p-4 sm:p-6">
-                <Accordion type="multiple" className="space-y-0">
+              <GlassCard glow className="">
+                <Accordion type="multiple" className="space-y-0 px-4 py-3 sm:px-6 sm:py-4">
                   {ECOSYSTEM_CATEGORIES.map((cat, ci) => (
                     <AccordionItem key={ci} value={`cat-${ci}`} className="border-white/5" data-testid={`accordion-category-${ci}`}>
                       <AccordionTrigger className="hover:no-underline py-4 px-2 group">
@@ -498,9 +500,10 @@ export default function InfluencerShowcasePage() {
               <p className="text-white/40 max-w-xl mx-auto">1 billion total supply. Native asset for the Trust Layer ecosystem.</p>
             </motion.div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <motion.div variants={fadeUp}>
-                <GlassCard glow className="p-6 h-full">
+                <GlassCard glow className="h-full">
+                  <div className="p-5 sm:p-7">
                   <h3 className="text-lg font-bold mb-6 text-white">Token Allocation</h3>
                   <div className="space-y-4">
                     {TOKEN_ALLOCATION.map((item, i) => (
@@ -533,13 +536,15 @@ export default function InfluencerShowcasePage() {
                       </div>
                     </div>
                   </div>
+                  </div>
                 </GlassCard>
               </motion.div>
 
               <motion.div variants={fadeUp}>
-                <GlassCard glow className="p-6 h-full">
+                <GlassCard glow className="h-full">
+                  <div className="p-5 sm:p-7">
                   <h3 className="text-lg font-bold mb-6 text-white">Key Metrics</h3>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3">
                     {[
                       { label: "Block Time", value: "400ms", icon: Zap },
                       { label: "Throughput", value: "200K+ TPS", icon: TrendingUp },
@@ -548,7 +553,7 @@ export default function InfluencerShowcasePage() {
                       { label: "Bridge Networks", value: "5 Chains", icon: Layers },
                       { label: "Security", value: "AES-256", icon: Lock },
                     ].map((m, i) => (
-                      <div key={i} className="p-3 rounded-lg bg-white/[0.02] border border-white/5">
+                      <div key={i} className="p-3.5 rounded-lg bg-white/[0.02] border border-white/5">
                         <m.icon className="w-4 h-4 text-cyan-400/60 mb-2" />
                         <p className="text-lg font-bold text-white font-display">{m.value}</p>
                         <p className="text-[10px] text-white/40 uppercase tracking-wider">{m.label}</p>
@@ -561,6 +566,7 @@ export default function InfluencerShowcasePage() {
                         <Rocket className="w-4 h-4 mr-2" /> Join the SIG Presale
                       </Button>
                     </Link>
+                  </div>
                   </div>
                 </GlassCard>
               </motion.div>
@@ -584,7 +590,7 @@ export default function InfluencerShowcasePage() {
               <p className="text-white/40 max-w-xl mx-auto">Earn commissions, receive SIG bonuses, and get exclusive access to the fastest-growing blockchain ecosystem.</p>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10">
               {PARTNER_TIERS.map((tier, i) => (
                 <motion.div key={i} variants={fadeUp} className={`relative ${tier.popular ? 'md:-mt-3 md:mb-3' : ''}`}>
                   {tier.popular && (
@@ -594,30 +600,32 @@ export default function InfluencerShowcasePage() {
                       </Badge>
                     </div>
                   )}
-                  <GlassCard glow={tier.popular} className={`p-6 h-full ${tier.border} ${tier.glow} ${tier.popular ? 'border-2' : ''}`}>
-                    <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${tier.color} flex items-center justify-center mb-4 shadow-lg`}>
-                      <tier.icon className="w-7 h-7 text-white" />
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-1">{tier.name}</h3>
-                    <p className="text-sm text-white/40 mb-3">{tier.req}</p>
-
-                    <div className="flex items-center gap-3 mb-5">
-                      <div className={`px-3 py-1.5 rounded-lg bg-gradient-to-r ${tier.color} bg-opacity-20`}>
-                        <span className="text-sm font-bold text-white">{tier.bonus}</span>
+                  <GlassCard glow={tier.popular} className={`h-full ${tier.border} ${tier.glow} ${tier.popular ? 'border-2' : ''}`}>
+                    <div className="p-5 sm:p-7">
+                      <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${tier.color} flex items-center justify-center mb-5 shadow-lg`}>
+                        <tier.icon className="w-7 h-7 text-white" />
                       </div>
-                      <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
-                        <span className="text-sm font-bold text-white">{tier.commission} Commission</span>
-                      </div>
-                    </div>
+                      <h3 className="text-xl font-bold text-white mb-1">{tier.name}</h3>
+                      <p className="text-sm text-white/40 mb-3">{tier.req}</p>
 
-                    <ul className="space-y-2">
-                      {tier.perks.map((perk, j) => (
-                        <li key={j} className="flex items-start gap-2 text-sm">
-                          <CheckCircle className="w-4 h-4 text-green-400 shrink-0 mt-0.5" />
-                          <span className="text-white/60">{perk}</span>
-                        </li>
-                      ))}
-                    </ul>
+                      <div className="flex flex-wrap items-center gap-3 mb-5">
+                        <div className={`px-3 py-1.5 rounded-lg bg-gradient-to-r ${tier.color} bg-opacity-20`}>
+                          <span className="text-sm font-bold text-white">{tier.bonus}</span>
+                        </div>
+                        <div className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10">
+                          <span className="text-sm font-bold text-white">{tier.commission} Commission</span>
+                        </div>
+                      </div>
+
+                      <ul className="space-y-2.5">
+                        {tier.perks.map((perk, j) => (
+                          <li key={j} className="flex items-start gap-2 text-sm">
+                            <CheckCircle className="w-4 h-4 text-green-400 shrink-0 mt-0.5" />
+                            <span className="text-white/60">{perk}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </GlassCard>
                 </motion.div>
               ))}
@@ -647,8 +655,8 @@ export default function InfluencerShowcasePage() {
             </motion.div>
 
             <motion.div variants={fadeUp}>
-              <GlassCard className="p-4 sm:p-6">
-                <Accordion type="single" collapsible className="space-y-0">
+              <GlassCard className="">
+                <Accordion type="single" collapsible className="space-y-0 px-4 py-3 sm:px-6 sm:py-4">
                   {[
                     {
                       q: "What is Trust Layer?",
@@ -703,9 +711,9 @@ export default function InfluencerShowcasePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <GlassCard glow className="p-8 sm:p-12 text-center relative overflow-hidden">
+            <GlassCard glow className="text-center relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-purple-500/5 to-pink-500/5 pointer-events-none" />
-              <div className="relative z-10">
+              <div className="relative z-10 p-8 sm:p-12">
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center mx-auto mb-6 shadow-[0_0_40px_rgba(6,182,212,0.3)]">
                   <Rocket className="w-8 h-8 text-white" />
                 </div>
