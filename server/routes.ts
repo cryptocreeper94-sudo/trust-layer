@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import crypto from "crypto";
 import fs from "fs";
 import path from "path";
+import { ReplitConnectors } from "@replit/connectors-sdk";
 import QRCode from "qrcode";
 import { WebSocketServer, WebSocket } from "ws";
 import { setupCommunityWebSocket } from "./community-ws";
@@ -17664,7 +17665,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   // Priority: ElevenLabs (Rachel) → OpenAI (Nova) → client browser fallback
   app.post("/api/voice/tts", async (req: any, res) => {
     try {
-      const { text } = req.body;
+      const { text, voice } = req.body;
       
       if (!text || text.length === 0) {
         return res.status(400).json({ error: "Text is required" });
@@ -17673,7 +17674,45 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (text.length > 4000) {
         return res.status(400).json({ error: "Text too long. Maximum 4000 characters per request." });
       }
+
+      // ElevenLabs Integration — primary TTS provider
+      const elevenLabsVoiceId = voice || "pFZP5JQG7iQjIQuC4Bku"; // Lily — warm, clear narrator voice
+      try {
+        const connectors = new ReplitConnectors();
+        const elResponse = await connectors.proxy("elevenlabs", `/v1/text-to-speech/${elevenLabsVoiceId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text,
+            model_id: "eleven_multilingual_v2",
+            voice_settings: {
+              stability: 0.5,
+              similarity_boost: 0.75,
+              style: 0.4,
+              use_speaker_boost: true,
+            },
+          }),
+        });
+
+        if (elResponse.ok) {
+          console.log("[TTS] ElevenLabs served successfully");
+          const arrayBuffer = await elResponse.arrayBuffer();
+          res.set({
+            "Content-Type": "audio/mpeg",
+            "Cache-Control": "public, max-age=86400",
+            "X-Voice-Provider": "elevenlabs",
+            "X-Voice-Name": "Lily",
+          });
+          return res.send(Buffer.from(arrayBuffer));
+        }
+
+        const elError = await elResponse.text().catch(() => "");
+        console.error("[TTS] ElevenLabs failed, falling back to OpenAI:", elResponse.status, elError);
+      } catch (elErr: any) {
+        console.error("[TTS] ElevenLabs error, falling back to OpenAI:", elErr.message);
+      }
       
+      // OpenAI fallback
       const openaiKey = process.env.OPENAI_API_KEY;
       if (!openaiKey) {
         return res.status(503).json({ error: "Voice service not configured", fallback: true });
@@ -17703,7 +17742,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         });
       }
       
-      console.log("[TTS] OpenAI Nova served successfully");
+      console.log("[TTS] OpenAI Nova served as fallback");
       res.set({
         "Content-Type": "audio/mpeg",
         "Cache-Control": "public, max-age=86400",
@@ -17721,9 +17760,32 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   app.get("/api/voice/voices", async (_req, res) => {
+    try {
+      const connectors = new ReplitConnectors();
+      const elResponse = await connectors.proxy("elevenlabs", "/v1/voices", { method: "GET" });
+      if (elResponse.ok) {
+        const data = await elResponse.json() as any;
+        const voices = (data.voices || []).map((v: any) => ({
+          id: v.voice_id,
+          name: v.name,
+          category: v.category || "elevenlabs",
+          preview: v.preview_url,
+          labels: v.labels,
+        }));
+        return res.json({
+          voices,
+          configured: true,
+          provider: "elevenlabs",
+          defaultVoice: { id: "pFZP5JQG7iQjIQuC4Bku", name: "Lily" },
+        });
+      }
+    } catch (err: any) {
+      console.error("[Voices] ElevenLabs list failed:", err.message);
+    }
     res.json({ 
       voices: [{ id: "nova", name: "Nova", category: "openai" }],
       configured: true,
+      provider: "openai",
       defaultVoice: { id: "nova", name: "Nova" }
     });
   });
