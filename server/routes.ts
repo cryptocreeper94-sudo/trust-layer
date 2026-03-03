@@ -22636,6 +22636,131 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
+  app.get("/api/veil/toc", async (req, res) => {
+    try {
+      const preview = req.query.preview === "true";
+      const mdPaths = [
+        path.join(process.cwd(), "client", "public", "through-the-veil.md"),
+        path.join(process.cwd(), "public", "through-the-veil.md"),
+        path.join(process.cwd(), "dist", "public", "through-the-veil.md"),
+      ];
+
+      let mdContent = '';
+      let mdMtime = 0;
+      for (const mdPath of mdPaths) {
+        if (fs.existsSync(mdPath)) {
+          const stat = fs.statSync(mdPath);
+          mdMtime = stat.mtimeMs;
+          if (cachedVeilChapters && mdMtime === cachedVeilMtime) {
+            let volumes = cachedVeilChapters;
+            if (preview && Array.isArray(volumes)) {
+              volumes = volumes.slice(0, 1).map((v: any) => ({
+                ...v,
+                chapters: v.chapters?.slice(0, 4) || [],
+              }));
+            }
+            const toc = volumes.map((v: any) => ({
+              id: v.id,
+              title: v.title,
+              subtitle: v.subtitle,
+              chapters: v.chapters.map((c: any) => ({ id: c.id, title: c.title, partTitle: c.partTitle })),
+            }));
+            res.setHeader('Cache-Control', 'public, max-age=300');
+            return res.json(toc);
+          }
+          mdContent = fs.readFileSync(mdPath, 'utf-8');
+          break;
+        }
+      }
+
+      if (!mdContent) {
+        return res.status(404).json({ error: "Ebook content not found" });
+      }
+
+      let volumes = parseVeilMarkdown(mdContent);
+      cachedVeilChapters = volumes;
+      cachedVeilMtime = mdMtime;
+
+      if (preview && Array.isArray(volumes)) {
+        volumes = volumes.slice(0, 1).map((v: any) => ({
+          ...v,
+          chapters: v.chapters?.slice(0, 4) || [],
+        }));
+      }
+
+      const toc = volumes.map((v: any) => ({
+        id: v.id,
+        title: v.title,
+        subtitle: v.subtitle,
+        chapters: v.chapters.map((c: any) => ({ id: c.id, title: c.title, partTitle: c.partTitle })),
+      }));
+      res.setHeader('Cache-Control', 'public, max-age=300');
+      res.json(toc);
+    } catch (error: any) {
+      console.error("Veil TOC API error:", error);
+      res.status(500).json({ error: "Failed to parse ebook TOC", details: error.message });
+    }
+  });
+
+  app.get("/api/veil/chapter/:volIndex/:chapIndex", async (req, res) => {
+    try {
+      const volIndex = parseInt(req.params.volIndex, 10);
+      const chapIndex = parseInt(req.params.chapIndex, 10);
+
+      if (isNaN(volIndex) || isNaN(chapIndex) || volIndex < 0 || chapIndex < 0) {
+        return res.status(400).json({ error: "Invalid volume or chapter index" });
+      }
+
+      const mdPaths = [
+        path.join(process.cwd(), "client", "public", "through-the-veil.md"),
+        path.join(process.cwd(), "public", "through-the-veil.md"),
+        path.join(process.cwd(), "dist", "public", "through-the-veil.md"),
+      ];
+
+      let mdContent = '';
+      let mdMtime = 0;
+      for (const mdPath of mdPaths) {
+        if (fs.existsSync(mdPath)) {
+          const stat = fs.statSync(mdPath);
+          mdMtime = stat.mtimeMs;
+          if (!cachedVeilChapters || mdMtime !== cachedVeilMtime) {
+            mdContent = fs.readFileSync(mdPath, 'utf-8');
+          }
+          break;
+        }
+      }
+
+      if (mdContent) {
+        cachedVeilChapters = parseVeilMarkdown(mdContent);
+        cachedVeilMtime = mdMtime;
+      }
+
+      if (!cachedVeilChapters) {
+        return res.status(404).json({ error: "Ebook content not found" });
+      }
+
+      const volumes = cachedVeilChapters as any[];
+      if (volIndex >= volumes.length) {
+        return res.status(404).json({ error: "Volume not found" });
+      }
+      if (chapIndex >= volumes[volIndex].chapters.length) {
+        return res.status(404).json({ error: "Chapter not found" });
+      }
+
+      const chapter = volumes[volIndex].chapters[chapIndex];
+      res.setHeader('Cache-Control', 'public, max-age=300');
+      res.json({
+        id: chapter.id,
+        title: chapter.title,
+        content: chapter.content,
+        partTitle: chapter.partTitle,
+      });
+    } catch (error: any) {
+      console.error("Veil chapter API error:", error);
+      res.status(500).json({ error: "Failed to load chapter", details: error.message });
+    }
+  });
+
   // =====================================================
   // EBOOK PURCHASE & AUTHOR PUBLISHING ROUTES
   // =====================================================

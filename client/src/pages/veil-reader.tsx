@@ -111,12 +111,22 @@ type Volume = {
   chapters: Chapter[];
 };
 
+type TocVolume = {
+  id: string;
+  title: string;
+  subtitle: string;
+  chapters: { id: string; title: string; partTitle?: string }[];
+};
+
 export default function VeilReader() {
   useVeilPWA();
   
-  const [volumes, setVolumes] = useState<Volume[]>([]);
+  const [toc, setToc] = useState<TocVolume[]>([]);
   const [loading, setLoading] = useState(true);
+  const [chapterLoading, setChapterLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const chapterCacheRef = useRef<Map<string, Chapter>>(new Map());
+  const [chapterContent, setChapterContent] = useState<Chapter | null>(null);
   
   const [currentVolume, setCurrentVolume] = useState(0);
   const [currentChapter, setCurrentChapter] = useState(0);
@@ -187,60 +197,72 @@ export default function VeilReader() {
   const isPreviewOnly = hasPurchased === false;
   const FREE_PREVIEW_CHAPTERS = 4;
 
-  const loadEbook = async (retryCount = 0) => {
+  const loadToc = async (retryCount = 0) => {
     setLoading(true);
     setError(null);
     try {
       const controller = new AbortController();
-      const timeoutMs = 60000 + (retryCount * 30000);
-      const timeout = setTimeout(() => controller.abort(), timeoutMs);
-      
-      const previewParam = isPreviewOnly ? '&preview=true' : '';
-      const cacheBust = retryCount > 0 ? `?_t=${Date.now()}${previewParam}` : `?preview=${isPreviewOnly}`;
-      const response = await fetch('/api/veil/chapters' + cacheBust, {
+      const timeout = setTimeout(() => controller.abort(), 15000);
+      const previewParam = isPreviewOnly ? '?preview=true' : '';
+      const response = await fetch('/api/veil/toc' + previewParam, {
         signal: controller.signal,
         headers: { 'Accept': 'application/json' },
-        cache: retryCount > 0 ? 'no-cache' : 'default'
       });
       clearTimeout(timeout);
-      
-      if (!response.ok) {
-        throw new Error(`Server error: ${response.status}`);
-      }
-      
-      const text = await response.text();
-      if (!text || text.length < 100) {
-        throw new Error('Empty response from server');
-      }
-      
-      let parsedVolumes;
-      try {
-        parsedVolumes = JSON.parse(text);
-      } catch (parseErr) {
-        throw new Error('Failed to parse book data');
-      }
-      
-      if (!Array.isArray(parsedVolumes) || parsedVolumes.length === 0) {
-        throw new Error('Invalid book data received');
-      }
-      setVolumes(parsedVolumes);
+      if (!response.ok) throw new Error(`Server error: ${response.status}`);
+      const data = await response.json();
+      if (!Array.isArray(data) || data.length === 0) throw new Error('Invalid book data');
+      setToc(data);
       setLoading(false);
     } catch (err: any) {
-      console.error('Error loading ebook (attempt ' + (retryCount + 1) + '):', err);
-      if (retryCount < 3 && err?.name !== 'AbortError') {
-        await new Promise(r => setTimeout(r, 2000 * (retryCount + 1)));
-        return loadEbook(retryCount + 1);
+      if (retryCount < 2) {
+        await new Promise(r => setTimeout(r, 1500));
+        return loadToc(retryCount + 1);
       }
-      setError(err?.name === 'AbortError' ? 'Loading took too long. Try connecting to Wi-Fi or tap Try Again.' : (err?.message || 'Failed to load book content'));
+      setError(err?.name === 'AbortError' ? 'Loading took too long. Tap Try Again.' : (err?.message || 'Failed to load book'));
       setLoading(false);
+    }
+  };
+
+  const loadChapter = async (volIdx: number, chapIdx: number) => {
+    const cacheKey = `${volIdx}-${chapIdx}`;
+    const cached = chapterCacheRef.current.get(cacheKey);
+    if (cached) {
+      setChapterContent(cached);
+      return;
+    }
+    setChapterLoading(true);
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 20000);
+      const response = await fetch(`/api/veil/chapter/${volIdx}/${chapIdx}`, {
+        signal: controller.signal,
+        headers: { 'Accept': 'application/json' },
+      });
+      clearTimeout(timeout);
+      if (!response.ok) throw new Error(`Failed to load chapter`);
+      const data = await response.json();
+      const chapter: Chapter = { id: data.id, title: data.title, content: data.content, partTitle: data.partTitle };
+      chapterCacheRef.current.set(cacheKey, chapter);
+      setChapterContent(chapter);
+    } catch (err: any) {
+      setChapterContent({ id: 'error', title: 'Loading Error', content: 'Failed to load this chapter. Please try again or check your connection.', partTitle: '' });
+    } finally {
+      setChapterLoading(false);
     }
   };
 
   useEffect(() => {
     if (hasPurchased !== null) {
-      loadEbook();
+      loadToc();
     }
   }, [hasPurchased]);
+
+  useEffect(() => {
+    if (toc.length > 0) {
+      loadChapter(currentVolume, currentChapter);
+    }
+  }, [currentVolume, currentChapter, toc]);
 
   useEffect(() => {
     const supported = typeof window !== 'undefined' && 'speechSynthesis' in window;
@@ -254,12 +276,12 @@ export default function VeilReader() {
   }, []);
 
   useEffect(() => {
-    if (volumes.length === 0) return;
+    if (toc.length === 0) return;
     
     const hash = window.location.hash.slice(1);
     if (hash) {
-      for (let volIdx = 0; volIdx < volumes.length; volIdx++) {
-        const vol = volumes[volIdx];
+      for (let volIdx = 0; volIdx < toc.length; volIdx++) {
+        const vol = toc[volIdx];
         for (let chapIdx = 0; chapIdx < vol.chapters.length; chapIdx++) {
           const chap = vol.chapters[chapIdx];
           const normalizedHash = hash.toLowerCase().replace(/-/g, ' ');
@@ -279,10 +301,10 @@ export default function VeilReader() {
         }
       }
     }
-  }, [volumes]);
+  }, [toc]);
 
   useEffect(() => {
-    if (volumes.length === 0) return;
+    if (toc.length === 0) return;
     
     const hash = window.location.hash.slice(1);
     if (hash) return;
@@ -298,11 +320,11 @@ export default function VeilReader() {
           setCurrentChapter(0);
           return;
         }
-        if (data.currentVolume !== undefined && data.currentVolume < volumes.length) {
+        if (data.currentVolume !== undefined && data.currentVolume < toc.length) {
           setCurrentVolume(data.currentVolume);
         }
         if (data.currentChapter !== undefined) {
-          const vol = volumes[data.currentVolume || 0];
+          const vol = toc[data.currentVolume || 0];
           if (vol && data.currentChapter < vol.chapters.length) {
             setCurrentChapter(data.currentChapter);
           }
@@ -321,10 +343,10 @@ export default function VeilReader() {
         console.error('Error loading saved data:', e);
       }
     }
-  }, [volumes]);
+  }, [toc]);
 
   useEffect(() => {
-    if (volumes.length === 0) return;
+    if (toc.length === 0) return;
     
     const data = {
       currentVolume,
@@ -333,7 +355,7 @@ export default function VeilReader() {
       lastSeenVersion: hasSeenUpdates ? CURRENT_VERSION : undefined
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  }, [currentVolume, currentChapter, hasSeenUpdates, volumes]);
+  }, [currentVolume, currentChapter, hasSeenUpdates, toc]);
 
   const [ttsError, setTtsError] = useState<string | null>(null);
   const [voiceProvider, setVoiceProvider] = useState<string>('');
@@ -695,9 +717,9 @@ export default function VeilReader() {
   const autoPlayNextRef = useRef(false);
 
   const handleNextChapterAuto = () => {
-    if (volumes.length === 0) return;
+    if (toc.length === 0) return;
     
-    const volume = volumes[currentVolume];
+    const volume = toc[currentVolume];
     if (!volume) return;
     
     if (currentChapter < volume.chapters.length - 1) {
@@ -706,7 +728,7 @@ export default function VeilReader() {
       lastPlayedChapterRef.current = null;
       autoPlayNextRef.current = true;
       window.scrollTo(0, 0);
-    } else if (currentVolume < volumes.length - 1) {
+    } else if (currentVolume < toc.length - 1) {
       const nextVolume = currentVolume + 1;
       setCurrentVolume(nextVolume);
       setCurrentChapter(0);
@@ -717,7 +739,7 @@ export default function VeilReader() {
   };
 
   useEffect(() => {
-    if (autoPlayNextRef.current && volumes.length > 0) {
+    if (autoPlayNextRef.current && toc.length > 0) {
       autoPlayNextRef.current = false;
       const timer = setTimeout(() => {
         handlePlay();
@@ -747,10 +769,9 @@ export default function VeilReader() {
   };
 
   const handlePlay = async () => {
-    if (volumes.length === 0) return;
+    if (toc.length === 0 || !chapterContent) return;
     
-    const volume = volumes[currentVolume];
-    const chapter = volume.chapters[currentChapter];
+    const chapter = chapterContent;
     const chapterId = `${currentVolume}-${currentChapter}`;
     
     if (isPaused && lastPlayedChapterRef.current === chapterId) {
@@ -829,10 +850,10 @@ export default function VeilReader() {
   };
 
   const navigateToUpdate = (volumeIndex?: number, chapterId?: string) => {
-    if (volumeIndex !== undefined && volumes.length > volumeIndex) {
+    if (volumeIndex !== undefined && toc.length > volumeIndex) {
       setCurrentVolume(volumeIndex);
       if (chapterId) {
-        const chapIdx = volumes[volumeIndex].chapters.findIndex(ch => ch.id === chapterId);
+        const chapIdx = toc[volumeIndex].chapters.findIndex(ch => ch.id === chapterId);
         if (chapIdx >= 0) {
           setCurrentChapter(chapIdx);
         }
@@ -866,7 +887,7 @@ export default function VeilReader() {
     );
   }
 
-  if (error || volumes.length === 0) {
+  if (error || toc.length === 0) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4 relative overflow-hidden">
         <div className="absolute top-1/3 left-1/3 w-80 h-80 bg-red-500/5 rounded-full blur-3xl pointer-events-none" />
@@ -889,7 +910,7 @@ export default function VeilReader() {
                   }
                   setError(null);
                   setLoading(true);
-                  setTimeout(() => loadEbook(), 300);
+                  setTimeout(() => loadToc(), 300);
                 }} 
                 className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 transition-all w-full py-5"
                 data-testid="button-retry-load"
@@ -908,16 +929,16 @@ export default function VeilReader() {
     );
   }
 
-  const volume = volumes[currentVolume];
-  const chapter = volume.chapters[currentChapter];
+  const volume = toc[currentVolume];
+  const chapter = chapterContent;
   
-  const totalChapters = volumes.reduce((acc, v) => acc + v.chapters.length, 0);
-  const currentGlobalIndex = volumes.slice(0, currentVolume).reduce((acc, v) => acc + v.chapters.length, 0) + currentChapter;
+  const totalChapters = toc.reduce((acc, v) => acc + v.chapters.length, 0);
+  const currentGlobalIndex = toc.slice(0, currentVolume).reduce((acc, v) => acc + v.chapters.length, 0) + currentChapter;
 
   const getGlobalChapterIndex = (volIdx: number, chapIdx: number) => {
     let idx = 0;
     for (let v = 0; v < volIdx; v++) {
-      idx += volumes[v]?.chapters.length || 0;
+      idx += toc[v]?.chapters.length || 0;
     }
     return idx + chapIdx;
   };
@@ -929,7 +950,7 @@ export default function VeilReader() {
     }
     if (currentChapter < volume.chapters.length - 1) {
       setCurrentChapter(currentChapter + 1);
-    } else if (currentVolume < volumes.length - 1) {
+    } else if (currentVolume < toc.length - 1) {
       setCurrentVolume(currentVolume + 1);
       setCurrentChapter(0);
     }
@@ -941,7 +962,7 @@ export default function VeilReader() {
       setCurrentChapter(currentChapter - 1);
     } else if (currentVolume > 0) {
       setCurrentVolume(currentVolume - 1);
-      setCurrentChapter(volumes[currentVolume - 1].chapters.length - 1);
+      setCurrentChapter(toc[currentVolume - 1].chapters.length - 1);
     }
     window.scrollTo(0, 0);
   };
@@ -963,9 +984,9 @@ export default function VeilReader() {
     
     if (target.startsWith('ch-')) {
       setReturnPosition({ vol: currentVolume, chap: currentChapter, scrollY: window.scrollY });
-      for (let volIdx = 0; volIdx < volumes.length; volIdx++) {
-        for (let chapIdx = 0; chapIdx < volumes[volIdx].chapters.length; chapIdx++) {
-          if (volumes[volIdx].chapters[chapIdx].id === target) {
+      for (let volIdx = 0; volIdx < toc.length; volIdx++) {
+        for (let chapIdx = 0; chapIdx < toc[volIdx].chapters.length; chapIdx++) {
+          if (toc[volIdx].chapters[chapIdx].id === target) {
             goToChapter(volIdx, chapIdx);
             return true;
           }
@@ -975,10 +996,11 @@ export default function VeilReader() {
     
     if (target.startsWith('concordance-')) {
       setReturnPosition({ vol: currentVolume, chap: currentChapter, scrollY: window.scrollY });
-      for (let volIdx = 0; volIdx < volumes.length; volIdx++) {
-        for (let chapIdx = 0; chapIdx < volumes[volIdx].chapters.length; chapIdx++) {
-          const ch = volumes[volIdx].chapters[chapIdx];
-          if (ch.content.includes(`id="${target}"`)) {
+      for (let volIdx = 0; volIdx < toc.length; volIdx++) {
+        for (let chapIdx = 0; chapIdx < toc[volIdx].chapters.length; chapIdx++) {
+          const chId = toc[volIdx].chapters[chapIdx].id;
+          const cachedCh = chapterCacheRef.current.get(`${volIdx}-${chapIdx}`);
+          if (cachedCh && cachedCh.content.includes(`id="${target}"`)) {
             setCurrentVolume(volIdx);
             setCurrentChapter(chapIdx);
             setSidebarOpen(false);
@@ -1003,7 +1025,7 @@ export default function VeilReader() {
     return false;
   };
 
-  const hasNext = currentChapter < volume.chapters.length - 1 || currentVolume < volumes.length - 1;
+  const hasNext = currentChapter < volume.chapters.length - 1 || currentVolume < toc.length - 1;
   const hasPrev = currentChapter > 0 || currentVolume > 0;
   const progressPercent = Math.round(((currentGlobalIndex + 1) / totalChapters) * 100);
 
@@ -1323,7 +1345,7 @@ export default function VeilReader() {
                 </div>
                 
                 <div className="py-3">
-                  {volumes.map((vol, volIndex) => (
+                  {toc.map((vol, volIndex) => (
                     <div key={vol.id} className="px-3 py-2">
                       <div className="flex items-center gap-2 mb-2 px-2">
                         <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-purple-400 to-cyan-400 shadow-sm shadow-purple-500/30" />
@@ -1410,6 +1432,15 @@ export default function VeilReader() {
       </div>
 
       <div className="pt-20 pb-28 px-4 sm:px-6 md:px-8 relative z-10">
+        {(chapterLoading || !chapter) ? (
+          <div className="max-w-3xl mx-auto flex flex-col items-center justify-center py-20">
+            <div className="relative w-14 h-14 mb-6">
+              <div className="absolute inset-0 rounded-full border-2 border-t-purple-400 border-r-cyan-400 border-b-transparent border-l-transparent animate-spin" />
+              <BookOpen className="absolute inset-0 m-auto w-6 h-6 text-purple-400" />
+            </div>
+            <p className="text-slate-400 text-sm">Loading chapter...</p>
+          </div>
+        ) : (
         <motion.div
           key={`${currentVolume}-${currentChapter}`}
           initial={{ opacity: 0, y: 20 }}
@@ -1645,6 +1676,7 @@ export default function VeilReader() {
             </>
           )}
         </motion.div>
+        )}
       </div>
 
       <AnimatePresence>
