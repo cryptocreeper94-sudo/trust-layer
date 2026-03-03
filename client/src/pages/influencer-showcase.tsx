@@ -38,7 +38,7 @@ const ECOSYSTEM_CATEGORIES: { name: string; icon: React.ComponentType<{ classNam
     icon: Layers,
     apps: [
       { name: "Trust Layer", url: "https://dwtl.io", desc: "Layer 1 PoA Blockchain" },
-      { name: "TrustHome", url: "/my-hub", desc: "Personal Dashboard & Portal" },
+      { name: "TrustHome", url: "https://trusthome.replit.app", desc: "Real Estate Agent Super Tool" },
       { name: "TrustVault", url: "/wallet", desc: "Multi-Chain Secure Wallet" },
       { name: "TLID.io", url: "https://tlid.io", desc: "Blockchain Domain Names (.tlid)" },
       { name: "THE VOID", url: "https://intothevoid.app", desc: "Premium Membership Identity" },

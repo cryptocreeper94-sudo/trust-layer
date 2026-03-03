@@ -422,7 +422,7 @@ Each app needs an entry in the app directory. Here is the complete list with cat
 | App | Description | URL |
 |-----|-------------|-----|
 | Trust Layer | Layer 1 PoA Blockchain — 200K+ TPS, 400ms blocks | dwtl.io |
-| TrustHome | Personal dashboard for membership and activity | trusthome.replit.app |
+| TrustHome | Real estate agent super tool with Trust Layer-verified agent profiles, property listings, and blockchain-backed trust scores | trusthome.replit.app |
 | TrustVault | Multi-chain wallet with multi-sig security | trustvault.replit.app |
 | TLID.io | Blockchain domain names (.tlid identity) | tlid.io |
 | THE VOID | Premium membership identity and ecosystem SSO | intothevoid.app |
