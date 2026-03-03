@@ -438,6 +438,92 @@ Full-body 3D character model of a resilient frontier woman in her early 60s with
 
 ---
 
+## PART 6: BUSINESS STOREFRONTS — MODERN ERA (8 Total)
+
+These are the player-ownable and leasable business buildings that appear on city plots. Each one is a distinct building that populates the city streets when a player (or verified real-world business) claims a plot and builds on it.
+
+- [ ] **Coffee Shop Storefront (Modern — Free Tier)**
+3D model of a small modern street-level coffee shop. Single-story brick building with a large front window, a sage green awning, and a small sidewalk chalkboard sign. Warm light glowing from inside. The door has a small "OPEN" sign. Simple planter box with flowers by the window. A small wall-mounted menu board. Clean, cozy independent coffee shop. About 6 meters wide facade. No surroundings. Game-ready low-poly.
+
+- [ ] **Tech Startup Office (Modern — Free Tier)**
+3D model of a small modern tech office storefront. Single-story with a contemporary glass front facade and minimalist brushed-metal framing. A glowing LED logo strip above the entrance (blank/generic). Interior visible through glass — standing desks and a whiteboard. Concrete planter with a small tree by the entrance. Clean, startup-chic aesthetic. About 6 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Boutique Fashion Store (Modern — Premium Tier)**
+3D model of an upscale small fashion boutique. Two-story building with a sleek matte black exterior. Tall ground-floor display windows showing two mannequins with stylish outfits. Gold-lettered "BOUTIQUE" sign above the entrance. Recessed entrance with a glass door and brass handles. Accent lighting illuminating the display windows from above. Small awning in charcoal. Refined luxury retail look. About 7 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Fine Restaurant (Modern — Premium Tier)**
+3D model of an upscale restaurant building. Two-story with a dark brick and dark wood exterior. Ground floor has three arched windows with warm amber light and visible table settings inside. A black canopy over the entrance with subtle gold trim. A small menu display case with a lamp beside the front door. Second floor has three matching windows with sheer curtains. Elegant but not stuffy. About 8 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Art Gallery (Modern — Premium Tier)**
+3D model of a modern art gallery storefront. Single-story with a stark white minimalist exterior and one massive floor-to-ceiling front window revealing a single large abstract painting on the back wall, lit by a track spotlight. A small bronze "GALLERY" nameplate by the frameless glass entrance door. Concrete facade with clean geometric lines. Ultra-modern and curated. About 8 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Co-Working Space (Modern — Premium Tier)**
+3D model of a modern co-working office building. Two stories with a glass-and-steel industrial-chic facade. Large windows on both floors showing long shared desks and pendant lights inside. A bright colored accent wall visible through the glass (orange or teal). Ground-floor entrance with a digital display screen showing "COWORK" beside the door. Bike rack by the entrance. Creative professional vibe. About 8 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Nightclub (Modern — Elite Tier)**
+3D model of a premium nightclub building. Two stories with a sleek matte black exterior. No visible windows — the facade is solid and mysterious. A dramatic LED strip running along the roofline glowing purple and cyan. A polished black door with a velvet rope and stanchion in front. A glowing neon sign reading "VOID" above the entrance. Small VIP entrance on the side with a separate door. Exclusive, high-end nightlife aesthetic. About 10 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Penthouse Tower (Modern — Elite Tier)**
+3D model of a luxury residential tower, about 6 stories tall and slender. Dark glass and brushed steel exterior with floor-to-ceiling windows. A rooftop terrace visible on top with a small plunge pool and lounge furniture. Ground-floor lobby with a marble-framed entrance, doorman canopy, and gold-accented revolving door. Balconies on the top two floors with glass railings. Premium luxury living. About 8 meters wide. No surroundings. Game-ready low-poly.
+
+---
+
+## PART 7: BUSINESS STOREFRONTS — MEDIEVAL ERA (8 Total)
+
+- [ ] **Market Stall (Medieval — Free Tier)**
+3D model of a simple medieval market stall. Open-front wooden frame structure with a weathered canvas awning in faded tan. A wooden counter with wicker baskets of produce, stacked bread loaves, and clay pots. A hand-painted wooden price sign on a stick. Rough timber construction. About 3 meters wide. A starter merchant's spot. No surroundings. Game-ready low-poly.
+
+- [ ] **Peasant Cottage (Medieval — Free Tier)**
+3D model of a small medieval cottage for a new player homestead. Wattle-and-daub walls with dark timber framing, a low thatched roof, and a single wooden door. One small shuttered window. A tiny vegetable garden patch beside the house with three wooden stakes. A rain barrel under the eave. Humble but tidy. About 5 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Tavern (Medieval — Premium Tier)**
+3D model of a lively medieval tavern. Two-story timber-framed building with a warm amber glow from windows. A hanging wooden sign with a painted tankard of ale. A covered porch with two barrels used as tables. The upper floor overhangs the street slightly. Thick oak door standing ajar. Sounds of revelry implied by the warm inviting light. Thatched roof with a stone chimney. About 8 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Blacksmith Workshop (Medieval — Premium Tier)**
+3D model of a medieval blacksmith's shop. Half open-air — stone walls on three sides with the front open, showing a brick forge with a glowing orange fire, a large anvil, and a wall rack of hammers and tongs. A wooden sign with a horseshoe emblem above the opening. Dark soot stains on the stone. Slate roof. A water quenching barrel by the forge. Smoke wisps from the chimney. About 6 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Apothecary Shop (Medieval — Premium Tier)**
+3D model of a mysterious medieval apothecary. Single-story stone building with a dark wood door and a small round window with lead-came glass. Bundles of dried herbs hanging from the eaves. A wooden sign with a mortar-and-pestle emblem. A small shelf of colored glass bottles visible through the window. Green moss on the stone walls. Slightly crooked construction, old and mystical. About 5 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Guild Hall (Medieval — Premium Tier)**
+3D model of a grand medieval guild hall. Two-story stone-and-timber building, larger than the tavern. An ornate arched entrance with carved stone columns. A banner hanging from the second floor with a crossed-tools guild emblem in gold on blue. Multiple tall windows with diamond-pane glass. A heavy iron-bound oak door. Cobblestone steps leading to the entrance. Slate tile roof. Prosperous and imposing. About 10 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Castle Tower (Medieval — Elite Tier)**
+3D model of a player-owned castle tower, about 5 stories tall. Circular stone construction with a crenellated parapet and a pointed slate roof with a pennant flag (red with gold trim). Arrow-slit windows spiraling up the tower. A heavy wooden door at the base reinforced with iron bands. A small balcony on the fourth floor. Smooth-cut stone blocks indicating wealth. Climbing ivy on one side. A symbol of power and status. No surroundings. Game-ready low-poly.
+
+- [ ] **Cathedral (Medieval — Elite Tier)**
+3D model of a grand medieval cathedral. Stone construction with a tall central nave, two flanking towers with pointed spires, and a large rose window with stained glass in blues and reds above the main entrance. Flying buttresses on the sides. A heavy ornate wooden door. Stone steps leading up to the entrance. About 15 meters wide facade. The most impressive building in the medieval city. No surroundings. Game-ready low-poly.
+
+---
+
+## PART 8: BUSINESS STOREFRONTS — WILD WEST ERA (8 Total)
+
+- [ ] **General Store (Wild West — Free Tier)**
+3D model of a simple frontier general store. Single-story wooden plank building with a covered front porch. A hand-painted "GENERAL STORE" sign above the porch. Display barrels of goods on the porch — flour sacks, rope coils, and lanterns. A weighing scale visible through the front window. Simple plank door with a bell. Classic frontier commerce. About 7 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Homestead Cabin (Wild West — Free Tier)**
+3D model of a small frontier homestead cabin. Horizontal log construction with mud chinking. A stone chimney, a small covered porch with a single rocking chair, and a split-rail fence section enclosing a tiny garden. One glass window with muslin curtains. Shingled wood roof. A water pump in the yard. Modest but well-maintained starter property. About 6 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Saloon (Wild West — Premium Tier)**
+3D model of a two-story Wild West saloon. Wooden construction with a tall false-front facade. "SALOON" in large faded gold painted letters on the facade. Classic batwing swinging doors. A wide wooden porch with a hitching rail. Piano music and warm light implied by glowing windows. Second-floor balcony with a wooden railing. A hanging oil lantern by the entrance. About 9 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Sheriff's Office (Wild West — Premium Tier)**
+3D model of a sturdy Wild West sheriff's office and jail. Stone foundation with wood plank upper walls. "SHERIFF" painted on a wooden sign. Iron-barred window on the jail side. A covered porch with a rocking chair and a rifle rack. A wanted poster board beside the door. An American flag on a pole. Solid, authoritative frontier law. About 7 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Assay & Mining Office (Wild West — Premium Tier)**
+3D model of a Wild West assay office where gold is weighed and claims filed. Wooden building with "ASSAY OFFICE" on a swinging sign. A large front window showing a precision scale inside. Stacked crates of ore samples on the porch. A pickaxe and gold pan leaning against the wall. Heavy iron safe visible through the window. Dusty, functional mining town business. About 6 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Telegraph Office (Wild West — Premium Tier)**
+3D model of a small Wild West telegraph office. Neat wooden building with "WESTERN UNION TELEGRAPH" painted on the front in black letters. Telegraph wires running from a pole to the roof. A small window showing a telegraph key on a desk inside. A bench outside for waiting. Clean, important-looking communication hub. About 5 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Frontier Bank (Wild West — Elite Tier)**
+3D model of a prestigious Wild West frontier bank. The only brick building in town — two stories with "BANK" chiseled into a stone lintel above the entrance. Four pillared columns flanking the front door giving it a classical civic appearance. Iron-barred windows. A large iron vault door visible through the front window. Stone steps leading up. The most substantial and permanent-looking building in town. About 10 meters wide. No surroundings. Game-ready low-poly.
+
+- [ ] **Grand Ranch (Wild West — Elite Tier)**
+3D model of a sprawling frontier ranch compound. A large main ranch house with a wide wraparound porch and stone chimney. A connected barn with an open corral fence. A wooden ranch gate archway with a brand emblem burned into the crossbeam. A windmill water pump nearby. Multiple hitching posts. A cattle trough. The whole compound is about 15 meters wide — the biggest property in the Wild West. No surroundings. Game-ready low-poly.
+
+---
+
 ## SUMMARY
 
 | Category | Count |
@@ -449,10 +535,13 @@ Full-body 3D character model of a resilient frontier woman in her early 60s with
 | Modern Era Pets | 8 |
 | Medieval Era Pets | 8 |
 | Wild West Era Pets | 8 |
-| Modern Era Props | 28 |
-| Medieval Era Props | 26 |
-| Wild West Era Props | 26 |
-| **TOTAL ASSETS** | **128** |
+| Modern Era Environment Props | 28 |
+| Medieval Era Environment Props | 26 |
+| Wild West Era Environment Props | 26 |
+| Modern Era Business Storefronts | 8 |
+| Medieval Era Business Storefronts | 8 |
+| Wild West Era Business Storefronts | 8 |
+| **TOTAL ASSETS** | **152** |
 
 ---
 
