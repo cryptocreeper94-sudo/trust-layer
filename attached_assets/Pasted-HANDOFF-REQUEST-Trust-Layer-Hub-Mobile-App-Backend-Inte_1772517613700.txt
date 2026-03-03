@@ -1,0 +1,93 @@
+HANDOFF REQUEST: Trust Layer Hub Mobile App — Backend Integration
+
+From: Trust Layer Hub (React Native/Expo mobile app)
+To: Trust Layer Backend Team / Agent
+Date: March 3, 2026
+
+What We've Built:
+
+The Trust Layer Hub mobile app is complete and running. It has 5 native screens — Dashboard, Explore (32-app directory), Wallet, Signal Chat, and Profile — all built with the Trust Layer UI Protocol (dark theme, glassmorphism, cyan/purple accents). Currently running on mock data. We need to connect to the live Trust Layer backend to make everything real.
+
+What We Need:
+
+1. API Base URL
+
+What is the production API base URL for the Trust Layer backend? (e.g., https://api.dwtl.io or similar)
+2. Authentication Endpoints — Confirm or Provide:
+The spec listed these. Please confirm they exist and are active, or provide the correct endpoints:
+
+POST /api/auth/login        — Body: { email, password } → { user, sessionToken }
+POST /api/auth/register     — Body: { email, username, password } → { user, sessionToken }
+GET  /api/auth/me           — Headers: Bearer token → { user }
+POST /api/auth/logout       — Headers: Bearer token
+3. User Data Endpoints — Confirm or Provide:
+
+GET /api/user/profile       — Full user profile (Trust Layer ID, VOID tier, Guardian score, avatar, etc.)
+GET /api/user/balance       — { sig, shells, stSig, portfolioValue, change24h }
+GET /api/user/transactions  — [{ id, type, amount, asset, txHash, from, createdAt }]
+GET /api/user/notifications — [{ id, title, body, type, read, createdAt }]
+4. Ecosystem Endpoints — Confirm or Provide:
+
+GET /api/ecosystem/apps     — [{ id, name, description, url, category, icon, tags }]
+GET /api/ecosystem/news     — [{ id, title, body, category, createdAt }]
+5. Shell Purchase Endpoint:
+
+POST /api/shells/purchase   — { amount, paymentMethod, receipt } → confirmation
+GET  /api/presale/stats     — { totalSold, totalHolders, currentPrice }
+6. Guardian Scanner Endpoint:
+
+POST /api/guardian/scan     — { url } → { score, threats, details }
+7. Chat WebSocket:
+
+WSS /ws/chat
+Events needed: message, typing, presence, channel_join, channel_leave
+What is the full WebSocket URL? (e.g., wss://api.dwtl.io/ws/chat)
+What authentication does the WebSocket expect? (Bearer token in header? Query param?)
+8. SSO Token Passing:
+
+When launching ecosystem apps from the hub, should we pass the session token as a URL parameter? (e.g., https://trustvault.replit.app?sso_token={token})
+Is there a specific parameter name the ecosystem apps expect?
+Are there any apps that use a different SSO mechanism?
+9. THE VOID Membership:
+
+Is there an endpoint to check/manage VOID membership status?
+What are the available tiers and their benefits?
+Is there an upgrade/subscribe endpoint we should call?
+10. API Keys / Secrets Needed:
+
+Do we need any API keys beyond the user's session token?
+Are there rate limits we should be aware of?
+Is there a staging/sandbox environment we can test against before going live?
+11. Subscriptions / Gated Features:
+
+Are there any features in the hub that should be gated behind a paid subscription?
+If so, what subscription tiers and pricing should we implement?
+Should subscriptions be handled through RevenueCat (recommended for mobile), or does Trust Layer have its own subscription system?
+What We'll Do Once We Have This:
+
+Replace all mock data with live API calls
+Implement real login/register flow with SecureStore token persistence
+Connect wallet to live SIG/Shell balances and transaction history
+Wire up Signal Chat to the WebSocket for real-time messaging
+Connect Guardian Scanner to the live scanning endpoint
+Implement SSO token passing for ecosystem app launches
+Set up Shell purchases through Apple IAP / Google Play Billing
+Set up subscription infrastructure if applicable
+Technical Notes for the Backend Team:
+
+The mobile app sends requests with Authorization: Bearer {sessionToken} header
+Content-Type is application/json for all POST/PUT requests
+The app needs CORS headers that allow the Expo dev domain and the production domain
+WebSocket connections will come from mobile clients (iOS/Android/web)
+For in-app purchases, the app will send Apple/Google receipts to the backend for server-side validation
+Please respond with the information above and we'll have the hub connected to live data quickly. If any endpoints don't exist yet, let us know and we can work with mock data for those features in the meantime.
+
+Contact: team@dwsc.io
+
+That's the handoff. Once you get the responses back from the Trust Layer team, share them with me and I'll wire everything up to live data.
+
+
+Scroll to latest
+
+Make, test, iterate…
+

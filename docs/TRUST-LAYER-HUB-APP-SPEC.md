@@ -1043,4 +1043,268 @@ Set `EXPO_PUBLIC_API_URL` to the production Trust Layer deployment URL.
 
 ---
 
-*This is the complete, unified specification for building the Trust Layer Hub mobile app. Everything is in this one file. No other documents are needed.*
+## 18. BACKEND INTEGRATION — LIVE ENDPOINT REFERENCE
+
+This section contains the real backend endpoint details so you can connect to live data instead of mocks.
+
+### API Base URL
+The production API base URL is the Replit deployment URL:
+```
+EXPO_PUBLIC_API_URL=https://<deployment-url>.replit.app
+```
+All routes are prefixed with `/api/`. Development: `http://localhost:5000`
+
+### Auth Endpoints (CONFIRMED WORKING)
+
+**Login:**
+```
+POST /api/auth/login
+Body: { email, password }
+Response: { user, sessionToken }
+```
+The `sessionToken` is a 64-character hex string with 30-day expiry. Send as `Authorization: Bearer {sessionToken}` on all requests.
+
+**Register:**
+```
+POST /api/auth/register
+Body: { email, username, password }
+Response: { user, sessionToken }
+```
+
+**Get Current User:**
+```
+GET /api/auth/me
+Headers: { Authorization: "Bearer {sessionToken}" }
+Response: { user }
+```
+
+**Logout:**
+```
+POST /api/auth/logout
+Headers: { Authorization: "Bearer {sessionToken}" }
+```
+
+Auth rate limit: **10 requests per 60 seconds** per IP.
+
+### User Balance Endpoints (REAL — NOT WHAT THE SPEC GUESSED)
+
+**SIG/Token Balance:**
+```
+GET /api/balance
+Auth: Bearer token required
+Response: { totalTokens, presaleTokens, stakedTokens, liquidTokens }
+```
+
+**Shell Balance:**
+```
+GET /api/shells/my-balance
+Auth: Bearer token required
+Response: { balance }
+```
+
+**Comprehensive Bag (BEST FOR WALLET SCREEN — gives everything in one call):**
+```
+GET /api/user/dwc-bag
+Auth: Bearer token required
+Response: {
+  totalDwc,
+  currentValue,
+  launchProjectedValue,
+  sources: { presale, shells, airdrops, earlyAdopterBonus }
+}
+```
+
+**Shell Reward Profile:**
+```
+GET /api/user/reward-profile
+Auth: Bearer token required
+Response: {
+  profile: { tier, multiplier, totalQuestsCompleted },
+  shellBalance,
+  tiers,
+  conversion: { rate, tgeDate }
+}
+```
+
+### Transaction History
+```
+GET /api/user/transactions
+Auth: Bearer token required
+Response: {
+  transactions: [{ id, type, title, amount, tokenAmount, txHash, status, date }]
+}
+```
+
+**Shell-Specific Transactions:**
+```
+GET /api/shells/transactions
+Auth: Bearer token required
+```
+
+### User Membership
+```
+GET /api/user/membership
+Auth: Bearer token required
+Response: {
+  trustLayerId,        // "TL-XXXXXX"
+  membershipStatus,    // "pending" | "active" | "suspended"
+  membershipType       // "individual" | "business"
+}
+```
+
+### Ecosystem Apps Directory (PUBLIC)
+```
+GET /api/ecosystem/apps
+Auth: Not required
+Response: [{
+  id, name, category, description, hook, tags, gradient,
+  verified, featured, users, url
+}]
+```
+Rate limit: **60 req/min**.
+
+### Presale (PUBLIC)
+```
+GET /api/presale/stats     → { totalSold, totalRaised }
+GET /api/presale/tiers     → [{ id, name, amount, price, bonus }]
+```
+
+### Shell Checkout (Stripe — WEB ONLY)
+```
+POST /api/shells/checkout
+Auth: Bearer token required
+Body: { packageId, quantity }
+Response: { url } (Stripe Checkout URL)
+```
+**For mobile:** Use Apple IAP / Google Play Billing instead. Stripe Checkout is web-only for digital goods.
+
+### Guardian Scanner (PUBLIC, RATE-LIMITED)
+```
+POST /api/guardian/scan
+Body: { url }
+Response: { score, threats, details }
+```
+Rate limit: **60 req/min**.
+
+### THE VOID Stats (PUBLIC)
+```
+GET /api/void/stats
+Response: { totalVoidIds, totalStamps, totalBridgeLinks }
+```
+
+### Subscription System
+```
+GET /api/subscription/status
+Auth: Bearer token required
+Response: { tier, active, features: [] }
+```
+Tiers: `free`, `pulse_pro`, `strike_agent`, `complete_bundle`
+
+```
+GET /api/subscription/plans
+Auth: Not required
+Response: [{ id, name, price, interval, features }]
+```
+
+### Signal Chat WebSocket — FULL DETAILS
+
+**URL:** `wss://<deployment-url>.replit.app/ws/chat`
+
+**IMPORTANT: Chat has its OWN auth system (JWT), separate from the main app.**
+
+**Chat Login:**
+```
+POST /api/chat/auth/login
+Body: { username, password }
+Response: { success, user, token }  ← this is a JWT
+```
+
+**Chat Register:**
+```
+POST /api/chat/auth/register
+Body: { username, email, password, displayName }
+Response: { success, user, token }
+```
+
+**WebSocket Auth Flow:**
+1. Connect to `wss://<url>/ws/chat`
+2. Send within 10 seconds:
+```json
+{ "type": "join", "token": "<jwt-from-chat-login>", "channel": "general" }
+```
+3. If token not sent within 10 seconds, connection is closed.
+
+**Client → Server Events:**
+```json
+{ "type": "join", "token": "...", "channel": "general" }
+{ "type": "message", "content": "Hello!", "channel": "general" }
+{ "type": "typing", "channel": "general" }
+{ "type": "switch_channel", "channel": "help" }
+```
+
+**Server → Client Events:**
+```json
+{ "type": "message", "userId": "...", "username": "...", "content": "...", "timestamp": "...", "channel": "..." }
+{ "type": "typing", "username": "...", "channel": "..." }
+{ "type": "presence", "users": [...], "channel": "..." }
+{ "type": "history", "messages": [...] }
+{ "type": "error", "message": "..." }
+```
+
+**Get Channels (REST):**
+```
+GET /api/chat/channels → { success, channels: [{ id, name, description }] }
+```
+
+### SSO for Ecosystem Apps in Hub WebView
+
+When opening an ecosystem app from the Hub in a WebView, pass the session token:
+```
+https://{app-url}?auth_token={sessionToken}
+```
+
+The full SSO flow (for server-to-server) is:
+1. Redirect to `/api/auth/sso/login?app={appName}&redirect={callbackUrl}`
+2. Server generates one-time `sso_token` (32-byte hex, 5-min expiry)
+3. Redirects back with `{callbackUrl}?sso_token={token}`
+4. App verifies via `GET /api/auth/sso/verify` with HMAC signature
+
+For the Hub WebView, the simpler `auth_token` query param approach is fine.
+
+### CORS Notes for Mobile
+React Native apps don't send browser-style Origin headers. The current CORS config should work without changes for native mobile. Allowed headers: `Content-Type, Authorization, X-API-Key, X-API-Secret`.
+
+### Rate Limits Summary
+| Category | Limit |
+|----------|-------|
+| General API | 100 req/min |
+| Authentication | 10 req/min |
+| Guardian Scanner | 60 req/min |
+| Ecosystem | 60 req/min |
+| Shell/Presale | 30 req/min |
+| Bridge | 5 req/min |
+
+### What's Ready vs What Needs Mocks
+
+**Ready to connect (live):**
+- ✅ Auth (login, register, me, logout)
+- ✅ Balance (SIG, Shells, DWC bag)
+- ✅ Transaction history
+- ✅ Membership status
+- ✅ Ecosystem apps directory
+- ✅ Guardian Scanner
+- ✅ Signal Chat (WebSocket + REST)
+- ✅ Presale stats and tiers
+- ✅ Shell purchases (Stripe web — needs IAP wrapper for mobile)
+- ✅ Subscription status and plans
+- ✅ VOID stats
+
+**Use mock data for v1:**
+- ❌ `/api/user/notifications` — not built yet
+- ❌ `/api/ecosystem/news` — not built yet
+- ❌ Push notification token registration — not built yet
+- ❌ Apple IAP / Google Play Billing receipt verification — not built yet
+
+---
+
+*This is the complete, unified specification for building the Trust Layer Hub mobile app. Everything — app spec, UI protocol, all 32 app descriptions, build plan, AND backend integration details — is in this one file. No other documents are needed.*
