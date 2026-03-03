@@ -702,4 +702,196 @@ trust-layer-hub/
 
 ---
 
+## 16. BUILD SESSION PLAN
+
+This is the execution plan. Follow it in order. Each task lists what to build, what files to create, and what "done" looks like.
+
+### Phase 1: Project Scaffolding
+
+#### T001: Initialize Expo Project
+- **Blocked By**: []
+- **Details**:
+  - Run `npx create-expo-app trust-layer-hub --template blank-typescript`
+  - Install all dependencies from Section 3 (NativeWind, Reanimated, Moti, expo-blur, expo-linear-gradient, expo-haptics, expo-secure-store, @tanstack/react-query, axios, react-native-webview, lucide-react-native, @react-native-masked-view/masked-view)
+  - Configure NativeWind v4 with the dark theme color tokens from Section 4.1
+  - Set up Expo Router file-based navigation in `app/` directory
+  - Configure `app.json` with app name "Trust Layer", slug, scheme for deep linking, iOS/Android bundle IDs
+  - Files: `package.json`, `app.json`, `tailwind.config.js`, `global.css`, `app/_layout.tsx`, `metro.config.js`, `babel.config.js`, `tsconfig.json`
+  - Acceptance: App boots on simulator, shows blank dark screen, no errors
+
+#### T002: Create Shared UI Components
+- **Blocked By**: [T001]
+- **Details**:
+  - Build `GlassCard` exactly as specified in Section 4.2 (expo-blur + LinearGradient glow border)
+  - Build `GradientText` using MaskedView + LinearGradient as in Section 4.5
+  - Build `Skeleton` loading component as in Section 4.6
+  - Build `BackgroundGlow` orb component as in Section 4.8
+  - Build gradient `Button` component as in Section 4.9 (44px min touch target)
+  - All components dark theme only
+  - Files: `components/GlassCard.tsx`, `components/GradientText.tsx`, `components/Skeleton.tsx`, `components/BackgroundGlow.tsx`, `components/Button.tsx`
+  - Acceptance: Each component renders correctly in isolation. GlassCard has visible blur and glow. Buttons have 44px+ touch targets.
+
+#### T003: Create Theme & API Layer
+- **Blocked By**: [T001]
+- **Details**:
+  - Create color constants file with all tokens from Section 4.1
+  - Create API client with axios, auto-attach Bearer token from SecureStore
+  - Create TanStack Query client with default stale/cache times
+  - Create SecureStore helper (save/get/delete session token)
+  - Files: `lib/colors.ts`, `lib/api.ts`, `lib/queryClient.ts`, `lib/storage.ts`
+  - Acceptance: API client can make authenticated requests. Token persists across app restarts.
+
+### Phase 2: Authentication
+
+#### T004: Build Auth Screens & Hook
+- **Blocked By**: [T002, T003]
+- **Details**:
+  - Login screen: email + password fields, gradient "Sign In" button, link to register
+  - Register screen: email + username + password fields, gradient "Create Account" button
+  - `useAuth` hook: login mutation, register mutation, logout, `useQuery` for `/api/auth/me`
+  - On successful login, store sessionToken in SecureStore, redirect to home tab
+  - On app launch, check SecureStore for token, auto-login if valid
+  - Biometric auth option after first login (expo-local-authentication)
+  - Files: `app/login.tsx`, `app/register.tsx`, `hooks/useAuth.ts`
+  - Acceptance: Can register, login, persist session, auto-login on restart. Biometric prompt works.
+
+### Phase 3: Tab Navigation & Core Screens
+
+#### T005: Build Tab Layout
+- **Blocked By**: [T004]
+- **Details**:
+  - 5-tab bottom navigator: Home, Explore, Wallet, Chat, Profile
+  - Tab bar: dark background (#0c1224), cyan active icon, gray inactive
+  - Icons from Lucide: Home, Search, Wallet, MessageCircle, User
+  - Tab bar should have subtle top border (rgba(255,255,255,0.08))
+  - Haptic feedback on tab press (expo-haptics)
+  - Files: `app/(tabs)/_layout.tsx`
+  - Acceptance: All 5 tabs render, switching works, haptic on press, correct icons/colors
+
+#### T006: Build Home Dashboard
+- **Blocked By**: [T002, T005]
+- **Details**:
+  - Welcome header with user name + Trust Layer ID
+  - Balance card (GlassCard glow): SIG balance, Shell balance, fiat estimate
+  - Quick actions row: Buy Shells, Send, Scan, Bridge — 4 icon buttons in a row
+  - News carousel: horizontal ScrollView with snap, each card is GlassCard
+  - Featured apps carousel: horizontal ScrollView, app cards with icon + name + description
+  - Activity feed: last 5 transactions, vertical list with "See All" link
+  - Launch countdown: real-time countdown to August 23, 2026 (America/Chicago timezone)
+  - All sections use MotiView staggered fade-in animations
+  - Files: `app/(tabs)/index.tsx`, `components/BalanceCard.tsx`, `components/CountdownTimer.tsx`, `components/NewsCard.tsx`
+  - Acceptance: Dashboard renders with all sections. Countdown is accurate. Carousels scroll horizontally with snap. Data loads from API.
+
+#### T007: Build Explore (App Directory)
+- **Blocked By**: [T002, T005]
+- **Details**:
+  - Search bar at top (TextInput with search icon, dark background)
+  - Category filter: horizontal ScrollView of pill buttons (All, Core, DeFi, Security, Gaming, AI, Social, Business, Health, Services)
+  - App grid: 2-column FlatList, each cell is GlassCard with app icon, name, one-line description, category badge
+  - All 32 apps from Section 7 with correct names, descriptions, URLs, categories
+  - Tapping a card opens detail modal (`app/app/[id].tsx`) with full description + "Launch" button
+  - Launch button opens URL in react-native-webview or Expo WebBrowser
+  - Pass SSO token when launching ecosystem apps
+  - MotiView staggered grid animation
+  - Files: `app/(tabs)/explore.tsx`, `app/app/[id].tsx`, `components/AppCard.tsx`, `hooks/useEcosystemApps.ts`
+  - Acceptance: All 32 apps show. Search filters by name. Category pills filter correctly. Tapping opens detail. Launch opens in-app browser with SSO.
+
+#### T008: Build Wallet Screen
+- **Blocked By**: [T002, T005]
+- **Details**:
+  - Balance hero: large SIG amount with gradient text, fiat estimate below
+  - Shell balance card with "Buy Shells" CTA button
+  - Portfolio breakdown: simple visual (pie chart or segmented bar) — SIG, stSIG, NFTs
+  - Transaction history: FlatList of TransactionRow items (icon, description, amount, timestamp, tx hash)
+  - "Buy Shells" flow: navigate to purchase screen with Shell tier options from Section 5.3
+  - Note: On iOS, digital purchases must use Apple IAP. On Android, can use Stripe or Google Play Billing.
+  - Files: `app/(tabs)/wallet.tsx`, `components/TransactionRow.tsx`, `hooks/useBalance.ts`
+  - Acceptance: Balances display correctly. Transaction history loads and scrolls. Buy Shells flow starts.
+
+#### T009: Build Chat Screen (Signal Chat)
+- **Blocked By**: [T002, T005]
+- **Details**:
+  - Channel list: FlatList of channels (public channels + DMs)
+  - Message view: ScrollView of messages with user avatar (colored circle + initial), username, timestamp, message text
+  - Message input bar: TextInput + Send button, fixed at bottom
+  - WebSocket connection to `wss://{baseUrl}/ws/chat`
+  - Typing indicators: "User is typing..." text
+  - Real-time message updates
+  - Files: `app/(tabs)/chat.tsx`, `hooks/useChat.ts`
+  - Acceptance: Can connect to chat, see messages in real-time, send messages, see typing indicators.
+
+#### T010: Build Profile Screen
+- **Blocked By**: [T002, T005]
+- **Details**:
+  - Profile header: avatar (colored circle), name, email, Trust Layer ID, member number
+  - THE VOID membership status badge
+  - Guardian Security Score display
+  - Settings section: Notifications toggle, Security (PIN/biometrics), appearance preferences
+  - Linked accounts: list of connected ecosystem apps
+  - Sign Out button (clears SecureStore, redirects to login)
+  - Files: `app/(tabs)/profile.tsx`
+  - Acceptance: Profile data displays correctly. Sign out works. Settings toggles function.
+
+### Phase 4: Polish & Store Prep
+
+#### T011: Push Notifications
+- **Blocked By**: [T005]
+- **Details**:
+  - Request notification permissions on first launch
+  - Register Expo push token with backend: `POST /api/notifications/register`
+  - Handle incoming notifications (navigate to relevant screen)
+  - Files: `lib/notifications.ts`, update `app/_layout.tsx`
+  - Acceptance: Push token registers with backend. Notifications appear when app is backgrounded.
+
+#### T012: App Store Assets & Config
+- **Blocked By**: [T006, T007, T008, T009, T010]
+- **Details**:
+  - `eas.json` config for EAS Build (development, preview, production profiles)
+  - App icon: 1024x1024 Trust Layer logo on dark background
+  - Splash screen: Trust Layer logo centered, #0c1224 background
+  - App Store screenshots (can be generated from simulator)
+  - Privacy policy URL (required for both stores)
+  - App Store listing copy from Section 12
+  - Files: `eas.json`, `assets/icon.png`, `assets/splash.png`, `assets/adaptive-icon.png`
+  - Acceptance: `eas build --platform all` succeeds. App icon and splash screen render correctly.
+
+---
+
+## 17. API BASE URL
+
+The Trust Layer backend is deployed at the production URL. The app should read this from an environment variable or config:
+
+```typescript
+// lib/api.ts
+const API_BASE = process.env.EXPO_PUBLIC_API_URL || 'https://your-deployment-url.replit.app';
+```
+
+The agent building this will need to set `EXPO_PUBLIC_API_URL` to the correct production deployment URL.
+
+---
+
+## 18. CRITICAL REMINDERS FOR THE BUILDING AGENT
+
+1. **Signal (SIG) is a NATIVE ASSET.** Not a token. Not a cryptocurrency. It is the native currency of the Trust Layer blockchain. Like ETH to Ethereum. If you write the word "token" anywhere in the app referring to SIG, you have failed.
+
+2. **Dark theme ONLY.** No light mode. No toggle. Background is #0c1224. Every screen. Every modal. Every component.
+
+3. **GlassCard padding rule.** Padding goes INSIDE the card content (`<View style={{padding: 20}}>` inside the card), never on the GlassCard wrapper itself. The blur and glow border must extend to the edges.
+
+4. **Horizontal carousels, not vertical lists.** When you have 4+ cards of the same type (apps, news, features), they go in a horizontal ScrollView with snap behavior. Vertical stacking of many same-type cards is forbidden.
+
+5. **44px minimum touch targets.** Every button, every tab, every tappable element. Apple and Google both require this for accessibility.
+
+6. **Animations on everything.** Every screen transition fades in. Every list uses staggered MotiView. Every card has a subtle scale on press. No static, lifeless screens.
+
+7. **Launch date is August 23, 2026.** The countdown timer on the dashboard counts down to this exact date in CST (America/Chicago). This date cannot change. Tagline: "One Year. One Vision. Launch Day."
+
+8. **No Replit branding.** This is white-labeled. The only company name that appears is "DarkWave Studios" in the copyright footer. Everything else says "Trust Layer."
+
+9. **Apple IAP for digital goods on iOS.** If you're selling Shells (which are a digital currency), Apple requires you use their In-App Purchase system on iOS. You cannot use Stripe directly for digital goods on iOS. Android has more flexibility.
+
+10. **This app must have REAL functionality.** Apple/Google reject apps that are just link directories. The dashboard, wallet, chat, and profile screens are genuinely functional — they pull real data, real balances, real messages. The app directory is ONE feature, not the entire app.
+
+---
+
 *This document is the complete specification for building the Trust Layer Hub mobile app. The agent receiving this should have everything needed to begin development without additional context.*
