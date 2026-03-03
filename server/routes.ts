@@ -20987,7 +20987,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           reason: canWithdrawCheck.reason,
           message: canWithdrawCheck.canWithdraw 
             ? "Ready for TGE conversion" 
-            : canWithdrawCheck.reason || "Connect your DarkWave wallet to receive SIG at Token Generation Event",
+            : canWithdrawCheck.reason || "Connect your Trust Layer wallet to receive SIG at Token Generation Event",
         },
       });
     } catch (error) {

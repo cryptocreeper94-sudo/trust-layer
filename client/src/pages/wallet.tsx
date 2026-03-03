@@ -615,7 +615,7 @@ export default function WalletPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `darkwave-wallet-backup-${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `trustlayer-wallet-backup-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
     toast({ title: "Backup Downloaded", description: "Keep this file safe!" });

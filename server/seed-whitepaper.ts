@@ -353,11 +353,11 @@ Subscribe to events:
 
 ## Overview
 
-This guide covers integrating DarkWave wallet functionality into your dApp.
+This guide covers integrating Trust Layer wallet functionality into your dApp.
 
 ## Supported Wallets
 
-1. **DarkWave Wallet** (Native) - Recommended
+1. **Trust Layer Wallet** (Native) - Recommended
 2. **MetaMask** (via bridge)
 3. **WalletConnect**
 4. **Hardware Wallets** (Ledger, Trezor)
