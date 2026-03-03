@@ -1,4 +1,4 @@
-# TrustHome — Hallmark System Integration Handoff
+# Trust Hub — Hallmark System Integration Handoff
 
 ## What Is the Hallmark System?
 
@@ -7,40 +7,40 @@ The Hallmark System is Trust Layer's on-chain audit trail. Every significant eve
 There are two layers:
 
 1. **Trust Stamps** — lightweight, automatic audit trail entries for everyday actions (logins, purchases, profile updates). These fire in the background without user interaction.
-2. **Hallmarks** — formal, numbered verification records for major events (app releases, certifications, property verifications). These produce a scannable QR code and a public verification URL.
+2. **Hallmarks** — formal, numbered verification records for major events (app releases, certifications, verifications). These produce a scannable QR code and a public verification URL.
 
 ---
 
-## TrustHome Numbering: `TH-00000001`
+## Trust Hub Numbering: `TH-00000001`
 
-TrustHome uses its own namespaced numbering within the Hallmark system:
+Trust Hub uses its own namespaced numbering within the Hallmark system:
 
 - **Format**: `TH-XXXXXXXX` (8-digit zero-padded)
 - **Examples**: `TH-00000001`, `TH-00000042`, `TH-00012500`
-- **Scope**: TrustHome-specific hallmarks only — this counter is independent from the global master sequence
+- **Scope**: Trust Hub-specific hallmarks only — this counter is independent from the global master sequence
 
 ### How to Implement the Counter
 
 ```typescript
-// In your TrustHome backend, maintain a simple counter
+// In your Trust Hub backend, maintain a simple counter
 // Option A: Use a dedicated DB row
-const nextTH = await db.select().from(trusthomeCounter).where(eq(id, "th-master"));
+const nextTH = await db.select().from(trusthubCounter).where(eq(id, "th-master"));
 const nextNum = parseInt(nextTH.currentSequence) + 1;
 const thId = `TH-${String(nextNum).padStart(8, '0')}`;
-await db.update(trusthomeCounter).set({ currentSequence: String(nextNum) });
+await db.update(trusthubCounter).set({ currentSequence: String(nextNum) });
 
 // Option B: Call the Trust Layer API (preferred for Hub app)
 POST /api/hallmark/generate
 {
-  "appId": "trusthome",
-  "appName": "TrustHome",
-  "productName": "Agent Verification",
+  "appId": "trusthub",
+  "appName": "Trust Hub",
+  "productName": "User Verification",
   "version": "1.0.0",
   "releaseType": "verification",
   "metadata": {
     "thId": "TH-00000001",
-    "agentId": "agent-xyz",
-    "eventType": "agent-verified",
+    "userId": "user-xyz",
+    "eventType": "user-verified",
     ...eventSpecificData
   }
 }
@@ -80,12 +80,11 @@ Store record in hallmarks/trust_stamps table
 import { trustStamp } from "./trust-stamp";
 
 // Automatically hashes, submits to chain, and stores
-await trustStamp("agent-profile-created", {
-  userId: agent.userId,
-  agentId: agent.id,
-  agentName: agent.name,
-  licenseNumber: agent.license,
-  state: agent.state,
+await trustStamp("trusthub-user-registered", {
+  userId: user.id,
+  email: user.email,
+  memberNumber: user.memberNumber,
+  registeredAt: new Date().toISOString(),
 });
 ```
 
@@ -95,18 +94,17 @@ await trustStamp("agent-profile-created", {
 import { generateHallmark } from "./hallmark";
 
 const result = await generateHallmark({
-  appId: "trusthome",
-  appName: "TrustHome",
-  productName: "Property Listing Verification",
+  appId: "trusthub",
+  appName: "Trust Hub",
+  productName: "Presale Purchase Verification",
   version: "1.0.0",
   releaseType: "verification",
   metadata: {
     thId: "TH-00000001",
-    propertyAddress: "123 Main St",
-    mlsNumber: "MLS-12345",
-    listPrice: 450000,
-    agentId: "agent-xyz",
-    verifiedAt: new Date().toISOString(),
+    userId: "user-xyz",
+    sigAmount: 50000,
+    usdAmount: 50,
+    purchaseDate: new Date().toISOString(),
   },
 });
 
@@ -126,13 +124,17 @@ These are the big-deal events that get a `TH-XXXXXXXX` number and a verifiable Q
 
 | Event | Category | What Gets Hashed |
 |-------|----------|-----------------|
-| **Agent Profile Verified** | `agent-verified` | Agent name, license #, brokerage, state, verification date |
-| **Property Listed** | `property-listed` | Address, MLS #, list price, agent ID, listing date, property type |
-| **Property Sold/Closed** | `property-closed` | Address, sale price, buyer (anonymized), closing date, agent ID |
-| **Client Agreement Signed** | `agreement-signed` | Agreement type, client ID (hashed), agent ID, terms hash, date |
-| **Trust Score Milestone** | `trust-score-milestone` | Agent ID, old score, new score, milestone level (Bronze/Silver/Gold/Platinum) |
-| **Agent Certification** | `agent-certified` | Agent ID, certification type, issuing body, expiration date |
-| **Brokerage Onboarded** | `brokerage-onboarded` | Brokerage name, license #, state, number of agents, date |
+| **User Registration** | `trusthub-user-registered` | User ID, email hash, member number, Trust Layer ID, registration date |
+| **Presale Purchase** | `trusthub-presale-purchase` | User ID, SIG amount, USD amount, Stripe payment ID, purchase date |
+| **Membership Activated** | `trusthub-membership-activated` | User ID, membership tier (Void/Premium), activation date, Stripe subscription ID |
+| **SIG Staking Event** | `trusthub-sig-staked` | User ID, amount staked, staking tier, lock period, date |
+| **Bridge Transaction** | `trusthub-bridge-transfer` | User ID, source chain, destination chain, amount, bridge tx hash, date |
+| **NFT Minted** | `trusthub-nft-minted` | User ID, NFT ID, collection, metadata hash, mint price, date |
+| **Guardian Certification** | `trusthub-guardian-certified` | Target URL/contract, scan result hash, score, certification level, date |
+| **Quest Milestone Completed** | `trusthub-quest-milestone` | User ID, quest ID, milestone name, XP earned, completion date |
+| **Token Swap Executed** | `trusthub-token-swap` | User ID, from token, to token, amounts, DEX pool, price at execution, date |
+| **Airdrop Distribution** | `trusthub-airdrop-distributed` | Distribution ID, total recipients, total SIG distributed, epoch, date |
+| **App Release / Version** | `trusthub-app-release` | App ID, app name, version number, build hash, release type, date |
 
 ### Tier 2 — Trust Stamps (Automatic background audit trail)
 
@@ -140,16 +142,18 @@ These fire automatically and don't need a TH number — they just build the audi
 
 | Event | Category | What Gets Hashed |
 |-------|----------|-----------------|
-| **Agent Login** | `trusthome-login` | Agent ID, IP hash, device fingerprint, timestamp |
-| **Profile Updated** | `trusthome-profile-update` | Agent ID, fields changed (keys only, not values), timestamp |
-| **Property Photo Uploaded** | `trusthome-photo-upload` | Property ID, photo hash (SHA-256 of image bytes), upload date |
-| **Client Added** | `trusthome-client-added` | Agent ID, client ID (hashed), relationship type, date |
-| **Showing Scheduled** | `trusthome-showing-scheduled` | Property ID, agent ID, showing date, client count |
-| **Price Changed** | `trusthome-price-change` | Property ID, old price, new price, agent ID, date |
-| **Document Uploaded** | `trusthome-document-upload` | Document type, file hash, agent ID, property ID, date |
-| **Review Submitted** | `trusthome-review-submitted` | Reviewer ID (hashed), agent ID, rating, date |
-| **Offer Submitted** | `trusthome-offer-submitted` | Property ID, agent ID, offer amount (range), date |
-| **Lead Assigned** | `trusthome-lead-assigned` | Lead source, agent ID, assignment date |
+| **User Login** | `trusthub-login` | User ID, IP hash, device fingerprint, timestamp |
+| **Profile Updated** | `trusthub-profile-update` | User ID, fields changed (keys only, not values), timestamp |
+| **Shell Balance Change** | `trusthub-shell-change` | User ID, old balance, new balance, reason, timestamp |
+| **Referral Signup** | `trusthub-referral-signup` | Referrer ID, referred user ID (hashed), referral code, date |
+| **Referral Payout** | `trusthub-referral-payout` | Referrer ID, payout amount (Shells), multiplier tier, date |
+| **Chat Message Sent** | `trusthub-chat-message` | User ID, channel ID, message hash (not content), timestamp |
+| **Guardian Scan Requested** | `trusthub-guardian-scan` | User ID, target URL/contract, scan type, timestamp |
+| **Wallet Connected** | `trusthub-wallet-connected` | User ID, wallet address (truncated), chain, timestamp |
+| **Trust Book Purchase** | `trusthub-book-purchase` | User ID, book ID, author ID, price, Stripe payment ID, date |
+| **Liquidity Added/Removed** | `trusthub-liquidity-change` | User ID, pool ID, action (add/remove), amount, date |
+| **Daily Reward Claimed** | `trusthub-daily-reward` | User ID, reward type, amount, streak day, date |
+| **Subscription Payment** | `trusthub-subscription-payment` | User ID, tier, amount, Stripe invoice ID, billing period, date |
 
 ---
 
@@ -165,9 +169,9 @@ Content-Type: application/json
 Authorization: Bearer <session-token>
 
 {
-  "appId": "trusthome",
-  "appName": "TrustHome",
-  "productName": "Agent Verification",
+  "appId": "trusthub",
+  "appName": "Trust Hub",
+  "productName": "Presale Purchase Verification",
   "releaseType": "verification",
   "metadata": { ... }
 }
@@ -212,12 +216,12 @@ Content-Type: application/json
 Authorization: Bearer <session-token>
 
 {
-  "category": "trusthome-property-listed",
+  "category": "trusthub-presale-purchase",
   "data": {
-    "userId": "agent-xyz",
-    "propertyId": "prop-123",
-    "address": "123 Main St",
-    "listPrice": 450000
+    "userId": "user-xyz",
+    "sigAmount": 50000,
+    "usdAmount": 50,
+    "stripePaymentId": "pi_abc123"
   }
 }
 
@@ -227,7 +231,7 @@ Response:
   "txHash": "0xdef456...",
   "blockHeight": 5586201,
   "dataHash": "0x789abc...",
-  "category": "trusthome-property-listed",
+  "category": "trusthub-presale-purchase",
   "timestamp": "2026-03-03T06:45:00.000Z"
 }
 ```
@@ -244,23 +248,23 @@ Response: Array of trust stamp records
 
 ## Setup Checklist for Hub App
 
-1. **Add TrustHome counter table** (if managing TH-numbers locally):
+1. **Add Trust Hub counter table** (if managing TH-numbers locally):
    ```sql
-   CREATE TABLE IF NOT EXISTS trusthome_counter (
+   CREATE TABLE IF NOT EXISTS trusthub_counter (
      id VARCHAR PRIMARY KEY DEFAULT 'th-master',
      current_sequence TEXT NOT NULL DEFAULT '0'
    );
    ```
 
-2. **Wire up Hallmark calls** — after every Tier 1 event, call `POST /api/hallmark/generate` with `appId: "trusthome"`
+2. **Wire up Hallmark calls** — after every Tier 1 event, call `POST /api/hallmark/generate` with `appId: "trusthub"`
 
-3. **Wire up Trust Stamp calls** — after every Tier 2 event, call `POST /api/trust-stamp` with the appropriate category prefixed with `trusthome-`
+3. **Wire up Trust Stamp calls** — after every Tier 2 event, call `POST /api/trust-stamp` with the appropriate category prefixed with `trusthub-`
 
-4. **Display verification badges** — when showing agent profiles or property listings, display the QR code from the hallmark and a "Verified on Trust Layer" badge with the block height
+4. **Display verification badges** — when showing transactions, purchases, or certifications, display the QR code from the hallmark and a "Verified on Trust Layer" badge with the block height
 
-5. **Transaction history** — all hallmarks and trust stamps are queryable via the API for display in agent dashboards and property detail views
+5. **Transaction history** — all hallmarks and trust stamps are queryable via the API for display in the user's My Hub / Wallet views
 
-6. **Category naming convention**: All TrustHome categories should be prefixed with `trusthome-` to distinguish them in the global audit trail
+6. **Category naming convention**: All Trust Hub categories should be prefixed with `trusthub-` to distinguish them in the global audit trail
 
 ---
 
@@ -272,7 +276,7 @@ Response: Array of trust stamp records
 | **Member Number** | `#1,234` | Sequential user signup order |
 | **Hallmark Master** | `000042-01` | Global hallmark counter (all apps) |
 | **Hallmark Serial** | 12-digit | Individual mint serial numbers |
-| **TrustHome** | `TH-00000001` | TrustHome-specific event counter |
+| **Trust Hub** | `TH-00000001` | Trust Hub-specific event counter |
 
 ### Serial Ranges (Global Hallmark Mints)
 
