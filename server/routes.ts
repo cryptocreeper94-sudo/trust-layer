@@ -285,6 +285,7 @@ export async function registerRoutes(
     "trustvault": "/wallet",
     "trustbook": "/trust-book",
     "launch": "/launch",
+    "trusthub": "/explore",
   };
 
   const TLID_EXTERNAL_REDIRECTS: Record<string, string> = {
