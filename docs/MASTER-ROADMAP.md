@@ -50,54 +50,7 @@
 ---
 
 ## PRIORITY 1: IMMEDIATE (Next Sprint)
-*Expand core gameplay*
-
-### Chronicles Expansion
-- [ ] Real-time 1:1 world clock (time of day affects gameplay)
-- [ ] Basic quest system with daily/weekly objectives
-- [ ] Relationship milestones and special interactions
-- [ ] Career/job system for income generation
-- [ ] Life events system (random encounters, opportunities)
-
-### City & Estate Enhancements
-- [ ] City Zoning System (Residential/Commercial/Civic zones)
-- [ ] Plot Marketplace (buy/sell/trade land with Shells)
-- [ ] Business Onboarding (real businesses claim commercial plots)
-- [ ] Era-Appropriate Settlements (architecture matches each era)
-
----
-
-## PRIORITY 2: GAME CONTENT (Weeks 2-4)
-*Expand the world*
-
-### Era Expansion
-- [ ] Medieval era content expansion — full faction system, NPCs, storylines
-- [ ] Wild West era content expansion — frontier justice, settlements, characters
-- [ ] Era-specific NPCs, activities, and storylines for all 3 starting eras
-- [ ] Era selection UI refinement
-
-### Player Systems Expansion
-- [ ] Marriage/partner system
-- [ ] Family and generational play
-- [ ] Basic inventory system
-- [ ] Quest log and progress tracking
-- [ ] Offline hibernation system (catch-up mechanics)
-
----
-
-## PRIORITY 3: STRATEGIC FEATURES (Weeks 4-8)
-*Differentiate from competition*
-
-### Proof of Impact Dashboard
-- [ ] Real-time metrics (active players, transactions, businesses)
-- [ ] Public-facing transparency page
-- [ ] No vanity metrics - real data only
-
-### Guardian Scanner Enhancement
-- [ ] URL/website scanning backend (phishing detection, malicious redirect identification)
-- [ ] Known scam domain database
-- [ ] Real-time risk scoring for URLs
-- [ ] Integration with Guardian Shield for continuous site monitoring
+*Revenue-generating features and blockchain launch prep*
 
 ### Guardian Shield (Recurring Revenue $299-$2,999/mo)
 - [ ] Real-time monitoring scheduler
@@ -105,9 +58,36 @@
 - [ ] Alert system with escalation rules
 - [ ] SOC operations dashboard
 
+### Guardian Scanner Enhancement
+- [ ] URL/website scanning backend (phishing detection, malicious redirect identification)
+- [ ] Known scam domain database
+- [ ] Real-time risk scoring for URLs
+- [ ] Integration with Guardian Shield for continuous site monitoring
+
+### Proof of Impact Dashboard
+- [ ] Real-time metrics (active players, transactions, businesses)
+- [ ] Public-facing transparency page
+- [ ] No vanity metrics - real data only
+
 ---
 
-## PRIORITY 4: GROWTH FEATURES (Weeks 8-14)
+## ⏸️ CHRONICLES — ON HOLD (Indefinite)
+*Paused pending graphics/engine overhaul. Current SVG-based rendering does not meet visual quality standards. Future development requires proper game engine (Three.js, Unity WebGL, or similar) for production-quality graphics.*
+
+### Completed (Season Zero Beta)
+- [x] Parallel Self onboarding, play system, daily needs, NPCs, estates, era progression, UI
+
+### Blocked Until Engine Upgrade
+- [ ] Real-time world clock
+- [ ] Quest system
+- [ ] Career/job system
+- [ ] Era expansion (Medieval, Wild West)
+- [ ] Marriage/family system
+- [ ] 70+ eras, voice cloning, on-chain achievements
+
+---
+
+## PRIORITY 2: GROWTH FEATURES (Weeks 4-8)
 *Scale and expand*
 
 ### Verifiable Revenue Sharing (8-12 weeks)
@@ -128,7 +108,7 @@
 
 ---
 
-## PRIORITY 5: BLOCKCHAIN LAUNCH PREP (Jan-Apr 2026)
+## PRIORITY 3: BLOCKCHAIN LAUNCH PREP (Jan-Apr 2026)
 
 ### Phase 1: Foundation (January 2026)
 - [ ] Finalize blockchain audit scope
@@ -170,24 +150,15 @@
 
 ---
 
-## PRIORITY 6: POST-LAUNCH & CHRONICLES FULL (Q2-Q3 2026)
+## PRIORITY 4: POST-LAUNCH (Q3-Q4 2026)
 
-### Chronicles Full Release (August 23, 2026)
-- [ ] 70+ eras live (using era design template)
-- [ ] Parallel Self AI system fully operational
-- [ ] Voice cloning integration
-- [ ] On-chain achievements & NFTs
-- [ ] Full relationship system
-- [ ] All 7 Sigil saga arcs
-
-### ChronoChat Launch
-- [ ] ChronoChat for Communities
-- [ ] ChronoChat Cloud SaaS
-- [ ] ChronoChat for Gaming integration
+### Signal Chat Expansion
+- [ ] Signal Chat for Communities
+- [ ] Signal Chat Cloud SaaS
 
 ---
 
-## PRIORITY 7: LONG-TERM (2027+)
+## PRIORITY 5: LONG-TERM (2027+)
 
 ### ISO 20022 Banking Compliance
 - [ ] Full ISO 20022 messaging standard integration
@@ -204,42 +175,8 @@
 
 ---
 
-## CHRONICLES SEASON ROADMAP
-
-### Season Zero (NOW - Active Beta)
-- [x] Parallel Self onboarding (self-discovery, not character creation)
-- [x] Modern Era hub with locations (starting era for all players)
-- [x] Play system with scenarios, decisions, XP, achievements
-- [x] Daily needs system
-- [x] Check-in streaks & rewards
-- [x] NPC interactions & relationships
-- [x] Estate building basics
-- [x] Community Builder Program
-- [x] Era unlock progression (Medieval at Lv.3, Wild West at Lv.5)
-- [x] Premium glassmorphism UI throughout
-
-### Season One (Post-TGE)
-- [ ] Daily & weekly quests
-- [ ] Faction system introduction
-- [ ] Full Medieval and Wild West era content
-- [ ] Career paths
-- [ ] Marriage system
-- [ ] Voice integration (text-to-speech)
-
-### Season Two (Summer 2026)
-- [ ] Voice cloning technology
-- [ ] Estate trading marketplace
-- [ ] 10+ additional eras
-- [ ] Generational gameplay
-- [ ] AI companion system
-- [ ] Cross-era travel mechanics
-
-### Season Three+ (Fall 2026 onwards)
-- [ ] Full 70+ era library
-- [ ] Parallel universe mechanics
-- [ ] Community-created eras
-- [ ] Competitive seasons
-- [ ] On-chain achievements as NFTs
+## CHRONICLES — ON HOLD
+*See "Chronicles — On Hold" section above. All season development paused pending engine/graphics overhaul.*
 
 ---
 

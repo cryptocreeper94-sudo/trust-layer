@@ -88,9 +88,9 @@ export const FEATURE_FLAGS: Record<string, FeatureFlag> = {
     id: 'chronicles',
     name: 'DarkWave Chronicles',
     status: 'coming_soon',
-    description: 'Parallel life simulation game',
-    expectedLaunch: 'Q2 2026',
-    launchQuarter: 'Q2 2026',
+    description: 'Parallel life simulation game — on hold pending graphics overhaul',
+    expectedLaunch: 'TBD',
+    launchQuarter: 'TBD',
     enabled: false,
   },
   communityHub: {
