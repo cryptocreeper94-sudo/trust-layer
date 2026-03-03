@@ -275,6 +275,7 @@ const GatewayError = lazy(() => import("@/pages/gateway-error"));
 const AIAgentMarketplace = lazy(() => import("@/pages/ai-agent-marketplace"));
 const RWATokenization = lazy(() => import("@/pages/rwa-tokenization"));
 const InfluencerPartnership = lazy(() => import("@/pages/influencer-partnership"));
+const InfluencerShowcase = lazy(() => import("@/pages/influencer-showcase"));
 const ComingFeatures = lazy(() => import("@/pages/coming-features"));
 const Blog = lazy(() => import("@/pages/blog"));
 const BlogPost = lazy(() => import("@/pages/blog-post"));
@@ -572,6 +573,8 @@ function DWSCRouter() {
         <Route path="/domain/:name" component={DomainManager} />
         <Route path="/partners" component={PartnerPortal} />
         <Route path="/influencer-partnership" component={InfluencerPartnership} />
+        <Route path="/influencer" component={InfluencerShowcase} />
+        <Route path="/showcase" component={InfluencerShowcase} />
         <Route path="/kol" component={InfluencerPartnership} />
         <Route path="/game-developer" component={GameDeveloper} />
         <Route path="/slots" component={Slots} />
