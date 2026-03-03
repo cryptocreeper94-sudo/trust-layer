@@ -49,8 +49,15 @@ The UI/UX emphasizes a "MANDATORY PREMIUM UI PROTOCOL" with a dark theme and pol
 - **Security**: Helmet.js, CORS, rate limiting, AES-256-GCM, HMAC-SHA256, parameterized SQL.
 - **React Native Portability**: Guidelines for shared business logic, data fetching with TanStack Query, React hooks, NativeWind for styling, and separation of logic from presentation.
 
+### Trust Hub Integration (trusthub.tlid.io)
+- **SSO Token Exchange**: `POST /api/auth/exchange-token` — accepts Hub session token, returns 1-hour ecosystem token
+- **Trust Stamp Creation**: `POST /api/trust-stamp` — authenticated endpoint for creating audit trail entries
+- **Trust Stamp Read**: `GET /api/trust-stamps/:userId` — self-only access to trust stamps
+- **Guardian Scan Alias**: `POST /api/guardian/scan` — rate-limited, Zod-validated, accepts address or URL
+- **Handoff Docs**: `docs/TRUST-LAYER-HANDOFF_*.md` (from Hub), `docs/TRUST-LAYER-TO-HUB-HANDOFF.md` (response)
+
 ### Ecosystem Domains & Subdomains
-The ecosystem spans 32 verified applications across primary domains including `dwsc.io`, `darkwavegames.io`, `darkwavestudios.io`, `yourlegacy.io`, `tlid.io`, `trustshield.tech`, and `intothevoid.app`, as well as various external and internal PWA routes.
+The ecosystem spans 32 verified applications across primary domains including `dwsc.io`, `darkwavegames.io`, `darkwavestudios.io`, `yourlegacy.io`, `tlid.io`, `trusthub.tlid.io`, `trustshield.tech`, and `intothevoid.app`, as well as various external and internal PWA routes.
 
 ### Tokenomics
 - **Native Asset**: Signal (SIG), Total Supply: 1,000,000,000 SIG.
