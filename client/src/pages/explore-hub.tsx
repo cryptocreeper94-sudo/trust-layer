@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLocation } from "wouter";
 import {
   BarChart3, Users, Megaphone, Shield, Eye,
@@ -17,7 +17,8 @@ import {
   Target, Heart, Dice1,
   Palette, Crosshair, Dices, CircleDollarSign,
   ArrowLeftRight, Droplets, ImagePlus, MonitorPlay,
-  BrainCircuit, Scan, RefreshCw, Joystick
+  BrainCircuit, Scan, RefreshCw, Joystick,
+  Download, X, Share, Smartphone
 } from "lucide-react";
 import {
   Carousel,
@@ -438,6 +439,120 @@ function CategorySection({ category, catIndex }: { category: Category; catIndex:
   );
 }
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt(): Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
+function PWAInstallBanner() {
+  const [installPrompt, setInstallPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [dismissed, setDismissed] = useState(false);
+  const [installed, setInstalled] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
+
+  useEffect(() => {
+    const standalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone === true;
+    setIsStandalone(standalone);
+
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+    setIsIOS(ios);
+
+    const wasDismissed = sessionStorage.getItem('pwa-banner-dismissed');
+    if (wasDismissed) setDismissed(true);
+
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e as BeforeInstallPromptEvent);
+    };
+    window.addEventListener('beforeinstallprompt', handler);
+
+    window.addEventListener('appinstalled', () => {
+      setInstalled(true);
+      setInstallPrompt(null);
+    });
+
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
+
+  const handleInstall = async () => {
+    if (!installPrompt) return;
+    await installPrompt.prompt();
+    const result = await installPrompt.userChoice;
+    if (result.outcome === 'accepted') {
+      setInstalled(true);
+    }
+    setInstallPrompt(null);
+  };
+
+  const handleDismiss = () => {
+    setDismissed(true);
+    sessionStorage.setItem('pwa-banner-dismissed', '1');
+  };
+
+  if (isStandalone || installed || dismissed) return null;
+
+  const showBanner = installPrompt || isIOS;
+  if (!showBanner) return null;
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, y: -10, scale: 0.98 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        exit={{ opacity: 0, y: -10, scale: 0.98 }}
+        transition={{ duration: 0.4 }}
+        className="relative overflow-hidden rounded-2xl border border-cyan-500/20 mb-10"
+        style={{ background: "linear-gradient(135deg, rgba(6,182,212,0.08), rgba(139,92,246,0.08), rgba(6,182,212,0.04))" }}
+        data-testid="banner-pwa-install"
+      >
+        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-purple-500/5 to-cyan-500/5" />
+        <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-cyan-500/40 to-transparent" />
+
+        <button
+          onClick={handleDismiss}
+          className="absolute top-3 right-3 z-20 w-7 h-7 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-white/40 hover:text-white/70 hover:bg-white/10 transition-all"
+          data-testid="button-pwa-dismiss"
+        >
+          <X className="w-3.5 h-3.5" />
+        </button>
+
+        <div className="relative z-10 p-5 sm:p-6 flex flex-col sm:flex-row items-center gap-5">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-purple-600 flex items-center justify-center shrink-0 shadow-lg shadow-cyan-500/20">
+            <Smartphone className="w-7 h-7 text-white" />
+          </div>
+
+          <div className="flex-1 text-center sm:text-left">
+            <h3 className="text-white font-bold text-lg mb-1">Install Trust Layer</h3>
+            <p className="text-white/50 text-sm leading-relaxed">
+              {isIOS
+                ? "Add to your home screen for the full app experience — tap the share button below, then \"Add to Home Screen.\""
+                : "Get the full app experience — install Trust Layer on your device for instant access, offline support, and push notifications."
+              }
+            </p>
+          </div>
+
+          {installPrompt ? (
+            <button
+              onClick={handleInstall}
+              className="shrink-0 px-6 py-3 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-bold text-sm flex items-center gap-2 hover:shadow-lg hover:shadow-cyan-500/20 transition-all active:scale-95"
+              data-testid="button-pwa-install"
+            >
+              <Download className="w-4 h-4" />
+              Install App
+            </button>
+          ) : isIOS ? (
+            <div className="shrink-0 flex items-center gap-2 px-5 py-3 rounded-xl bg-white/5 border border-white/10 text-white/70 text-sm font-medium">
+              <Share className="w-4 h-4" />
+              Tap Share → Add to Home Screen
+            </div>
+          ) : null}
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
+}
+
 export default function ExploreHub() {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -491,6 +606,8 @@ export default function ExploreHub() {
             />
           </div>
         </div>
+
+        <PWAInstallBanner />
 
         <EcosystemDirectory compact defaultCollapsed className="mb-10" />
 
