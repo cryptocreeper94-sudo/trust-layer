@@ -19,7 +19,7 @@ const navCategories = [
     icon: Home,
     items: [
       { href: "/", label: "Home", icon: Home },
-      { href: "/launch", label: "July 4th Launch", icon: Rocket, badge: "🔥" },
+      { href: "/launch", label: "Launch Countdown", icon: Rocket, badge: "🔥" },
       { href: "/explore", label: "Explore Everything", icon: Compass, badge: "Hub" },
       { href: "/note", label: "Our Story", icon: Heart },
       { href: "/ecosystem", label: "Ecosystem", icon: Compass },
@@ -196,7 +196,7 @@ const navCategories = [
       { href: "/api-docs", label: "API Docs", icon: FileText },
       { href: "/webhooks", label: "Webhooks API", icon: Webhook },
       { href: "/doc-hub", label: "Documentation Hub", icon: FileText },
-      { href: "/launch", label: "July 4th Launch Roadmap", icon: Rocket, badge: "🔥" },
+      { href: "/launch", label: "Launch Roadmap", icon: Rocket, badge: "🔥" },
       { href: "/roadmap", label: "Ecosystem Roadmap", icon: Star },
       { href: "/coming-features", label: "Coming Features", icon: Rocket },
       { href: "/feedback", label: "Feedback", icon: MessageCircle },
@@ -727,7 +727,7 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
           />
         </div>
 
-        {/* July 4th Launch Countdown */}
+        {/* Launch Countdown */}
         <Link href="/launch" style={{ textDecoration: 'none', display: 'block' }}>
           <div
             onClick={onClose}
@@ -769,7 +769,7 @@ function MenuPanel({ onClose, onShowLogin }: { onClose: () => void; onShowLogin:
             </div>
             <div style={{ flex: 1, position: 'relative' as const, zIndex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-                <span style={{ fontWeight: 700, fontSize: '15px', color: '#ffffff' }}>July 4th Launch</span>
+                <span style={{ fontWeight: 700, fontSize: '15px', color: '#ffffff' }}>August 23rd Launch</span>
                 <Badge className="text-[9px] px-1.5 py-0 bg-red-500/30 text-red-300 border-red-500/30 animate-pulse">🔥</Badge>
               </div>
               <span style={{ fontSize: '12px', color: 'rgba(255,255,255,0.7)' }}>Signal goes live — view roadmap</span>
