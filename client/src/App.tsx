@@ -286,6 +286,7 @@ const GuardianScannerDetail = lazy(() => import("@/pages/token-detail"));
 const GuardianAI = lazy(() => import("@/pages/guardian-ai"));
 const GuardianAIRegistry = lazy(() => import("@/pages/guardian-ai-registry"));
 const GuardianShield = lazy(() => import("@/pages/guardian-shield"));
+const AffiliateDashboard = lazy(() => import("@/pages/affiliate-dashboard"));
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -295,6 +296,19 @@ function ScrollToTop() {
   }, [location]);
   
   return null;
+}
+
+function ReferralRedirect({ hash }: { hash: string }) {
+  const [, setLocation] = useLocation();
+  useEffect(() => {
+    fetch("/api/affiliate/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ referralHash: hash, platform: "trustlayer" }),
+    }).catch(() => {});
+    setLocation("/");
+  }, [hash, setLocation]);
+  return <PageLoader />;
 }
 
 function GamesRouter() {
@@ -443,6 +457,8 @@ function DWSCRouter() {
         <Route path="/rewards" component={Rewards} />
         <Route path="/referral-program" component={ReferralProgram} />
         <Route path="/referrals" component={ReferralProgram} />
+        <Route path="/affiliate" component={AffiliateDashboard} />
+        <Route path="/ref/:hash">{(params: { hash: string }) => <ReferralRedirect hash={params.hash} />}</Route>
         <Route path="/my-hub" component={MyHub} />
         <Route path="/members" component={Members} />
         <Route path="/my-tokens" component={MyTokens} />

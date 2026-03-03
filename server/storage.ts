@@ -583,16 +583,16 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getNextMasterSequence(): Promise<string> {
-    const [existing] = await db.select().from(hallmarkCounter).where(eq(hallmarkCounter.id, "master"));
+    const [existing] = await db.select().from(hallmarkCounter).where(eq(hallmarkCounter.id, "tl-master"));
     
     if (!existing) {
-      await db.insert(hallmarkCounter).values({ id: "master", currentSequence: "0" });
-      return "000000000";
+      await db.insert(hallmarkCounter).values({ id: "tl-master", currentSequence: "0" });
+      return "00000000";
     }
 
     const nextSeq = parseInt(existing.currentSequence) + 1;
-    await db.update(hallmarkCounter).set({ currentSequence: nextSeq.toString() }).where(eq(hallmarkCounter.id, "master"));
-    return nextSeq.toString().padStart(9, "0");
+    await db.update(hallmarkCounter).set({ currentSequence: nextSeq.toString() }).where(eq(hallmarkCounter.id, "tl-master"));
+    return nextSeq.toString().padStart(8, "0");
   }
 
   async addToWaitlist(data: InsertWaitlist): Promise<Waitlist> {

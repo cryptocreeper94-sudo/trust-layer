@@ -29,6 +29,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { EcosystemDirectory } from "@/components/ecosystem-directory";
+import { GenesisHallmarkBadge } from "@/components/genesis-hallmark-badge";
 
 import hubTrading from "@/assets/generated_images/hub_trading_defi.png";
 import hubWallet from "@/assets/generated_images/hub_wallet_tokens.png";
@@ -628,6 +629,10 @@ export default function ExploreHub() {
             <CategorySection key={category.title} category={category} catIndex={i} />
           ))
         )}
+
+        <div className="flex justify-center mt-12 mb-4">
+          <GenesisHallmarkBadge />
+        </div>
       </div>
     </div>
   );

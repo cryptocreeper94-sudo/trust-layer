@@ -66,6 +66,22 @@ The ecosystem spans 32 verified applications across primary domains including `d
 - **Allocation**: Treasury (50%), Staking Rewards (15%), Development & Team (15%), Ecosystem Growth (10%), Community Rewards (10%).
 - **Referral System**: Multiplier-based Shell rewards with automated payouts.
 
+### Hallmark System (Ecosystem Handoff Spec)
+- **Prefix**: `TL` — Trust Layer app prefix. Genesis hallmark: `TL-00000001`.
+- **Format**: `TL-XXXXXXXX` (8-digit zero-padded sequence per app).
+- **Genesis**: Created on first server boot via `seedGenesisHallmark()`. References `TH-00000001` (Hub) as `parentGenesis`.
+- **Trust Stamps**: Standardized categories (`auth-login`, `auth-register`, `purchase`, `wallet-send`, etc.) with SHA-256 hashing, simulated txHash/blockHeight.
+- **Verification**: `GET /api/hallmark/:id/verify` — public endpoint returning `{ verified, hallmark: { thId, appName, productName, releaseType, dataHash, txHash, blockHeight, createdAt } }`.
+- **Files**: `server/hallmark.ts` (generateHallmark, createTrustStamp, seedGenesisHallmark), `server/affiliate-service.ts`.
+
+### Affiliate Program (Ecosystem Handoff Spec)
+- **Tiers**: Base (0 conversions, 10%), Silver (5, 12.5%), Gold (15, 15%), Platinum (30, 17.5%), Diamond (50, 20%).
+- **Referral Link Format**: `https://dwtl.io/ref/[uniqueHash]`.
+- **Commission Currency**: SIG (native asset). Minimum payout: 10 SIG.
+- **Tables**: `affiliate_referrals_v2`, `affiliate_commissions_v2` (new v2 tables alongside legacy).
+- **Endpoints**: `GET /api/affiliate/dashboard`, `GET /api/affiliate/link`, `POST /api/affiliate/track` (public), `POST /api/affiliate/request-payout`.
+- **UI**: `/affiliate` dashboard page, Genesis Hallmark Badge component on explore-hub, `/ref/:hash` routing.
+
 ### Embeddable Ecosystem Widget & Shared Components
 An embeddable widget allows any app to display ecosystem apps, presale stats, and user data via a single script tag. A shared UI system enables loading standardized components (footer, announcement bar, trust badge) via another script tag.
 

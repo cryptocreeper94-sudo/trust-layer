@@ -120,11 +120,11 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
 import { sql, eq, desc, and, gte } from "drizzle-orm";
 import { billingService } from "./billing";
 import type { EcosystemApp, BlockchainStats } from "@shared/schema";
-import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, guardianCertifications, guardianMonitoredAssets, guardianIncidents, guardianBlockchainStamps, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications, limitOrders, insertLimitOrderSchema, chatChannels, ecosystemAffiliates, ecosystemReferrals, ecosystemRewardsLedger, chroniclesGameState, userPhoneSettings } from "@shared/schema";
+import { insertDocumentSchema, insertPageViewSchema, insertWaitlistSchema, insertInfluencerApplicationSchema, faucetClaims, tokenPairs, swapTransactions, nftCollections, nfts, nftListings, legacyFounders, APP_VERSION, gameSubmissions, insertGameSubmissionSchema, playerPersonalities, playerEstates, waitlist, betaTesters, whitelistedUsers, blockchainDomains, signupCounter, walletBackups, walletBiometricCredentials, kycVerifications, guardianSecurityScores, guardianCertifications, guardianMonitoredAssets, guardianIncidents, guardianBlockchainStamps, chronoPassIdentities, experienceShards, shardAssignments, questDefinitions, questProgress, questSeasons, questLeaderboard, realityOracles, oracleDataFeeds, aiExecutionProofs, aiModelRegistry, copilotSessions, copilotMessages, users, passwordResetTokens, guilds, guildMembers, guildInvites, guildRoles, chronicleEras, chronicleArtifacts, chroniclePlayerArtifacts, chroniclePlayerEras, chronicleTimePortals, chronicleEraMissions, chronicleMissionProgress, chronicleAccounts, cityZones, landPlots, plotListings, dailyLoginRewards, businessClaims, eraBuildingTemplates, shellRewardProfiles, zealyQuestMappings, zealyQuestEvents, userExternalWallets, predictionEvents, predictionOutcomes, predictionAccuracyStats, strikeAgentPredictions, strikeAgentOutcomes, memberTrustCards, hallmarkGlobalCounter, feedbackReports, emailVerificationCodes, businessApplications, limitOrders, insertLimitOrderSchema, chatChannels, ecosystemAffiliates, ecosystemReferrals, ecosystemRewardsLedger, chroniclesGameState, userPhoneSettings, TL_PREFIX } from "@shared/schema";
 import { ecosystemClient, OrbitEcosystemClient } from "./ecosystem-client";
 import { orbitClient } from "./services/orbitEcosystem";
 import { submitHashToDarkWave, generateDataHash, darkwaveConfig } from "./darkwave";
-import { generateHallmark, verifyHallmark, getHallmarkQRCode } from "./hallmark";
+import { generateHallmark, verifyHallmark, getHallmarkQRCode, seedGenesisHallmark, createTrustStamp } from "./hallmark";
 import { trustStamp, getUserTrustStamps } from "./trust-stamp";
 import { blockchain } from "./blockchain-engine";
 import { sendEmail, sendApiKeyEmail, sendHallmarkEmail, sendPresaleConfirmationEmail, sendEmailVerificationCode, sendBusinessApprovalEmail, sendBusinessRejectionEmail, sendCrowdfundConfirmationEmail, sendSubscriptionActivatedEmail, sendSubscriptionRenewalEmail, sendGoldCoinPurchaseEmail, sendCreditsConfirmationEmail, sendGuardianCertificationEmail, sendGuardianIntakeEmail, sendDomainRegistrationEmail, sendOrbsPurchaseEmail, sendShellsPurchaseEmail, sendPaymentFailedEmail } from "./email";
@@ -154,6 +154,7 @@ import { mirrorLifeService } from "./mirror-life-service";
 import { interiorsService } from "./interiors-service";
 import { subscriptionService, SUBSCRIPTION_PLANS } from "./subscription-service";
 import { guardianService, generateDataHash as guardianHash, generateMerkleRoot } from "./guardian-service";
+import * as affiliateService from "./affiliate-service";
 
 const FaucetClaimRequestSchema = z.object({
   walletAddress: z.string().min(10, "Invalid wallet address").max(100),
@@ -1588,6 +1589,8 @@ export async function registerRoutes(
       const tokenExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
       await db.update(users).set({ sessionToken, sessionTokenExpiry: tokenExpiry }).where(eq(users.id, userId));
 
+      createTrustStamp("auth-register", { userId, email: normalizedEmail, signupPosition }).catch(() => {});
+
       res.json({ success: true, userId, signupPosition, emailVerificationRequired: true, sessionToken });
     } catch (error) {
       console.error("Registration error:", error);
@@ -1807,6 +1810,8 @@ export async function registerRoutes(
       }).where(eq(users.id, user.id));
       
       // Also save to session for cookie-based auth (backup)
+      createTrustStamp("auth-login", { userId: user.id, email: user.email }).catch(() => {});
+
       req.session.save((err) => {
         if (err) {
           console.error("[Login] Session save error:", err);
@@ -6159,59 +6164,32 @@ const { trustLayerId } = await response.json();`
     }
   });
 
-  // Genesis Hallmark - The first ever Trust Layer hallmark (MUST be before :hallmarkId route)
   app.get("/api/hallmark/genesis", async (req, res) => {
     try {
-      const stats = blockchain.getStats();
-      const genesisTimestamp = "2025-02-14T00:00:00.000Z";
-      
-      const QRCode = await import("qrcode");
-      const verificationUrl = `${process.env.BASE_URL || 'https://darkwave.chain'}/explorer`;
-      const qrData = JSON.stringify({
-        id: "DWH-000000000001",
-        type: "genesis",
-        url: verificationUrl,
-        chain: "Trust Layer",
-      });
-      const qrCodeSvg = await QRCode.toString(qrData, { type: "svg", width: 200 });
-      
-      const crypto = await import("crypto");
-      const genesisPayload = {
-        id: "DWH-000000000001",
-        type: "genesis",
-        chain: "Trust Layer",
-        blockHeight: 0,
-        timestamp: genesisTimestamp,
-        validator: "Founders Validator",
-      };
-      const payloadHash = crypto.createHash("sha256")
-        .update(JSON.stringify(genesisPayload))
-        .digest("hex");
-      
-      res.json({
-        id: "genesis-hallmark-001",
-        globalSerial: "DWH-000000000001",
-        serialNumber: "DWH-GENESIS-0001",
-        type: "Genesis Hallmark",
-        chain: "Trust Layer",
-        blockNumber: 0,
-        payloadHash,
-        txHash: "genesis-block-0x" + payloadHash.slice(0, 16),
-        createdAt: genesisTimestamp,
-        verificationUrl,
-        qrCodeSvg,
-        metadata: {
-          totalSupply: "1,000,000,000 SIG",
-          decimals: 18,
-          consensusType: "Proof-of-Authority",
-          blockTime: "400ms",
-          tps: "200,000+",
-          validator: "Founders Validator",
-          launchDate: "April 11, 2026",
-        },
-        verified: true,
-        message: "Genesis Block - Trust Layer Origin",
-      });
+      const genesisThId = `${TL_PREFIX}-00000001`;
+      const hallmark = await storage.getHallmark(genesisThId);
+
+      if (hallmark) {
+        const verified = hallmark.status === "confirmed" && !!hallmark.darkwaveTxHash;
+        return res.json({
+          verified,
+          hallmark: {
+            thId: hallmark.thId || hallmark.hallmarkId,
+            appName: hallmark.appName,
+            productName: hallmark.productName,
+            releaseType: hallmark.releaseType,
+            dataHash: hallmark.dataHash,
+            txHash: hallmark.darkwaveTxHash,
+            blockHeight: hallmark.darkwaveBlockHeight,
+            createdAt: hallmark.createdAt,
+            metadata: hallmark.metadata ? JSON.parse(hallmark.metadata) : null,
+            qrCodeSvg: hallmark.qrCodeSvg,
+            verificationUrl: hallmark.verificationUrl,
+          },
+        });
+      }
+
+      res.status(404).json({ error: "Genesis hallmark not found" });
     } catch (error) {
       console.error("Genesis hallmark error:", error);
       res.status(500).json({ error: "Failed to fetch genesis hallmark" });
@@ -6305,14 +6283,17 @@ const { trustLayerId } = await response.json();`
       const result = await verifyHallmark(hallmarkId);
 
       res.json({
-        valid: result.valid,
-        onChain: result.onChain,
-        message: result.message,
-        hallmarkId: result.hallmark?.hallmarkId,
-        appName: result.hallmark?.appName,
-        productName: result.hallmark?.productName,
-        version: result.hallmark?.version,
-        darkwaveTxHash: result.hallmark?.darkwaveTxHash,
+        verified: result.valid,
+        hallmark: result.hallmark ? {
+          thId: result.hallmark.thId || result.hallmark.hallmarkId,
+          appName: result.hallmark.appName,
+          productName: result.hallmark.productName,
+          releaseType: result.hallmark.releaseType,
+          dataHash: result.hallmark.dataHash,
+          txHash: result.hallmark.darkwaveTxHash,
+          blockHeight: result.hallmark.darkwaveBlockHeight,
+          createdAt: result.hallmark.createdAt,
+        } : null,
       });
     } catch (error) {
       res.status(500).json({ error: "Failed to verify hallmark" });
@@ -25220,6 +25201,62 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       res.status(500).json({ error: "Failed to check gate" });
     }
   });
+
+  app.get("/api/affiliate/dashboard", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = parseInt(req.user?.id || req.user?.claims?.sub);
+      if (isNaN(userId)) {
+        const dashboard = await affiliateService.getDashboard(0);
+        return res.json(dashboard);
+      }
+      const dashboard = await affiliateService.getDashboard(userId);
+      res.json(dashboard);
+    } catch (error) {
+      console.error("Affiliate dashboard error:", error);
+      res.status(500).json({ error: "Failed to load affiliate dashboard" });
+    }
+  });
+
+  app.get("/api/affiliate/link", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user?.id || req.user?.claims?.sub;
+      const link = affiliateService.getUserReferralLink(userId);
+      res.json({ link });
+    } catch (error) {
+      console.error("Affiliate link error:", error);
+      res.status(500).json({ error: "Failed to generate referral link" });
+    }
+  });
+
+  app.post("/api/affiliate/track", async (req, res) => {
+    try {
+      const { referralHash, platform } = req.body;
+      if (!referralHash) {
+        return res.status(400).json({ error: "referralHash is required" });
+      }
+      const referral = await affiliateService.trackReferral(referralHash, platform || "trustlayer");
+      res.json({ success: true, referral });
+    } catch (error) {
+      console.error("Affiliate track error:", error);
+      res.status(500).json({ error: "Failed to track referral" });
+    }
+  });
+
+  app.post("/api/affiliate/request-payout", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = parseInt(req.user?.id || req.user?.claims?.sub);
+      if (isNaN(userId)) {
+        return res.status(400).json({ error: "Invalid user" });
+      }
+      const result = await affiliateService.requestPayout(userId);
+      res.json(result);
+    } catch (error) {
+      console.error("Affiliate payout error:", error);
+      res.status(500).json({ error: "Failed to request payout" });
+    }
+  });
+
+  seedGenesisHallmark().catch(err => console.error("[Boot] Genesis hallmark seed error:", err));
 
   return httpServer;
 }

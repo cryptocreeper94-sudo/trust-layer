@@ -318,9 +318,14 @@ export const dualChainResultSchema = z.object({
 
 export type DualChainResult = z.infer<typeof dualChainResultSchema>;
 
+export const TL_PREFIX = "TL";
+
 export const hallmarks = pgTable("hallmarks", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   hallmarkId: text("hallmark_id").notNull().unique(),
+  thId: text("th_id").unique(),
+  userId: integer("user_id"),
+  verificationUrl: text("verification_url"),
   masterSequence: text("master_sequence").notNull(),
   subSequence: text("sub_sequence").notNull().default("01"),
   appId: text("app_id").notNull(),
@@ -340,7 +345,7 @@ export const hallmarks = pgTable("hallmarks", {
 });
 
 export const hallmarkCounter = pgTable("hallmark_counter", {
-  id: varchar("id").primaryKey().default("master"),
+  id: varchar("id").primaryKey().default("tl-master"),
   currentSequence: text("current_sequence").notNull().default("0"),
 });
 
@@ -424,6 +429,7 @@ export const trustStamps = pgTable("trust_stamps", {
   id: serial("id").primaryKey(),
   userId: text("user_id"),
   category: text("category").notNull(),
+  data: text("data"),
   dataHash: text("data_hash").notNull(),
   txHash: text("tx_hash"),
   blockHeight: integer("block_height"),
@@ -4148,7 +4154,7 @@ export type InsertSeoConfig = z.infer<typeof insertSeoConfigSchema>;
 export const REFERRAL_HOSTS = ["dwsc.io", "yourlegacy.io"] as const;
 export type ReferralHost = typeof REFERRAL_HOSTS[number];
 
-export const AFFILIATE_TIERS = ["explorer", "builder", "architect", "oracle"] as const;
+export const AFFILIATE_TIERS = ["base", "silver", "gold", "platinum", "diamond"] as const;
 export type AffiliateTier = typeof AFFILIATE_TIERS[number];
 
 export const REFERRAL_STATUS = ["pending", "qualified", "converted", "expired", "fraud"] as const;
@@ -4473,6 +4479,59 @@ export const REFERRAL_REWARDS = {
   REFERRER_CONVERSION_BONUS: 500,
   COMMISSION_PERCENT_DEFAULT: 10,
 } as const;
+
+// ============================================
+// HALLMARK AFFILIATE V2 TABLES
+// ============================================
+
+export const HALLMARK_AFFILIATE_TIERS = {
+  base: { conversions: 0, rate: 10 },
+  silver: { conversions: 5, rate: 12.5 },
+  gold: { conversions: 15, rate: 15 },
+  platinum: { conversions: 30, rate: 17.5 },
+  diamond: { conversions: 50, rate: 20 },
+} as const;
+
+export const affiliateReferralsV2 = pgTable("affiliate_referrals_v2", {
+  id: serial("id").primaryKey(),
+  referrerId: integer("referrer_id").notNull(),
+  referredUserId: integer("referred_user_id"),
+  referralHash: text("referral_hash").notNull(),
+  platform: text("platform").notNull().default("trustlayer"),
+  status: text("status").notNull().default("pending"),
+  convertedAt: timestamp("converted_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertAffiliateReferralV2Schema = createInsertSchema(affiliateReferralsV2).omit({
+  id: true,
+  convertedAt: true,
+  createdAt: true,
+});
+
+export type AffiliateReferralV2 = typeof affiliateReferralsV2.$inferSelect;
+export type InsertAffiliateReferralV2 = z.infer<typeof insertAffiliateReferralV2Schema>;
+
+export const affiliateCommissionsV2 = pgTable("affiliate_commissions_v2", {
+  id: serial("id").primaryKey(),
+  referrerId: integer("referrer_id").notNull(),
+  referralId: integer("referral_id"),
+  amount: text("amount").notNull(),
+  currency: text("currency").default("SIG"),
+  tier: text("tier").default("base"),
+  status: text("status").default("pending"),
+  paidAt: timestamp("paid_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertAffiliateCommissionV2Schema = createInsertSchema(affiliateCommissionsV2).omit({
+  id: true,
+  paidAt: true,
+  createdAt: true,
+});
+
+export type AffiliateCommissionV2 = typeof affiliateCommissionsV2.$inferSelect;
+export type InsertAffiliateCommissionV2 = z.infer<typeof insertAffiliateCommissionV2Schema>;
 
 // ============================================
 // COMMUNITY HUB
