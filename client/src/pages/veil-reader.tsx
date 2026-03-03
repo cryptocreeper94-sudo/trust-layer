@@ -929,8 +929,9 @@ export default function VeilReader() {
     );
   }
 
-  const volume = toc[currentVolume];
-  const chapter = chapterContent;
+  const volume = toc[currentVolume] || toc[0];
+  if (!volume) return null;
+  const chapter = chapterContent || { id: '', title: volume.chapters?.[currentChapter]?.title || 'Loading...', content: '', partTitle: '' };
   
   const totalChapters = toc.reduce((acc, v) => acc + v.chapters.length, 0);
   const currentGlobalIndex = toc.slice(0, currentVolume).reduce((acc, v) => acc + v.chapters.length, 0) + currentChapter;
