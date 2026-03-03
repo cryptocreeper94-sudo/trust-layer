@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronUp, Minimize2, Maximize2 } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 interface OverlayContainerProps {
   children: ReactNode;

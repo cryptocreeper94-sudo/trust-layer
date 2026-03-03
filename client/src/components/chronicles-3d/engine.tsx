@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, Suspense, useMemo, type ReactNode } from "react";
 import { Canvas } from "@react-three/fiber";
-import { Stars } from "@react-three/drei";
+import { Stars, Sky } from "@react-three/drei";
 import * as THREE from "three";
 import { CameraController } from "./camera";
 import { LoadingOverlay, useLoadingProgress } from "./assets";
@@ -20,24 +20,39 @@ interface ChroniclesEngineProps {
   children?: ReactNode;
 }
 
-function SceneEnvironment({ era, location }: { era: EraType; location: LocationType }) {
+function GroundPlane({ era }: { era: EraType }) {
+  const envConfig = ERA_ENVIRONMENT_CONFIG[era];
+
+  const textureProps = useMemo(() => {
+    switch (envConfig.groundMaterial) {
+      case "concrete":
+        return { roughness: 0.9, metalness: 0.05 };
+      case "grass":
+        return { roughness: 0.95, metalness: 0 };
+      case "dirt":
+        return { roughness: 0.98, metalness: 0 };
+      case "stone":
+        return { roughness: 0.92, metalness: 0.02 };
+      case "sand":
+        return { roughness: 0.97, metalness: 0 };
+      default:
+        return { roughness: 0.95, metalness: 0 };
+    }
+  }, [envConfig.groundMaterial]);
+
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
+      <planeGeometry args={[80, 80]} />
+      <meshStandardMaterial color={envConfig.groundColor} {...textureProps} />
+    </mesh>
+  );
+}
+
+function LightingRig({ era }: { era: EraType }) {
   const envConfig = ERA_ENVIRONMENT_CONFIG[era];
 
   return (
-    <group>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>
-        <planeGeometry args={[60, 60]} />
-        <meshStandardMaterial color={envConfig.groundColor} roughness={0.95} />
-      </mesh>
-
-      {era === "modern" && <ModernScene location={location} />}
-      {era === "medieval" && <MedievalScene location={location} />}
-      {era === "wildwest" && <WildWestScene location={location} />}
-
-      <Stars radius={60} depth={60} count={1500} factor={3} saturation={0} fade speed={0.3} />
-
-      <fog attach="fog" args={[envConfig.fogColor, envConfig.fogNear, envConfig.fogFar]} />
-
+    <>
       <ambientLight intensity={envConfig.ambientIntensity} color={envConfig.ambientColor} />
       <directionalLight
         position={envConfig.sunPosition}
@@ -47,14 +62,48 @@ function SceneEnvironment({ era, location }: { era: EraType; location: LocationT
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
         shadow-camera-far={50}
-        shadow-camera-left={-15}
-        shadow-camera-right={15}
-        shadow-camera-top={15}
-        shadow-camera-bottom={-15}
+        shadow-camera-left={-20}
+        shadow-camera-right={20}
+        shadow-camera-top={20}
+        shadow-camera-bottom={-20}
+        shadow-bias={-0.001}
       />
       <hemisphereLight
-        args={[envConfig.ambientColor, envConfig.groundColor, 0.3]}
+        args={[envConfig.ambientColor, envConfig.groundColor, 0.25]}
       />
+    </>
+  );
+}
+
+function AtmosphereEffects({ era }: { era: EraType }) {
+  const envConfig = ERA_ENVIRONMENT_CONFIG[era];
+
+  return (
+    <>
+      <Stars
+        radius={60}
+        depth={60}
+        count={era === "medieval" ? 2500 : era === "wildwest" ? 800 : 1500}
+        factor={era === "medieval" ? 4 : 3}
+        saturation={0}
+        fade
+        speed={0.2}
+      />
+      <fog attach="fog" args={[envConfig.fogColor, envConfig.fogNear, envConfig.fogFar]} />
+    </>
+  );
+}
+
+function SceneEnvironment({ era, location }: { era: EraType; location: LocationType }) {
+  return (
+    <group>
+      <GroundPlane era={era} />
+      <LightingRig era={era} />
+      <AtmosphereEffects era={era} />
+
+      {era === "modern" && <ModernScene location={location} />}
+      {era === "medieval" && <MedievalScene location={location} />}
+      {era === "wildwest" && <WildWestScene location={location} />}
     </group>
   );
 }
@@ -79,7 +128,7 @@ export function ChroniclesEngine({
   useEffect(() => {
     try {
       const canvas = document.createElement("canvas");
-      const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
+      const gl = canvas.getContext("webgl2") || canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
       if (!gl) setWebglSupported(false);
     } catch {
       setWebglSupported(false);
@@ -93,8 +142,8 @@ export function ChroniclesEngine({
         setActiveEra(era);
         setActiveLocation(location);
         resetLoading();
-        setTimeout(() => setIsTransitioning(false), 300);
-      }, 400);
+        setTimeout(() => setIsTransitioning(false), 350);
+      }, 450);
       return () => clearTimeout(timer);
     }
   }, [era, location]);
@@ -140,6 +189,8 @@ export function ChroniclesEngine({
           antialias: !isMobile,
           powerPreference: isMobile ? "low-power" : "high-performance",
           alpha: false,
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.1,
         }}
         dpr={isMobile ? [1, 1.5] : [1, 2]}
         performance={{ min: 0.5 }}
@@ -150,7 +201,8 @@ export function ChroniclesEngine({
             targetPosition={sceneConfig.cameraPosition}
             lookAt={sceneConfig.lookAt}
             autoRotate={true}
-            autoRotateSpeed={0.15}
+            autoRotateSpeed={0.12}
+            cinematicIntro={era !== activeEra}
           />
         </Suspense>
       </Canvas>

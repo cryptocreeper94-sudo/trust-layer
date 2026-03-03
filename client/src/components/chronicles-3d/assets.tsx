@@ -1,10 +1,12 @@
 import { Suspense, useState, useEffect, useRef, useMemo, type ReactNode } from "react";
 import { useLoader, useThree } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { Text } from "@react-three/drei";
 import * as THREE from "three";
 import type { AssetManifest } from "./types";
 
 const assetCache = new Map<string, THREE.Group>();
+const failedUrls = new Set<string>();
 
 const DEFAULT_MANIFEST: AssetManifest = {};
 
@@ -25,6 +27,7 @@ export function GLBModel({ url, position, rotation, scale, onLoad, onError }: GL
   const groupRef = useRef<THREE.Group>(null);
 
   const gltf = useLoader(GLTFLoader, url, undefined, (error: any) => {
+    failedUrls.add(url);
     onError?.(error instanceof Error ? error : new Error(String(error)));
   });
 
@@ -74,7 +77,7 @@ interface AssetOrFallbackProps {
 export function AssetOrFallback({ assetKey, manifest, position, rotation, fallback, onLoad }: AssetOrFallbackProps) {
   const entry = manifest[assetKey];
 
-  if (!entry?.url) {
+  if (!entry?.url || failedUrls.has(entry.url)) {
     return <group position={position} rotation={rotation ? rotation.map(r => r * Math.PI / 180) as [number, number, number] : undefined}>{fallback}</group>;
   }
 
@@ -88,6 +91,39 @@ export function AssetOrFallback({ assetKey, manifest, position, rotation, fallba
         onLoad={onLoad}
       />
     </Suspense>
+  );
+}
+
+export function PlaceholderBuilding({
+  label,
+  width = 3,
+  height = 4,
+  depth = 3,
+  color = "#334155",
+  accentColor = "#06b6d4",
+  position = [0, 0, 0] as [number, number, number],
+}: {
+  label?: string;
+  width?: number;
+  height?: number;
+  depth?: number;
+  color?: string;
+  accentColor?: string;
+  position?: [number, number, number];
+}) {
+  return (
+    <group position={position}>
+      <mesh castShadow receiveShadow position={[0, height / 2, 0]}>
+        <boxGeometry args={[width, height, depth]} />
+        <meshStandardMaterial color={color} roughness={0.4} metalness={0.5} />
+      </mesh>
+      {label && (
+        <mesh position={[0, height / 2, depth / 2 + 0.02]}>
+          <planeGeometry args={[width * 0.7, 0.6]} />
+          <meshStandardMaterial color={accentColor} emissive={accentColor} emissiveIntensity={0.3} />
+        </mesh>
+      )}
+    </group>
   );
 }
 
@@ -105,10 +141,10 @@ export function LoadingOverlay({ progress, isVisible }: LoadingProgressProps) {
         <div className="w-48 h-1.5 bg-slate-800 rounded-full overflow-hidden mb-3">
           <div
             className="h-full bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full transition-all duration-300"
-            style={{ width: `${progress}%` }}
+            style={{ width: `${Math.round(progress)}%` }}
           />
         </div>
-        <p className="text-xs text-gray-400">Loading scene...</p>
+        <p className="text-xs text-gray-400">Loading scene... {Math.round(progress)}%</p>
       </div>
     </div>
   );

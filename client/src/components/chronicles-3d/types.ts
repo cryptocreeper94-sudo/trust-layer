@@ -35,6 +35,7 @@ export interface SceneConfig {
   environment: {
     skyColor: string;
     groundColor: string;
+    groundMaterial?: "concrete" | "grass" | "dirt" | "stone" | "sand" | "wood";
     fogColor: string;
     fogNear: number;
     fogFar: number;
@@ -46,7 +47,8 @@ export interface SceneConfig {
 
 export interface PropConfig {
   id: string;
-  type: "building" | "tree" | "furniture" | "decoration" | "ground_feature";
+  type: "building" | "tree" | "furniture" | "decoration" | "ground_feature" | "vehicle" | "sign" | "light";
+  subtype?: string;
   position: [number, number, number];
   rotation?: [number, number, number];
   scale?: [number, number, number];
@@ -81,4 +83,20 @@ export interface EngineState {
   isTransitioning: boolean;
   loadingProgress: number;
   isLoaded: boolean;
+}
+
+export interface EraEnvironmentConfig {
+  groundColor: string;
+  groundMaterial: "concrete" | "grass" | "dirt" | "stone" | "sand" | "wood";
+  skyColor: string;
+  fogColor: string;
+  fogNear: number;
+  fogFar: number;
+  ambientIntensity: number;
+  ambientColor: string;
+  sunPosition: [number, number, number];
+  sunIntensity: number;
+  sunColor: string;
+  particleColor: string;
+  particleCount: number;
 }
