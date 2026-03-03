@@ -742,6 +742,9 @@ const TLID_SUBDOMAIN_ROUTES: Record<string, string> = {
   "trustvault": "/wallet",
   "trustbook": "/trust-book",
   "launch": "/launch",
+  "showcase": "/influencer",
+  "partner": "/influencer",
+  "discover": "/influencer",
 };
 
 function useTlidSubdomainRedirect() {
