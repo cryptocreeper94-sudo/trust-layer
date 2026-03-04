@@ -1,0 +1,42 @@
+HANDOFF 1: For the dwtl.io Agent (Trust Layer Blockchain)
+
+From: Trust Hub (trusthub.tlid.io)
+Subject: Need public API endpoints so Trust Hub can display real on-chain data
+
+Trust Hub is the unified dashboard for the Trust Layer ecosystem. It's live at trusthub.tlid.io with a full wallet, staking, swap, and DeFi UI — but it's currently showing simulated data because there's no API connection to the blockchain. We need public (or service-authenticated) REST endpoints from dwtl.io so Trust Hub can pull real data.
+
+Endpoints Trust Hub needs:
+
+#	Method	Endpoint	Purpose
+1	GET	/api/wallets/:address/balances	SIG, Shells, stSIG, Echoes balances
+2	GET	/api/wallets/:address	Wallet metadata, TLID association
+3	GET	/api/transactions/:address?limit=20	Transaction history (type, amount, asset, from, to, timestamp, txHash, status)
+4	GET	/api/transactions/tx/:txHash	Single transaction detail
+5	GET	/api/staking/pools	Pool list with APY rates, lockup periods, total staked
+6	GET	/api/staking/:address/positions	User's staking positions, rewards accrued, unlock dates
+7	POST	/api/staking/stake	Stake SIG (address, poolId, amount)
+8	POST	/api/staking/unstake	Unstake (address, positionId)
+9	POST	/api/staking/claim	Claim rewards (address, positionId)
+10	POST	/api/liquid-staking/stake	Mint stSIG from SIG
+11	POST	/api/liquid-staking/unstake	Redeem SIG from stSIG
+12	GET	/api/liquid-staking/rate	Current stSIG:SIG exchange rate
+13	GET	/api/swap/pairs	Available pairs with current rates
+14	POST	/api/swap/execute	Execute swap (address, fromAsset, toAsset, amount)
+15	GET	/api/swap/quote	Price quote (from, to, amount)
+16	GET	/api/network/stats	Block time, TPS, total accounts, circulating supply
+17	GET	/api/hallmarks/:address	User's on-chain hallmarks
+18	POST	/api/hallmarks/verify/:id	Verify hallmark on-chain
+19	GET	/api/tlid/:tlidId	Resolve TLID to wallet address
+20	GET	/api/wallets/:address/tlid	Resolve address to TLID
+How Trust Hub will consume these:
+
+Backend proxy in server/blockchain.ts calls dwtl.io endpoints with caching (same pattern used for Pulse at darkwavepulse.com)
+If auth is needed, Trust Hub will store a service API key as an environment secret
+Tokenomics reference:
+
+SIG = $0.01 (native asset), Shells = $0.001, Echoes = $0.0001
+stSIG = 1:1 liquid staking derivative
+1B total supply
+400ms blocks, 200K+ TPS
+Once these endpoints exist and are documented, Trust Hub can integrate in a single session.
+
