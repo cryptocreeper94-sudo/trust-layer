@@ -320,6 +320,42 @@ export type DualChainResult = z.infer<typeof dualChainResultSchema>;
 
 export const TL_PREFIX = "TL";
 
+export const ECOSYSTEM_APP_REGISTRY = [
+  { id: 1, name: "Trust Layer Hub", prefix: "TH", domain: "trusthub.tlid.io" },
+  { id: 2, name: "Trust Layer (L1)", prefix: "TL", domain: "dwtl.io" },
+  { id: 3, name: "TrustHome", prefix: "TR", domain: "trusthome.tlid.io" },
+  { id: 4, name: "TrustVault", prefix: "TV", domain: "trustvault.tlid.io" },
+  { id: 5, name: "TLID.io", prefix: "TI", domain: "tlid.io" },
+  { id: 6, name: "THE VOID", prefix: "VO", domain: "thevoid.tlid.io" },
+  { id: 7, name: "Signal Chat", prefix: "SC", domain: "signalchat.tlid.io" },
+  { id: 8, name: "DarkWave Studio", prefix: "DS", domain: "darkwavestudio.tlid.io" },
+  { id: 9, name: "Guardian Shield", prefix: "GS", domain: "guardianshield.tlid.io" },
+  { id: 10, name: "Guardian Scanner", prefix: "GN", domain: "guardianscanner.tlid.io" },
+  { id: 11, name: "Guardian Screener", prefix: "GR", domain: "guardianscreener.tlid.io" },
+  { id: 12, name: "TradeWorks AI", prefix: "TW", domain: "tradeworks.tlid.io" },
+  { id: 13, name: "StrikeAgent", prefix: "SA", domain: "strikeagent.tlid.io" },
+  { id: 14, name: "Pulse", prefix: "PU", domain: "pulse.tlid.io" },
+  { id: 15, name: "Chronicles", prefix: "CH", domain: "chronicles.tlid.io" },
+  { id: 16, name: "The Arcade", prefix: "AR", domain: "thearcade.tlid.io" },
+  { id: 17, name: "Bomber", prefix: "BO", domain: "bomber.tlid.io" },
+  { id: 18, name: "Trust Golf", prefix: "TG", domain: "trustgolf.tlid.io" },
+  { id: 19, name: "ORBIT Staffing OS", prefix: "OR", domain: "orbit.tlid.io" },
+  { id: 20, name: "Orby Commander", prefix: "OC", domain: "orby.tlid.io" },
+  { id: 21, name: "GarageBot", prefix: "GB", domain: "garagebot.tlid.io" },
+  { id: 22, name: "Lot Ops Pro", prefix: "LO", domain: "lotops.tlid.io" },
+  { id: 23, name: "TORQUE", prefix: "TQ", domain: "torque.tlid.io" },
+  { id: 24, name: "TL Driver Connect", prefix: "DC", domain: "driverconnect.tlid.io" },
+  { id: 25, name: "VedaSolus", prefix: "VS", domain: "vedasolus.tlid.io" },
+  { id: 26, name: "Verdara", prefix: "VD", domain: "verdara.tlid.io" },
+  { id: 27, name: "Arbora", prefix: "AB", domain: "arbora.tlid.io" },
+  { id: 28, name: "PaintPros", prefix: "PP", domain: "paintpros.tlid.io" },
+  { id: 29, name: "Nashville Painting Professionals", prefix: "NP", domain: "nashvillepainting.tlid.io" },
+  { id: 30, name: "Trust Book", prefix: "TB", domain: "trustbook.tlid.io" },
+  { id: 31, name: "DarkWave Academy", prefix: "DA", domain: "darkwaveacademy.tlid.io" },
+  { id: 32, name: "Happy Eats", prefix: "HE", domain: "happyeats.tlid.io" },
+  { id: 33, name: "Brew & Board Coffee", prefix: "BB", domain: "brewandboard.tlid.io" },
+] as const;
+
 export const hallmarks = pgTable("hallmarks", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   hallmarkId: text("hallmark_id").notNull().unique(),

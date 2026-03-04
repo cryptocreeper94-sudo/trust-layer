@@ -1,6 +1,6 @@
 import crypto from "crypto";
 import { db } from "./db";
-import { affiliateReferralsV2, affiliateCommissionsV2, HALLMARK_AFFILIATE_TIERS } from "@shared/schema";
+import { affiliateReferralsV2, affiliateCommissionsV2, HALLMARK_AFFILIATE_TIERS, ECOSYSTEM_APP_REGISTRY } from "@shared/schema";
 import { eq, and, sql, desc } from "drizzle-orm";
 import { createTrustStamp } from "./hallmark";
 
@@ -95,9 +95,16 @@ export async function getDashboard(userId: number) {
   };
 }
 
-export function getUserReferralLink(userId: number | string): string {
+export function getUserReferralLink(userId: number | string): { link: string; hash: string; crossPlatformLinks: { name: string; prefix: string; domain: string; link: string }[] } {
   const hash = getUserHash(userId);
-  return `${BASE_URL}/ref/${hash}`;
+  const link = `${BASE_URL}/ref/${hash}`;
+  const crossPlatformLinks = ECOSYSTEM_APP_REGISTRY.map(app => ({
+    name: app.name,
+    prefix: app.prefix,
+    domain: app.domain,
+    link: `https://${app.domain}/ref/${hash}`,
+  }));
+  return { link, hash, crossPlatformLinks };
 }
 
 export async function requestPayout(userId: number) {

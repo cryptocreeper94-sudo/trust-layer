@@ -64,7 +64,7 @@ export default function AffiliateDashboard() {
     enabled: isAuthenticated,
   });
 
-  const { data: referralLink } = useQuery<{ link: string }>({
+  const { data: referralLink } = useQuery<{ link: string; hash: string; crossPlatformLinks: { name: string; prefix: string; domain: string; link: string }[] }>({
     queryKey: ["/api/affiliate/link"],
     queryFn: async () => {
       const res = await authFetch("/api/affiliate/link");

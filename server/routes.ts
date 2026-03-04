@@ -25220,8 +25220,8 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
   app.get("/api/affiliate/link", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
-      const link = affiliateService.getUserReferralLink(userId);
-      res.json({ link });
+      const result = affiliateService.getUserReferralLink(userId);
+      res.json(result);
     } catch (error) {
       console.error("Affiliate link error:", error);
       res.status(500).json({ error: "Failed to generate referral link" });
