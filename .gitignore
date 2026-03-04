@@ -6,4 +6,4 @@ vite.config.ts.*
 *.tar.gz
 blockchain/target/
 .local/state/
-*.db
+*.db.local/state/replit/log-query.db

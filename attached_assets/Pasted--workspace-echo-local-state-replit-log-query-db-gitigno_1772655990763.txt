@@ -1,0 +1,48 @@
+~/workspace$ echo ".local/state/replit/log-query.db" >> .gitignore
+~/workspace$ git rm --cached .local/state/replit/log-query.db
+rm '.local/state/replit/log-query.db'
+~/workspace$ git commit -m "Remove log-query.db from tracking, add to gitignore"
+[main b3697b99] Remove log-query.db from tracking, add to gitignore
+ 1 file changed, 3 deletions(-)
+ delete mode 100644 .local/state/replit/log-query.db
+~/workspace$ git rev-list --reverse origin/main..main | sed -n '10p' | xargs -I {} git push origin {}:refs/heads/main
+Enumerating objects: 163, done.
+Counting objects: 100% (163/163), done.
+Compressing objects: 100% (118/118), done.
+Writing objects: 100% (139/139), 9.66 MiB | 783.00 KiB/s, done.
+Total 139 (delta 77), reused 1 (delta 1), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (77/77), completed with 16 local objects.
+remote: warning: See https://gh.io/lfs for more information.
+remote: warning: File .local/state/replit/log-query.db is 99.15 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 98.88 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 98.64 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 98.55 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 90.04 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 89.57 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 99.20 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 98.74 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 99.25 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
+To https://github.com/cryptocreeper94-sudo/Darkwavechain.git
+   b71289c6..3bab10cf  3bab10cfb1c3b1a00df0a8ed5264b6b6316e70af -> main
+~/workspace$ git rev-list --reverse origin/main..main | sed -n '10p' | xargs -I {} git push origin {}:refs/heads/main
+Enumerating objects: 168, done.
+Counting objects: 100% (168/168), done.
+Compressing objects: 100% (121/121), done.
+Writing objects: 100% (141/141), 3.04 MiB | 392.00 KiB/s, done.
+Total 141 (delta 78), reused 0 (delta 0), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (78/78), completed with 18 local objects.
+remote: warning: File .local/state/replit/log-query.db is 99.68 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 99.39 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 99.34 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: error: Trace: 519df336798806955010c830845e06d9da5e1c8ff76c0fdfa49c1d83d101d89b
+remote: error: See https://gh.io/lfs for more information.
+remote: error: File .local/state/replit/log-query.db is 101.13 MB; this exceeds GitHub's file size limit of 100.00 MB
+remote: error: File .local/state/replit/log-query.db is 101.08 MB; this exceeds GitHub's file size limit of 100.00 MB
+remote: error: File .local/state/replit/log-query.db is 102.59 MB; this exceeds GitHub's file size limit of 100.00 MB
+remote: error: File .local/state/replit/log-query.db is 101.70 MB; this exceeds GitHub's file size limit of 100.00 MB
+remote: error: File .local/state/replit/log-query.db is 101.27 MB; this exceeds GitHub's file size limit of 100.00 MB
+remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
+To https://github.com/cryptocreeper94-sudo/Darkwavechain.git
+ ! [remote rejected]   f4da59c05b0ed44010e339472812603ded670cde -> main (pre-receive hook declined)
+error: failed to push some refs to 'https://github.com/cryptocreeper94-sudo/Darkwavechain.git'
