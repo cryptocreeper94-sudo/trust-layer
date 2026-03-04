@@ -18331,9 +18331,11 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       }
 
       const elevenLabsKey = process.env.ELEVEN_LABS_API_KEY;
-      const elevenLabsVoiceId = voice || "pFZP5JQG7iQjIQuC4Bku"; // Lily — warm, clear narrator voice
+      const elevenLabsVoiceId = voice || "pFZP5JQG7iQjIQuC4Bku";
       if (elevenLabsKey) {
         try {
+          const elAbort = new AbortController();
+          const elTimeout = setTimeout(() => elAbort.abort(), 12000);
           const elResponse = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${elevenLabsVoiceId}`, {
             method: "POST",
             headers: {
@@ -18350,7 +18352,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
                 use_speaker_boost: true,
               },
             }),
+            signal: elAbort.signal,
           });
+          clearTimeout(elTimeout);
 
           if (elResponse.ok) {
             console.log("[TTS] ElevenLabs served successfully");
@@ -18371,12 +18375,13 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         }
       }
       
-      // OpenAI fallback
       const openaiKey = process.env.OPENAI_API_KEY;
       if (!openaiKey) {
         return res.status(503).json({ error: "Voice service not configured", fallback: true });
       }
       
+      const oaiAbort = new AbortController();
+      const oaiTimeout = setTimeout(() => oaiAbort.abort(), 12000);
       const response = await fetch("https://api.openai.com/v1/audio/speech", {
         method: "POST",
         headers: {
@@ -18389,7 +18394,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           voice: "nova",
           response_format: "mp3",
         }),
+        signal: oaiAbort.signal,
       });
+      clearTimeout(oaiTimeout);
       
       if (!response.ok) {
         const errorText = await response.text();
