@@ -936,6 +936,59 @@ export async function registerRoutes(
   });
 
   // ============================================
+  // PAYPAL PAYMENT ROUTES
+  // ============================================
+  
+  const paypalEnabled = !!(process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET);
+  if (paypalEnabled) {
+    console.log("[PayPal] Credentials found — enabling PayPal payment routes");
+  } else {
+    console.log("[PayPal] No credentials — PayPal routes disabled (set PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET to enable)");
+  }
+
+  app.get("/paypal/setup", async (req, res) => {
+    if (!paypalEnabled) return res.status(503).json({ error: "PayPal not configured" });
+    try {
+      const { loadPaypalDefault } = await import("./paypal");
+      await loadPaypalDefault(req, res);
+    } catch (error) {
+      console.error("[PayPal] Setup error:", error);
+      res.status(500).json({ error: "PayPal setup failed" });
+    }
+  });
+
+  app.post("/paypal/order", async (req, res) => {
+    if (!paypalEnabled) return res.status(503).json({ error: "PayPal not configured" });
+    try {
+      const { createPaypalOrder } = await import("./paypal");
+      await createPaypalOrder(req, res);
+    } catch (error) {
+      console.error("[PayPal] Create order error:", error);
+      res.status(500).json({ error: "Failed to create PayPal order" });
+    }
+  });
+
+  app.post("/paypal/order/:orderID/capture", async (req, res) => {
+    if (!paypalEnabled) return res.status(503).json({ error: "PayPal not configured" });
+    try {
+      const { capturePaypalOrder } = await import("./paypal");
+      await capturePaypalOrder(req, res);
+    } catch (error) {
+      console.error("[PayPal] Capture error:", error);
+      res.status(500).json({ error: "Failed to capture PayPal order" });
+    }
+  });
+
+  app.get("/api/payment-methods", async (req, res) => {
+    const methods = [
+      { id: "stripe", name: "Credit/Debit Card", provider: "Stripe", enabled: true, description: "Visa, Mastercard, Amex, Apple Pay, Google Pay" },
+      { id: "coinbase", name: "Crypto (Coinbase)", provider: "Coinbase Commerce", enabled: !!(process.env.COINBASE_COMMERCE_API_KEY), description: "Pay with Bitcoin, Ethereum, USDC, and more" },
+      { id: "paypal", name: "PayPal", provider: "PayPal", enabled: paypalEnabled, description: "Pay with your PayPal balance or linked bank account" },
+    ];
+    res.json({ methods });
+  });
+
+  // ============================================
   // ZEALY WEBHOOK - Community Quest Platform
   // ============================================
   app.post("/api/zealy/webhook", async (req: Request, res: Response) => {

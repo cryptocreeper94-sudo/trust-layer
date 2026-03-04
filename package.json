@@ -17,6 +17,7 @@
     "@jridgewell/trace-mapping": "^0.3.25",
     "@noble/curves": "^2.0.1",
     "@noble/hashes": "^2.0.1",
+    "@paypal/paypal-server-sdk": "^2.2.0",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
     "@radix-ui/react-aspect-ratio": "^1.1.8",

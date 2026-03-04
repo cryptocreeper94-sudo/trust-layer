@@ -9,7 +9,9 @@ Trust Layer is a high-performance Layer 1 Proof-of-Authority (PoA) blockchain ec
 - Design: Premium UI with extensive visual effects ("everything should sparkle and shine")
 - Mobile: Mobile-first design with self-contained carousels, accordions, dropdowns
 - Branding: White-labeled, no Replit branding, dark theme only
-- Stripe: FULLY CONFIGURATED - do not ask about Stripe keys, payments are ready
+- Stripe: FULLY CONFIGURED - do not ask about Stripe keys, payments are ready
+- Coinbase Commerce: LIVE - crypto payments (BTC, ETH, USDC) via coinbaseClient.ts
+- PayPal: CONFIGURED - routes ready, awaiting PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET
 - App Store Target: Build for eventual React Native + Expo port - iOS App Store & Google Play as standalone ecosystem apps
 - Signal (SIG) is a NATIVE ASSET — NEVER call it a "token" or "cryptocurrency." It is the native currency of the Trust Layer chain, like ETH is to Ethereum or SOL is to Solana.
 
