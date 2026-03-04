@@ -25384,6 +25384,19 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
 function getLocalEcosystemApps(): EcosystemApp[] {
   return [
     {
+      id: "trust-layer-hub",
+      name: "Trust Layer Hub",
+      category: "Core",
+      description: "The unified mobile command center for the Trust Layer protocol ecosystem. Manage your digital identity, DeFi wallet, staking, community, and 32 interconnected apps from one interface. React Native + Expo SDK 54, 66 API endpoints, 24 screens, 21,026 lines of hand-written TypeScript.",
+      hook: "Your Blockchain Ecosystem Command Center",
+      tags: ["Hub", "Mobile", "Wallet", "DeFi", "Identity", "Command Center"],
+      gradient: "from-cyan-400 to-purple-600",
+      verified: true,
+      featured: true,
+      users: "Trust Layer Verified",
+      url: "https://trusthub.tlid.io",
+    },
+    {
       id: "trust-layer",
       name: "Trust Layer",
       category: "Core",

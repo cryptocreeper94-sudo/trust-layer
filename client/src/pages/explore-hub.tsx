@@ -96,6 +96,7 @@ const categories: Category[] = [
     gradient: "from-slate-400 to-cyan-500",
     description: "Start here — your main dashboard, presale, ecosystem overview, and the full Trust Layer story.",
     cards: [
+      { label: "Trust Layer Hub", description: "Your blockchain ecosystem command center", href: "https://trusthub.tlid.io", icon: <Shield className="size-5" />, image: hubIdentity, glowColor: "shadow-cyan-500/30", badge: "Hub", featured: true },
       { label: "Home", description: "Main landing page", href: "/home", icon: <Home className="size-5" />, image: hubHome, glowColor: "shadow-cyan-500/30", featured: false },
       { label: "Presale", description: "Get SIG at the lowest price", href: "/presale", icon: <Rocket className="size-5" />, image: hubPresale, glowColor: "shadow-yellow-500/30", badge: "Live" },
       { label: "Ecosystem", description: "Explore all Trust Layer apps", href: "/ecosystem", icon: <Globe className="size-5" />, image: hubEcosystem, glowColor: "shadow-indigo-500/30" },
@@ -328,7 +329,7 @@ function LaunchCardComponent({ card, index }: { card: LaunchCard; index: number 
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04, duration: 0.4 }}
-      onClick={() => navigate(card.href)}
+      onClick={() => card.href.startsWith("http") ? window.open(card.href, "_blank", "noopener,noreferrer") : navigate(card.href)}
       className={`group relative overflow-hidden rounded-2xl border border-white/5 cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:border-white/15 min-h-[240px]`}
       style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.4)" }}
       data-testid={`hub-card-${card.label.toLowerCase().replace(/\s+/g, "-")}`}
