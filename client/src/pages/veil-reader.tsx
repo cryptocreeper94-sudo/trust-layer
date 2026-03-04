@@ -452,9 +452,16 @@ export default function VeilReader() {
     return chunks.filter(c => c.length > 0);
   };
 
+  const withTimeout = <T,>(promise: Promise<T>, ms: number, label: string): Promise<T> => {
+    return new Promise((resolve, reject) => {
+      const timer = setTimeout(() => reject(new Error(`${label} timed out after ${ms / 1000}s`)), ms);
+      promise.then((v) => { clearTimeout(timer); resolve(v); }).catch((e) => { clearTimeout(timer); reject(e); });
+    });
+  };
+
   const fetchAndPlayChunk = async (chunkText: string): Promise<void> => {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 45000);
+    const fetchTimer = setTimeout(() => controller.abort(), 20000);
 
     const response = await fetch('/api/voice/tts', {
       method: 'POST',
@@ -462,7 +469,7 @@ export default function VeilReader() {
       body: JSON.stringify({ text: chunkText }),
       signal: controller.signal
     });
-    clearTimeout(timeout);
+    clearTimeout(fetchTimer);
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
@@ -473,7 +480,7 @@ export default function VeilReader() {
     const voiceName = response.headers.get('X-Voice-Name') || '';
     setVoiceProvider(provider === 'elevenlabs' ? `ElevenLabs ${voiceName}` : `OpenAI ${voiceName}`);
 
-    const blob = await response.blob();
+    const blob = await withTimeout(response.blob(), 10000, 'Audio download');
     if (blob.size < 100) throw new Error('Empty audio response');
 
     if (blobUrlRef.current) URL.revokeObjectURL(blobUrlRef.current);
@@ -482,15 +489,15 @@ export default function VeilReader() {
 
     const audio = getOrCreateAudioElement();
 
-    await new Promise<void>((resolve, reject) => {
+    await withTimeout(new Promise<void>((resolve, reject) => {
       audio.oncanplaythrough = () => resolve();
       audio.onerror = () => reject(new Error('Audio decode failed'));
       audio.src = url;
       audio.load();
       setTimeout(() => resolve(), 3000);
-    });
+    }), 8000, 'Audio load');
 
-    await new Promise<void>((resolve, reject) => {
+    await withTimeout(new Promise<void>((resolve, reject) => {
       audio.onended = () => resolve();
       audio.onerror = () => reject(new Error('Playback error'));
 
@@ -511,7 +518,7 @@ export default function VeilReader() {
           }
         });
       }
-    });
+    }), 120000, 'Playback');
   };
 
   const playWithAIVoice = async (text: string) => {
@@ -519,6 +526,16 @@ export default function VeilReader() {
     setTtsError(null);
     aiCancelledRef.current = false;
     
+    const loadingTimeout = setTimeout(() => {
+      if (aiCancelledRef.current) return;
+      console.warn('[Veil TTS] Loading timeout hit (15s) — falling back to browser voice');
+      setIsLoading(false);
+      aiPlayingRef.current = false;
+      setVoiceProvider('Browser Voice');
+      setTtsError('AI voice took too long to load — using browser voice instead.');
+      tryBrowserSpeech(text);
+    }, 15000);
+
     try {
       unlockAudio();
 
@@ -528,12 +545,13 @@ export default function VeilReader() {
       aiPlayingRef.current = true;
 
       for (let i = 0; i < chunks.length; i++) {
-        if (aiCancelledRef.current) return;
+        if (aiCancelledRef.current) { clearTimeout(loadingTimeout); return; }
         
         aiChunkIndexRef.current = i;
 
         if (i === 0) {
           await fetchAndPlayChunk(chunks[i]);
+          clearTimeout(loadingTimeout);
           setIsPlaying(true);
           setIsLoading(false);
         } else {
@@ -554,12 +572,13 @@ export default function VeilReader() {
         handleNextChapterAuto();
       }
     } catch (err: any) {
+      clearTimeout(loadingTimeout);
       console.error('AI voice error:', err);
       setIsLoading(false);
       aiPlayingRef.current = false;
-      if (err?.name === 'AbortError') {
-        setTtsError('AI voice loading timed out — using browser voice for this chapter. AI will retry on next chapter.');
-        setVoiceProvider('Browser Voice (AI timed out)');
+      if (err?.name === 'AbortError' || err?.message?.includes('timed out')) {
+        setTtsError('AI voice took too long — switching to browser voice for this chapter.');
+        setVoiceProvider('Browser Voice');
       } else {
         setVoiceProvider('Browser Voice');
       }
