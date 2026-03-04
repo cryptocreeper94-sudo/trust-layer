@@ -5328,6 +5328,61 @@ const { trustLayerId } = await response.json();`
     }
   });
   
+  // External validator node registration
+  app.post("/api/validator-node/register", async (req, res) => {
+    try {
+      const apiKey = req.headers["x-blockchain-key"] as string;
+      const serverKey = process.env.TRUSTLAYER_API_KEY;
+      if (!apiKey || !serverKey || apiKey !== serverKey) {
+        return res.status(401).json({ error: "Invalid API key" });
+      }
+
+      const { validatorId, address, nodeVersion, capabilities } = req.body;
+      if (!validatorId || !address) {
+        return res.status(400).json({ error: "validatorId and address are required" });
+      }
+
+      const validator = blockchain.getValidatorDetails(validatorId);
+      if (!validator) {
+        return res.status(404).json({ error: "Validator not found — register via /api/validators/register first" });
+      }
+
+      console.log(`[Validator Node] External node registered: ${validatorId} (${address}) v${nodeVersion || "unknown"}`);
+
+      res.status(201).json({
+        success: true,
+        message: "Validator node registered",
+        validator: { id: validator.id, name: validator.name, address: validator.address, status: validator.status },
+        chainHeight: blockchain.getLatestBlock()?.header.height || 0,
+        blockTime: 400,
+        quorumThreshold: 0.67,
+      });
+    } catch (error: any) {
+      console.error("[Validator Node] Registration error:", error);
+      res.status(500).json({ error: "Registration failed" });
+    }
+  });
+
+  // External validator node heartbeat
+  app.post("/api/validator-node/heartbeat", async (req, res) => {
+    try {
+      const { validatorId, address, stats: nodeStats } = req.body;
+      if (!validatorId) {
+        return res.status(400).json({ error: "validatorId required" });
+      }
+
+      console.log(`[Validator Node] Heartbeat from ${validatorId}: ${nodeStats?.blocksAttested || 0} attested, last=#${nodeStats?.lastAttestedHeight || 0}`);
+
+      res.json({
+        success: true,
+        chainHeight: blockchain.getLatestBlock()?.header.height || 0,
+        activeValidators: blockchain.getValidators().length,
+      });
+    } catch (error) {
+      res.status(500).json({ error: "Heartbeat failed" });
+    }
+  });
+
   // Validator details
   app.get("/api/validators/:id", async (req, res) => {
     try {

@@ -44,6 +44,7 @@ The UI/UX emphasizes a "MANDATORY PREMIUM UI PROTOCOL" with a dark theme and pol
 - **Unified Transaction Tracking**: Every Stripe purchase logged to `user_transactions` with a SHA-256 blockchain tx hash, displayed in `/my-hub`.
 - **My Hub / User Portal**: Personalized user portal displaying member number, explorer address, Signal Allocation, shell balance, and transaction history.
 - **TrustHome**: Real estate agent super tool with blockchain-verified agent profiles, property listings, client management, and trust scores. This is NOT a personal dashboard — it is a real estate professional platform.
+- **External Validator Nodes**: Standalone `validator-node/` package for deploying external validators on DigitalOcean/AWS/etc. Connects to mainnet via HMAC-authenticated API, submits block attestations for BFT consensus. Endpoints: `POST /api/validator-node/register`, `POST /api/validator-node/heartbeat`.
 - **Ecosystem Infrastructure**: Credits System, Owner Admin Portal, Marketing Automation, Payment Infrastructure, Pre-Launch Airdrop, Signal Chat, Shells Economy, Subscription System, Early Adopter Rewards, Backend IDE.
 - **Innovation Hub Features**: Guardian Security Scores, ChronoPass Identity, Experience Shards, Quest Mining System, Zealy Integration, Reality Layer Oracles, AI Verified Execution, Guardian Studio Copilot, AI Agent Marketplace, RWA Tokenization.
 - **Web Presence**: Trust Layer Landing Page, Strategic Marketing Pages, Business Tenant Portals, DarkWave Academy, Blockchain Domain Service (.tlid).
