@@ -1,0 +1,56 @@
+eads/main
+Enumerating objects: 322, done.
+Counting objects: 100% (322/322), done.
+Compressing objects: 100% (238/238), done.
+Writing objects: 100% (281/281), 5.71 MiB | 314.00 KiB/s, done.
+Total 281 (delta 160), reused 3 (delta 2), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (160/160), completed with 32 local objects.
+remote: warning: See https://gh.io/lfs for more information.
+remote: warning: File .local/state/replit/log-query.db is 88.14 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 87.53 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 87.12 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 87.07 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 86.42 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 86.05 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 86.00 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 89.31 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 87.90 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 87.86 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 87.43 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 86.78 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 85.52 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 85.48 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
+To https://github.com/cryptocreeper94-sudo/Darkwavechain.git
+   27e8f00b..b71289c6  b71289c6f37a95e3db6b530a8197f12bbcb1a837 -> main
+~/workspace$ git rev-list --reverse origin/main..main | sed -n '20p' | xargs -I {} git push origin {}:refs/heads/main
+Enumerating objects: 308, done.
+Counting objects: 100% (308/308), done.
+Compressing objects: 100% (235/235), done.
+Writing objects: 100% (278/278), 20.56 MiB | 815.00 KiB/s, done.
+Total 278 (delta 154), reused 3 (delta 3), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (154/154), completed with 22 local objects.
+remote: warning: File .local/state/replit/log-query.db is 98.74 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 89.57 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 99.15 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 98.64 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 98.55 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 90.04 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 99.39 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 98.88 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 99.68 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 99.34 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 99.25 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: warning: File .local/state/replit/log-query.db is 99.20 MB; this is larger than GitHub's recommended maximum file size of 50.00 MB
+remote: error: Trace: f5ebcfa97a46ca7f11b6d14a7873305323f54f1f9a0fa68c408b7bfb282116b6
+remote: error: See https://gh.io/lfs for more information.
+remote: error: File .local/state/replit/log-query.db is 101.27 MB; this exceeds GitHub's file size limit of 100.00 MB
+remote: error: File .local/state/replit/log-query.db is 101.70 MB; this exceeds GitHub's file size limit of 100.00 MB
+remote: error: File .local/state/replit/log-query.db is 101.13 MB; this exceeds GitHub's file size limit of 100.00 MB
+remote: error: File .local/state/replit/log-query.db is 101.08 MB; this exceeds GitHub's file size limit of 100.00 MB
+remote: error: File .local/state/replit/log-query.db is 102.59 MB; this exceeds GitHub's file size limit of 100.00 MB
+remote: error: GH001: Large files detected. You may want to try Git Large File Storage - https://git-lfs.github.com.
+To https://github.com/cryptocreeper94-sudo/Darkwavechain.git
+ ! [remote rejected]   f4da59c05b0ed44010e339472812603ded670cde -> main (pre-receive hook declined)
+error: failed to push some refs to 'https://github.com/cryptocreeper94-sudo/Darkwavechain.git'
+~/workspace$ 
