@@ -780,6 +780,7 @@ const TLID_SUBDOMAIN_ROUTES: Record<string, string> = {
   "arcade": "/arcade",
   "tlid": "/domains",
   "torque": "/ecosystem",
+  "trusthub": "/explore",
   "trusthome": "/my-hub",
   "trustvault": "/wallet",
   "trustbook": "/trust-book",
