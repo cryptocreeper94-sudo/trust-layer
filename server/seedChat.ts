@@ -7,6 +7,7 @@ const DEFAULT_CHANNELS = [
   { name: 'announcements', description: 'Official announcements and updates', category: 'ecosystem', isDefault: true },
   { name: 'darkwavestudios-support', description: 'Support for DarkWave Studios', category: 'app-support', isDefault: false },
   { name: 'garagebot-support', description: 'Support for GarageBot', category: 'app-support', isDefault: false },
+  { name: 'trustgen-support', description: 'Support for TrustGen 3D generator (trustgen.tlid.io)', category: 'app-support', isDefault: false },
   { name: 'tlid-marketing', description: 'TLID domain service marketing and discussion', category: 'app-support', isDefault: false },
   { name: 'guardian-ai', description: 'Guardian AI certification discussion', category: 'app-support', isDefault: false },
 ];
@@ -21,34 +22,30 @@ const CHRONICLES_CHANNELS = [
 
 export async function seedChatChannels() {
   const existing = await db.select().from(chatChannels);
-  if (existing.length > 0) {
-    console.log(`[Signal Chat] ${existing.length} channels already exist, skipping seed`);
-    await seedChroniclesChannels();
+  const existingNames = new Set(existing.map(c => c.name));
+
+  if (existing.length === 0) {
+    for (const channel of DEFAULT_CHANNELS) {
+      await db.insert(chatChannels).values(channel).onConflictDoNothing();
+    }
+    for (const channel of CHRONICLES_CHANNELS) {
+      await db.insert(chatChannels).values(channel).onConflictDoNothing();
+    }
+    console.log(`[Signal Chat] Seeded ${DEFAULT_CHANNELS.length + CHRONICLES_CHANNELS.length} channels (including Chronicles era channels)`);
     return;
   }
 
-  for (const channel of DEFAULT_CHANNELS) {
-    await db.insert(chatChannels).values(channel).onConflictDoNothing();
-  }
-
-  for (const channel of CHRONICLES_CHANNELS) {
-    await db.insert(chatChannels).values(channel).onConflictDoNothing();
-  }
-
-  console.log(`[Signal Chat] Seeded ${DEFAULT_CHANNELS.length + CHRONICLES_CHANNELS.length} channels (including Chronicles era channels)`);
-}
-
-async function seedChroniclesChannels() {
-  const existing = await db.select().from(chatChannels);
-  const existingNames = new Set(existing.map(c => c.name));
+  const allChannels = [...DEFAULT_CHANNELS, ...CHRONICLES_CHANNELS];
   let added = 0;
-  for (const channel of CHRONICLES_CHANNELS) {
+  for (const channel of allChannels) {
     if (!existingNames.has(channel.name)) {
       await db.insert(chatChannels).values(channel).onConflictDoNothing();
       added++;
     }
   }
   if (added > 0) {
-    console.log(`[Signal Chat] Added ${added} Chronicles era channels`);
+    console.log(`[Signal Chat] Added ${added} new channels`);
+  } else {
+    console.log(`[Signal Chat] ${existing.length} channels already exist, all up to date`);
   }
 }

@@ -238,6 +238,7 @@ ws.send(JSON.stringify({
 | `announcements` | ecosystem | Official updates (default) |
 | `darkwavestudios-support` | app-support | DarkWave Studios support |
 | `garagebot-support` | app-support | GarageBot support |
+| `trustgen-support` | app-support | TrustGen 3D generator support (trustgen.tlid.io) |
 | `tlid-marketing` | app-support | TLID domain service |
 | `guardian-ai` | app-support | Guardian AI certification |
 | `chronicles-modern` | chronicles | Modern Era game chat |
@@ -542,6 +543,20 @@ Bots receive messages via webhook and can respond with:
 | `server/routes.ts` | (in main routes) | 50+ REST endpoints |
 | `client/src/pages/signal-chat.tsx` | 863 | Main standalone chat page |
 | `client/src/components/chat/` | 18 files | Modular chat UI components |
+
+---
+
+## Live Integrations
+
+### TrustGen (trustgen.tlid.io) — LIVE
+- **Integration type:** Option A (embedded widget)
+- **Frontend:** Vercel (trustgen.tlid.io)
+- **Backend:** Render (trustgen-1.onrender.com)
+- **Implementation:** Side-tab chat widget on every page, expands to full chat modal
+- **Connects to:** `wss://dwtl.io/ws/chat` via WebSocket
+- **Auth:** Trust Layer SSO (login/register at `/api/chat/auth/*`)
+- **Dedicated channel:** `trustgen-support`
+- **Repo:** github.com/cryptocreeper94-sudo/trustgen
 
 ---
 
