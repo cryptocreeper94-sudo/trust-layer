@@ -1,0 +1,142 @@
+═══════════════════════════════════════════════════════════
+TRUSTGEN 3D — App Catalog Entry
+═══════════════════════════════════════════════════════════
+
+App Name: TrustGen
+Tagline: AI-Powered 3D Creation with Blockchain Provenance
+Category: Creative Tools / 3D Engine / SaaS
+Status: Live
+Version: 1.0.0
+Launch Target: Q3 2026 (August 23, 2026 — Trust Layer Mainnet)
+
+═══ Domains & Hosting ═══
+Frontend:     trustgen.tlid.io (Vercel)
+Backend:      trustgen-1.onrender.com (Render)
+Repo:         github.com/cryptocreeper94-sudo/trustgen
+Branch:       master
+
+═══ Marketing Description ═══
+TrustGen is a browser-based, AI-powered 3D creation platform where 
+every asset is hallmarked on Trust Layer's blockchain. Create stunning 
+3D scenes with professional-grade tools, generate models from text 
+descriptions using AI, animate with keyframe timelines, and export 
+production-ready assets — all without downloading any software.
+
+TrustGen combines the power of Three.js real-time rendering with 
+Meshy.ai's AI model generation and Trust Layer's immutable provenance 
+verification. Every 3D creation receives a unique hallmark on the 
+blockchain, providing cryptographic proof of authorship, timestamp, 
+and authenticity. Creators earn Signal (SIG) rewards for platform 
+activity through the Trust Layer ecosystem.
+
+The platform features a cinematic Explore page with rotating hero 
+imagery, a PIN-secured Developer Portal for system administration, 
+an AI-driven blog for SEO content, ecosystem-wide Signal Chat for 
+real-time support, and comprehensive legal pages. TrustGen is fully 
+mobile-optimized and integrates seamlessly with the broader Trust Layer 
+ecosystem of 12+ connected apps and services.
+
+═══ Key Features ═══
+• 3D Creation Studio — primitives, materials, lighting, real-time preview
+• AI Model Generation — text-to-3D via Meshy.ai (800 char prompts)
+• Animation Timeline — keyframe system with easing curves
+• Post-Processing — bloom, SSAO, DOF, chromatic aberration, film grain
+• Model Import/Export — GLTF, GLB, FBX support
+• Trust Layer Integration — blockchain hallmarks, Signal (SIG) rewards
+• Developer Portal — PIN-gated admin dashboard (PIN: 0424)
+• Signal Chat — real-time ecosystem chat via dwtl.io WebSocket
+• AI Blog — SEO-driven content platform with category filters
+• Subscription Billing — Free / Pro ($19/mo) / Enterprise ($49/mo) via Stripe
+• SMS Alerts — Twilio-powered notifications with opt-in
+• Investor Summary — TAM, revenue streams, roadmap, tech stack
+
+═══ Tech Stack ═══
+Frontend:     React 19, TypeScript, Vite, Three.js (R3F)
+Styling:      Vanilla CSS (glassmorphism, dark theme, 4,600+ lines)
+3D Engine:    Three.js with React Three Fiber, Drei
+AI:           Meshy.ai (3D generation), OpenAI GPT-4o
+State:        Zustand (engine store, auth store)
+Routing:      React Router DOM v6
+Animations:   CSS keyframes, transitions
+Backend:      Node.js, Express.js, TypeScript (tsx)
+Database:     PostgreSQL (Neon, via pg Pool)
+ORM:          Raw SQL with pg (no ORM overhead)
+Auth:         JWT (HS256, 7-day expiry), bcryptjs
+Payments:     Stripe (subscriptions, checkout sessions)
+SMS:          Twilio (opt-in, verification codes)
+Chat:         Signal Chat (WebSocket to dwtl.io)
+Blockchain:   Trust Layer (hallmarks, stamps, SSO via TLID)
+Hosting:      Vercel (frontend), Render (backend)
+CI/CD:        Auto-deploy on push to master
+
+═══ Codebase Stats ═══
+Source Files:     46
+Lines of Code:    11,607
+Components:       18 React components
+Pages:            13 pages
+API Endpoints:    50+ (auth, projects, billing, SMS, blog, admin, trust layer)
+CSS Lines:        4,650+
+Database Tables:  7 core + 1 blog (users, tenants, projects, subscriptions, 
+                  trust_stamps, verification_codes, sms_opt_ins, blog_posts)
+
+═══ Routes ═══
+/explore          Public (default landing) — hero carousel, feature cards
+/login            Public — authentication
+/terms            Public — Terms of Service
+/privacy          Public — Privacy Policy
+/legal            Public — Legal Hub
+/blog             Public — Blog listing with categories
+/blog/:slug       Public — Individual blog post (SEO meta tags)
+/investors        Public — Investor summary, roadmap, metrics
+/dev-portal       PIN-gated (0424) — Developer Portal (5 admin tabs)
+/dashboard        Auth required — User projects dashboard
+/editor/:id?      Auth required — 3D creation studio
+/billing          Auth required — Subscription plans (Stripe)
+/sms-opt-in       Auth required — SMS notification opt-in
+
+═══ Global UI Elements ═══
+☰ Hamburger Menu    Top-left on every page. Mission statement, full 
+                    navigation, user profile, ecosystem branding links.
+💬 Signal Chat Tab  Right edge on every page. Expands to full chat modal 
+                    with channels, connects to wss://dwtl.io/ws/chat.
+🦶 Footer           All public pages. "Powered by Trust Layer" (dwtl.io), 
+                    "Protected by TrustShield.tech", 
+                    "DarkWave Studios LLC © 2026" (darkwavestudios.io).
+
+═══ Support ═══
+Email:            team@dwsc.io
+Live Chat:        Signal Chat (widget on every page)
+Legal:            team@dwsc.io
+
+═══ Ecosystem ═══
+Parent Company:   DarkWave Studios LLC (darkwavestudios.io)
+Ecosystem:        Trust Layer (dwtl.io)
+Protection:       TrustShield.tech
+Chat Platform:    Signal Chat (signalchat.tlid.io)
+Identity:         TLID (tlid.io)
+Ecosystem App ID: TN (TrustGen)
+
+═══ Revenue Streams ═══
+60%  SaaS Subscriptions (Pro $19/mo, Enterprise $49/mo)
+20%  AI Generation Credits (pay-per-use beyond plan limits)
+10%  Trust Layer Rewards (SIG transaction fees, hallmark verification)
+10%  Enterprise Licensing (white-label 3D tools for studios)
+
+═══ Emblem / App Icon Description ═══
+Generate the TrustGen emblem as follows:
+
+A sleek, modern app icon on a pure black background. The icon is a 
+stylized hexagonal shield shape with rounded corners. The shield has 
+a gradient fill from deep purple (#7c3aed) at the top-left to electric 
+cyan (#06b6d4) at the bottom-right. Inside the shield, a minimalist 
+white wireframe cube is rendered in 3D perspective (isometric view), 
+with one face slightly glowing purple. A small diamond-shaped "hallmark" 
+symbol (◈) sits at the bottom center of the cube in cyan, representing 
+blockchain verification. The letters "TG" are subtly integrated below 
+the cube inside the shield in a clean, modern sans-serif font (weight 
+600), colored white with 80% opacity. The overall aesthetic is ultra-
+premium, dark, and futuristic — matching the purple/cyan color palette 
+of the Trust Layer ecosystem. No gradients on the background, only on 
+the shield. The icon should work at 512x512, 192x192, and 64x64 sizes 
+without losing detail. Style: flat design with subtle depth cues, no 
+skeuomorphism, no drop shadows on the outer shape.
