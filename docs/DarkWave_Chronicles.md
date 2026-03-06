@@ -33,6 +33,7 @@
 22. [API Endpoint Master List](#22-api-endpoint-master-list)
 23. [Vercel Migration Strategy](#23-vercel-migration-strategy)
 24. [Implementation Checklist](#24-implementation-checklist)
+25. [CRITICAL: Visual Assets & Design Rules](#critical-visual-assets--design-rules)
 
 ---
 
@@ -1658,6 +1659,260 @@ GET  /api/chronicles/legacy/:userId
 
 ---
 
+## CRITICAL: Visual Assets & Design Rules
+
+**The Chronicles app must use photorealistic AI-generated images and cinematic flyover videos. Do NOT use emojis, emoji icons, or placeholder graphics in cards or UI elements. Every visual must be a photorealistic image or video.**
+
+### Color Scheme (MANDATORY)
+
+The ONLY acceptable color palette:
+
+| Element | Value |
+|---------|-------|
+| **Background base** | `#06060a` (void-black) |
+| **Panel backgrounds** | `#0a0b10` |
+| **Borders** | `#1a1b2e` |
+| **Primary accent** | `#06b6d4` (cyan / Tailwind `cyan-500`) |
+| **Secondary accent** | `#a855f7` (purple / Tailwind `purple-500`) |
+| **Text primary** | `white` / `white/90` |
+| **Text secondary** | `white/60` / `white/40` |
+| **Gradients** | Cyan-to-purple only |
+
+**NEVER use amber, orange, yellow, or warm tones anywhere.** All glows, accents, badges, buttons, borders, and highlights must be cyan, purple, or white only.
+
+### Hero Video Carousel (Landing Page)
+
+The Chronicles landing page features a full-screen cinematic video carousel as the hero section. This is a core visual element — not optional.
+
+#### Video Files (8 videos, ~145MB total)
+
+Jason will provide these files. Place them in your assets directory (e.g., `src/assets/videos/` or `public/videos/`):
+
+| Filename | Label | Size |
+|----------|-------|------|
+| `fantasy_world_cinematic_flyover.mp4` | Historical Journey | 27MB |
+| `wild_west_frontier_town_flyover.mp4` | Wild West | 11MB |
+| `ancient_rome_colosseum_glory.mp4` | Ancient Rome | 14MB |
+| `medieval_castle_twilight_scene.mp4` | Medieval Era | 14MB |
+| `victorian_london_foggy_streets.mp4` | Victorian London | 10MB |
+| `ancient_egypt_pyramids_sunset.mp4` | Ancient Egypt | 13MB |
+| `prehistoric_dinosaur_jungle_scene.mp4` | Prehistoric | 20MB |
+| `biblical_jerusalem_temple_scene.mp4` | Biblical Era | 14MB |
+
+There is also a 9th bonus video not currently in the carousel:
+- `medieval_kingdom_establishing_shot.mp4` (24MB)
+
+#### Video Carousel Implementation
+
+The hero section is full-viewport with two `<video>` elements layered for crossfade transitions. Key behaviors:
+
+1. **Auto-advances** — when the current video ends, it crossfades (700ms opacity transition) to the next video in the array
+2. **Starts muted** — `videoMuted` defaults to `true`. A toggle button (top-right, `VolumeX`/`Volume2` icons) lets users unmute
+3. **Audio fade** — when unmuting/muting or transitioning between videos, volume fades smoothly over 500ms (20 steps)
+4. **Preloading** — the next video element has `preload="auto"` and calls `.load()` when `nextVideoIndex` changes
+5. **Indicator dots** — bottom-center, pill-shaped navigation. Active dot is wider (`w-8 h-2 bg-white`), inactive dots are smaller (`w-2 h-2 bg-white/40`). Hidden on small mobile, visible on `sm:` and up
+6. **Click to jump** — clicking a dot triggers a crossfade transition to that video
+7. **Overlay gradients** — two gradient layers over the video:
+   - `bg-gradient-to-b from-black/60 via-black/40 to-background`
+   - `bg-gradient-to-r from-black/70 via-transparent to-black/70`
+8. **Atmosphere layer** — a radial gradient overlay with `opacity-40`:
+   - Purple glow at 20% horizontal: `rgba(168,85,247,0.4)`
+   - Cyan glow at 80% horizontal: `rgba(6,182,212,0.4)`
+
+#### React State & Refs
+
+```typescript
+const [videoMuted, setVideoMuted] = useState(true);
+const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+const [nextVideoIndex, setNextVideoIndex] = useState(1);
+const [isVideoTransitioning, setIsVideoTransitioning] = useState(false);
+const currentVideoRef = useRef<HTMLVideoElement>(null);
+const nextVideoRef = useRef<HTMLVideoElement>(null);
+```
+
+#### Audio Fade Function
+
+```typescript
+const fadeAudio = (video: HTMLVideoElement, fadeIn: boolean, duration: number = 500) => {
+  const steps = 20;
+  const stepTime = duration / steps;
+  const startVolume = fadeIn ? 0 : 1;
+  const endVolume = fadeIn ? 1 : 0;
+  const volumeStep = (endVolume - startVolume) / steps;
+  video.volume = startVolume;
+  let step = 0;
+  const interval = setInterval(() => {
+    step++;
+    video.volume = Math.max(0, Math.min(1, startVolume + (volumeStep * step)));
+    if (step >= steps) {
+      clearInterval(interval);
+      video.volume = endVolume;
+    }
+  }, stepTime);
+};
+```
+
+#### Video End Handler (useEffect)
+
+```typescript
+useEffect(() => {
+  const handleVideoEnd = () => {
+    const currentVideo = currentVideoRef.current;
+    if (currentVideo && !videoMuted) {
+      fadeAudio(currentVideo, false, 500);
+    }
+    setIsVideoTransitioning(true);
+    setTimeout(() => {
+      setCurrentVideoIndex(nextVideoIndex);
+      setNextVideoIndex((nextVideoIndex + 1) % HERO_VIDEOS.length);
+      setIsVideoTransitioning(false);
+    }, 400);
+  };
+  const video = currentVideoRef.current;
+  if (video) {
+    video.addEventListener('ended', handleVideoEnd);
+    return () => video.removeEventListener('ended', handleVideoEnd);
+  }
+}, [nextVideoIndex, videoMuted]);
+```
+
+#### Video Playback (useEffect)
+
+```typescript
+// Preload next video
+useEffect(() => {
+  if (nextVideoRef.current) {
+    nextVideoRef.current.load();
+  }
+}, [nextVideoIndex]);
+
+// Play current video with audio fade
+useEffect(() => {
+  if (currentVideoRef.current && !isVideoTransitioning) {
+    const video = currentVideoRef.current;
+    video.volume = 0;
+    video.play().catch(() => {});
+    if (!videoMuted) {
+      fadeAudio(video, true, 500);
+    }
+  }
+}, [currentVideoIndex, isVideoTransitioning, videoMuted]);
+```
+
+#### Hero Section JSX
+
+```tsx
+<section className="relative min-h-screen flex items-center justify-center pt-14 overflow-hidden">
+  <div className="absolute inset-0 bg-black">
+    {/* Current video */}
+    <video
+      ref={currentVideoRef}
+      key={`current-${currentVideoIndex}`}
+      autoPlay
+      muted={videoMuted}
+      playsInline
+      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+        isVideoTransitioning ? 'opacity-0' : 'opacity-100'
+      }`}
+    >
+      <source src={HERO_VIDEOS[currentVideoIndex].src} type="video/mp4" />
+    </video>
+    {/* Next video (preloaded, hidden until transition) */}
+    <video
+      ref={nextVideoRef}
+      key={`next-${nextVideoIndex}`}
+      muted={videoMuted}
+      playsInline
+      preload="auto"
+      className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+        isVideoTransitioning ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
+      <source src={HERO_VIDEOS[nextVideoIndex].src} type="video/mp4" />
+    </video>
+    <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-background" />
+    <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-transparent to-black/70" />
+  </div>
+
+  {/* Atmosphere overlay */}
+  <div className="absolute inset-0 opacity-40 pointer-events-none"
+    style={{
+      backgroundImage: 'radial-gradient(circle at 20% 50%, rgba(168,85,247,0.4) 0%, transparent 50%), radial-gradient(circle at 80% 50%, rgba(6,182,212,0.4) 0%, transparent 50%)',
+    }}
+  />
+
+  {/* Video indicator dots */}
+  <div className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 hidden sm:flex items-center gap-1.5 sm:gap-2 bg-black/30 backdrop-blur-sm rounded-full px-3 py-2">
+    {HERO_VIDEOS.map((video, idx) => (
+      <button
+        key={idx}
+        onClick={() => {
+          if (idx !== currentVideoIndex) {
+            setNextVideoIndex(idx);
+            setIsVideoTransitioning(true);
+            setTimeout(() => {
+              setCurrentVideoIndex(idx);
+              setNextVideoIndex((idx + 1) % HERO_VIDEOS.length);
+              setIsVideoTransitioning(false);
+            }, 700);
+          }
+        }}
+        className={`transition-all ${currentVideoIndex === idx
+          ? 'w-6 sm:w-8 h-1.5 sm:h-2 bg-white rounded-full'
+          : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-white/40 hover:bg-white/60 rounded-full'}`}
+        title={video.label}
+        data-testid={`button-video-${idx}`}
+      />
+    ))}
+  </div>
+
+  {/* Mute/unmute toggle */}
+  <button
+    onClick={() => setVideoMuted(!videoMuted)}
+    className="absolute top-20 right-4 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all"
+    data-testid="button-toggle-sound"
+  >
+    {videoMuted ? <VolumeX className="w-4 h-4 sm:w-5 sm:h-5" /> : <Volume2 className="w-4 h-4 sm:w-5 sm:h-5" />}
+  </button>
+
+  {/* Hero content goes here over the video */}
+</section>
+```
+
+### Photorealistic Image Assets
+
+Jason will provide these image files. They are used throughout Chronicles for era cards, feature sections, epoch carousels, and marketing pages. Place them in your assets directory (e.g., `src/assets/images/`):
+
+#### Era & Location Images (used in epoch cards, feature sections)
+
+| Filename | Used For |
+|----------|----------|
+| `fantasy_sci-fi_world_landscape.png` | Main hero poster, fantasy era |
+| `medieval_fantasy_kingdom.png` | Medieval era card, admin, demo, dashboard |
+| `ancient_wisdom_library_interior.png` | Library/knowledge feature |
+| `historical_time_vortex_portal.png` | Time travel feature |
+| `cyberpunk_neon_city.png` | Cyberpunk era |
+| `fantasy_character_heroes.png` | Character creation feature, community |
+| `fantasy_lands_and_realms.png` | World exploration feature |
+| `stone_age_village_scene.png` | Stone Age era |
+| `industrial_steampunk_city.png` | Industrial era |
+| `ancient_egyptian_kingdom_sunset.png` | Ancient Egypt era |
+| `wild_west_frontier_town.png` | Wild West era |
+| `victorian_london_street_scene.png` | Victorian era |
+| `ancient_greek_athens_parthenon.png` | Ancient Greece era |
+| `viking_longship_fjord_scene.png` | Viking era |
+| `renaissance_florence_italy_scene.png` | Renaissance era |
+| `roman_empire_colosseum_gladiators.png` | Roman era |
+| `feudal_japan_samurai_castle.png` | Feudal Japan era |
+| `quantum_dimension_realm.png` | Quantum/sci-fi era, dashboard, economy |
+| `deep_space_station.png` | Deep space era, creators, economy |
+| `darkwave_chronicles_hero_banner.png` | Chronicles marketing banner |
+| `chronicles_historical_adventure.png` | Chronicles promo |
+
+These are all photorealistic, AI-generated images. They should be displayed at full card width with `object-cover` styling — never shrunk to icon size.
+
+---
+
 ## UI Styling Rules
 
 - **Theme**: Dark only. Base: `#06060a` (void-black), panels: `#0a0b10`, borders: `#1a1b2e`
@@ -1667,6 +1922,8 @@ GET  /api/chronicles/legacy/:userId
 - **Fonts**: `JetBrains Mono` for code/stats, `Inter` for UI text.
 - **Animations**: Framer Motion `motion.div` with spring physics.
 - **Test IDs**: `data-testid` on every interactive element.
+- **Images**: Always photorealistic AI-generated assets. NEVER emojis or emoji icons in cards.
+- **Video**: Full-viewport cinematic flyover videos with crossfade transitions.
 
 ---
 
