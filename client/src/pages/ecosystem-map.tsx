@@ -180,8 +180,8 @@ const verticals: Vertical[] = [
     color: "from-purple-500 to-cyan-500",
     app: "TrustGen",
     appStatus: "live",
-    description: "AI-powered 3D creation with blockchain provenance. Text-to-3D via Meshy.ai, Three.js rendering, hallmarked assets on Trust Layer",
-    participants: ["3D Artists", "Designers", "Developers", "Studios", "Content Creators", "Game Devs"],
+    description: "Premium browser-based 3D creation & code studio. Real-time WebGL viewport, PBR materials, post-processing, AI model generation via Meshy.ai, animation timeline, auto-rigging, integrated Monaco IDE with AI assistant, and blockchain-verified provenance",
+    participants: ["3D Artists", "Designers", "Developers", "Studios", "Content Creators", "Game Devs", "Animators"],
     connectsTo: ["staffing", "gaming", "technology"]
   },
   {

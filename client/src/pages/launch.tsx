@@ -135,7 +135,7 @@ const LAUNCH_PHASES: LaunchPhase[] = [
       { id: "e5", title: "The Arcade", description: "Provably fair blockchain games with 9+ titles", status: "done", priority: "high", link: "/arcade" },
       { id: "e6", title: "Pulse AI Intelligence", description: "ML-powered market predictions with verified accuracy", status: "done", priority: "high", link: "/pulse" },
       { id: "e7", title: "Strike Agent", description: "Solana memecoin detection with AI risk scoring", status: "done", priority: "high", link: "/strike-agent" },
-      { id: "e8", title: "TrustGen 3D Studio", description: "AI-powered 3D creation with blockchain provenance via Meshy.ai + Three.js", status: "done", priority: "high", link: "https://trustgen.tlid.io" },
+      { id: "e8", title: "TrustGen 3D Studio", description: "Premium 3D creation & code studio — 3D editor, PBR materials, post-processing, Meshy.ai text-to-3D, animation timeline, auto-rigging, Monaco IDE, AI assistant, blockchain provenance", status: "done", priority: "high", link: "https://trustgen.tlid.io" },
       { id: "e8b", title: "Ecosystem Widget", description: "Embeddable widget for any partner app (one script tag)", status: "done", priority: "medium" },
       { id: "e9", title: "External Domains Verified", description: "All 7 primary domains active and routing correctly", status: "done", priority: "critical" },
       { id: "e10", title: "Mobile App (React Native)", description: "iOS App Store and Google Play standalone apps", status: "pending", priority: "medium" },

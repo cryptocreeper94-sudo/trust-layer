@@ -7,7 +7,7 @@ const DEFAULT_CHANNELS = [
   { name: 'announcements', description: 'Official announcements and updates', category: 'ecosystem', isDefault: true },
   { name: 'darkwavestudios-support', description: 'Support for DarkWave Studios', category: 'app-support', isDefault: false },
   { name: 'garagebot-support', description: 'Support for GarageBot', category: 'app-support', isDefault: false },
-  { name: 'trustgen-support', description: 'Support for TrustGen 3D generator (trustgen.tlid.io)', category: 'app-support', isDefault: false },
+  { name: 'trustgen-support', description: 'Support for TrustGen 3D — AI-powered 3D creation & code studio (trustgen.tlid.io)', category: 'app-support', isDefault: false },
   { name: 'tlid-marketing', description: 'TLID domain service marketing and discussion', category: 'app-support', isDefault: false },
   { name: 'guardian-ai', description: 'Guardian AI certification discussion', category: 'app-support', isDefault: false },
 ];

@@ -170,7 +170,7 @@ const categories: Category[] = [
       { label: "Predictions", description: "AI price predictions", href: "/predictions", icon: <Target className="size-5" />, image: hubPortfolio, glowColor: "shadow-amber-500/30" },
       { label: "Wallet Profiler", description: "Analyze any wallet", href: "/wallet-profiler", icon: <Search className="size-5" />, image: hubWallet, glowColor: "shadow-teal-500/30" },
       { label: "Whale Tracker", description: "Track large wallet movements", href: "/whale-tracker", icon: <Eye className="size-5" />, image: hubEcosystem, glowColor: "shadow-sky-500/30" },
-      { label: "TrustGen", description: "AI-powered 3D creation studio", href: "https://trustgen.tlid.io", icon: <Palette className="size-5" />, image: hubAI, glowColor: "shadow-purple-500/30", badge: "Live", featured: true },
+      { label: "TrustGen", description: "AI-powered 3D creation & code studio with Monaco IDE, Meshy.ai, animation timeline, and blockchain provenance", href: "https://trustgen.tlid.io", icon: <Palette className="size-5" />, image: hubAI, glowColor: "shadow-purple-500/30", badge: "Live", featured: true },
     ]
   },
   {
