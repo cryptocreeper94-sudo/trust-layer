@@ -58,7 +58,7 @@ The UI/UX emphasizes a "MANDATORY PREMIUM UI PROTOCOL" with a dark theme and pol
 - **Trust Stamp Creation**: `POST /api/trust-stamp` — authenticated endpoint for creating audit trail entries
 - **Trust Stamp Read**: `GET /api/trust-stamps/:userId` — self-only access to trust stamps
 - **Guardian Scan Alias**: `POST /api/guardian/scan` — rate-limited, Zod-validated, accepts address or URL
-- **Handoff Docs**: `docs/TRUST-LAYER-HANDOFF_*.md` (from Hub), `docs/TRUST-LAYER-TO-HUB-HANDOFF.md` (response)
+- **Handoff Docs**: `docs/TRUST-LAYER-HANDOFF_*.md` (from Hub), `docs/TRUST-LAYER-TO-HUB-HANDOFF.md` (response), `docs/DarkWave_Studio.md` (Studio IDE handoff for TrustGen), `docs/DarkWave_Chronicles.md` (Chronicles handoff for Vercel migration)
 
 ### Ecosystem Domains & Subdomains
 The ecosystem spans 32 verified applications across primary domains including `dwsc.io`, `darkwavegames.io`, `darkwavestudios.io`, `yourlegacy.io`, `tlid.io`, `trusthub.tlid.io`, `trustshield.tech`, and `intothevoid.app`, as well as various external and internal PWA routes.
