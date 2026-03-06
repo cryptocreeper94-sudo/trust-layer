@@ -1,0 +1,61 @@
+TrustGen 3D — AI-Powered 3D Creation Platform
+
+The premium browser-based 3D creation and code studio in the Trust Layer ecosystem. TrustGen combines a full-featured 3D editor, AI model generation, animation timeline, integrated IDE with Monaco editor, and blockchain-verified provenance into a single platform.
+
+Live: trustgen.tlid.io | Repo: github.com/cryptocreeper94-sudo/trustgen
+Stack: React 18 + TypeScript + Vite | Three.js + React Three Fiber | Node.js + Express + PostgreSQL
+LOC: ~18,700 source lines across 62 files (~2,000 backend, ~7,400 CSS, ~9,300 frontend TS/TSX)
+
+═══ CORE ENGINE ═══
+
+• 3D Viewport — Real-time WebGL rendering with OrbitControls, grid, axes, selection outlines
+• Scene Hierarchy — Tree-based node management (meshes, lights, cameras, groups)
+• Material Editor — PBR materials, textures, transparency, emissive, metalness, roughness
+• Transform Controls — Translate/rotate/scale gizmos with snap-to-grid
+• Lighting System — Directional, point, spot, hemisphere, ambient lights with shadow mapping
+• Post-Processing — Bloom, SSAO, depth of field, chromatic aberration, film grain, color grading, vignette
+• AI Model Generation — Meshy.ai integration for text-to-3D (800 char prompts, polling, auto-import)
+• Animation Timeline — Keyframe system with easing curves, playback controls, per-property tracks
+• Model Import/Export — GLTF/GLB import with drag-and-drop, scene export
+• Auto-Rigging Engine — Skeleton generation for humanoid meshes with bone mapping and IK weights
+• Skeletal Animation Player — Play/pause/blend animations on rigged models
+
+═══ STUDIO IDE ═══
+
+• Monaco Editor — Full VS Code-grade editor with custom TrustGen Dark theme, JetBrains Mono font
+• Project Templates — 9 templates: React, Node.js, Python Flask, Vue, Next.js, Go, Rust, Django, TrustGen 3D Scene
+• File Tree — Sidebar file browser with icons, new file/folder creation, delete
+• Multi-Tab Editor — Open/close tabs, unsaved indicators, tab management
+• AI Assistant — Chat panel with code blocks (copy/replace/insert), agent mode, GPT-4o integration
+• Command Palette — Ctrl+K fuzzy search across files and commands
+• Hot Apply — Push editor code directly to the 3D viewport via CustomEvent bridge
+• Deploy Panel — One-click deploy to .trustgen.app domains with status polling and build logs
+• TrustHub Code Stamps — Blockchain-verified SHA-256 code provenance snapshots
+• Secrets Manager — Encrypted environment variable storage with masked UI
+• Config Manager — Project-level key-value configuration store
+• Terminal — Simulated command execution with blocked command security
+• Diagnostics — Real-time code linting (var→let/const, ===, eval, console.log, line length)
+• Git Panel — Commit history, commit creation, branch management
+• Search — Full-text search across all project files with line-level results
+
+═══ PLATFORM ═══
+
+• Trust Layer SSO — Unified authentication via dwtl.io OAuth
+• Subscription Tiers — Free/Pro/Enterprise with server-side API gating (requireTier middleware)
+• Hallmark System — Blockchain-verified creation stamps via Trust Layer API
+• Signal Chat Widget — Embedded real-time messaging (WebSocket)
+• SMS Notifications — Twilio-powered alerts for renders, invites, security
+• Billing Dashboard — Stripe integration for subscription management
+• Affiliate System — Referral tracking and commission management
+• Admin Diagnostics — Runtime health checks, API latency monitoring
+• Cinematic Landing Page — Hero carousel with crossfade, feature grid, animated CTAs
+
+═══ UI/UX ═══
+
+• Mobile-First Responsive — IDE goes full-screen on mobile (≤768px), compact tablet layout
+• Premium Glassmorphism — backdrop-filter blur on panels, command palette, headers
+• Micro-Animations — Panel slide-ins, hover lifts, template pulse glow, shimmer effects
+• Dark Theme — Void-black base (#06060a) with cyan (#06b6d4) / purple (#a855f7) accents
+• 7,400+ lines of hand-crafted CSS with design tokens and CSS variables
+
+Database: 20+ PostgreSQL tables | Auth: JWT + Trust Layer SSO | Payments: Stripe | SMS: Twilio | AI: OpenAI GPT-4o + Meshy.ai
