@@ -25836,6 +25836,8 @@ const APP_URL_MAP: Record<string, string> = {
   "tlid": `${PORTAL_BASE}/domains`,
   "darkwave-academy": `${PORTAL_BASE}/academy`,
   "torque": `${PORTAL_BASE}/ecosystem`,
+  "trustgen": "https://trustgen.tlid.io",
+  "trust-gen": "https://trustgen.tlid.io",
   "through-the-veil": `${PORTAL_BASE}/veil/read`,
   "trust-book": `${PORTAL_BASE}/trust-book`,
 };
@@ -26311,6 +26313,19 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       featured: true,
       users: "Trust Layer Verified",
       url: "https://bomber.tlid.io",
+    },
+    {
+      id: "trustgen",
+      name: "TrustGen",
+      category: "Creative Tools",
+      description: "AI-powered browser-based 3D creation platform with blockchain provenance. Create stunning scenes with Three.js, generate models from text via Meshy.ai, animate with keyframe timelines, and export production-ready assets — all hallmarked on Trust Layer.",
+      hook: "AI-Powered 3D Creation with Blockchain Provenance",
+      tags: ["3D", "AI", "Creative", "Three.js", "SaaS", "Meshy"],
+      gradient: "from-purple-600 to-cyan-500",
+      verified: true,
+      featured: true,
+      users: "Trust Layer Verified",
+      url: "https://trustgen.tlid.io",
     },
   ];
 }

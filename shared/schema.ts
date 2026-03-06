@@ -354,6 +354,7 @@ export const ECOSYSTEM_APP_REGISTRY = [
   { id: 31, name: "DarkWave Academy", prefix: "DA", domain: "darkwaveacademy.tlid.io" },
   { id: 32, name: "Happy Eats", prefix: "HE", domain: "happyeats.tlid.io" },
   { id: 33, name: "Brew & Board Coffee", prefix: "BB", domain: "brewandboard.tlid.io" },
+  { id: 34, name: "TrustGen", prefix: "TN", domain: "trustgen.tlid.io" },
 ] as const;
 
 export const hallmarks = pgTable("hallmarks", {

@@ -177,12 +177,12 @@ const verticals: Vertical[] = [
     id: "creative",
     name: "Creative & Digital",
     icon: <Palette className="w-6 h-6" />,
-    color: "from-indigo-500 to-blue-500",
-    app: "Web Design Studio",
-    appStatus: "building",
-    description: "Designers, developers, and marketers with verified portfolios and transparent project management",
-    participants: ["Designers", "Developers", "Marketers", "Clients", "Hosting", "Content"],
-    connectsTo: ["staffing"]
+    color: "from-purple-500 to-cyan-500",
+    app: "TrustGen",
+    appStatus: "live",
+    description: "AI-powered 3D creation with blockchain provenance. Text-to-3D via Meshy.ai, Three.js rendering, hallmarked assets on Trust Layer",
+    participants: ["3D Artists", "Designers", "Developers", "Studios", "Content Creators", "Game Devs"],
+    connectsTo: ["staffing", "gaming", "technology"]
   },
   {
     id: "gaming",
