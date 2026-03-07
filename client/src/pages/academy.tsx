@@ -7,7 +7,7 @@ import {
   Sparkles, GraduationCap, FileText, Zap, Globe, TrendingUp,
   Target, ArrowRight, Flame, Crown, Eye, Radio,
   Code, Terminal, Cpu, Braces, Languages, Lightbulb,
-  Rocket, Binary, Server, Monitor, Smartphone, Bot,
+  Rocket, Binary, Server, Monitor, Smartphone, Bot, Box,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -107,6 +107,17 @@ const courseCategories = [
     level: "Advanced",
     topics: ["Layer 1: Self-Monitoring & Metrics", "Layer 2: Self-Healing & Circuit Breakers", "Layer 3: Self-Optimizing with AI", "Layer 4: Self-Evolving Daemon", "Safety Guardrails & Mutation Logs"],
   },
+  {
+    id: "trustgen-3d",
+    title: "AI-Powered 3D Creation",
+    description: "Create 3D models, animations, and scenes using AI. From text-to-3D generation and character rigging to blockchain provenance — every asset gets an on-chain hallmark.",
+    icon: Box,
+    color: "purple",
+    courses: 6,
+    hours: 10,
+    level: "Intermediate",
+    topics: ["Text-to-3D Prompt Engineering", "AI Animation & Character Rigging", "Blockchain Provenance & Hallmarking", "Multi-Model Scene Composition", "LOD Management & Export Formats", "Ecosystem Integration & Publishing"],
+  },
 ];
 
 const certifications = [
@@ -169,7 +180,7 @@ const pricingTiers = [
     period: "/mo",
     description: "Full access to all courses, certification exams, and priority support.",
     features: [
-      "All 7 course tracks (58+ courses)",
+      "All 8 course tracks (64+ courses)",
       "Certification exam access",
       "Lume language deep dives",
       "Compiler engineering labs",
@@ -233,6 +244,10 @@ const faqItems = [
   {
     q: "What is the self-sustaining runtime?",
     a: "It's Lume's Milestone 6 — four layers that make your programs autonomous. Layer 1 monitors everything automatically. Layer 2 heals failures with retries, fallbacks, and circuit breakers. Layer 3 uses AI to optimize slow code. Layer 4 evolves the program by watching for dependency updates, benchmarking AI models, and adapting to changes. All with strict safety guardrails and rollback capability.",
+  },
+  {
+    q: "What is the TrustGen 3D track?",
+    a: "TrustGen is the ecosystem's AI-powered 3D asset creation platform. The course covers text-to-3D generation, character rigging via Mixamo, animation pipelines, and blockchain provenance — every 3D asset you create gets a TN-XXXXXXX hallmark ID recorded on the Trust Layer, proving authorship forever.",
   },
 ];
 
@@ -537,10 +552,10 @@ export default function AcademyPage() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4"
           >
             {[
-              { label: "Courses", value: "58+", icon: BookOpen },
-              { label: "Hours", value: "102+", icon: Clock },
+              { label: "Courses", value: "64+", icon: BookOpen },
+              { label: "Hours", value: "112+", icon: Clock },
               { label: "Certifications", value: "4", icon: Award },
-              { label: "Tracks", value: "7", icon: Target },
+              { label: "Tracks", value: "8", icon: Target },
             ].map((stat) => (
               <motion.div key={stat.label} variants={fadeUp}>
                 <AnimatedCounter {...stat} />
@@ -790,7 +805,7 @@ export default function AcademyPage() {
             </Badge>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black mb-4">
               <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
-                Six Expert-Crafted
+                Eight Expert-Crafted
               </span>{" "}
               Learning Tracks
             </h2>
@@ -805,7 +820,7 @@ export default function AcademyPage() {
             whileInView="visible"
             viewport={{ once: true }}
             variants={stagger}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
           >
             {courseCategories.map((cat) => {
               const colors = colorMap[cat.color] || colorMap.cyan;
