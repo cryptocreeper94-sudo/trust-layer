@@ -6,6 +6,8 @@ import {
   CheckCircle2, Star, Award, Users, Clock, Play, ChevronRight,
   Sparkles, GraduationCap, FileText, Zap, Globe, TrendingUp,
   Target, ArrowRight, Flame, Crown, Eye, Radio,
+  Code, Terminal, Cpu, Braces, Languages, Lightbulb,
+  Rocket, Binary, Server, Monitor, Smartphone, Bot,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,97 +31,97 @@ const STRIPE_PRICES = {
 
 const courseCategories = [
   {
-    id: "fundamentals",
-    title: "Crypto Fundamentals",
-    description: "Master the basics of blockchain technology, wallets, and cryptocurrency from the ground up.",
-    icon: BookOpen,
+    id: "programming-foundations",
+    title: "Programming Foundations",
+    description: "Understand what a programming language really is — no gatekeepers, no governing body. Just a compiler that reads text and turns it into something a computer can execute.",
+    icon: Code,
     color: "cyan",
     courses: 8,
     hours: 12,
     level: "Beginner",
-    topics: ["What is Blockchain?", "Wallets & Keys", "Consensus Mechanisms", "Transaction Lifecycle", "Cryptography Basics"],
+    topics: ["What is a Programming Language?", "How Compilers Work", "Variables, Functions & Loops", "The Lexer-Parser-Transpiler Pipeline", "Your First Program"],
   },
   {
-    id: "multichain",
-    title: "Multi-Chain Ecosystems",
-    description: "Explore Ethereum, Solana, Polygon, Arbitrum, Base, and the Trust Layer — understand how they interconnect.",
-    icon: Globe,
+    id: "language-history",
+    title: "The Major Languages",
+    description: "Learn the origin stories — HTML from CERN, CSS from Norway, JavaScript built in 10 days, C from Bell Labs. Every language was born from one person's frustration.",
+    icon: BookOpen,
+    color: "purple",
+    courses: 6,
+    hours: 10,
+    level: "Beginner",
+    topics: ["HTML — Tim Berners-Lee & CERN", "CSS — Separating Structure from Style", "JavaScript — 10 Days That Changed Everything", "C — The Foundation of Everything", "The Pattern: Frustration Creates Innovation"],
+  },
+  {
+    id: "javascript-mastery",
+    title: "JavaScript: Buttons to Everything",
+    description: "Trace JavaScript's journey from validating form fields to running the entire internet. DOM manipulation, AJAX, Node.js, React, and the AI frontier.",
+    icon: Braces,
+    color: "cyan",
+    courses: 10,
+    hours: 16,
+    level: "Intermediate",
+    topics: ["DOM Manipulation & the Living Page", "AJAX & Background Communication", "Node.js — JavaScript Leaves the Browser", "React, Angular & Vue Frameworks", "WebGL, AI & the Modern Frontier"],
+  },
+  {
+    id: "compiler-engineering",
+    title: "Compiler Engineering",
+    description: "Build a compiler from scratch. Understand lexers, parsers, ASTs, and transpilers — the three-stage pipeline that turns human-readable code into executable programs.",
+    icon: Cpu,
+    color: "purple",
+    courses: 7,
+    hours: 14,
+    level: "Advanced",
+    topics: ["Lexer: Breaking Text into Tokens", "Parser: Building the AST", "Transpiler: Generating Output", "The Complete Compilation Flow", "Error Handling & Edge Cases"],
+  },
+  {
+    id: "lume-language",
+    title: "The Lume Language",
+    description: "Master the world's first AI-native programming language. AI isn't a library you bolt on — it's a keyword. One word replaces dozens of lines of setup code.",
+    icon: Sparkles,
+    color: "cyan",
+    courses: 9,
+    hours: 18,
+    level: "All Levels",
+    topics: ["AI as a Native Keyword", "Readable Syntax by Design", "Fetch, Ask & Show", "Lume Compiler Internals", "Publishing to npm"],
+  },
+  {
+    id: "digital-architecture",
+    title: "Digital Architecture",
+    description: "Understand how the digital world is built — operating systems, platforms, the web as universal translator, and why software scales infinitely.",
+    icon: Layers,
     color: "purple",
     courses: 6,
     hours: 10,
     level: "Intermediate",
-    topics: ["Ethereum & EVM", "Solana Architecture", "L2 Rollups", "Cross-Chain Interoperability", "Trust Layer Deep Dive"],
-  },
-  {
-    id: "defi",
-    title: "DeFi Strategies",
-    description: "Learn decentralized finance from AMMs and liquidity pools to yield farming and liquid staking.",
-    icon: Coins,
-    color: "amber",
-    courses: 10,
-    hours: 16,
-    level: "Intermediate",
-    topics: ["AMM Mechanics", "Liquidity Provision", "Yield Farming", "Liquid Staking (stSIG)", "Risk Management"],
-  },
-  {
-    id: "security",
-    title: "Security Best Practices",
-    description: "Protect yourself and your projects. Smart contract auditing, phishing defense, and operational security.",
-    icon: Shield,
-    color: "red",
-    courses: 7,
-    hours: 11,
-    level: "All Levels",
-    topics: ["Smart Contract Vulnerabilities", "Phishing & Social Engineering", "Wallet Security", "Guardian Scanner Usage", "Audit Methodology"],
-  },
-  {
-    id: "bridging",
-    title: "Cross-Chain Bridging",
-    description: "Understand lock & mint, wrapped tokens, and safely bridging assets across blockchains.",
-    icon: ArrowLeftRight,
-    color: "green",
-    courses: 4,
-    hours: 6,
-    level: "Advanced",
-    topics: ["Bridge Architecture", "Lock & Mint Explained", "wSIG Bridging", "Bridge Security Risks", "Multi-Chain Portfolio"],
-  },
-  {
-    id: "trust-layer",
-    title: "Trust Layer Operations",
-    description: "Become an expert on the Trust Layer: validator operations, staking, governance, and ecosystem building.",
-    icon: Layers,
-    color: "blue",
-    courses: 9,
-    hours: 14,
-    level: "Advanced",
-    topics: ["PoA Consensus", "Validator Setup", "Signal Tokenomics", "Governance Participation", "Building on Trust Layer"],
+    topics: ["Windows vs macOS — Same Bricks, Different Architects", "The Web as Universal Translator", "Where Code Actually Runs", "Digital Durability & Self-Sustaining Systems", "The Democratization of Software"],
   },
 ];
 
 const certifications = [
   {
-    id: "ctf",
-    title: "Certified Trust Fundamentals",
-    abbrev: "CTF",
-    description: "Demonstrates foundational understanding of blockchain and the Trust Layer ecosystem.",
-    prereqs: ["Crypto Fundamentals", "Trust Layer Operations (Intro)"],
-    badge: "from-cyan-500 to-blue-500",
+    id: "clf",
+    title: "Certified Lume Foundations",
+    abbrev: "CLF",
+    description: "Demonstrates foundational understanding of programming languages, compilers, and the Lume ecosystem.",
+    prereqs: ["Programming Foundations", "The Major Languages"],
+    badge: "from-cyan-500 to-cyan-600",
   },
   {
-    id: "cds",
-    title: "Certified DeFi Specialist",
-    abbrev: "CDS",
-    description: "Validates advanced DeFi knowledge including liquidity strategies and risk management.",
-    prereqs: ["DeFi Strategies (All Modules)", "Security Best Practices"],
-    badge: "from-amber-500 to-orange-500",
+    id: "cle",
+    title: "Certified Lume Engineer",
+    abbrev: "CLE",
+    description: "Validates advanced Lume development skills including compiler engineering and AI-native programming.",
+    prereqs: ["Compiler Engineering", "The Lume Language"],
+    badge: "from-purple-500 to-purple-600",
   },
   {
-    id: "ctlo",
-    title: "Certified Trust Layer Operator",
-    abbrev: "CTLO",
-    description: "Expert-level certification for running validators, governance, and ecosystem development.",
-    prereqs: ["Trust Layer Operations (All)", "Cross-Chain Bridging", "Security"],
-    badge: "from-purple-500 to-pink-500",
+    id: "cda",
+    title: "Certified Digital Architect",
+    abbrev: "CDA",
+    description: "Expert-level certification covering full-stack digital architecture, platform engineering, and self-sustaining systems.",
+    prereqs: ["JavaScript Mastery", "Digital Architecture", "Compiler Engineering"],
+    badge: "from-cyan-500 to-purple-500",
   },
 ];
 
@@ -129,13 +131,13 @@ const pricingTiers = [
     name: "Explorer",
     price: "Free",
     period: "",
-    description: "Start your learning journey with crypto fundamentals and community access.",
+    description: "Start your learning journey with programming foundations and community access.",
     features: [
-      "Crypto Fundamentals course track",
+      "Programming Foundations course track",
+      "The Major Languages track",
       "Community forums access",
       "Weekly live Q&A sessions",
       "Progress tracking dashboard",
-      "Mobile-friendly learning",
     ],
     cta: "Start Free",
     popular: false,
@@ -148,17 +150,17 @@ const pricingTiers = [
     period: "/mo",
     description: "Full access to all courses, certification exams, and priority support.",
     features: [
-      "All 6 course tracks (44+ courses)",
+      "All 6 course tracks (46+ courses)",
       "Certification exam access",
-      "DeFi & Security deep dives",
+      "Lume language deep dives",
+      "Compiler engineering labs",
       "Downloadable resources",
       "Priority support",
       "Monthly workshops",
-      "Course completion badges",
     ],
     cta: "Start Learning",
     popular: true,
-    gradient: "from-cyan-500 to-blue-600",
+    gradient: "from-cyan-500 to-cyan-600",
     priceId: STRIPE_PRICES.scholar,
   },
   {
@@ -170,28 +172,32 @@ const pricingTiers = [
     features: [
       "Everything in Scholar",
       "1-on-1 mentorship sessions",
-      "Advanced builder workshops",
+      "Advanced compiler workshops",
+      "Build-your-own-language project",
       "Early access to new courses",
       "Exclusive Master credentials",
-      "Private Discord channel",
+      "Private community channel",
       "Career guidance & referrals",
-      "Guest speaker sessions",
     ],
     cta: "Go Master",
     popular: false,
-    gradient: "from-purple-500 to-pink-600",
+    gradient: "from-purple-500 to-purple-600",
     priceId: STRIPE_PRICES.master,
   },
 ];
 
 const faqItems = [
   {
-    q: "Do I need any prior crypto knowledge?",
-    a: "Not at all. Our Crypto Fundamentals track starts from zero and builds your understanding step by step. The Explorer tier is completely free, so you can start learning today.",
+    q: "Do I need any prior coding experience?",
+    a: "Not at all. Our Programming Foundations track starts from zero and explains everything in plain language. The Explorer tier is completely free, so you can start learning today.",
+  },
+  {
+    q: "What is Lume and why should I learn it?",
+    a: "Lume is a programming language where AI is a native keyword — not a library you bolt on. One word replaces dozens of lines of setup code. It compiles to JavaScript, so it runs everywhere JavaScript runs: browsers, servers, phones, desktop apps, even IoT devices.",
   },
   {
     q: "How do certifications work?",
-    a: "After completing the required course modules, you can take the certification exam. Pass with 80% or higher to earn your on-chain verified credential. Certifications are available on Scholar and Master plans.",
+    a: "After completing the required course modules, you can take the certification exam. Pass with 80% or higher to earn your verified credential, recorded permanently on the Trust Layer. Certifications are available on Scholar and Master plans.",
   },
   {
     q: "Can I switch plans anytime?",
@@ -202,24 +208,47 @@ const faqItems = [
     a: "Yes, all courses are fully self-paced. Learn on your schedule. Scholar and Master members also get access to monthly live workshops for real-time interaction.",
   },
   {
-    q: "What makes Academy credentials different?",
-    a: "Your certifications are recorded on the Trust Layer blockchain, making them permanently verifiable by anyone. No faking credentials — they're cryptographically proven.",
+    q: "Do I need to install anything to write Lume code?",
+    a: "Lume compiles to JavaScript, so you just need Node.js installed. Run 'npm install -g lume' and you're ready. The compiler runs entirely on your machine — no connection to any central server.",
   },
 ];
 
 const testimonials = [
-  { text: "The DeFi track completely changed how I approach liquidity provision. Practical, no fluff.", author: "Trust Layer Validator", rating: 5 },
-  { text: "Got my CTF certification in 3 weeks. The on-chain credential opened doors I didn't expect.", author: "Blockchain Developer", rating: 5 },
-  { text: "Best crypto education platform I've used. The security track alone is worth the Scholar tier.", author: "Smart Contract Auditor", rating: 5 },
+  { text: "The compiler engineering track completely changed how I understand software. I built my own language in a weekend.", author: "Full-Stack Developer", rating: 5 },
+  { text: "Got my CLF certification in 3 weeks. The on-chain credential opened doors I didn't expect.", author: "Junior Developer", rating: 5 },
+  { text: "Best programming education platform I've used. The Lume track alone is worth the Scholar tier.", author: "Software Engineer", rating: 5 },
+];
+
+const knowledgeHighlights = [
+  {
+    icon: Terminal,
+    title: "The Compiler Pipeline",
+    description: "Lexer breaks text into tokens. Parser builds the AST. Transpiler writes JavaScript. Three steps, each does one job.",
+    detail: "let name = \"Ada\" → [LET] [IDENTIFIER: name] [EQUALS] [STRING: \"Ada\"] → const name = \"Ada\";",
+  },
+  {
+    icon: Bot,
+    title: "AI as a Native Keyword",
+    description: "Every language today treats AI as an external library. Lume makes it a keyword. One word replaces dozens of lines.",
+    detail: "let cities = ask \"List 5 cities in Texas\" as json",
+  },
+  {
+    icon: Globe,
+    title: "JavaScript Runs Everywhere",
+    description: "Browser, server, phone, desktop, IoT. JavaScript is like water — it flows into whatever container you put it in.",
+    detail: "Lume compiles to JS. Where JS runs, Lume runs.",
+  },
+  {
+    icon: Rocket,
+    title: "Self-Sustaining Systems",
+    description: "Software that monitors, heals, optimizes, and improves itself. The human becomes the architect, not the mechanic.",
+    detail: "Lume's 'mutate' keyword enables controlled self-modification with strict guardrails.",
+  },
 ];
 
 const colorMap: Record<string, { text: string; bg: string; border: string; glow: string }> = {
   cyan: { text: "text-cyan-400", bg: "bg-cyan-500/20", border: "border-cyan-500/20", glow: "shadow-cyan-500/20" },
   purple: { text: "text-purple-400", bg: "bg-purple-500/20", border: "border-purple-500/20", glow: "shadow-purple-500/20" },
-  amber: { text: "text-amber-400", bg: "bg-amber-500/20", border: "border-amber-500/20", glow: "shadow-amber-500/20" },
-  red: { text: "text-red-400", bg: "bg-red-500/20", border: "border-red-500/20", glow: "shadow-red-500/20" },
-  green: { text: "text-green-400", bg: "bg-green-500/20", border: "border-green-500/20", glow: "shadow-green-500/20" },
-  blue: { text: "text-blue-400", bg: "bg-blue-500/20", border: "border-blue-500/20", glow: "shadow-blue-500/20" },
 };
 
 function AnimatedCounter({ value, label, icon: Icon }: { value: string; label: string; icon: any }) {
@@ -249,14 +278,16 @@ function AnimatedCounter({ value, label, icon: Icon }: { value: string; label: s
 
   return (
     <div ref={ref}>
-      <GlassCard glow className="p-5 text-center shadow-2xl hover:border-cyan-500/30 transition-all duration-300">
-        <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/20 flex items-center justify-center mx-auto mb-3">
-          <Icon className="w-5 h-5 text-cyan-400" />
+      <GlassCard glow>
+        <div className="p-5 text-center">
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/20 flex items-center justify-center mx-auto mb-3">
+            <Icon className="w-5 h-5 text-cyan-400" />
+          </div>
+          <div className="text-2xl sm:text-3xl font-black text-white" data-testid={`stat-${label.toLowerCase()}`}>
+            {isNaN(numericValue) ? value : `${count}${suffix}`}
+          </div>
+          <div className="text-xs text-white/50 mt-1 uppercase tracking-wider font-medium">{label}</div>
         </div>
-        <div className="text-2xl sm:text-3xl font-black text-white" data-testid={`stat-${label.toLowerCase()}`}>
-          {isNaN(numericValue) ? value : `${count}${suffix}`}
-        </div>
-        <div className="text-xs text-white/50 mt-1 uppercase tracking-wider font-medium">{label}</div>
       </GlassCard>
     </div>
   );
@@ -286,7 +317,7 @@ export default function AcademyPage() {
 
     const themeColor = document.querySelector('meta[name="theme-color"]');
     const previousThemeColor = themeColor?.getAttribute('content') || '#06b6d4';
-    if (themeColor) themeColor.setAttribute('content', '#3b82f6');
+    if (themeColor) themeColor.setAttribute('content', '#06b6d4');
 
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/academy-sw.js', { scope: '/academy' }).catch(() => {});
@@ -321,14 +352,14 @@ export default function AcademyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white overflow-x-hidden">
+    <div className="min-h-screen bg-[#06060a] text-white overflow-x-hidden">
       <SiteNav />
 
       <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroImg} alt="Academy" className="w-full h-full object-cover opacity-25" />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-slate-950/80 to-slate-950" />
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-500/5 via-transparent to-purple-500/5" />
+          <img src={heroImg} alt="Lume Academy" className="w-full h-full object-cover opacity-20" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#06060a]/50 via-[#06060a]/80 to-[#06060a]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-purple-500/5" />
         </div>
 
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -341,7 +372,7 @@ export default function AcademyPage() {
                 top: `${Math.random() * 100}%`,
                 width: `${2 + Math.random() * 3}px`,
                 height: `${2 + Math.random() * 3}px`,
-                background: i % 3 === 0 ? "rgba(59,130,246,0.4)" : i % 3 === 1 ? "rgba(6,182,212,0.4)" : "rgba(168,85,247,0.3)",
+                background: i % 2 === 0 ? "rgba(6,182,212,0.4)" : "rgba(168,85,247,0.3)",
               }}
               animate={{
                 y: [0, -(20 + Math.random() * 40), 0],
@@ -357,7 +388,7 @@ export default function AcademyPage() {
           ))}
         </div>
 
-        <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-blue-600/8 rounded-full blur-[120px]" />
+        <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-cyan-600/8 rounded-full blur-[120px]" />
         <div className="absolute bottom-20 right-1/4 w-[400px] h-[400px] bg-purple-600/8 rounded-full blur-[100px]" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-600/5 rounded-full blur-[150px]" />
 
@@ -372,9 +403,9 @@ export default function AcademyPage() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-blue-500/20 to-purple-500/20 border-blue-500/30 text-white text-sm backdrop-blur-sm shadow-lg shadow-blue-500/10" data-testid="badge-academy">
-              <GraduationCap className="w-4 h-4 mr-2 text-blue-400" />
-              Academy
+            <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-500/30 text-white text-sm backdrop-blur-sm shadow-lg shadow-cyan-500/10" data-testid="badge-academy">
+              <GraduationCap className="w-4 h-4 mr-2 text-cyan-400" />
+              Lume Academy
             </Badge>
           </motion.div>
 
@@ -383,9 +414,9 @@ export default function AcademyPage() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.8 }}
-              className="bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent drop-shadow-2xl block"
+              className="bg-gradient-to-r from-cyan-400 via-cyan-300 to-purple-400 bg-clip-text text-transparent drop-shadow-2xl block"
             >
-              Learn. Certify.
+              Understand Code.
             </motion.span>
             <motion.span
               initial={{ opacity: 0, y: 30 }}
@@ -393,7 +424,7 @@ export default function AcademyPage() {
               transition={{ delay: 0.6, duration: 0.8 }}
               className="text-white drop-shadow-2xl block mt-2"
             >
-              Master.
+              Build Anything.
             </motion.span>
           </h1>
 
@@ -403,8 +434,8 @@ export default function AcademyPage() {
             transition={{ delay: 0.8 }}
             className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            The premier education platform for cryptocurrency, DeFi, multi-chain ecosystems,
-            and Trust Layer operations. Earn blockchain-verified credentials that prove your expertise.
+            The premier education platform for understanding programming languages, compilers,
+            and the digital world — featuring the Lume language, where AI is a native keyword.
           </motion.p>
 
           <motion.div
@@ -414,7 +445,7 @@ export default function AcademyPage() {
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
           >
             <a href="#courses">
-              <Button size="lg" className="h-14 px-8 text-base gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-2xl shadow-blue-500/25 rounded-xl" data-testid="button-explore-courses">
+              <Button size="lg" className="h-14 px-8 text-base gap-2 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white shadow-2xl shadow-cyan-500/25 rounded-xl" data-testid="button-explore-courses">
                 <Play className="w-5 h-5" />
                 Explore Courses
                 <ArrowRight className="w-4 h-4" />
@@ -448,8 +479,8 @@ export default function AcademyPage() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4"
           >
             {[
-              { label: "Courses", value: "44+", icon: BookOpen },
-              { label: "Hours", value: "69+", icon: Clock },
+              { label: "Courses", value: "46+", icon: BookOpen },
+              { label: "Hours", value: "80+", icon: Clock },
               { label: "Certifications", value: "3", icon: Award },
               { label: "Tracks", value: "6", icon: Target },
             ].map((stat) => (
@@ -462,7 +493,7 @@ export default function AcademyPage() {
       </section>
 
       <section className="py-20 relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-500/[0.03] to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/[0.03] to-transparent" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <motion.div
@@ -471,15 +502,15 @@ export default function AcademyPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-blue-500/10">
-                <img src={defiImg} alt="DeFi Learning Lab" className="w-full h-auto" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-cyan-500/10">
+                <img src={defiImg} alt="Lume Code Editor" className="w-full h-auto" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#06060a]/80 via-transparent to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs mb-2">
-                    <Flame className="w-3 h-3 mr-1" /> Most Popular Track
+                  <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-xs mb-2">
+                    <Sparkles className="w-3 h-3 mr-1" /> Featured Track
                   </Badge>
-                  <h3 className="text-xl font-bold text-white">DeFi Strategies</h3>
-                  <p className="text-white/50 text-sm mt-1">10 courses &middot; 16 hours of expert content</p>
+                  <h3 className="text-xl font-bold text-white">The Lume Language</h3>
+                  <p className="text-white/50 text-sm mt-1">9 courses · 18 hours of expert content</p>
                 </div>
               </div>
             </motion.div>
@@ -491,30 +522,30 @@ export default function AcademyPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="space-y-6"
             >
-              <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
-                <Sparkles className="w-3 h-3 mr-1" /> Why Academy
+              <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
+                <Lightbulb className="w-3 h-3 mr-1" /> Why Lume Academy
               </Badge>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black">
-                <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                   Built for builders.
                 </span>
                 <br />
                 <span className="text-white">Not spectators.</span>
               </h2>
               <p className="text-white/60 leading-relaxed">
-                Every course is designed around practical, hands-on exercises using real Trust Layer tools.
-                No theoretical fluff. You build, you break, you learn.
+                Every course is designed around practical, hands-on understanding. No theoretical fluff.
+                You learn how compilers actually work, why languages exist, and how to build your own.
               </p>
               <div className="space-y-3">
                 {[
-                  { icon: Lock, label: "On-chain verified credentials — impossible to fake" },
-                  { icon: Zap, label: "Hands-on labs with live testnet environments" },
-                  { icon: Users, label: "Community of 500+ builders and validators" },
-                  { icon: TrendingUp, label: "Updated monthly with latest DeFi & security research" },
+                  { icon: Lock, label: "Verified credentials — permanently recorded, impossible to fake" },
+                  { icon: Terminal, label: "Hands-on labs — build a compiler from scratch" },
+                  { icon: Bot, label: "Learn AI-native programming with Lume" },
+                  { icon: TrendingUp, label: "Updated monthly with latest language & AI research" },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center gap-3 group">
-                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center flex-shrink-0 group-hover:border-cyan-500/40 group-hover:shadow-lg group-hover:shadow-cyan-500/10 transition-all duration-300">
-                      <item.icon className="w-4 h-4 text-blue-400" />
+                    <div className="w-8 h-8 rounded-lg bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center flex-shrink-0 group-hover:border-purple-500/40 group-hover:shadow-lg group-hover:shadow-purple-500/10 transition-all duration-300">
+                      <item.icon className="w-4 h-4 text-cyan-400" />
                     </div>
                     <span className="text-white/70 text-sm">{item.label}</span>
                   </div>
@@ -525,9 +556,10 @@ export default function AcademyPage() {
         </div>
       </section>
 
-      <section id="courses" className="py-20 px-4 relative">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500/20 to-transparent" />
-        <div className="container mx-auto max-w-7xl">
+      <section className="py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/[0.03] to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -536,17 +568,74 @@ export default function AcademyPage() {
             className="text-center mb-16"
           >
             <Badge className="mb-4 px-3 py-1.5 bg-cyan-500/10 border-cyan-500/30 text-cyan-400 text-xs">
+              <Lightbulb className="w-3 h-3 mr-1" /> Knowledge Base Highlights
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black mb-4">
+              <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                Core Concepts
+              </span>{" "}
+              You'll Master
+            </h2>
+            <p className="text-white/50 max-w-xl mx-auto">
+              Real understanding, not memorization. These are the ideas that change how you see software.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={stagger}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto"
+          >
+            {knowledgeHighlights.map((item) => (
+              <motion.div key={item.title} variants={fadeUp}>
+                <motion.div whileHover={{ scale: 1.02, y: -2 }} transition={{ type: "spring", stiffness: 300 }}>
+                  <GlassCard glow>
+                    <div className="p-6 h-full">
+                      <div className="flex items-start gap-4 mb-4">
+                        <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/20 flex-shrink-0 shadow-lg shadow-cyan-500/20">
+                          <item.icon className="w-6 h-6 text-cyan-400" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-white text-lg">{item.title}</h3>
+                          <p className="text-white/60 text-sm leading-relaxed mt-1">{item.description}</p>
+                        </div>
+                      </div>
+                      <div className="bg-[#0a0b10] border border-[#1a1b2e] rounded-lg p-3 mt-3">
+                        <code className="text-cyan-400 text-xs font-mono">{item.detail}</code>
+                      </div>
+                    </div>
+                  </GlassCard>
+                </motion.div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      <section id="courses" className="py-20 px-4 relative">
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
+        <div className="container mx-auto max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <Badge className="mb-4 px-3 py-1.5 bg-purple-500/10 border-purple-500/30 text-purple-400 text-xs">
               <BookOpen className="w-3 h-3 mr-1" /> Course Catalog
             </Badge>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black mb-4">
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
                 Six Expert-Crafted
               </span>{" "}
               Learning Tracks
             </h2>
             <p className="text-white/50 max-w-xl mx-auto">
-              From beginner to expert, each track is designed to build practical, real-world skills
-              you can apply immediately.
+              From "what is a programming language?" to building your own compiler.
+              Each track builds practical, real-world understanding.
             </p>
           </motion.div>
 
@@ -568,49 +657,51 @@ export default function AcademyPage() {
                     >
                       <GlassCard
                         glow
-                        className={`p-6 h-full cursor-pointer transition-all duration-300 shadow-2xl hover:border-cyan-500/30 hover:shadow-cyan-500/10 ${
+                        className={`h-full cursor-pointer transition-all duration-300 shadow-2xl hover:border-cyan-500/30 hover:shadow-cyan-500/10 ${
                           selectedCategory === cat.id ? "border-cyan-500/40 shadow-[0_0_40px_rgba(6,182,212,0.2)]" : ""
                         }`}
                       >
-                        <div className="flex items-start gap-4 mb-4">
-                          <div className={`p-3 rounded-xl border ${colors.bg} ${colors.border} flex-shrink-0 shadow-lg ${colors.glow}`}>
-                            <cat.icon className={`w-6 h-6 ${colors.text}`} />
+                        <div className="p-6">
+                          <div className="flex items-start gap-4 mb-4">
+                            <div className={`p-3 rounded-xl border ${colors.bg} ${colors.border} flex-shrink-0 shadow-lg ${colors.glow}`}>
+                              <cat.icon className={`w-6 h-6 ${colors.text}`} />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <h3 className="font-bold text-white text-base sm:text-lg">{cat.title}</h3>
+                              <Badge variant="outline" className="text-[10px] border-white/10 text-white/50 mt-1.5">
+                                {cat.level}
+                              </Badge>
+                            </div>
                           </div>
-                          <div className="flex-1 min-w-0">
-                            <h3 className="font-bold text-white text-base sm:text-lg">{cat.title}</h3>
-                            <Badge variant="outline" className="text-[10px] border-white/10 text-white/50 mt-1.5">
-                              {cat.level}
-                            </Badge>
+                          <p className="text-white/60 text-sm leading-relaxed mb-5">{cat.description}</p>
+                          <div className="flex items-center gap-4 text-xs text-white/40">
+                            <span className="flex items-center gap-1.5 bg-white/5 px-2.5 py-1 rounded-full">
+                              <BookOpen className="w-3 h-3" /> {cat.courses} courses
+                            </span>
+                            <span className="flex items-center gap-1.5 bg-white/5 px-2.5 py-1 rounded-full">
+                              <Clock className="w-3 h-3" /> {cat.hours}h content
+                            </span>
                           </div>
-                        </div>
-                        <p className="text-white/60 text-sm leading-relaxed mb-5">{cat.description}</p>
-                        <div className="flex items-center gap-4 text-xs text-white/40">
-                          <span className="flex items-center gap-1.5 bg-white/5 px-2.5 py-1 rounded-full">
-                            <BookOpen className="w-3 h-3" /> {cat.courses} courses
-                          </span>
-                          <span className="flex items-center gap-1.5 bg-white/5 px-2.5 py-1 rounded-full">
-                            <Clock className="w-3 h-3" /> {cat.hours}h content
-                          </span>
-                        </div>
 
-                        {selectedCategory === cat.id && (
-                          <motion.div
-                            initial={{ opacity: 0, height: 0 }}
-                            animate={{ opacity: 1, height: "auto" }}
-                            exit={{ opacity: 0, height: 0 }}
-                            className="border-t border-white/10 pt-4 mt-5"
-                          >
-                            <p className="text-[10px] text-white/40 uppercase tracking-widest mb-3 font-semibold">Key Topics</p>
-                            <ul className="space-y-2">
-                              {cat.topics.map((topic) => (
-                                <li key={topic} className="flex items-center gap-2.5 text-sm text-white/70">
-                                  <CheckCircle2 className={`w-4 h-4 ${colors.text} flex-shrink-0`} />
-                                  {topic}
-                                </li>
-                              ))}
-                            </ul>
-                          </motion.div>
-                        )}
+                          {selectedCategory === cat.id && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="border-t border-white/10 pt-4 mt-5"
+                            >
+                              <p className="text-[10px] text-white/40 uppercase tracking-widest mb-3 font-semibold">Key Topics</p>
+                              <ul className="space-y-2">
+                                {cat.topics.map((topic) => (
+                                  <li key={topic} className="flex items-center gap-2.5 text-sm text-white/70">
+                                    <CheckCircle2 className={`w-4 h-4 ${colors.text} flex-shrink-0`} />
+                                    {topic}
+                                  </li>
+                                ))}
+                              </ul>
+                            </motion.div>
+                          )}
+                        </div>
                       </GlassCard>
                     </div>
                   </motion.div>
@@ -623,8 +714,8 @@ export default function AcademyPage() {
 
       <section className="py-20 relative overflow-hidden">
         <div className="absolute inset-0">
-          <img src={certImg} alt="Blockchain Credentials" className="w-full h-full object-cover opacity-15" />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/90 to-slate-950" />
+          <img src={certImg} alt="Verified Credentials" className="w-full h-full object-cover opacity-15" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#06060a] via-[#06060a]/90 to-[#06060a]" />
         </div>
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
 
@@ -640,14 +731,14 @@ export default function AcademyPage() {
               <Award className="w-3 h-3 mr-1" /> Certifications
             </Badge>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black mb-4">
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-rose-400 bg-clip-text text-transparent">
-                Blockchain-Verified
+              <span className="bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                Verified
               </span>{" "}
               Credentials
             </h2>
             <p className="text-white/50 max-w-xl mx-auto">
-              Earn certifications recorded on the Trust Layer. Permanently verifiable. Impossible to fake.
-              Your proof of expertise, forever on-chain.
+              Earn certifications that prove your skills. Permanently verifiable on the Trust Layer.
+              Your proof of expertise — recorded, immutable, and always accessible.
             </p>
           </motion.div>
 
@@ -661,23 +752,25 @@ export default function AcademyPage() {
             {certifications.map((cert) => (
               <motion.div key={cert.id} variants={fadeUp}>
                 <motion.div whileHover={{ scale: 1.03, y: -4 }} transition={{ type: "spring", stiffness: 300 }}>
-                  <GlassCard glow className="p-6 sm:p-8 h-full shadow-2xl hover:border-purple-500/30 hover:shadow-purple-500/10 transition-all duration-300" data-testid={`card-cert-${cert.id}`}>
-                    <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${cert.badge} flex items-center justify-center mb-6 shadow-xl relative`}>
-                      <span className="text-xl font-black text-white">{cert.abbrev}</span>
-                      <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${cert.badge} opacity-40 blur-xl`} />
-                    </div>
-                    <h3 className="font-bold text-white text-lg mb-3">{cert.title}</h3>
-                    <p className="text-white/60 text-sm leading-relaxed mb-6">{cert.description}</p>
-                    <div className="border-t border-white/10 pt-4">
-                      <p className="text-[10px] text-white/40 uppercase tracking-widest mb-3 font-semibold">Prerequisites</p>
-                      <ul className="space-y-2">
-                        {cert.prereqs.map((p) => (
-                          <li key={p} className="flex items-center gap-2.5 text-sm text-white/60">
-                            <FileText className="w-3.5 h-3.5 text-white/30 flex-shrink-0" />
-                            {p}
-                          </li>
-                        ))}
-                      </ul>
+                  <GlassCard glow className="h-full shadow-2xl hover:border-purple-500/30 hover:shadow-purple-500/10 transition-all duration-300" data-testid={`card-cert-${cert.id}`}>
+                    <div className="p-6 sm:p-8">
+                      <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${cert.badge} flex items-center justify-center mb-6 shadow-xl relative`}>
+                        <span className="text-xl font-black text-white">{cert.abbrev}</span>
+                        <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${cert.badge} opacity-40 blur-xl`} />
+                      </div>
+                      <h3 className="font-bold text-white text-lg mb-3">{cert.title}</h3>
+                      <p className="text-white/60 text-sm leading-relaxed mb-6">{cert.description}</p>
+                      <div className="border-t border-white/10 pt-4">
+                        <p className="text-[10px] text-white/40 uppercase tracking-widest mb-3 font-semibold">Prerequisites</p>
+                        <ul className="space-y-2">
+                          {cert.prereqs.map((p) => (
+                            <li key={p} className="flex items-center gap-2.5 text-sm text-white/60">
+                              <FileText className="w-3.5 h-3.5 text-white/30 flex-shrink-0" />
+                              {p}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
                   </GlassCard>
                 </motion.div>
@@ -688,7 +781,7 @@ export default function AcademyPage() {
       </section>
 
       <section className="py-20 relative">
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber-500/20 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/20 to-transparent" />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -697,11 +790,11 @@ export default function AcademyPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <Badge className="mb-4 px-3 py-1.5 bg-amber-500/10 border-amber-500/30 text-amber-400 text-xs">
+            <Badge className="mb-4 px-3 py-1.5 bg-cyan-500/10 border-cyan-500/30 text-cyan-400 text-xs">
               <Star className="w-3 h-3 mr-1" /> Testimonials
             </Badge>
             <h2 className="text-3xl sm:text-4xl font-display font-black mb-4">
-              What <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Builders</span> Are Saying
+              What <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Builders</span> Are Saying
             </h2>
           </motion.div>
 
@@ -714,18 +807,20 @@ export default function AcademyPage() {
           >
             {testimonials.map((t, i) => (
               <motion.div key={i} variants={fadeUp}>
-                <GlassCard glow className="p-6 h-full shadow-2xl hover:border-amber-500/20 transition-all duration-300">
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(t.rating)].map((_, j) => (
-                      <Star key={j} className="w-4 h-4 text-amber-400 fill-amber-400" />
-                    ))}
-                  </div>
-                  <p className="text-white/80 text-sm leading-relaxed mb-4 italic">"{t.text}"</p>
-                  <div className="flex items-center gap-2 text-xs text-white/40">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
-                      <Users className="w-3 h-3 text-white" />
+                <GlassCard glow className="h-full shadow-2xl hover:border-cyan-500/20 transition-all duration-300">
+                  <div className="p-6">
+                    <div className="flex gap-1 mb-4">
+                      {[...Array(t.rating)].map((_, j) => (
+                        <Star key={j} className="w-4 h-4 text-cyan-400 fill-cyan-400" />
+                      ))}
                     </div>
-                    {t.author}
+                    <p className="text-white/80 text-sm leading-relaxed mb-4 italic">"{t.text}"</p>
+                    <div className="flex items-center gap-2 text-xs text-white/40">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-cyan-500 to-purple-500 flex items-center justify-center">
+                        <Users className="w-3 h-3 text-white" />
+                      </div>
+                      {t.author}
+                    </div>
                   </div>
                 </GlassCard>
               </motion.div>
@@ -736,10 +831,10 @@ export default function AcademyPage() {
 
       <section className="py-20 relative overflow-hidden">
         <div className="absolute inset-0">
-          <img src={securityImg} alt="Security Command Center" className="w-full h-full object-cover opacity-10" />
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-950/95 to-slate-950" />
+          <img src={securityImg} alt="Learning Lab" className="w-full h-full object-cover opacity-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#06060a] via-[#06060a]/95 to-[#06060a]" />
         </div>
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-500/20 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
 
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -750,26 +845,26 @@ export default function AcademyPage() {
               transition={{ duration: 0.8 }}
               className="space-y-6"
             >
-              <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
+              <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
                 <Shield className="w-3 h-3 mr-1" /> Learning Journey
               </Badge>
               <h2 className="text-3xl sm:text-4xl font-display font-black">
                 Your Path to{" "}
-                <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                   Mastery
                 </span>
               </h2>
               <p className="text-white/60 leading-relaxed">
-                A structured progression from crypto beginner to certified Trust Layer operator.
+                A structured progression from "what is code?" to building your own programming language.
                 Each level builds on the last.
               </p>
 
               <div className="space-y-4">
                 {[
-                  { step: "01", title: "Foundation", desc: "Crypto Fundamentals — blockchain basics, wallets, transactions", color: "from-cyan-500 to-blue-500", icon: BookOpen },
-                  { step: "02", title: "Specialization", desc: "Choose DeFi, Security, or Multi-Chain tracks", color: "from-amber-500 to-orange-500", icon: Target },
-                  { step: "03", title: "Certification", desc: "Pass your exam and earn on-chain credentials", color: "from-purple-500 to-pink-500", icon: Award },
-                  { step: "04", title: "Mastery", desc: "Advanced workshops, mentorship, and ecosystem building", color: "from-green-500 to-emerald-500", icon: Crown },
+                  { step: "01", title: "Foundation", desc: "Programming Foundations — what languages are, how they work, who made them", color: "from-cyan-500 to-cyan-600", icon: BookOpen },
+                  { step: "02", title: "Specialization", desc: "Choose JavaScript Mastery, Compiler Engineering, or Digital Architecture", color: "from-purple-500 to-purple-600", icon: Target },
+                  { step: "03", title: "Certification", desc: "Pass your exam and earn on-chain credentials — CLF, CLE, or CDA", color: "from-cyan-500 to-purple-500", icon: Award },
+                  { step: "04", title: "Mastery", desc: "Build your own language, contribute to Lume, mentor others", color: "from-purple-500 to-cyan-500", icon: Crown },
                 ].map((s, i) => (
                   <motion.div
                     key={s.step}
@@ -779,17 +874,19 @@ export default function AcademyPage() {
                     transition={{ delay: i * 0.15 }}
                     className="group"
                   >
-                    <GlassCard className="p-4 flex items-center gap-4 hover:border-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-500/5 transition-all duration-300">
-                      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center flex-shrink-0 shadow-lg relative`}>
-                        <s.icon className="w-5 h-5 text-white" />
-                        <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${s.color} opacity-30 blur-lg`} />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] text-white/30 font-mono uppercase tracking-wider">Step {s.step}</span>
+                    <GlassCard className="hover:border-cyan-500/30 hover:shadow-2xl hover:shadow-cyan-500/5 transition-all duration-300">
+                      <div className="p-4 flex items-center gap-4">
+                        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center flex-shrink-0 shadow-lg relative`}>
+                          <s.icon className="w-5 h-5 text-white" />
+                          <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${s.color} opacity-30 blur-lg`} />
                         </div>
-                        <h4 className="font-bold text-white text-sm">{s.title}</h4>
-                        <p className="text-white/50 text-xs mt-0.5">{s.desc}</p>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] text-white/30 font-mono uppercase tracking-wider">Step {s.step}</span>
+                          </div>
+                          <h4 className="font-bold text-white text-sm">{s.title}</h4>
+                          <p className="text-white/50 text-xs mt-0.5">{s.desc}</p>
+                        </div>
                       </div>
                     </GlassCard>
                   </motion.div>
@@ -805,13 +902,13 @@ export default function AcademyPage() {
             >
               <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-purple-500/10">
                 <img src={mentorImg} alt="Mentorship" className="w-full h-auto" />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#06060a]/80 via-transparent to-transparent" />
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs mb-2">
                     <Crown className="w-3 h-3 mr-1" /> Master Tier Exclusive
                   </Badge>
                   <h3 className="text-lg font-bold text-white">1-on-1 Mentorship</h3>
-                  <p className="text-white/50 text-xs mt-1">Direct access to ecosystem experts and validators</p>
+                  <p className="text-white/50 text-xs mt-1">Direct access to language designers and compiler engineers</p>
                 </div>
               </div>
             </motion.div>
@@ -832,12 +929,12 @@ export default function AcademyPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <Badge className="mb-4 px-3 py-1.5 bg-green-500/10 border-green-500/30 text-green-400 text-xs">
+            <Badge className="mb-4 px-3 py-1.5 bg-cyan-500/10 border-cyan-500/30 text-cyan-400 text-xs">
               Pricing
             </Badge>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black mb-4">
               Choose Your{" "}
-              <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
                 Learning Path
               </span>
             </h2>
@@ -862,51 +959,53 @@ export default function AcademyPage() {
                 <motion.div whileHover={{ scale: 1.03, y: -4 }} transition={{ type: "spring", stiffness: 300 }}>
                   <GlassCard
                     glow={tier.popular}
-                    className={`p-6 sm:p-8 h-full flex flex-col relative shadow-2xl transition-all duration-300 ${
+                    className={`h-full flex flex-col relative shadow-2xl transition-all duration-300 ${
                       tier.popular
                         ? "border-cyan-500/30 shadow-[0_0_50px_rgba(6,182,212,0.15)] hover:shadow-[0_0_60px_rgba(6,182,212,0.25)]"
                         : "hover:border-white/20"
                     }`}
                     data-testid={`card-pricing-${tier.id}`}
                   >
-                    {tier.popular && (
-                      <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
-                        <Badge className="bg-gradient-to-r from-cyan-500 to-blue-500 text-white border-0 text-xs px-4 py-1 shadow-lg shadow-cyan-500/30">
-                          <Star className="w-3 h-3 mr-1 fill-white" />
-                          Most Popular
-                        </Badge>
+                    <div className="p-6 sm:p-8 flex flex-col h-full">
+                      {tier.popular && (
+                        <div className="absolute -top-3.5 left-1/2 -translate-x-1/2">
+                          <Badge className="bg-gradient-to-r from-cyan-500 to-purple-500 text-white border-0 text-xs px-4 py-1 shadow-lg shadow-cyan-500/30">
+                            <Star className="w-3 h-3 mr-1 fill-white" />
+                            Most Popular
+                          </Badge>
+                        </div>
+                      )}
+                      <div className="mb-6">
+                        <h3 className="font-black text-white text-xl">{tier.name}</h3>
+                        <p className="text-white/50 text-xs mt-1.5">{tier.description}</p>
                       </div>
-                    )}
-                    <div className="mb-6">
-                      <h3 className="font-black text-white text-xl">{tier.name}</h3>
-                      <p className="text-white/50 text-xs mt-1.5">{tier.description}</p>
+                      <div className="flex items-baseline gap-1 mb-8">
+                        <span className="text-4xl sm:text-5xl font-black text-white">{tier.price}</span>
+                        {tier.period && <span className="text-white/40 text-sm">{tier.period}</span>}
+                      </div>
+                      <ul className="space-y-3 mb-8 flex-grow">
+                        {tier.features.map((feature) => (
+                          <li key={feature} className="flex items-start gap-2.5 text-sm text-white/70">
+                            <CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" />
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                      <Button
+                        size="lg"
+                        className={`w-full h-12 font-bold rounded-xl text-base ${
+                          tier.popular
+                            ? "bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white shadow-lg shadow-cyan-500/20"
+                            : tier.id === "master"
+                            ? "bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white shadow-lg shadow-purple-500/20"
+                            : "bg-white/10 hover:bg-white/15 text-white border border-white/10"
+                        }`}
+                        onClick={() => tier.priceId && handleSubscribe(tier.priceId)}
+                        data-testid={`button-subscribe-${tier.id}`}
+                      >
+                        {tier.cta}
+                      </Button>
                     </div>
-                    <div className="flex items-baseline gap-1 mb-8">
-                      <span className="text-4xl sm:text-5xl font-black text-white">{tier.price}</span>
-                      {tier.period && <span className="text-white/40 text-sm">{tier.period}</span>}
-                    </div>
-                    <ul className="space-y-3 mb-8 flex-grow">
-                      {tier.features.map((feature) => (
-                        <li key={feature} className="flex items-start gap-2.5 text-sm text-white/70">
-                          <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                    <Button
-                      size="lg"
-                      className={`w-full h-12 font-bold rounded-xl text-base ${
-                        tier.popular
-                          ? "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/20"
-                          : tier.id === "master"
-                          ? "bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white shadow-lg shadow-purple-500/20"
-                          : "bg-white/10 hover:bg-white/15 text-white border border-white/10"
-                      }`}
-                      onClick={() => tier.priceId && handleSubscribe(tier.priceId)}
-                      data-testid={`button-subscribe-${tier.id}`}
-                    >
-                      {tier.cta}
-                    </Button>
                   </GlassCard>
                 </motion.div>
               </motion.div>
@@ -925,40 +1024,40 @@ export default function AcademyPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <Badge className="mb-4 bg-blue-500/20 text-blue-400 border-blue-500/30">
+              <Badge className="mb-4 bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
                 <Eye className="w-3 h-3 mr-1" /> Built Different
               </Badge>
               <h2 className="text-3xl sm:text-4xl font-display font-black mb-8">
                 Why{" "}
-                <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                  Academy
+                <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                  Lume Academy
                 </span>
               </h2>
               <div className="space-y-4">
                 {[
                   {
                     icon: Lock,
-                    title: "On-Chain Credentials",
-                    desc: "Your certifications live on the Trust Layer blockchain. Verifiable by anyone, forever.",
-                    gradient: "from-cyan-500 to-blue-500",
+                    title: "Verified Credentials",
+                    desc: "Your certifications are permanently recorded on the Trust Layer. Verifiable by anyone, forever.",
+                    gradient: "from-cyan-500 to-cyan-600",
                   },
                   {
-                    icon: Zap,
-                    title: "Practical, Not Theoretical",
-                    desc: "Every course includes hands-on exercises using real Trust Layer tools and tokens.",
-                    gradient: "from-amber-500 to-orange-500",
+                    icon: Terminal,
+                    title: "Build, Don't Just Read",
+                    desc: "Every course includes hands-on labs. Build a compiler, create a language, ship real software.",
+                    gradient: "from-purple-500 to-purple-600",
                   },
                   {
                     icon: Users,
                     title: "Community-Driven",
-                    desc: "Learn alongside other builders. Weekly Q&A sessions, forums, and peer reviews.",
-                    gradient: "from-purple-500 to-pink-500",
+                    desc: "Learn alongside other builders. Weekly Q&A sessions, forums, and peer code reviews.",
+                    gradient: "from-cyan-500 to-purple-500",
                   },
                   {
                     icon: TrendingUp,
                     title: "Always Current",
-                    desc: "Courses updated monthly to reflect the latest in DeFi, security, and multi-chain tech.",
-                    gradient: "from-green-500 to-emerald-500",
+                    desc: "Courses updated monthly to reflect the latest in AI-native programming, compilers, and language design.",
+                    gradient: "from-purple-500 to-cyan-500",
                   },
                 ].map((item, i) => (
                   <motion.div
@@ -968,14 +1067,16 @@ export default function AcademyPage() {
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.1 }}
                   >
-                    <GlassCard className="p-5 flex items-start gap-4 hover:border-cyan-500/20 hover:shadow-2xl hover:shadow-cyan-500/5 transition-all duration-300">
-                      <div className={`p-2.5 rounded-xl bg-gradient-to-br ${item.gradient} flex-shrink-0 shadow-lg relative`}>
-                        <item.icon className="w-5 h-5 text-white" />
-                        <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${item.gradient} opacity-30 blur-lg`} />
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-white text-sm">{item.title}</h4>
-                        <p className="text-white/60 text-xs leading-relaxed mt-1.5">{item.desc}</p>
+                    <GlassCard className="hover:border-cyan-500/20 hover:shadow-2xl hover:shadow-cyan-500/5 transition-all duration-300">
+                      <div className="p-5 flex items-start gap-4">
+                        <div className={`p-2.5 rounded-xl bg-gradient-to-br ${item.gradient} flex-shrink-0 shadow-lg relative`}>
+                          <item.icon className="w-5 h-5 text-white" />
+                          <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${item.gradient} opacity-30 blur-lg`} />
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-white text-sm">{item.title}</h4>
+                          <p className="text-white/60 text-xs leading-relaxed mt-1.5">{item.desc}</p>
+                        </div>
                       </div>
                     </GlassCard>
                   </motion.div>
@@ -989,7 +1090,7 @@ export default function AcademyPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <Badge className="mb-4 bg-slate-500/20 text-white/60 border-white/10">
+              <Badge className="mb-4 bg-purple-500/20 text-purple-400 border-purple-500/30">
                 <Radio className="w-3 h-3 mr-1" /> FAQ
               </Badge>
               <h2 className="text-3xl sm:text-4xl font-display font-black mb-8">
@@ -1021,44 +1122,46 @@ export default function AcademyPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <GlassCard glow className="p-10 sm:p-16 shadow-2xl shadow-cyan-500/10 relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-transparent to-purple-500/5" />
-              <div className="absolute top-0 right-0 w-40 h-40 bg-cyan-500/10 rounded-full blur-[80px]" />
-              <div className="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/10 rounded-full blur-[80px]" />
+            <GlassCard glow className="shadow-2xl shadow-cyan-500/10 relative overflow-hidden">
+              <div className="p-10 sm:p-16">
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-purple-500/5" />
+                <div className="absolute top-0 right-0 w-40 h-40 bg-cyan-500/10 rounded-full blur-[80px]" />
+                <div className="absolute bottom-0 left-0 w-40 h-40 bg-purple-500/10 rounded-full blur-[80px]" />
 
-              <div className="relative z-10">
-                <motion.div
-                  animate={{ rotate: [0, 5, -5, 0] }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                >
-                  <Sparkles className="w-12 h-12 text-cyan-400 mx-auto mb-6" />
-                </motion.div>
-                <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black mb-6">
-                  <span className="bg-gradient-to-r from-blue-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                    Start Your Journey
-                  </span>
-                  <br />
-                  <span className="text-white">Today</span>
-                </h2>
-                <p className="text-white/60 text-base sm:text-lg mb-10 max-w-lg mx-auto leading-relaxed">
-                  Join builders and validators building real skills in crypto, DeFi, and blockchain security.
-                  Your first course is free — no credit card required.
-                </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                  <Button
-                    size="lg"
-                    className="h-14 px-8 text-base gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white shadow-2xl shadow-blue-500/25 rounded-xl"
-                    data-testid="button-start-free"
+                <div className="relative z-10">
+                  <motion.div
+                    animate={{ rotate: [0, 5, -5, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                   >
-                    <GraduationCap className="w-5 h-5" />
-                    Start Free
-                    <ArrowRight className="w-4 h-4" />
-                  </Button>
-                  <Link href="/ecosystem">
-                    <Button size="lg" variant="outline" className="h-14 px-8 text-base border-white/20 text-white hover:bg-white/5 rounded-xl" data-testid="button-back-ecosystem">
-                      Back to Ecosystem
+                    <GraduationCap className="w-12 h-12 text-cyan-400 mx-auto mb-6" />
+                  </motion.div>
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black mb-6">
+                    <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                      Start Your Journey
+                    </span>
+                    <br />
+                    <span className="text-white">Today</span>
+                  </h2>
+                  <p className="text-white/60 text-base sm:text-lg mb-10 max-w-lg mx-auto leading-relaxed">
+                    Join builders and engineers learning how code really works — from first principles
+                    to building their own programming languages. Your first course is free.
+                  </p>
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <Button
+                      size="lg"
+                      className="h-14 px-8 text-base gap-2 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 text-white shadow-2xl shadow-cyan-500/25 rounded-xl"
+                      data-testid="button-start-free"
+                    >
+                      <GraduationCap className="w-5 h-5" />
+                      Start Free
+                      <ArrowRight className="w-4 h-4" />
                     </Button>
-                  </Link>
+                    <Link href="/ecosystem">
+                      <Button size="lg" variant="outline" className="h-14 px-8 text-base border-white/20 text-white hover:bg-white/5 rounded-xl" data-testid="button-back-ecosystem">
+                        Back to Ecosystem
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </GlassCard>
