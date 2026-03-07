@@ -96,6 +96,17 @@ const courseCategories = [
     level: "Intermediate",
     topics: ["Windows vs macOS — Same Bricks, Different Architects", "The Web as Universal Translator", "Where Code Actually Runs", "Digital Durability & Self-Sustaining Systems", "The Democratization of Software"],
   },
+  {
+    id: "self-sustaining",
+    title: "Self-Sustaining Runtime",
+    description: "Build software that takes care of itself. Four layers — monitoring, healing, optimizing, and evolving — that make your Lume programs autonomous.",
+    icon: Shield,
+    color: "cyan",
+    courses: 12,
+    hours: 22,
+    level: "Advanced",
+    topics: ["Layer 1: Self-Monitoring & Metrics", "Layer 2: Self-Healing & Circuit Breakers", "Layer 3: Self-Optimizing with AI", "Layer 4: Self-Evolving Daemon", "Safety Guardrails & Mutation Logs"],
+  },
 ];
 
 const certifications = [
@@ -119,9 +130,17 @@ const certifications = [
     id: "cda",
     title: "Certified Digital Architect",
     abbrev: "CDA",
-    description: "Expert-level certification covering full-stack digital architecture, platform engineering, and self-sustaining systems.",
+    description: "Expert-level certification covering full-stack digital architecture, platform engineering, and system design.",
     prereqs: ["JavaScript Mastery", "Digital Architecture", "Compiler Engineering"],
     badge: "from-cyan-500 to-purple-500",
+  },
+  {
+    id: "csr",
+    title: "Certified Self-Sustaining Runtime Engineer",
+    abbrev: "CSR",
+    description: "Master-level certification for building autonomous software — self-monitoring, self-healing, self-optimizing, and self-evolving systems.",
+    prereqs: ["The Lume Language", "Self-Sustaining Runtime", "Compiler Engineering"],
+    badge: "from-purple-500 to-cyan-500",
   },
 ];
 
@@ -150,7 +169,7 @@ const pricingTiers = [
     period: "/mo",
     description: "Full access to all courses, certification exams, and priority support.",
     features: [
-      "All 6 course tracks (46+ courses)",
+      "All 7 course tracks (58+ courses)",
       "Certification exam access",
       "Lume language deep dives",
       "Compiler engineering labs",
@@ -211,6 +230,10 @@ const faqItems = [
     q: "Do I need to install anything to write Lume code?",
     a: "Lume compiles to JavaScript, so you just need Node.js installed. Run 'npm install -g lume' and you're ready. The compiler runs entirely on your machine — no connection to any central server.",
   },
+  {
+    q: "What is the self-sustaining runtime?",
+    a: "It's Lume's Milestone 6 — four layers that make your programs autonomous. Layer 1 monitors everything automatically. Layer 2 heals failures with retries, fallbacks, and circuit breakers. Layer 3 uses AI to optimize slow code. Layer 4 evolves the program by watching for dependency updates, benchmarking AI models, and adapting to changes. All with strict safety guardrails and rollback capability.",
+  },
 ];
 
 const testimonials = [
@@ -241,8 +264,43 @@ const knowledgeHighlights = [
   {
     icon: Rocket,
     title: "Self-Sustaining Systems",
-    description: "Software that monitors, heals, optimizes, and improves itself. The human becomes the architect, not the mechanic.",
-    detail: "Lume's 'mutate' keyword enables controlled self-modification with strict guardrails.",
+    description: "Software that monitors, heals, optimizes, and evolves itself. The human becomes the architect, not the mechanic.",
+    detail: "monitor → heal → optimize → evolve — four layers, each building on the one below it.",
+  },
+];
+
+const runtimeLayers = [
+  {
+    layer: 4,
+    title: "Self-Evolving",
+    keyword: "evolve",
+    description: "Anticipates problems before they happen. Watches dependency updates, benchmarks AI models, detects API schema changes, and adapts — only asking a human when it faces a decision it genuinely cannot make alone.",
+    capabilities: ["Predictive scaling & cache pre-warming", "Dependency monitoring & auto-patching", "AI model benchmarking & switching", "Schema adaptation for API changes", "Cost optimization recommendations", "Pattern learning from usage data"],
+    codeExample: "evolve:\n    daemon: true\n    check_interval: 1 hour\n    capabilities:\n        model_benchmarking: true\n        dependency_updates: true\n        cost_optimization: true",
+  },
+  {
+    layer: 3,
+    title: "Self-Optimizing",
+    keyword: "optimize",
+    description: "Uses AI to analyze performance data from Layer 1 and improve code automatically. Detects slow functions, adds caching, and rewrites bottlenecks — all in a sandbox with rollback capability.",
+    capabilities: ["AI-powered function rewriting", "Automatic caching for repeated inputs", "Error pattern analysis & fixes", "Unused code detection", "Prompt optimization for AI calls", "Two modes: suggest or auto-apply"],
+    codeExample: "optimize:\n    mode: suggest\n    ai_model: claude.sonnet\n    constraints:\n        max_mutations_per_day: 10\n        require_test_pass: true\n        log_all_changes: true",
+  },
+  {
+    layer: 2,
+    title: "Self-Healing",
+    keyword: "heal",
+    description: "When something breaks, the program has a playbook. Retries with backoff, switches to backup endpoints, falls back to alternate AI models, and implements circuit breakers — all without crashing.",
+    capabilities: ["Exponential backoff retry", "Backup endpoint switching", "AI model fallback chains", "Circuit breaker pattern", "Automatic reconnection", "Graceful degradation with cached data"],
+    codeExample: "@healable\nto fetch_user_data(id) -> result of User:\n    heal:\n        retries: 5\n        fallback: cached_user(id)\n        on_fail: alert \"User data unavailable\"",
+  },
+  {
+    layer: 1,
+    title: "Self-Monitoring",
+    keyword: "monitor",
+    description: "Every function is automatically instrumented at compile time. Execution time, call count, error rate, memory usage, AI call costs — all tracked with zero developer code required.",
+    capabilities: ["Execution time per function", "Call count & hot path detection", "Error rate tracking", "Memory usage monitoring", "AI call latency & cost tracking", "Built-in web dashboard on port 9090"],
+    codeExample: "monitor:\n    interval: 5 seconds\n    retention: 24 hours\n    alert_on:\n        error_rate > 0.05\n        avg_time > 2000\n    dashboard: true",
   },
 ];
 
@@ -479,10 +537,10 @@ export default function AcademyPage() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4"
           >
             {[
-              { label: "Courses", value: "46+", icon: BookOpen },
-              { label: "Hours", value: "80+", icon: Clock },
-              { label: "Certifications", value: "3", icon: Award },
-              { label: "Tracks", value: "6", icon: Target },
+              { label: "Courses", value: "58+", icon: BookOpen },
+              { label: "Hours", value: "102+", icon: Clock },
+              { label: "Certifications", value: "4", icon: Award },
+              { label: "Tracks", value: "7", icon: Target },
             ].map((stat) => (
               <motion.div key={stat.label} variants={fadeUp}>
                 <AnimatedCounter {...stat} />
@@ -610,6 +668,109 @@ export default function AcademyPage() {
                 </motion.div>
               </motion.div>
             ))}
+          </motion.div>
+        </div>
+      </section>
+
+      <section className="py-20 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/[0.02] to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500/20 to-transparent" />
+        <div className="absolute top-40 right-1/4 w-[500px] h-[500px] bg-purple-600/5 rounded-full blur-[150px]" />
+        <div className="absolute bottom-40 left-1/4 w-[400px] h-[400px] bg-cyan-600/5 rounded-full blur-[120px]" />
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <Badge className="mb-4 px-3 py-1.5 bg-purple-500/10 border-purple-500/30 text-purple-400 text-xs">
+              <Shield className="w-3 h-3 mr-1" /> Milestone 6: The Autonomous Runtime
+            </Badge>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black mb-4">
+              <span className="bg-gradient-to-r from-purple-400 via-cyan-400 to-purple-400 bg-clip-text text-transparent">
+                Software That
+              </span>{" "}
+              Takes Care of Itself
+            </h2>
+            <p className="text-white/50 max-w-2xl mx-auto">
+              Lume's self-sustaining runtime has four layers, each building on the one below it.
+              A Lume program can monitor itself, heal itself, optimize itself, and evolve — only calling a human when it faces a decision it genuinely cannot make on its own.
+            </p>
+          </motion.div>
+
+          <div className="space-y-6 max-w-5xl mx-auto">
+            {runtimeLayers.map((layer, i) => (
+              <motion.div
+                key={layer.layer}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: i * 0.1 }}
+              >
+                <GlassCard glow className="hover:border-cyan-500/30 transition-all duration-300">
+                  <div className="p-6 sm:p-8">
+                    <div className="flex flex-col lg:flex-row gap-6">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/30 flex items-center justify-center shadow-lg shadow-purple-500/10">
+                            <span className="text-lg font-black text-white">{layer.layer}</span>
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-white text-lg">{layer.title}</h3>
+                            <code className="text-cyan-400 text-xs font-mono">{layer.keyword}:</code>
+                          </div>
+                        </div>
+                        <p className="text-white/60 text-sm leading-relaxed mb-4">{layer.description}</p>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {layer.capabilities.map((cap) => (
+                            <div key={cap} className="flex items-center gap-2 text-xs text-white/50">
+                              <CheckCircle2 className="w-3.5 h-3.5 text-cyan-400 flex-shrink-0" />
+                              {cap}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="lg:w-80 flex-shrink-0">
+                        <div className="bg-[#0a0b10] border border-[#1a1b2e] rounded-lg p-4 h-full">
+                          <div className="flex items-center gap-2 mb-3">
+                            <div className="w-2 h-2 rounded-full bg-cyan-500" />
+                            <span className="text-[10px] text-white/30 uppercase tracking-widest font-mono">Lume Syntax</span>
+                          </div>
+                          <pre className="text-cyan-400 text-xs font-mono whitespace-pre leading-relaxed">{layer.codeExample}</pre>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </GlassCard>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="mt-10 max-w-5xl mx-auto"
+          >
+            <GlassCard>
+              <div className="p-6">
+                <div className="flex flex-col sm:flex-row items-center gap-4 text-center sm:text-left">
+                  <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/20 flex-shrink-0">
+                    <Zap className="w-6 h-6 text-cyan-400" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-white text-sm">All Layers Integrate</h4>
+                    <p className="text-white/50 text-xs leading-relaxed mt-1">
+                      Monitor feeds data to Healer (triggers healing on errors). Healer feeds data to Optimizer (recurring issues trigger optimization). Optimizer feeds data to Evolver (optimization patterns inform evolution decisions). The mutation log is append-only — it cannot be deleted by the program itself.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </GlassCard>
           </motion.div>
         </div>
       </section>
@@ -747,7 +908,7 @@ export default function AcademyPage() {
             whileInView="visible"
             viewport={{ once: true }}
             variants={stagger}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           >
             {certifications.map((cert) => (
               <motion.div key={cert.id} variants={fadeUp}>
