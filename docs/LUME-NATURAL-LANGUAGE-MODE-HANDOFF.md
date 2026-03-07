@@ -1,5 +1,5 @@
-# LUME — Natural Language Mode Handoff
-### Milestone 7: English Mode & Milestone 8: Multilingual Mode
+# LUME — Natural Language Evolution Roadmap
+### Milestones 7–13: From English Mode to Universal Programming
 **Date:** March 7, 2026
 **From:** Jason (Trust Layer / DarkWave Ecosystem)
 **To:** Lume Agent (lume-lang.org)
@@ -8,7 +8,15 @@
 
 ## CONTEXT
 
-Lume already compiles `.lume` files through the pipeline: **Lexer → Parser → AST → Transpiler → JavaScript**. The existing keywords (`ask`, `think`, `generate`, `show`, `let`, `monitor`, `heal`, `optimize`, `evolve`, `mutate`) proved that natural-language-inspired syntax dramatically reduces friction. These two milestones take that principle to its logical conclusion.
+Lume already compiles `.lume` files through the pipeline: **Lexer → Parser → AST → Transpiler → JavaScript**. The existing keywords (`ask`, `think`, `generate`, `show`, `let`, `monitor`, `heal`, `optimize`, `evolve`, `mutate`) proved that natural-language-inspired syntax dramatically reduces friction. Milestones 1–6 are complete. These seven milestones take the language to its ultimate form.
+
+**Milestones 1–6 (COMPLETE):**
+1. Core language & compiler
+2. AI-native keywords
+3. Transpiler to JavaScript
+4. npm publish & CLI
+5. Lume Academy integration
+6. Self-Sustaining Runtime (monitor, heal, optimize, evolve)
 
 ---
 
@@ -123,10 +131,20 @@ Never silently guess. If there's ambiguity, surface it.
 ### CLI Usage
 
 ```bash
-lume build app.lume              # Standard Lume compilation (unchanged)
+lume build app.lume                  # Standard Lume compilation (unchanged)
 lume build app.lume --mode english   # Force English mode (override file declaration)
-lume run app.lume                # Auto-detects mode from file header
+lume run app.lume                    # Auto-detects mode from file header
 ```
+
+### Acceptance Criteria
+
+- [ ] `mode: english` file header is recognized by the compiler
+- [ ] Layer A pattern library with 50+ common phrases resolves correctly
+- [ ] Layer B AI resolution handles complex multi-step sentences
+- [ ] Context Engine scans project data models and populates variable slots
+- [ ] Pronoun/reference resolution works ("get the user, then show **their** name")
+- [ ] Errors are clear and suggest corrections
+- [ ] All existing `.lume` files without a mode declaration compile unchanged
 
 ---
 
@@ -137,8 +155,6 @@ lume run app.lume                # Auto-detects mode from file header
 Extend the Intent Resolver to accept input in any human language. French, Spanish, Mandarin, Arabic, Hindi, Japanese, Portuguese, German — any language the AI model understands.
 
 ### How It Works
-
-The Intent Resolver already processes natural language (from Milestone 7). Multilingual support means:
 
 1. **Auto-detect the input language** — no configuration needed
 2. **Resolve intent identically regardless of language** — the same program written in French and English produces the same AST and the same JavaScript output
@@ -195,51 +211,414 @@ The `mode: natural` declaration enables multilingual mode. `mode: english` restr
 
 Error messages should be returned in the same language the user is writing in. If the input is French, errors are in French. If mixed, default to the language used most in the file.
 
+### Acceptance Criteria
+
+- [ ] `mode: natural` file header enables multilingual input
+- [ ] Auto-detection of input language per line (no manual config)
+- [ ] Pattern library covers top 10 languages with 50+ patterns each
+- [ ] Mixed-language files compile correctly
+- [ ] Error messages output in the detected language
+- [ ] Identical AST/JS output regardless of input language
+
 ---
 
-## WHAT THIS DOES NOT CHANGE
+## MILESTONE 9: VOICE-TO-CODE
+
+### What It Is
+
+Spoken language as compiler input. A developer speaks into a microphone, the speech is transcribed, and the transcription is fed directly into the Intent Resolver from Milestones 7-8. The compiled output is working JavaScript.
+
+### How It Works
+
+```
+Voice Input → Speech-to-Text (Whisper / browser API) → Intent Resolver → Lume AST → Transpiler → JavaScript
+```
+
+The hard part (understanding what the words mean) is already solved by the Intent Resolver. This milestone adds a transcription front-end.
+
+### Implementation
+
+**Option A: Browser-Based (for the playground / IDE)**
+- Use the Web Speech API (`SpeechRecognition`) for real-time transcription in the browser
+- A microphone button in the Lume playground/IDE that toggles dictation mode
+- Transcribed text appears in the editor in real-time as the user speaks
+- User can edit the transcription before compiling, or compile on the fly
+
+**Option B: CLI-Based**
+- `lume listen` command starts a microphone session
+- Uses OpenAI Whisper (local or API) for high-accuracy transcription
+- Transcribed text is saved to a `.lume` file with `mode: natural` header
+- User reviews the file and runs `lume build` as normal
+
+**Option C: Mobile (future — ties into React Native ecosystem app)**
+- Tap-to-speak interface
+- Dictate an entire program while walking
+- Review and compile from phone
+
+### Voice-Specific Handling
+
+Speech introduces challenges that typed text doesn't have:
+
+1. **Punctuation** — speech doesn't naturally include colons, brackets, or indentation. The Intent Resolver should infer structure from verbal cues like "when," "if," "then," "next," "inside that," "end," "that's it"
+2. **Corrections** — "no wait, I meant..." or "scratch that" should undo the last transcribed line
+3. **Pauses** — a long pause (2+ seconds) could indicate a new logical block (like a paragraph break)
+4. **Numbers vs words** — "five" and "5" should resolve identically
+5. **Variable naming** — when the user says "call it user count," the system creates a variable named `userCount`
+
+### Multilingual Voice
+
+Because Milestone 8 already supports multilingual text, voice input in any language works automatically. Whisper supports 99 languages. A developer in Tokyo speaks Japanese, it transcribes to Japanese text, and the Intent Resolver compiles it.
+
+### Acceptance Criteria
+
+- [ ] Browser-based microphone input works in the Lume playground
+- [ ] CLI `lume listen` command starts voice capture and produces a `.lume` file
+- [ ] Verbal structural cues ("when," "if," "then") resolve to correct AST structure
+- [ ] "Scratch that" / "undo" removes the last transcribed line
+- [ ] Pause detection separates logical blocks
+- [ ] Voice input in non-English languages produces correct output via Milestone 8
+
+---
+
+## MILESTONE 10: VISUAL CONTEXT AWARENESS
+
+### What It Is
+
+Extend the Context Engine to understand visual layout and UI state. The compiler can resolve spatial and visual references in natural language — "put the form in the center," "make the header blue," "add a sidebar on the left."
+
+### How It Works
+
+The Context Engine (from Milestone 7) already tracks data models and variables. This milestone adds:
+
+1. **UI Element Registry** — the compiler maintains a map of all UI elements in the current project (buttons, forms, headers, lists, modals, etc.) with their positions, styles, and relationships
+2. **Spatial Resolution** — phrases like "on the left," "below the header," "next to the search bar" resolve to CSS/layout properties
+3. **Style Resolution** — "make it bigger," "change the color to blue," "add some spacing" resolve to specific style changes relative to the current state
+4. **Component Awareness** — "add a login form" generates a complete component (input fields, submit button, validation) based on common patterns
+
+### Implementation
+
+**UI Element Registry:**
+```
+Scans existing project files → builds a map:
+{
+  elements: [
+    { id: "header", type: "nav", position: "top", children: ["logo", "nav-links", "login-button"] },
+    { id: "main-content", type: "section", position: "center", children: [] },
+    { id: "footer", type: "footer", position: "bottom", children: ["copyright", "links"] }
+  ]
+}
+```
+
+**Natural Language → Layout:**
+
+| Input | Resolves To |
+|-------|-------------|
+| `put the form in the center of the page` | `display: flex; justify-content: center; align-items: center` on parent container |
+| `add a sidebar on the left` | CSS Grid or Flexbox layout with sidebar column |
+| `make the header sticky` | `position: sticky; top: 0` |
+| `hide the login button when the user is logged in` | Conditional render based on auth state |
+| `add some space between the cards` | `gap` property on parent grid/flex container |
+| `make the text bigger` | Increase `font-size` relative to current value |
+
+**Component Generation:**
+
+When the user says "add a login form," the compiler generates a full component based on common patterns:
+- Email/username input
+- Password input
+- Submit button
+- Basic validation
+- Error message display
+- Connection to the project's auth system (if one exists in the Context Engine)
+
+This isn't template-based — the Context Engine looks at the current project and generates a component that fits. If the project uses a specific design system, the generated component uses those styles.
+
+### Integration with TrustGen 3D
+
+For projects using TrustGen/Three.js/React Three Fiber, the Visual Context extends to 3D space:
+
+| Input | Resolves To |
+|-------|-------------|
+| `place the building next to the river` | 3D position calculation relative to existing meshes |
+| `make the sky darker` | Environment lighting adjustment |
+| `rotate the camera to face the entrance` | Camera transform with lookAt |
+| `add trees along the road` | Instanced mesh generation along a path |
+
+### Acceptance Criteria
+
+- [ ] UI Element Registry scans project and maps all visual elements
+- [ ] Spatial terms ("left," "center," "above," "below") resolve to correct CSS
+- [ ] Style modifications ("bigger," "blue," "more spacing") are relative to current state
+- [ ] "Add a [component]" generates contextually appropriate full components
+- [ ] 3D spatial resolution works for TrustGen/Three.js projects
+- [ ] Changes are non-destructive — existing layout is preserved unless explicitly changed
+
+---
+
+## MILESTONE 11: REVERSE MODE (CODE-TO-LANGUAGE)
+
+### What It Is
+
+Flip the pipeline. Instead of human language → code, take existing code and explain it in plain human language. Any JavaScript, TypeScript, or Lume file can be translated into a natural language explanation in whatever language the user speaks.
+
+### How It Works
+
+```
+JavaScript/Lume Source → AST Analysis → Explanation Generator → Plain Language Output
+```
+
+### Implementation
+
+**Two output modes:**
+
+**Mode A: Line-by-line annotation**
+```
+Input (JavaScript):
+  const users = await db.query("SELECT * FROM users WHERE active = true");
+  const names = users.map(u => u.name);
+  console.log(names.join(", "));
+
+Output (English):
+  Line 1: Get all active users from the database
+  Line 2: Extract just their names into a list
+  Line 3: Show all the names separated by commas
+
+Output (Spanish):
+  Línea 1: Obtener todos los usuarios activos de la base de datos
+  Línea 2: Extraer solo sus nombres en una lista
+  Línea 3: Mostrar todos los nombres separados por comas
+```
+
+**Mode B: Summary explanation**
+```
+Input: [entire file]
+Output: "This file connects to the database, gets all active users, and displays
+         their names as a comma-separated list. It runs when the page loads."
+```
+
+### CLI Usage
+
+```bash
+lume explain app.js                    # Explain in English (default)
+lume explain app.js --lang french      # Explain in French
+lume explain app.js --lang japanese    # Explain in Japanese
+lume explain app.js --mode summary     # Summary instead of line-by-line
+lume explain app.js --mode annotate    # Line-by-line annotations (default)
+```
+
+### Use Cases
+
+1. **Learning** — students read code explanations in their native language
+2. **Onboarding** — new developers on a project get plain-language explanations of what each file does
+3. **Documentation** — auto-generate documentation in any language from the code itself
+4. **Code review** — explain what changed in a pull request in plain language
+5. **Accessibility** — combined with text-to-speech, code can be *read aloud* as an explanation
+
+### Academy Integration
+
+This transforms Lume Academy instantly. Every code example can be explained in any language. A student in Brazil clicks "Explain in Portuguese" and the code block gets a line-by-line annotation. No translation of course content needed — the code explains itself.
+
+### Acceptance Criteria
+
+- [ ] `lume explain` command produces accurate line-by-line annotations
+- [ ] Summary mode produces a coherent paragraph-level explanation
+- [ ] Output language follows `--lang` flag or auto-detects from user locale
+- [ ] Works on JavaScript, TypeScript, and Lume files
+- [ ] Handles complex patterns (async/await, closures, higher-order functions)
+- [ ] Explanations are accurate and use everyday language, not jargon
+
+---
+
+## MILESTONE 12: COLLABORATIVE INTENT (MULTI-DEVELOPER, MULTI-LANGUAGE)
+
+### What It Is
+
+Multiple developers write in different human languages on the same project. The compiler merges their contributions at the AST level, which is language-neutral. No merge conflicts caused by language differences.
+
+### How It Works
+
+Because the AST is the same regardless of input language (established in Milestone 8), version control operates on the AST, not on the raw text. Two developers can edit the same logical block — one in English, one in Japanese — and the merge happens at the intent level.
+
+### Implementation
+
+**AST-Level Diffing:**
+- Instead of line-by-line text diffs (like Git does today), Lume's version control diffs the AST
+- Two changes to the same AST node = actual conflict (requires resolution)
+- Two changes to different AST nodes = clean merge (even if the text lines overlap)
+
+**Language-Tagged Source:**
+Each line in the source file carries metadata about which language it was written in:
+```
+mode: natural
+
+# Written by: developer-a (English)
+get all active users from the database
+
+# Written by: developer-b (Japanese)
+アクティブなユーザーの名前を表示する
+```
+
+Both lines produce AST nodes. The compiler doesn't care about the language tags — they're metadata for the developers. The AST diff engine resolves merges.
+
+**Lume Sync Protocol:**
+For real-time collaboration (like Google Docs for code):
+- Each developer's editor sends intent operations to a central server
+- Intent operations are language-neutral AST transformations
+- The server merges operations using operational transformation (OT) or CRDTs
+- Each developer sees the code in their own language (the server translates the shared AST back to each developer's preferred language)
+
+### Visual Example
+
+Developer A (Dallas, English) and Developer B (Tokyo, Japanese) are working on the same file simultaneously:
+
+**What Developer A sees:**
+```
+mode: natural
+get all active users from the database
+show their names in a list
+when a name is clicked, show that user's profile
+```
+
+**What Developer B sees (same file, same AST, different language):**
+```
+mode: natural
+データベースからすべてのアクティブユーザーを取得する
+名前をリストに表示する
+名前がクリックされたら、そのユーザーのプロファイルを表示する
+```
+
+**What gets compiled (identical for both):**
+```javascript
+const users = await db.query("SELECT * FROM users WHERE active = true");
+renderList(users.map(u => u.name), {
+  onClick: (user) => showProfile(user)
+});
+```
+
+### Acceptance Criteria
+
+- [ ] AST-level diffing produces cleaner merges than text-level diffing
+- [ ] Two developers in different languages can edit the same file without language-based conflicts
+- [ ] Each developer can view the shared codebase rendered in their preferred language
+- [ ] Real-time collaboration syncs intent operations, not text
+- [ ] Merge conflicts only occur when two developers modify the same logical operation
+
+---
+
+## MILESTONE 13: ZERO-DEPENDENCY RUNTIME
+
+### What It Is
+
+The ultimate goal: Lume programs written in natural language compile to standalone executables that run without Node.js, without a browser, without any external runtime. One file in, one executable out. Write in English (or any language), get a program that runs anywhere.
+
+### How It Works
+
+```
+Natural Language → Intent Resolver → Lume AST → Transpiler → JavaScript → Bundler → Standalone Executable
+```
+
+The addition is the final two stages:
+1. **Bundler** — tree-shakes and bundles all JavaScript output into a single file with zero imports
+2. **Executable Compiler** — compiles the bundled JS into a native binary using a tool like Bun's `bun build --compile`, Deno's `deno compile`, or a custom V8 snapshot
+
+### Implementation
+
+**Stage 1: Single-file JavaScript output**
+- The transpiler already outputs JavaScript
+- Add a bundler pass that resolves all imports, inlines dependencies, and produces one self-contained `.js` file
+- This file can run with `node app.bundle.js` — but still requires Node.js
+
+**Stage 2: Standalone binary**
+- Use one of these approaches to produce a native executable:
+  - **Bun compile** — `bun build --compile app.bundle.js --outfile app` → produces a single binary
+  - **Deno compile** — `deno compile app.bundle.js` → cross-platform binary
+  - **pkg** — `pkg app.bundle.js` → Node.js executable wrapper
+  - **Custom V8 snapshot** — embed V8 engine + bundled code into a single binary (most independent, most work)
+- Output: a single file (`app` on Linux/Mac, `app.exe` on Windows) that runs without any runtime installed
+
+**Stage 3: Cross-compilation**
+- `lume build app.lume --target linux` → Linux binary
+- `lume build app.lume --target macos` → macOS binary
+- `lume build app.lume --target windows` → Windows .exe
+- `lume build app.lume --target wasm` → WebAssembly (runs in any browser without a server)
+
+### CLI Usage
+
+```bash
+lume build app.lume                         # Standard JS output (unchanged)
+lume build app.lume --bundle                # Single-file JS (no external imports)
+lume build app.lume --compile               # Standalone binary for current OS
+lume build app.lume --compile --target linux # Cross-compile for Linux
+lume build app.lume --compile --target wasm  # WebAssembly output
+```
+
+### What This Means
+
+Someone writes a program in plain French on their Mac. They run `lume build --compile --target windows` and hand the resulting `.exe` to a Windows user who has never heard of Lume, Node.js, or JavaScript. The program just runs. No installation, no runtime, no dependencies.
+
+This is the full circle:
+- **Milestone 7:** Write code in English
+- **Milestone 8:** Write code in any language
+- **Milestone 9:** Speak code
+- **Milestone 10:** Describe what you see
+- **Milestone 11:** Code explains itself
+- **Milestone 12:** Collaborate across languages
+- **Milestone 13:** Ship without dependencies
+
+From thought to working software, in any language, for any platform, with nothing installed.
+
+---
+
+## WHAT NONE OF THIS CHANGES
 
 - The existing Lume syntax (`let`, `ask`, `show`, `think`, etc.) is fully preserved and unchanged
 - Standard `.lume` files without a mode declaration compile exactly as they do today
 - The Transpiler is untouched — it still receives the same AST format and outputs the same JavaScript
-- The runtime is untouched
 - The self-sustaining features (monitor, heal, optimize, evolve, mutate) are untouched
-- npm package structure is unchanged — this is an additive feature
+- npm package structure is unchanged — all milestones are additive features
+- Backward compatibility is absolute — nothing breaks
 
 ---
 
-## PRIORITY ORDER
+## PRIORITY / BUILD ORDER
 
-1. **Milestone 7 first** — get English Mode working with Layer A (pattern matching only, no AI). This is the simplest version and proves the concept.
-2. **Add Layer B** — integrate AI resolution for complex sentences that don't match patterns.
-3. **Milestone 8** — expand pattern library to multilingual. Layer B already handles this automatically.
+| Order | Milestone | Dependency | Effort |
+|-------|-----------|------------|--------|
+| 1st | **M7: English Mode (Layer A only)** | None | Pattern library + Intent Resolver scaffold |
+| 2nd | **M7: English Mode (Layer B)** | M7-A | AI integration for complex sentences |
+| 3rd | **M8: Multilingual Mode** | M7 | Expand pattern library + auto-detect language |
+| 4th | **M9: Voice-to-Code** | M8 | Whisper/Web Speech API front-end |
+| 5th | **M11: Reverse Mode** | M7 | AST → explanation generator |
+| 6th | **M10: Visual Context** | M7 | UI Element Registry + spatial resolution |
+| 7th | **M13: Zero-Dependency Runtime** | M7 | Bundler + binary compilation |
+| 8th | **M12: Collaborative Intent** | M8 | AST diffing + real-time sync protocol |
+
+M9 and M11 are the quickest wins after M7-M8 because they reuse the same pipeline in different directions. M10 and M12 are the most architecturally complex. M13 is independent of the natural language features — it can be worked on in parallel.
 
 ---
 
 ## WHAT SUCCESS LOOKS LIKE
 
-A developer opens a `.lume` file, writes `mode: natural` at the top, and then writes their program in plain French. They run `lume build` and get working JavaScript. No configuration, no language selection, no special setup. They write in their language, the compiler understands.
+A developer opens a `.lume` file, writes `mode: natural` at the top, and writes their program in plain French. They run `lume build --compile` and get a standalone executable. They hand it to someone who has never coded, on any operating system, and it runs.
 
-A team in São Paulo writes in Portuguese. A team in Tokyo writes in Japanese. A solo developer in Dallas writes in English. They're all writing valid Lume. The compiled output is identical. The language barrier to programming is eliminated.
+A classroom in Mumbai teaches programming in Hindi. A team in São Paulo collaborates in Portuguese with a partner in Berlin writing in German. A solo founder in Dallas speaks their app into existence while driving.
 
----
+No syntax to memorize. No English requirement. No runtime to install. No language barrier.
 
-## THE LARGER VISION
-
-Every programming language that has ever existed requires you to learn English keywords. Python, JavaScript, Ruby, Go, Rust, C — all English. Billions of people worldwide are excluded from programming not because they can't think logically, but because the syntax is in a language they don't speak fluently.
-
-Lume would be the first programming language where the syntax is whatever language you already speak. That's not competing with Python or JavaScript — that's a category that has never existed.
+That's Lume.
 
 ---
 
 ## ACADEMY UPDATES NEEDED
 
-Once implemented, the Lume Academy (on dwtl.io and academy.tlid.io) will need:
+Once milestones are implemented, the Lume Academy (on dwtl.io and academy.tlid.io) will need:
 
-1. A new track or module: "Natural Language Programming with Lume"
+1. New track: "Natural Language Programming with Lume" (covers M7-M8)
 2. Updated playground to support `mode: english` and `mode: natural` headers
 3. Example programs written in multiple languages showing identical output
-4. Documentation of the pattern library (all supported phrases)
+4. Voice input demo in the playground (M9)
+5. "Explain This Code" button on every code example, with language selector (M11)
+6. Documentation of the pattern library (all supported phrases, all languages)
+7. Certification: **Certified Lume Natural Language Developer (CNLD)**
 
 Trust Layer will handle the Academy content updates. The Lume agent just needs to expose the compiler functionality.
 
@@ -251,3 +630,4 @@ Trust Layer will handle the Academy content updates. The Lume agent just needs t
 - **Trust Layer DB user_id:** 49057269
 - **Launch date:** August 23, 2026
 - **Lume Academy:** /academy on dwtl.io
+- **Lume Language:** lume-lang.org
