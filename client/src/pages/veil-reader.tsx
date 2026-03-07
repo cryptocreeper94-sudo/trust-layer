@@ -470,7 +470,7 @@ export default function VeilReader() {
     });
   };
 
-  const fetchAndPlayChunk = async (chunkText: string): Promise<void> => {
+  const fetchAndPlayChunk = async (chunkText: string, onPlaybackStarted?: () => void): Promise<void> => {
     const ctx = getOrCreateWebAudioCtx();
     if (ctx.state === 'suspended') {
       await ctx.resume();
@@ -526,6 +526,7 @@ export default function VeilReader() {
         webAudioStartTimeRef.current = ctx.currentTime;
         source.start(0);
         console.log('[Veil Audio] Playback started via Web Audio API');
+        if (onPlaybackStarted) onPlaybackStarted();
       } catch (err) {
         reject(err);
       }
@@ -536,16 +537,25 @@ export default function VeilReader() {
     setIsLoading(true);
     setTtsError(null);
     aiCancelledRef.current = false;
+    let loadingTimeoutCleared = false;
     
     const loadingTimeout = setTimeout(() => {
-      if (aiCancelledRef.current) return;
+      if (aiCancelledRef.current || loadingTimeoutCleared) return;
       console.warn('[Veil Audio] Loading timeout hit (15s) — falling back to browser voice');
+      cleanupAudio();
       setIsLoading(false);
       aiPlayingRef.current = false;
       setVoiceProvider('Browser Voice');
       setTtsError('AI voice took too long to load — using browser voice instead.');
       tryBrowserSpeech(text);
     }, 15000);
+
+    const clearLoadingTimeout = () => {
+      if (!loadingTimeoutCleared) {
+        loadingTimeoutCleared = true;
+        clearTimeout(loadingTimeout);
+      }
+    };
 
     try {
       const chunks = splitTextIntoChunks(text);
@@ -554,15 +564,16 @@ export default function VeilReader() {
       aiPlayingRef.current = true;
 
       for (let i = 0; i < chunks.length; i++) {
-        if (aiCancelledRef.current) { clearTimeout(loadingTimeout); return; }
+        if (aiCancelledRef.current) { clearLoadingTimeout(); return; }
         
         aiChunkIndexRef.current = i;
 
         if (i === 0) {
-          await fetchAndPlayChunk(chunks[i]);
-          clearTimeout(loadingTimeout);
-          setIsPlaying(true);
-          setIsLoading(false);
+          await fetchAndPlayChunk(chunks[i], () => {
+            clearLoadingTimeout();
+            setIsPlaying(true);
+            setIsLoading(false);
+          });
         } else {
           if (aiCancelledRef.current) return;
           await fetchAndPlayChunk(chunks[i]);
@@ -576,7 +587,7 @@ export default function VeilReader() {
         handleNextChapterAuto();
       }
     } catch (err: any) {
-      clearTimeout(loadingTimeout);
+      clearLoadingTimeout();
       console.error('[Veil Audio] AI voice error:', err);
       setIsLoading(false);
       aiPlayingRef.current = false;
