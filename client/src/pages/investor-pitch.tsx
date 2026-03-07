@@ -357,15 +357,41 @@ export default function InvestorPitch() {
                 accountability, and transparent audit trails.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
                 <DownloadButton />
                 <Link href="/presale">
                   <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold px-8 shadow-[0_0_30px_rgba(6,182,212,0.4)]" data-testid="button-join-presale">
                     <Coins className="w-5 h-5 mr-2" />
-                    View Presale
+                    Join Presale — Launching Soon
                   </Button>
                 </Link>
               </div>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.5 }}
+                className="max-w-2xl mx-auto mb-12"
+              >
+                <div className="relative overflow-hidden rounded-2xl border border-purple-500/30 bg-gradient-to-r from-purple-500/10 via-cyan-500/10 to-purple-500/10 p-4 sm:p-5">
+                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(168,85,247,0.15),transparent_70%)]" />
+                  <div className="relative flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+                    <div className="flex items-center gap-2 shrink-0">
+                      <div className="w-3 h-3 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_12px_rgba(6,182,212,0.8)]" />
+                      <span className="text-sm font-bold text-cyan-400 uppercase tracking-wider">Presale Live Soon</span>
+                    </div>
+                    <p className="text-white/60 text-sm text-center sm:text-left">
+                      Early investors lock in pre-launch pricing. Projected $45M Year 3 revenue across 35 products.
+                    </p>
+                    <Link href="/investor-room" className="shrink-0">
+                      <Button size="sm" variant="outline" className="border-purple-500/40 text-purple-400 hover:bg-purple-500/10 text-xs whitespace-nowrap" data-testid="button-data-room-hero">
+                        <Lock className="w-3 h-3 mr-1" />
+                        Private Data Room
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
             </motion.div>
 
             <motion.div initial="hidden" animate="visible" variants={stagger} className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
@@ -734,6 +760,7 @@ export default function InvestorPitch() {
                 { title: "Presale", desc: "Acquire Signal at pre-launch pricing", href: "/presale", icon: Coins },
                 { title: "Competitive Analysis", desc: "How we compare to other chains", href: "/competitive-analysis", icon: BarChart3 },
                 { title: "Investment Simulator", desc: "Model potential investment outcomes", href: "/investment-simulator", icon: LineChart },
+                { title: "Private Data Room", desc: "Detailed forecasts (invite PIN required)", href: "/investor-room", icon: Lock },
                 { title: "TrustHome", desc: "Real estate agent verification platform", href: "/trusthome", icon: Home },
                 { title: "Launch Roadmap", desc: "Full timeline to August 23, 2026", href: "/launch", icon: Rocket },
                 { title: "Vision", desc: "Our philosophy: Signal, Not Coin", href: "/vision", icon: Star },
@@ -773,18 +800,27 @@ export default function InvestorPitch() {
                   <div className="relative z-10">
                     <Rocket className="w-14 h-14 text-cyan-400 mx-auto mb-6" />
                     <h2 className="text-3xl sm:text-4xl font-display font-black text-white mb-4">
-                      Ready to Explore?
+                      The Presale Window Is Opening
                     </h2>
-                    <p className="text-white/50 mb-8 max-w-2xl mx-auto text-base sm:text-lg">
-                      Download the pitch deck, explore our live products, or join the presale.
-                      We're building something real — and the blockchain is already running.
+                    <p className="text-white/50 mb-4 max-w-2xl mx-auto text-base sm:text-lg">
+                      35 products. $45M projected Year 3 revenue. Our own blockchain, our own language, our own ecosystem.
+                      The chain is live, the products are built, and early allocation is limited.
+                    </p>
+                    <p className="text-cyan-400/80 text-sm font-medium mb-8">
+                      Pre-launch pricing won't last. Secure your allocation before public launch.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                       <DownloadButton />
                       <Link href="/presale">
                         <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold px-8 shadow-[0_0_30px_rgba(6,182,212,0.4)]" data-testid="button-cta-presale">
                           <Coins className="w-5 h-5 mr-2" />
-                          View Presale
+                          Join Presale Now
+                        </Button>
+                      </Link>
+                      <Link href="/investor-room">
+                        <Button size="lg" variant="outline" className="border-purple-500/40 text-purple-400 hover:bg-purple-500/10 font-bold px-8" data-testid="button-cta-data-room">
+                          <Lock className="w-5 h-5 mr-2" />
+                          Private Data Room
                         </Button>
                       </Link>
                     </div>

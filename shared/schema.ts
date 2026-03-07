@@ -9184,3 +9184,18 @@ export const BOOK_CATEGORIES = {
     ]
   }
 } as const;
+
+export const investorInvitePins = pgTable("investor_invite_pins", {
+  id: serial("id").primaryKey(),
+  pin: text("pin").notNull().unique(),
+  label: text("label"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  expiresAt: timestamp("expires_at"),
+  usedAt: timestamp("used_at"),
+  usedBy: text("used_by"),
+  active: boolean("active").notNull().default(true),
+});
+
+export const insertInvestorInvitePinSchema = createInsertSchema(investorInvitePins).omit({ id: true, createdAt: true });
+export type InsertInvestorInvitePin = z.infer<typeof insertInvestorInvitePinSchema>;
+export type InvestorInvitePin = typeof investorInvitePins.$inferSelect;

@@ -5647,6 +5647,72 @@ const { trustLayerId } = await response.json();`
     }
   });
 
+  app.post("/api/investor/pin/generate", async (req, res) => {
+    try {
+      const authHeader = req.headers.authorization;
+      const sessionToken = authHeader?.replace("Bearer ", "");
+      if (!sessionToken || !developerSessions.has(sessionToken)) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      const { label, expiresInDays } = req.body;
+      const expiresAt = expiresInDays ? new Date(Date.now() + expiresInDays * 86400000) : undefined;
+      const pin = await storage.createInvestorPin(label, expiresAt);
+      res.json(pin);
+    } catch (error) {
+      console.error("Error creating investor PIN:", error);
+      res.status(500).json({ error: "Failed to create PIN" });
+    }
+  });
+
+  app.post("/api/investor/pin/verify", async (req, res) => {
+    try {
+      const { pin } = req.body;
+      if (!pin) return res.status(400).json({ error: "PIN required" });
+      const result = await storage.verifyInvestorPin(pin);
+      if (result.valid) {
+        const token = generateSessionToken();
+        developerSessions.set(`inv-${token}`, { createdAt: Date.now(), expiresAt: Date.now() + 24 * 60 * 60 * 1000 });
+        res.json({ valid: true, label: result.label, sessionToken: token });
+      } else {
+        res.status(401).json({ valid: false, error: "Invalid or expired PIN" });
+      }
+    } catch (error) {
+      console.error("Error verifying investor PIN:", error);
+      res.status(500).json({ error: "Verification failed" });
+    }
+  });
+
+  app.get("/api/investor/pins", async (req, res) => {
+    try {
+      const authHeader = req.headers.authorization;
+      const sessionToken = authHeader?.replace("Bearer ", "");
+      if (!sessionToken || !developerSessions.has(sessionToken)) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      const pins = await storage.listInvestorPins();
+      res.json(pins);
+    } catch (error) {
+      console.error("Error listing investor PINs:", error);
+      res.status(500).json({ error: "Failed to list PINs" });
+    }
+  });
+
+  app.delete("/api/investor/pin/:id", async (req, res) => {
+    try {
+      const authHeader = req.headers.authorization;
+      const sessionToken = authHeader?.replace("Bearer ", "");
+      if (!sessionToken || !developerSessions.has(sessionToken)) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      const id = parseInt(req.params.id);
+      const revoked = await storage.revokeInvestorPin(id);
+      res.json({ success: revoked });
+    } catch (error) {
+      console.error("Error revoking investor PIN:", error);
+      res.status(500).json({ error: "Failed to revoke PIN" });
+    }
+  });
+
   app.get("/api/developer/analytics", async (req, res) => {
     try {
       const overview = await storage.getAnalyticsOverview();

@@ -6,14 +6,15 @@ import {
   ChevronDown, ChevronRight, BarChart3, Activity, Layers, 
   Zap, Database, Shield, Terminal, FileCode, BookOpen,
   ExternalLink, Copy, Check, RefreshCw, Key, AlertTriangle,
-  Gift, Coins, Target, CheckCircle, Network, Handshake, Megaphone
+  Gift, Coins, Target, CheckCircle, Network, Handshake, Megaphone,
+  Trash2, Plus, UserPlus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { APP_VERSION } from "@shared/schema";
 import {
   Accordion,
@@ -263,6 +264,194 @@ async function registerApiKey(name: string, email: string, appName: string): Pro
     return { success: false, error: data.error || "Registration failed" };
   }
   return { success: true, apiKey: data.apiKey };
+}
+
+interface InvestorPin {
+  id: number;
+  pin: string;
+  label: string | null;
+  createdAt: string;
+  usedAt: string | null;
+  usedBy: string | null;
+  expiresAt: string | null;
+  active: boolean;
+}
+
+function InvestorPinManager() {
+  const queryClient = useQueryClient();
+  const [newLabel, setNewLabel] = useState("");
+  const [copiedPin, setCopiedPin] = useState<string | null>(null);
+  const sessionToken = sessionStorage.getItem("dev-session-token");
+
+  const { data: pins = [], isLoading } = useQuery<InvestorPin[]>({
+    queryKey: ["/api/investor/pins"],
+    queryFn: async () => {
+      const res = await fetch("/api/investor/pins", {
+        headers: { Authorization: `Bearer ${sessionToken}` },
+      });
+      if (!res.ok) throw new Error("Failed to load");
+      return res.json();
+    },
+    enabled: !!sessionToken,
+  });
+
+  const generateMutation = useMutation({
+    mutationFn: async (label: string) => {
+      const res = await fetch("/api/investor/pin/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${sessionToken}`,
+        },
+        body: JSON.stringify({ label: label || undefined, expiresInDays: 30 }),
+      });
+      if (!res.ok) throw new Error("Failed to generate PIN");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/investor/pins"] });
+      setNewLabel("");
+    },
+  });
+
+  const revokeMutation = useMutation({
+    mutationFn: async (id: number) => {
+      const res = await fetch(`/api/investor/pin/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${sessionToken}` },
+      });
+      if (!res.ok) throw new Error("Failed to revoke");
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/investor/pins"] });
+    },
+  });
+
+  const copyToClipboard = (pin: string) => {
+    navigator.clipboard.writeText(pin);
+    setCopiedPin(pin);
+    setTimeout(() => setCopiedPin(null), 2000);
+  };
+
+  const getPinStatus = (pin: InvestorPin) => {
+    if (!pin.active) return { text: "Revoked", color: "text-white/40 bg-white/5 border-white/10" };
+    if (pin.expiresAt && new Date(pin.expiresAt) < new Date()) return { text: "Expired", color: "text-white/40 bg-white/5 border-white/10" };
+    if (pin.usedAt) return { text: "Used", color: "text-cyan-400 bg-cyan-400/10 border-cyan-400/30" };
+    return { text: "Active", color: "text-purple-400 bg-purple-400/10 border-purple-400/30" };
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.35 }}
+      className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8"
+      data-testid="investor-pin-section"
+    >
+      <BentoCard span={3} glow>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-3 rounded-xl bg-purple-400/10 text-purple-400 border border-purple-400/30">
+            <UserPlus className="w-6 h-6" />
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-white">Investor Access Management</h3>
+            <p className="text-sm text-muted-foreground">Generate and manage private data room invite PINs</p>
+          </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <Input
+            value={newLabel}
+            onChange={(e) => setNewLabel(e.target.value)}
+            placeholder="Investor name or company (optional)"
+            className="bg-black/40 border-white/10 text-white placeholder:text-white/30 flex-1"
+            data-testid="input-investor-label"
+          />
+          <Button
+            onClick={() => generateMutation.mutate(newLabel)}
+            disabled={generateMutation.isPending}
+            className="bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 text-white shrink-0"
+            data-testid="button-generate-pin"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            {generateMutation.isPending ? "Generating..." : "Generate PIN"}
+          </Button>
+        </div>
+
+        {isLoading ? (
+          <div className="text-center py-8 text-muted-foreground">Loading PINs...</div>
+        ) : pins.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            No investor PINs generated yet. Create one above to invite investors to your private data room.
+          </div>
+        ) : (
+          <div className="space-y-3">
+            <div className="text-xs text-muted-foreground mb-2">{pins.length} PIN{pins.length !== 1 ? "s" : ""} generated</div>
+            {pins.map((pin) => {
+              const status = getPinStatus(pin);
+              return (
+                <motion.div
+                  key={pin.id}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.06] hover:border-white/10 transition-colors"
+                  data-testid={`pin-row-${pin.id}`}
+                >
+                  <div className="flex items-center gap-3 flex-1 min-w-0">
+                    <code className="text-cyan-300 font-mono text-sm bg-cyan-500/10 px-3 py-1.5 rounded-lg whitespace-nowrap">
+                      {pin.pin}
+                    </code>
+                    <div className="min-w-0">
+                      {pin.label && (
+                        <span className="text-white text-sm font-medium block truncate">{pin.label}</span>
+                      )}
+                      <span className="text-xs text-muted-foreground">
+                        {new Date(pin.createdAt).toLocaleDateString()}
+                        {pin.usedAt && ` · Used ${new Date(pin.usedAt).toLocaleDateString()}`}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <Badge variant="outline" className={`text-xs ${status.color}`}>
+                      {status.text}
+                    </Badge>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => copyToClipboard(pin.pin)}
+                      className="h-8 w-8 p-0 text-white/50 hover:text-cyan-400"
+                      data-testid={`button-copy-pin-${pin.id}`}
+                    >
+                      {copiedPin === pin.pin ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                    </Button>
+                    {pin.active && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => revokeMutation.mutate(pin.id)}
+                        disabled={revokeMutation.isPending}
+                        className="h-8 w-8 p-0 text-white/50 hover:text-red-400"
+                        data-testid={`button-revoke-pin-${pin.id}`}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </Button>
+                    )}
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        )}
+
+        <div className="mt-4 p-3 rounded-xl bg-purple-500/5 border border-purple-500/15">
+          <p className="text-xs text-purple-300/80">
+            PINs grant one-time access to <strong>/investor-room</strong>. Each PIN expires after 30 days. Share privately with prospective investors.
+          </p>
+        </div>
+      </BentoCard>
+    </motion.div>
+  );
 }
 
 export default function DeveloperPortal() {
@@ -1345,6 +1534,8 @@ console.log('All successful:', result.allSuccessful);`}
             </p>
           </BentoCard>
         </motion.div>
+
+        <InvestorPinManager />
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

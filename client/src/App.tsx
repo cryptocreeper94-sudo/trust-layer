@@ -241,6 +241,7 @@ const FAQ = lazy(() => import("@/pages/faq"));
 const SupportPage = lazy(() => import("@/pages/support"));
 const CompetitiveAnalysis = lazy(() => import("@/pages/competitive-analysis"));
 const InvestorPitch = lazy(() => import("@/pages/investor-pitch"));
+const InvestorDataRoom = lazy(() => import("@/pages/investor-data-room"));
 const Vision = lazy(() => import("@/pages/vision"));
 const Learn = lazy(() => import("@/pages/learn"));
 const Academy = lazy(() => import("@/pages/academy"));
@@ -577,6 +578,7 @@ function DWSCRouter() {
         <Route path="/token-compare" component={TokenCompare} />
         <Route path="/investor-pitch" component={InvestorPitch} />
         <Route path="/pitch-deck" component={InvestorPitch} />
+        <Route path="/investor-room" component={InvestorDataRoom} />
         <Route path="/vision" component={Vision} />
         <Route path="/trust-layer" component={TrustLayer} />
         <Route path="/learn" component={Learn} />
