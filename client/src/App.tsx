@@ -576,6 +576,7 @@ function DWSCRouter() {
         <Route path="/error" component={ErrorPage} />
         <Route path="/token-compare" component={TokenCompare} />
         <Route path="/investor-pitch" component={InvestorPitch} />
+        <Route path="/pitch-deck" component={InvestorPitch} />
         <Route path="/vision" component={Vision} />
         <Route path="/trust-layer" component={TrustLayer} />
         <Route path="/learn" component={Learn} />
