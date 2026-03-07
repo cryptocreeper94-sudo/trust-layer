@@ -28,6 +28,7 @@ The UI/UX emphasizes a "MANDATORY PREMIUM UI PROTOCOL" with a dark theme and pol
 - **Animations**: `motion.div` for page transitions, staggered animations, and gradient text.
 - **Color Palette**: Exclusively dark theme with primary, secondary, and accent colors, and various white text shades.
 - **Component Standards**: Required `GlassCard` with `glow`, `Badge`, UI library `Button`, `motion.div` wrapper, and `data-testid` on interactive elements.
+- **4K / Ultra-wide Support**: Global CSS media queries in `client/src/index.css` scale containers, grids, text, padding, and gaps at 1536px, 2560px, and 3200px+ breakpoints. Containers expand from `max-w-6xl` (1152px) up to 120rem (1920px) on true 4K. Grids gain additional columns. Text sizes scale proportionally. No per-page changes needed — all handled globally.
 
 ### Technical Implementations
 - **Blockchain Core**: BFT-PoA consensus, stake-weighted validators, PostgreSQL state, SHA-256/Merkle trees, 400ms block time, 200K+ TPS. Includes validator staking, slashing, epoch-based finality, node sync APIs, and native asset Signal (SIG).
