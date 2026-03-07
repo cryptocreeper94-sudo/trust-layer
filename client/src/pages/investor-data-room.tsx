@@ -3,7 +3,8 @@ import { motion, AnimatePresence, useInView } from "framer-motion";
 import {
   Lock, TrendingUp, DollarSign, Users, Layers, Globe, Zap, Building2,
   Shield, Code, Cpu, Download, Mail, Rocket, BarChart3, Target,
-  Briefcase, Home, Gamepad2, GraduationCap, ChevronRight, Eye
+  Briefcase, Home, Gamepad2, GraduationCap, ChevronRight, Eye,
+  CheckCircle, Star, Crown, MessageSquare, Server
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -472,7 +473,7 @@ export default function InvestorDataRoom() {
                   <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">Presale</span>
                 </h2>
                 <p className="text-white/50 max-w-2xl mb-8 leading-relaxed">
-                  The Signal (SIG) token presale represents a rare opportunity to acquire the native asset
+                  The Signal (SIG) presale represents a rare opportunity to acquire the native asset
                   of a fully-built Layer 1 ecosystem at pre-launch pricing. With 35 products already developed,
                   this isn't speculative — it's a functioning platform.
                 </p>
@@ -500,6 +501,129 @@ export default function InvestorDataRoom() {
                 </Button>
               </div>
             </GlassCard>
+          </motion.div>
+        </SectionWrapper>
+
+        <SectionWrapper>
+          <motion.div variants={fadeUp}>
+            <Badge className="mb-4 bg-purple-500/10 border-purple-500/30 text-purple-400 text-xs">
+              <Briefcase className="w-3 h-3 mr-1" />
+              Investment Packages
+            </Badge>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-display font-black text-white mb-3">
+              Structured{" "}
+              <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">Investment Tiers</span>
+            </h2>
+            <p className="text-white/40 max-w-2xl mb-8 text-sm sm:text-base">
+              Three tiers designed for different investment levels. All tiers include pre-launch Signal pricing and ecosystem access.
+            </p>
+          </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+            {[
+              {
+                name: "Pioneer",
+                icon: Rocket,
+                allocation: "100,000 SIG",
+                price: "$5,000",
+                perSig: "$0.05 / SIG",
+                highlight: false,
+                benefits: [
+                  "Pre-launch SIG pricing before public listing",
+                  "Early access to all 35 ecosystem products",
+                  "Pioneer Hallmark badge (on-chain, permanent)",
+                  "Monthly investor newsletter with dev updates",
+                  "Private Signal Chat investor channel access",
+                ],
+              },
+              {
+                name: "Venture",
+                icon: Star,
+                allocation: "500,000 SIG",
+                price: "$20,000",
+                perSig: "$0.04 / SIG",
+                highlight: true,
+                benefits: [
+                  "Everything in Pioneer, plus:",
+                  "Better per-SIG rate ($0.04 vs $0.05)",
+                  "Licensed validator node (earn staking rewards)",
+                  "Quarterly video briefings with the founder",
+                  "Priority API access for building on Trust Layer",
+                  "Named in genesis block acknowledgments",
+                ],
+              },
+              {
+                name: "Strategic Partner",
+                icon: Crown,
+                allocation: "1,000,000+ SIG",
+                price: "Custom",
+                perSig: "Best available rate",
+                highlight: false,
+                benefits: [
+                  "Everything in Venture, plus:",
+                  "Best available per-SIG rate (negotiated)",
+                  "Direct advisory access to the founder",
+                  "Input on product roadmap priorities",
+                  "Product co-development rights (e.g., TrustHome market exclusivity)",
+                  "Revenue-sharing options on specific products",
+                  "Custom integration support for your business",
+                ],
+              },
+            ].map((tier, i) => (
+              <motion.div key={tier.name} variants={fadeUp}>
+                <GlassCard glow={tier.highlight}>
+                  <div className={`relative overflow-hidden ${tier.highlight ? "" : ""}`}>
+                    {tier.highlight && (
+                      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-cyan-500" />
+                    )}
+                    <div className="p-6 sm:p-8">
+                      {tier.highlight && (
+                        <Badge className="mb-4 bg-purple-500/20 border-purple-500/40 text-purple-300 text-[10px] font-bold uppercase tracking-wider">
+                          Most Popular
+                        </Badge>
+                      )}
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/20 flex items-center justify-center mb-4">
+                        <tier.icon className="w-6 h-6 text-cyan-400" />
+                      </div>
+                      <h3 className="text-xl font-black text-white mb-1" data-testid={`tier-name-${tier.name.toLowerCase().replace(/\s+/g, "-")}`}>{tier.name}</h3>
+                      <div className="text-xs text-white/40 mb-4">{tier.perSig}</div>
+                      <div className="flex items-baseline gap-2 mb-2">
+                        <span className="text-3xl sm:text-4xl font-black bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent" data-testid={`tier-price-${tier.name.toLowerCase().replace(/\s+/g, "-")}`}>
+                          {tier.price}
+                        </span>
+                      </div>
+                      <div className="text-sm text-purple-400 font-medium mb-6">{tier.allocation}</div>
+                      <div className="space-y-3">
+                        {tier.benefits.map((benefit, j) => (
+                          <div key={j} className="flex items-start gap-2.5">
+                            <CheckCircle className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
+                            <span className="text-xs text-white/60 leading-relaxed">{benefit}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-6">
+                        <Button
+                          className={`w-full min-h-[44px] font-bold ${
+                            tier.highlight
+                              ? "bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white shadow-[0_0_20px_rgba(6,182,212,0.3)]"
+                              : "bg-white/5 border border-white/10 text-white hover:bg-white/10"
+                          }`}
+                          onClick={() => window.location.href = "mailto:cryptocreeper94@gmail.com?subject=Trust%20Layer%20Investment%20-%20" + encodeURIComponent(tier.name) + "%20Tier"}
+                          data-testid={`button-invest-${tier.name.toLowerCase().replace(/\s+/g, "-")}`}
+                        >
+                          <Mail className="w-4 h-4 mr-2" />
+                          {tier.name === "Strategic Partner" ? "Discuss Terms" : "Express Interest"}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </GlassCard>
+              </motion.div>
+            ))}
+          </div>
+          <motion.div variants={fadeUp} className="mt-6 text-center">
+            <p className="text-xs text-white/30">
+              All allocations vest over 3 months (50% at TGE, 50% over following 2 months). Pricing valid during pre-launch period only.
+            </p>
           </motion.div>
         </SectionWrapper>
 

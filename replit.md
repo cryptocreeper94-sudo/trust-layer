@@ -87,6 +87,15 @@ The ecosystem spans 32 verified applications across primary domains including `d
 - **Endpoints**: `GET /api/affiliate/dashboard`, `GET /api/affiliate/link`, `POST /api/affiliate/track` (public), `POST /api/affiliate/request-payout`.
 - **UI**: `/affiliate` dashboard page, Genesis Hallmark Badge component on explore-hub, `/ref/:hash` routing.
 
+### Investor Data Room & Pitch Infrastructure
+- **Public Pitch Deck**: `/investor-pitch` and `/pitch-deck` — public-facing investor materials with presale urgency, ecosystem overview, and links to private data room.
+- **Private Data Room**: `/investor-room` — PIN-gated investor page with detailed financial forecasts (Y1 $2.4M, Y2 $12M, Y3 $45M), revenue model breakdown, market opportunity, TrustHome deep dive, and structured investment tiers.
+- **Investment Tiers**: Pioneer (100K SIG / $5K), Venture (500K SIG / $20K), Strategic Partner (1M+ SIG / Custom). Each tier includes specific deliverable benefits.
+- **Investor PIN System**: `investor_invite_pins` table with `INV-XXXXXX` format PINs. Generated from developer portal, verified at `/investor-room`.
+- **API Endpoints**: `POST /api/investor/pin/generate` (admin), `POST /api/investor/pin/verify`, `GET /api/investor/pins` (admin), `DELETE /api/investor/pin/:id` (admin).
+- **Developer Portal**: Investor Access Management section for generating, listing, copying, and revoking PINs.
+- **Files**: `client/src/pages/investor-data-room.tsx`, `client/src/pages/investor-pitch.tsx`, `client/src/pages/developer-portal.tsx`, `shared/schema.ts` (investorInvitePins table).
+
 ### Embeddable Ecosystem Widget & Shared Components
 An embeddable widget allows any app to display ecosystem apps, presale stats, and user data via a single script tag. A shared UI system enables loading standardized components (footer, announcement bar, trust badge) via another script tag.
 
