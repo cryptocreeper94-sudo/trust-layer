@@ -246,6 +246,7 @@ const InvestorDataRoom = lazy(() => import("@/pages/investor-data-room"));
 const Vision = lazy(() => import("@/pages/vision"));
 const Learn = lazy(() => import("@/pages/learn"));
 const Academy = lazy(() => import("@/pages/academy"));
+const LumeResearch = lazy(() => import("@/pages/lume-research"));
 const EcosystemMap = lazy(() => import("@/pages/ecosystem-map"));
 const SecurityPage = lazy(() => import("@/pages/security"));
 const GuardianCertification = lazy(() => import("@/pages/guardian-certification"));
@@ -584,6 +585,7 @@ function DWSCRouter() {
         <Route path="/trust-layer" component={TrustLayer} />
         <Route path="/learn" component={Learn} />
         <Route path="/academy" component={Academy} />
+        <Route path="/academy/research" component={LumeResearch} />
         <Route path="/ecosystem" component={EcosystemMap} />
         <Route path="/code-snippets" component={CodeSnippets} />
         <Route path="/api-usage" component={ApiUsage} />

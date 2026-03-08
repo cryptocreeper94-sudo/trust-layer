@@ -885,6 +885,36 @@ export default function AcademyPage() {
               );
             })}
           </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="mt-12"
+          >
+            <Link href="/academy/research">
+              <GlassCard glow className="cursor-pointer hover:border-purple-500/30 hover:shadow-2xl hover:shadow-purple-500/10 transition-all duration-300">
+                <div className="p-6 sm:p-8 flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                  <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/20 flex-shrink-0 shadow-lg">
+                    <FileText className="w-8 h-8 text-purple-400" />
+                  </div>
+                  <div className="flex-1">
+                    <Badge className="mb-2 bg-purple-500/20 text-purple-400 border-purple-500/30 text-[10px]">
+                      <Sparkles className="w-3 h-3 mr-1" /> Academic Research
+                    </Badge>
+                    <h3 className="text-xl sm:text-2xl font-display font-black text-white mb-2">
+                      Research & Publications
+                    </h3>
+                    <p className="text-white/50 text-sm leading-relaxed">
+                      Read the full academic whitepaper on cognitive distance elimination and the complete Lume language specification — 7,074 lines, 305 acceptance criteria, 13 milestones. Includes code examples you can try in Studio.
+                    </p>
+                  </div>
+                  <ChevronRight className="w-6 h-6 text-white/30 hidden sm:block flex-shrink-0" />
+                </div>
+              </GlassCard>
+            </Link>
+          </motion.div>
         </div>
       </section>
 

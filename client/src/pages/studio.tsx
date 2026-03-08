@@ -372,6 +372,89 @@ serde_json = "1"
 tokio = { version = "1", features = ["full"] }` },
     ]
   },
+  lume: {
+    name: "Lume",
+    icon: "✨",
+    files: [
+      { name: "main.lume", content: `intent: "Demonstrate core Lume language features"
+
+let greeting = "Hello from Lume!"
+let counter = 0
+
+show greeting
+
+if counter == 0 {
+  show "Counter is at zero, let's fix that."
+  counter = counter + 1
+}
+
+show "Counter is now: " + counter
+
+let description = ask "Describe what you want to build"
+let plan = think "Break this into 3 steps: " + description
+show plan
+
+let code = generate "A simple web server" using plan
+show code
+
+try {
+  let result = ask "What is 2 + 2?"
+  show "Answer: " + result
+} recover {
+  show "Something went wrong, but we recovered gracefully."
+}
+
+repeat 3 times {
+  show "Lume iteration " + counter
+  counter = counter + 1
+}
+
+show "Done! Final counter: " + counter` },
+      { name: "english-mode.lume", content: `mode: english
+
+Create a variable called userName and set it to "Trust Layer Developer".
+Show the user's name on screen.
+
+Ask the user "What project would you like to build today?" and store it in projectIdea.
+Think about how to structure the project based on projectIdea and store the result in projectPlan.
+Show the project plan.
+
+Generate starter code for a web application using the project plan.
+
+If the project plan contains the word "database" then
+  show "You'll need a database — consider PostgreSQL with Drizzle ORM."
+otherwise
+  show "No database needed for this project."
+
+Repeat 3 times:
+  show "Building step number" and the current count.
+
+Show "Your Lume project is ready!"` },
+      { name: "README.md", content: `# Lume — The AI-Native Programming Language
+
+Lume eliminates cognitive distance between human intent and machine execution.
+Instead of translating your ideas into rigid syntax, Lume lets you express
+what you want naturally and the AI-native runtime handles the rest.
+
+## Key Features
+
+- **Intent Blocks**: Declare what your code is meant to do with \`intent:\`
+- **AI Keywords**: \`ask\`, \`think\`, \`generate\` — first-class AI operations
+- **English Mode**: Write entire programs in plain English with \`mode: english\`
+- **Graceful Recovery**: \`try / recover\` blocks for fault-tolerant execution
+- **Natural Loops**: \`repeat N times\` for readable iteration
+
+## Files
+
+- \`main.lume\` — Core language features: variables, conditions, AI keywords, loops, error handling
+- \`english-mode.lume\` — Full English mode demonstration
+
+## Learn More
+
+Visit the Research & Publications section in Lume Academy for the full
+whitepaper and master specification.` },
+    ]
+  },
 };
 
 const PROTOCOL_DEFINITIONS: Record<string, string> = {
