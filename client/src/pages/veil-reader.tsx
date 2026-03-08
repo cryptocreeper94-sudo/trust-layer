@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { 
   BookOpen, ChevronLeft, ChevronRight, Menu, X, Home, Lock,
   BookMarked, ScrollText, FileText, ExternalLink, Volume2, VolumeX, Pause, Play, Download, ArrowLeft, Sparkles, Bell, Loader2,
-  Feather, Crown, Flame, Eye, Star
+  Feather, Crown, Flame, Eye, Star, Square
 } from "lucide-react";
 import { Link } from "wouter";
 import ReactMarkdown from 'react-markdown';
@@ -1167,8 +1167,8 @@ export default function VeilReader() {
                     <span className="text-xs text-purple-300">Loading...</span>
                   </div>
                 ) : isPlaying ? (
-                  <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-gradient-to-r from-purple-500/15 to-cyan-500/10 border border-purple-500/20 backdrop-blur-sm">
-                    <div className="flex items-center gap-0.5 mr-1">
+                  <div className="flex items-center gap-4 px-3 py-2 rounded-full bg-gradient-to-r from-purple-500/15 to-cyan-500/10 border border-purple-500/20 backdrop-blur-sm">
+                    <div className="flex items-center gap-0.5">
                       {[0, 150, 300, 450].map((delay, i) => (
                         <motion.div
                           key={i}
@@ -1178,48 +1178,45 @@ export default function VeilReader() {
                         />
                       ))}
                     </div>
-                    {voiceProvider && (
-                      <span className="text-[9px] text-purple-300/70 font-mono mr-1">{voiceProvider}</span>
-                    )}
                     <Button 
                       size="icon" 
                       onClick={handlePause}
-                      className="bg-amber-500/90 hover:bg-amber-500 text-white rounded-full w-7 h-7 shadow-lg shadow-amber-500/20"
+                      className="bg-cyan-500/90 hover:bg-cyan-500 text-white rounded-full min-w-[44px] min-h-[44px] w-11 h-11 shadow-lg shadow-cyan-500/20"
                       data-testid="button-pause-chapter"
                       title="Pause"
                     >
-                      <Pause className="w-3.5 h-3.5" />
+                      <Pause className="w-5 h-5" />
                     </Button>
                     <Button 
-                      variant="ghost" 
                       size="icon" 
                       onClick={handleStop}
-                      className="text-slate-400 hover:text-white w-7 h-7"
+                      className="bg-slate-700/80 hover:bg-slate-600 text-white rounded-full min-w-[44px] min-h-[44px] w-11 h-11"
+                      data-testid="button-stop-chapter"
                       title="Stop"
                     >
-                      <VolumeX className="w-3.5 h-3.5" />
+                      <Square className="w-4 h-4 fill-current" />
                     </Button>
                   </div>
                 ) : (
                   <Button 
                     size="icon" 
                     onClick={handlePlay}
-                    className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white rounded-full w-8 h-8 shadow-lg shadow-purple-500/25 transition-all hover:shadow-purple-500/40 hover:scale-110"
+                    className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white rounded-full min-w-[44px] min-h-[44px] w-11 h-11 shadow-lg shadow-purple-500/25 transition-all hover:shadow-purple-500/40 hover:scale-110"
                     data-testid="button-play-chapter"
                     title={isPaused ? 'Resume' : (useAIVoice ? 'Listen with AI Voice' : 'Listen (Browser Voice)')}
                   >
-                    <Play className="w-4 h-4 ml-0.5" />
+                    <Play className="w-5 h-5 ml-0.5" />
                   </Button>
                 )}
                 {isPaused && !isPlaying && (
                   <Button 
-                    variant="ghost" 
                     size="icon" 
                     onClick={handleStop}
-                    className="text-slate-400 hover:text-white w-7 h-7"
+                    className="bg-slate-700/80 hover:bg-slate-600 text-white rounded-full min-w-[44px] min-h-[44px] w-11 h-11 ml-2"
+                    data-testid="button-stop-paused"
                     title="Stop"
                   >
-                    <VolumeX className="w-3.5 h-3.5" />
+                    <Square className="w-4 h-4 fill-current" />
                   </Button>
                 )}
                 <div className="absolute top-full right-0 mt-2 w-72 p-4 bg-slate-900/95 backdrop-blur-2xl border border-purple-500/20 rounded-xl shadow-2xl shadow-purple-500/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
