@@ -475,7 +475,7 @@ export default function VeilReader() {
     if (ctx.state === 'suspended') await ctx.resume();
 
     const controller = new AbortController();
-    const fetchTimer = setTimeout(() => controller.abort(), 25000);
+    const fetchTimer = setTimeout(() => controller.abort(), 45000);
 
     const response = await fetch('/api/voice/tts', {
       method: 'POST',
@@ -590,6 +590,7 @@ export default function VeilReader() {
       aiChunksRef.current = chunks;
       aiChunkIndexRef.current = 0;
       aiPlayingRef.current = true;
+      let consecutiveFailures = 0;
 
       console.log(`[Veil Audio] Starting playback: ${chunks.length} chunks, ${text.length} chars total`);
 
@@ -600,21 +601,36 @@ export default function VeilReader() {
         
         aiChunkIndexRef.current = i;
 
-        let result: { audioBuffer: AudioBuffer; provider: string };
+        let result: { audioBuffer: AudioBuffer; provider: string } | null = null;
 
-        if (i === 0) {
-          result = await fetchWithRetry(chunks[i]);
-          clearLoadingTimeout();
-          setVoiceProvider(result.provider);
-          setIsPlaying(true);
-          setIsLoading(false);
-        } else if (nextChunkPromise) {
-          result = await nextChunkPromise;
+        try {
+          if (i === 0) {
+            result = await fetchWithRetry(chunks[i]);
+            clearLoadingTimeout();
+            setVoiceProvider(result.provider);
+            setIsPlaying(true);
+            setIsLoading(false);
+            consecutiveFailures = 0;
+          } else if (nextChunkPromise) {
+            result = await nextChunkPromise;
+            nextChunkPromise = null;
+            setVoiceProvider(result.provider);
+            consecutiveFailures = 0;
+          } else {
+            result = await fetchWithRetry(chunks[i]);
+            setVoiceProvider(result.provider);
+            consecutiveFailures = 0;
+          }
+        } catch (chunkErr: any) {
+          consecutiveFailures++;
+          console.warn(`[Veil Audio] Chunk ${i + 1}/${chunks.length} failed (${consecutiveFailures} consecutive): ${chunkErr.message}`);
           nextChunkPromise = null;
-          setVoiceProvider(result.provider);
-        } else {
-          result = await fetchWithRetry(chunks[i]);
-          setVoiceProvider(result.provider);
+          if (i === 0 || consecutiveFailures >= 2) {
+            console.warn('[Veil Audio] Too many failures, falling back to browser voice');
+            clearLoadingTimeout();
+            throw chunkErr;
+          }
+          continue;
         }
 
         if (aiCancelledRef.current) return;
@@ -642,7 +658,7 @@ export default function VeilReader() {
       }
     } catch (err: any) {
       clearLoadingTimeout();
-      console.error('[Veil Audio] AI voice error:', err);
+      console.error('[Veil Audio] AI voice error, switching to browser voice:', err.message);
       setIsLoading(false);
       setIsPlaying(false);
       aiPlayingRef.current = false;
