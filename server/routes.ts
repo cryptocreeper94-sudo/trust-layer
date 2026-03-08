@@ -18401,7 +18401,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (elevenLabsKey) {
         try {
           const elAbort = new AbortController();
-          const elTimeout = setTimeout(() => elAbort.abort(), 5000);
+          const elTimeout = setTimeout(() => elAbort.abort(), 20000);
           const elResponse = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${elevenLabsVoiceId}`, {
             method: "POST",
             headers: {
@@ -18447,7 +18447,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       }
       
       const oaiAbort = new AbortController();
-      const oaiTimeout = setTimeout(() => oaiAbort.abort(), 15000);
+      const oaiTimeout = setTimeout(() => oaiAbort.abort(), 30000);
       const response = await fetch("https://api.openai.com/v1/audio/speech", {
         method: "POST",
         headers: {
