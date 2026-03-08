@@ -998,7 +998,7 @@ export default function VeilReader() {
           className="text-center max-w-sm relative z-10"
         >
           <GlassCard glow className="p-8">
-            <div className="w-16 h-16 mx-auto mb-5 rounded-xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/20 flex items-center justify-center shadow-lg shadow-red-500/10">
+            <div className="w-16 h-16 mx-auto mb-5 rounded-xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/20 flex items-center justify-center shadow-lg shadow-purple-500/10">
               <X className="w-7 h-7 text-red-400" />
             </div>
             <p className="text-red-300 mb-2 font-medium text-lg">{error || 'Failed to load content'}</p>
@@ -1158,120 +1158,7 @@ export default function VeilReader() {
             </div>
           </div>
           
-          <div className="flex items-center gap-1.5">
-            {(speechSupported || useAIVoice) && (
-              <div className="flex items-center gap-1.5 group relative">
-                {isLoading ? (
-                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/15 border border-purple-500/20 backdrop-blur-sm">
-                    <div className="w-3.5 h-3.5 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
-                    <span className="text-xs text-purple-300">Loading...</span>
-                  </div>
-                ) : isPlaying ? (
-                  <div className="flex items-center gap-4 px-3 py-2 rounded-full bg-gradient-to-r from-purple-500/15 to-cyan-500/10 border border-purple-500/20 backdrop-blur-sm">
-                    <div className="flex items-center gap-0.5">
-                      {[0, 150, 300, 450].map((delay, i) => (
-                        <motion.div
-                          key={i}
-                          className={`w-0.5 rounded-full ${i % 2 === 0 ? 'bg-purple-400' : 'bg-cyan-400'}`}
-                          animate={{ height: [8, 14, 8] }}
-                          transition={{ duration: 0.6, repeat: Infinity, delay: delay / 1000 }}
-                        />
-                      ))}
-                    </div>
-                    <Button 
-                      size="icon" 
-                      onClick={handlePause}
-                      className="bg-cyan-500/90 hover:bg-cyan-500 text-white rounded-full min-w-[44px] min-h-[44px] w-11 h-11 shadow-lg shadow-cyan-500/20"
-                      data-testid="button-pause-chapter"
-                      title="Pause"
-                    >
-                      <Pause className="w-5 h-5" />
-                    </Button>
-                    <Button 
-                      size="icon" 
-                      onClick={handleStop}
-                      className="bg-slate-700/80 hover:bg-slate-600 text-white rounded-full min-w-[44px] min-h-[44px] w-11 h-11"
-                      data-testid="button-stop-chapter"
-                      title="Stop"
-                    >
-                      <Square className="w-4 h-4 fill-current" />
-                    </Button>
-                  </div>
-                ) : (
-                  <Button 
-                    size="icon" 
-                    onClick={handlePlay}
-                    className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white rounded-full min-w-[44px] min-h-[44px] w-11 h-11 shadow-lg shadow-purple-500/25 transition-all hover:shadow-purple-500/40 hover:scale-110"
-                    data-testid="button-play-chapter"
-                    title={isPaused ? 'Resume' : (useAIVoice ? 'Listen with AI Voice' : 'Listen (Browser Voice)')}
-                  >
-                    <Play className="w-5 h-5 ml-0.5" />
-                  </Button>
-                )}
-                {isPaused && !isPlaying && (
-                  <Button 
-                    size="icon" 
-                    onClick={handleStop}
-                    className="bg-slate-700/80 hover:bg-slate-600 text-white rounded-full min-w-[44px] min-h-[44px] w-11 h-11 ml-2"
-                    data-testid="button-stop-paused"
-                    title="Stop"
-                  >
-                    <Square className="w-4 h-4 fill-current" />
-                  </Button>
-                )}
-                <div className="absolute top-full right-0 mt-2 w-72 p-4 bg-slate-900/95 backdrop-blur-2xl border border-purple-500/20 rounded-xl shadow-2xl shadow-purple-500/10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center shadow-md shadow-purple-500/20">
-                      <Volume2 className="w-3 h-3 text-white" />
-                    </div>
-                    <p className="text-white font-semibold text-sm">AI Narration</p>
-                  </div>
-                  <p className="text-slate-400 text-xs leading-relaxed mb-2">
-                    AI-powered narration with natural, expressive voice. Every chapter read aloud for you.
-                  </p>
-                  {voiceProvider && (
-                    <p className="text-cyan-400 text-[10px] font-mono mb-2">Currently using: {voiceProvider}</p>
-                  )}
-                  <p className="text-purple-400 text-xs">For offline listening, download PDF and use Adobe Reader's read-aloud.</p>
-                </div>
-                {ttsError && (
-                  <motion.div 
-                    initial={{ opacity: 0, y: -5 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}
-                    className={`fixed top-16 left-1/2 -translate-x-1/2 w-[90vw] max-w-sm p-3 backdrop-blur-xl border rounded-xl shadow-2xl z-[200] text-xs ${voicePermanentFail ? 'bg-red-950/95 border-red-500/30' : 'bg-slate-900/95 border-purple-500/30'}`}
-                  >
-                    <button 
-                      onClick={() => { setTtsError(null); if (voicePermanentFail) setVoicePermanentFail(false); }} 
-                      className="absolute top-1 right-2 text-white/40 hover:text-white text-lg"
-                      data-testid="button-dismiss-tts-error"
-                    >
-                      &times;
-                    </button>
-                    <p className="text-white/80 mb-2 pr-4">{ttsError}</p>
-                    <div className="flex gap-3">
-                      <button 
-                        onClick={() => { setTtsError(null); handleDownloadPDF(); }} 
-                        className="text-cyan-400 hover:text-cyan-300 underline transition-colors text-[10px]"
-                        data-testid="button-tts-error-pdf"
-                      >
-                        Download PDF
-                      </button>
-                      <a href="/veil" className="text-purple-400 hover:text-purple-300 underline transition-colors text-[10px]">Download page</a>
-                      {voicePermanentFail && (
-                        <button 
-                          onClick={() => { setVoicePermanentFail(false); setTtsError(null); }}
-                          className="text-amber-400 hover:text-amber-300 underline transition-colors text-[10px]"
-                        >
-                          Try again
-                        </button>
-                      )}
-                    </div>
-                  </motion.div>
-                )}
-              </div>
-            )}
-            
+          <div className="flex items-center gap-2">
             <Button 
               variant="ghost" 
               size="sm" 
@@ -1313,6 +1200,113 @@ export default function VeilReader() {
         </div>
       </div>
       
+      {(speechSupported || useAIVoice) && (
+        <div className="fixed top-[52px] left-0 right-0 z-40">
+          <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-xl border-b border-purple-500/10" />
+          <div className="container mx-auto px-4 py-2 relative z-10">
+            <div className="flex items-center justify-center gap-5">
+              {isLoading ? (
+                <div className="flex items-center gap-3 px-5 py-2 rounded-full bg-purple-500/10 border border-purple-500/20">
+                  <div className="w-4 h-4 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
+                  <span className="text-sm text-purple-300">Loading audio...</span>
+                </div>
+              ) : isPlaying ? (
+                <div className="flex items-center gap-5">
+                  <div className="flex items-center gap-1">
+                    {[0, 150, 300, 450].map((delay, i) => (
+                      <motion.div
+                        key={i}
+                        className={`w-1 rounded-full ${i % 2 === 0 ? 'bg-purple-400' : 'bg-cyan-400'}`}
+                        animate={{ height: [10, 18, 10] }}
+                        transition={{ duration: 0.6, repeat: Infinity, delay: delay / 1000 }}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-xs text-slate-400 hidden sm:inline">Now playing</span>
+                  <Button 
+                    size="icon" 
+                    onClick={handlePause}
+                    className="bg-cyan-600 hover:bg-cyan-500 text-white rounded-full min-w-[48px] min-h-[48px] w-12 h-12 shadow-lg shadow-cyan-500/30"
+                    data-testid="button-pause-chapter"
+                    title="Pause"
+                  >
+                    <Pause className="w-5 h-5" />
+                  </Button>
+                  <Button 
+                    size="icon" 
+                    onClick={handleStop}
+                    className="bg-slate-700 hover:bg-slate-600 text-white rounded-full min-w-[48px] min-h-[48px] w-12 h-12 border border-slate-600"
+                    data-testid="button-stop-chapter"
+                    title="Stop"
+                  >
+                    <Square className="w-4 h-4 fill-current" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center gap-4">
+                  <Button 
+                    size="icon" 
+                    onClick={handlePlay}
+                    className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 text-white rounded-full min-w-[48px] min-h-[48px] w-12 h-12 shadow-lg shadow-purple-500/30 transition-all hover:shadow-purple-500/50 hover:scale-105"
+                    data-testid="button-play-chapter"
+                    title={isPaused ? 'Resume' : (useAIVoice ? 'Listen with AI Voice' : 'Listen (Browser Voice)')}
+                  >
+                    <Play className="w-5 h-5 ml-0.5" />
+                  </Button>
+                  <span className="text-xs text-slate-500 hidden sm:inline">{isPaused ? 'Paused — tap to resume' : 'Listen to this chapter'}</span>
+                  {isPaused && (
+                    <Button 
+                      size="icon" 
+                      onClick={handleStop}
+                      className="bg-slate-700 hover:bg-slate-600 text-white rounded-full min-w-[48px] min-h-[48px] w-12 h-12 border border-slate-600"
+                      data-testid="button-stop-paused"
+                      title="Stop"
+                    >
+                      <Square className="w-4 h-4 fill-current" />
+                    </Button>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+          {ttsError && (
+            <motion.div 
+              initial={{ opacity: 0, y: -5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              className={`mx-4 mb-2 p-3 backdrop-blur-xl border rounded-xl shadow-2xl z-[200] text-xs relative ${voicePermanentFail ? 'bg-red-950/95 border-red-500/30' : 'bg-slate-900/95 border-purple-500/30'}`}
+            >
+              <button 
+                onClick={() => { setTtsError(null); if (voicePermanentFail) setVoicePermanentFail(false); }} 
+                className="absolute top-1 right-2 text-white/40 hover:text-white text-lg"
+                data-testid="button-dismiss-tts-error"
+              >
+                &times;
+              </button>
+              <p className="text-white/80 mb-2 pr-4">{ttsError}</p>
+              <div className="flex gap-3">
+                <button 
+                  onClick={() => { setTtsError(null); handleDownloadPDF(); }} 
+                  className="text-cyan-400 hover:text-cyan-300 underline transition-colors text-[10px]"
+                  data-testid="button-tts-error-pdf"
+                >
+                  Download PDF
+                </button>
+                <a href="/veil" className="text-purple-400 hover:text-purple-300 underline transition-colors text-[10px]">Download page</a>
+                {voicePermanentFail && (
+                  <button 
+                    onClick={() => { setVoicePermanentFail(false); setTtsError(null); }}
+                    className="text-purple-400 hover:text-purple-300 underline transition-colors text-[10px]"
+                  >
+                    Try again
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </div>
+      )}
+
       <AnimatePresence>
         {showWhatsNew && (
           <>
@@ -1530,7 +1524,7 @@ export default function VeilReader() {
         />
       </div>
 
-      <div className="pt-20 pb-28 px-4 sm:px-6 md:px-8 relative z-10">
+      <div className={`${(speechSupported || useAIVoice) ? 'pt-28' : 'pt-20'} pb-28 px-4 sm:px-6 md:px-8 relative z-10`}>
         {(chapterLoading || !chapter) ? (
           <div className="max-w-3xl mx-auto flex flex-col items-center justify-center py-20">
             <div className="relative w-14 h-14 mb-6">
@@ -1717,7 +1711,7 @@ export default function VeilReader() {
                       </Button>
                     </div>
                     {!userId && (
-                      <p className="text-amber-400/70 text-xs">
+                      <p className="text-purple-400/70 text-xs">
                         Sign in to purchase the full book
                       </p>
                     )}
