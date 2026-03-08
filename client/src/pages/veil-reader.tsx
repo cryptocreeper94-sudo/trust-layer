@@ -442,7 +442,7 @@ export default function VeilReader() {
     };
   }, []);
 
-  const splitTextIntoChunks = (text: string, maxLen = 3800): string[] => {
+  const splitTextIntoChunks = (text: string, maxLen = 3000): string[] => {
     if (text.length <= maxLen) return [text];
     const chunks: string[] = [];
     let remaining = text;
@@ -644,11 +644,8 @@ export default function VeilReader() {
       clearLoadingTimeout();
       console.error('[Veil Audio] AI voice error:', err);
       setIsLoading(false);
+      setIsPlaying(false);
       aiPlayingRef.current = false;
-      const msg = err?.message || '';
-      if (err?.name === 'AbortError' || msg.includes('timed out')) {
-        setTtsError('AI voice took too long — switching to browser voice for this chapter.');
-      }
       setVoiceProvider('Browser Voice');
       tryBrowserSpeech(text);
     }

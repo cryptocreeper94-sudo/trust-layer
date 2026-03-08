@@ -18392,8 +18392,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         return res.status(400).json({ error: "Text is required" });
       }
       
-      if (text.length > 4000) {
-        return res.status(400).json({ error: "Text too long. Maximum 4000 characters per request." });
+      if (text.length > 5000) {
+        return res.status(400).json({ error: "Text too long. Maximum 5000 characters per request." });
       }
 
       const elevenLabsKey = process.env.ELEVEN_LABS_API_KEY;
