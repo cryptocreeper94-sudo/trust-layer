@@ -391,6 +391,9 @@ export default function VeilReader() {
     aiChunksRef.current = [];
     aiChunkIndexRef.current = 0;
     stopWebAudioSource();
+    if (audioElementRef.current) {
+      try { audioElementRef.current.pause(); audioElementRef.current.src = ''; } catch {}
+    }
     if (blobUrlRef.current) {
       URL.revokeObjectURL(blobUrlRef.current);
       blobUrlRef.current = null;
@@ -470,9 +473,11 @@ export default function VeilReader() {
     });
   };
 
-  const fetchChunkAudio = async (chunkText: string): Promise<{ audioBuffer: AudioBuffer; provider: string }> => {
+  const isIOSRef = useRef(/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1));
+
+  const fetchChunkAudio = async (chunkText: string): Promise<{ audioBuffer: AudioBuffer; rawData: ArrayBuffer; provider: string }> => {
     const ctx = getOrCreateWebAudioCtx();
-    if (ctx.state === 'suspended') await ctx.resume();
+    if (ctx.state === 'suspended') await ctx.resume().catch(() => {});
 
     const controller = new AbortController();
     const fetchTimer = setTimeout(() => controller.abort(), 45000);
@@ -503,13 +508,79 @@ export default function VeilReader() {
       'Audio decode'
     );
 
-    console.log(`[Veil Audio] Fetched chunk: ${audioBuffer.duration.toFixed(1)}s, ${audioBuffer.numberOfChannels}ch, ${audioBuffer.sampleRate}Hz`);
-    return { audioBuffer, provider };
+    console.log(`[Veil Audio] Fetched chunk: ${audioBuffer.duration.toFixed(1)}s, ${audioBuffer.numberOfChannels}ch, ${audioBuffer.sampleRate}Hz, iOS=${isIOSRef.current}`);
+    return { audioBuffer, rawData: arrayBuffer, provider };
+  };
+
+  const playAudioViaElement = async (rawData: ArrayBuffer): Promise<void> => {
+    return new Promise<void>((resolve, reject) => {
+      try {
+        if (blobUrlRef.current) {
+          URL.revokeObjectURL(blobUrlRef.current);
+        }
+        const blob = new Blob([rawData], { type: 'audio/mpeg' });
+        const url = URL.createObjectURL(blob);
+        blobUrlRef.current = url;
+
+        if (!audioElementRef.current) {
+          audioElementRef.current = new Audio();
+        }
+        const audio = audioElementRef.current;
+        audio.src = url;
+        audio.volume = 1.0;
+
+        const safetyTimer = setTimeout(() => {
+          console.warn('[Veil Audio] iOS audio element safety timeout');
+          resolve();
+        }, 120000);
+
+        audio.onended = () => {
+          clearTimeout(safetyTimer);
+          console.log('[Veil Audio] iOS audio element chunk ended');
+          resolve();
+        };
+        audio.onerror = (e) => {
+          clearTimeout(safetyTimer);
+          console.error('[Veil Audio] iOS audio element error:', e);
+          resolve();
+        };
+
+        const playPromise = audio.play();
+        if (playPromise) {
+          playPromise.then(() => {
+            console.log('[Veil Audio] iOS audio element playing successfully');
+          }).catch((err) => {
+            clearTimeout(safetyTimer);
+            console.error('[Veil Audio] iOS audio.play() rejected:', err);
+            resolve();
+          });
+        }
+      } catch (err) {
+        console.error('[Veil Audio] iOS playback setup error:', err);
+        resolve();
+      }
+    });
   };
 
   const playAudioBuffer = async (audioBuffer: AudioBuffer, onStarted?: () => void): Promise<void> => {
     const ctx = getOrCreateWebAudioCtx();
-    if (ctx.state === 'suspended') await ctx.resume();
+    if (ctx.state === 'suspended') {
+      try { await ctx.resume(); } catch {}
+    }
+    if (ctx.state === 'suspended') {
+      console.warn('[Veil Audio] AudioContext still suspended after resume — iOS may have blocked it');
+      const retryResume = async () => {
+        for (let i = 0; i < 3; i++) {
+          try { await ctx.resume(); } catch {}
+          if (ctx.state === 'running') return;
+          await new Promise(r => setTimeout(r, 100));
+        }
+      };
+      await retryResume();
+      if (ctx.state !== 'running') {
+        console.error('[Veil Audio] Cannot resume AudioContext — state:', ctx.state);
+      }
+    }
 
     stopWebAudioSource();
     webAudioBufferRef.current = audioBuffer;
@@ -519,7 +590,10 @@ export default function VeilReader() {
       try {
         const source = ctx.createBufferSource();
         source.buffer = audioBuffer;
-        source.connect(ctx.destination);
+        const gainNode = ctx.createGain();
+        gainNode.gain.value = 1.0;
+        source.connect(gainNode);
+        gainNode.connect(ctx.destination);
 
         const safetyDuration = (audioBuffer.duration + 5) * 1000;
         const safetyTimer = setTimeout(() => {
@@ -540,7 +614,7 @@ export default function VeilReader() {
         webAudioSourceRef.current = source;
         webAudioStartTimeRef.current = ctx.currentTime;
         source.start(0);
-        console.log('[Veil Audio] Playback started via Web Audio API');
+        console.log(`[Veil Audio] Playback started via Web Audio API, ctx.state=${ctx.state}, duration=${audioBuffer.duration.toFixed(1)}s`);
         if (onStarted) onStarted();
       } catch (err) {
         reject(err);
@@ -548,7 +622,7 @@ export default function VeilReader() {
     });
   };
 
-  const fetchWithRetry = async (chunkText: string, retries = 1): Promise<{ audioBuffer: AudioBuffer; provider: string }> => {
+  const fetchWithRetry = async (chunkText: string, retries = 1): Promise<{ audioBuffer: AudioBuffer; rawData: ArrayBuffer; provider: string }> => {
     try {
       return await fetchChunkAudio(chunkText);
     } catch (err) {
@@ -594,14 +668,14 @@ export default function VeilReader() {
 
       console.log(`[Veil Audio] Starting playback: ${chunks.length} chunks, ${text.length} chars total`);
 
-      let nextChunkPromise: Promise<{ audioBuffer: AudioBuffer; provider: string }> | null = null;
+      let nextChunkPromise: Promise<{ audioBuffer: AudioBuffer; rawData: ArrayBuffer; provider: string }> | null = null;
 
       for (let i = 0; i < chunks.length; i++) {
         if (aiCancelledRef.current) { clearLoadingTimeout(); return; }
         
         aiChunkIndexRef.current = i;
 
-        let result: { audioBuffer: AudioBuffer; provider: string } | null = null;
+        let result: { audioBuffer: AudioBuffer; rawData: ArrayBuffer; provider: string } | null = null;
 
         try {
           if (i === 0) {
@@ -643,8 +717,12 @@ export default function VeilReader() {
           });
         }
 
-        console.log(`[Veil Audio] Playing chunk ${i + 1}/${chunks.length}`);
-        await playAudioBuffer(result.audioBuffer);
+        console.log(`[Veil Audio] Playing chunk ${i + 1}/${chunks.length}, iOS=${isIOSRef.current}`);
+        if (isIOSRef.current && result.rawData) {
+          await playAudioViaElement(result.rawData);
+        } else {
+          await playAudioBuffer(result.audioBuffer);
+        }
 
         if (aiCancelledRef.current) return;
       }
@@ -928,6 +1006,15 @@ export default function VeilReader() {
       clearInterval(speechKeepAliveRef.current);
       speechKeepAliveRef.current = null;
     }
+    if (isIOSRef.current && audioElementRef.current && isPlaying) {
+      audioElementRef.current.pause();
+      aiCancelledRef.current = true;
+      aiPlayingRef.current = false;
+      setIsPaused(true);
+      setIsPlaying(false);
+      console.log('[Veil Audio] iOS audio element paused');
+      return;
+    }
     const ctx = webAudioCtxRef.current;
     if (ctx && webAudioSourceRef.current && isPlaying) {
       const elapsed = ctx.currentTime - webAudioStartTimeRef.current + webAudioOffsetRef.current;
@@ -955,6 +1042,10 @@ export default function VeilReader() {
   };
 
   const handleDownloadPDF = () => {
+    if (isIOSRef.current) {
+      window.open('/api/veil/pdf', '_blank');
+      return;
+    }
     const a = document.createElement('a');
     a.href = '/api/veil/pdf';
     a.download = 'Through-The-Veil.pdf';

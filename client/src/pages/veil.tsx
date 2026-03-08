@@ -83,7 +83,6 @@ const item = {
 export default function Veil() {
   const [, setLocation] = useLocation();
   const [isStandalone, setIsStandalone] = useState(false);
-  const [isIOS, setIsIOS] = useState(false);
 
   const handleReadOnline = (anchor?: string) => {
     if (anchor) {
@@ -94,7 +93,13 @@ export default function Veil() {
     }
   };
 
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
   const handleDownloadPDF = () => {
+    if (isIOS) {
+      window.open('/api/veil/pdf', '_blank');
+      return;
+    }
     const a = document.createElement('a');
     a.href = '/api/veil/pdf';
     a.download = 'Through-The-Veil.pdf';
@@ -104,6 +109,10 @@ export default function Veil() {
   };
 
   const handleDownloadEPUB = () => {
+    if (isIOS) {
+      window.open('/api/veil/epub', '_blank');
+      return;
+    }
     const a = document.createElement('a');
     a.href = '/api/veil/epub';
     a.download = 'Through-The-Veil.epub';
@@ -118,8 +127,6 @@ export default function Veil() {
     const standalone = window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone;
     setIsStandalone(standalone);
 
-    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    setIsIOS(ios);
   }, []);
 
   useEffect(() => {

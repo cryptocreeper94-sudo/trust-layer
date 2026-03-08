@@ -24169,7 +24169,13 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       res.setHeader("Content-Length", stat.size.toString());
       res.setHeader("Accept-Ranges", "bytes");
       
-      res.setHeader("Content-Disposition", 'attachment; filename="Through-The-Veil.pdf"');
+      const ua = req.headers['user-agent'] || '';
+      const isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && /Mobile/i.test(ua));
+      if (isIOS) {
+        res.setHeader("Content-Disposition", 'inline; filename="Through-The-Veil.pdf"');
+      } else {
+        res.setHeader("Content-Disposition", 'attachment; filename="Through-The-Veil.pdf"');
+      }
       
       const stream = fs.createReadStream(pdfPath);
       stream.pipe(res);
