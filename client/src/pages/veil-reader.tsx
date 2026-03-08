@@ -470,14 +470,12 @@ export default function VeilReader() {
     });
   };
 
-  const fetchAndPlayChunk = async (chunkText: string, onPlaybackStarted?: () => void): Promise<void> => {
+  const fetchChunkAudio = async (chunkText: string): Promise<{ audioBuffer: AudioBuffer; provider: string }> => {
     const ctx = getOrCreateWebAudioCtx();
-    if (ctx.state === 'suspended') {
-      await ctx.resume();
-    }
+    if (ctx.state === 'suspended') await ctx.resume();
 
     const controller = new AbortController();
-    const fetchTimer = setTimeout(() => controller.abort(), 20000);
+    const fetchTimer = setTimeout(() => controller.abort(), 25000);
 
     const response = await fetch('/api/voice/tts', {
       method: 'POST',
@@ -492,9 +490,9 @@ export default function VeilReader() {
       throw new Error(errorData.error || `Voice server error (${response.status})`);
     }
 
-    const provider = response.headers.get('X-Voice-Provider') || 'ai';
+    const providerHeader = response.headers.get('X-Voice-Provider') || 'ai';
     const voiceName = response.headers.get('X-Voice-Name') || '';
-    setVoiceProvider(provider === 'elevenlabs' ? `ElevenLabs ${voiceName}` : `OpenAI ${voiceName}`);
+    const provider = providerHeader === 'elevenlabs' ? `ElevenLabs ${voiceName}` : `OpenAI ${voiceName}`;
 
     const arrayBuffer = await withTimeout(response.arrayBuffer(), 15000, 'Audio download');
     if (arrayBuffer.byteLength < 100) throw new Error('Empty audio response');
@@ -505,7 +503,13 @@ export default function VeilReader() {
       'Audio decode'
     );
 
-    console.log(`[Veil Audio] Decoded chunk: ${audioBuffer.duration.toFixed(1)}s, ${audioBuffer.numberOfChannels}ch, ${audioBuffer.sampleRate}Hz`);
+    console.log(`[Veil Audio] Fetched chunk: ${audioBuffer.duration.toFixed(1)}s, ${audioBuffer.numberOfChannels}ch, ${audioBuffer.sampleRate}Hz`);
+    return { audioBuffer, provider };
+  };
+
+  const playAudioBuffer = async (audioBuffer: AudioBuffer, onStarted?: () => void): Promise<void> => {
+    const ctx = getOrCreateWebAudioCtx();
+    if (ctx.state === 'suspended') await ctx.resume();
 
     stopWebAudioSource();
     webAudioBufferRef.current = audioBuffer;
@@ -516,7 +520,18 @@ export default function VeilReader() {
         const source = ctx.createBufferSource();
         source.buffer = audioBuffer;
         source.connect(ctx.destination);
+
+        const safetyDuration = (audioBuffer.duration + 5) * 1000;
+        const safetyTimer = setTimeout(() => {
+          console.warn(`[Veil Audio] Safety timeout — onended did not fire after ${audioBuffer.duration.toFixed(1)}s + 5s buffer`);
+          if (webAudioSourceRef.current === source) {
+            webAudioSourceRef.current = null;
+          }
+          resolve();
+        }, safetyDuration);
+
         source.onended = () => {
+          clearTimeout(safetyTimer);
           if (webAudioSourceRef.current === source) {
             webAudioSourceRef.current = null;
           }
@@ -526,11 +541,24 @@ export default function VeilReader() {
         webAudioStartTimeRef.current = ctx.currentTime;
         source.start(0);
         console.log('[Veil Audio] Playback started via Web Audio API');
-        if (onPlaybackStarted) onPlaybackStarted();
+        if (onStarted) onStarted();
       } catch (err) {
         reject(err);
       }
     });
+  };
+
+  const fetchWithRetry = async (chunkText: string, retries = 1): Promise<{ audioBuffer: AudioBuffer; provider: string }> => {
+    try {
+      return await fetchChunkAudio(chunkText);
+    } catch (err) {
+      if (retries > 0) {
+        console.warn(`[Veil Audio] Chunk fetch failed, retrying... (${retries} left)`);
+        await new Promise(r => setTimeout(r, 1000));
+        return fetchWithRetry(chunkText, retries - 1);
+      }
+      throw err;
+    }
   };
 
   const playWithAIVoice = async (text: string) => {
@@ -563,24 +591,50 @@ export default function VeilReader() {
       aiChunkIndexRef.current = 0;
       aiPlayingRef.current = true;
 
+      console.log(`[Veil Audio] Starting playback: ${chunks.length} chunks, ${text.length} chars total`);
+
+      let nextChunkPromise: Promise<{ audioBuffer: AudioBuffer; provider: string }> | null = null;
+
       for (let i = 0; i < chunks.length; i++) {
         if (aiCancelledRef.current) { clearLoadingTimeout(); return; }
         
         aiChunkIndexRef.current = i;
 
+        let result: { audioBuffer: AudioBuffer; provider: string };
+
         if (i === 0) {
-          await fetchAndPlayChunk(chunks[i], () => {
-            clearLoadingTimeout();
-            setIsPlaying(true);
-            setIsLoading(false);
-          });
+          result = await fetchWithRetry(chunks[i]);
+          clearLoadingTimeout();
+          setVoiceProvider(result.provider);
+          setIsPlaying(true);
+          setIsLoading(false);
+        } else if (nextChunkPromise) {
+          result = await nextChunkPromise;
+          nextChunkPromise = null;
+          setVoiceProvider(result.provider);
         } else {
-          if (aiCancelledRef.current) return;
-          await fetchAndPlayChunk(chunks[i]);
+          result = await fetchWithRetry(chunks[i]);
+          setVoiceProvider(result.provider);
         }
+
+        if (aiCancelledRef.current) return;
+
+        if (i + 1 < chunks.length) {
+          console.log(`[Veil Audio] Pre-fetching chunk ${i + 2}/${chunks.length}`);
+          nextChunkPromise = fetchWithRetry(chunks[i + 1]).catch(err => {
+            console.warn(`[Veil Audio] Pre-fetch failed for chunk ${i + 2}, will retry during playback`);
+            return fetchWithRetry(chunks[i + 1]);
+          });
+        }
+
+        console.log(`[Veil Audio] Playing chunk ${i + 1}/${chunks.length}`);
+        await playAudioBuffer(result.audioBuffer);
+
+        if (aiCancelledRef.current) return;
       }
 
       if (!aiCancelledRef.current) {
+        console.log('[Veil Audio] All chunks complete, advancing to next chapter');
         setIsPlaying(false);
         setIsPaused(false);
         aiPlayingRef.current = false;
