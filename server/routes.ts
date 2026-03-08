@@ -24136,9 +24136,15 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
   
   app.get("/api/veil/epub", async (_req, res) => {
     try {
-      const epubPath = path.join(process.cwd(), "attached_assets", "Through-The-Veil-KINDLE.epub");
+      const epubCandidates = [
+        path.join(process.cwd(), "attached_assets", "Through-The-Veil-KINDLE.epub"),
+        path.join(process.cwd(), "attached_assets", "Through-The-Veil-EBOOK.epub"),
+        path.join(process.cwd(), "server", "data", "Through-The-Veil.epub"),
+        path.join(process.cwd(), "server-data", "Through-The-Veil.epub"),
+      ];
+      const epubPath = epubCandidates.find(p => fs.existsSync(p));
       
-      if (!fs.existsSync(epubPath)) {
+      if (!epubPath) {
         return res.status(404).json({ error: "EPUB file not found" });
       }
       
@@ -24158,9 +24164,14 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
   // PDF GENERATION FOR THROUGH THE VEIL (Dynamic from markdown)
   app.get("/api/veil/pdf", async (req, res) => {
     try {
-      const pdfPath = path.join(process.cwd(), "attached_assets", "Through-The-Veil-EBOOK.pdf");
+      const candidates = [
+        path.join(process.cwd(), "attached_assets", "Through-The-Veil-EBOOK.pdf"),
+        path.join(process.cwd(), "server", "data", "Through-The-Veil.pdf"),
+        path.join(process.cwd(), "server-data", "Through-The-Veil.pdf"),
+      ];
+      const pdfPath = candidates.find(p => fs.existsSync(p));
       
-      if (!fs.existsSync(pdfPath)) {
+      if (!pdfPath) {
         return res.status(404).json({ error: "PDF file not found" });
       }
       

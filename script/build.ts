@@ -16,7 +16,8 @@ if (!process.env.__BUILD_RELAUNCHED && !process.env.NODE_OPTIONS?.includes('max-
 
 import { build as esbuild } from "esbuild";
 import { build as viteBuild } from "vite";
-import { rm, readFile, writeFile } from "fs/promises";
+import { rm, readFile, writeFile, mkdir, copyFile } from "fs/promises";
+import { existsSync } from "fs";
 import * as crypto from "crypto";
 import * as path from "path";
 
@@ -123,6 +124,19 @@ async function buildAll() {
     external: externals,
     logLevel: "info",
   });
+
+  console.log("copying server data files...");
+  await mkdir("dist/server-data", { recursive: true });
+  const dataFiles = [
+    { src: "server/data/Through-The-Veil.pdf", dest: "dist/server-data/Through-The-Veil.pdf" },
+    { src: "server/data/Through-The-Veil.epub", dest: "dist/server-data/Through-The-Veil.epub" },
+  ];
+  for (const { src, dest } of dataFiles) {
+    if (existsSync(src)) {
+      await copyFile(src, dest);
+      console.log(`  copied ${src} -> ${dest}`);
+    }
+  }
 }
 
 buildAll().catch((err) => {
