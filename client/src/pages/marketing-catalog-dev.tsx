@@ -106,7 +106,7 @@ const IMAGE_ASSETS = [
     id: "img1",
     name: "Trust Shield Hero",
     description: "Main brand shield with cosmic glow - use for major announcements",
-    url: "/images/darkwave_emblem.png",
+    url: "/images/darkwave_emblem.jpg",
     platforms: ["x", "facebook"],
     usage: "Hero posts, major announcements"
   },

@@ -231,7 +231,7 @@ export default function Veil() {
         >
           <div className="relative rounded-2xl overflow-hidden aspect-[16/7] sm:aspect-[16/6] max-w-5xl mx-auto">
             <img
-              src="/images/veil-hero.png"
+              src="/images/veil-hero.jpg"
               alt="Through The Veil"
               className="w-full h-full object-cover"
               loading="eager"
@@ -293,7 +293,7 @@ export default function Veil() {
             <GlassCard glow className="md:col-span-2 lg:col-span-2 overflow-hidden">
               <div className="relative">
                 <img
-                  src="/images/veil-manuscript.png"
+                  src="/images/veil-manuscript.jpg"
                   alt="Listen to the book"
                   className="w-full h-40 sm:h-48 object-cover"
                   loading="lazy"
@@ -363,7 +363,7 @@ export default function Veil() {
               <GlassCard glow className="flex-1 overflow-hidden">
                 <div className="relative">
                   <img
-                    src="/images/veil-evidence.png"
+                    src="/images/veil-evidence.jpg"
                     alt="PDF Download"
                     className="w-full h-28 sm:h-32 object-cover"
                     loading="lazy"
@@ -398,7 +398,7 @@ export default function Veil() {
               <GlassCard glow className="flex-1 overflow-hidden">
                 <div className="relative">
                   <img
-                    src="/images/veil-library.png"
+                    src="/images/veil-library.jpg"
                     alt="EPUB Download"
                     className="w-full h-28 sm:h-32 object-cover"
                     loading="lazy"

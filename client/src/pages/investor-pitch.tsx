@@ -16,14 +16,14 @@ import { Badge } from "@/components/ui/badge";
 import { BackButton } from "@/components/page-nav";
 import { GlassCard } from "@/components/glass-card";
 
-import heroImg from "@assets/generated_images/trust-layer-ecosystem-hero.png";
-import blockchainImg from "@assets/generated_images/darkwave_blockchain_network_visualization.png";
-import trustHomeImg from "@assets/generated_images/ethereum_smart_city_network.png";
-import communityImg from "@assets/generated_images/community_building_future.png";
-import validatorImg from "@assets/generated_images/validator_network_servers.png";
-import presaleImg from "@assets/generated_images/token_presale_investment.png";
-import guardianImg from "@assets/generated_images/guardian_security_shield_logo.png";
-import roadmapImg from "@assets/generated_images/darkwave_roadmap_visual.png";
+import heroImg from "@assets/generated_images/trust-layer-ecosystem-hero.jpg";
+import blockchainImg from "@assets/generated_images/darkwave_blockchain_network_visualization.jpg";
+import trustHomeImg from "@assets/generated_images/ethereum_smart_city_network.jpg";
+import communityImg from "@assets/generated_images/community_building_future.jpg";
+import validatorImg from "@assets/generated_images/validator_network_servers.jpg";
+import presaleImg from "@assets/generated_images/token_presale_investment.jpg";
+import guardianImg from "@assets/generated_images/guardian_security_shield_logo.jpg";
+import roadmapImg from "@assets/generated_images/darkwave_roadmap_visual.jpg";
 
 const fadeUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } };
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } };

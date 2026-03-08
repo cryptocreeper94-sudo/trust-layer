@@ -13,21 +13,21 @@ import { ChronoLayout, HoloCard, CTABanner, chronoStyles } from "@/components/ch
 import { HomeButton } from "@/components/page-nav";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 
-import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
-import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
-import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
-import deepSpace from "@assets/generated_images/deep_space_station.png";
-import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
-import egyptianKingdom from "@assets/generated_images/ancient_egyptian_kingdom_sunset.png";
-import wildWest from "@assets/generated_images/wild_west_frontier_town.png";
-import victorianLondon from "@assets/generated_images/victorian_london_street_scene.png";
-import greekAthens from "@assets/generated_images/ancient_greek_athens_parthenon.png";
-import vikingFjord from "@assets/generated_images/viking_longship_fjord_scene.png";
-import renaissanceFlorence from "@assets/generated_images/renaissance_florence_italy_scene.png";
-import romanColosseum from "@assets/generated_images/roman_empire_colosseum_gladiators.png";
-import feudalJapan from "@assets/generated_images/feudal_japan_samurai_castle.png";
-import stoneAgeVillage from "@assets/generated_images/stone_age_village_scene.png";
-import industrialCity from "@assets/generated_images/industrial_steampunk_city.png";
+import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.jpg";
+import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.jpg";
+import quantumRealm from "@assets/generated_images/quantum_dimension_realm.jpg";
+import deepSpace from "@assets/generated_images/deep_space_station.jpg";
+import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.jpg";
+import egyptianKingdom from "@assets/generated_images/ancient_egyptian_kingdom_sunset.jpg";
+import wildWest from "@assets/generated_images/wild_west_frontier_town.jpg";
+import victorianLondon from "@assets/generated_images/victorian_london_street_scene.jpg";
+import greekAthens from "@assets/generated_images/ancient_greek_athens_parthenon.jpg";
+import vikingFjord from "@assets/generated_images/viking_longship_fjord_scene.jpg";
+import renaissanceFlorence from "@assets/generated_images/renaissance_florence_italy_scene.jpg";
+import romanColosseum from "@assets/generated_images/roman_empire_colosseum_gladiators.jpg";
+import feudalJapan from "@assets/generated_images/feudal_japan_samurai_castle.jpg";
+import stoneAgeVillage from "@assets/generated_images/stone_age_village_scene.jpg";
+import industrialCity from "@assets/generated_images/industrial_steampunk_city.jpg";
 
 interface Era {
   id: string;

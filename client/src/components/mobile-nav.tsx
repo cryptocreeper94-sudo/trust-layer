@@ -8,9 +8,9 @@ import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { SimpleLoginModal } from "@/components/simple-login";
 import { WalletButton } from "@/components/wallet-button";
 
-import signalEmblem from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
+import signalEmblem from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.jpg";
 import shieldImage from "/shield-reference.jpg";
-import crowdfundImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
+import crowdfundImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.jpg";
 
 // Streamlined nav categories - consolidated for cleaner mobile experience
 const navCategories = [

@@ -13,8 +13,8 @@ import { useLocation } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 import { Switch } from "@/components/ui/switch";
 import { SimpleLoginModal } from "@/components/simple-login";
-import dragonBg from "@assets/generated_images/game_dragon_slots.png";
-import leprechaunBg from "@assets/generated_images/game_leprechaun_slots.png";
+import dragonBg from "@assets/generated_images/game_dragon_slots.jpg";
+import leprechaunBg from "@assets/generated_images/game_leprechaun_slots.jpg";
 
 interface SweepsBalance {
   goldCoins: string;

@@ -12,15 +12,15 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { GlassCard } from "@/components/glass-card";
 import { GamesComingSoonModal } from "@/components/games-coming-soon-modal";
-import worldImg from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
-import warriorImg from "@assets/generated_images/warrior_character_concept_art.png";
-import mageImg from "@assets/generated_images/mage_character_concept_art.png";
-import rogueImg from "@assets/generated_images/rogue_assassin_concept_art.png";
-import dragonImg from "@assets/generated_images/crystal_dragon_creature.png";
-import landsImg from "@assets/generated_images/fantasy_lands_and_realms.png";
-import charactersImg from "@assets/generated_images/fantasy_character_heroes.png";
-import loreImg from "@assets/generated_images/ancient_lore_library.png";
-import artifactsImg from "@assets/generated_images/legendary_weapons_artifacts.png";
+import worldImg from "@assets/generated_images/fantasy_sci-fi_world_landscape.jpg";
+import warriorImg from "@assets/generated_images/warrior_character_concept_art.jpg";
+import mageImg from "@assets/generated_images/mage_character_concept_art.jpg";
+import rogueImg from "@assets/generated_images/rogue_assassin_concept_art.jpg";
+import dragonImg from "@assets/generated_images/crystal_dragon_creature.jpg";
+import landsImg from "@assets/generated_images/fantasy_lands_and_realms.jpg";
+import charactersImg from "@assets/generated_images/fantasy_character_heroes.jpg";
+import loreImg from "@assets/generated_images/ancient_lore_library.jpg";
+import artifactsImg from "@assets/generated_images/legendary_weapons_artifacts.jpg";
 
 const CONTRIBUTION_TYPES = [
   {

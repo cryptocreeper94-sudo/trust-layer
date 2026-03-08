@@ -315,7 +315,7 @@ const IMAGE_ASSETS = [
     id: "img1",
     name: "Discord Welcome Banner",
     description: "Wide banner for Discord server welcome channel",
-    url: "/images/darkwave_emblem.png",
+    url: "/images/darkwave_emblem.jpg",
     platforms: ["discord"],
     usage: "Server welcome, announcements"
   },

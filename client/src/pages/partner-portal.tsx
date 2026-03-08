@@ -13,12 +13,12 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
-import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
-import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
-import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
-import deepSpace from "@assets/generated_images/deep_space_station.png";
-import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
-import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
+import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.jpg";
+import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.jpg";
+import quantumRealm from "@assets/generated_images/quantum_dimension_realm.jpg";
+import deepSpace from "@assets/generated_images/deep_space_station.jpg";
+import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.jpg";
+import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.jpg";
 
 const TECH_STACK = [
   { name: "Blockchain Layer", tech: "Trust Layer (PoA)", status: "Live", icon: Database },

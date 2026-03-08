@@ -17,12 +17,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 
-import heroImg from "@/assets/images/guardian-hero.png";
-import shieldImg from "@/assets/images/guardian-shield.png";
-import trustScoreImg from "@/assets/images/guardian-trust-score.png";
-import threatImg from "@/assets/images/guardian-threat.png";
-import certifiedImg from "@/assets/images/guardian-certified.png";
-import enterpriseImg from "@/assets/images/guardian-enterprise.png";
+import heroImg from "@/assets/images/guardian-hero.jpg";
+import shieldImg from "@/assets/images/guardian-shield.jpg";
+import trustScoreImg from "@/assets/images/guardian-trust-score.jpg";
+import threatImg from "@/assets/images/guardian-threat.jpg";
+import certifiedImg from "@/assets/images/guardian-certified.jpg";
+import enterpriseImg from "@/assets/images/guardian-enterprise.jpg";
 
 const AGENT_TYPES = [
   { id: 'trading_bot', label: 'Trading Bot', icon: TrendingUp },

@@ -18,10 +18,10 @@ import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 import { BOOK_CATEGORIES } from "@shared/schema";
 
-const heroImg = "/images/trust-book-hero.png";
-const featuredImg = "/images/trust-book-featured.png";
-const readerImg = "/images/trust-book-reader.png";
-const audioImg = "/images/trust-book-audio.png";
+const heroImg = "/images/trust-book-hero.jpg";
+const featuredImg = "/images/trust-book-featured.jpg";
+const readerImg = "/images/trust-book-reader.jpg";
+const audioImg = "/images/trust-book-audio.jpg";
 
 const PLATFORM_FEATURES = [
   { icon: BookOpen, title: "Immersive E-Reader", desc: "Full-screen reading with adjustable fonts, themes, and progress tracking across all devices.", gradient: "from-cyan-500 to-blue-600" },

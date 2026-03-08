@@ -11,7 +11,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 import { SimpleLoginModal } from "@/components/simple-login";
-import coinflipBg from "@assets/generated_images/game_coinflip_premium.png";
+import coinflipBg from "@assets/generated_images/game_coinflip_premium.jpg";
 
 interface SweepsBalance {
   goldCoins: string;

@@ -12,10 +12,10 @@ import { Input } from "@/components/ui/input";
 import { ChronoLayout, HoloCard, CTABanner, SocialProofTicker, chronoStyles } from "@/components/chrono-ui";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 
-import fantasyHeroes from "@assets/generated_images/fantasy_character_heroes.png";
-import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
-import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
-import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
+import fantasyHeroes from "@assets/generated_images/fantasy_character_heroes.jpg";
+import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.jpg";
+import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.jpg";
+import quantumRealm from "@assets/generated_images/quantum_dimension_realm.jpg";
 
 const FOUNDING_TIERS = [
   {

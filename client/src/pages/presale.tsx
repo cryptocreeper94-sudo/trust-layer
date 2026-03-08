@@ -25,15 +25,15 @@ import {
 } from "@/components/ui/dialog";
 import { DYORDisclaimer } from "@/components/dyor-disclaimer";
 const shieldImage = "/shield-reference.jpg";
-import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
-import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
-import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
-import bridgeVisual from "@assets/generated_images/darkwave_bridge_visual.png";
-import nftGallery from "@assets/generated_images/darkwave_nft_gallery_visual.png";
-import communityVisual from "@assets/generated_images/darkwave_community_visual.png";
-import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
-import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
-import deepSpace from "@assets/generated_images/deep_space_station.png";
+import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.jpg";
+import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.jpg";
+import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.jpg";
+import bridgeVisual from "@assets/generated_images/darkwave_bridge_visual.jpg";
+import nftGallery from "@assets/generated_images/darkwave_nft_gallery_visual.jpg";
+import communityVisual from "@assets/generated_images/darkwave_community_visual.jpg";
+import quantumRealm from "@assets/generated_images/quantum_dimension_realm.jpg";
+import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.jpg";
+import deepSpace from "@assets/generated_images/deep_space_station.jpg";
 
 const PRESALE_ALLOCATION = 150000000;
 

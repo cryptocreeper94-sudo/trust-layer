@@ -12,8 +12,8 @@ import { usePageAnalytics } from "@/hooks/use-analytics";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/hooks/use-auth";
 
-import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
-import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
+import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.jpg";
+import quantumRealm from "@assets/generated_images/quantum_dimension_realm.jpg";
 
 const DEFAULT_STATS = {
   era: "Age of Crowns",

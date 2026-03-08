@@ -15,8 +15,8 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
-import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
+import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.jpg";
+import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.jpg";
 import { WalletButton } from "@/components/wallet-button";
 import { LimitOrderForm, LimitOrdersList } from "@/components/limit-orders";
 

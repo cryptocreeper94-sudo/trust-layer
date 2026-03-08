@@ -14,12 +14,12 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import genesisNft1 from "@assets/generated_images/genesis_cosmic_orb_nft.png";
-import genesisNft2 from "@assets/generated_images/genesis_crystal_formation_nft.png";
-import genesisNft3 from "@assets/generated_images/genesis_portal_vortex_nft.png";
-import cyberNft from "@assets/generated_images/cyber_warrior_nft_collectible.png";
-import neonNft from "@assets/generated_images/neon_dreams_nft_collectible.png";
-import goldenNft from "@assets/generated_images/golden_aura_nft_collectible.png";
+import genesisNft1 from "@assets/generated_images/genesis_cosmic_orb_nft.jpg";
+import genesisNft2 from "@assets/generated_images/genesis_crystal_formation_nft.jpg";
+import genesisNft3 from "@assets/generated_images/genesis_portal_vortex_nft.jpg";
+import cyberNft from "@assets/generated_images/cyber_warrior_nft_collectible.jpg";
+import neonNft from "@assets/generated_images/neon_dreams_nft_collectible.jpg";
+import goldenNft from "@assets/generated_images/golden_aura_nft_collectible.jpg";
 
 interface NFT {
   id: string;

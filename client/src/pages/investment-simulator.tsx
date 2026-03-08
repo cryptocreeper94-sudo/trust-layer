@@ -12,8 +12,8 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
-import deepSpace from "@assets/generated_images/deep_space_station.png";
+import quantumRealm from "@assets/generated_images/quantum_dimension_realm.jpg";
+import deepSpace from "@assets/generated_images/deep_space_station.jpg";
 
 const TOKEN_PRICE = 0.001; // $0.001 per SIG (1B supply)
 const TIER_BONUSES = [

@@ -6,7 +6,7 @@ import { WalletButton } from "@/components/wallet-button";
 import { MemberBadge } from "@/components/member-badge";
 import { openGlobalSearch } from "@/components/global-search";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
-import signalEmblem from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.png";
+import signalEmblem from "@assets/generated_images/darkwave_trust_layer_emblem_enhanced.jpg";
 
 const HIDDEN_PATHS = [
   "/chronicles/login",

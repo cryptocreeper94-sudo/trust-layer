@@ -16,7 +16,7 @@ import { usePageAnalytics } from "@/hooks/use-analytics";
 import { useAuth } from "@/hooks/use-auth";
 import { apiRequest } from "@/lib/queryClient";
 
-import fantasyHeroes from "@assets/generated_images/fantasy_character_heroes.png";
+import fantasyHeroes from "@assets/generated_images/fantasy_character_heroes.jpg";
 
 type RecordingState = "idle" | "recording" | "recorded" | "playing";
 

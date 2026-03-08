@@ -18,11 +18,11 @@ import {
   Accordion, AccordionContent, AccordionItem, AccordionTrigger,
 } from "@/components/ui/accordion";
 
-const heroImg = "/images/academy-hero.png";
-const certImg = "/images/academy-cert.png";
-const defiImg = "/images/academy-defi.png";
-const mentorImg = "/images/academy-mentor.png";
-const securityImg = "/images/academy-security.png";
+const heroImg = "/images/academy-hero.jpg";
+const certImg = "/images/academy-cert.jpg";
+const defiImg = "/images/academy-defi.jpg";
+const mentorImg = "/images/academy-mentor.jpg";
+const securityImg = "/images/academy-security.jpg";
 
 const STRIPE_PRICES = {
   scholar: "price_1T2GJZRq977vVehdIBcsUn7x",

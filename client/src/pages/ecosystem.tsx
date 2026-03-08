@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/page-nav";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
-import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
-import fantasyImg from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
+import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.jpg";
+import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.jpg";
+import fantasyImg from "@assets/generated_images/fantasy_sci-fi_world_landscape.jpg";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 import { useQuery } from "@tanstack/react-query";
@@ -79,46 +79,46 @@ function ExploreButton({ url, appName }: { url?: string; appName: string }) {
 }
 
 const ecosystemImages: Record<string, string> = {
-  "driverconnect": "/ecosystem/driverconnect-new.png",
-  "darkwavestudios": "/ecosystem/darkwave-studios-new.png",
-  "lotopspro": "/ecosystem/lotopspro-new.png",
-  "lotops-pro": "/ecosystem/lotopspro-new.png",
-  "orby": "/ecosystem/orby-new.png",
-  "garagebot": "/ecosystem/garagebot-prod-new.png",
-  "garagebot-prod": "/ecosystem/garagebot-prod-new.png",
-  "orbit-staffing": "/ecosystem/orbit-staffing-new.png",
-  "brew-board": "/ecosystem/brew-board-new.png",
-  "darkwave-pulse": "/ecosystem/darkwave-pulse-new.png",
-  "nashpaintpros": "/ecosystem/nashpaintpros-new.png",
-  "paintpros": "/ecosystem/paintpros-new.png",
-  "strike-agent": "/ecosystem/strike-agent-new.png",
-  "veda-solus": "/ecosystem/veda-solus-new.png",
-  "vedasolus": "/ecosystem/veda-solus-new.png",
-  "darkwave-studios": "/ecosystem/darkwave-studios-new.png",
-  "tradeworks-ai": "/ecosystem/tradeworks-ai-new.png",
-  "chronicles": "/ecosystem/chronicles-new.png",
-  "the-arcade": "/ecosystem/the-arcade-new.png",
-  "signal-chat": "/ecosystem/signal-chat-new.png",
-  "driver-connect": "/ecosystem/driver-connect-new.png",
-  "trust-home": "/ecosystem/trust-home-new.png",
-  "trust-vault": "/ecosystem/trust-vault-new.png",
-  "guardian-scanner": "/ecosystem/guardian-scanner-new.png",
-  "guardian-screener": "/ecosystem/guardian-screener-new.png",
-  "trustshield": "/ecosystem/trustshield-new.png",
-  "the-void": "/ecosystem/the-void-new.png",
-  "trust-layer": "/ecosystem/trust-layer-new.png",
-  "tlid": "/ecosystem/tlid-new.png",
-  "torque": "/ecosystem/torque-new.png",
-  "darkwave-academy": "/ecosystem/darkwave-academy-new.png",
-  "academy": "/ecosystem/darkwave-academy-new.png",
-  "verdara": "/ecosystem/verdara-new.png",
-  "arbora": "/ecosystem/arbora-new.png",
-  "trust-book": "/ecosystem/trust-book-new.png",
+  "driverconnect": "/ecosystem/driverconnect-new.jpg",
+  "darkwavestudios": "/ecosystem/darkwave-studios-new.jpg",
+  "lotopspro": "/ecosystem/lotopspro-new.jpg",
+  "lotops-pro": "/ecosystem/lotopspro-new.jpg",
+  "orby": "/ecosystem/orby-new.jpg",
+  "garagebot": "/ecosystem/garagebot-prod-new.jpg",
+  "garagebot-prod": "/ecosystem/garagebot-prod-new.jpg",
+  "orbit-staffing": "/ecosystem/orbit-staffing-new.jpg",
+  "brew-board": "/ecosystem/brew-board-new.jpg",
+  "darkwave-pulse": "/ecosystem/darkwave-pulse-new.jpg",
+  "nashpaintpros": "/ecosystem/nashpaintpros-new.jpg",
+  "paintpros": "/ecosystem/paintpros-new.jpg",
+  "strike-agent": "/ecosystem/strike-agent-new.jpg",
+  "veda-solus": "/ecosystem/veda-solus-new.jpg",
+  "vedasolus": "/ecosystem/veda-solus-new.jpg",
+  "darkwave-studios": "/ecosystem/darkwave-studios-new.jpg",
+  "tradeworks-ai": "/ecosystem/tradeworks-ai-new.jpg",
+  "chronicles": "/ecosystem/chronicles-new.jpg",
+  "the-arcade": "/ecosystem/the-arcade-new.jpg",
+  "signal-chat": "/ecosystem/signal-chat-new.jpg",
+  "driver-connect": "/ecosystem/driver-connect-new.jpg",
+  "trust-home": "/ecosystem/trust-home-new.jpg",
+  "trust-vault": "/ecosystem/trust-vault-new.jpg",
+  "guardian-scanner": "/ecosystem/guardian-scanner-new.jpg",
+  "guardian-screener": "/ecosystem/guardian-screener-new.jpg",
+  "trustshield": "/ecosystem/trustshield-new.jpg",
+  "the-void": "/ecosystem/the-void-new.jpg",
+  "trust-layer": "/ecosystem/trust-layer-new.jpg",
+  "tlid": "/ecosystem/tlid-new.jpg",
+  "torque": "/ecosystem/torque-new.jpg",
+  "darkwave-academy": "/ecosystem/darkwave-academy-new.jpg",
+  "academy": "/ecosystem/darkwave-academy-new.jpg",
+  "verdara": "/ecosystem/verdara-new.jpg",
+  "arbora": "/ecosystem/arbora-new.jpg",
+  "trust-book": "/ecosystem/trust-book-new.jpg",
   "trust-golf": "/ecosystem/trust-golf-new.png",
   "trustgolf": "/ecosystem/trust-golf-new.png",
-  "veil": "/ecosystem/veil-new.png",
-  "through-the-veil": "/ecosystem/veil-new.png",
-  "happy-eats": "/ecosystem/happy-eats.png",
+  "veil": "/ecosystem/veil-new.jpg",
+  "through-the-veil": "/ecosystem/veil-new.jpg",
+  "happy-eats": "/ecosystem/happy-eats.jpg",
 };
 
 function getAppImage(appId: string): string {

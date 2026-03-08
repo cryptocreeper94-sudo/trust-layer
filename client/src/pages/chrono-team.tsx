@@ -11,10 +11,10 @@ import { Progress } from "@/components/ui/progress";
 import { ChronoLayout, HoloCard, chronoStyles } from "@/components/chrono-ui";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 
-import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
-import deepSpace from "@assets/generated_images/deep_space_station.png";
-import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
-import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
+import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.jpg";
+import deepSpace from "@assets/generated_images/deep_space_station.jpg";
+import quantumRealm from "@assets/generated_images/quantum_dimension_realm.jpg";
+import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.jpg";
 
 const ROADMAP_PHASES = [
   {

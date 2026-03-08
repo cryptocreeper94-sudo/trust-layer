@@ -12,19 +12,19 @@ import { Badge } from "@/components/ui/badge";
 import { ChronoLayout, VideoHero, HoloCard, SocialProofTicker, CTABanner, chronoStyles } from "@/components/chrono-ui";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 
-import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
-import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
-import ancientLibrary from "@assets/generated_images/ancient_wisdom_library_interior.png";
-import timeVortex from "@assets/generated_images/historical_time_vortex_portal.png";
-import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
-import fantasyHeroes from "@assets/generated_images/fantasy_character_heroes.png";
-import egyptianKingdom from "@assets/generated_images/ancient_egyptian_kingdom_sunset.png";
-import wildWest from "@assets/generated_images/wild_west_frontier_town.png";
-import victorianLondon from "@assets/generated_images/victorian_london_street_scene.png";
-import vikingFjord from "@assets/generated_images/viking_longship_fjord_scene.png";
-import romanColosseum from "@assets/generated_images/roman_empire_colosseum_gladiators.png";
-import stoneAgeVillage from "@assets/generated_images/stone_age_village_scene.png";
-import deepSpace from "@assets/generated_images/deep_space_station.png";
+import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.jpg";
+import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.jpg";
+import ancientLibrary from "@assets/generated_images/ancient_wisdom_library_interior.jpg";
+import timeVortex from "@assets/generated_images/historical_time_vortex_portal.jpg";
+import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.jpg";
+import fantasyHeroes from "@assets/generated_images/fantasy_character_heroes.jpg";
+import egyptianKingdom from "@assets/generated_images/ancient_egyptian_kingdom_sunset.jpg";
+import wildWest from "@assets/generated_images/wild_west_frontier_town.jpg";
+import victorianLondon from "@assets/generated_images/victorian_london_street_scene.jpg";
+import vikingFjord from "@assets/generated_images/viking_longship_fjord_scene.jpg";
+import romanColosseum from "@assets/generated_images/roman_empire_colosseum_gladiators.jpg";
+import stoneAgeVillage from "@assets/generated_images/stone_age_village_scene.jpg";
+import deepSpace from "@assets/generated_images/deep_space_station.jpg";
 
 const FEATURED_ERAS = [
   { id: "stone", name: "Dawn Age", period: "50,000 BCE", image: stoneAgeVillage, color: "from-amber-500 to-orange-600" },

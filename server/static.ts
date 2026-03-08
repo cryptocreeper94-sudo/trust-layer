@@ -45,7 +45,7 @@ const APP_CONFIG: Record<AppDomain, {
     themeColor: "#a855f7",
     title: "Chronicles",
     description: "Not a game. A life. Live your legacy across 70+ historical eras in the ChronoVerse.",
-    icon: "/marketing/darkwave_games_app_icon.png",
+    icon: "/marketing/darkwave_games_app_icon.jpg",
   },
   chronochat: {
     manifest: "/manifest-chronochat.webmanifest",

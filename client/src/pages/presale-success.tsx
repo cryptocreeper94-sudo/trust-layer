@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { CheckCircle, ArrowRight, Loader2, Sparkles, Wallet, Copy, ExternalLink, Shield, LayoutDashboard } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
+import quantumRealm from "@assets/generated_images/quantum_dimension_realm.jpg";
 
 const TOKEN_PRICE = 0.001; // $0.001 per SIG (1B supply)
 

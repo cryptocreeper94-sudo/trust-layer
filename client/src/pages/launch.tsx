@@ -10,13 +10,13 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-import heroImg from "@/assets/generated_images/hub_presale_launch.png";
-import blockchainImg from "@/assets/generated_images/cc_blockchain_network.png";
-import defiImg from "@/assets/generated_images/hub_trading_defi.png";
-import securityImg from "@/assets/generated_images/cc_security_shield.png";
-import gamesImg from "@/assets/generated_images/hub_chronicles_game.png";
-import communityImg from "@/assets/generated_images/hub_community_social.png";
-import bridgeImg from "@/assets/generated_images/hub_bridge_chains.png";
+import heroImg from "@/assets/generated_images/hub_presale_launch.jpg";
+import blockchainImg from "@/assets/generated_images/cc_blockchain_network.jpg";
+import defiImg from "@/assets/generated_images/hub_trading_defi.jpg";
+import securityImg from "@/assets/generated_images/cc_security_shield.jpg";
+import gamesImg from "@/assets/generated_images/hub_chronicles_game.jpg";
+import communityImg from "@/assets/generated_images/hub_community_social.jpg";
+import bridgeImg from "@/assets/generated_images/hub_bridge_chains.jpg";
 
 const LAUNCH_DATE = new Date("2026-08-23T00:00:00-05:00");
 

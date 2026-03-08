@@ -13,11 +13,11 @@ import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 import { apiRequest } from "@/lib/queryClient";
 import { useAuth } from "@/hooks/use-auth";
-import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
-import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
-import stakingImg from "@assets/generated_images/darkwave_staking_rewards_visual.png";
-import defiImg from "@assets/generated_images/darkwave_defi_trading_visual.png";
-import networkImg from "@assets/generated_images/darkwave_blockchain_network_visual.png";
+import blockchainImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.jpg";
+import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.jpg";
+import stakingImg from "@assets/generated_images/darkwave_staking_rewards_visual.jpg";
+import defiImg from "@assets/generated_images/darkwave_defi_trading_visual.jpg";
+import networkImg from "@assets/generated_images/darkwave_blockchain_network_visual.jpg";
 import { WalletButton } from "@/components/wallet-button";
 
 const poolBackgrounds = [stakingImg, defiImg, networkImg, blockchainImg];

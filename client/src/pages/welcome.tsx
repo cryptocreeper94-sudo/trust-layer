@@ -119,7 +119,7 @@ export default function WelcomePage() {
             className="text-center mb-12"
           >
             <motion.img 
-              src="/images/darkwave_emblem.png"
+              src="/images/darkwave_emblem.jpg"
               alt="Trust Layer" 
               className="w-24 h-24 mx-auto mb-6"
               animate={{ 

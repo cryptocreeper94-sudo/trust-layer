@@ -13,11 +13,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Crown, Sword, Users, MessageCircle, Star, Shield, Scroll, Sparkles, BookOpen, Trophy, Target, ChevronRight, Send, User, MapPin, Play, Volume2, VolumeX, Flame, Zap, Globe, Building, Store, Clock, Compass, Layers } from "lucide-react";
 
 import medievalVideo from "@assets/generated_videos/medieval_castle_twilight_scene.mp4";
-import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
-import fantasyHeroes from "@assets/generated_images/fantasy_character_heroes.png";
-import romanColosseum from "@assets/generated_images/roman_empire_colosseum_gladiators.png";
-import vikingFjord from "@assets/generated_images/viking_longship_fjord_scene.png";
-import wildWest from "@assets/generated_images/wild_west_frontier_town.png";
+import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.jpg";
+import fantasyHeroes from "@assets/generated_images/fantasy_character_heroes.jpg";
+import romanColosseum from "@assets/generated_images/roman_empire_colosseum_gladiators.jpg";
+import vikingFjord from "@assets/generated_images/viking_longship_fjord_scene.jpg";
+import wildWest from "@assets/generated_images/wild_west_frontier_town.jpg";
 
 const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
   <motion.div

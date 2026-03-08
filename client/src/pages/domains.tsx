@@ -15,12 +15,12 @@ import { WalletButton } from "@/components/wallet-button";
 import { useWallet } from "@/hooks/use-wallet";
 import { toast } from "sonner";
 
-import deepSpaceBg from "@assets/generated_images/deep_space_station.png";
-import cyberpunkBg from "@assets/generated_images/cyberpunk_neon_city.png";
-import quantumBg from "@assets/generated_images/quantum_dimension_realm.png";
-import medievalBg from "@assets/generated_images/medieval_fantasy_kingdom.png";
-import fantasyBg from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
-import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
+import deepSpaceBg from "@assets/generated_images/deep_space_station.jpg";
+import cyberpunkBg from "@assets/generated_images/cyberpunk_neon_city.jpg";
+import quantumBg from "@assets/generated_images/quantum_dimension_realm.jpg";
+import medievalBg from "@assets/generated_images/medieval_fantasy_kingdom.jpg";
+import fantasyBg from "@assets/generated_images/fantasy_sci-fi_world_landscape.jpg";
+import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.jpg";
 
 interface DomainSearchResult {
   available: boolean;

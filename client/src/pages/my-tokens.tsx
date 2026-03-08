@@ -14,7 +14,7 @@ import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import { WalletButton } from "@/components/wallet-button";
 
-import samuraiImage from "@assets/generated_images/feudal_japan_samurai_castle.png";
+import samuraiImage from "@assets/generated_images/feudal_japan_samurai_castle.jpg";
 
 interface TokenBag {
   totalDwc: number;

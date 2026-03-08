@@ -4,11 +4,11 @@ import { Check, Circle, Clock, Sparkles, Brain, Users, Globe, Zap, Crown, Chevro
 
 import { Link } from "wouter";
 
-import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
-import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
-import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
-import deepSpace from "@assets/generated_images/deep_space_station.png";
-import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
+import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.jpg";
+import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.jpg";
+import quantumRealm from "@assets/generated_images/quantum_dimension_realm.jpg";
+import deepSpace from "@assets/generated_images/deep_space_station.jpg";
+import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.jpg";
 
 interface Milestone {
   id: string;

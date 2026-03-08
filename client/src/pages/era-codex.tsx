@@ -9,9 +9,9 @@ import { BackButton } from "@/components/page-nav";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
-import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
-import medievalImg from "@assets/generated_images/medieval_fantasy_kingdom.png";
-import industrialImg from "@assets/generated_images/industrial_steampunk_city.png";
+import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.jpg";
+import medievalImg from "@assets/generated_images/medieval_fantasy_kingdom.jpg";
+import industrialImg from "@assets/generated_images/industrial_steampunk_city.jpg";
 
 interface Era {
   id: string;

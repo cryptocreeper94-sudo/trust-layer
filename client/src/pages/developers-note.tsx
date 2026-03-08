@@ -52,7 +52,7 @@ Join the community: https://dwsc.io/community
 
 #DarkWave #TrustNetwork #Signal #Blockchain #Web3 #Community #Builders #CryptoRecovery #RealTalk #TrustLayer #DecentralizedTrust #BlockchainCommunity #CryptoSkepticism #HonestCrypto #NoMoreScams`;
 
-import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
+import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.jpg";
 
 export default function DevelopersNote() {
   const [copied, setCopied] = useState(false);

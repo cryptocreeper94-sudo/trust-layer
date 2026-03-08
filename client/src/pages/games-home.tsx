@@ -10,13 +10,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { GlassCard } from "@/components/glass-card";
 
-import heroBanner from "@assets/generated_images/games_hero_banner.png";
-import dragonSlots from "@assets/generated_images/game_dragon_slots.png";
-import coinflipArt from "@assets/generated_images/game_coinflip_premium.png";
-import crashArt from "@assets/generated_images/game_crash_rocket.png";
-import arcadeClassics from "@assets/generated_images/game_arcade_classics.png";
-import leprechaunSlots from "@assets/generated_images/game_leprechaun_slots.png";
-import cardGames from "@assets/generated_images/game_card_games.png";
+import heroBanner from "@assets/generated_images/games_hero_banner.jpg";
+import dragonSlots from "@assets/generated_images/game_dragon_slots.jpg";
+import coinflipArt from "@assets/generated_images/game_coinflip_premium.jpg";
+import crashArt from "@assets/generated_images/game_crash_rocket.jpg";
+import arcadeClassics from "@assets/generated_images/game_arcade_classics.jpg";
+import leprechaunSlots from "@assets/generated_images/game_leprechaun_slots.jpg";
+import cardGames from "@assets/generated_images/game_card_games.jpg";
 
 const FEATURED_GAMES = [
   {

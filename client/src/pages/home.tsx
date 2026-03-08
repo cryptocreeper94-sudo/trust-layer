@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target, ChevronDown, ChevronLeft, ChevronRight, Gift, Search } from "lucide-react";
 import { InfoTooltip } from "@/components/info-tooltip";
-import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.png";
+import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.jpg";
 import shieldImage from "/shield-reference.jpg";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -18,22 +18,22 @@ import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { SimpleLoginModal } from "@/components/simple-login";
 import { useState, useRef, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.png";
-import medievalImg from "@assets/generated_images/medieval_castle_vertical_portrait.png";
-import egyptImg from "@assets/generated_images/ancient_egyptian_kingdom_sunset.png";
-import greeceImg from "@assets/generated_images/ancient_greek_athens_parthenon.png";
-import samuraiImg from "@assets/generated_images/feudal_japan_samurai_castle.png";
-import steampunkImg from "@assets/generated_images/industrial_steampunk_city.png";
-import renaissanceImg from "@assets/generated_images/renaissance_florence_italy_scene.png";
-import romanImg from "@assets/generated_images/roman_empire_colosseum_gladiators.png";
-import vikingImg from "@assets/generated_images/viking_longship_fjord_scene.png";
-import wildWestImg from "@assets/generated_images/wild_west_frontier_town.png";
-import tradingImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
-import nftImg from "@assets/generated_images/fantasy_character_heroes.png";
-import devStudioImg from "@assets/generated_images/developer_portal_apis.png";
-import launchpadImg from "@assets/generated_images/rocket_launching_growth.png";
-import toolsImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
-import earnImg from "@assets/generated_images/darkwave_crypto_token_coin_holographic.png";
+import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.jpg";
+import medievalImg from "@assets/generated_images/medieval_castle_vertical_portrait.jpg";
+import egyptImg from "@assets/generated_images/ancient_egyptian_kingdom_sunset.jpg";
+import greeceImg from "@assets/generated_images/ancient_greek_athens_parthenon.jpg";
+import samuraiImg from "@assets/generated_images/feudal_japan_samurai_castle.jpg";
+import steampunkImg from "@assets/generated_images/industrial_steampunk_city.jpg";
+import renaissanceImg from "@assets/generated_images/renaissance_florence_italy_scene.jpg";
+import romanImg from "@assets/generated_images/roman_empire_colosseum_gladiators.jpg";
+import vikingImg from "@assets/generated_images/viking_longship_fjord_scene.jpg";
+import wildWestImg from "@assets/generated_images/wild_west_frontier_town.jpg";
+import tradingImg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.jpg";
+import nftImg from "@assets/generated_images/fantasy_character_heroes.jpg";
+import devStudioImg from "@assets/generated_images/developer_portal_apis.jpg";
+import launchpadImg from "@assets/generated_images/rocket_launching_growth.jpg";
+import toolsImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.jpg";
+import earnImg from "@assets/generated_images/darkwave_crypto_token_coin_holographic.jpg";
 
 function ExploreButton({ url, appName }: { url?: string; appName: string }) {
   const [open, setOpen] = useState(false);
@@ -98,34 +98,34 @@ function ExploreButton({ url, appName }: { url?: string; appName: string }) {
 }
 
 const ecosystemImages: Record<string, string> = {
-  "orbit-staffing": "/ecosystem/orbit-staffing.jpg",
-  "lotopspro": "/ecosystem/lotopspro.jpg",
-  "lotops-pro": "/ecosystem/lotopspro.jpg",
-  "brew-board": "/ecosystem/brew-board.jpg",
-  "garagebot": "/ecosystem/garagebot-prod.jpg",
-  "garagebot-prod": "/ecosystem/garagebot-prod.jpg",
-  "darkwave-pulse": "/ecosystem/darkwave-pulse.jpg",
-  "paintpros": "/ecosystem/paintpros.jpg",
-  "nashpaintpros": "/ecosystem/paintpros.jpg",
-  "orby": "/ecosystem/orby.jpg",
-  "strike-agent": "/ecosystem/strike-agent.jpg",
-  "veda-solus": "/ecosystem/veda-solus.jpg",
-  "vedasolus": "/ecosystem/veda-solus.jpg",
-  "trust-home": "/ecosystem/trust-home.png",
-  "trust-vault": "/ecosystem/trust-vault.png",
-  "guardian-scanner": "/ecosystem/guardian-scanner.png",
-  "guardian-screener": "/ecosystem/guardian-screener.png",
-  "trustshield": "/ecosystem/trustshield.png",
+  "orbit-staffing": "/ecosystem/orbit-staffing-new.jpg",
+  "lotopspro": "/ecosystem/lotopspro-new.jpg",
+  "lotops-pro": "/ecosystem/lotopspro-new.jpg",
+  "brew-board": "/ecosystem/brew-board-new.jpg",
+  "garagebot": "/ecosystem/garagebot-prod-new.jpg",
+  "garagebot-prod": "/ecosystem/garagebot-prod-new.jpg",
+  "darkwave-pulse": "/ecosystem/darkwave-pulse-new.jpg",
+  "paintpros": "/ecosystem/paintpros-new.jpg",
+  "nashpaintpros": "/ecosystem/paintpros-new.jpg",
+  "orby": "/ecosystem/orby-new.jpg",
+  "strike-agent": "/ecosystem/strike-agent-new.jpg",
+  "veda-solus": "/ecosystem/veda-solus-new.jpg",
+  "vedasolus": "/ecosystem/veda-solus-new.jpg",
+  "trust-home": "/ecosystem/trust-home.jpg",
+  "trust-vault": "/ecosystem/trust-vault.jpg",
+  "guardian-scanner": "/ecosystem/guardian-scanner.jpg",
+  "guardian-screener": "/ecosystem/guardian-screener.jpg",
+  "trustshield": "/ecosystem/trustshield.jpg",
   "the-void": "/ecosystem/the-void.png",
-  "torque": "/ecosystem/torque.png",
-  "driver-connect": "/ecosystem/driver-connect.png",
-  "trust-layer": "/ecosystem/trust-layer.png",
-  "tlid": "/ecosystem/tlid.png",
-  "chronicles": "/ecosystem/chronicles.png",
-  "the-arcade": "/ecosystem/the-arcade.png",
-  "signal-chat": "/ecosystem/signal-chat.png",
-  "darkwave-studios": "/ecosystem/darkwave-studios.png",
-  "tradeworks-ai": "/ecosystem/tradeworks-ai.png",
+  "torque": "/ecosystem/torque.jpg",
+  "driver-connect": "/ecosystem/driver-connect.jpg",
+  "trust-layer": "/ecosystem/trust-layer.jpg",
+  "tlid": "/ecosystem/tlid.jpg",
+  "chronicles": "/ecosystem/chronicles.jpg",
+  "the-arcade": "/ecosystem/the-arcade.jpg",
+  "signal-chat": "/ecosystem/signal-chat.jpg",
+  "darkwave-studios": "/ecosystem/darkwave-studios.jpg",
+  "tradeworks-ai": "/ecosystem/tradeworks-ai.jpg",
 };
 
 const CHRONICLES_ERAS = [

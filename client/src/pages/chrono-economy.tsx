@@ -10,10 +10,10 @@ import { Badge } from "@/components/ui/badge";
 import { ChronoLayout, HoloCard, CTABanner, VideoHero, chronoStyles } from "@/components/chrono-ui";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 
-import deepSpace from "@assets/generated_images/deep_space_station.png";
-import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
-import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
-import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
+import deepSpace from "@assets/generated_images/deep_space_station.jpg";
+import quantumRealm from "@assets/generated_images/quantum_dimension_realm.jpg";
+import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.jpg";
+import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.jpg";
 
 const ECONOMY_PILLARS = [
   {

@@ -17,12 +17,12 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { BuyCryptoModal } from "@/components/buy-crypto-modal";
-import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
-import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
-import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
-import deepSpace from "@assets/generated_images/deep_space_station.png";
-import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
-import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
+import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.jpg";
+import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.jpg";
+import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.jpg";
+import deepSpace from "@assets/generated_images/deep_space_station.jpg";
+import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.jpg";
+import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.jpg";
 
 const CATEGORY_IMAGES: Record<string, string> = {
   defi: blockchainBg,

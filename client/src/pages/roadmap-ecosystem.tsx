@@ -4,13 +4,13 @@ import { Check, Circle, Clock, Sparkles, Layers, Shield, Globe, Rocket, Server, 
 
 import { Link } from "wouter";
 
-import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.png";
-import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.png";
-import deepSpace from "@assets/generated_images/deep_space_station.png";
-import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.png";
-import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
-import quantumRealm from "@assets/generated_images/quantum_dimension_realm.png";
-import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.png";
+import blockchainBg from "@assets/generated_images/futuristic_blockchain_network_activity_monitor.jpg";
+import dashboardImg from "@assets/generated_images/futuristic_dashboard_interface_for_managing_decentralized_applications.jpg";
+import deepSpace from "@assets/generated_images/deep_space_station.jpg";
+import cyberpunkCity from "@assets/generated_images/cyberpunk_neon_city.jpg";
+import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.jpg";
+import quantumRealm from "@assets/generated_images/quantum_dimension_realm.jpg";
+import fantasyWorld from "@assets/generated_images/fantasy_sci-fi_world_landscape.jpg";
 
 interface Milestone {
   id: string;

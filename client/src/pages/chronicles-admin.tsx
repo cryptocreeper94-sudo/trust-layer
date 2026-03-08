@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 
-import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.png";
+import medievalKingdom from "@assets/generated_images/medieval_fantasy_kingdom.jpg";
 
 const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: number; top: string; left: string; delay?: number }) => (
   <motion.div
