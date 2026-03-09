@@ -11,9 +11,9 @@ import { passkeys, users } from "@shared/models/auth";
 import { eq, and } from "drizzle-orm";
 import crypto from "crypto";
 
-const rpName = "Trust Layer";
-const rpID = process.env.REPLIT_DEV_DOMAIN?.replace(/^https?:\/\//, "") || "localhost";
-const origin = process.env.REPLIT_DEV_DOMAIN || `http://localhost:5000`;
+const siteUrl = process.env.SITE_BASE_URL || 'https://trust-layer-1pji.onrender.com';
+const rpID = new URL(siteUrl).hostname;
+const origin = siteUrl;
 
 interface StoredChallenge {
   challenge: string;
@@ -54,7 +54,7 @@ export async function getPasskeyByCredentialId(credentialId: string) {
 
 export async function startRegistration(userId: string, userEmail: string) {
   const userPasskeys = await getUserPasskeys(userId);
-  
+
   const options = await generateRegistrationOptions({
     rpName,
     rpID,
@@ -119,7 +119,7 @@ export async function finishRegistration(
 
 export async function startAuthentication(userId?: string) {
   let allowCredentials: { id: string; transports?: string[] }[] = [];
-  
+
   if (userId) {
     const userPasskeys = await getUserPasskeys(userId);
     allowCredentials = userPasskeys.map((pk) => ({
@@ -151,7 +151,7 @@ export async function finishAuthentication(
     return { success: false, message: "Request ID required" };
   }
   const expectedChallenge = getChallenge(`auth:${requestId}`);
-  
+
   if (!expectedChallenge) {
     return { success: false, message: "Challenge expired or not found" };
   }

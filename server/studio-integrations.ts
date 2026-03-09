@@ -4,9 +4,7 @@ import crypto from "crypto";
 const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || "";
 const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET || "";
 const VERCEL_TOKEN_KEY = "VERCEL_TOKEN";
-const GITHUB_REDIRECT_URI = process.env.REPLIT_DEV_DOMAIN
-  ? `https://${process.env.REPLIT_DEV_DOMAIN}/api/studio/github/callback`
-  : `${process.env.REPL_SLUG ? `https://${process.env.REPL_SLUG}.replit.app` : "http://localhost:5000"}/api/studio/github/callback`;
+const GITHUB_REDIRECT_URI = `${process.env.SITE_BASE_URL || 'https://trust-layer-1pji.onrender.com'}/api/studio/github/callback`;
 
 const githubTokens = new Map<string, string>();
 const vercelTokens = new Map<string, string>();
@@ -113,7 +111,7 @@ export function registerStudioIntegrations(app: Express, isAuthenticated: any) {
             if (blob.content) {
               files.push({ path: item.path, content: Buffer.from(blob.content, "base64").toString("utf8") });
             }
-          } catch {}
+          } catch { }
         }
       }
 
@@ -351,7 +349,7 @@ export function registerStudioIntegrations(app: Express, isAuthenticated: any) {
     }
 
     const port = 9000 + Math.floor(Math.random() * 1000);
-    
+
     try {
       const fs = await import("fs/promises");
       const path = await import("path");
@@ -394,7 +392,7 @@ export function registerStudioIntegrations(app: Express, isAuthenticated: any) {
     const key = `${userId}-${projectId}`;
     const server = devServers.get(key);
     if (server?.process) {
-      try { server.process.kill(); } catch {}
+      try { server.process.kill(); } catch { }
       devServers.delete(key);
     }
     res.json({ stopped: true });

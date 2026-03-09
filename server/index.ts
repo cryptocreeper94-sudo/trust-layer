@@ -240,9 +240,8 @@ const sessionStore = new pgStore({
 });
 
 app.set("trust proxy", 1);
-// Use secure cookies when running on Replit (always HTTPS)
-const isReplitDeployment = process.env.REPLIT_DEPLOYMENT === '1';
-console.log('[Session] Config: isProduction=', isProduction, 'isReplitDeployment=', isReplitDeployment);
+// Use secure cookies in production (always HTTPS on Render)
+console.log('[Session] Config: isProduction=', isProduction);
 app.use(session({
   store: sessionStore,
   secret: process.env.SESSION_SECRET || process.env.OWNER_SECRET || 'darkwave-session-secret-dev',
@@ -371,12 +370,10 @@ async function initializeServices() {
         await runMigrations({ databaseUrl });
 
         const stripeSync = await getStripeSync();
-        const domains = process.env.REPLIT_DOMAINS?.split(',') || [];
-        if (domains.length > 0) {
-          const webhookUrl = `https://${domains[0]}/api/stripe/webhook`;
-          const webhook = await stripeSync.findOrCreateManagedWebhook(webhookUrl);
-          console.log(`[Stripe] Managed webhook configured: ${webhook.url || webhookUrl}`);
-        }
+        const siteBaseUrl = process.env.SITE_BASE_URL || 'https://trust-layer-1pji.onrender.com';
+        const webhookUrl = `${siteBaseUrl}/api/stripe/webhook`;
+        const webhook = await stripeSync.findOrCreateManagedWebhook(webhookUrl);
+        console.log(`[Stripe] Managed webhook configured: ${webhook.url || webhookUrl}`);
 
         // Sync existing Stripe data in background
         stripeSync.syncBackfill().then(() => {
@@ -549,11 +546,7 @@ async function registerEcosystemAppsToOrbit() {
     return;
   }
 
-  const appBaseUrl = process.env.REPLIT_DEPLOYMENT_URL
-    ? `https://${process.env.REPLIT_DEPLOYMENT_URL}`
-    : process.env.REPL_SLUG
-      ? `https://${process.env.REPL_SLUG}.replit.app`
-      : 'https://dwsc.io';
+  const appBaseUrl = process.env.SITE_BASE_URL || 'https://trust-layer-1pji.onrender.com';
 
   const apps = [
     { appName: 'The Void', appSlug: 'the-void', appUrl: 'https://thevoid.tlid.io', description: 'Premium membership identity system with Void IDs and DW-STAMP hallmarks', category: 'entertainment', permissions: ['read:profile', 'read:membership'] },

@@ -8,7 +8,7 @@ if (!process.env.DATABASE_URL) {
   throw new Error("DATABASE_URL environment variable is not set");
 }
 
-const isProduction = process.env.NODE_ENV === "production" || process.env.REPL_DEPLOYMENT === "1";
+const isProduction = process.env.NODE_ENV === "production";
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,

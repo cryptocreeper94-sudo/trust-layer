@@ -30,38 +30,38 @@ async function isAuthenticated(req: any, res: Response, next: NextFunction) {
     if (sessionUserId) {
       const user = await storage.getUser(sessionUserId);
       if (user) {
-        req.user = { 
+        req.user = {
           claims: { sub: user.id },
           id: user.id,
-          email: user.email 
+          email: user.email
         };
         req.firebaseUser = { uid: user.id, email: user.email || undefined };
         return next();
       }
     }
-    
+
     // Priority 2: Check session token in Authorization header (cross-domain support)
     const authHeader = req.headers.authorization;
     if (authHeader?.startsWith('Bearer ')) {
       const token = authHeader.substring(7);
-      
+
       if (/^[a-f0-9]{64}$/.test(token)) {
         const [user] = await db.select().from(users)
           .where(eq(users.sessionToken, token))
           .limit(1);
-        
+
         if (user && user.sessionTokenExpiry && new Date(user.sessionTokenExpiry) > new Date()) {
-          req.user = { 
+          req.user = {
             claims: { sub: user.id },
             id: user.id,
-            email: user.email 
+            email: user.email
           };
           req.firebaseUser = { uid: user.id, email: user.email || undefined };
           return next();
         }
       }
     }
-    
+
     return res.status(401).json({ error: "Authentication required" });
   } catch (error: any) {
     console.error("Auth middleware error:", error.message || error);
@@ -84,33 +84,33 @@ async function isChroniclesAuthenticated(req: any, res: Response, next: NextFunc
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({ error: "Authentication required" });
     }
-    
+
     const sessionToken = authHeader.substring(7);
-    
+
     const [account] = await db.select().from(chronicleAccounts)
       .where(eq(chronicleAccounts.sessionToken, sessionToken))
       .limit(1);
-    
+
     if (!account) {
       return res.status(401).json({ error: "Invalid session" });
     }
-    
+
     if (!account.isActive) {
       return res.status(401).json({ error: "Account disabled" });
     }
-    
+
     if (account.sessionExpiresAt && new Date(account.sessionExpiresAt) < new Date()) {
       return res.status(401).json({ error: "Session expired" });
     }
-    
+
     // Set the Chronicles account on the request for use in route handlers
     req.chroniclesAccount = account;
-    req.user = { 
+    req.user = {
       id: account.id,
       claims: { sub: account.id },
       email: account.email
     };
-    
+
     return next();
   } catch (error: any) {
     console.error("Chronicles auth middleware error:", error.message || error);
@@ -191,16 +191,16 @@ function rateLimit(routeId: string, maxRequests: number, windowMs: number) {
     const key = `${routeId}:${ip}`;
     const now = Date.now();
     const record = rateLimitStore.get(key);
-    
+
     if (!record || now > record.resetTime) {
       rateLimitStore.set(key, { count: 1, resetTime: now + windowMs });
       return next();
     }
-    
+
     if (record.count >= maxRequests) {
       return res.status(429).json({ error: "Too many requests, please try again later" });
     }
-    
+
     record.count++;
     return next();
   };
@@ -241,7 +241,7 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  
+
   app.post("/api/diag", (req, res) => {
     const { stage, detail } = req.body || {};
     const ua = req.headers["user-agent"] || "unknown";
@@ -296,7 +296,7 @@ export async function registerRoutes(
 
   app.get("*", async (req: Request, res: Response, next: NextFunction) => {
     const host = req.hostname;
-    
+
     // Bare tlid.io domain should serve the automated marketing / domains page
     if (host === "tlid.io" || host === "www.tlid.io") {
       if (!req.url.startsWith("/api/") && !req.url.startsWith("/assets/") && !req.url.match(/\.\w+$/)) {
@@ -305,14 +305,14 @@ export async function registerRoutes(
       }
       return next();
     }
-    
+
     if (host && host.endsWith(".tlid.io") && !host.startsWith("www.")) {
       const domainName = host.split(".")[0];
-      
+
       if (req.url.startsWith("/api/") || req.url.startsWith("/assets/") || req.url.startsWith("/src/") || req.url.startsWith("/icons/") || req.url.startsWith("/images/") || req.url.startsWith("/ecosystem/") || req.url.startsWith("/marketing/") || req.url.match(/\.\w{2,5}$/)) {
         return next();
       }
-      
+
       try {
         const externalRedirect = TLID_EXTERNAL_REDIRECTS[domainName];
         if (externalRedirect) {
@@ -326,7 +326,7 @@ export async function registerRoutes(
         }
 
         const domain = await storage.getDomain(domainName);
-        
+
         if (domain && domain.website) {
           const targetUrl = new URL(domain.website);
           if (targetUrl.hostname === host) {
@@ -334,14 +334,14 @@ export async function registerRoutes(
           }
           return res.redirect(301, domain.website);
         }
-        
+
         res.setHeader("X-Gateway-Domain", domainName);
         res.setHeader("X-Gateway-Found", domain ? "true" : "false");
       } catch (error) {
         console.error("Gateway error:", error);
       }
     }
-    
+
     next();
   });
 
@@ -352,12 +352,12 @@ export async function registerRoutes(
     try {
       const sig = req.headers["stripe-signature"];
       const rawBody = req.rawBody;
-      
+
       if (!sig || !rawBody) {
         console.error("Stripe webhook: Missing signature or raw body");
         return res.status(400).json({ error: "Missing signature or raw body" });
       }
-      
+
       // Use managed webhook from stripe-replit-sync for signature verification and sync
       const { getStripeSync } = await import("./stripeClient");
       try {
@@ -367,7 +367,7 @@ export async function registerRoutes(
         console.error("Stripe webhook sync error:", syncErr.message);
         // Continue to process custom logic even if sync fails
       }
-      
+
       // Parse event for custom business logic (signature already verified by processWebhook)
       let event;
       try {
@@ -377,9 +377,9 @@ export async function registerRoutes(
         console.error("Stripe webhook JSON parse error:", err.message);
         return res.status(400).json({ error: "Invalid JSON payload" });
       }
-      
+
       console.log(`[Stripe Webhook] Event received: ${event.type}`);
-      
+
       const logUserTransaction = async (userId: string, type: string, title: string, amountCents: number, extras: { description?: string, tokenAmount?: number, stripePaymentId?: string, metadata?: any } = {}) => {
         try {
           const crypto = require('crypto');
@@ -388,7 +388,7 @@ export async function registerRoutes(
             INSERT INTO user_transactions (user_id, type, title, description, amount_cents, token_amount, tx_hash, stripe_payment_id, status, metadata, created_at)
             VALUES (${userId}, ${type}, ${title}, ${extras.description || null}, ${amountCents}, ${extras.tokenAmount || null}, ${txHash}, ${extras.stripePaymentId || null}, 'completed', ${JSON.stringify(extras.metadata || {})}, NOW())
           `);
-          console.log(`[UserTx] Logged: ${type} for ${userId} — $${(amountCents/100).toFixed(2)}`);
+          console.log(`[UserTx] Logged: ${type} for ${userId} — $${(amountCents / 100).toFixed(2)}`);
         } catch (e: any) {
           console.error(`[UserTx] Failed to log ${type}:`, e.message);
         }
@@ -400,18 +400,18 @@ export async function registerRoutes(
         const metadata = session.metadata || {};
         const customerEmail = session.customer_details?.email || metadata.email || session.customer_email;
         const amountCents = session.amount_total || 0;
-        
+
         // Use payment_intent as the idempotency key (not session.id)
         const paymentId = session.payment_intent || session.id;
-        
+
         console.log(`[Stripe Webhook] Checkout completed: ${paymentId}, type: ${metadata.type}, email: ${customerEmail}, amount: ${amountCents}`);
-        
+
         // Handle presale purchases
         if (metadata.type === "presale") {
           try {
             const tier = metadata.tier || "custom";
             const buyerName = session.customer_details?.name || metadata.name || "Supporter";
-            
+
             // SECURITY: Calculate bonus server-side from verified amount (not tier)
             // Get current token price based on total raised (milestone pricing)
             const statsResult = await db.execute(sql`
@@ -420,20 +420,20 @@ export async function registerRoutes(
             `);
             const totalRaisedCents = parseInt(statsResult.rows[0]?.total_raised_cents as string || "0");
             const TOKEN_PRICE = getTokenPriceForAmount(totalRaisedCents).price;
-            
+
             const tokenAmount = Math.floor((amountCents / 100) / TOKEN_PRICE);
             // Bonus thresholds: $250+=25%, $100+=15%, $50+=10%, $25+=5%
             const bonusPercent = amountCents >= 25000 ? 25 : amountCents >= 10000 ? 15 : amountCents >= 5000 ? 10 : amountCents >= 2500 ? 5 : 0;
             const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
             const totalTokens = tokenAmount + bonusTokens;
-            
+
             // Record the purchase with payment_intent as key
             await db.execute(sql`
               INSERT INTO presale_purchases (stripe_payment_intent_id, email, buyer_name, usd_amount_cents, token_amount, tier, status, payment_method, created_at)
               VALUES (${paymentId}, ${customerEmail}, ${buyerName}, ${amountCents}, ${totalTokens}, ${tier}, 'completed', 'stripe', NOW())
               ON CONFLICT (stripe_payment_intent_id) DO NOTHING
             `);
-            
+
             // Grant Early Adopter status automatically
             if (customerEmail) {
               const adoperTier = tier === 'genesis' || amountCents >= 100000 ? 'founder' : 'supporter';
@@ -445,9 +445,9 @@ export async function registerRoutes(
                   status = 'active'
               `);
             }
-            
-            console.log(`[Stripe Webhook] Presale recorded: ${customerEmail}, ${totalTokens} tokens from $${(amountCents/100).toFixed(2)}`);
-            
+
+            console.log(`[Stripe Webhook] Presale recorded: ${customerEmail}, ${totalTokens} tokens from $${(amountCents / 100).toFixed(2)}`);
+
             orbitClient.reportFinancialEvent({
               eventType: 'revenue',
               grossAmount: amountCents / 100,
@@ -455,9 +455,9 @@ export async function registerRoutes(
               productCode: 'presale-sig',
               metadata: { email: customerEmail, tokens: totalTokens, tier, bonusPercent, paymentId },
             }).catch(e => console.error("[Orbit Sync] Presale event failed:", e.message));
-            
-            trustStamp("presale-purchase", { email: customerEmail, amountUsd: (amountCents / 100).toFixed(2), tokens: totalTokens, tier, paymentId }).catch(() => {});
-            
+
+            trustStamp("presale-purchase", { email: customerEmail, amountUsd: (amountCents / 100).toFixed(2), tokens: totalTokens, tier, paymentId }).catch(() => { });
+
             if (metadata.userId) {
               await logUserTransaction(metadata.userId, 'presale', `Presale: ${totalTokens.toLocaleString()} SIG`, amountCents, { tokenAmount: totalTokens, stripePaymentId: paymentId as string, description: `${tier} tier — ${totalTokens.toLocaleString()} SIG tokens`, metadata: { tier, bonusPercent, email: customerEmail } });
             }
@@ -471,14 +471,14 @@ export async function registerRoutes(
             console.error("[Stripe Webhook] DB error for presale:", dbError);
           }
         }
-        
+
         // Handle crowdfund donations
         if (metadata.contributionId) {
           try {
             await storage.updateCrowdfundContribution(metadata.contributionId, {
               status: "confirmed",
             });
-            
+
             // Grant Early Adopter status for donors too
             if (customerEmail) {
               await db.execute(sql`
@@ -487,7 +487,7 @@ export async function registerRoutes(
                 ON CONFLICT (email) DO NOTHING
               `);
             }
-            
+
             if (customerEmail) {
               try {
                 const donorName = session.customer_details?.name || metadata.name || "Supporter";
@@ -495,9 +495,9 @@ export async function registerRoutes(
                 await sendCrowdfundConfirmationEmail(customerEmail, (amountCents / 100).toFixed(2), crowdfundTier, donorName);
               } catch (emailErr) { console.error("[Stripe Webhook] Crowdfund email error:", emailErr); }
             }
-            
+
             console.log(`[Stripe Webhook] Crowdfund confirmed: ${metadata.contributionId}`);
-            
+
             orbitClient.reportFinancialEvent({
               eventType: 'revenue',
               grossAmount: amountCents / 100,
@@ -505,9 +505,9 @@ export async function registerRoutes(
               productCode: 'crowdfund',
               metadata: { email: customerEmail, contributionId: metadata.contributionId, tier: metadata.tier, paymentId },
             }).catch(e => console.error("[Orbit Sync] Crowdfund event failed:", e.message));
-            
-            trustStamp("crowdfund-donation", { email: customerEmail, amountUsd: (amountCents / 100).toFixed(2), contributionId: metadata.contributionId, paymentId }).catch(() => {});
-            
+
+            trustStamp("crowdfund-donation", { email: customerEmail, amountUsd: (amountCents / 100).toFixed(2), contributionId: metadata.contributionId, paymentId }).catch(() => { });
+
             if (metadata.userId) {
               await logUserTransaction(metadata.userId, 'crowdfund', `Crowdfund Donation`, amountCents, { stripePaymentId: paymentId as string, description: `${metadata.tier || 'Supporter'} tier donation`, metadata: { tier: metadata.tier, contributionId: metadata.contributionId } });
             }
@@ -515,7 +515,7 @@ export async function registerRoutes(
             console.error("[Stripe Webhook] DB error for crowdfund:", dbError);
           }
         }
-        
+
         // Handle credits purchases
         if (metadata.type === "credits_purchase" && metadata.userId && metadata.packageId) {
           try {
@@ -525,7 +525,7 @@ export async function registerRoutes(
               paymentId as string
             );
             console.log(`[Stripe Webhook] Credits purchased: user=${metadata.userId}, credits=${result.creditsAdded}, balance=${result.newBalance}`);
-            
+
             orbitClient.reportFinancialEvent({
               eventType: 'revenue',
               grossAmount: amountCents / 100,
@@ -533,9 +533,9 @@ export async function registerRoutes(
               productCode: 'credits',
               metadata: { userId: metadata.userId, credits: result.creditsAdded, packageId: metadata.packageId, paymentId },
             }).catch(e => console.error("[Orbit Sync] Credits event failed:", e.message));
-            
-            trustStamp("credits-purchase", { userId: metadata.userId, credits: result.creditsAdded, amountUsd: (amountCents / 100).toFixed(2), paymentId }).catch(() => {});
-            
+
+            trustStamp("credits-purchase", { userId: metadata.userId, credits: result.creditsAdded, amountUsd: (amountCents / 100).toFixed(2), paymentId }).catch(() => { });
+
             await logUserTransaction(metadata.userId, 'credits', `${result.creditsAdded} AI Credits`, amountCents, { stripePaymentId: paymentId as string, description: `${result.creditsAdded} credits — new balance: ${result.newBalance}`, metadata: { credits: result.creditsAdded, newBalance: result.newBalance } });
 
             if (customerEmail) {
@@ -543,11 +543,11 @@ export async function registerRoutes(
                 await sendCreditsConfirmationEmail(customerEmail, result.creditsAdded, (amountCents / 100).toFixed(2), result.newBalance);
               } catch (emailErr) { console.error("[Stripe Webhook] Credits email error:", emailErr); }
             }
-            
+
             // Process affiliate commission if user was referred
             try {
               await referralService.processConversion(metadata.userId, amountCents);
-              
+
               // Mark commission eligible for payout after settlement
               await payoutService.markCommissionEligible(paymentId as string, amountCents);
               console.log(`[Stripe Webhook] Affiliate commission tracked for user ${metadata.userId}`);
@@ -558,7 +558,7 @@ export async function registerRoutes(
             console.error("[Stripe Webhook] DB error for credits purchase:", dbError);
           }
         }
-        
+
         // Process affiliate commission for presale purchases
         if (metadata.type === "presale" && metadata.userId) {
           try {
@@ -569,7 +569,7 @@ export async function registerRoutes(
             console.error("[Stripe Webhook] Presale referral commission error:", refErr);
           }
         }
-        
+
         // Handle Guardian Certification purchases
         if (metadata.type === "guardian_certification") {
           try {
@@ -583,7 +583,7 @@ export async function registerRoutes(
               userId: metadata.userId || null,
             });
             console.log(`[Stripe Webhook] Guardian certification created: ${certification.id}, tier: ${metadata.tier}, project: ${metadata.projectName}`);
-            
+
             orbitClient.reportFinancialEvent({
               eventType: 'revenue',
               grossAmount: amountCents / 100,
@@ -591,9 +591,9 @@ export async function registerRoutes(
               productCode: 'guardian-cert',
               metadata: { certId: String(certification.id), tier: metadata.tier, project: metadata.projectName, paymentId },
             }).catch(e => console.error("[Orbit Sync] Guardian cert event failed:", e.message));
-            
-            trustStamp("guardian-certification", { certId: String(certification.id), tier: metadata.tier, project: metadata.projectName, amountUsd: (amountCents / 100).toFixed(2), paymentId }).catch(() => {});
-            
+
+            trustStamp("guardian-certification", { certId: String(certification.id), tier: metadata.tier, project: metadata.projectName, amountUsd: (amountCents / 100).toFixed(2), paymentId }).catch(() => { });
+
             if (metadata.userId) {
               await logUserTransaction(metadata.userId, 'guardian', `Guardian: ${metadata.projectName}`, amountCents, { stripePaymentId: paymentId as string, description: `${metadata.tier} certification for ${metadata.projectName}`, metadata: { certId: String(certification.id), tier: metadata.tier, project: metadata.projectName } });
             }
@@ -608,7 +608,7 @@ export async function registerRoutes(
             console.error("[Stripe Webhook] DB error for Guardian certification:", dbError);
           }
         }
-        
+
         if (metadata.type === "ebook_purchase" && metadata.userId && metadata.bookId) {
           try {
             const existing = await storage.getEbookPurchase(metadata.userId, metadata.bookId);
@@ -623,7 +623,7 @@ export async function registerRoutes(
               });
               console.log(`[Stripe Webhook] Ebook purchase recorded: ${metadata.bookId} for user ${metadata.userId}`);
               await logUserTransaction(metadata.userId, 'ebook', `TrustBook: ${metadata.bookTitle || metadata.bookId}`, amountCents, { stripePaymentId: paymentId as string, description: `Ebook purchase — ${metadata.bookTitle || metadata.bookId}`, metadata: { bookId: metadata.bookId } });
-              
+
               try {
                 const book = await storage.getPublishedBook(metadata.bookId);
                 if (book && book.authorId) {
@@ -653,7 +653,7 @@ export async function registerRoutes(
             console.error("[Stripe Webhook] Orbs email error:", emailErr);
           }
         }
-        
+
         // Handle new subscription activation (with server-side validation)
         if (metadata.type === "subscription" && session.subscription) {
           try {
@@ -661,26 +661,26 @@ export async function registerRoutes(
             const stripe = await getUncachableStripeClient();
             const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
             const subData = subscription as any;
-            
+
             // SECURITY: Validate subscription is actually active/trialing before granting access
             if (subData.status !== "active" && subData.status !== "trialing") {
               console.error(`[Stripe Webhook] Subscription not active: status=${subData.status}`);
               return res.json({ received: true });
             }
-            
+
             // SECURITY: Validate plan from subscription metadata (set server-side during checkout creation)
             const subMetadata = subData.metadata || {};
             const userId = subMetadata.userId;
             const plan = subMetadata.plan;
             const billingCycle = subMetadata.billingCycle as "monthly" | "annual";
-            
+
             // SECURITY: Validate plan is a valid subscription plan
             const validPlans = ["pulse_pro", "strike_agent", "complete_bundle", "rm_monthly", "rm_annual"];
             if (!userId || !plan || !validPlans.includes(plan)) {
               console.error(`[Stripe Webhook] Invalid subscription metadata: userId=${userId}, plan=${plan}`);
               return res.json({ received: true });
             }
-            
+
             // SECURITY: Verify price matches expected plan pricing
             const priceId = subData.items?.data?.[0]?.price?.id;
             const priceAmount = subData.items?.data?.[0]?.price?.unit_amount;
@@ -691,12 +691,12 @@ export async function registerRoutes(
               rm_monthly: [800],
               rm_annual: [8000],
             };
-            
+
             if (expectedPrices[plan] && !expectedPrices[plan].includes(priceAmount)) {
               console.error(`[Stripe Webhook] Price mismatch: plan=${plan}, expected=${expectedPrices[plan]}, got=${priceAmount}`);
               return res.json({ received: true });
             }
-            
+
             await subscriptionService.activateSubscription(
               userId,
               plan,
@@ -708,9 +708,9 @@ export async function registerRoutes(
               new Date(subData.current_period_end * 1000),
               subData.trial_end ? new Date(subData.trial_end * 1000) : undefined
             );
-            
+
             console.log(`[Stripe Webhook] Subscription activated: user=${userId}, plan=${plan}, cycle=${billingCycle}, price=${priceAmount}`);
-            
+
             orbitClient.reportFinancialEvent({
               eventType: 'revenue',
               grossAmount: (priceAmount || 0) / 100,
@@ -718,9 +718,9 @@ export async function registerRoutes(
               productCode: `subscription-${plan}`,
               metadata: { userId, plan, billingCycle, priceAmount, paymentId },
             }).catch(e => console.error("[Orbit Sync] Subscription event failed:", e.message));
-            
-            trustStamp("subscription-activated", { userId, plan, billingCycle, amountCents: priceAmount, paymentId }).catch(() => {});
-            
+
+            trustStamp("subscription-activated", { userId, plan, billingCycle, amountCents: priceAmount, paymentId }).catch(() => { });
+
             await logUserTransaction(userId, 'subscription', `Subscription: ${plan.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}`, priceAmount || amountCents, { stripePaymentId: paymentId as string, description: `${plan} plan — ${billingCycle}`, metadata: { plan, billingCycle } });
 
             if (customerEmail) {
@@ -734,7 +734,7 @@ export async function registerRoutes(
           }
         }
       }
-      
+
       // Handle subscription updated (renewal, plan change)
       if (event.type === "customer.subscription.updated") {
         const subscription = event.data.object as any;
@@ -752,7 +752,7 @@ export async function registerRoutes(
           console.error("[Stripe Webhook] Subscription update error:", err);
         }
       }
-      
+
       // Handle subscription cancelled
       if (event.type === "customer.subscription.deleted") {
         const subscription = event.data.object as any;
@@ -763,7 +763,7 @@ export async function registerRoutes(
           console.error("[Stripe Webhook] Subscription delete error:", err);
         }
       }
-      
+
       // Handle payment failed
       if (event.type === "invoice.payment_failed") {
         const invoice = event.data.object as any;
@@ -771,7 +771,7 @@ export async function registerRoutes(
           try {
             await subscriptionService.markPastDue(invoice.subscription as string);
             console.log(`[Stripe Webhook] Subscription marked past_due: ${invoice.subscription}`);
-            
+
             const failedEmail = invoice.customer_email;
             if (failedEmail) {
               try {
@@ -785,7 +785,7 @@ export async function registerRoutes(
           }
         }
       }
-      
+
       // Handle successful invoice payment (renewal)
       if (event.type === "invoice.paid") {
         const invoice = event.data.object as any;
@@ -794,14 +794,14 @@ export async function registerRoutes(
             const { getUncachableStripeClient } = await import("./stripeClient");
             const stripe = await getUncachableStripeClient();
             const subscription = await stripe.subscriptions.retrieve(invoice.subscription as string) as any;
-            
+
             await subscriptionService.renewSubscription(
               subscription.id,
               new Date(subscription.current_period_start * 1000),
               new Date(subscription.current_period_end * 1000)
             );
             console.log(`[Stripe Webhook] Subscription renewed via invoice: ${subscription.id}`);
-            
+
             const renewalEmail = invoice.customer_email;
             if (renewalEmail) {
               try {
@@ -816,7 +816,7 @@ export async function registerRoutes(
           }
         }
       }
-      
+
       res.json({ received: true });
     } catch (error: any) {
       console.error("Stripe webhook error:", error);
@@ -867,7 +867,7 @@ export async function registerRoutes(
             const purchaseId = metadata.purchaseId;
             const tier = metadata.tier || "standard";
             const totalTokens = parseInt(metadata.totalTokens || "0");
-            
+
             // Update existing pending purchase to completed
             if (purchaseId) {
               await db.execute(sql`
@@ -889,7 +889,7 @@ export async function registerRoutes(
             `);
 
             console.log(`[Coinbase Webhook] Presale recorded: ${customerEmail}, tier: ${tier}, amount: $${amountUsd}, tokens: ${totalTokens}`);
-            
+
             // Send confirmation email
             try {
               const bonusPercent = tier === 'genesis' ? 25 : tier === 'founder' ? 15 : tier === 'pioneer' ? 10 : tier === 'early_bird' ? 5 : 0;
@@ -919,8 +919,8 @@ export async function registerRoutes(
                 charge.code
               );
               console.log(`[Coinbase Webhook] Shells credited: ${shellsAmount} to user ${metadata.userId}`);
-              
-              trustStamp("shells-purchase", { userId: metadata.userId, shells: shellsAmount, amountUsd, source: "coinbase" }).catch(() => {});
+
+              trustStamp("shells-purchase", { userId: metadata.userId, shells: shellsAmount, amountUsd, source: "coinbase" }).catch(() => { });
             }
           } catch (shellsError) {
             console.error("[Coinbase Webhook] Shells credit error:", shellsError);
@@ -938,7 +938,7 @@ export async function registerRoutes(
   // ============================================
   // PAYPAL PAYMENT ROUTES
   // ============================================
-  
+
   const paypalEnabled = !!(process.env.PAYPAL_CLIENT_ID && process.env.PAYPAL_CLIENT_SECRET);
   if (paypalEnabled) {
     console.log("[PayPal] Credentials found — enabling PayPal payment routes");
@@ -1038,24 +1038,24 @@ export async function registerRoutes(
       if (!accessCode || typeof accessCode !== 'string') {
         return res.status(400).json({ success: false, error: "Access code required" });
       }
-      
+
       if (PARTNER_ACCESS_CODE && accessCode === PARTNER_ACCESS_CODE) {
         const token = crypto.randomBytes(32).toString('hex');
         return res.json({ success: true, token });
       }
-      
+
       // Check if it's a studio-specific access code
       const studioRequest = await db.execute(sql`
         SELECT * FROM partner_access_requests 
         WHERE access_code = ${accessCode} AND status = 'approved'
         LIMIT 1
       `);
-      
+
       if (studioRequest.rows.length > 0) {
         const token = crypto.randomBytes(32).toString('hex');
         return res.json({ success: true, token, studioName: studioRequest.rows[0].studio_name });
       }
-      
+
       return res.status(401).json({ success: false, error: "Invalid access code" });
     } catch (error) {
       console.error("Partner auth error:", error);
@@ -1067,21 +1067,21 @@ export async function registerRoutes(
   app.post("/api/partner/request", rateLimit("partner-request", 3, 60000), async (req: Request, res: Response) => {
     try {
       const { studioName, contactName, email, website, teamSize, expertise, previousProjects, interestReason, partnershipType, ndaAccepted } = req.body;
-      
+
       if (!studioName || !contactName || !email) {
         return res.status(400).json({ success: false, error: "Studio name, contact name, and email are required" });
       }
-      
+
       if (!ndaAccepted) {
         return res.status(400).json({ success: false, error: "NDA must be accepted to proceed" });
       }
-      
+
       const result = await db.execute(sql`
         INSERT INTO partner_access_requests (studio_name, contact_name, email, website, team_size, expertise, previous_projects, interest_reason, partnership_type, nda_accepted)
         VALUES (${studioName}, ${contactName}, ${email}, ${website || null}, ${teamSize || null}, ${expertise || null}, ${previousProjects || null}, ${interestReason || null}, ${partnershipType || null}, ${ndaAccepted})
         RETURNING id
       `);
-      
+
       // Send notification email
       try {
         await sendEmail({
@@ -1105,7 +1105,7 @@ export async function registerRoutes(
       } catch (emailErr) {
         console.error("Failed to send partner notification email:", emailErr);
       }
-      
+
       return res.json({ success: true, message: "Request submitted successfully. We'll review your application and get back to you soon." });
     } catch (error) {
       console.error("Partner request error:", error);
@@ -1117,7 +1117,7 @@ export async function registerRoutes(
   app.post("/api/trust-documents/acknowledge", async (req: Request, res: Response) => {
     try {
       const { documentId, documentTitle, role, allocation, terms } = req.body;
-      
+
       if (!documentId || !documentTitle || !role) {
         return res.status(400).json({ error: "Missing required document fields" });
       }
@@ -1128,9 +1128,9 @@ export async function registerRoutes(
       `);
 
       if (existing.rows.length > 0) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: "This document has already been acknowledged",
-          hash: existing.rows[0].document_hash 
+          hash: existing.rows[0].document_hash
         });
       }
 
@@ -1169,8 +1169,8 @@ export async function registerRoutes(
 
       console.log(`[Trust Document] ${documentId} acknowledged - Hash: ${documentHash.substring(0, 16)}...`);
 
-      return res.json({ 
-        success: true, 
+      return res.json({
+        success: true,
         hash: documentHash,
         message: "Document acknowledged and recorded"
       });
@@ -1184,7 +1184,7 @@ export async function registerRoutes(
   app.get("/api/trust-documents/:documentId", async (req: Request, res: Response) => {
     try {
       const { documentId } = req.params;
-      
+
       const result = await db.execute(sql`
         SELECT * FROM trust_documents WHERE document_id = ${documentId} LIMIT 1
       `);
@@ -1219,20 +1219,20 @@ export async function registerRoutes(
     try {
       const { id } = req.params;
       const accessCode = `DWP-${crypto.randomBytes(4).toString('hex').toUpperCase()}`;
-      
+
       const result = await db.execute(sql`
         UPDATE partner_access_requests 
         SET status = 'approved', access_code = ${accessCode}, reviewed_at = CURRENT_TIMESTAMP
         WHERE id = ${id}
         RETURNING *
       `);
-      
+
       if (result.rows.length === 0) {
         return res.status(404).json({ success: false, error: "Request not found" });
       }
-      
+
       const request = result.rows[0] as any;
-      
+
       // Send approval email with access code
       try {
         await sendEmail({
@@ -1252,7 +1252,7 @@ export async function registerRoutes(
       } catch (emailErr) {
         console.error("Failed to send approval email:", emailErr);
       }
-      
+
       return res.json({ success: true, message: "Request approved", accessCode });
     } catch (error) {
       console.error("Approve partner request error:", error);
@@ -1265,20 +1265,20 @@ export async function registerRoutes(
     try {
       const { id } = req.params;
       const { reason } = req.body;
-      
+
       const result = await db.execute(sql`
         UPDATE partner_access_requests 
         SET status = 'rejected', reviewed_at = CURRENT_TIMESTAMP
         WHERE id = ${id}
         RETURNING *
       `);
-      
+
       if (result.rows.length === 0) {
         return res.status(404).json({ success: false, error: "Request not found" });
       }
-      
+
       const request = result.rows[0] as any;
-      
+
       // Send rejection email
       try {
         await sendEmail({
@@ -1298,7 +1298,7 @@ export async function registerRoutes(
       } catch (emailErr) {
         console.error("Failed to send rejection email:", emailErr);
       }
-      
+
       return res.json({ success: true, message: "Request rejected" });
     } catch (error) {
       console.error("Reject partner request error:", error);
@@ -1328,14 +1328,14 @@ export async function registerRoutes(
   app.post("/api/contact", rateLimit("contact", 5, 60000), async (req: Request, res: Response) => {
     try {
       const { name, email, subject, message } = req.body;
-      
+
       if (!name || !email || !message) {
         return res.status(400).json({ error: "Name, email, and message are required" });
       }
-      
+
       // Log the contact submission
       console.log(`[Contact Form] New submission from ${name} (${email}): ${subject}`);
-      
+
       // Send email notification
       try {
         await sendEmail({
@@ -1354,7 +1354,7 @@ export async function registerRoutes(
       } catch (emailErr) {
         console.error("Failed to send contact form email:", emailErr);
       }
-      
+
       res.json({ success: true, message: "Message received" });
     } catch (error) {
       console.error("Contact form error:", error);
@@ -1363,31 +1363,31 @@ export async function registerRoutes(
   });
 
   const wss = new WebSocketServer({ server: httpServer, path: "/ws/studio" });
-  
+
   wss.on("connection", (ws: WebSocket) => {
     ws.on("message", (data: string) => {
       try {
         const message = JSON.parse(data.toString());
-        
+
         if (message.type === "join") {
           const { projectId, userId, userName } = message;
           wsClients.set(ws, { projectId, userId });
-          
+
           if (!projectPresence.has(projectId)) {
             projectPresence.set(projectId, new Map());
           }
           const projectUsers = projectPresence.get(projectId)!;
           const colorIndex = projectUsers.size % PRESENCE_COLORS.length;
-          
+
           projectUsers.set(userId, {
             id: userId,
             name: userName || "Anonymous",
             color: PRESENCE_COLORS[colorIndex],
           });
-          
+
           broadcastPresence(projectId);
         }
-        
+
         if (message.type === "cursor") {
           const { projectId, cursor, file } = message;
           const client = wsClients.get(ws);
@@ -1400,9 +1400,9 @@ export async function registerRoutes(
             }
           }
         }
-      } catch (e) {}
+      } catch (e) { }
     });
-    
+
     ws.on("close", () => {
       const client = wsClients.get(ws);
       if (client) {
@@ -1413,14 +1413,14 @@ export async function registerRoutes(
       }
     });
   });
-  
+
   function broadcastPresence(projectId: string) {
     const users = projectPresence.get(projectId);
     if (!users) return;
-    
+
     const presence = Array.from(users.values());
     const message = JSON.stringify({ type: "presence", users: presence });
-    
+
     wsClients.forEach((client, clientWs) => {
       if (client.projectId === projectId && clientWs.readyState === WebSocket.OPEN) {
         clientWs.send(message);
@@ -1434,7 +1434,7 @@ export async function registerRoutes(
   app.post("/api/auth/firebase-sync", authRateLimit, async (req, res) => {
     try {
       const { uid, email, displayName, photoURL, username } = req.body;
-      
+
       if (!uid) {
         return res.status(400).json({ error: "Missing user ID" });
       }
@@ -1463,7 +1463,7 @@ export async function registerRoutes(
       // Create or get Trust Layer membership
       const entryPoint = req.headers['x-entry-point'] as string || 'tlid.io';
       const trustLayerId = await membershipReconciliationService.getOrCreateMembership(uid, entryPoint);
-      
+
       // Queue for duplicate reconciliation if new user
       if (!existingUser) {
         await membershipReconciliationService.queueForReconciliation(uid);
@@ -1481,15 +1481,15 @@ export async function registerRoutes(
     try {
       const { email, password, displayName, username, rememberMe } = req.body;
       console.log("[Auth/Register] Request received for:", email, "username:", username);
-      
+
       if (!email || !password) {
         console.log("[Auth/Register] Validation failed: missing email or password");
         return res.status(400).json({ error: "Email and password are required" });
       }
-      
+
       // Normalize email to lowercase for consistent storage and lookups
       const normalizedEmail = email.toLowerCase().trim();
-      
+
       // Validate password strength
       if (password.length < 8) {
         return res.status(400).json({ error: "Password must be at least 8 characters" });
@@ -1516,26 +1516,26 @@ export async function registerRoutes(
           // Hash password with SHA-256 + salt
           const salt = crypto.randomBytes(16).toString('hex');
           const passwordHash = crypto.createHash('sha256').update(password + salt).digest('hex') + ':' + salt;
-          
+
           // Update the existing user with password and optional username/displayName
-          await db.update(users).set({ 
+          await db.update(users).set({
             passwordHash,
             emailVerified: true,
             ...(username && !existingUser.username ? { username } : {}),
             ...(displayName && !existingUser.displayName ? { displayName } : {}),
           }).where(eq(users.id, existingUser.id));
-          
+
           // Set session
           (req.session as any).userId = existingUser.id;
-          
+
           // Extend session to 30 days if rememberMe is checked
           if (rememberMe) {
             req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
           }
-          
-          return res.json({ 
-            success: true, 
-            userId: existingUser.id, 
+
+          return res.json({
+            success: true,
+            userId: existingUser.id,
             signupPosition: existingUser.signupPosition,
             emailVerificationRequired: false,
             passwordSet: true,
@@ -1588,17 +1588,17 @@ export async function registerRoutes(
       // Create Trust Layer membership
       const entryPoint = req.headers['x-entry-point'] as string || 'tlid.io';
       const trustLayerId = await membershipReconciliationService.getOrCreateMembership(userId, entryPoint);
-      
+
       // Queue for duplicate reconciliation
       await membershipReconciliationService.queueForReconciliation(userId);
 
       // Generate and send email verification code
       const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
       const expiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
-      
+
       // Clear any existing codes for this user
       await db.delete(emailVerificationCodes).where(eq(emailVerificationCodes.userId, userId));
-      
+
       // Store the new code
       await db.insert(emailVerificationCodes).values({
         userId,
@@ -1606,7 +1606,7 @@ export async function registerRoutes(
         code: verificationCode,
         expiresAt,
       });
-      
+
       // Send verification email
       try {
         const { sendEmailVerificationCode } = await import("./email");
@@ -1631,7 +1631,7 @@ export async function registerRoutes(
 
       // Set session (user is logged in but email not verified yet)
       (req.session as any).userId = userId;
-      
+
       // Extend session to 30 days if rememberMe is checked
       if (rememberMe) {
         req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
@@ -1642,7 +1642,7 @@ export async function registerRoutes(
       const tokenExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
       await db.update(users).set({ sessionToken, sessionTokenExpiry: tokenExpiry }).where(eq(users.id, userId));
 
-      createTrustStamp("auth-register", { userId, email: normalizedEmail, signupPosition }).catch(() => {});
+      createTrustStamp("auth-register", { userId, email: normalizedEmail, signupPosition }).catch(() => { });
 
       res.json({ success: true, userId, signupPosition, emailVerificationRequired: true, sessionToken });
     } catch (error) {
@@ -1729,7 +1729,7 @@ export async function registerRoutes(
       // Generate new code
       const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
       const expiresAt = new Date(Date.now() + 10 * 60 * 1000);
-      
+
       await db.delete(emailVerificationCodes).where(eq(emailVerificationCodes.userId, userId));
       await db.insert(emailVerificationCodes).values({
         userId,
@@ -1737,10 +1737,10 @@ export async function registerRoutes(
         code: verificationCode,
         expiresAt,
       });
-      
+
       await sendEmailVerificationCode(user.email, verificationCode, user.displayName || user.username || "User");
       console.log(`[Email Verification] Code resent to ${user.email}`);
-      
+
       res.json({ success: true, message: "Verification code sent" });
     } catch (error) {
       console.error("Resend verification error:", error);
@@ -1752,19 +1752,19 @@ export async function registerRoutes(
   app.post("/api/auth/quick-register", authRateLimit, async (req, res) => {
     try {
       const { firstName, email } = req.body;
-      
+
       if (!firstName || !email) {
         return res.status(400).json({ error: "Name and email are required" });
       }
 
       const normalizedEmail = email.toLowerCase().trim();
-      
+
       // Check if user already exists
       const existingUser = await storage.getUserByEmail(normalizedEmail);
       if (existingUser) {
         // User already exists, just return success (they're already registered)
-        return res.json({ 
-          success: true, 
+        return res.json({
+          success: true,
           message: "Welcome back!",
           isExisting: true,
           user: { id: existingUser.id, email: existingUser.email, firstName: existingUser.firstName }
@@ -1781,11 +1781,11 @@ export async function registerRoutes(
         emailVerified: false,
         profileImageUrl: null,
       });
-      
+
       console.log(`[Quick Register] New lead captured: ${normalizedEmail}`);
-      
-      res.json({ 
-        success: true, 
+
+      res.json({
+        success: true,
         message: "Registration successful",
         isExisting: false,
         user: { id: newUser.id, email: newUser.email, firstName: newUser.firstName }
@@ -1803,14 +1803,14 @@ export async function registerRoutes(
   app.post("/api/auth/login", authRateLimit, async (req, res) => {
     try {
       const { email, password, rememberMe } = req.body;
-      
+
       if (!email || !password) {
         return res.status(400).json({ error: "Email and password are required" });
       }
 
       // Normalize email to lowercase for consistent lookups
       const normalizedEmail = email.toLowerCase().trim();
-      
+
       // Find user
       const user = await storage.getUserByEmail(normalizedEmail);
       if (!user) {
@@ -1827,26 +1827,26 @@ export async function registerRoutes(
         console.error("Invalid password hash format for user:", user.id);
         return res.status(401).json({ error: "Invalid email or password" });
       }
-      
+
       const [storedHash, salt] = hashParts;
       if (!storedHash || !salt) {
         return res.status(401).json({ error: "Invalid email or password" });
       }
-      
+
       const providedHash = crypto.createHash('sha256').update(password + salt).digest('hex');
-      
+
       // Use timing-safe comparison
       if (storedHash.length !== providedHash.length) {
         return res.status(401).json({ error: "Invalid email or password" });
       }
-      
+
       if (!crypto.timingSafeEqual(Buffer.from(storedHash, 'hex'), Buffer.from(providedHash, 'hex'))) {
         return res.status(401).json({ error: "Invalid email or password" });
       }
 
       // Set session
       (req.session as any).userId = user.id;
-      
+
       // Extend session to 30 days if rememberMe is checked
       if (rememberMe) {
         req.session.cookie.maxAge = 30 * 24 * 60 * 60 * 1000; // 30 days
@@ -1855,23 +1855,23 @@ export async function registerRoutes(
       // Generate a session token for cross-domain auth
       const sessionToken = crypto.randomBytes(32).toString('hex');
       const tokenExpiry = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
-      
+
       // Store token in user record
       await db.update(users).set({
         sessionToken,
         sessionTokenExpiry: tokenExpiry,
       }).where(eq(users.id, user.id));
-      
+
       // Also save to session for cookie-based auth (backup)
-      createTrustStamp("auth-login", { userId: user.id, email: user.email }).catch(() => {});
+      createTrustStamp("auth-login", { userId: user.id, email: user.email }).catch(() => { });
 
       req.session.save((err) => {
         if (err) {
           console.error("[Login] Session save error:", err);
         }
         console.log("[Login] Session saved for user:", user.id, "sessionID:", req.sessionID);
-        res.json({ 
-          success: true, 
+        res.json({
+          success: true,
           sessionToken,
           user: {
             id: user.id,
@@ -1893,26 +1893,26 @@ export async function registerRoutes(
   app.get("/api/auth/me", async (req, res) => {
     try {
       let userId = (req.session as any)?.userId;
-      
+
       // Check Authorization header for token-based auth (cross-domain support)
       if (!userId) {
         const authHeader = req.headers.authorization;
         if (authHeader?.startsWith('Bearer ')) {
           const token = authHeader.substring(7);
-          
+
           // Check if it's a session token (64 char hex string)
           if (/^[a-f0-9]{64}$/.test(token)) {
             const [tokenUser] = await db.select().from(users)
               .where(eq(users.sessionToken, token))
               .limit(1);
-            
+
             if (tokenUser && tokenUser.sessionTokenExpiry && new Date(tokenUser.sessionTokenExpiry) > new Date()) {
               userId = tokenUser.id;
             }
           }
         }
       }
-      
+
       if (!userId) {
         return res.json({ user: null });
       }
@@ -1932,7 +1932,7 @@ export async function registerRoutes(
       const isOwner = ownerRole === 'owner';
       const isAdmin = ownerRole === 'admin' || ownerRole === 'owner';
 
-      res.json({ 
+      res.json({
         user: {
           id: user.id,
           email: user.email,
@@ -1960,11 +1960,11 @@ export async function registerRoutes(
         return res.status(401).json({ error: "Not authenticated" });
       }
       const user = await storage.getUser(userId);
-      
+
       if (!user) {
         return res.status(401).json({ error: "User not found" });
       }
-      
+
       // Create a simple JWT-like token for WebSocket auth
       const payload = {
         sub: user.id,
@@ -1972,15 +1972,15 @@ export async function registerRoutes(
         exp: Math.floor(Date.now() / 1000) + (60 * 60), // 1 hour expiry
         iat: Math.floor(Date.now() / 1000)
       };
-      
+
       const header = Buffer.from(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).toString('base64url');
       const payloadB64 = Buffer.from(JSON.stringify(payload)).toString('base64url');
       const signature = crypto.createHmac('sha256', process.env.SESSION_SECRET || 'darkwave-ws-secret')
         .update(`${header}.${payloadB64}`)
         .digest('base64url');
-      
+
       const token = `${header}.${payloadB64}.${signature}`;
-      
+
       res.json({ token });
     } catch (error) {
       console.error("WS token generation error:", error);
@@ -2002,14 +2002,14 @@ export async function registerRoutes(
   app.post("/api/auth/phone/send-code", authRateLimit, async (req, res) => {
     try {
       const { phoneNumber } = req.body;
-      
+
       if (!phoneNumber) {
         return res.status(400).json({ error: "Phone number is required" });
       }
 
       const { sendVerificationCode } = await import('./twilio-service');
       const result = await sendVerificationCode(phoneNumber);
-      
+
       if (!result.success) {
         return res.status(400).json({ error: result.message });
       }
@@ -2025,14 +2025,14 @@ export async function registerRoutes(
   app.post("/api/auth/phone/verify", authRateLimit, async (req, res) => {
     try {
       const { phoneNumber, code } = req.body;
-      
+
       if (!phoneNumber || !code) {
         return res.status(400).json({ error: "Phone number and code are required" });
       }
 
       const { verifyCode } = await import('./twilio-service');
       const result = await verifyCode(phoneNumber, code);
-      
+
       if (!result.success) {
         return res.status(400).json({ error: result.message });
       }
@@ -2040,9 +2040,9 @@ export async function registerRoutes(
       // If user is logged in, update their phone verification status
       const userId = (req.session as any)?.userId;
       if (userId) {
-        await db.update(users).set({ 
+        await db.update(users).set({
           phoneNumber,
-          phoneVerified: true 
+          phoneVerified: true
         }).where(eq(users.id, userId));
       }
 
@@ -2146,13 +2146,13 @@ export async function registerRoutes(
   app.post("/api/auth/forgot-password", authRateLimit, async (req, res) => {
     try {
       const { email } = req.body;
-      
+
       if (!email) {
         return res.status(400).json({ error: "Email is required" });
       }
 
       const user = await storage.getUserByEmail(email);
-      
+
       // Always return success to prevent email enumeration
       if (!user) {
         return res.json({ success: true, message: "If an account exists, a reset email has been sent" });
@@ -2170,11 +2170,9 @@ export async function registerRoutes(
       });
 
       // Send reset email
-      const baseUrl = process.env.REPLIT_DEV_DOMAIN 
-        ? `https://${process.env.REPLIT_DEV_DOMAIN}`
-        : process.env.REPLIT_DEPLOYMENT_URL || 'https://dwsc.io';
+      const baseUrl = process.env.SITE_BASE_URL || 'https://dwsc.io';
       const resetLink = `${baseUrl}/reset-password?token=${token}`;
-      
+
       const { sendPasswordResetEmail } = await import('./email');
       await sendPasswordResetEmail(email, resetLink);
 
@@ -2189,7 +2187,7 @@ export async function registerRoutes(
   app.post("/api/auth/reset-password", authRateLimit, async (req, res) => {
     try {
       const { token, newPassword } = req.body;
-      
+
       if (!token || !newPassword) {
         return res.status(400).json({ error: "Token and new password are required" });
       }
@@ -2281,7 +2279,7 @@ export async function registerRoutes(
   app.post("/api/auth/pin/login", authRateLimit, async (req, res) => {
     try {
       const { email, pin } = req.body;
-      
+
       if (!email || !pin) {
         return res.status(400).json({ error: "Email and PIN are required" });
       }
@@ -2292,25 +2290,25 @@ export async function registerRoutes(
 
       // Find user by email - use uniform error to prevent enumeration
       const user = await storage.getUserByEmail(email);
-      
+
       // Generate a dummy hash for timing-safe comparison even when user doesn't exist
       const dummyId = 'dummy-user-id-for-timing-safety';
       const userId = user?.id || dummyId;
       const storedHash = user?.pinHash || crypto.createHash('sha256').update('dummy').digest('hex');
-      
+
       // Compute PIN hash
       const pinHash = crypto.createHash('sha256').update(pin + userId).digest('hex');
-      
+
       // Use timing-safe comparison to prevent timing attacks
       const hashBuffer = Buffer.from(pinHash, 'hex');
       const storedBuffer = Buffer.from(storedHash, 'hex');
-      
+
       // Ensure buffers are same length for timingSafeEqual
       let isValid = false;
       if (hashBuffer.length === storedBuffer.length) {
         isValid = crypto.timingSafeEqual(hashBuffer, storedBuffer);
       }
-      
+
       // User must exist AND have PIN set AND hash must match
       if (!user || !user.pinHash || !isValid) {
         return res.status(401).json({ error: "Invalid credentials" });
@@ -2318,8 +2316,8 @@ export async function registerRoutes(
 
       // Return user data - NOTE: This is for display only, not for API access
       // Users should still authenticate with Firebase for protected API calls
-      res.json({ 
-        success: true, 
+      res.json({
+        success: true,
         user: {
           id: user.id,
           email: user.email,
@@ -2401,40 +2399,40 @@ export async function registerRoutes(
       const appKey = req.headers['x-app-key'] as string;
       const signature = req.headers['x-app-signature'] as string;
       const timestamp = req.headers['x-app-timestamp'] as string;
-      
+
       if (!token || !appKey || !signature || !timestamp) {
         return res.status(400).json({ error: "Missing token, app key, signature, or timestamp" });
       }
-      
+
       // Check timestamp is within 5 minutes to prevent replay attacks
       const requestTime = parseInt(timestamp);
       if (isNaN(requestTime) || Math.abs(Date.now() - requestTime) > 5 * 60 * 1000) {
         return res.status(401).json({ error: "Request expired or invalid timestamp" });
       }
-      
+
       // Verify the app is registered and active
       const appResult = await db.execute(sql`
         SELECT * FROM ecosystem_apps WHERE api_key = ${appKey} AND is_active = true LIMIT 1
       `);
-      
+
       if (!appResult.rows[0]) {
         return res.status(401).json({ error: "Invalid or inactive app" });
       }
-      
+
       const appData = appResult.rows[0] as any;
-      
+
       // Verify HMAC signature: HMAC-SHA256(apiSecret, token + timestamp)
       const expectedSignature = crypto.createHmac('sha256', appData.api_secret)
         .update(`${token}${timestamp}`)
         .digest('hex');
-      
+
       // Guard against length mismatch (timingSafeEqual throws on different lengths)
       const sigBuffer = Buffer.from(signature);
       const expectedBuffer = Buffer.from(expectedSignature);
       if (sigBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
         return res.status(401).json({ error: "Invalid signature" });
       }
-      
+
       // Find the SSO session - MUST match both token AND the requesting app's ID
       const sessionResult = await db.execute(sql`
         SELECT * FROM sso_sessions 
@@ -2444,31 +2442,31 @@ export async function registerRoutes(
         AND used_at IS NULL
         LIMIT 1
       `);
-      
+
       if (!sessionResult.rows[0]) {
         return res.status(401).json({ error: "Invalid or expired token" });
       }
-      
+
       const ssoSession = sessionResult.rows[0] as any;
-      
+
       // Mark token as used (one-time use)
       await db.execute(sql`
         UPDATE sso_sessions SET used_at = NOW() WHERE id = ${ssoSession.id}
       `);
-      
+
       // Get the user data
       const user = await storage.getUser(ssoSession.user_id);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
-      
+
       // Get or create user app connection
       const connResult = await db.execute(sql`
         SELECT * FROM user_app_connections 
         WHERE user_id = ${user.id} AND app_id = ${appData.id}
         LIMIT 1
       `);
-      
+
       if (!connResult.rows[0]) {
         await db.execute(sql`
           INSERT INTO user_app_connections (user_id, app_id, connected_at, last_login_at)
@@ -2480,20 +2478,20 @@ export async function registerRoutes(
           WHERE user_id = ${user.id} AND app_id = ${appData.id}
         `);
       }
-      
+
       // Get membership card info
       const [card] = await db.select().from(memberTrustCards).where(eq(memberTrustCards.userId, user.id)).limit(1);
-      
+
       // Get connected apps for this user
       const connectedApps = await db.execute(sql`
         SELECT ea.app_name FROM user_app_connections uac
         JOIN ecosystem_apps ea ON ea.id = uac.app_id
         WHERE uac.user_id = ${user.id} AND uac.revoked_at IS NULL
       `);
-      
+
       // Apply permission-based filtering (same as user endpoint)
       const permissions = appData.permissions || [];
-      
+
       // Base response (always returned)
       const userResponse: any = {
         id: user.id,
@@ -2502,20 +2500,20 @@ export async function registerRoutes(
         createdAt: user.createdAt,
         lastLogin: new Date().toISOString()
       };
-      
+
       // Include email only if app has read:email permission
       if (permissions.includes('read:email') || permissions.includes('read:profile')) {
         userResponse.email = user.email;
         userResponse.firstName = user.firstName;
         userResponse.lastName = user.lastName;
       }
-      
+
       // Include membership info only if app has read:membership permission
       if (permissions.includes('read:membership') || permissions.includes('read:profile')) {
         userResponse.membershipCard = card?.trustNumber || null;
         userResponse.memberTier = card?.memberTier || 'pioneer';
       }
-      
+
       res.json({
         success: true,
         user: userResponse
@@ -2525,7 +2523,7 @@ export async function registerRoutes(
       res.status(500).json({ error: "Verification failed" });
     }
   });
-  
+
   // Get user by ID (for external apps with valid API key and HMAC signature)
   app.get("/api/auth/sso/user/:userId", async (req, res) => {
     try {
@@ -2533,124 +2531,124 @@ export async function registerRoutes(
       const appKey = req.headers['x-app-key'] as string;
       const signature = req.headers['x-app-signature'] as string;
       const timestamp = req.headers['x-app-timestamp'] as string;
-      
+
       if (!appKey || !signature || !timestamp) {
         return res.status(401).json({ error: "Missing app key, signature, or timestamp" });
       }
-      
+
       // Check timestamp is within 5 minutes to prevent replay attacks
       const requestTime = parseInt(timestamp);
       if (isNaN(requestTime) || Math.abs(Date.now() - requestTime) > 5 * 60 * 1000) {
         return res.status(401).json({ error: "Request expired or invalid timestamp" });
       }
-      
+
       // Verify the app is registered
       const appResult2 = await db.execute(sql`
         SELECT * FROM ecosystem_apps WHERE api_key = ${appKey} AND is_active = true LIMIT 1
       `);
-      
+
       if (!appResult2.rows[0]) {
         return res.status(401).json({ error: "Invalid or inactive app" });
       }
-      
+
       const appData = appResult2.rows[0] as any;
-      
+
       // Verify HMAC signature: HMAC-SHA256(apiSecret, userId + timestamp)
       const expectedSignature = crypto.createHmac('sha256', appData.api_secret)
         .update(`${userId}${timestamp}`)
         .digest('hex');
-      
+
       // Guard against length mismatch (timingSafeEqual throws on different lengths)
       const sigBuffer = Buffer.from(signature);
       const expectedBuffer = Buffer.from(expectedSignature);
       if (sigBuffer.length !== expectedBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedBuffer)) {
         return res.status(401).json({ error: "Invalid signature" });
       }
-      
+
       const user = await storage.getUser(userId);
       if (!user) {
         return res.status(404).json({ error: "User not found" });
       }
-      
+
       // Check if user has connected to this app
       const connResult2 = await db.execute(sql`
         SELECT * FROM user_app_connections 
         WHERE user_id = ${userId} AND app_id = ${appData.id} AND revoked_at IS NULL
         LIMIT 1
       `);
-      
+
       if (!connResult2.rows[0]) {
         return res.status(403).json({ error: "User has not authorized this app" });
       }
-      
+
       // Check app permissions before returning sensitive data
       const permissions = appData.permissions || [];
       const [card] = await db.select().from(memberTrustCards).where(eq(memberTrustCards.userId, user.id)).limit(1);
-      
+
       // Base response (always returned)
       const response: any = {
         id: user.id,
         name: user.displayName || user.username,
       };
-      
+
       // Include email only if app has read:email permission
       if (permissions.includes('read:email') || permissions.includes('read:profile')) {
         response.email = user.email;
         response.firstName = user.firstName;
         response.lastName = user.lastName;
       }
-      
+
       // Include membership info only if app has read:membership permission
       if (permissions.includes('read:membership') || permissions.includes('read:profile')) {
         response.membershipCard = card?.trustNumber || null;
         response.memberTier = card?.memberTier || 'pioneer';
       }
-      
+
       response.createdAt = user.createdAt;
-      
+
       res.json(response);
     } catch (error) {
       console.error("SSO user lookup error:", error);
       res.status(500).json({ error: "User lookup failed" });
     }
   });
-  
+
   // SSO Login initiation (external app redirects here)
   app.get("/api/auth/sso/login", async (req, res) => {
     try {
       const appName = req.query.app as string;
       const redirectUrl = req.query.redirect as string;
       const state = req.query.state as string; // CSRF protection
-      
+
       if (!appName || !redirectUrl) {
         return res.status(400).json({ error: "Missing app name or redirect URL" });
       }
-      
+
       // Verify the app is registered
       const appResult3 = await db.execute(sql`
         SELECT * FROM ecosystem_apps WHERE app_name = ${appName} AND is_active = true LIMIT 1
       `);
-      
+
       if (!appResult3.rows[0]) {
         return res.status(401).json({ error: "Unknown or inactive app" });
       }
-      
+
       const appData = appResult3.rows[0] as any;
-      
+
       // SECURITY: Validate redirect URL against registered callback URL
       try {
         const requestedUrl = new URL(redirectUrl);
         const allowedCallbackUrl = new URL(appData.callback_url, appData.app_url);
-        
+
         // Must match origin (protocol + host) and path prefix
         const requestedOrigin = requestedUrl.origin;
         const allowedOrigin = allowedCallbackUrl.origin;
-        
+
         if (requestedOrigin !== allowedOrigin) {
           console.warn(`SSO redirect blocked: ${redirectUrl} does not match allowed origin ${allowedOrigin}`);
           return res.status(400).json({ error: "Invalid redirect URL - origin mismatch" });
         }
-        
+
         // Path must start with the registered callback path
         if (!requestedUrl.pathname.startsWith(allowedCallbackUrl.pathname)) {
           console.warn(`SSO redirect blocked: path ${requestedUrl.pathname} does not match ${allowedCallbackUrl.pathname}`);
@@ -2659,7 +2657,7 @@ export async function registerRoutes(
       } catch (urlError) {
         return res.status(400).json({ error: "Invalid redirect URL format" });
       }
-      
+
       // Store SSO request in session for after login
       (req.session as any).ssoRequest = {
         appId: appData.id,
@@ -2668,7 +2666,7 @@ export async function registerRoutes(
         state,
         createdAt: Date.now()
       };
-      
+
       // Redirect to login page with SSO context (app info stored in session, not URL)
       res.redirect(`/login?sso=true&app=${encodeURIComponent(appData.app_display_name)}`);
     } catch (error) {
@@ -2676,7 +2674,7 @@ export async function registerRoutes(
       res.status(500).json({ error: "SSO initialization failed" });
     }
   });
-  
+
   // Get pending SSO request info (for consent page)
   app.get("/api/auth/sso/pending", async (req, res) => {
     try {
@@ -2721,77 +2719,77 @@ export async function registerRoutes(
     try {
       const userId = (req.session as any)?.userId;
       const ssoRequest = (req.session as any)?.ssoRequest;
-      
+
       if (!userId) {
         return res.status(401).json({ error: "Not authenticated" });
       }
-      
+
       if (!ssoRequest) {
         return res.status(400).json({ error: "No SSO request pending" });
       }
-      
+
       // Check SSO request hasn't expired (5 min max)
       if (Date.now() - ssoRequest.createdAt > 5 * 60 * 1000) {
         delete (req.session as any).ssoRequest;
         return res.status(400).json({ error: "SSO request expired" });
       }
-      
+
       // Generate SSO token
       const ssoToken = crypto.randomBytes(32).toString('hex');
       const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 min expiry
-      
+
       await db.execute(sql`
         INSERT INTO sso_sessions (user_id, app_id, sso_token, expires_at, ip_address, user_agent)
         VALUES (${userId}, ${ssoRequest.appId}, ${ssoToken}, ${expiresAt}, ${req.ip}, ${req.headers['user-agent']})
       `);
-      
+
       // Clear SSO request from session
       delete (req.session as any).ssoRequest;
-      
+
       // Build redirect URL with token
       const redirectUrl = new URL(ssoRequest.redirectUrl);
       redirectUrl.searchParams.set('token', ssoToken);
       if (ssoRequest.state) {
         redirectUrl.searchParams.set('state', ssoRequest.state);
       }
-      
-      res.json({ 
-        success: true, 
-        redirectUrl: redirectUrl.href 
+
+      res.json({
+        success: true,
+        redirectUrl: redirectUrl.href
       });
     } catch (error) {
       console.error("SSO callback error:", error);
       res.status(500).json({ error: "SSO callback failed" });
     }
   });
-  
+
   // Register a new ecosystem app (admin only)
   app.post("/api/auth/sso/register-app", async (req, res) => {
     try {
       // Check owner authentication
       const authHeader = req.headers.authorization;
       const ownerSecret = process.env.OWNER_SECRET;
-      
+
       if (!ownerSecret || authHeader !== `Bearer ${ownerSecret}`) {
         return res.status(401).json({ error: "Unauthorized" });
       }
-      
+
       const { appName, appDisplayName, appDescription, appUrl, callbackUrl, logoUrl, permissions } = req.body;
-      
+
       if (!appName || !appDisplayName || !appUrl || !callbackUrl) {
         return res.status(400).json({ error: "Missing required fields" });
       }
-      
+
       // Generate API credentials
       const apiKey = `dw_${crypto.randomBytes(16).toString('hex')}`;
       const apiSecret = crypto.randomBytes(32).toString('hex');
       const appPermissions = JSON.stringify(permissions || ["read:profile"]);
-      
+
       await db.execute(sql`
         INSERT INTO ecosystem_apps (app_name, app_display_name, app_description, app_url, callback_url, api_key, api_secret, logo_url, permissions)
         VALUES (${appName}, ${appDisplayName}, ${appDescription || ''}, ${appUrl}, ${callbackUrl}, ${apiKey}, ${apiSecret}, ${logoUrl || ''}, ${appPermissions}::jsonb)
       `);
-      
+
       res.json({
         success: true,
         credentials: {
@@ -2809,7 +2807,7 @@ export async function registerRoutes(
       res.status(500).json({ error: "Registration failed" });
     }
   });
-  
+
   // Toggle app active/inactive status
   app.post("/api/auth/sso/toggle-app", async (req, res) => {
     try {
@@ -2843,7 +2841,7 @@ export async function registerRoutes(
         FROM ecosystem_apps
         ORDER BY created_at DESC
       `);
-      
+
       res.json({ apps: apps.rows });
     } catch (error) {
       console.error("List apps error:", error);
@@ -3135,7 +3133,7 @@ export async function registerRoutes(
       }
 
       const [card] = await db.select().from(memberTrustCards).where(eq(memberTrustCards.userId, userId));
-      
+
       if (!card) {
         return res.status(404).json({ error: "Trust card not found" });
       }
@@ -3193,7 +3191,7 @@ export async function registerRoutes(
 
         const trustNumber = `TN-${nextSerial.toString().padStart(10, '0')}`;
         const displayName = user.displayName || user.firstName || user.email?.split('@')[0] || 'Member';
-        
+
         const payload = {
           userId,
           trustNumber,
@@ -3310,7 +3308,7 @@ export async function registerRoutes(
       const { q, location } = req.query;
       const searchQuery = typeof q === 'string' ? q.toLowerCase().trim() : '';
       const locationQuery = typeof location === 'string' ? location.toLowerCase().trim() : '';
-      
+
       // Get all verified members with basic public profile info
       const allMembers = await db.select({
         id: users.id,
@@ -3334,7 +3332,7 @@ export async function registerRoutes(
 
       // Apply search filter
       if (searchQuery) {
-        formattedMembers = formattedMembers.filter(m => 
+        formattedMembers = formattedMembers.filter(m =>
           m.displayName.toLowerCase().includes(searchQuery) ||
           `member #${m.memberNumber}`.includes(searchQuery)
         );
@@ -3342,14 +3340,14 @@ export async function registerRoutes(
 
       // Apply location filter (for future when profiles have location data)
       if (locationQuery) {
-        formattedMembers = formattedMembers.filter(m => 
+        formattedMembers = formattedMembers.filter(m =>
           m.location && m.location.toLowerCase().includes(locationQuery)
         );
       }
 
-      res.json({ 
+      res.json({
         members: formattedMembers.slice(0, 100),
-        total: formattedMembers.length 
+        total: formattedMembers.length
       });
     } catch (error) {
       console.error("Members directory error:", error);
@@ -3365,12 +3363,12 @@ export async function registerRoutes(
         return res.status(401).json({ error: "Unauthorized" });
       }
 
-      const { 
-        businessName, 
-        einNumber, 
-        website, 
-        contactName, 
-        contactEmail, 
+      const {
+        businessName,
+        einNumber,
+        website,
+        contactName,
+        contactEmail,
         contactPhone,
         businessDescription,
         intendedUse,
@@ -3414,8 +3412,8 @@ export async function registerRoutes(
 
       console.log(`[Business] New application submitted: ${businessName} by ${userId}`);
 
-      res.json({ 
-        success: true, 
+      res.json({
+        success: true,
         applicationId: application.id,
         status: "pending",
         message: "Application submitted successfully. We will review within 2-3 business days."
@@ -3442,7 +3440,7 @@ export async function registerRoutes(
         return res.json({ hasApplication: false });
       }
 
-      res.json({ 
+      res.json({
         hasApplication: true,
         application: {
           id: application.id,
@@ -3487,17 +3485,17 @@ export async function registerRoutes(
   // ======================
   // FEEDBACK & BUG REPORTS
   // ======================
-  
+
   // Submit a feedback report (authenticated users)
   app.post("/api/feedback", verifyFirebaseToken, async (req: AuthenticatedRequest, res) => {
     try {
       const userId = req.firebaseUser?.uid;
       const { type, category, title, description, stepsToReproduce, expectedBehavior, actualBehavior, pageUrl, screenshots } = req.body;
-      
+
       if (!title || !description) {
         return res.status(400).json({ error: "Title and description are required" });
       }
-      
+
       // Get user info
       let userEmail = null;
       let userName = null;
@@ -3508,10 +3506,10 @@ export async function registerRoutes(
           userName = user.username;
         }
       }
-      
+
       // Get browser/device info from request
       const userAgent = req.headers['user-agent'] || 'Unknown';
-      
+
       const [report] = await db.insert(feedbackReports).values({
         userId: userId || null,
         userEmail,
@@ -3528,14 +3526,14 @@ export async function registerRoutes(
         browserInfo: userAgent,
         deviceInfo: null,
       }).returning();
-      
+
       res.json({ success: true, reportId: report.id, message: "Thank you for your feedback!" });
     } catch (error) {
       console.error("Feedback submit error:", error);
       res.status(500).json({ error: "Failed to submit feedback" });
     }
   });
-  
+
   // Get all feedback reports (owner admin only)
   app.get("/api/owner/feedback", async (req, res) => {
     try {
@@ -3544,19 +3542,19 @@ export async function registerRoutes(
       if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
       }
-      
+
       // Simple token verification (in production, use proper JWT)
       const ownerSecret = process.env.OWNER_SECRET;
       if (!ownerSecret || token !== Buffer.from(ownerSecret).toString('base64')) {
         return res.status(401).json({ error: "Invalid token" });
       }
-      
+
       const { status, type, limit = 50 } = req.query;
-      
+
       let query = db.select().from(feedbackReports).orderBy(sql`created_at DESC`);
-      
+
       const reports = await query.limit(Number(limit));
-      
+
       // Filter by status/type if provided
       let filteredReports = reports;
       if (status && typeof status === 'string') {
@@ -3565,14 +3563,14 @@ export async function registerRoutes(
       if (type && typeof type === 'string') {
         filteredReports = filteredReports.filter(r => r.type === type);
       }
-      
+
       res.json({ reports: filteredReports });
     } catch (error) {
       console.error("Feedback list error:", error);
       res.status(500).json({ error: "Failed to get feedback reports" });
     }
   });
-  
+
   // Update feedback report status (owner admin only)
   app.patch("/api/owner/feedback/:id", async (req, res) => {
     try {
@@ -3580,15 +3578,15 @@ export async function registerRoutes(
       if (!token) {
         return res.status(401).json({ error: "Unauthorized" });
       }
-      
+
       const ownerSecret = process.env.OWNER_SECRET;
       if (!ownerSecret || token !== Buffer.from(ownerSecret).toString('base64')) {
         return res.status(401).json({ error: "Invalid token" });
       }
-      
+
       const { id } = req.params;
       const { status, priority, adminNotes, resolution } = req.body;
-      
+
       const updateData: Record<string, any> = { updatedAt: new Date() };
       if (status) updateData.status = status;
       if (priority) updateData.priority = priority;
@@ -3599,12 +3597,12 @@ export async function registerRoutes(
           updateData.resolvedAt = new Date();
         }
       }
-      
+
       const [updated] = await db.update(feedbackReports)
         .set(updateData)
         .where(eq(feedbackReports.id, Number(id)))
         .returning();
-      
+
       res.json({ success: true, report: updated });
     } catch (error) {
       console.error("Feedback update error:", error);
@@ -3659,29 +3657,29 @@ export async function registerRoutes(
       const userResult = await db.execute(sql`
         SELECT created_at FROM users WHERE id = ${userId}
       `);
-      
+
       if (userResult.rows.length === 0) {
         return res.status(404).json({ error: "User not found" });
       }
-      
+
       const userCreatedAt = userResult.rows[0].created_at;
-      
+
       // Count users who signed up before this user (their member number)
       const countResult = await db.execute(sql`
         SELECT COUNT(*) as position FROM users WHERE created_at <= ${userCreatedAt}
       `);
-      
+
       const memberNumber = parseInt(countResult.rows[0]?.position as string) || 1;
-      
+
       // Get total members
       const totalResult = await db.execute(sql`SELECT COUNT(*) as total FROM users`);
       const totalMembers = parseInt(totalResult.rows[0]?.total as string) || 0;
-      
+
       const crypto = require('crypto');
       const fullHash = crypto.createHash('sha256').update(`trustlayer:member:${userId}`).digest('hex');
       const explorerAddress = '0x' + fullHash.slice(0, 40);
       const trustHash = fullHash.slice(0, 16).toUpperCase();
-      
+
       const isEarlyAdopter = memberNumber <= 1000;
 
       res.json({
@@ -3709,7 +3707,7 @@ export async function registerRoutes(
       // Get presale allocation by email (check users table, then Firebase token)
       const userResult = await db.execute(sql`SELECT email FROM users WHERE id = ${userId}`);
       const userEmail = (userResult.rows[0] as any)?.email || req.firebaseUser?.email;
-      
+
       const presaleResult = await db.execute(sql`
         SELECT COALESCE(SUM(token_amount), 0) as total_sig
         FROM presale_purchases
@@ -3816,7 +3814,7 @@ export async function registerRoutes(
       }
 
       const membership = await membershipReconciliationService.getMembershipByUserId(userId);
-      
+
       if (!membership) {
         // Create membership if doesn't exist (legacy users)
         const entryPoint = req.headers['x-entry-point'] as string || 'tlid.io';
@@ -3831,8 +3829,8 @@ export async function registerRoutes(
       res.json({
         trustLayerId: membership.trustLayerId,
         status: membership.status,
-        message: membership.status === 'active' 
-          ? 'Welcome to Trust Layer!' 
+        message: membership.status === 'active'
+          ? 'Welcome to Trust Layer!'
           : 'Your membership is being processed. You will be notified when it is active.'
       });
     } catch (error) {
@@ -3856,13 +3854,13 @@ export async function registerRoutes(
         WHERE user_id = ${userId}
         AND usd_amount_cents >= 2500
       `);
-      
+
       const maxPurchase = Number(result.rows[0]?.max_purchase) || 0;
-      
+
       // Determine tier based on purchase amount
       let tier: string | null = null;
       let bonusPercent = 0;
-      
+
       if (maxPurchase >= 10000) {
         tier = 'diamond';
         bonusPercent = 100;
@@ -3896,14 +3894,14 @@ export async function registerRoutes(
       if (!userId) {
         return res.status(401).json({ error: "Not authenticated" });
       }
-      
+
       // Get or create reward profile
       const profile = await zealyService.getOrCreateRewardProfile(userId);
-      
+
       // Get shell balance
       const shellBalanceRaw = await shellsService.getBalance(userId);
       const shellBalance = Number(shellBalanceRaw) || 0;
-      
+
       res.json({
         profile: {
           tier: profile.tier,
@@ -3985,7 +3983,7 @@ export async function registerRoutes(
 
       // Presale price: $0.001 per SIG, so value = totalDwc * 0.001
       const currentValue = totalDwc * 0.001;
-      
+
       // Future projected value at launch (estimated $0.01)
       const launchProjectedValue = totalDwc * 0.01;
 
@@ -4071,17 +4069,17 @@ export async function registerRoutes(
       if (!userId) {
         return res.status(401).json({ error: "Not authenticated" });
       }
-      
+
       const { walletAddress } = req.body;
       if (!walletAddress || typeof walletAddress !== "string") {
         return res.status(400).json({ error: "Wallet address required" });
       }
-      
+
       const profile = await zealyService.linkWallet(userId, walletAddress);
       if (!profile) {
         return res.status(404).json({ error: "Reward profile not found" });
       }
-      
+
       res.json({ success: true, profile });
     } catch (error) {
       console.error("Link wallet error:", error);
@@ -4096,7 +4094,7 @@ export async function registerRoutes(
       if (!userId) {
         return res.status(401).json({ error: "Not authenticated" });
       }
-      
+
       const result = await zealyService.canWithdraw(userId);
       res.json(result);
     } catch (error) {
@@ -4155,15 +4153,15 @@ export async function registerRoutes(
           INSERT INTO user_sessions (token, user_id, expires_at) 
           VALUES (${sessionToken}, ${userId}, NOW() + INTERVAL '30 days')
           ON CONFLICT DO NOTHING
-        `).catch(() => {});
-        
+        `).catch(() => { });
+
         res.cookie('session_token', sessionToken, {
           httpOnly: true,
           secure: true,
           sameSite: 'lax',
           maxAge: 30 * 24 * 60 * 60 * 1000,
         });
-        
+
         res.json({ success: true, user: result.user, sessionToken });
       } else {
         res.status(401).json(result);
@@ -4212,7 +4210,7 @@ export async function registerRoutes(
     try {
       const { pin } = req.body;
       const clientIp = req.ip || req.connection.remoteAddress || "unknown";
-      
+
       // Check for lockout
       const attempts = portalPinAttempts.get(clientIp);
       if (attempts && attempts.count >= 5) {
@@ -4222,47 +4220,47 @@ export async function registerRoutes(
         }
         portalPinAttempts.delete(clientIp);
       }
-      
+
       if (!pin || typeof pin !== "string" || pin.length < 1) {
         return res.status(400).json({ error: "Invalid access code" });
       }
-      
+
       // OWNER_SECRET - full owner access (highest priority)
       const ownerSecret = process.env.OWNER_SECRET;
       // Developer PIN - disabled (no default)
       const developerPin = process.env.DEVELOPER_PIN || null;
       // Admin PIN - disabled (no default)
       const adminPin = process.env.ADMIN_PIN || null;
-      
+
       const pinBuffer = Buffer.from(pin);
-      
+
       // Check OWNER_SECRET first (highest priority - full owner access)
       let isOwner = false;
       if (ownerSecret) {
         const ownerBuffer = Buffer.from(ownerSecret);
-        isOwner = pinBuffer.length === ownerBuffer.length && 
-                  crypto.timingSafeEqual(pinBuffer, ownerBuffer);
+        isOwner = pinBuffer.length === ownerBuffer.length &&
+          crypto.timingSafeEqual(pinBuffer, ownerBuffer);
       }
-      
+
       // Check Developer PIN (disabled if not set)
       let isDeveloper = false;
       if (developerPin) {
         const devPinBuffer = Buffer.from(developerPin);
-        isDeveloper = pinBuffer.length === devPinBuffer.length && 
-                  crypto.timingSafeEqual(pinBuffer, devPinBuffer);
+        isDeveloper = pinBuffer.length === devPinBuffer.length &&
+          crypto.timingSafeEqual(pinBuffer, devPinBuffer);
       }
-      
+
       // Check Admin PIN (disabled if not set)
       let isAdmin = false;
       if (adminPin) {
         const adminPinBuffer = Buffer.from(adminPin);
-        isAdmin = pinBuffer.length === adminPinBuffer.length && 
-                  crypto.timingSafeEqual(pinBuffer, adminPinBuffer);
+        isAdmin = pinBuffer.length === adminPinBuffer.length &&
+          crypto.timingSafeEqual(pinBuffer, adminPinBuffer);
       }
-      
+
       if (isOwner || isDeveloper) {
         portalPinAttempts.delete(clientIp);
-        
+
         // Create owner session for full access
         let ownerUser = await storage.getUserByEmail("owner@darkwave.io");
         if (!ownerUser) {
@@ -4275,13 +4273,13 @@ export async function registerRoutes(
         if (ownerUser) {
           (req.session as any).userId = ownerUser.id;
         }
-        
+
         const accessType = isOwner ? "Owner" : "Developer";
         console.log(`[Team Access] ${accessType} login from ${clientIp}`);
         res.json({ success: true, redirect: "/owner-admin", portalType: "owner" });
       } else if (isAdmin) {
         portalPinAttempts.delete(clientIp);
-        
+
         console.log(`[Team Access] Admin login from ${clientIp}`);
         res.json({ success: true, redirect: "/admin", portalType: "admin" });
       } else {
@@ -4301,7 +4299,7 @@ export async function registerRoutes(
     try {
       const { pin } = req.body;
       const clientIp = req.ip || req.connection.remoteAddress || "unknown";
-      
+
       // Check for lockout
       const attempts = teamPinAttempts.get(clientIp);
       if (attempts && attempts.count >= 5) {
@@ -4311,23 +4309,23 @@ export async function registerRoutes(
         }
         teamPinAttempts.delete(clientIp);
       }
-      
+
       if (!pin || typeof pin !== "string" || pin.length < 4) {
         return res.status(400).json({ error: "Invalid PIN format" });
       }
-      
+
       // Use environment variable for team PIN, fallback to default for development only
       const teamPin = process.env.TEAM_ACCESS_PIN || (process.env.NODE_ENV === "development" ? "0424" : null);
       if (!teamPin) {
         return res.status(500).json({ error: "Team access not configured" });
       }
-      
+
       // Timing-safe comparison
       const pinBuffer = Buffer.from(pin);
       const teamPinBuffer = Buffer.from(teamPin);
-      const isValid = pinBuffer.length === teamPinBuffer.length && 
-                      crypto.timingSafeEqual(pinBuffer, teamPinBuffer);
-      
+      const isValid = pinBuffer.length === teamPinBuffer.length &&
+        crypto.timingSafeEqual(pinBuffer, teamPinBuffer);
+
       if (isValid) {
         teamPinAttempts.delete(clientIp);
         res.json({ success: true });
@@ -4345,9 +4343,9 @@ export async function registerRoutes(
   app.get("/api/ecosystem/hub/status", ecosystemRateLimit, async (req, res) => {
     try {
       if (!ecosystemClient.isConfigured()) {
-        return res.json({ 
-          connected: false, 
-          message: "API credentials not configured. Set DARKWAVE_API_KEY and DARKWAVE_API_SECRET." 
+        return res.json({
+          connected: false,
+          message: "API credentials not configured. Set DARKWAVE_API_KEY and DARKWAVE_API_SECRET."
         });
       }
       const status = await ecosystemClient.checkStatus();
@@ -4361,7 +4359,7 @@ export async function registerRoutes(
   app.post("/api/ecosystem/register", ecosystemRateLimit, async (req, res) => {
     try {
       const { appName, appSlug, appUrl, description, permissions, category, metadata } = req.body;
-      
+
       if (!appName || !appSlug) {
         return res.status(400).json({ error: "appName and appSlug are required" });
       }
@@ -4375,7 +4373,7 @@ export async function registerRoutes(
         permissions: permissions || ["read:ecosystem", "write:ecosystem"],
         metadata: metadata || {}
       });
-      
+
       res.json({ success: true, data: result });
     } catch (error) {
       console.error("Error registering with Trust Layer Hub:", error);
@@ -4397,7 +4395,7 @@ export async function registerRoutes(
     try {
       const { category, language } = req.query;
       const snippets = await ecosystemClient.getSnippets(
-        category as string | undefined, 
+        category as string | undefined,
         language as string | undefined
       );
       res.json(snippets);
@@ -4436,7 +4434,7 @@ export async function registerRoutes(
       res.status(500).json({ error: "Failed to push log" });
     }
   });
-  
+
   app.get("/api/ecosystem/apps", ecosystemRateLimit, async (req, res) => {
     try {
       const apps = await fetchEcosystemApps();
@@ -4518,7 +4516,7 @@ export async function registerRoutes(
           if (userId) {
             try {
               subscription = await subscriptionService.getSubscriptionStatus(userId);
-            } catch {}
+            } catch { }
             try {
               const userResult = await db.execute(sql`SELECT email FROM users WHERE id = ${userId}`);
               const userEmail = (userResult.rows[0] as any)?.email;
@@ -4535,9 +4533,9 @@ export async function registerRoutes(
                   totalSpent: parseInt(row?.total_spent_cents || "0") / 100,
                 };
               }
-            } catch {}
+            } catch { }
           }
-        } catch {}
+        } catch { }
       }
 
       const presaleStatsResult = await db.execute(sql`
@@ -4926,7 +4924,7 @@ const { trustLayerId } = await response.json();`
       // Calculate overall status
       const downCount = services.filter(s => s.status === "down").length;
       const degradedCount = services.filter(s => s.status === "degraded").length;
-      
+
       let overallStatus: "operational" | "degraded" | "down" = "operational";
       if (downCount > 0) overallStatus = "down";
       else if (degradedCount > 0) overallStatus = "degraded";
@@ -4982,52 +4980,52 @@ const { trustLayerId } = await response.json();`
   // TREASURY SYNC API (Orbit Staffing Integration)
   // ============================================
   // HMAC-authenticated endpoint for external bookkeeping sync
-  
+
   app.get("/api/treasury/sync", async (req, res) => {
     try {
       const apiKey = req.headers["x-orbit-key"] as string;
       const timestamp = req.headers["x-orbit-timestamp"] as string;
       const signature = req.headers["x-orbit-signature"] as string;
       const nonce = req.headers["x-orbit-nonce"] as string || "";
-      
+
       // Verify HMAC signature
       const expectedKey = process.env.ORBIT_HUB_API_KEY;
       const expectedSecret = process.env.ORBIT_HUB_API_SECRET;
-      
+
       if (!expectedKey || !expectedSecret) {
         console.error("Treasury sync: ORBIT_HUB credentials not configured");
         return res.status(500).json({ error: "Integration not configured", code: "CONFIG_ERROR" });
       }
-      
+
       if (!apiKey || !timestamp || !signature) {
         return res.status(401).json({ error: "Missing authentication headers", code: "AUTH_MISSING" });
       }
-      
+
       // Verify timestamp is within 5 minutes
       const timestampMs = parseInt(timestamp);
       const now = Date.now();
       if (isNaN(timestampMs) || Math.abs(now - timestampMs) > 5 * 60 * 1000) {
         return res.status(401).json({ error: "Request expired or invalid timestamp", code: "TIMESTAMP_INVALID" });
       }
-      
+
       // Constant-time API key comparison
       const keyBuffer = Buffer.from(apiKey);
       const expectedKeyBuffer = Buffer.from(expectedKey);
       if (keyBuffer.length !== expectedKeyBuffer.length || !crypto.timingSafeEqual(keyBuffer, expectedKeyBuffer)) {
         return res.status(401).json({ error: "Invalid API key", code: "AUTH_INVALID" });
       }
-      
+
       // Verify HMAC signature with nonce for replay protection
       const payload = `GET:/api/treasury/sync:${timestamp}:${nonce}`;
       const expectedSignature = crypto.createHmac("sha256", expectedSecret).update(payload).digest("hex");
-      
+
       // Constant-time signature comparison
       const sigBuffer = Buffer.from(signature);
       const expectedSigBuffer = Buffer.from(expectedSignature);
       if (sigBuffer.length !== expectedSigBuffer.length || !crypto.timingSafeEqual(sigBuffer, expectedSigBuffer)) {
         return res.status(401).json({ error: "Invalid signature", code: "SIG_INVALID" });
       }
-      
+
       // Fetch treasury data with error handling
       let treasuryInfo;
       try {
@@ -5036,7 +5034,7 @@ const { trustLayerId } = await response.json();`
         console.error("Treasury sync: Failed to fetch treasury info", fetchError);
         return res.status(503).json({ error: "Treasury data temporarily unavailable", code: "TREASURY_FETCH_ERROR" });
       }
-      
+
       let allocations, ledger;
       try {
         allocations = await storage.getTreasuryAllocations();
@@ -5045,7 +5043,7 @@ const { trustLayerId } = await response.json();`
         console.error("Treasury sync: Storage error", storageError);
         return res.status(503).json({ error: "Database temporarily unavailable", code: "STORAGE_ERROR" });
       }
-      
+
       const syncResponse = {
         snapshot: {
           asOf: new Date().toISOString(),
@@ -5086,7 +5084,7 @@ const { trustLayerId } = await response.json();`
           requestNonce: nonce || null,
         },
       };
-      
+
       res.json(syncResponse);
     } catch (error: any) {
       console.error("Treasury sync error:", error);
@@ -5121,7 +5119,7 @@ const { trustLayerId } = await response.json();`
   app.post("/api/validators", isAuthenticated, async (req, res) => {
     try {
       const { address, name, description, stake } = req.body;
-      
+
       if (!address || !name) {
         return res.status(400).json({ error: "address and name are required" });
       }
@@ -5132,7 +5130,7 @@ const { trustLayerId } = await response.json();`
       }
 
       const validator = await blockchain.addValidator(address, name, description, stake);
-      
+
       if (!validator) {
         return res.status(500).json({ error: "Failed to add validator" });
       }
@@ -5155,7 +5153,7 @@ const { trustLayerId } = await response.json();`
     try {
       const { id } = req.params;
       const success = await blockchain.removeValidator(id);
-      
+
       if (!success) {
         return res.status(404).json({ error: "Validator not found" });
       }
@@ -5169,7 +5167,7 @@ const { trustLayerId } = await response.json();`
       res.status(500).json({ error: "Failed to remove validator" });
     }
   });
-  
+
   // BFT Consensus Endpoints
   app.get("/api/consensus", async (_req, res) => {
     try {
@@ -5180,7 +5178,7 @@ const { trustLayerId } = await response.json();`
       res.status(500).json({ error: "Failed to fetch consensus state" });
     }
   });
-  
+
   app.get("/api/consensus/stats", async (_req, res) => {
     try {
       const stats = blockchain.getStats();
@@ -5196,23 +5194,23 @@ const { trustLayerId } = await response.json();`
       res.status(500).json({ error: "Failed to fetch consensus stats" });
     }
   });
-  
+
   // Validator registration with stake
   app.post("/api/validators/register", isAuthenticated, async (req: any, res) => {
     try {
       const { address, name, stakeAmount, description, commission } = req.body;
-      
+
       if (!address || !name || !stakeAmount) {
         return res.status(400).json({ error: "address, name, and stakeAmount are required" });
       }
-      
+
       const stake = BigInt(stakeAmount);
       const result = await blockchain.registerValidator(address, name, stake, description, commission);
-      
+
       if (!result.success) {
         return res.status(400).json({ error: result.error });
       }
-      
+
       res.status(201).json({
         success: true,
         message: `Validator "${name}" registered successfully`,
@@ -5223,103 +5221,103 @@ const { trustLayerId } = await response.json();`
       res.status(500).json({ error: "Failed to register validator" });
     }
   });
-  
+
   // Increase validator stake
   app.post("/api/validators/:id/stake", isAuthenticated, async (req: any, res) => {
     try {
       const { id } = req.params;
       const { amount, fromAddress } = req.body;
-      
+
       if (!amount || !fromAddress) {
         return res.status(400).json({ error: "amount and fromAddress are required" });
       }
-      
+
       const result = await blockchain.increaseStake(id, BigInt(amount), fromAddress);
-      
+
       if (!result.success) {
         return res.status(400).json({ error: result.error });
       }
-      
+
       res.json({ success: true, message: "Stake increased successfully" });
     } catch (error) {
       console.error("Error increasing stake:", error);
       res.status(500).json({ error: "Failed to increase stake" });
     }
   });
-  
+
   // Block attestation (for external validators)
   // Validators must sign: `${blockHeight}:${blockHash}:${validatorAddress}:${timestamp}`
   // with HMAC-SHA256 using their validator secret key
   app.post("/api/consensus/attest", isAuthenticated, async (req: any, res) => {
     try {
       const { blockHeight, blockHash, validatorId, signature, timestamp } = req.body;
-      
+
       if (!blockHeight || !blockHash || !validatorId || !signature || !timestamp) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: "blockHeight, blockHash, validatorId, signature, and timestamp are required",
           signatureFormat: "HMAC-SHA256(${blockHeight}:${blockHash}:${validatorAddress}:${timestamp})"
         });
       }
-      
+
       // Validate timestamp is recent (within 30 seconds to prevent replay attacks)
       const attestationTime = parseInt(timestamp);
       const now = Date.now();
       if (isNaN(attestationTime) || Math.abs(now - attestationTime) > 30000) {
         return res.status(400).json({ error: "Timestamp expired or invalid (must be within 30 seconds)" });
       }
-      
+
       const result = await blockchain.addBlockAttestation(blockHeight, blockHash, validatorId, signature, timestamp);
-      
+
       if (!result.success) {
         return res.status(400).json({ error: result.error });
       }
-      
-      res.json({ 
-        success: true, 
+
+      res.json({
+        success: true,
         finalized: result.finalized,
         attestedStake: result.attestedStake,
         totalStake: result.totalStake,
-        message: result.finalized ? "Block finalized with quorum" : "Attestation recorded, awaiting quorum" 
+        message: result.finalized ? "Block finalized with quorum" : "Attestation recorded, awaiting quorum"
       });
     } catch (error) {
       console.error("Error adding attestation:", error);
       res.status(500).json({ error: "Failed to add attestation" });
     }
   });
-  
+
   // Slash validator (admin only)
   app.post("/api/validators/:id/slash", isAuthenticated, async (req: any, res) => {
     try {
       const { id } = req.params;
       const { reason, evidence } = req.body;
-      
+
       if (!reason) {
         return res.status(400).json({ error: "reason is required" });
       }
-      
+
       const result = await blockchain.slashValidator(id, reason, evidence);
-      
+
       if (!result.success) {
         return res.status(400).json({ error: result.error });
       }
-      
-      res.json({ 
-        success: true, 
+
+      res.json({
+        success: true,
         slashAmount: result.slashAmount,
-        message: `Validator slashed for ${reason}` 
+        message: `Validator slashed for ${reason}`
       });
     } catch (error) {
       console.error("Error slashing validator:", error);
       res.status(500).json({ error: "Failed to slash validator" });
     }
   });
-  
+
   // Node sync endpoint (for external nodes to sync chain state)
   app.get("/api/sync/state", async (req, res) => {
     try {
       const fromBlock = parseInt(req.query.fromBlock as string) || 0;
       const toBlock = req.query.toBlock ? parseInt(req.query.toBlock as string) : undefined;
-      
+
       const state = await blockchain.getChainStateForSync(fromBlock, toBlock);
       res.json(state);
     } catch (error) {
@@ -5327,7 +5325,7 @@ const { trustLayerId } = await response.json();`
       res.status(500).json({ error: "Failed to fetch sync state" });
     }
   });
-  
+
   // External validator node registration
   app.post("/api/validator-node/register", async (req, res) => {
     try {
@@ -5612,14 +5610,14 @@ const { trustLayerId } = await response.json();`
     try {
       const { pin } = req.body;
       const clientIp = req.ip || req.socket.remoteAddress || "unknown";
-      
+
       const attempt = pinAttempts.get(clientIp);
       if (attempt && attempt.count >= MAX_ATTEMPTS) {
         const timeSinceLockout = Date.now() - attempt.lastAttempt;
         if (timeSinceLockout < LOCKOUT_DURATION) {
           const remainingSeconds = Math.ceil((LOCKOUT_DURATION - timeSinceLockout) / 1000);
-          return res.status(429).json({ 
-            error: `Too many attempts. Try again in ${remainingSeconds} seconds.` 
+          return res.status(429).json({
+            error: `Too many attempts. Try again in ${remainingSeconds} seconds.`
           });
         }
         pinAttempts.delete(clientIp);
@@ -5628,7 +5626,7 @@ const { trustLayerId } = await response.json();`
       if (!DEVELOPER_PIN) {
         return res.status(503).json({ error: "Developer portal not configured" });
       }
-      
+
       if (pin === DEVELOPER_PIN) {
         pinAttempts.delete(clientIp);
         const sessionToken = generateSessionToken();
@@ -5636,9 +5634,9 @@ const { trustLayerId } = await response.json();`
         res.json({ success: true, version: APP_VERSION, sessionToken });
       } else {
         const current = pinAttempts.get(clientIp) || { count: 0, lastAttempt: 0 };
-        pinAttempts.set(clientIp, { 
-          count: current.count + 1, 
-          lastAttempt: Date.now() 
+        pinAttempts.set(clientIp, {
+          count: current.count + 1,
+          lastAttempt: Date.now()
         });
         res.status(401).json({ error: "Invalid PIN" });
       }
@@ -5740,7 +5738,7 @@ const { trustLayerId } = await response.json();`
       const dataGas = dataSize * 16;
       const gasLimit = baseGas + dataGas;
       const gasPrice = 1000000;
-      
+
       const ONE_DWC = BigInt("1000000000000000000");
       const totalGas = BigInt(gasLimit) * BigInt(gasPrice);
       const costInDWC = Number(totalGas) / Number(ONE_DWC);
@@ -5779,19 +5777,19 @@ const { trustLayerId } = await response.json();`
     try {
       const sessionToken = req.headers["x-developer-session"] as string;
       const user = (req as any).user;
-      
+
       const hasDevSession = sessionToken && validateDeveloperSession(sessionToken);
       const hasUserSession = req.isAuthenticated?.() && user;
-      
+
       if (!hasDevSession && !hasUserSession) {
         return res.status(401).json({ error: "Please log in with your account or authenticate with developer PIN." });
       }
 
       const { name, email, appName } = req.body;
-      
+
       const registrantName = name || (hasUserSession ? `${user.firstName || ''} ${user.lastName || ''}`.trim() : null);
       const registrantEmail = email || (hasUserSession ? user.email : null);
-      
+
       if (!registrantName || !registrantEmail || !appName) {
         return res.status(400).json({ error: "Name, email, and app name are required" });
       }
@@ -5823,7 +5821,7 @@ const { trustLayerId } = await response.json();`
   app.post("/api/hash/submit", hashSubmitRateLimit, async (req, res) => {
     try {
       const apiKey = req.headers["x-api-key"] as string;
-      
+
       if (!apiKey) {
         return res.status(401).json({ error: "API key required" });
       }
@@ -5834,7 +5832,7 @@ const { trustLayerId } = await response.json();`
       }
 
       const { dataHash, category, appId, metadata } = req.body;
-      
+
       if (!dataHash) {
         return res.status(400).json({ error: "dataHash is required" });
       }
@@ -5873,7 +5871,7 @@ const { trustLayerId } = await response.json();`
   app.get("/api/hash/:txHash", async (req, res) => {
     try {
       const tx = await storage.getTransactionHashByTxHash(req.params.txHash);
-      
+
       if (!tx) {
         return res.status(404).json({ error: "Transaction not found" });
       }
@@ -5896,7 +5894,7 @@ const { trustLayerId } = await response.json();`
   app.get("/api/developer/transactions", async (req, res) => {
     try {
       const apiKey = req.headers["x-api-key"] as string;
-      
+
       if (!apiKey) {
         return res.status(401).json({ error: "API key required" });
       }
@@ -5907,7 +5905,7 @@ const { trustLayerId } = await response.json();`
       }
 
       const transactions = await storage.getTransactionHashesByApiKey(validKey.id);
-      
+
       res.json({
         transactions: transactions.map(tx => ({
           txHash: tx.txHash,
@@ -5927,7 +5925,7 @@ const { trustLayerId } = await response.json();`
   app.post("/api/stamp/dual", async (req, res) => {
     try {
       const apiKey = req.headers["x-api-key"] as string;
-      
+
       if (!apiKey) {
         return res.status(401).json({ error: "API key required" });
       }
@@ -5943,8 +5941,8 @@ const { trustLayerId } = await response.json();`
         return res.status(400).json({ error: "Data to hash is required" });
       }
 
-      const dataHash = typeof data === "string" && data.startsWith("0x") 
-        ? data 
+      const dataHash = typeof data === "string" && data.startsWith("0x")
+        ? data
         : generateDataHash(data);
 
       const requestedChains = chains || ["darkwave"];
@@ -5999,7 +5997,7 @@ const { trustLayerId } = await response.json();`
       if (requestedChains.includes("solana")) {
         if (isHeliusConfigured()) {
           const solResult = await submitMemoToSolana(dataHash, stamp.id, metadata);
-          
+
           result.solana = {
             success: solResult.success,
             txSignature: solResult.txSignature,
@@ -6087,7 +6085,7 @@ const { trustLayerId } = await response.json();`
   app.patch("/api/stamp/:stampId/solana", async (req, res) => {
     try {
       const apiKey = req.headers["x-api-key"] as string;
-      
+
       if (!apiKey) {
         return res.status(401).json({ error: "API key required" });
       }
@@ -6154,10 +6152,10 @@ const { trustLayerId } = await response.json();`
     try {
       const walletAddress = `0x${crypto.randomBytes(20).toString("hex")}`;
       const privateKey = crypto.randomBytes(32).toString("hex");
-      
+
       // Fund the test wallet with 1000 test SIG
       blockchain.creditAccount(walletAddress, BigInt("1000000000000000000000")); // 1000 SIG
-      
+
       res.json({
         success: true,
         wallet: {
@@ -6179,11 +6177,11 @@ const { trustLayerId } = await response.json();`
   app.post("/api/devnet/faucet", async (req, res) => {
     try {
       const { address, amount } = req.body;
-      
+
       if (!address) {
         return res.status(400).json({ error: "Wallet address required" });
       }
-      
+
       // Validate and limit faucet to 100 SIG per request (must be positive)
       const parsedAmount = parseFloat(amount || "100");
       if (isNaN(parsedAmount) || parsedAmount <= 0) {
@@ -6191,10 +6189,10 @@ const { trustLayerId } = await response.json();`
       }
       const requestedAmount = Math.min(parsedAmount, 100);
       const amountWei = BigInt(Math.floor(requestedAmount * 1e18));
-      
+
       blockchain.creditAccount(address, amountWei);
       const account = blockchain.getAccount(address);
-      
+
       res.json({
         success: true,
         faucet: {
@@ -6217,7 +6215,7 @@ const { trustLayerId } = await response.json();`
     try {
       const { address } = req.params;
       const account = blockchain.getAccount(address);
-      
+
       res.json({
         address,
         balance: account ? (Number(account.balance) / 1e18).toFixed(4) : "0",
@@ -6235,29 +6233,29 @@ const { trustLayerId } = await response.json();`
   app.post("/api/devnet/transaction", async (req, res) => {
     try {
       const { from, to, amount, data } = req.body;
-      
+
       if (!from || !to) {
         return res.status(400).json({ error: "From and to addresses required" });
       }
-      
+
       const parsedAmount = parseFloat(amount || "0");
       if (isNaN(parsedAmount) || parsedAmount < 0) {
         return res.status(400).json({ error: "Amount must be a non-negative number" });
       }
       const amountWei = BigInt(Math.floor(parsedAmount * 1e18));
-      
+
       // Simulate the transfer
       const fromAccount = blockchain.getAccount(from);
       if (!fromAccount || fromAccount.balance < amountWei) {
         return res.status(400).json({ error: "Insufficient balance" });
       }
-      
+
       blockchain.debitAccount(from, amountWei);
       blockchain.creditAccount(to, amountWei);
-      
+
       const txHash = `0x${crypto.randomBytes(32).toString("hex")}`;
       const blockHeight = blockchain.getStats().currentBlock;
-      
+
       res.json({
         success: true,
         transaction: {
@@ -6306,7 +6304,7 @@ const { trustLayerId } = await response.json();`
   app.post("/api/hallmark/generate", async (req, res) => {
     try {
       const apiKey = req.headers["x-api-key"] as string;
-      
+
       if (!apiKey) {
         return res.status(401).json({ error: "API key required" });
       }
@@ -6397,7 +6395,7 @@ const { trustLayerId } = await response.json();`
           status: hallmark.status,
         },
         verified,
-        message: verified 
+        message: verified
           ? `Verified on Trust Layer (Block ${hallmark.darkwaveBlockHeight})`
           : "Hallmark registered, pending chain confirmation",
         createdAt: hallmark.createdAt,
@@ -6426,7 +6424,7 @@ const { trustLayerId } = await response.json();`
   app.get("/api/hallmarks", async (req, res) => {
     try {
       const { appId, limit } = req.query;
-      
+
       let hallmarks;
       if (appId) {
         hallmarks = await storage.getHallmarksByApp(appId as string);
@@ -6882,7 +6880,7 @@ const { trustLayerId } = await response.json();`
   // === END TRUST HUB PUBLIC API ===
 
   // === CROSS-CHAIN BRIDGE ROUTES (Phase 1 - Beta) ===
-  
+
   app.get("/api/bridge/info", async (req, res) => {
     try {
       const stats = bridge.getBridgeStats();
@@ -6910,7 +6908,7 @@ const { trustLayerId } = await response.json();`
   app.get("/api/bridge/chains/status", async (req, res) => {
     try {
       const statuses = await bridge.getChainStatuses();
-      res.json({ 
+      res.json({
         statuses,
         timestamp: new Date().toISOString(),
       });
@@ -6923,7 +6921,7 @@ const { trustLayerId } = await response.json();`
   app.post("/api/bridge/verify-tx", bridgeRateLimit, async (req, res) => {
     try {
       const { chain, txHash, amount } = req.body;
-      
+
       if (!chain || !txHash) {
         return res.status(400).json({ error: "Missing chain or txHash" });
       }
@@ -6943,7 +6941,7 @@ const { trustLayerId } = await response.json();`
   app.post("/api/bridge/lock", bridgeRateLimit, async (req, res) => {
     try {
       const { fromAddress, amount, targetChain, targetAddress } = req.body;
-      
+
       if (!fromAddress || !amount || !targetChain || !targetAddress) {
         return res.status(400).json({ error: "Missing required fields" });
       }
@@ -6973,7 +6971,7 @@ const { trustLayerId } = await response.json();`
   app.post("/api/bridge/burn", bridgeRateLimit, async (req, res) => {
     try {
       const { sourceChain, sourceAddress, amount, targetAddress, sourceTxHash } = req.body;
-      
+
       if (!sourceChain || !sourceAddress || !amount || !targetAddress || !sourceTxHash) {
         return res.status(400).json({ error: "Missing required fields" });
       }
@@ -7004,7 +7002,7 @@ const { trustLayerId } = await response.json();`
     try {
       const { lockId } = req.params;
       const status = await bridge.getLockStatus(lockId);
-      
+
       if (!status) {
         return res.status(404).json({ error: "Lock not found" });
       }
@@ -7019,7 +7017,7 @@ const { trustLayerId } = await response.json();`
     try {
       const { burnId } = req.params;
       const status = await bridge.getBurnStatus(burnId);
-      
+
       if (!status) {
         return res.status(404).json({ error: "Burn not found" });
       }
@@ -7041,7 +7039,7 @@ const { trustLayerId } = await response.json();`
   });
 
   // === STAKING ROUTES ===
-  
+
   app.get("/api/staking/stats", async (req, res) => {
     try {
       const stats = await stakingEngine.getStakingStats();
@@ -7083,16 +7081,16 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "User not authenticated" });
       }
-      
+
       const stakes = await stakingEngine.getUserStakes(userId);
-      
+
       const stakesWithRewards = await Promise.all(
         stakes.map(async (stake) => ({
           ...stake,
           pendingRewards: await stakingEngine.calculatePendingRewards(stake),
         }))
       );
-      
+
       res.json({ stakes: stakesWithRewards });
     } catch (error) {
       console.error("Error fetching user stakes:", error);
@@ -7104,24 +7102,24 @@ const { trustLayerId } = await response.json();`
     try {
       const userId = (req.user as any)?.claims?.sub;
       const { poolId, amount } = req.body;
-      
+
       if (!userId) {
         return res.status(401).json({ error: "User not authenticated" });
       }
-      
+
       if (!poolId || !amount) {
         return res.status(400).json({ error: "Missing required fields: poolId, amount" });
       }
-      
+
       if (typeof poolId !== 'string' || poolId.length < 10 || poolId.length > 50) {
         return res.status(400).json({ error: "Invalid pool ID format" });
       }
-      
+
       const amountNum = parseFloat(amount);
       if (isNaN(amountNum) || amountNum <= 0 || amountNum > 1000000000) {
         return res.status(400).json({ error: "Amount must be a positive number up to 1 billion" });
       }
-      
+
       const stake = await stakingEngine.stake(userId, poolId, amount);
       res.json({ success: true, stake });
     } catch (error: any) {
@@ -7134,26 +7132,26 @@ const { trustLayerId } = await response.json();`
     try {
       const userId = (req.user as any)?.claims?.sub;
       const { stakeId, amount } = req.body;
-      
+
       if (!userId) {
         return res.status(401).json({ error: "User not authenticated" });
       }
-      
+
       if (!stakeId) {
         return res.status(400).json({ error: "Missing required field: stakeId" });
       }
-      
+
       if (typeof stakeId !== 'string' || stakeId.length < 10 || stakeId.length > 50) {
         return res.status(400).json({ error: "Invalid stake ID format" });
       }
-      
+
       if (amount !== undefined) {
         const amountNum = parseFloat(amount);
         if (isNaN(amountNum) || amountNum <= 0 || amountNum > 1000000000) {
           return res.status(400).json({ error: "Amount must be a positive number up to 1 billion" });
         }
       }
-      
+
       const stake = await stakingEngine.unstake(userId, stakeId, amount);
       res.json({ success: true, stake });
     } catch (error: any) {
@@ -7166,19 +7164,19 @@ const { trustLayerId } = await response.json();`
     try {
       const userId = (req.user as any)?.claims?.sub;
       const { stakeId } = req.body;
-      
+
       if (!userId) {
         return res.status(401).json({ error: "User not authenticated" });
       }
-      
+
       if (!stakeId) {
         return res.status(400).json({ error: "Missing required field: stakeId" });
       }
-      
+
       if (typeof stakeId !== 'string' || stakeId.length < 10 || stakeId.length > 50) {
         return res.status(400).json({ error: "Invalid stake ID format" });
       }
-      
+
       const reward = await stakingEngine.claimRewards(userId, stakeId);
       res.json({ success: true, reward });
     } catch (error: any) {
@@ -7203,7 +7201,7 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "User not authenticated" });
       }
-      
+
       const progress = await stakingEngine.getUserQuestProgress(userId);
       res.json({ progress });
     } catch (error) {
@@ -7229,7 +7227,7 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "User not authenticated" });
       }
-      
+
       const position = await stakingEngine.getUserLeaderboardPosition(userId);
       res.json({ position });
     } catch (error) {
@@ -7241,7 +7239,7 @@ const { trustLayerId } = await response.json();`
   // ============================================
   // LIQUID STAKING (stSIG)
   // ============================================
-  
+
   app.get("/api/liquid-staking/state", async (req, res) => {
     try {
       const state = await storage.getLiquidStakingState();
@@ -7249,7 +7247,7 @@ const { trustLayerId } = await response.json();`
       const totalSupply = BigInt(state?.totalStDwtSupply || "0");
       const exchangeRate = state?.exchangeRate || "1000000000000000000";
       const apy = state?.targetApy || "12";
-      
+
       res.json({
         totalDwtStaked: state?.totalDwtStaked || "0",
         totalStDwtSupply: state?.totalStDwtSupply || "0",
@@ -7267,13 +7265,13 @@ const { trustLayerId } = await response.json();`
     try {
       const userId = req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Not authenticated" });
-      
+
       const position = await storage.getLiquidStakingPosition(userId);
       const state = await storage.getLiquidStakingState();
       const exchangeRate = BigInt(state?.exchangeRate || "1000000000000000000");
       const stDwtBalance = BigInt(position?.stDwtBalance || "0");
       const withdrawableDwt = (stDwtBalance * exchangeRate) / BigInt("1000000000000000000");
-      
+
       res.json({
         stakedDwt: position?.stakedDwt || "0",
         stDwtBalance: position?.stDwtBalance || "0",
@@ -7290,24 +7288,24 @@ const { trustLayerId } = await response.json();`
     try {
       const userId = req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Not authenticated" });
-      
+
       const { amount } = req.body;
       if (!amount || BigInt(amount) <= 0) {
         return res.status(400).json({ error: "Invalid amount" });
       }
-      
+
       const dwtAmount = BigInt(amount);
       const state = await storage.getLiquidStakingState();
       const exchangeRate = BigInt(state?.exchangeRate || "1000000000000000000");
       const stDwtToMint = (dwtAmount * BigInt("1000000000000000000")) / exchangeRate;
-      
+
       const newTotalStaked = (BigInt(state?.totalDwtStaked || "0") + dwtAmount).toString();
       const newTotalSupply = (BigInt(state?.totalStDwtSupply || "0") + stDwtToMint).toString();
       await storage.updateLiquidStakingState({
         totalDwtStaked: newTotalStaked,
         totalStDwtSupply: newTotalSupply,
       });
-      
+
       const position = await storage.getLiquidStakingPosition(userId);
       const newStakedDwt = (BigInt(position?.stakedDwt || "0") + dwtAmount).toString();
       const newStDwtBalance = (BigInt(position?.stDwtBalance || "0") + stDwtToMint).toString();
@@ -7315,7 +7313,7 @@ const { trustLayerId } = await response.json();`
         stakedDwt: newStakedDwt,
         stDwtBalance: newStDwtBalance,
       });
-      
+
       const txHash = `0x${crypto.randomBytes(32).toString("hex")}`;
       await storage.recordLiquidStakingEvent({
         userId,
@@ -7325,7 +7323,7 @@ const { trustLayerId } = await response.json();`
         exchangeRate: exchangeRate.toString(),
         txHash,
       });
-      
+
       res.json({
         success: true,
         stDwtMinted: stDwtToMint.toString(),
@@ -7341,36 +7339,36 @@ const { trustLayerId } = await response.json();`
     try {
       const userId = req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Not authenticated" });
-      
+
       const { stDwtAmount } = req.body;
       if (!stDwtAmount || BigInt(stDwtAmount) <= 0) {
         return res.status(400).json({ error: "Invalid amount" });
       }
-      
+
       const stDwtToBurn = BigInt(stDwtAmount);
       const position = await storage.getLiquidStakingPosition(userId);
       if (!position || BigInt(position.stDwtBalance) < stDwtToBurn) {
         return res.status(400).json({ error: "Insufficient stSIG balance" });
       }
-      
+
       const state = await storage.getLiquidStakingState();
       const exchangeRate = BigInt(state?.exchangeRate || "1000000000000000000");
       const dwtToReturn = (stDwtToBurn * exchangeRate) / BigInt("1000000000000000000");
-      
+
       const newTotalStaked = (BigInt(state?.totalDwtStaked || "0") - dwtToReturn).toString();
       const newTotalSupply = (BigInt(state?.totalStDwtSupply || "0") - stDwtToBurn).toString();
       await storage.updateLiquidStakingState({
         totalDwtStaked: newTotalStaked,
         totalStDwtSupply: newTotalSupply,
       });
-      
+
       const newStakedDwt = (BigInt(position.stakedDwt) - dwtToReturn).toString();
       const newStDwtBalance = (BigInt(position.stDwtBalance) - stDwtToBurn).toString();
       await storage.upsertLiquidStakingPosition(userId, {
         stakedDwt: newStakedDwt,
         stDwtBalance: newStDwtBalance,
       });
-      
+
       const txHash = `0x${crypto.randomBytes(32).toString("hex")}`;
       await storage.recordLiquidStakingEvent({
         userId,
@@ -7380,7 +7378,7 @@ const { trustLayerId } = await response.json();`
         exchangeRate: exchangeRate.toString(),
         txHash,
       });
-      
+
       res.json({
         success: true,
         dwtReturned: dwtToReturn.toString(),
@@ -7396,7 +7394,7 @@ const { trustLayerId } = await response.json();`
     try {
       const userId = req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Not authenticated" });
-      
+
       const events = await storage.getLiquidStakingEvents(userId);
       res.json({ events });
     } catch (error) {
@@ -7418,9 +7416,9 @@ const { trustLayerId } = await response.json();`
         ...req.body,
         userId,
       });
-      
+
       if (!parseResult.success) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: "Invalid submission data",
           details: parseResult.error.flatten()
         });
@@ -7443,7 +7441,7 @@ const { trustLayerId } = await response.json();`
           const performanceScore = 75 + Math.floor(Math.random() * 20);
           const uxScore = 65 + Math.floor(Math.random() * 30);
           const codeQualityScore = 70 + Math.floor(Math.random() * 25);
-          
+
           const overallScore = Math.round(
             securityScore * 0.30 +
             fairnessScore * 0.25 +
@@ -7453,15 +7451,15 @@ const { trustLayerId } = await response.json();`
           );
 
           const status = overallScore >= 70 ? "approved" : "rejected";
-          
+
           const aiReview = JSON.stringify({
-            summary: overallScore >= 70 
+            summary: overallScore >= 70
               ? `${gameName} passed our AI security and fairness review with a score of ${overallScore}/100.`
               : `${gameName} did not meet our minimum requirements. Please address the issues and resubmit.`,
             breakdown: {
               security: {
                 score: securityScore,
-                notes: securityScore >= 80 
+                notes: securityScore >= 80
                   ? "No critical vulnerabilities detected. Smart contract access controls are properly implemented."
                   : "Some input validation improvements recommended. Consider adding additional access controls."
               },
@@ -7508,14 +7506,14 @@ const { trustLayerId } = await response.json();`
               reviewedAt: new Date(),
             })
             .where(eq(gameSubmissions.id, submission.id));
-            
+
         } catch (error) {
           console.error("AI review error:", error);
         }
       }, 5000);
 
-      res.json({ 
-        success: true, 
+      res.json({
+        success: true,
         submission,
         message: "Your game has been submitted for AI review. You will be notified within 48 hours."
       });
@@ -7574,7 +7572,7 @@ const { trustLayerId } = await response.json();`
         .from(gameSubmissions)
         .orderBy(sql`${gameSubmissions.createdAt} DESC`)
         .limit(10);
-      
+
       res.json({ submissions });
     } catch (error) {
       console.error("Error fetching recent submissions:", error);
@@ -7601,16 +7599,16 @@ const { trustLayerId } = await response.json();`
   app.post("/api/arcade/score", async (req, res) => {
     try {
       const { game, userId, username, score, level, metadata } = req.body;
-      
+
       if (!game || !userId || score === undefined) {
         return res.status(400).json({ error: "Missing required fields: game, userId, score" });
       }
-      
+
       const validGames = ["pacman", "galaga", "snake", "tetris", "minesweeper", "solitaire", "spades"];
       if (!validGames.includes(game)) {
         return res.status(400).json({ error: "Invalid game type" });
       }
-      
+
       const entry = await storage.submitArcadeScore({
         game,
         userId,
@@ -7619,7 +7617,7 @@ const { trustLayerId } = await response.json();`
         level: level ? parseInt(level) : undefined,
         metadata: metadata ? JSON.stringify(metadata) : undefined,
       });
-      
+
       res.json({ success: true, entry });
     } catch (error) {
       console.error("Error submitting arcade score:", error);
@@ -7645,11 +7643,11 @@ const { trustLayerId } = await response.json();`
   app.post("/api/support/tickets", isAuthenticated, async (req, res) => {
     try {
       const { category, subject, message, priority } = req.body;
-      
+
       if (!subject || !message) {
         return res.status(400).json({ error: "Subject and message are required" });
       }
-      
+
       const user = req.user as any;
       const ticket = await storage.createSupportTicket({
         userId: user?.id || user?.claims?.sub || "",
@@ -7660,7 +7658,7 @@ const { trustLayerId } = await response.json();`
         message,
         priority: priority || "normal",
       });
-      
+
       res.status(201).json({ success: true, ticket });
     } catch (error) {
       console.error("Error creating support ticket:", error);
@@ -7685,7 +7683,7 @@ const { trustLayerId } = await response.json();`
     if (!ownerSecret || !providedSecret || providedSecret !== ownerSecret) {
       return res.status(403).json({ error: "Unauthorized" });
     }
-    
+
     try {
       const status = req.query.status as string | undefined;
       const tickets = await storage.getSupportTickets(status);
@@ -7702,7 +7700,7 @@ const { trustLayerId } = await response.json();`
     if (!ownerSecret || !providedSecret || providedSecret !== ownerSecret) {
       return res.status(403).json({ error: "Unauthorized" });
     }
-    
+
     try {
       const { status, adminNotes } = req.body;
       const ticket = await storage.updateSupportTicketStatus(req.params.id, status, adminNotes);
@@ -7724,9 +7722,9 @@ const { trustLayerId } = await response.json();`
     try {
       const parseResult = insertInfluencerApplicationSchema.safeParse(req.body);
       if (!parseResult.success) {
-        return res.status(400).json({ 
-          error: "Invalid application data", 
-          details: parseResult.error.flatten() 
+        return res.status(400).json({
+          error: "Invalid application data",
+          details: parseResult.error.flatten()
         });
       }
 
@@ -7802,9 +7800,9 @@ const { trustLayerId } = await response.json();`
       }
 
       console.log("[Partnership] New influencer application:", { id: application?.id, name, email, platform, handle, followers });
-      
-      res.json({ 
-        success: true, 
+
+      res.json({
+        success: true,
         message: "Application submitted successfully. We'll be in touch within 48-72 hours.",
         applicationId: application?.id
       });
@@ -7817,11 +7815,11 @@ const { trustLayerId } = await response.json();`
   // Whitepaper PDF Download - serves the comprehensive Signal Whitepaper
   app.get("/api/whitepaper/pdf", async (req, res) => {
     const pdfPath = path.join(process.cwd(), 'public', 'assets', 'SIG-Token-Whitepaper.pdf');
-    
+
     if (!fs.existsSync(pdfPath)) {
       return res.status(404).json({ error: "Whitepaper PDF not found" });
     }
-    
+
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'inline; filename="SIG-Token-Whitepaper.pdf"');
     fs.createReadStream(pdfPath).pipe(res);
@@ -7832,21 +7830,21 @@ const { trustLayerId } = await response.json();`
     try {
       const parseResult = insertWaitlistSchema.safeParse(req.body);
       if (!parseResult.success) {
-        return res.status(400).json({ 
-          error: "Invalid email address", 
-          details: parseResult.error.flatten() 
+        return res.status(400).json({
+          error: "Invalid email address",
+          details: parseResult.error.flatten()
         });
       }
 
       const { email, feature } = parseResult.data;
-      
+
       // Check if already on waitlist
       const existing = await storage.getWaitlistByEmail(email);
       if (existing) {
-        return res.json({ 
-          success: true, 
-          message: "You're already on the waitlist!", 
-          alreadyRegistered: true 
+        return res.json({
+          success: true,
+          message: "You're already on the waitlist!",
+          alreadyRegistered: true
         });
       }
 
@@ -7872,17 +7870,17 @@ const { trustLayerId } = await response.json();`
         // Continue even if email fails
       }
 
-      res.json({ 
-        success: true, 
-        message: "You've been added to the waitlist!" 
+      res.json({
+        success: true,
+        message: "You've been added to the waitlist!"
       });
     } catch (error: any) {
       console.error("Waitlist signup error:", error);
       if (error.code === '23505') { // Unique violation
-        return res.json({ 
-          success: true, 
-          message: "You're already on the waitlist!", 
-          alreadyRegistered: true 
+        return res.json({
+          success: true,
+          message: "You're already on the waitlist!",
+          alreadyRegistered: true
         });
       }
       res.status(500).json({ error: "Failed to add to waitlist" });
@@ -7916,7 +7914,7 @@ const { trustLayerId } = await response.json();`
   app.get("/api/crowdfund/stats", async (_req, res) => {
     try {
       const crowdfundStats = await storage.getCrowdfundStats();
-      
+
       const presaleResult = await db.execute(sql`
         SELECT 
           COALESCE(SUM(usd_amount_cents), 0) as presale_raised,
@@ -7926,7 +7924,7 @@ const { trustLayerId } = await response.json();`
       `);
       const presaleRaised = parseInt(presaleResult.rows[0]?.presale_raised as string || "0");
       const presaleContributors = parseInt(presaleResult.rows[0]?.presale_contributors as string || "0");
-      
+
       res.json({
         ...crowdfundStats,
         totalRaised: (crowdfundStats.totalRaised || 0) + presaleRaised,
@@ -7953,7 +7951,7 @@ const { trustLayerId } = await response.json();`
   app.post("/api/crowdfund/checkout", async (req, res) => {
     try {
       const { amountCents, featureId, displayName, isAnonymous, message } = req.body;
-      
+
       if (!amountCents || amountCents < 100) {
         return res.status(400).json({ error: "Minimum donation is $1.00" });
       }
@@ -7964,7 +7962,7 @@ const { trustLayerId } = await response.json();`
       }
 
       const user = req.user as any;
-      
+
       const contribution = await storage.createCrowdfundContribution({
         campaignId: campaign.id,
         featureId: featureId || null,
@@ -8018,7 +8016,7 @@ const { trustLayerId } = await response.json();`
   app.post("/api/crowdfund/confirm/:contributionId", isAuthenticated, async (req: any, res) => {
     try {
       const { contributionId } = req.params;
-      
+
       const contribution = await storage.updateCrowdfundContribution(contributionId, {
         status: "confirmed",
       });
@@ -8038,7 +8036,7 @@ const { trustLayerId } = await response.json();`
   app.post("/api/crowdfund/crypto-checkout", async (req, res) => {
     try {
       const { amountCents, featureId, displayName, isAnonymous, message } = req.body;
-      
+
       if (!amountCents || amountCents < 100) {
         return res.status(400).json({ error: "Minimum donation is $1.00" });
       }
@@ -8049,7 +8047,7 @@ const { trustLayerId } = await response.json();`
       }
 
       const user = req.user as any;
-      
+
       const contribution = await storage.createCrowdfundContribution({
         campaignId: campaign.id,
         featureId: featureId || null,
@@ -8096,17 +8094,17 @@ const { trustLayerId } = await response.json();`
   app.post("/api/crowdfund/confirm-crypto/:contributionId", async (req, res) => {
     try {
       const { contributionId } = req.params;
-      
+
       const contribution = await storage.getCrowdfundContribution(contributionId);
       if (!contribution) {
         return res.status(404).json({ error: "Contribution not found" });
       }
-      
+
       // Already confirmed
       if (contribution.status === "confirmed") {
         return res.json({ success: true, contribution });
       }
-      
+
       // Check if it's a Coinbase payment
       const paymentId = contribution.stripePaymentIntentId;
       if (!paymentId?.startsWith("coinbase_")) {
@@ -8114,16 +8112,16 @@ const { trustLayerId } = await response.json();`
         const updated = await storage.updateCrowdfundContribution(contributionId, { status: "confirmed" });
         return res.json({ success: true, contribution: updated });
       }
-      
+
       const chargeId = paymentId.replace("coinbase_", "");
       const { getCoinbaseCharge } = await import("./coinbaseClient");
       const charge = await getCoinbaseCharge(chargeId);
-      
+
       if (charge.status === "COMPLETED" || charge.status === "CONFIRMED") {
         const updated = await storage.updateCrowdfundContribution(contributionId, { status: "confirmed" });
         return res.json({ success: true, contribution: updated });
       }
-      
+
       res.json({ success: false, status: charge.status });
     } catch (error) {
       console.error("Confirm crypto contribution error:", error);
@@ -8157,7 +8155,7 @@ const { trustLayerId } = await response.json();`
     try {
       const data = GuardianCheckoutSchema.parse(req.body);
       const tierInfo = GUARDIAN_TIERS[data.tier];
-      
+
       if (!tierInfo) {
         return res.status(400).json({ error: "Invalid tier" });
       }
@@ -8263,7 +8261,7 @@ const { trustLayerId } = await response.json();`
         project: data.projectName,
         tier: mappedTier,
         email: data.contactEmail,
-      }).catch(() => {});
+      }).catch(() => { });
 
       console.log(`[Guardian Intake] Created certification ${certification.id} for ${data.projectName} (${mappedTier})`);
 
@@ -8501,10 +8499,10 @@ const { trustLayerId } = await response.json();`
         blockNumber: z.number()
       });
       const { stampIds, transactionHash, blockNumber } = schema.parse(req.body);
-      
+
       const hashes = stampIds.map(id => guardianHash({ id, confirmed: true }));
       const merkleRoot = generateMerkleRoot(hashes);
-      
+
       const confirmed = await guardianService.batchConfirmStamps(stampIds, merkleRoot, transactionHash, blockNumber);
       res.json({ confirmed, merkleRoot });
     } catch (error) {
@@ -8612,15 +8610,15 @@ const { trustLayerId } = await response.json();`
         chainDeployed: z.string().optional(),
         certificationTier: z.string().default("basic"),
       });
-      
+
       const data = schema.parse(req.body);
-      
+
       const certification = await storage.createAiAgentCertification({
         ...data,
         riskFactors: [],
         capabilities: [],
       });
-      
+
       res.json({ success: true, id: certification.id });
     } catch (error: any) {
       console.error("Error submitting AI agent:", error);
@@ -8722,20 +8720,20 @@ const { trustLayerId } = await response.json();`
         chain: z.string().default('solana')
       });
       const { tokenAddress, chain } = schema.parse(req.body);
-      
+
       const { safetyEngineService } = await import('./services/pulse/safetyEngineService');
       const safetyReport = await safetyEngineService.runFullSafetyCheck(tokenAddress);
-      
-      res.json({ 
-        success: true, 
+
+      res.json({
+        success: true,
         report: safetyReport,
         timestamp: new Date().toISOString()
       });
     } catch (error: any) {
       console.error("Error running safety check:", error);
-      res.status(500).json({ 
-        success: false, 
-        error: error.message || "Failed to run safety check" 
+      res.status(500).json({
+        success: false,
+        error: error.message || "Failed to run safety check"
       });
     }
   });
@@ -8744,10 +8742,10 @@ const { trustLayerId } = await response.json();`
   app.get("/api/pulse/safety-score/:tokenAddress", pulseSafetyRateLimit, isAuthenticated, async (req: any, res) => {
     try {
       const { tokenAddress } = req.params;
-      
+
       const { safetyEngineService } = await import('./services/pulse/safetyEngineService');
       const report = await safetyEngineService.runFullSafetyCheck(tokenAddress);
-      
+
       res.json({
         tokenAddress,
         score: report?.safetyScore || 0,
@@ -8767,7 +8765,7 @@ const { trustLayerId } = await response.json();`
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 10, 50);
       const recommendation = req.query.recommendation as string;
-      
+
       let query = db.select().from(strikeAgentPredictions);
       if (recommendation && ['snipe', 'watch', 'avoid'].includes(recommendation)) {
         query = query.where(eq(strikeAgentPredictions.aiRecommendation, recommendation)) as typeof query;
@@ -8775,7 +8773,7 @@ const { trustLayerId } = await response.json();`
       const predictions = await query
         .orderBy(desc(strikeAgentPredictions.createdAt))
         .limit(limit);
-      
+
       res.json({
         success: true,
         recommendations: predictions,
@@ -8829,13 +8827,13 @@ const { trustLayerId } = await response.json();`
       const stats = await db.select().from(predictionAccuracyStats)
         .orderBy(desc(predictionAccuracyStats.totalPredictions))
         .limit(20);
-      
+
       res.json({
         success: true,
         stats: stats,
         summary: {
           totalStats: stats.length,
-          avgWinRate: stats.length > 0 
+          avgWinRate: stats.length > 0
             ? Math.round(stats.reduce((a, b) => a + parseFloat(b.winRate || '0'), 0) / stats.length)
             : 0
         }
@@ -8851,7 +8849,7 @@ const { trustLayerId } = await response.json();`
     try {
       const limit = Math.min(parseInt(req.query.limit as string) || 20, 100);
       const ticker = req.query.ticker as string;
-      
+
       let query = db.select().from(predictionEvents);
       if (ticker) {
         query = query.where(eq(predictionEvents.ticker, ticker.toUpperCase())) as typeof query;
@@ -8859,7 +8857,7 @@ const { trustLayerId } = await response.json();`
       const predictions = await query
         .orderBy(desc(predictionEvents.createdAt))
         .limit(limit);
-      
+
       res.json({
         success: true,
         predictions: predictions,
@@ -8926,14 +8924,14 @@ const { trustLayerId } = await response.json();`
     try {
       const { id } = req.params;
       const userId = req.user?.id || req.user?.claims?.sub;
-      
+
       const [existing] = await db.select().from(limitOrders).where(eq(limitOrders.id, id));
       if (!existing || existing.userId !== userId) {
         return res.status(404).json({ error: "Order not found" });
       }
 
       const { entryPrice, exitPrice, stopLoss, status, isActive, buyAmountSol } = req.body;
-      
+
       const [updated] = await db.update(limitOrders)
         .set({
           ...(entryPrice !== undefined && { entryPrice }),
@@ -8959,7 +8957,7 @@ const { trustLayerId } = await response.json();`
     try {
       const { id } = req.params;
       const userId = req.user?.id || req.user?.claims?.sub;
-      
+
       const [existing] = await db.select().from(limitOrders).where(eq(limitOrders.id, id));
       if (!existing || existing.userId !== userId) {
         return res.status(404).json({ error: "Order not found" });
@@ -8977,7 +8975,7 @@ const { trustLayerId } = await response.json();`
   app.post("/api/sniper/analyze-token", isAuthenticated, async (req: any, res) => {
     try {
       const { tokenAddress, chain = 'solana' } = req.body;
-      
+
       if (!tokenAddress) {
         return res.status(400).json({ error: "Token address required" });
       }
@@ -8986,11 +8984,11 @@ const { trustLayerId } = await response.json();`
       try {
         const { safetyEngineService } = await import('./services/pulse/safetyEngineService');
         const report = await safetyEngineService.runFullSafetyCheck(tokenAddress);
-        
+
         if (report) {
-          const recommendation = report.safetyScore >= 70 ? 'safe' : 
-                                 report.safetyScore >= 40 ? 'caution' : 'danger';
-          
+          const recommendation = report.safetyScore >= 70 ? 'safe' :
+            report.safetyScore >= 40 ? 'caution' : 'danger';
+
           return res.json({
             tokenAddress,
             tokenSymbol: report.tokenSymbol || 'UNKNOWN',
@@ -9018,7 +9016,7 @@ const { trustLayerId } = await response.json();`
       // Mock response for development
       const mockScore = Math.floor(Math.random() * 40) + 40;
       const recommendation = mockScore >= 70 ? 'safe' : mockScore >= 40 ? 'caution' : 'danger';
-      
+
       res.json({
         tokenAddress,
         tokenSymbol: 'TOKEN',
@@ -9048,11 +9046,11 @@ const { trustLayerId } = await response.json();`
   app.get("/api/strike-agent/top-signals", isAuthenticated, async (req: any, res) => {
     try {
       const chain = req.query.chain as string || 'all';
-      
+
       // Get recent high-scoring recommendations from Strike Agent
       let query = db.select().from(strikeAgentPredictions)
         .where(eq(strikeAgentPredictions.aiRecommendation, 'snipe'));
-      
+
       const predictions = await query
         .orderBy(desc(strikeAgentPredictions.aiScore))
         .limit(10);
@@ -9124,10 +9122,10 @@ const { trustLayerId } = await response.json();`
         avatarUrl: z.string().url().optional()
       });
       const data = schema.parse(req.body);
-      
+
       const existing = await db.select().from(chronoPassIdentities)
         .where(eq(chronoPassIdentities.userId, userId)).limit(1);
-      
+
       if (existing.length) {
         const updated = await db.update(chronoPassIdentities)
           .set({ ...data, updatedAt: new Date() })
@@ -9135,7 +9133,7 @@ const { trustLayerId } = await response.json();`
           .returning();
         return res.json({ identity: updated[0], updated: true });
       }
-      
+
       const created = await db.insert(chronoPassIdentities)
         .values({ userId, ...data })
         .returning();
@@ -9218,7 +9216,7 @@ const { trustLayerId } = await response.json();`
     try {
       const shards = await db.select().from(experienceShards);
       const totalTps = shards.reduce((a, s) => a + s.currentTps, 0);
-      const avgLatency = shards.length > 0 
+      const avgLatency = shards.length > 0
         ? Math.round(shards.reduce((a, s) => a + s.currentLatencyMs, 0) / shards.length)
         : 0;
       const avgLoad = shards.length > 0
@@ -9251,7 +9249,7 @@ const { trustLayerId } = await response.json();`
       const questType = req.query.type as string;
       let query = db.select().from(questDefinitions)
         .where(eq(questDefinitions.isActive, true));
-      
+
       const quests = await query.orderBy(questDefinitions.difficultyLevel);
       const filtered = quests.filter(q => {
         if (category && q.category !== category) return false;
@@ -9286,25 +9284,25 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       // Get quest definition
       const [quest] = await db.select().from(questDefinitions)
         .where(eq(questDefinitions.id, req.params.questId));
-      
+
       if (!quest) {
         return res.status(404).json({ error: "Quest not found" });
       }
-      
+
       const existing = await db.select().from(questProgress)
         .where(and(
           eq(questProgress.questId, req.params.questId),
           eq(questProgress.userId, userId)
         )).limit(1);
-      
+
       if (existing.length) {
         return res.json({ progress: existing[0], alreadyStarted: true });
       }
-      
+
       // Parse requirements to get target count
       let targetCount = 1;
       try {
@@ -9313,11 +9311,11 @@ const { trustLayerId } = await response.json();`
       } catch (e) {
         // Default to 1 if requirements is not valid JSON
       }
-      
+
       const created = await db.insert(questProgress)
-        .values({ 
-          questId: req.params.questId, 
-          userId, 
+        .values({
+          questId: req.params.questId,
+          userId,
           status: 'in_progress',
           progressPercent: 0,
           progressData: JSON.stringify({ current: 0, target: targetCount })
@@ -9337,34 +9335,34 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const { questId } = req.params;
-      
+
       // Get quest definition
       const [quest] = await db.select().from(questDefinitions)
         .where(eq(questDefinitions.id, questId));
-      
+
       if (!quest) {
         return res.status(404).json({ error: "Quest not found" });
       }
-      
+
       // Get existing progress
       const [progress] = await db.select().from(questProgress)
         .where(and(
           eq(questProgress.questId, questId),
           eq(questProgress.userId, userId)
         ));
-      
+
       if (!progress) {
         return res.status(400).json({ error: "Quest not started" });
       }
-      
+
       const rewardAmount = quest.shellsReward || 10;
-      
+
       // Idempotent - if already completed, just return success with info
       if (progress.status === 'completed' || progress.status === 'claimed') {
-        return res.json({ 
-          progress, 
+        return res.json({
+          progress,
           completed: true,
           alreadyCompleted: true,
           reward: {
@@ -9373,7 +9371,7 @@ const { trustLayerId } = await response.json();`
           }
         });
       }
-      
+
       // Update progress to completed
       const [updatedProgress] = await db.update(questProgress)
         .set({
@@ -9383,10 +9381,10 @@ const { trustLayerId } = await response.json();`
         })
         .where(eq(questProgress.id, progress.id))
         .returning();
-      
+
       // Award Shells as quest reward
       const user = await storage.getUser(userId);
-      
+
       if (user) {
         await shellsService.addShells(
           userId,
@@ -9398,22 +9396,22 @@ const { trustLayerId } = await response.json();`
           'quest'
         );
       }
-      
+
       // Update leaderboard for active season
       const [activeSeason] = await db.select().from(questSeasons)
         .where(eq(questSeasons.status, 'active'))
         .limit(1);
-      
+
       if (activeSeason) {
         const pointsEarned = quest.reputationReward || 10;
-        
+
         // Get or create leaderboard entry
         const [existingEntry] = await db.select().from(questLeaderboard)
           .where(and(
             eq(questLeaderboard.seasonId, activeSeason.id),
             eq(questLeaderboard.userId, userId)
           ));
-        
+
         if (existingEntry) {
           await db.update(questLeaderboard)
             .set({
@@ -9433,9 +9431,9 @@ const { trustLayerId } = await response.json();`
             });
         }
       }
-      
-      res.json({ 
-        progress: updatedProgress, 
+
+      res.json({
+        progress: updatedProgress,
         completed: true,
         reward: {
           shells: rewardAmount,
@@ -9455,36 +9453,36 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const { questId } = req.params;
       const { increment = 1 } = req.body;
-      
+
       // Get existing progress
       const [progress] = await db.select().from(questProgress)
         .where(and(
           eq(questProgress.questId, questId),
           eq(questProgress.userId, userId)
         ));
-      
+
       if (!progress) {
         return res.status(400).json({ error: "Quest not started" });
       }
-      
+
       if (progress.status === 'completed' || progress.status === 'claimed') {
         return res.json({ progress, alreadyCompleted: true });
       }
-      
+
       // Parse progressData to get current and target
       let progressInfo = { current: 0, target: 1 };
       try {
         progressInfo = JSON.parse(progress.progressData || '{"current": 0, "target": 1}');
-      } catch (e) {}
-      
+      } catch (e) { }
+
       const newCurrent = (progressInfo.current || 0) + increment;
       const target = progressInfo.target || 1;
       const isComplete = newCurrent >= target;
       const newPercent = Math.min(Math.round((newCurrent / target) * 100), 100);
-      
+
       // Update progress
       const [updated] = await db.update(questProgress)
         .set({
@@ -9495,18 +9493,18 @@ const { trustLayerId } = await response.json();`
         })
         .where(eq(questProgress.id, progress.id))
         .returning();
-      
+
       let reward = null;
-      
+
       // If complete, award rewards directly
       if (isComplete) {
         const [quest] = await db.select().from(questDefinitions)
           .where(eq(questDefinitions.id, questId));
-        
+
         if (quest) {
           const user = await storage.getUser(userId);
           const rewardAmount = quest.shellsReward || 10;
-          
+
           if (user) {
             await shellsService.addShells(
               userId,
@@ -9518,21 +9516,21 @@ const { trustLayerId } = await response.json();`
               'quest'
             );
           }
-          
+
           // Update leaderboard
           const [activeSeason] = await db.select().from(questSeasons)
             .where(eq(questSeasons.status, 'active'))
             .limit(1);
-          
+
           if (activeSeason) {
             const pointsEarned = quest.reputationReward || 10;
-            
+
             const [existingEntry] = await db.select().from(questLeaderboard)
               .where(and(
                 eq(questLeaderboard.seasonId, activeSeason.id),
                 eq(questLeaderboard.userId, userId)
               ));
-            
+
             if (existingEntry) {
               await db.update(questLeaderboard)
                 .set({
@@ -9552,11 +9550,11 @@ const { trustLayerId } = await response.json();`
                 });
             }
           }
-          
+
           reward = { shells: rewardAmount, xp: quest.reputationReward || 10 };
         }
       }
-      
+
       res.json({ progress: updated, isComplete, reward });
     } catch (error) {
       console.error("Error updating quest progress:", error);
@@ -9707,7 +9705,7 @@ const { trustLayerId } = await response.json();`
         contractType: z.enum(['token', 'nft', 'staking', 'dao', 'custom']).optional()
       });
       const data = schema.parse(req.body);
-      
+
       const session = await db.insert(copilotSessions)
         .values({ userId, ...data })
         .returning();
@@ -9753,11 +9751,11 @@ const { trustLayerId } = await response.json();`
       const limit = parseInt(req.query.limit as string) || 50;
       const category = req.query.category as string;
       const featured = req.query.featured === 'true';
-      
+
       const conditions = [eq(aiAgents.status, 'active')];
       if (category) conditions.push(eq(aiAgents.category, category));
       if (featured) conditions.push(eq(aiAgents.featured, true));
-      
+
       const agents = await db.select().from(aiAgents)
         .where(and(...conditions))
         .orderBy(desc(aiAgents.totalExecutions))
@@ -9777,13 +9775,13 @@ const { trustLayerId } = await response.json();`
       const verifiedAgents = agents.filter(a => a.verified).length;
       const totalExecutions = agents.reduce((sum, a) => sum + a.totalExecutions, 0);
       const totalEarnings = agents.reduce((sum, a) => sum + BigInt(a.totalEarnings), BigInt(0));
-      
+
       const categories = ['trading', 'portfolio', 'quest', 'social', 'analytics', 'custom'];
       const byCategory = categories.map(cat => ({
         category: cat,
         count: agents.filter(a => a.category === cat).length
       }));
-      
+
       res.json({
         totalAgents,
         activeAgents,
@@ -9908,7 +9906,7 @@ const { trustLayerId } = await response.json();`
       const limit = parseInt(req.query.limit as string) || 50;
       const assetType = req.query.type as string;
       const status = req.query.status as string;
-      
+
       let query = db.select().from(rwaAssets);
       if (assetType) {
         query = query.where(eq(rwaAssets.assetType, assetType)) as typeof query;
@@ -9928,22 +9926,22 @@ const { trustLayerId } = await response.json();`
     try {
       const assets = await db.select().from(rwaAssets);
       const tokens = await db.select().from(rwaTokens);
-      
+
       const totalAssets = assets.length;
       const verifiedAssets = assets.filter(a => a.verified).length;
       const tokenizedAssets = assets.filter(a => a.status === 'tokenized').length;
       const totalValuation = assets.reduce((sum, a) => sum + BigInt(a.valuation), BigInt(0));
-      
+
       const totalRaised = tokens.reduce((sum, t) => sum + BigInt(t.totalRaised), BigInt(0));
       const totalInvestors = tokens.reduce((sum, t) => sum + t.investorCount, 0);
-      
+
       const assetTypes = ['real_estate', 'equity', 'bond', 'commodity', 'collectible', 'invoice', 'ip_rights'];
       const byType = assetTypes.map(type => ({
         type,
         count: assets.filter(a => a.assetType === type).length,
         valuation: assets.filter(a => a.assetType === type).reduce((sum, a) => sum + BigInt(a.valuation), BigInt(0)).toString()
       }));
-      
+
       res.json({
         totalAssets,
         verifiedAssets,
@@ -9996,7 +9994,7 @@ const { trustLayerId } = await response.json();`
       const limit = parseInt(req.query.limit as string) || 50;
       const status = req.query.status as string;
       const tradeable = req.query.tradeable === 'true';
-      
+
       let query = db.select().from(rwaTokens);
       if (status) {
         query = query.where(eq(rwaTokens.status, status)) as typeof query;
@@ -10085,31 +10083,31 @@ const { trustLayerId } = await response.json();`
   });
 
   // === WALLET CLOUD BACKUP ROUTES ===
-  
+
   app.post("/api/wallet/backup", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id;
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const schema = z.object({
         encryptedData: z.string().min(10),
         walletAddresses: z.string().optional(),
         backupName: z.string().max(100).optional(),
         deviceId: z.string().max(100).optional(),
       });
-      
+
       const data = schema.parse(req.body);
-      
+
       // Check if user already has a backup, update if so
       const [existing] = await db.select()
         .from(walletBackups)
         .where(and(eq(walletBackups.userId, userId), eq(walletBackups.isActive, true)));
-      
+
       if (existing) {
         const [updated] = await db.update(walletBackups)
-          .set({ 
+          .set({
             encryptedData: data.encryptedData,
             walletAddresses: data.walletAddresses,
             lastSyncedAt: new Date(),
@@ -10118,7 +10116,7 @@ const { trustLayerId } = await response.json();`
           .returning();
         return res.json({ backup: updated, updated: true });
       }
-      
+
       const [backup] = await db.insert(walletBackups)
         .values({
           userId,
@@ -10128,7 +10126,7 @@ const { trustLayerId } = await response.json();`
           deviceId: data.deviceId,
         })
         .returning();
-      
+
       res.json({ backup, created: true });
     } catch (error: any) {
       console.error("Error creating wallet backup:", error);
@@ -10142,15 +10140,15 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const [backup] = await db.select()
         .from(walletBackups)
         .where(and(eq(walletBackups.userId, userId), eq(walletBackups.isActive, true)));
-      
+
       if (!backup) {
         return res.json({ backup: null });
       }
-      
+
       res.json({ backup });
     } catch (error: any) {
       console.error("Error fetching wallet backup:", error);
@@ -10164,11 +10162,11 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       await db.update(walletBackups)
         .set({ isActive: false })
         .where(and(eq(walletBackups.userId, userId), eq(walletBackups.isActive, true)));
-      
+
       res.json({ success: true, message: "Backup removed" });
     } catch (error: any) {
       console.error("Error deleting wallet backup:", error);
@@ -10182,11 +10180,11 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const [backup] = await db.select({ id: walletBackups.id, lastSyncedAt: walletBackups.lastSyncedAt })
         .from(walletBackups)
         .where(and(eq(walletBackups.userId, userId), eq(walletBackups.isActive, true)));
-      
+
       res.json({ exists: !!backup, lastSyncedAt: backup?.lastSyncedAt });
     } catch (error) {
       console.error("Error checking backup:", error);
@@ -10197,7 +10195,7 @@ const { trustLayerId } = await response.json();`
   // === BIOMETRIC WALLET UNLOCK ===
   // Encryption key for wallet passwords (server-side)
   const WALLET_ENCRYPTION_KEY = process.env.OWNER_SECRET || 'default-wallet-key-change-in-production';
-  
+
   // Setup biometric unlock - stores encrypted wallet password
   app.post("/api/wallet/biometric/setup", isAuthenticated, async (req: any, res) => {
     try {
@@ -10205,34 +10203,34 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const schema = z.object({
         walletPassword: z.string().min(1),
       });
-      
+
       const { walletPassword } = schema.parse(req.body);
-      
+
       // Encrypt the wallet password using AES-256-GCM
       const iv = crypto.randomBytes(16);
       const key = crypto.scryptSync(WALLET_ENCRYPTION_KEY, 'salt', 32);
       const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
-      
+
       let encrypted = cipher.update(walletPassword, 'utf8', 'hex');
       encrypted += cipher.final('hex');
       const authTag = cipher.getAuthTag().toString('hex');
-      
+
       // Store encrypted password + IV + authTag
       const encryptedData = encrypted + ':' + authTag;
-      
+
       // Upsert biometric credential
       const [existing] = await db.select()
         .from(walletBiometricCredentials)
         .where(eq(walletBiometricCredentials.userId, userId));
-      
+
       if (existing) {
         await db.update(walletBiometricCredentials)
-          .set({ 
-            encryptedPassword: encryptedData, 
+          .set({
+            encryptedPassword: encryptedData,
             encryptionIv: iv.toString('hex'),
             isActive: true,
           })
@@ -10245,14 +10243,14 @@ const { trustLayerId } = await response.json();`
           isActive: true,
         });
       }
-      
+
       res.json({ success: true, message: "Biometric unlock enabled" });
     } catch (error: any) {
       console.error("Error setting up biometric:", error);
       res.status(500).json({ error: "Failed to setup biometric unlock" });
     }
   });
-  
+
   // Get wallet password using biometrics (must be called after passkey auth)
   app.post("/api/wallet/biometric/unlock", isAuthenticated, async (req: any, res) => {
     try {
@@ -10260,7 +10258,7 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       // Get biometric credential
       const [credential] = await db.select()
         .from(walletBiometricCredentials)
@@ -10268,33 +10266,33 @@ const { trustLayerId } = await response.json();`
           eq(walletBiometricCredentials.userId, userId),
           eq(walletBiometricCredentials.isActive, true)
         ));
-      
+
       if (!credential) {
         return res.status(404).json({ error: "Biometric unlock not set up" });
       }
-      
+
       // Decrypt the wallet password
       const [encryptedData, authTag] = credential.encryptedPassword.split(':');
       const iv = Buffer.from(credential.encryptionIv, 'hex');
       const key = crypto.scryptSync(WALLET_ENCRYPTION_KEY, 'salt', 32);
       const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
       decipher.setAuthTag(Buffer.from(authTag, 'hex'));
-      
+
       let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
       decrypted += decipher.final('utf8');
-      
+
       // Update last used timestamp
       await db.update(walletBiometricCredentials)
         .set({ lastUsedAt: new Date() })
         .where(eq(walletBiometricCredentials.userId, userId));
-      
+
       res.json({ success: true, walletPassword: decrypted });
     } catch (error: any) {
       console.error("Error with biometric unlock:", error);
       res.status(500).json({ error: "Failed to unlock with biometrics" });
     }
   });
-  
+
   // Check if biometric unlock is set up
   app.get("/api/wallet/biometric/status", isAuthenticated, async (req: any, res) => {
     try {
@@ -10302,16 +10300,16 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
-      const [credential] = await db.select({ 
+
+      const [credential] = await db.select({
         id: walletBiometricCredentials.id,
         isActive: walletBiometricCredentials.isActive,
         lastUsedAt: walletBiometricCredentials.lastUsedAt,
       })
         .from(walletBiometricCredentials)
         .where(eq(walletBiometricCredentials.userId, userId));
-      
-      res.json({ 
+
+      res.json({
         enabled: !!credential?.isActive,
         lastUsedAt: credential?.lastUsedAt || null,
       });
@@ -10320,7 +10318,7 @@ const { trustLayerId } = await response.json();`
       res.status(500).json({ error: "Failed to check status" });
     }
   });
-  
+
   // Disable biometric unlock
   app.delete("/api/wallet/biometric", isAuthenticated, async (req: any, res) => {
     try {
@@ -10328,11 +10326,11 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       await db.update(walletBiometricCredentials)
         .set({ isActive: false })
         .where(eq(walletBiometricCredentials.userId, userId));
-      
+
       res.json({ success: true, message: "Biometric unlock disabled" });
     } catch (error) {
       console.error("Error disabling biometric:", error);
@@ -10347,12 +10345,12 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const wallets = await db.select()
         .from(userExternalWallets)
         .where(eq(userExternalWallets.userId, userId))
         .orderBy(userExternalWallets.createdAt);
-      
+
       res.json({ wallets });
     } catch (error) {
       console.error("Error fetching external wallets:", error);
@@ -10366,13 +10364,13 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const { chain, address, label } = req.body;
-      
+
       if (!chain || !address) {
         return res.status(400).json({ error: "Chain and address are required" });
       }
-      
+
       // Basic address validation - more permissive for various wallet formats
       if (chain === 'solana') {
         // Solana addresses are base58, typically 32-44 chars but can vary
@@ -10387,14 +10385,14 @@ const { trustLayerId } = await response.json();`
       if (['ethereum', 'base', 'polygon', 'arbitrum', 'optimism', 'bsc'].includes(chain) && !/^0x[a-fA-F0-9]{40}$/.test(address)) {
         return res.status(400).json({ error: "Invalid EVM address format" });
       }
-      
+
       const [wallet] = await db.insert(userExternalWallets).values({
         userId,
         chain,
         address,
         label: label || null,
       }).returning();
-      
+
       res.json({ wallet });
     } catch (error) {
       console.error("Error saving external wallet:", error);
@@ -10406,14 +10404,14 @@ const { trustLayerId } = await response.json();`
     try {
       const userId = req.user?.id;
       const walletId = req.params.id;
-      
+
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       await db.delete(userExternalWallets)
         .where(and(eq(userExternalWallets.id, walletId), eq(userExternalWallets.userId, userId)));
-      
+
       res.json({ success: true });
     } catch (error) {
       console.error("Error deleting external wallet:", error);
@@ -10428,11 +10426,11 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const [kyc] = await db.select()
         .from(kycVerifications)
         .where(eq(kycVerifications.userId, userId));
-      
+
       res.json({ kyc: kyc || null });
     } catch (error) {
       console.error("Error fetching KYC status:", error);
@@ -10446,32 +10444,32 @@ const { trustLayerId } = await response.json();`
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const { fullName, country, verificationType } = req.body;
-      
+
       if (!fullName || !country) {
         return res.status(400).json({ error: "Full name and country are required" });
       }
-      
+
       const [existing] = await db.select()
         .from(kycVerifications)
         .where(eq(kycVerifications.userId, userId));
-      
+
       if (existing) {
         const [updated] = await db.update(kycVerifications)
-          .set({ 
-            fullName, 
-            country, 
+          .set({
+            fullName,
+            country,
             verificationType: verificationType || 'basic',
             status: 'pending',
             updatedAt: new Date(),
           })
           .where(eq(kycVerifications.userId, userId))
           .returning();
-        
+
         return res.json({ success: true, kyc: updated });
       }
-      
+
       const [kyc] = await db.insert(kycVerifications)
         .values({
           userId,
@@ -10481,7 +10479,7 @@ const { trustLayerId } = await response.json();`
           status: 'pending',
         })
         .returning();
-      
+
       res.json({ success: true, kyc });
     } catch (error: any) {
       console.error("Error submitting KYC:", error);
@@ -10544,7 +10542,7 @@ const { trustLayerId } = await response.json();`
 
   // Reserved ecosystem prefixes - these domains are not for public sale
   const RESERVED_ECOSYSTEM_PREFIXES = [
-    "darkwave", "dw", "dwsc", "chronochat", "chrono", "vedasolus", "veda", 
+    "darkwave", "dw", "dwsc", "chronochat", "chrono", "vedasolus", "veda",
     "strikeagent", "strike", "yourlegacy", "legacy", "signal", "sig",
     "guardian", "pulse", "jason", "team", "admin", "owner", "official",
     "darkwavestudios", "darkwavegames", "trustlayer", "trust",
@@ -10555,23 +10553,23 @@ const { trustLayerId } = await response.json();`
     try {
       const { name } = req.params;
       const result = await storage.searchDomain(name);
-      
+
       const normalizedName = name.replace(/\.tlid$/, '').toLowerCase();
       const pricing = getDomainPricing(normalizedName.length);
-      
+
       // Check if this is a reserved ecosystem domain
       const isEcosystemReserved = RESERVED_ECOSYSTEM_PREFIXES.some(prefix => normalizedName.startsWith(prefix));
-      
+
       // Check early adopter eligibility
       const stats = await storage.getDomainStats();
       const now = new Date();
       const isEarlyAdopterPeriod = now < EARLY_ADOPTER_END_DATE && stats.totalDomains < EARLY_ADOPTER_MAX_REGISTRATIONS;
-      
+
       // Calculate early adopter discount (only on yearly, not lifetime)
-      const earlyAdopterYearly = isEarlyAdopterPeriod 
+      const earlyAdopterYearly = isEarlyAdopterPeriod
         ? Math.round(pricing.yearly * (1 - EARLY_ADOPTER_DISCOUNT))
         : pricing.yearly;
-      
+
       res.json({
         ...result,
         available: isEcosystemReserved ? false : result.available,
@@ -10632,7 +10630,7 @@ const { trustLayerId } = await response.json();`
       if (!domain) {
         return res.status(404).json({ error: "Domain not found" });
       }
-      
+
       const records = await storage.getDomainRecords(domain.id);
       res.json({ ...domain, records });
     } catch (error) {
@@ -10644,55 +10642,55 @@ const { trustLayerId } = await response.json();`
   app.post("/api/domains/register", async (req, res) => {
     try {
       const data = DomainRegisterSchema.parse(req.body);
-      
+
       // Owner bypass code validation - allows registering reserved domains for free
       // Uses OWNER_DOMAIN_ACCESS secret for validation
       const OWNER_BYPASS_CODE = process.env.OWNER_DOMAIN_ACCESS;
       const isOwnerBypass = !!(data.ownerCode && OWNER_BYPASS_CODE && data.ownerCode === OWNER_BYPASS_CODE);
-      
+
       const pricing = getDomainPricing(data.name.length);
-      
+
       // Block reserved domains (1-2 characters) - unless owner bypass
       if (pricing.isReserved && !isOwnerBypass) {
-        return res.status(400).json({ 
-          error: "Reserved domain", 
-          message: "1-2 character domains are reserved for special release. Contact us for enterprise availability." 
+        return res.status(400).json({
+          error: "Reserved domain",
+          message: "1-2 character domains are reserved for special release. Contact us for enterprise availability."
         });
       }
-      
+
       // Block DarkWave ecosystem reserved domains - unless owner bypass
       const normalizedName = data.name.toLowerCase();
       const RESERVED_PREFIXES = [
-        "darkwave", "dw", "dwsc", "chronochat", "chrono", "vedasolus", "veda", 
+        "darkwave", "dw", "dwsc", "chronochat", "chrono", "vedasolus", "veda",
         "strikeagent", "strike", "yourlegacy", "legacy", "signal", "sig",
         "guardian", "pulse", "jason", "team", "admin", "owner", "official",
         "darkwavestudios", "darkwavegames", "trustlayer", "trust",
         "intothevoid", "thevoid", "void"
       ];
       const isEcosystemReserved = RESERVED_PREFIXES.some(prefix => normalizedName.startsWith(prefix));
-      
+
       if (isEcosystemReserved && !isOwnerBypass) {
-        return res.status(400).json({ 
-          error: "Reserved domain", 
-          message: "This domain is reserved for the DarkWave ecosystem. Contact team@dwsc.io for partnership inquiries." 
+        return res.status(400).json({
+          error: "Reserved domain",
+          message: "This domain is reserved for the DarkWave ecosystem. Contact team@dwsc.io for partnership inquiries."
         });
       }
-      
+
       const existing = await storage.searchDomain(data.name);
       if (!existing.available) {
         return res.status(400).json({ error: "Domain is not available" });
       }
-      
+
       // Check early adopter eligibility
       const stats = await storage.getDomainStats();
       const now = new Date();
       const isEarlyAdopterPeriod = now < EARLY_ADOPTER_END_DATE && stats.totalDomains < EARLY_ADOPTER_MAX_REGISTRATIONS;
-      
+
       const isLifetime = data.ownershipType === "lifetime" || isOwnerBypass;
-      
+
       let totalPrice: number;
       let expiresAt: Date | null;
-      
+
       if (isOwnerBypass) {
         // Owner bypass - free lifetime registration
         totalPrice = 0;
@@ -10703,16 +10701,16 @@ const { trustLayerId } = await response.json();`
         expiresAt = null;
       } else {
         // Apply early adopter discount to annual pricing
-        const yearlyPrice = isEarlyAdopterPeriod 
+        const yearlyPrice = isEarlyAdopterPeriod
           ? Math.round(pricing.yearly * (1 - EARLY_ADOPTER_DISCOUNT))
           : pricing.yearly;
         totalPrice = yearlyPrice * (data.years || 1);
         expiresAt = new Date();
         expiresAt.setFullYear(expiresAt.getFullYear() + (data.years || 1));
       }
-      
+
       const txHash = `0x${crypto.randomBytes(32).toString('hex')}`;
-      
+
       const domain = await storage.registerDomain({
         name: data.name,
         tld: "dwsc",
@@ -10730,7 +10728,7 @@ const { trustLayerId } = await response.json();`
         discord: data.discord,
         telegram: data.telegram,
       });
-      
+
       if (data.email) {
         try {
           const domainTier = pricing.isPremium ? "Premium" : (data.name.length <= 5 ? "Standard" : "Basic");
@@ -10739,9 +10737,9 @@ const { trustLayerId } = await response.json();`
           await sendDomainRegistrationEmail(data.email, data.name, domainTier, paidAmount, isLifetimePurchase);
         } catch (emailErr) { console.error("[Domain] Registration email error:", emailErr); }
       }
-      
-      trustStamp("domain-registration", { domain: data.name, tld: "dwsc", owner: data.ownerAddress, priceCents: totalPrice, txHash }).catch(() => {});
-      
+
+      trustStamp("domain-registration", { domain: data.name, tld: "dwsc", owner: data.ownerAddress, priceCents: totalPrice, txHash }).catch(() => { });
+
       res.json({
         success: true,
         domain,
@@ -10763,7 +10761,7 @@ const { trustLayerId } = await response.json();`
     try {
       const { id } = req.params;
       const { description, website, email, twitter, discord, telegram, avatarUrl, primaryWallet } = req.body;
-      
+
       const domain = await storage.updateDomain(id, {
         description,
         website,
@@ -10774,11 +10772,11 @@ const { trustLayerId } = await response.json();`
         avatarUrl,
         primaryWallet,
       });
-      
+
       if (!domain) {
         return res.status(404).json({ error: "Domain not found" });
       }
-      
+
       res.json(domain);
     } catch (error) {
       console.error("Update domain error:", error);
@@ -10790,7 +10788,7 @@ const { trustLayerId } = await response.json();`
     try {
       const { id } = req.params;
       const data = DomainRecordSchema.parse({ ...req.body, domainId: id });
-      
+
       const record = await storage.setDomainRecord(data);
       res.json(record);
     } catch (error: any) {
@@ -10806,7 +10804,7 @@ const { trustLayerId } = await response.json();`
     try {
       const { recordId } = req.params;
       const { value, ttl, priority } = req.body;
-      
+
       const record = await storage.updateDomainRecord(recordId, { value, ttl, priority });
       if (!record) {
         return res.status(404).json({ error: "Record not found" });
@@ -10833,18 +10831,18 @@ const { trustLayerId } = await response.json();`
     try {
       const { id } = req.params;
       const { toAddress, fromAddress } = req.body;
-      
+
       if (!toAddress || !fromAddress) {
         return res.status(400).json({ error: "Both fromAddress and toAddress are required" });
       }
-      
+
       const txHash = `0x${crypto.randomBytes(32).toString('hex')}`;
       const success = await storage.transferDomain(id, fromAddress, toAddress, txHash);
-      
+
       if (!success) {
         return res.status(400).json({ error: "Transfer failed - domain not found or not owned by fromAddress" });
       }
-      
+
       res.json({ success: true, transactionHash: txHash });
     } catch (error) {
       console.error("Domain transfer error:", error);
@@ -10867,22 +10865,22 @@ const { trustLayerId } = await response.json();`
     try {
       const { id } = req.params;
       const { years } = req.body;
-      
+
       if (!years || years < 1 || years > 10) {
         return res.status(400).json({ error: "Years must be between 1 and 10" });
       }
-      
+
       const domain = await storage.getDomain(id);
       if (!domain) {
         return res.status(404).json({ error: "Domain not found" });
       }
-      
+
       const currentExpiry = domain.expiresAt ? new Date(domain.expiresAt) : new Date();
       const newExpiry = new Date(currentExpiry);
       newExpiry.setFullYear(newExpiry.getFullYear() + years);
-      
+
       await storage.updateDomain(id, { expiresAt: newExpiry });
-      
+
       res.json({ success: true, expiresAt: newExpiry.toISOString() });
     } catch (error) {
       console.error("Domain renewal error:", error);
@@ -10981,7 +10979,7 @@ const { trustLayerId } = await response.json();`
   app.post("/api/sponsorship/claim", async (req, res) => {
     try {
       const { domainId, slotId, businessName, businessUrl, businessDescription, isEarlyAdopter } = req.body;
-      
+
       if (!domainId || !slotId) {
         return res.status(400).json({ error: "domainId and slotId are required" });
       }
@@ -11087,7 +11085,7 @@ const { trustLayerId } = await response.json();`
       if (!user?.id) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const feature = await storage.getRoadmapFeature(req.params.id);
       if (!feature) {
         return res.status(404).json({ error: "Feature not found" });
@@ -11097,7 +11095,7 @@ const { trustLayerId } = await response.json();`
       if (!success) {
         return res.status(400).json({ error: "Already voted for this feature" });
       }
-      
+
       res.json({ success: true, message: "Vote recorded" });
     } catch (error) {
       console.error("Vote error:", error);
@@ -11192,7 +11190,7 @@ const { trustLayerId } = await response.json();`
         `${baseUrl}/billing/cancel`
       );
 
-      res.json({ 
+      res.json({
         checkoutUrl: session.url,
         amountCents: balance,
         amountUSD: (balance / 100).toFixed(2),
@@ -11206,7 +11204,7 @@ const { trustLayerId } = await response.json();`
   app.post("/api/billing/subscribe", isAuthenticated, async (req: any, res) => {
     try {
       const { plan } = req.body;
-      
+
       if (!plan || !["builder", "enterprise"].includes(plan)) {
         return res.status(400).json({ error: "Invalid plan" });
       }
@@ -11228,7 +11226,7 @@ const { trustLayerId } = await response.json();`
             currency: "usd",
             product_data: {
               name: `Trust Layer ${planName} Membership`,
-              description: plan === "builder" 
+              description: plan === "builder"
                 ? "50,000 API calls/month, Trust Studio, Priority support, Early token access"
                 : "Unlimited API calls, Dedicated support, Custom integrations, Validator node access",
             },
@@ -11313,14 +11311,14 @@ const { trustLayerId } = await response.json();`
   app.post("/api/crypto-onramp/create-session", isAuthenticated, async (req: any, res) => {
     try {
       const { walletAddress, cryptoCurrency = "eth", fiatCurrency = "usd", fiatAmount } = req.body;
-      
+
       if (!walletAddress) {
         return res.status(400).json({ error: "Wallet address is required" });
       }
-      
+
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
-      
+
       // Create the OnrampSessionResource by extending Stripe
       const OnrampSessionResource = (stripe as any).StripeResource.extend({
         create: (stripe as any).StripeResource.method({
@@ -11328,9 +11326,9 @@ const { trustLayerId } = await response.json();`
           path: 'crypto/onramp_sessions',
         }),
       });
-      
+
       const onrampSessionResource = new OnrampSessionResource(stripe);
-      
+
       // Create the onramp session
       const session = await onrampSessionResource.create({
         transaction_details: {
@@ -11343,16 +11341,16 @@ const { trustLayerId } = await response.json();`
         },
         customer_ip_address: req.ip || req.headers['x-forwarded-for'] || '127.0.0.1',
       });
-      
-      res.json({ 
+
+      res.json({
         clientSecret: session.client_secret,
-        sessionId: session.id 
+        sessionId: session.id
       });
     } catch (error: any) {
       console.error("Crypto onramp session error:", error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: "Failed to create crypto onramp session",
-        details: error.message 
+        details: error.message
       });
     }
   });
@@ -11413,7 +11411,7 @@ const { trustLayerId } = await response.json();`
           tier: "early_bird",
         },
       ];
-      
+
       return res.json(hardcodedTiers);
     } catch (error) {
       console.error("Failed to fetch presale tiers:", error);
@@ -11433,7 +11431,7 @@ const { trustLayerId } = await response.json();`
     let currentPrice = PRESALE_MILESTONES[0].price;
     let nextMilestone: number | null = null;
     let nextPrice: number | null = null;
-    
+
     for (let i = PRESALE_MILESTONES.length - 1; i >= 0; i--) {
       if (totalRaisedCents >= PRESALE_MILESTONES[i].threshold) {
         currentPrice = PRESALE_MILESTONES[i].price;
@@ -11444,7 +11442,7 @@ const { trustLayerId } = await response.json();`
         break;
       }
     }
-    
+
     return { price: currentPrice, nextMilestone, nextPrice };
   }
 
@@ -11452,7 +11450,7 @@ const { trustLayerId } = await response.json();`
     try {
       // Presale allocation: 15% of 1B = 150M tokens
       const PRESALE_ALLOCATION = 150000000;
-      
+
       const result = await db.execute(sql`
         SELECT 
           COALESCE(SUM(usd_amount_cents), 0) as total_raised_cents,
@@ -11462,14 +11460,14 @@ const { trustLayerId } = await response.json();`
         FROM presale_purchases 
         WHERE status = 'completed'
       `);
-      
+
       const stats = result.rows[0] || { total_raised_cents: 0, total_tokens_sold: 0, total_purchases: 0, unique_holders: 0 };
       const totalRaisedCents = parseInt(stats.total_raised_cents as string || "0");
       const tokensSold = parseInt(stats.total_tokens_sold as string || "0");
       const { price: tokenPrice, nextMilestone, nextPrice } = getTokenPriceForAmount(totalRaisedCents);
       const tokensRemaining = Math.max(0, PRESALE_ALLOCATION - tokensSold);
       const percentSold = (tokensSold / PRESALE_ALLOCATION) * 100;
-      
+
       res.json({
         totalRaisedCents,
         totalRaisedUsd: totalRaisedCents / 100,
@@ -11511,26 +11509,26 @@ const { trustLayerId } = await response.json();`
   app.post("/api/presale/checkout", async (req, res) => {
     try {
       const { priceId, email, name, tier, amountCents } = req.body;
-      
+
       if (!email || !email.includes("@")) {
         return res.status(400).json({ error: "Valid email required" });
       }
-      
+
       const customerName = (name && name.trim().length >= 2) ? name.trim() : email.split("@")[0];
-      
+
       const finalAmount = amountCents || 1000;
-      
+
       if (!finalAmount || finalAmount < 1000) {
         return res.status(400).json({ error: "Minimum purchase is $10" });
       }
-      
+
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
-      
+
       const host = req.get("host") || "dwsc.io";
       const protocol = host.includes("localhost") ? "http" : "https";
       const baseUrl = `${protocol}://${host}`;
-      
+
       // Get current token price and tokens sold based on total raised
       const PRESALE_ALLOCATION = 150000000; // 15% of 1B
       const statsResult = await db.execute(sql`
@@ -11543,24 +11541,24 @@ const { trustLayerId } = await response.json();`
       const totalTokensSold = parseInt(statsResult.rows[0]?.total_tokens_sold as string || "0");
       const tokensRemaining = PRESALE_ALLOCATION - totalTokensSold;
       const { price: TOKEN_PRICE } = getTokenPriceForAmount(totalRaisedCents);
-      
+
       const tokenAmount = Math.floor((finalAmount / 100) / TOKEN_PRICE);
       const bonusPercent = finalAmount >= 25000 ? 25 : finalAmount >= 10000 ? 15 : finalAmount >= 5000 ? 10 : finalAmount >= 2500 ? 5 : 0;
       const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
       const totalTokens = tokenAmount + bonusTokens;
-      
+
       // Check if presale is sold out
       if (tokensRemaining <= 0) {
         return res.status(400).json({ error: "Presale is sold out! All 150M tokens have been allocated." });
       }
-      
+
       // Check if this purchase exceeds remaining allocation
       if (totalTokens > tokensRemaining) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: `Only ${tokensRemaining.toLocaleString()} tokens remaining in presale. Please reduce your purchase amount.`
         });
       }
-      
+
       // Whale protection: 2% max per wallet/email (20 million tokens)
       const WHALE_LIMIT = 20000000;
       const existingTokensResult = await db.execute(sql`
@@ -11569,18 +11567,18 @@ const { trustLayerId } = await response.json();`
         WHERE email = ${email.toLowerCase()} AND status = 'completed'
       `);
       const existingTokens = parseInt(existingTokensResult.rows[0]?.total_tokens as string || "0");
-      
+
       if (existingTokens + totalTokens > WHALE_LIMIT) {
         const remaining = Math.max(0, WHALE_LIMIT - existingTokens);
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: `Whale protection: Maximum 2% of total supply (20M SIG) per wallet. You have ${existingTokens.toLocaleString()} tokens and can purchase up to ${remaining.toLocaleString()} more.`
         });
       }
-      
-      const tierName = !tier || tier === "custom" 
-        ? "SIG Token Presale" 
+
+      const tierName = !tier || tier === "custom"
+        ? "SIG Token Presale"
         : `${tier.charAt(0).toUpperCase()}${tier.slice(1).replace("_", " ")} Tier`;
-      
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [{
@@ -11588,7 +11586,7 @@ const { trustLayerId } = await response.json();`
             currency: "usd",
             product_data: {
               name: tierName,
-              description: bonusTokens > 0 
+              description: bonusTokens > 0
                 ? `${totalTokens.toLocaleString()} SIG tokens (${tokenAmount.toLocaleString()} base + ${bonusTokens.toLocaleString()} bonus)`
                 : `${tokenAmount.toLocaleString()} SIG tokens`,
             },
@@ -11610,7 +11608,7 @@ const { trustLayerId } = await response.json();`
           totalTokens: String(totalTokens),
         },
       });
-      
+
       res.json({ url: session.url, sessionId: session.id });
     } catch (error: any) {
       console.error("Presale checkout error:", error?.message || error);
@@ -11623,11 +11621,11 @@ const { trustLayerId } = await response.json();`
   app.post("/api/presale/crypto-checkout", async (req, res) => {
     try {
       const { email, name, walletAddress, tier, amountCents } = req.body;
-      
+
       if (!email || !email.includes("@")) {
         return res.status(400).json({ error: "Valid email required" });
       }
-      
+
       const TIER_CONFIG: Record<string, { amount: number; bonus: number; name: string }> = {
         starter: { amount: 1000, bonus: 0, name: "Starter Tier" },
         early_bird: { amount: 2500, bonus: 5, name: "Early Bird Tier" },
@@ -11635,14 +11633,14 @@ const { trustLayerId } = await response.json();`
         founder: { amount: 10000, bonus: 15, name: "Founder Tier" },
         genesis: { amount: 25000, bonus: 25, name: "Genesis Tier" },
       };
-      
+
       const tierConfig = TIER_CONFIG[tier];
       const finalAmount = amountCents || tierConfig?.amount;
-      
+
       if (!finalAmount || finalAmount < 100) {
         return res.status(400).json({ error: "Invalid amount" });
       }
-      
+
       // Get current token price and tokens sold based on total raised (milestone pricing)
       const PRESALE_ALLOCATION = 150000000; // 15% of 1B
       const statsResult = await db.execute(sql`
@@ -11655,24 +11653,24 @@ const { trustLayerId } = await response.json();`
       const totalTokensSold = parseInt(statsResult.rows[0]?.total_tokens_sold as string || "0");
       const tokensRemaining = PRESALE_ALLOCATION - totalTokensSold;
       const TOKEN_PRICE = getTokenPriceForAmount(totalRaisedCents).price;
-      
+
       const tokenAmount = Math.floor((finalAmount / 100) / TOKEN_PRICE);
       const bonusPercent = tierConfig?.bonus || 0;
       const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
       const totalTokens = tokenAmount + bonusTokens;
-      
+
       // Check if presale is sold out
       if (tokensRemaining <= 0) {
         return res.status(400).json({ error: "Presale is sold out! All 150M tokens have been allocated." });
       }
-      
+
       // Check if this purchase exceeds remaining allocation
       if (totalTokens > tokensRemaining) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: `Only ${tokensRemaining.toLocaleString()} tokens remaining in presale. Please reduce your purchase amount.`
         });
       }
-      
+
       // Whale protection: 2% max per wallet/email (20 million tokens)
       const WHALE_LIMIT = 20000000;
       const existingTokensResult = await db.execute(sql`
@@ -11681,20 +11679,20 @@ const { trustLayerId } = await response.json();`
         WHERE (email = ${email.toLowerCase()} ${walletAddress ? sql`OR wallet_address = ${walletAddress}` : sql``}) AND status = 'completed'
       `);
       const existingTokens = parseInt(existingTokensResult.rows[0]?.total_tokens as string || "0");
-      
+
       if (existingTokens + totalTokens > WHALE_LIMIT) {
         const remaining = Math.max(0, WHALE_LIMIT - existingTokens);
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: `Whale protection: Maximum 2% of total supply (20M SIG) per wallet. You have ${existingTokens.toLocaleString()} tokens and can purchase up to ${remaining.toLocaleString()} more.`
         });
       }
-      
+
       const host = req.get("host") || "dwsc.io";
       const protocol = host.includes("localhost") ? "http" : "https";
       const baseUrl = `${protocol}://${host}`;
-      
+
       const { createCoinbaseCharge } = await import("./coinbaseClient");
-      
+
       // Create a pending record first to get an ID we can use in the redirect
       const pendingResult = await db.execute(sql`
         INSERT INTO presale_purchases (stripe_payment_intent_id, email, buyer_name, wallet_address, usd_amount_cents, token_amount, tier, status, payment_method, created_at)
@@ -11713,7 +11711,7 @@ const { trustLayerId } = await response.json();`
         RETURNING id
       `);
       const purchaseId = (pendingResult.rows[0] as any)?.id;
-      
+
       const charge = await createCoinbaseCharge({
         name: tierConfig?.name || "SIG Token Presale",
         description: `${totalTokens.toLocaleString()} SIG tokens (includes ${bonusTokens.toLocaleString()} bonus tokens)`,
@@ -11731,14 +11729,14 @@ const { trustLayerId } = await response.json();`
           purchaseId: String(purchaseId),
         },
       });
-      
+
       // Update with actual charge ID
       await db.execute(sql`
         UPDATE presale_purchases 
         SET stripe_payment_intent_id = ${`coinbase_${charge.id}`}
         WHERE id = ${purchaseId}
       `);
-      
+
       res.json({ checkoutUrl: charge.hostedUrl, chargeId: charge.id, purchaseId });
     } catch (error) {
       console.error("Presale crypto checkout error:", error);
@@ -11753,17 +11751,17 @@ const { trustLayerId } = await response.json();`
       if (!purchaseId) {
         return res.status(400).json({ error: "Purchase ID required" });
       }
-      
+
       // Get the pending purchase record
       const purchaseResult = await db.execute(sql`
         SELECT * FROM presale_purchases WHERE id = ${purchaseId} AND payment_method = 'coinbase'
       `);
-      
+
       const purchase = purchaseResult.rows[0] as any;
       if (!purchase) {
         return res.status(404).json({ error: "Purchase not found" });
       }
-      
+
       // Already completed
       if (purchase.status === "completed") {
         return res.json({
@@ -11774,16 +11772,16 @@ const { trustLayerId } = await response.json();`
           amountPaid: (purchase.usd_amount_cents / 100).toFixed(2),
         });
       }
-      
+
       // Extract charge ID from stored payment intent ID (format: coinbase_CHARGE_ID)
       const chargeId = purchase.stripe_payment_intent_id?.replace("coinbase_", "").replace("coinbase_pending_", "");
       if (!chargeId || chargeId.startsWith("pending")) {
         return res.json({ success: false, status: "pending", message: "Payment not yet initiated" });
       }
-      
+
       const { getCoinbaseCharge } = await import("./coinbaseClient");
       const charge = await getCoinbaseCharge(chargeId);
-      
+
       if (charge.status === "COMPLETED" || charge.status === "CONFIRMED") {
         // Update to completed
         await db.execute(sql`
@@ -11791,7 +11789,7 @@ const { trustLayerId } = await response.json();`
           SET status = 'completed'
           WHERE id = ${purchaseId}
         `);
-        
+
         return res.json({
           success: true,
           email: purchase.email,
@@ -11800,7 +11798,7 @@ const { trustLayerId } = await response.json();`
           amountPaid: (purchase.usd_amount_cents / 100).toFixed(2),
         });
       }
-      
+
       res.json({ success: false, status: charge.status });
     } catch (error) {
       console.error("Verify crypto presale error:", error);
@@ -11812,7 +11810,7 @@ const { trustLayerId } = await response.json();`
   app.get("/api/presale/my-purchases", async (req, res) => {
     try {
       let userId = (req.session as any)?.userId;
-      
+
       // Check for session token or Firebase token in Authorization header
       if (!userId) {
         const authHeader = req.headers.authorization;
@@ -11829,17 +11827,17 @@ const { trustLayerId } = await response.json();`
           }
         }
       }
-      
+
       const userEmail = req.query.email as string;
       const walletAddress = req.query.wallet as string;
-      
+
       if (!userId && !userEmail && !walletAddress) {
         return res.json({ purchases: [], total: { tokens: 0, spent: 0 } });
       }
-      
+
       // Find purchases by user_id, email, or wallet address
       let purchases: any[] = [];
-      
+
       if (userId) {
         const userResult = await db.execute(sql`SELECT email FROM users WHERE id = ${userId}`);
         const user = userResult.rows[0] as any;
@@ -11855,7 +11853,7 @@ const { trustLayerId } = await response.json();`
           purchases = result.rows as any[];
         }
       }
-      
+
       // Also check by email if provided and no results yet
       if (purchases.length === 0 && userEmail) {
         const normalizedEmail = userEmail.toLowerCase().trim();
@@ -11867,7 +11865,7 @@ const { trustLayerId } = await response.json();`
         `);
         purchases = result.rows as any[];
       }
-      
+
       // Also check by wallet address if provided
       if (purchases.length === 0 && walletAddress) {
         const normalizedWallet = walletAddress.toLowerCase().trim();
@@ -11879,11 +11877,11 @@ const { trustLayerId } = await response.json();`
         `);
         purchases = result.rows as any[];
       }
-      
+
       const totalTokens = purchases.reduce((sum, p) => sum + Number(p.token_amount || 0), 0);
       const totalSpent = purchases.reduce((sum, p) => sum + Number(p.usd_amount_cents || 0), 0) / 100;
-      
-      res.json({ 
+
+      res.json({
         purchases: purchases.map(p => ({
           id: p.id,
           tokens: Number(p.token_amount),
@@ -11919,7 +11917,7 @@ const { trustLayerId } = await response.json();`
         ORDER BY created_at DESC
         LIMIT ${limit}
       `);
-      
+
       const transactions = result.rows.map((row: any) => {
         let rawName = row.buyer_name || '';
         let displayName = 'Supporter';
@@ -11931,7 +11929,7 @@ const { trustLayerId } = await response.json();`
             displayName = parts[0].charAt(0).toUpperCase() + '***';
           }
         }
-        
+
         return {
           id: (row.id as string).substring(0, 8),
           name: displayName,
@@ -11942,7 +11940,7 @@ const { trustLayerId } = await response.json();`
           time: row.created_at,
         };
       });
-      
+
       res.json({ transactions });
     } catch (error) {
       console.error("Error fetching recent presale transactions:", error);
@@ -11954,18 +11952,18 @@ const { trustLayerId } = await response.json();`
     try {
       const sessionId = req.query.session_id as string;
       const cryptoPurchaseId = req.query.crypto_purchase as string;
-      
+
       // Handle crypto purchase verification
       if (cryptoPurchaseId) {
         const purchaseResult = await db.execute(sql`
           SELECT * FROM presale_purchases WHERE id = ${cryptoPurchaseId}
         `);
         const purchase = purchaseResult.rows[0] as any;
-        
+
         if (!purchase) {
           return res.status(404).json({ error: "Purchase not found" });
         }
-        
+
         return res.json({
           success: purchase.status === 'completed',
           email: purchase.email,
@@ -11976,21 +11974,21 @@ const { trustLayerId } = await response.json();`
           message: purchase.status === 'completed' ? "Purchase confirmed!" : "Payment pending confirmation",
         });
       }
-      
+
       if (!sessionId) {
         return res.status(400).json({ error: "Session ID required" });
       }
-      
+
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
       const session = await stripe.checkout.sessions.retrieve(sessionId, {
         expand: ["customer_details"],
       });
-      
+
       if (session.payment_status === "paid") {
-        const customerEmail = session.customer_details?.email 
-          || session.metadata?.email 
-          || session.customer_email 
+        const customerEmail = session.customer_details?.email
+          || session.metadata?.email
+          || session.customer_email
           || "anonymous";
         const customerName = session.customer_details?.name
           || session.metadata?.name
@@ -11998,7 +11996,7 @@ const { trustLayerId } = await response.json();`
         const amountCents = session.amount_total || 0;
         const tier = session.metadata?.tier || 'unknown';
         const amountPaid = (amountCents / 100).toFixed(2);
-        
+
         // Get current token price based on total raised (milestone pricing)
         const statsResult = await db.execute(sql`
           SELECT COALESCE(SUM(usd_amount_cents), 0) as total_raised_cents
@@ -12006,12 +12004,12 @@ const { trustLayerId } = await response.json();`
         `);
         const totalRaisedCents = parseInt(statsResult.rows[0]?.total_raised_cents as string || "0");
         const TOKEN_PRICE = getTokenPriceForAmount(totalRaisedCents).price;
-        
+
         const tokenAmount = Math.floor((amountCents / 100) / TOKEN_PRICE);
         // Match webhook: bonus based on amount, not tier
         const bonusPercent = amountCents >= 25000 ? 25 : amountCents >= 10000 ? 15 : amountCents >= 5000 ? 10 : amountCents >= 2500 ? 5 : 0;
         const bonusTokens = Math.floor(tokenAmount * (bonusPercent / 100));
-        
+
         const insertResult = await db.execute(sql`
           INSERT INTO presale_purchases (stripe_payment_intent_id, email, buyer_name, usd_amount_cents, token_amount, tier, status, payment_method, created_at)
           VALUES (
@@ -12028,9 +12026,9 @@ const { trustLayerId } = await response.json();`
           ON CONFLICT (stripe_payment_intent_id) DO NOTHING
           RETURNING id
         `);
-        
+
         const isNewPurchase = (insertResult.rowCount ?? 0) > 0;
-        
+
         if (isNewPurchase && customerEmail !== "anonymous") {
           try {
             await sendPresaleConfirmationEmail(customerEmail, amountPaid, tier, tokenAmount, bonusTokens);
@@ -12038,9 +12036,9 @@ const { trustLayerId } = await response.json();`
             console.error("Failed to send presale confirmation email:", emailError);
           }
         }
-        
-        res.json({ 
-          success: true, 
+
+        res.json({
+          success: true,
           email: customerEmail,
           amountPaid,
           tier,
@@ -12070,8 +12068,8 @@ const { trustLayerId } = await response.json();`
       if (session.payment_status === "paid" && session.metadata?.apiKeyId) {
         const amountCents = parseInt(session.metadata.amountCents || "0");
         await billingService.handlePaymentSuccess(session.metadata.apiKeyId, amountCents);
-        res.json({ 
-          success: true, 
+        res.json({
+          success: true,
           message: "Payment confirmed",
           amountPaid: (amountCents / 100).toFixed(2),
         });
@@ -12160,7 +12158,7 @@ const { trustLayerId } = await response.json();`
   });
 
   // ===== Blog API Routes (AI-Generated SEO Content) =====
-  
+
   async function isBlogAdmin(req: any): Promise<boolean> {
     const sessionUserId = (req.session as any)?.userId;
     if (!sessionUserId) return false;
@@ -12304,7 +12302,7 @@ const { trustLayerId } = await response.json();`
       const existing = await db.select().from(legacyFounders)
         .where(eq(legacyFounders.email, email))
         .limit(1);
-      
+
       if (existing[0] && existing[0].status !== 'pending') {
         return res.status(400).json({ error: "You have already joined the Legacy Founder program" });
       }
@@ -12367,7 +12365,7 @@ const { trustLayerId } = await response.json();`
       const existing = await db.select().from(legacyFounders)
         .where(eq(legacyFounders.email, email))
         .limit(1);
-      
+
       if (existing[0] && existing[0].status !== 'pending') {
         return res.status(400).json({ error: "You have already joined the Legacy Founder program" });
       }
@@ -12421,7 +12419,7 @@ const { trustLayerId } = await response.json();`
           await db.update(legacyFounders)
             .set({ status: "paid", paidAt: new Date() })
             .where(eq(legacyFounders.email, session.metadata.email));
-          
+
           return res.json({ success: true, message: "Welcome to the Legacy Founder program!" });
         }
       }
@@ -12434,7 +12432,7 @@ const { trustLayerId } = await response.json();`
           await db.update(legacyFounders)
             .set({ status: "paid", paidAt: new Date() })
             .where(eq(legacyFounders.email, charge.metadata.email));
-          
+
           return res.json({ success: true, message: "Welcome to the Legacy Founder program!" });
         }
       }
@@ -13052,7 +13050,7 @@ const { trustLayerId } = await response.json();`
       const credits = await getUserCredits(userId);
       if (credits.balanceCents < STUDIO_AI_COST_CENTS) {
         // Return 402 Payment Required for insufficient credits
-        return res.status(402).json({ 
+        return res.status(402).json({
           error: "insufficient_credits",
           message: "You're out of AI credits! Each Studio AI request costs $0.05.",
           required: STUDIO_AI_COST_CENTS,
@@ -13101,7 +13099,7 @@ ${fileContext ? `\nProject files:\n${fileContext}` : ""}`;
       res.setHeader("Cache-Control", "no-cache");
       res.setHeader("Connection", "keep-alive");
 
-      const userMessage = code 
+      const userMessage = code
         ? `${prompt}\n\nHere's the active file code:\n\`\`\`${language || ""}\n${code}\n\`\`\``
         : prompt;
 
@@ -13440,8 +13438,8 @@ Project files:\n${fileContext}`;
         return res.status(404).json({ error: "Project not found" });
       }
       const { packageName, packageManager } = req.body;
-      const [name, version] = packageName.includes("@") && !packageName.startsWith("@") 
-        ? packageName.split("@") 
+      const [name, version] = packageName.includes("@") && !packageName.startsWith("@")
+        ? packageName.split("@")
         : [packageName, "latest"];
       const resolvedVersion = version === "latest" ? (packageManager === "npm" ? "^1.0.0" : "1.0.0") : version;
       const files = await storage.getStudioFiles(req.params.id);
@@ -13453,7 +13451,7 @@ Project files:\n${fileContext}`;
             pkg.dependencies = pkg.dependencies || {};
             pkg.dependencies[name] = resolvedVersion;
             await storage.updateStudioFile(pkgFile.id, { content: JSON.stringify(pkg, null, 2) });
-          } catch {}
+          } catch { }
         }
       } else if (packageManager === "pip") {
         const reqFile = files.find(f => f.name === "requirements.txt");
@@ -13486,7 +13484,7 @@ Project files:\n${fileContext}`;
             delete pkg.dependencies[packageName];
             await storage.updateStudioFile(pkgFile.id, { content: JSON.stringify(pkg, null, 2) });
           }
-        } catch {}
+        } catch { }
       }
       const reqFile = files.find(f => f.name === "requirements.txt");
       if (reqFile) {
@@ -13514,7 +13512,7 @@ Project files:\n${fileContext}`;
         WHERE table_schema = 'public' AND table_type = 'BASE TABLE'
         ORDER BY table_name
       `);
-      
+
       const tables = await Promise.all(
         result.rows.map(async (row: any) => {
           try {
@@ -13528,7 +13526,7 @@ Project files:\n${fileContext}`;
           }
         })
       );
-      
+
       res.json({ tables });
     } catch (error: any) {
       console.error("Database tables error:", error);
@@ -13539,12 +13537,12 @@ Project files:\n${fileContext}`;
   app.get("/api/studio/database/table/:name", isAuthenticated, async (req: any, res) => {
     try {
       const { name } = req.params;
-      
+
       // Validate table name to prevent SQL injection
       if (!/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(name)) {
         return res.status(400).json({ error: "Invalid table name" });
       }
-      
+
       // Get columns
       const columnsResult = await db.execute(sql`
         SELECT column_name, data_type, is_nullable
@@ -13552,12 +13550,12 @@ Project files:\n${fileContext}`;
         WHERE table_schema = 'public' AND table_name = ${name}
         ORDER BY ordinal_position
       `);
-      
+
       const columns = columnsResult.rows.map((row: any) => row.column_name);
-      
+
       // Get rows (limit to 100)
       const rowsResult = await db.execute(sql.raw(`SELECT * FROM "${name}" LIMIT 100`));
-      
+
       res.json({ columns, rows: rowsResult.rows });
     } catch (error: any) {
       console.error("Database table error:", error);
@@ -13568,21 +13566,21 @@ Project files:\n${fileContext}`;
   app.post("/api/studio/database/query", isAuthenticated, async (req: any, res) => {
     try {
       const { query } = req.body;
-      
+
       if (!query) {
         return res.status(400).json({ error: "Query is required" });
       }
-      
+
       // Only allow SELECT queries for safety
       const trimmedQuery = query.trim().toLowerCase();
       if (!trimmedQuery.startsWith("select")) {
         return res.status(400).json({ error: "Only SELECT queries are allowed in the explorer. Use migrations for data modifications." });
       }
-      
+
       // Execute the query with a limit
       const limitedQuery = query.includes("limit") ? query : `${query} LIMIT 100`;
       const result = await db.execute(sql.raw(limitedQuery));
-      
+
       res.json({
         columns: result.rows.length > 0 ? Object.keys(result.rows[0]) : [],
         rows: result.rows,
@@ -13664,11 +13662,11 @@ Project files:\n${fileContext}`;
   app.get("/api/transactions/export", async (req, res) => {
     try {
       const transactions = await storage.getTransactionHistory();
-      
+
       // Build CSV content
       const headers = ["Hash", "Type", "From", "To", "Amount", "Token", "Status", "Timestamp"];
       const csvRows = [headers.join(",")];
-      
+
       for (const tx of transactions) {
         const row = [
           tx.hash || "",
@@ -13682,9 +13680,9 @@ Project files:\n${fileContext}`;
         ].map(field => `"${String(field).replace(/"/g, '""')}"`);
         csvRows.push(row.join(","));
       }
-      
+
       const csv = csvRows.join("\n");
-      
+
       res.setHeader("Content-Type", "text/csv");
       res.setHeader("Content-Disposition", `attachment; filename="darkwave-transactions-${Date.now()}.csv"`);
       res.send(csv);
@@ -13705,7 +13703,7 @@ Project files:\n${fileContext}`;
       { name: "Quantum Realms", symbol: "QREALM", description: "Explore quantum dimensions through holographic art", imageUrl: "/assets/generated_images/quantum_shift_holographic_nft_card.png" },
       { name: "Neon Dreams", symbol: "NEON", description: "Neon-infused ethereal dreamscapes", imageUrl: "/assets/generated_images/neon_dreams_nft_collectible.png" },
     ];
-    
+
     for (const collection of DEFAULT_COLLECTIONS) {
       await storage.createNftCollection(collection);
     }
@@ -13732,7 +13730,7 @@ Project files:\n${fileContext}`;
       { name: "Quantum Shift", desc: "Dimensional portal warping space-time" },
       { name: "Neon Wave", desc: "Flowing waves of electric neon light" },
     ];
-    
+
     for (const collection of collections) {
       for (let i = 0; i < 5; i++) {
         const config = NFT_CONFIGS[i];
@@ -13750,13 +13748,13 @@ Project files:\n${fileContext}`;
   app.get("/api/nft/collections", async (req, res) => {
     try {
       let collections = await storage.getNftCollections();
-      
+
       if (collections.length === 0) {
         await seedNftCollections();
         collections = await storage.getNftCollections();
         await seedNfts(collections);
       }
-      
+
       res.json({ collections });
     } catch (error) {
       console.error("NFT collections error:", error);
@@ -13813,7 +13811,7 @@ Project files:\n${fileContext}`;
         ownerId: userId,
       });
 
-      trustStamp("nft-mint", { nftId: nft.id, name, collection: finalCollectionId, owner: userId }).catch(() => {});
+      trustStamp("nft-mint", { nftId: nft.id, name, collection: finalCollectionId, owner: userId }).catch(() => { });
 
       res.json({ success: true, nft });
     } catch (error: any) {
@@ -13825,7 +13823,7 @@ Project files:\n${fileContext}`;
   // ============================================
   // DEX / TOKEN SWAP
   // ============================================
-  
+
   const SUPPORTED_TOKENS = ["SIG", "USDC", "wETH", "wSOL", "USDT"];
 
   app.get("/api/swap/info", async (req, res) => {
@@ -13847,7 +13845,7 @@ Project files:\n${fileContext}`;
   app.get("/api/swap/quote", async (req, res) => {
     try {
       const { tokenIn, tokenOut, amountIn } = req.query;
-      
+
       if (!tokenIn || !tokenOut || !amountIn) {
         return res.json({
           isTestnet: true,
@@ -13858,7 +13856,7 @@ Project files:\n${fileContext}`;
           minReceived: null,
         });
       }
-      
+
       // Testnet mock rates for different token pairs
       const mockRates: Record<string, Record<string, number>> = {
         SIG: { USDC: 0.01, USDT: 0.01, wETH: 0.0000035, wSOL: 0.00006 },
@@ -13867,16 +13865,16 @@ Project files:\n${fileContext}`;
         wETH: { SIG: 285714, USDC: 2857, USDT: 2857, wSOL: 17.5 },
         wSOL: { SIG: 16666, USDC: 166, USDT: 166, wETH: 0.057 },
       };
-      
+
       const rate = mockRates[tokenIn as string]?.[tokenOut as string] || 1;
       const inputAmount = parseFloat(amountIn as string) / 1e18;
       const outputAmount = inputAmount * rate;
       const outputWei = Math.floor(outputAmount * 1e18).toString();
-      
+
       const fee = (inputAmount * 0.003 * 1e18).toString(); // 0.3% fee
       const priceImpact = inputAmount > 10000 ? "2.5" : inputAmount > 1000 ? "0.8" : "0.1";
       const minReceived = Math.floor(outputAmount * 0.995 * 1e18).toString(); // 0.5% slippage
-      
+
       res.json({
         isTestnet: true,
         route: `${tokenIn} → ${tokenOut}`,
@@ -13906,11 +13904,11 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const { tokenIn, tokenOut, amountIn, amountOutMin, walletAddress } = req.body;
-      
+
       if (!tokenIn || !tokenOut || !amountIn) {
         return res.status(400).json({ error: "Missing required fields" });
       }
-      
+
       // Calculate output using mock rates
       const mockRates: Record<string, Record<string, number>> = {
         SIG: { USDC: 0.01, USDT: 0.01, wETH: 0.0000035, wSOL: 0.00006 },
@@ -13919,12 +13917,12 @@ Project files:\n${fileContext}`;
         wETH: { SIG: 285714, USDC: 2857, USDT: 2857, wSOL: 17.5 },
         wSOL: { SIG: 16666, USDC: 166, USDT: 166, wETH: 0.057 },
       };
-      
+
       const rate = mockRates[tokenIn]?.[tokenOut] || 1;
       const inputAmount = parseFloat(amountIn) / 1e18;
       const outputAmount = inputAmount * rate;
       const outputWei = Math.floor(outputAmount * 1e18).toString();
-      
+
       // Record the swap in database
       const swap = await storage.createSwap({
         userId: userId || null,
@@ -13936,7 +13934,7 @@ Project files:\n${fileContext}`;
         status: "completed",
         txHash: `0x${Date.now().toString(16)}${Math.random().toString(16).slice(2, 10)}`,
       });
-      
+
       res.json({
         success: true,
         isTestnet: true,
@@ -13965,21 +13963,21 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const walletAddress = req.query.wallet as string | undefined;
-      
+
       let dwtBalance = "0";
       if (walletAddress) {
         const account = await storage.getChainAccount(walletAddress);
         dwtBalance = account?.balance || "0";
       }
-      
+
       const priceHistory = await storage.getPriceHistory("SIG", 2);
       const currentPrice = parseFloat(priceHistory[0]?.price || "0.000124");
       const oldPrice = parseFloat(priceHistory[1]?.price || String(currentPrice));
       const priceChange = oldPrice > 0 ? ((currentPrice - oldPrice) / oldPrice * 100) : 0;
-      
+
       const dwtBalanceNum = parseFloat(dwtBalance) / 1e18;
       const dwtValue = dwtBalanceNum * currentPrice;
-      
+
       // Get liquid staking position
       const liquidPosition = await storage.getLiquidStakingPosition(userId);
       const stDwtBalance = liquidPosition?.stDwtBalance || "0";
@@ -13988,32 +13986,32 @@ Project files:\n${fileContext}`;
       const exchangeRate = parseFloat(liquidState?.exchangeRate || "1000000000000000000") / 1e18;
       const stDwtDwtEquivalent = stDwtBalanceNum * exchangeRate;
       const stDwtValue = stDwtDwtEquivalent * currentPrice;
-      
+
       // Get regular staking positions - amounts are stored as tokens not wei
       const stakingPositions = await storage.getStakingPositions(userId);
       const totalStakedTokens = stakingPositions.reduce((sum, p) => sum + parseFloat(p.amount), 0);
       const totalPendingRewards = stakingPositions.reduce((sum, p) => sum + parseFloat(p.pendingRewards || "0"), 0);
       const stakedValue = totalStakedTokens * currentPrice;
-      
+
       const lpPositions = await storage.getLiquidityPositions(userId);
       const lpValue = lpPositions.reduce((sum, p) => sum + parseFloat(p.lpTokens) * currentPrice, 0);
-      
+
       const totalValue = dwtValue + stDwtValue + stakedValue + lpValue;
-      
+
       // Build tokens array
       const tokens: any[] = [];
-      
+
       // Always show SIG
-      tokens.push({ 
-        symbol: "SIG", 
-        name: "Signal", 
-        balance: dwtBalance, 
+      tokens.push({
+        symbol: "SIG",
+        name: "Signal",
+        balance: dwtBalance,
         displayBalance: dwtBalanceNum.toFixed(2),
-        value: dwtValue, 
-        change: parseFloat(priceChange.toFixed(2)), 
-        icon: "🌊" 
+        value: dwtValue,
+        change: parseFloat(priceChange.toFixed(2)),
+        icon: "🌊"
       });
-      
+
       // Show stSIG if user has any
       if (stDwtBalanceNum > 0) {
         tokens.push({
@@ -14026,7 +14024,7 @@ Project files:\n${fileContext}`;
           icon: "💧"
         });
       }
-      
+
       res.json({
         totalValue,
         change24h: parseFloat(priceChange.toFixed(2)),
@@ -14068,19 +14066,19 @@ Project files:\n${fileContext}`;
   // ============================================
   // PLAYER GAMING STATS (Authenticated)
   // ============================================
-  
+
   app.get("/api/player-stats/:userId", isAuthenticated, async (req: any, res) => {
     try {
       const { userId } = req.params;
       const authUserId = req.user?.id || req.user?.claims?.sub;
-      
+
       // Users can only view their own stats
       if (userId !== authUserId) {
         return res.status(403).json({ error: "Cannot view other users' stats" });
       }
-      
+
       const stats = await storage.getPlayerStats(userId);
-      
+
       if (!stats) {
         return res.json({
           username: "Player",
@@ -14100,24 +14098,24 @@ Project files:\n${fileContext}`;
           bestStreak: 0,
         });
       }
-      
+
       res.json(stats);
     } catch (error) {
       console.error("Player stats error:", error);
       res.status(500).json({ error: "Failed to get player stats" });
     }
   });
-  
+
   app.get("/api/player-history/:userId", isAuthenticated, async (req: any, res) => {
     try {
       const { userId } = req.params;
       const authUserId = req.user?.id || req.user?.claims?.sub;
-      
+
       // Users can only view their own history
       if (userId !== authUserId) {
         return res.status(403).json({ error: "Cannot view other users' history" });
       }
-      
+
       const limit = parseInt(req.query.limit as string) || 50;
       const history = await storage.getPlayerGameHistory(userId, limit);
       res.json(history);
@@ -14126,26 +14124,26 @@ Project files:\n${fileContext}`;
       res.status(500).json({ error: "Failed to get player history" });
     }
   });
-  
+
   app.get("/api/player-daily-profit/:userId", isAuthenticated, async (req: any, res) => {
     try {
       const { userId } = req.params;
       const authUserId = req.user?.id || req.user?.claims?.sub;
-      
+
       // Users can only view their own profit data
       if (userId !== authUserId) {
         return res.status(403).json({ error: "Cannot view other users' profit data" });
       }
-      
+
       const days = parseInt(req.query.days as string) || 14;
       const dailyProfit = await storage.getPlayerDailyProfit(userId, days);
-      
+
       // Transform to chart format
       const chartData = dailyProfit.map(d => ({
         date: d.date.substring(5), // MM-DD format
         profit: parseFloat(d.profit),
       })).reverse();
-      
+
       res.json(chartData);
     } catch (error) {
       console.error("Daily profit error:", error);
@@ -14176,11 +14174,11 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       let balance = await storage.getSweepsBalance(userId);
-      
+
       if (!balance) {
         balance = await storage.createSweepsBalance(userId);
       }
-      
+
       res.json({
         goldCoins: balance.goldCoins,
         sweepsCoins: balance.sweepsCoins,
@@ -14204,15 +14202,15 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const { packId } = req.body;
-      
+
       const pack = COIN_PACKS.find(p => p.id === packId);
       if (!pack) {
         return res.status(400).json({ error: "Invalid pack" });
       }
-      
+
       const stripe = await getUncachableStripeClient();
-      const baseUrl = `https://${(process.env.REPLIT_DOMAINS || process.env.REPL_SLUG + '.repl.co').split(',')[0]}`;
-      
+      const baseUrl = process.env.SITE_BASE_URL || 'https://trust-layer-1pji.onrender.com';
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
         line_items: [{
@@ -14238,7 +14236,7 @@ Project files:\n${fileContext}`;
           packName: pack.name,
         },
       });
-      
+
       res.json({
         success: true,
         checkoutUrl: session.url,
@@ -14257,14 +14255,14 @@ Project files:\n${fileContext}`;
       if (!metadata || metadata.type !== 'sweeps_gc_purchase') {
         return res.status(400).json({ error: "Invalid fulfillment request" });
       }
-      
+
       const { userId, packId, goldCoins, bonusSc, packName } = metadata;
-      
+
       const pack = COIN_PACKS.find(p => p.id === packId);
       if (!pack) {
         return res.status(400).json({ error: "Invalid pack" });
       }
-      
+
       const purchase = await storage.recordSweepsPurchase({
         userId,
         packId: pack.id,
@@ -14275,9 +14273,9 @@ Project files:\n${fileContext}`;
         stripePaymentId: sessionId || null,
         status: "completed",
       });
-      
+
       const newBalance = await storage.updateSweepsBalance(userId, goldCoins, bonusSc);
-      
+
       await storage.recordSweepsBonus({
         userId,
         bonusType: "purchase_bonus",
@@ -14285,7 +14283,7 @@ Project files:\n${fileContext}`;
         goldCoinsAmount: "0",
         description: `FREE SC with ${packName} purchase`,
       });
-      
+
       res.json({ success: true, purchase, newBalance });
     } catch (error) {
       console.error("Fulfillment error:", error);
@@ -14298,41 +14296,41 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const { sessionId, packId } = req.body;
-      
+
       if (!sessionId || !packId) {
         return res.status(400).json({ error: "Missing sessionId or packId" });
       }
-      
+
       const pack = COIN_PACKS.find(p => p.id === packId);
       if (!pack) {
         return res.status(400).json({ error: "Invalid pack" });
       }
-      
+
       const stripe = await getUncachableStripeClient();
       const session = await stripe.checkout.sessions.retrieve(sessionId);
-      
+
       if (session.payment_status !== 'paid') {
         return res.status(400).json({ error: "Payment not completed" });
       }
-      
+
       if (session.metadata?.userId !== userId || session.metadata?.packId !== packId) {
         return res.status(403).json({ error: "Session mismatch" });
       }
-      
+
       const existingPurchases = await storage.getSweepsPurchases(userId);
-      const alreadyFulfilled = existingPurchases.some(p => 
+      const alreadyFulfilled = existingPurchases.some(p =>
         (p as any).stripePaymentId === sessionId
       );
-      
+
       if (alreadyFulfilled) {
         const balance = await storage.getSweepsBalance(userId);
-        return res.json({ 
-          success: true, 
+        return res.json({
+          success: true,
           alreadyFulfilled: true,
           newBalance: balance ? { goldCoins: balance.goldCoins, sweepsCoins: balance.sweepsCoins } : null,
         });
       }
-      
+
       const purchase = await storage.recordSweepsPurchase({
         userId,
         packId: pack.id,
@@ -14343,9 +14341,9 @@ Project files:\n${fileContext}`;
         stripePaymentId: sessionId,
         status: "completed",
       });
-      
+
       const newBalance = await storage.updateSweepsBalance(userId, pack.goldCoins, pack.bonusSc);
-      
+
       await storage.recordSweepsBonus({
         userId,
         bonusType: "purchase_bonus",
@@ -14353,14 +14351,14 @@ Project files:\n${fileContext}`;
         goldCoinsAmount: "0",
         description: `FREE SC with ${pack.name} purchase`,
       });
-      
+
       const gcEmail = session.customer_details?.email || session.customer_email;
       if (gcEmail) {
         try {
           await sendGoldCoinPurchaseEmail(gcEmail, parseInt(pack.goldCoins), parseInt(pack.bonusSc), pack.priceUsd);
         } catch (emailErr) { console.error("[Sweeps] GC purchase email error:", emailErr); }
       }
-      
+
       res.json({
         success: true,
         purchase,
@@ -14380,16 +14378,16 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const loginStatus = await storage.getDailyLoginStatus(userId);
-      
+
       if (!loginStatus) {
         // New login today - calculate streak
         const yesterday = new Date();
         yesterday.setDate(yesterday.getDate() - 1);
         const yesterdayStr = yesterday.toISOString().split('T')[0];
-        
+
         // For now, start at streak day 1 (would need yesterday's login to continue streak)
         const streakDay = 1;
-        
+
         res.json({
           canClaim: true,
           streakDay,
@@ -14417,11 +14415,11 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       let loginStatus = await storage.getDailyLoginStatus(userId);
-      
+
       if (loginStatus?.bonusClaimed) {
         return res.status(400).json({ error: "Already claimed today" });
       }
-      
+
       let streakDay = 1;
       if (!loginStatus) {
         // Record new login
@@ -14429,16 +14427,16 @@ Project files:\n${fileContext}`;
       } else {
         streakDay = loginStatus.streakDay;
       }
-      
+
       // Claim the bonus
       await storage.claimDailyBonus(userId);
-      
+
       const bonusGc = DAILY_BONUS_GC[Math.min(streakDay - 1, 6)].toString();
       const bonusSc = DAILY_BONUS_SC[Math.min(streakDay - 1, 6)].toString();
-      
+
       // Update balance
       const newBalance = await storage.updateSweepsBalance(userId, bonusGc, bonusSc);
-      
+
       // Record bonus
       await storage.recordSweepsBonus({
         userId,
@@ -14447,7 +14445,7 @@ Project files:\n${fileContext}`;
         goldCoinsAmount: bonusGc,
         description: `Day ${streakDay} login bonus`,
       });
-      
+
       res.json({
         success: true,
         streakDay,
@@ -14469,23 +14467,23 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const { scAmount, walletAddress } = req.body;
-      
+
       if (!scAmount || parseFloat(scAmount) < 100) {
         return res.status(400).json({ error: "Minimum redemption is 100 SC" });
       }
-      
+
       if (!walletAddress) {
         return res.status(400).json({ error: "Wallet address required" });
       }
-      
+
       const balance = await storage.getSweepsBalance(userId);
       if (!balance || parseFloat(balance.sweepsCoins) < parseFloat(scAmount)) {
         return res.status(400).json({ error: "Insufficient SC balance" });
       }
-      
+
       // 1 SC = 1 SIG conversion rate
       const dwcAmount = scAmount;
-      
+
       const redemption = await storage.requestSweepsRedemption({
         userId,
         sweepsCoinsAmount: scAmount,
@@ -14494,7 +14492,7 @@ Project files:\n${fileContext}`;
         status: "pending",
         kycVerified: false,
       });
-      
+
       res.json({
         success: true,
         redemption,
@@ -14531,7 +14529,7 @@ Project files:\n${fileContext}`;
   });
 
   // ===== SERVER-SIDE PROVABLY FAIR GAME ENGINE =====
-  
+
   const activeCrashRounds = new Map<string, { crashPoint: number; betAmount: number; currencyType: string; cashedOut: boolean; gameId: number | null }>();
   const activeMinesweeperGames = new Map<string, { minePositions: number[]; betAmount: number; currencyType: string; revealedCount: number; gridSize: number; mineCount: number; cashedOut: boolean; gameId: number | null }>();
 
@@ -14546,15 +14544,15 @@ Project files:\n${fileContext}`;
       if (now - ts > 600000) activeMinesweeperGames.delete(key);
     });
   }, 60000);
-  
+
   function generateServerSeed(): string {
     return crypto.randomBytes(32).toString('hex');
   }
-  
+
   function hashSeed(seed: string): string {
     return crypto.createHash('sha256').update(seed).digest('hex');
   }
-  
+
   function getProvablyFairRandom(serverSeed: string, clientSeed: string, nonce: number): number {
     const combined = `${serverSeed}:${clientSeed}:${nonce}`;
     const hash = crypto.createHmac('sha256', serverSeed).update(`${clientSeed}:${nonce}`).digest('hex');
@@ -14576,15 +14574,15 @@ Project files:\n${fileContext}`;
       leprechaun: ["🍀", "🌈", "💰", "🎩", "⭐", "💎", "🪙", "🌟"],
     };
     const symbols = themeSymbols[theme] || themeSymbols.egyptian;
-    
+
     const r1 = Math.floor(random * symbols.length);
     const r2Hash = crypto.createHash('md5').update(`${random}:r2`).digest('hex');
     const r2 = parseInt(r2Hash.substring(0, 4), 16) % symbols.length;
     const r3Hash = crypto.createHash('md5').update(`${random}:r3`).digest('hex');
     const r3 = parseInt(r3Hash.substring(0, 4), 16) % symbols.length;
-    
+
     const reels = [symbols[r1], symbols[r2], symbols[r3]];
-    
+
     let multiplier = 0;
     if (reels[0] === reels[1] && reels[1] === reels[2]) {
       const symbolIndex = symbols.indexOf(reels[0]);
@@ -14593,7 +14591,7 @@ Project files:\n${fileContext}`;
     } else if (reels[0] === reels[1] || reels[1] === reels[2]) {
       multiplier = 1.5;
     }
-    
+
     return { reels, multiplier };
   }
 
@@ -14626,37 +14624,37 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const { gameType, currencyType, betAmount, clientSeed, choice, theme, gridSize, mineCount } = req.body;
-      
+
       if (currencyType !== "GC" && currencyType !== "SC") {
         return res.status(400).json({ error: "Invalid currency type" });
       }
-      
+
       const bet = parseFloat(betAmount);
       if (isNaN(bet) || bet <= 0) {
         return res.status(400).json({ error: "Invalid bet amount" });
       }
-      
+
       const balance = await storage.getSweepsBalance(userId);
       if (!balance) {
         return res.status(400).json({ error: "No balance found" });
       }
-      
+
       const currentBalance = currencyType === "GC" ? parseFloat(balance.goldCoins) : parseFloat(balance.sweepsCoins);
       if (currentBalance < bet) {
         return res.status(400).json({ error: "Insufficient balance" });
       }
-      
+
       const serverSeed = generateServerSeed();
       const serverSeedHash = hashSeed(serverSeed);
       const cSeed = clientSeed || crypto.randomBytes(16).toString('hex');
       const nonce = Date.now();
       const random = getProvablyFairRandom(serverSeed, cSeed, nonce);
-      
+
       let outcome: string;
       let multiplier = 0;
       let payout = 0;
       let gameResult: any = {};
-      
+
       switch (gameType) {
         case "coinflip": {
           const flip = resolveCoinflip(random);
@@ -14693,7 +14691,7 @@ Project files:\n${fileContext}`;
         }
         case "minesweeper": {
           const mines = resolveMines(serverSeed, cSeed, gridSize || 5, mineCount || 5);
-          gameResult = { 
+          gameResult = {
             minePositions: mines.minePositions,
             serverSeedHash,
           };
@@ -14705,13 +14703,13 @@ Project files:\n${fileContext}`;
         default:
           return res.status(400).json({ error: "Unknown game type" });
       }
-      
+
       const profit = payout - bet;
       const gcDelta = currencyType === "GC" ? profit.toString() : "0";
       const scDelta = currencyType === "SC" ? profit.toString() : "0";
-      
+
       const newBalance = await storage.updateSweepsBalance(userId, gcDelta, scDelta);
-      
+
       const game = await storage.recordSweepsGame({
         userId,
         gameType,
@@ -14722,9 +14720,9 @@ Project files:\n${fileContext}`;
         profit: profit.toString(),
         outcome,
       });
-      
+
       const isCompleted = outcome === "win" || outcome === "loss";
-      
+
       res.json({
         success: true,
         game,
@@ -14749,17 +14747,17 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const { gameType, currencyType, betAmount, multiplier, payout, profit, outcome } = req.body;
-      
+
       if (currencyType !== "GC" && currencyType !== "SC") {
         return res.status(400).json({ error: "Invalid currency type" });
       }
-      
+
       const balanceDelta = parseFloat(profit);
       const gcDelta = currencyType === "GC" ? balanceDelta.toString() : "0";
       const scDelta = currencyType === "SC" ? balanceDelta.toString() : "0";
-      
+
       const newBalance = await storage.updateSweepsBalance(userId, gcDelta, scDelta);
-      
+
       const game = await storage.recordSweepsGame({
         userId,
         gameType,
@@ -14770,7 +14768,7 @@ Project files:\n${fileContext}`;
         profit: profit.toString(),
         outcome,
       });
-      
+
       res.json({
         success: true,
         game,
@@ -14790,39 +14788,39 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const { roundKey, cashoutMultiplier } = req.body;
-      
+
       if (!roundKey) {
         return res.status(400).json({ error: "Missing round key" });
       }
-      
+
       const round = activeCrashRounds.get(roundKey);
       if (!round) {
         return res.status(400).json({ error: "Round not found or expired" });
       }
-      
+
       if (round.cashedOut) {
         return res.status(400).json({ error: "Already cashed out this round" });
       }
-      
+
       const mult = parseFloat(cashoutMultiplier);
       if (isNaN(mult) || mult < 1) {
         return res.status(400).json({ error: "Invalid cashout multiplier" });
       }
-      
+
       if (mult > round.crashPoint) {
         return res.status(400).json({ error: "Cannot cashout above crash point" });
       }
-      
+
       round.cashedOut = true;
-      
+
       const bet = round.betAmount;
       const payout = bet * mult;
       const profit = payout - bet;
       const gcDelta = round.currencyType === "GC" ? profit.toString() : "0";
       const scDelta = round.currencyType === "SC" ? profit.toString() : "0";
-      
+
       const newBalance = await storage.updateSweepsBalance(userId, gcDelta, scDelta);
-      
+
       await storage.recordSweepsGame({
         userId,
         gameType: "crash",
@@ -14833,9 +14831,9 @@ Project files:\n${fileContext}`;
         profit: profit.toString(),
         outcome: "win",
       });
-      
+
       activeCrashRounds.delete(roundKey);
-      
+
       res.json({
         success: true,
         payout,
@@ -14856,31 +14854,31 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const { currencyType, betAmount, tilesRevealed, mineCount, gridSize } = req.body;
-      
+
       const bet = parseFloat(betAmount);
       const tiles = parseInt(tilesRevealed);
       const mines = parseInt(mineCount) || 5;
       const grid = parseInt(gridSize) || 5;
       const totalSafe = (grid * grid) - mines;
-      
+
       if (isNaN(bet) || bet <= 0 || isNaN(tiles) || tiles <= 0) {
         return res.status(400).json({ error: "Invalid parameters" });
       }
-      
+
       let multiplier = 1;
       for (let i = 0; i < tiles; i++) {
         multiplier *= (totalSafe - i) / ((grid * grid) - mines - i + (totalSafe - i));
         multiplier = 1 / multiplier;
       }
       multiplier = Math.round(multiplier * 100) / 100;
-      
+
       const payout = bet * multiplier;
       const profit = payout - bet;
       const gcDelta = currencyType === "GC" ? profit.toString() : "0";
       const scDelta = currencyType === "SC" ? profit.toString() : "0";
-      
+
       const newBalance = await storage.updateSweepsBalance(userId, gcDelta, scDelta);
-      
+
       await storage.recordSweepsGame({
         userId,
         gameType: "minesweeper",
@@ -14891,7 +14889,7 @@ Project files:\n${fileContext}`;
         profit: profit.toString(),
         outcome: "win",
       });
-      
+
       res.json({
         success: true,
         multiplier,
@@ -14926,12 +14924,12 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const { method } = req.body; // "mail", "social", etc.
-      
+
       // AMOE gives small SC bonus (legal requirement for sweepstakes)
       const bonusSc = "5"; // 5 SC free
-      
+
       await storage.updateSweepsBalance(userId, "0", bonusSc);
-      
+
       await storage.recordSweepsBonus({
         userId,
         bonusType: "amoe",
@@ -14939,7 +14937,7 @@ Project files:\n${fileContext}`;
         goldCoinsAmount: "0",
         description: `Free entry via ${method || "alternative method"}`,
       });
-      
+
       res.json({
         success: true,
         bonusSc,
@@ -14954,21 +14952,21 @@ Project files:\n${fileContext}`;
   // ============================================
   // TESTNET FAUCET
   // ============================================
-  
+
   const FAUCET_AMOUNT = "1000000000000000000000"; // 1000 SIG
   const FAUCET_COOLDOWN_MS = 24 * 60 * 60 * 1000; // 24 hours
-  
+
   app.get("/api/faucet/info", async (req, res) => {
     try {
       const claims = await storage.getFaucetClaims();
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      
+
       const claimsToday = claims.filter(c => new Date(c.claimedAt) >= today).length;
       const totalDistributed = claims
         .filter(c => c.status === "completed")
         .reduce((sum, c) => sum + BigInt(c.amount), BigInt(0));
-      
+
       res.json({
         dailyLimit: "10000000000000000000000", // 10,000 SIG per day total
         claimAmount: FAUCET_AMOUNT,
@@ -14981,7 +14979,7 @@ Project files:\n${fileContext}`;
       res.status(500).json({ error: "Failed to get faucet info" });
     }
   });
-  
+
   app.get("/api/faucet/claims", async (req, res) => {
     try {
       const claims = await storage.getFaucetClaims();
@@ -14991,7 +14989,7 @@ Project files:\n${fileContext}`;
       res.status(500).json({ error: "Failed to get claims" });
     }
   });
-  
+
   app.post("/api/faucet/claim", faucetRateLimit, async (req, res) => {
     try {
       const parseResult = FaucetClaimRequestSchema.safeParse(req.body);
@@ -14999,7 +14997,7 @@ Project files:\n${fileContext}`;
         return res.status(400).json({ error: parseResult.error.errors[0]?.message || "Invalid request" });
       }
       const { walletAddress } = parseResult.data;
-      
+
       // Check cooldown
       const recentClaim = await storage.getRecentFaucetClaim(walletAddress);
       if (recentClaim) {
@@ -15008,12 +15006,12 @@ Project files:\n${fileContext}`;
         if (now - claimTime < FAUCET_COOLDOWN_MS) {
           const remainingMs = FAUCET_COOLDOWN_MS - (now - claimTime);
           const remainingHours = Math.ceil(remainingMs / (60 * 60 * 1000));
-          return res.status(429).json({ 
-            error: `Please wait ${remainingHours} hours before claiming again` 
+          return res.status(429).json({
+            error: `Please wait ${remainingHours} hours before claiming again`
           });
         }
       }
-      
+
       // Create claim record
       const claim = await storage.createFaucetClaim({
         walletAddress,
@@ -15021,7 +15019,7 @@ Project files:\n${fileContext}`;
         status: "pending",
         ipAddress: req.ip || null,
       });
-      
+
       // Distribute tokens
       try {
         const result = blockchain.distributeTokens(walletAddress, BigInt(FAUCET_AMOUNT));
@@ -15222,29 +15220,29 @@ Project files:\n${fileContext}`;
 
   app.post("/api/launchpad/create", async (req, res) => {
     try {
-      const { 
+      const {
         name, symbol, description, totalSupply, initialPrice, launchType,
         website, twitter, telegram,
         autoLiquidityPercent = 75, lpLockDays = 90, softCap = "1000", hardCap = "100000"
       } = req.body;
-      
+
       if (!name || !symbol) {
         return res.status(400).json({ error: "Name and symbol are required" });
       }
-      
+
       // Validate auto-liquidity settings (server-side validation)
       const liquidityPct = Math.min(95, Math.max(50, Number(autoLiquidityPercent)));
       const lockDays = Math.min(365, Math.max(30, Number(lpLockDays)));
       const platformFee = 2.5;
-      
+
       // Ensure creator receives at least 2.5%
       if (liquidityPct + platformFee > 97.5) {
         return res.status(400).json({ error: "Auto-liquidity cannot exceed 95%" });
       }
-      
+
       const tokenId = crypto.randomUUID();
       const creatorReceives = (100 - platformFee - liquidityPct).toFixed(1);
-      
+
       res.json({
         success: true,
         token: {
@@ -15299,7 +15297,7 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const positions = await storage.getLiquidityPositions(userId);
-      
+
       // Enrich with pool info
       const enrichedPositions = await Promise.all(positions.map(async (pos) => {
         const pool = await storage.getLiquidityPool(pos.poolId);
@@ -15312,7 +15310,7 @@ Project files:\n${fileContext}`;
             : "0",
         };
       }));
-      
+
       res.json({ positions: enrichedPositions });
     } catch (error) {
       console.error("Liquidity positions error:", error);
@@ -15324,19 +15322,19 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const { poolId, amountA, amountB } = req.body;
-      
+
       if (!poolId || !amountA || !amountB) {
         return res.status(400).json({ error: "Missing required fields" });
       }
-      
+
       const pool = await storage.getLiquidityPool(poolId);
       if (!pool) {
         return res.status(404).json({ error: "Pool not found" });
       }
-      
+
       // Calculate LP tokens (simplified sqrt formula)
       const lpTokens = Math.floor(Math.sqrt(parseFloat(amountA) * parseFloat(amountB))).toString();
-      
+
       // Create position
       const position = await storage.createLiquidityPosition({
         userId,
@@ -15346,14 +15344,14 @@ Project files:\n${fileContext}`;
         tokenBDeposited: amountB,
         earnedFees: "0",
       });
-      
+
       // Update pool reserves
       await storage.updateLiquidityPool(poolId, {
         reserveA: (BigInt(pool.reserveA) + BigInt(amountA)).toString(),
         reserveB: (BigInt(pool.reserveB) + BigInt(amountB)).toString(),
         totalLpTokens: (BigInt(pool.totalLpTokens) + BigInt(lpTokens)).toString(),
       });
-      
+
       res.json({ success: true, position });
     } catch (error: any) {
       console.error("Add liquidity error:", error);
@@ -15369,10 +15367,10 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const { walletAddress } = req.query;
-      
+
       const ownerId = (walletAddress as string) || userId;
       const nfts = await storage.getNftsByOwner(ownerId);
-      
+
       res.json({ nfts });
     } catch (error) {
       console.error("NFT gallery error:", error);
@@ -15439,9 +15437,9 @@ Project files:\n${fileContext}`;
       if (!url || !events?.length) {
         return res.status(400).json({ error: "URL and events are required" });
       }
-      
+
       const webhookSecret = secret || `whsec_${crypto.randomBytes(16).toString('hex')}`;
-      
+
       const webhook = await storage.createWebhook({
         userId,
         url,
@@ -15450,7 +15448,7 @@ Project files:\n${fileContext}`;
         isActive: true,
         failureCount: 0,
       });
-      
+
       // Also register with the real-time webhook service
       const { webhookService } = await import("./webhook-service");
       webhookService.registerWebhook({
@@ -15458,14 +15456,14 @@ Project files:\n${fileContext}`;
         secret: webhookSecret,
         events: events as any[]
       });
-      
+
       res.json({ success: true, webhook });
     } catch (error: any) {
       console.error("Create webhook error:", error);
       res.status(500).json({ error: error.message || "Failed to create webhook" });
     }
   });
-  
+
   app.patch("/api/webhooks/:id", isAuthenticated, async (req: any, res) => {
     try {
       const { url, events, isActive } = req.body;
@@ -15473,7 +15471,7 @@ Project files:\n${fileContext}`;
       if (url !== undefined) updateData.url = url;
       if (events !== undefined) updateData.events = JSON.stringify(events);
       if (isActive !== undefined) updateData.isActive = isActive;
-      
+
       const webhook = await storage.updateWebhook(req.params.id, updateData);
       res.json({ success: true, webhook });
     } catch (error: any) {
@@ -15506,7 +15504,7 @@ Project files:\n${fileContext}`;
   // STUDIO AI CREDITS - For expensive AI coding features
   // Basic AI Assistant is FREE (just requires login)
   // =====================================================
-  
+
   const STUDIO_AI_COST_CENTS = 5; // $0.05 per Studio AI call (code completion, AI fixes)
 
   // Helper: Get or create user AI credits (for Studio AI features)
@@ -15526,15 +15524,15 @@ Project files:\n${fileContext}`;
     const { userAiCredits, aiUsageLogs } = await import("@shared/schema");
     const credits = await getUserCredits(userId);
     if (credits.balanceCents < amount) return false;
-    
+
     await db.update(userAiCredits)
-      .set({ 
+      .set({
         balanceCents: (credits.balanceCents - amount).toString(),
         totalUsedCents: sql`(CAST(total_used_cents AS INTEGER) + ${amount})::TEXT`,
         updatedAt: new Date(),
       })
       .where(eq(userAiCredits.userId, userId));
-    
+
     await db.insert(aiUsageLogs).values({ userId, action, costCents: amount.toString() });
     return true;
   }
@@ -15544,9 +15542,9 @@ Project files:\n${fileContext}`;
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Login required" });
-      
+
       const credits = await getUserCredits(userId);
-      res.json({ 
+      res.json({
         balanceCents: credits.balanceCents,
         balanceUSD: (credits.balanceCents / 100).toFixed(2),
         studioAiCost: STUDIO_AI_COST_CENTS,
@@ -15569,7 +15567,7 @@ Project files:\n${fileContext}`;
 
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
-      
+
       const host = req.get("host") || "darkwavechain.io";
       const protocol = host.includes("localhost") ? "http" : "https";
       const baseUrl = `${protocol}://${host}`;
@@ -15605,18 +15603,18 @@ Project files:\n${fileContext}`;
       if (!userId || !amountCents) {
         return res.status(400).json({ error: "userId and amountCents required" });
       }
-      
+
       const { userAiCredits } = await import("@shared/schema");
       const amount = parseInt(amountCents);
-      
+
       await db.update(userAiCredits)
-        .set({ 
+        .set({
           balanceCents: sql`(CAST(balance_cents AS INTEGER) + ${amount})::TEXT`,
           totalPurchasedCents: sql`(CAST(total_purchased_cents AS INTEGER) + ${amount})::TEXT`,
           updatedAt: new Date(),
         })
         .where(eq(userAiCredits.userId, userId));
-      
+
       res.json({ success: true });
     } catch (error) {
       console.error("Add credits error:", error);
@@ -15628,7 +15626,7 @@ Project files:\n${fileContext}`;
   // FREE AI ASSISTANT - Basic ecosystem guidance
   // Free with rate limiting to prevent abuse
   // =====================================================
-  
+
   // Simple in-memory rate limiter for AI assistant
   const assistantRateLimits = new Map<string, { count: number; resetTime: number }>();
   const ASSISTANT_RATE_LIMIT = 50; // 50 requests per hour
@@ -15637,16 +15635,16 @@ Project files:\n${fileContext}`;
   function checkAssistantRateLimit(identifier: string): { allowed: boolean; remaining: number } {
     const now = Date.now();
     const record = assistantRateLimits.get(identifier);
-    
+
     if (!record || now > record.resetTime) {
       assistantRateLimits.set(identifier, { count: 1, resetTime: now + ASSISTANT_RATE_WINDOW });
       return { allowed: true, remaining: ASSISTANT_RATE_LIMIT - 1 };
     }
-    
+
     if (record.count >= ASSISTANT_RATE_LIMIT) {
       return { allowed: false, remaining: 0 };
     }
-    
+
     record.count++;
     return { allowed: true, remaining: ASSISTANT_RATE_LIMIT - record.count };
   }
@@ -15658,7 +15656,7 @@ Project files:\n${fileContext}`;
       const ip = req.ip || req.socket.remoteAddress || "unknown";
       const rateCheck = checkAssistantRateLimit(`tts:${ip}`);
       if (!rateCheck.allowed) {
-        return res.status(429).json({ 
+        return res.status(429).json({
           error: "Rate limit exceeded",
           message: "You've used all your free AI voice requests this hour. Try again later!",
         });
@@ -15683,7 +15681,7 @@ Project files:\n${fileContext}`;
       });
 
       const buffer = Buffer.from(await mp3.arrayBuffer());
-      
+
       res.set({
         "Content-Type": "audio/mpeg",
         "Content-Length": buffer.length,
@@ -15702,7 +15700,7 @@ Project files:\n${fileContext}`;
       const ip = req.ip || req.socket.remoteAddress || "unknown";
       const rateCheck = checkAssistantRateLimit(`chat:${ip}`);
       if (!rateCheck.allowed) {
-        return res.status(429).json({ 
+        return res.status(429).json({
           error: "Rate limit exceeded",
           message: "You've used all your free AI messages this hour. Try again later!",
           response: "Whoa, you're chatting a lot! Come back in a bit and we can keep talking.",
@@ -15753,11 +15751,11 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       });
 
       const response = completion.choices[0]?.message?.content || "I'm here to help! Could you rephrase that?";
-      
+
       res.json({ response });
     } catch (error: any) {
       console.error("AI Assistant error:", error);
-      res.status(500).json({ 
+      res.status(500).json({
         error: "Failed to process message",
         response: "Sorry, I'm having a moment. Try asking me again!"
       });
@@ -15917,11 +15915,11 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   app.post("/api/airdrop/check-eligibility", async (req, res) => {
     try {
       const { email, wallet } = req.body;
-      
+
       if (!email && !wallet) {
         return res.status(400).json({ eligible: false, message: "Email or wallet address required" });
       }
-      
+
       // Check presale purchases by email or wallet
       let result;
       if (email) {
@@ -15947,18 +15945,18 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           WHERE LOWER(wallet_address) = LOWER(${wallet}) AND status = 'completed'
         `);
       }
-      
+
       const data = result.rows[0];
       const totalTokens = parseInt(data?.total_tokens as string) || 0;
       const purchaseCount = parseInt(data?.purchase_count as string) || 0;
-      
+
       if (totalTokens === 0 || purchaseCount === 0) {
         return res.json({
           eligible: false,
           message: "No presale purchases found for this address. Purchase Signal during presale to qualify!"
         });
       }
-      
+
       // Determine tier label based on total spent
       const totalSpent = parseInt(data?.total_spent as string) || 0;
       let tierLabel = data?.tier || "Participant";
@@ -15966,7 +15964,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       else if (totalSpent >= 500000) tierLabel = "Trust Pioneer";
       else if (totalSpent >= 100000) tierLabel = "Community Builder";
       else if (totalSpent >= 25000) tierLabel = "Early Supporter";
-      
+
       // Check if already claimed
       const identifier = email || wallet;
       const claimCheck = await db.execute(sql`
@@ -15975,7 +15973,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         AND status IN ('pending', 'completed')
       `);
       const alreadyClaimed = claimCheck.rows.length > 0;
-      
+
       res.json({
         eligible: true,
         allocation: totalTokens.toString(),
@@ -15996,24 +15994,24 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const userEmail = req.user?.email || req.user?.claims?.email;
-      
+
       // Check if user is a beta tester
       let tester = null;
       if (userEmail) {
         tester = await storage.getBetaTesterByEmail(userEmail);
       }
-      
+
       // Get active airdrop allocations
       const allocations = await storage.getAirdropAllocations();
       const activeAllocations = allocations.filter(a => a.isActive);
-      
+
       // Check existing claims
       const claims = await storage.getAirdropClaims(userId);
-      
+
       // Get gifts for this user
       const gifts = userEmail ? await storage.getTokenGiftsByRecipient(userEmail) : [];
       const pendingGifts = gifts.filter(g => g.status === "pending");
-      
+
       res.json({
         isBetaTester: !!tester,
         tester,
@@ -16031,20 +16029,20 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       const { allocationId, walletAddress } = req.body;
-      
+
       // Check if already claimed
       const existing = await storage.getAirdropClaimByUser(allocationId, userId);
       if (existing) {
         return res.status(400).json({ error: "Already claimed this airdrop" });
       }
-      
+
       // Get allocation
       const allocations = await storage.getAirdropAllocations();
       const allocation = allocations.find(a => a.id === allocationId);
       if (!allocation || !allocation.isActive) {
         return res.status(400).json({ error: "Airdrop not available" });
       }
-      
+
       // Create claim (amount would be calculated based on tier/eligibility)
       const claim = await storage.createAirdropClaim({
         allocationId,
@@ -16053,7 +16051,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         amount: "1000",
         status: "pending",
       });
-      
+
       res.json({ claim });
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Failed to claim" });
@@ -16061,7 +16059,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   // ===== Marketing Automation Routes =====
-  
+
   // Get all marketing posts
   app.get("/api/marketing/posts", isAuthenticated, async (req: Request, res: Response) => {
     try {
@@ -16164,21 +16162,21 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const { platform } = req.params;
       const { postId } = req.body;
-      
+
       let post;
       if (postId) {
         post = await storage.getMarketingPost(postId);
       } else {
         post = await storage.getRandomActivePost(platform);
       }
-      
+
       if (!post) {
         return res.status(404).json({ error: "No active posts available for this platform" });
       }
 
       const { deploySocialPost } = await import("./social-connectors");
       const result = await deploySocialPost(platform, post.content, post.imageUrl);
-      
+
       await storage.recordMarketingDeploy({
         postId: post.id,
         platform,
@@ -16186,12 +16184,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         externalId: result.externalId,
         errorMessage: result.error,
       });
-      
+
       if (result.success) {
         await storage.markPostUsed(post.id);
         await storage.updateLastDeployed(platform);
       }
-      
+
       res.json({ success: result.success, post, result });
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Failed to deploy" });
@@ -16227,14 +16225,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   // =====================================================
   // CHRONICLES AUTHENTICATION - Separate Game Auth System
   // =====================================================
-  
+
   const crypto = await import("crypto");
-  
+
   // Secure password hashing using PBKDF2 with 100,000 iterations
   const PBKDF2_ITERATIONS = 100000;
   const PBKDF2_KEYLEN = 64;
   const PBKDF2_DIGEST = 'sha512';
-  
+
   function hashChroniclePassword(password: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const salt = crypto.randomBytes(32).toString('hex');
@@ -16244,7 +16242,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       });
     });
   }
-  
+
   function verifyChroniclePassword(password: string, storedHash: string): Promise<boolean> {
     return new Promise((resolve) => {
       const parts = storedHash.split(':');
@@ -16267,59 +16265,59 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       });
     });
   }
-  
+
   function generateChroniclesSessionToken(): string {
     return crypto.randomBytes(32).toString('hex');
   }
-  
+
   // Chronicles signup
   app.post("/api/chronicles/auth/signup", async (req: Request, res: Response) => {
     try {
       const { username, email, firstName, lastName, password } = req.body;
-      
+
       if (!username || !email || !firstName || !lastName || !password) {
         return res.status(400).json({ error: "All fields are required" });
       }
-      
+
       if (username.length < 3 || username.length > 30) {
         return res.status(400).json({ error: "Username must be 3-30 characters" });
       }
-      
+
       // Basic email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         return res.status(400).json({ error: "Please enter a valid email address" });
       }
-      
+
       if (password.length < 6) {
         return res.status(400).json({ error: "Password must be at least 6 characters" });
       }
-      
+
       // Check if username exists (case-insensitive)
       const existingUsername = await db.select().from(chronicleAccounts)
         .where(sql`LOWER(${chronicleAccounts.username}) = LOWER(${username})`)
         .limit(1);
-      
+
       if (existingUsername.length > 0) {
         return res.status(400).json({ error: "Username already taken" });
       }
-      
+
       // Check if email exists (case-insensitive)
       const existingEmail = await db.select().from(chronicleAccounts)
         .where(sql`LOWER(${chronicleAccounts.email}) = LOWER(${email})`)
         .limit(1);
-      
+
       if (existingEmail.length > 0) {
         return res.status(400).json({ error: "Email already registered" });
       }
-      
+
       // Hash password using PBKDF2
       const passwordHash = await hashChroniclePassword(password);
-      
+
       // Generate session
       const sessionToken = generateChroniclesSessionToken();
       const sessionExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
-      
+
       // Create account
       const [account] = await db.insert(chronicleAccounts).values({
         username: username.toLowerCase(),
@@ -16332,7 +16330,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         sessionExpiresAt,
         lastLoginAt: new Date(),
       }).returning();
-      
+
       // Grant welcome bonus Shells to new players (F2P friendly start)
       const WELCOME_BONUS_SHELLS = 250;
       try {
@@ -16350,7 +16348,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         console.error("[Chronicles] Failed to grant welcome Shells:", shellError);
         // Don't fail registration if Shell grant fails
       }
-      
+
       res.json({
         success: true,
         account: {
@@ -16367,39 +16365,39 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.status(500).json({ error: error.message || "Signup failed" });
     }
   });
-  
+
   // Chronicles login
   app.post("/api/chronicles/auth/login", async (req: Request, res: Response) => {
     try {
       const { username, password } = req.body;
-      
+
       if (!username || !password) {
         return res.status(400).json({ error: "Username and password are required" });
       }
-      
+
       // Find account (case-insensitive)
       const [account] = await db.select().from(chronicleAccounts)
         .where(sql`LOWER(${chronicleAccounts.username}) = LOWER(${username})`)
         .limit(1);
-      
+
       if (!account) {
         return res.status(401).json({ error: "Invalid username or password" });
       }
-      
+
       if (!account.isActive) {
         return res.status(401).json({ error: "Account is disabled" });
       }
-      
+
       // Verify password using PBKDF2
       const isValidPassword = await verifyChroniclePassword(password, account.passwordHash);
       if (!isValidPassword) {
         return res.status(401).json({ error: "Invalid username or password" });
       }
-      
+
       // Generate new session
       const sessionToken = generateChroniclesSessionToken();
       const sessionExpiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
-      
+
       // Update session
       await db.update(chronicleAccounts)
         .set({
@@ -16409,7 +16407,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           updatedAt: new Date(),
         })
         .where(eq(chronicleAccounts.id, account.id));
-      
+
       res.json({
         success: true,
         account: {
@@ -16426,7 +16424,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.status(500).json({ error: error.message || "Login failed" });
     }
   });
-  
+
   // Chronicles session check
   app.get("/api/chronicles/auth/session", async (req: Request, res: Response) => {
     try {
@@ -16434,25 +16432,25 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({ error: "No session token provided", authenticated: false });
       }
-      
+
       const sessionToken = authHeader.substring(7);
-      
+
       const [account] = await db.select().from(chronicleAccounts)
         .where(eq(chronicleAccounts.sessionToken, sessionToken))
         .limit(1);
-      
+
       if (!account) {
         return res.status(401).json({ error: "Invalid session", authenticated: false });
       }
-      
+
       if (!account.isActive) {
         return res.status(401).json({ error: "Account disabled", authenticated: false });
       }
-      
+
       if (account.sessionExpiresAt && new Date(account.sessionExpiresAt) < new Date()) {
         return res.status(401).json({ error: "Session expired", authenticated: false });
       }
-      
+
       res.json({
         authenticated: true,
         account: {
@@ -16467,14 +16465,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.status(500).json({ error: error.message || "Session check failed", authenticated: false });
     }
   });
-  
+
   // Chronicles logout
   app.post("/api/chronicles/auth/logout", async (req: Request, res: Response) => {
     try {
       const authHeader = req.headers.authorization;
       if (authHeader && authHeader.startsWith('Bearer ')) {
         const sessionToken = authHeader.substring(7);
-        
+
         await db.update(chronicleAccounts)
           .set({
             sessionToken: null,
@@ -16483,7 +16481,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           })
           .where(eq(chronicleAccounts.sessionToken, sessionToken));
       }
-      
+
       res.json({ success: true, message: "Logged out" });
     } catch (error: any) {
       console.error("Chronicles logout error:", error);
@@ -16494,7 +16492,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   // =====================================================
   // CHRONICLES PERSONALITY AI - API Routes
   // =====================================================
-  
+
   const { chroniclesAI } = await import("./chronicles-ai");
   const { chroniclesService: chroniclesGameService, STARTER_FACTIONS, SEASON_ZERO_QUESTS, STARTER_NPCS } = await import("./chronicles-service");
   Object.assign(chroniclesGameService, { STARTER_FACTIONS, SEASON_ZERO_QUESTS, STARTER_NPCS });
@@ -16534,12 +16532,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const personality = await chroniclesAI.getOrCreatePersonality(userId);
       const choiceSignature = chroniclesAI.generateChoiceSignature(personality);
       const emotionalState = chroniclesAI.getEmotionalState(personality);
       const description = chroniclesAI.describeEmotionalState(emotionalState);
-      
+
       res.json({
         personality,
         choiceSignature,
@@ -16576,21 +16574,21 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const parseResult = UpdatePersonalitySchema.safeParse(req.body);
       if (!parseResult.success) {
         return res.status(400).json({ error: "Invalid request body", details: parseResult.error.issues });
       }
-      
-      const { 
-        playerName, parallelSelfName, worldview, coreValues, 
+
+      const {
+        playerName, parallelSelfName, worldview, coreValues,
         decisionStyle, conflictApproach, predictedArchetype,
         colorPreference, eraInterest, primaryTrait, secondaryTrait, challengeResponse,
         audioPreference, audioMood
       } = parseResult.data;
-      
+
       const personality = await chroniclesAI.getOrCreatePersonality(userId, playerName);
-      
+
       const updates: any = { updatedAt: new Date() };
       if (playerName) updates.playerName = playerName;
       if (parallelSelfName) updates.parallelSelfName = parallelSelfName;
@@ -16606,13 +16604,13 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (challengeResponse) updates.challengeResponse = challengeResponse;
       if (audioPreference) updates.audioPreference = audioPreference;
       if (audioMood) updates.audioMood = audioMood;
-      
+
       if (Object.keys(updates).length > 1) {
         await db.update(playerPersonalities)
           .set(updates)
           .where(eq(playerPersonalities.userId, userId));
       }
-      
+
       const updated = await chroniclesAI.getOrCreatePersonality(userId);
       res.json({ personality: updated });
     } catch (error: any) {
@@ -16621,7 +16619,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     }
   });
 
-// Estate persistence endpoints
+  // Estate persistence endpoints
   const EstateGridCellSchema = z.object({
     x: z.number(),
     y: z.number(),
@@ -16642,23 +16640,23 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const era = (req.query.era as string) || "modern";
       const [estate] = await db.select().from(playerEstates)
         .where(and(eq(playerEstates.userId, userId), eq(playerEstates.era, era)));
-      
+
       if (!estate) {
         return res.json({ estate: null, era });
       }
-      
+
       let gridData = [];
       try {
         gridData = JSON.parse(estate.gridData || '[]');
       } catch (e) {
         gridData = [];
       }
-      
-      res.json({ 
+
+      res.json({
         estate: {
           ...estate,
           gridData
@@ -16677,17 +16675,17 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const estates = await db.select().from(playerEstates)
         .where(eq(playerEstates.userId, userId));
-      
+
       const result: Record<string, any> = {};
       for (const estate of estates) {
         let gridData = [];
         try { gridData = JSON.parse(estate.gridData || '[]'); } catch (e) { gridData = []; }
         result[estate.era] = { ...estate, gridData };
       }
-      
+
       res.json({ estates: result });
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Failed to get estates" });
@@ -16700,25 +16698,25 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const parseResult = SaveEstateSchema.safeParse(req.body);
       if (!parseResult.success) {
         return res.status(400).json({ error: "Invalid estate data", details: parseResult.error.issues });
       }
-      
+
       const { gridData, totalBuildings, shellsSpent } = parseResult.data;
       const era = (req.body.era as string) || "modern";
-      
+
       const validEras = ["modern", "medieval", "wildwest"];
       if (!validEras.includes(era)) {
         return res.status(400).json({ error: "Invalid era" });
       }
-      
+
       const [existing] = await db.select().from(playerEstates)
         .where(and(eq(playerEstates.userId, userId), eq(playerEstates.era, era)));
-      
+
       const previousBuildings = existing?.totalBuildings || 0;
-      
+
       if (existing) {
         await db.update(playerEstates)
           .set({
@@ -16737,7 +16735,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           shellsSpent: shellsSpent || 0
         });
       }
-      
+
       let shellsEarned = 0;
       let questProgress = { questsUpdated: [] as string[], questsCompleted: [] as string[] };
       const newBuildings = (totalBuildings || 1) - previousBuildings;
@@ -16754,7 +16752,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           console.warn("[Chronicles] Failed to award estate_upgrade Shells:", shellErr);
         }
       }
-      
+
       res.json({ success: true, shellsEarned, questProgress, era });
     } catch (error: any) {
       console.error("Save estate error:", error);
@@ -16807,28 +16805,28 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { plotId } = req.params;
       const [plot] = await db.select().from(landPlots).where(eq(landPlots.id, plotId));
-      
+
       if (!plot) return res.status(404).json({ error: "Plot not found" });
       if (plot.ownerId) return res.status(400).json({ error: "Plot already owned" });
-      
+
       // Check user has enough Shells (using treasury ledger balance)
       // TODO: Implement proper shells balance check from treasury ledger
       const userProfile = await storage.getUser(userId);
       const shellsBalance = 0; // Stub - shells tracked via treasury ledger, not user profile
       // For now, allow purchases - balance tracking via treasury ledger happens separately
-      
+
       // Log the purchase intent (actual deduction tracked in treasury ledger)
       console.log(`[Plot Purchase] User ${userId} purchasing plot ${plotId} for ${plot.currentPrice} shells`);
       await db.update(landPlots)
         .set({ ownerId: userId, isForSale: false, purchasedAt: new Date() })
         .where(eq(landPlots.id, plotId));
-      
+
       // Update zone occupied count
       await db.execute(sql`UPDATE city_zones SET occupied_plots = occupied_plots + 1 WHERE id = ${plot.zoneId}`);
-      
+
       res.json({ success: true, message: "Plot purchased!" });
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Failed to purchase plot" });
@@ -16840,23 +16838,23 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { plotId } = req.params;
       const { askingPrice } = req.body;
-      
+
       const [plot] = await db.select().from(landPlots).where(eq(landPlots.id, plotId));
       if (!plot) return res.status(404).json({ error: "Plot not found" });
       if (plot.ownerId !== userId) return res.status(403).json({ error: "You don't own this plot" });
-      
+
       await db.insert(plotListings).values({
         plotId,
         sellerId: userId,
         askingPrice: askingPrice || plot.currentPrice,
         status: "active"
       });
-      
+
       await db.update(landPlots).set({ isForSale: true, listingPrice: askingPrice }).where(eq(landPlots.id, plotId));
-      
+
       res.json({ success: true });
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Failed to list plot" });
@@ -16873,29 +16871,29 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const streak = await storage.getLoginStreak(userId);
-      
+
       if (!streak) {
-        return res.json({ 
-          canClaim: true, 
-          currentStreak: 0, 
+        return res.json({
+          canClaim: true,
+          currentStreak: 0,
           nextReward: DAILY_REWARDS_SCHEDULE[0],
           longestStreak: 0,
           totalLogins: 0,
           totalShellsEarned: 0
         });
       }
-      
+
       const now = new Date();
       const lastLogin = streak.lastLoginAt ? new Date(streak.lastLoginAt) : null;
       const hoursSinceLogin = lastLogin ? (now.getTime() - lastLogin.getTime()) / (1000 * 60 * 60) : 999;
-      
+
       const canClaim = hoursSinceLogin >= 24; // Strict 24-hour rule
       const streakBroken = hoursSinceLogin > 48; // Streak breaks after 48 hours
       const currentStreak = streakBroken ? 0 : streak.currentStreak;
       const nextRewardIndex = currentStreak % DAILY_REWARDS_SCHEDULE.length;
-      
+
       res.json({
         canClaim,
         currentStreak,
@@ -16915,27 +16913,27 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       // Use the new storage method with 24-hour real-time rule
       const result = await storage.checkInDaily(userId);
-      
+
       if (!result.reward) {
-        return res.status(400).json({ 
+        return res.status(400).json({
           error: result.message,
           currentStreak: result.streak.currentStreak,
           canClaim: false
         });
       }
-      
+
       // Grant Shells to the user's balance via the Shells ledger
       const totalReward = result.reward.shellsAwarded + (result.reward.bonusAmount || 0);
       const username = req.user?.username || req.user?.firstName || "Player";
       try {
         await shellsService.addShells(
-          userId, 
-          username, 
-          totalReward, 
-          "bonus", 
+          userId,
+          username,
+          totalReward,
+          "bonus",
           `Daily login reward (Day ${result.streak.currentStreak})`,
           `daily_${Date.now()}`,
           "daily_login"
@@ -16945,10 +16943,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         await storage.updateOrbsBalance(userId, totalReward, "Daily login reward");
         console.warn("[Daily Reward] Fell back to orbs balance:", shellErr);
       }
-      
-      res.json({ 
-        success: true, 
-        reward: totalReward, 
+
+      res.json({
+        success: true,
+        reward: totalReward,
         baseReward: result.reward.shellsAwarded,
         bonusType: result.reward.bonusType,
         bonusAmount: result.reward.bonusAmount,
@@ -16967,7 +16965,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const history = await storage.getRewardHistory(userId, 30);
       res.json({ history });
     } catch (error: any) {
@@ -16984,7 +16982,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const quests = await questsService.getActiveQuests(userId);
       res.json(quests);
     } catch (error: any) {
@@ -16997,16 +16995,16 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { questId } = req.params;
       const username = req.user?.username || req.user?.firstName || "Player";
-      
+
       const result = await questsService.claimReward(userId, username, questId);
-      
+
       if (!result.success) {
         return res.status(400).json({ error: result.message });
       }
-      
+
       res.json(result);
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Failed to claim reward" });
@@ -17022,7 +17020,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const persona = await mirrorLifeService.getOrCreateEchoPersona(userId);
       res.json({ persona });
     } catch (error: any) {
@@ -17035,7 +17033,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const insight = await mirrorLifeService.generatePersonaInsight(userId);
       res.json({ insight });
     } catch (error: any) {
@@ -17048,7 +17046,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const entries = await mirrorLifeService.getRecentJournalEntries(userId, 7);
       res.json({ entries });
     } catch (error: any) {
@@ -17061,7 +17059,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const pulse = await mirrorLifeService.getMorningPulse(userId);
       res.json(pulse);
     } catch (error: any) {
@@ -17074,7 +17072,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const result = await mirrorLifeService.claimMorningPulse(userId);
       res.json(result);
     } catch (error: any) {
@@ -17141,11 +17139,11 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const userId = req.chroniclesUser.id;
       const { roomId } = req.params;
       const { catalogId, gridX, gridY } = req.body;
-      
+
       if (!catalogId || gridX === undefined || gridY === undefined) {
         return res.status(400).json({ error: "Missing required fields: catalogId, gridX, gridY" });
       }
-      
+
       const obj = await interiorsService.placeObject(userId, roomId, catalogId, gridX, gridY);
       res.json({ success: true, object: obj });
     } catch (error: any) {
@@ -17172,11 +17170,11 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const username = req.chroniclesUser.username || req.chroniclesUser.displayName || "Player";
       const { objectId } = req.params;
       const { verb } = req.body;
-      
+
       if (!verb) {
         return res.status(400).json({ error: "Interaction verb required" });
       }
-      
+
       const result = await interiorsService.interactWithObject(userId, username, objectId, verb);
       res.json(result);
     } catch (error: any) {
@@ -17203,22 +17201,22 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { plotId, businessName, businessType, businessWebsite, businessEmail } = req.body;
-      
+
       if (!plotId || !businessName || !businessType || !businessEmail) {
         return res.status(400).json({ error: "Missing required fields" });
       }
-      
+
       // Verify plot exists and is in commercial zone
       const [plot] = await db.select().from(landPlots).where(eq(landPlots.id, plotId));
       if (!plot) return res.status(404).json({ error: "Plot not found" });
-      
+
       const [zone] = await db.select().from(cityZones).where(eq(cityZones.id, plot.zoneId));
       if (!zone || (zone.zoneType !== "commercial" && zone.zoneType !== "mixed")) {
         return res.status(400).json({ error: "Businesses can only claim commercial or mixed-use plots" });
       }
-      
+
       // Create business claim
       const [claim] = await db.insert(businessClaims).values({
         plotId,
@@ -17229,7 +17227,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         claimantUserId: userId,
         verificationStatus: "pending"
       }).returning();
-      
+
       res.json({ success: true, claim, message: "Business claim submitted for verification" });
     } catch (error: any) {
       res.status(500).json({ error: error.message || "Failed to submit claim" });
@@ -17270,20 +17268,20 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       // Check credits availability first (without deducting)
       const hasCredits = await creditsService.hasCredits(userId, CREDIT_COSTS.SCENARIO_GENERATION);
       if (!hasCredits) {
         const balance = await creditsService.getBalance(userId);
-        return res.status(402).json({ 
-          error: "Insufficient credits", 
+        return res.status(402).json({
+          error: "Insufficient credits",
           required: CREDIT_COSTS.SCENARIO_GENERATION,
-          balance 
+          balance
         });
       }
-      
+
       const { era, location, situation, npcPresent } = req.body;
-      
+
       // Generate scenario first
       const personality = await chroniclesAI.getOrCreatePersonality(userId);
       const scenario = await chroniclesAI.generateScenario(personality, {
@@ -17292,7 +17290,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         situation: situation || "A moment of decision",
         npcPresent,
       });
-      
+
       // Only deduct credits AFTER successful generation
       const creditsResult = await creditsService.deductCredits(
         userId,
@@ -17300,12 +17298,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         "Scenario generation",
         "ai_usage"
       );
-      
+
       // Handle race condition where credits were consumed concurrently
       if (!creditsResult.success) {
         console.warn(`[Credits] Scenario generated but deduction failed for user ${userId} - returning free result`);
       }
-      
+
       res.json({ scenario, creditsUsed: creditsResult.success ? CREDIT_COSTS.SCENARIO_GENERATION : 0, creditsRemaining: creditsResult.newBalance });
     } catch (error: any) {
       console.error("Generate scenario error:", error);
@@ -17319,24 +17317,24 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       // Validate request BEFORE deducting credits
       const { scenario, chosenOption, choiceReasoning, era } = req.body;
       if (!scenario || !chosenOption) {
         return res.status(400).json({ error: "Scenario and chosen option required" });
       }
-      
+
       // Check credits availability first (without deducting)
       const hasCredits = await creditsService.hasCredits(userId, CREDIT_COSTS.CHOICE_PROCESSING);
       if (!hasCredits) {
         const balance = await creditsService.getBalance(userId);
-        return res.status(402).json({ 
-          error: "Insufficient credits", 
+        return res.status(402).json({
+          error: "Insufficient credits",
           required: CREDIT_COSTS.CHOICE_PROCESSING,
-          balance 
+          balance
         });
       }
-      
+
       // Process the choice first
       const personality = await chroniclesAI.getOrCreatePersonality(userId);
       const result = await chroniclesAI.processChoice(
@@ -17346,7 +17344,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         choiceReasoning,
         era
       );
-      
+
       // Only deduct credits AFTER successful processing
       const creditsResult = await creditsService.deductCredits(
         userId,
@@ -17354,12 +17352,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         "Choice processing",
         "ai_usage"
       );
-      
+
       // Handle race condition where credits were consumed concurrently
       if (!creditsResult.success) {
         console.warn(`[Credits] Choice processed but deduction failed for user ${userId} - returning free result`);
       }
-      
+
       // Award Shells for making a story choice (F2P reward)
       let shellsEarned = 0;
       let questProgress = { questsUpdated: [] as string[], questsCompleted: [] as string[] };
@@ -17373,7 +17371,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       } catch (shellErr) {
         console.warn("[Chronicles] Failed to award story_choice Shells:", shellErr);
       }
-      
+
       res.json({ ...result, creditsUsed: creditsResult.success ? CREDIT_COSTS.CHOICE_PROCESSING : 0, creditsRemaining: creditsResult.newBalance, shellsEarned, questProgress });
     } catch (error: any) {
       console.error("Process choice error:", error);
@@ -17387,24 +17385,24 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       // Validate request BEFORE deducting credits
       const { message, era, situation } = req.body;
       if (!message) {
         return res.status(400).json({ error: "Message required" });
       }
-      
+
       // Check credits availability first (without deducting)
       const hasCredits = await creditsService.hasCredits(userId, CREDIT_COSTS.AI_CHAT_MESSAGE);
       if (!hasCredits) {
         const balance = await creditsService.getBalance(userId);
-        return res.status(402).json({ 
-          error: "Insufficient credits", 
+        return res.status(402).json({
+          error: "Insufficient credits",
           required: CREDIT_COSTS.AI_CHAT_MESSAGE,
-          balance 
+          balance
         });
       }
-      
+
       // Process the chat first
       const personality = await chroniclesAI.getOrCreatePersonality(userId);
       const response = await chroniclesAI.generateParallelSelfResponse(
@@ -17412,7 +17410,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         message,
         { era, situation }
       );
-      
+
       // Only deduct credits AFTER successful processing
       const creditsResult = await creditsService.deductCredits(
         userId,
@@ -17420,12 +17418,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         "Chat with parallel self",
         "ai_usage"
       );
-      
+
       // Handle race condition where credits were consumed concurrently
       if (!creditsResult.success) {
         console.warn(`[Credits] Chat processed but deduction failed for user ${userId} - returning free result`);
       }
-      
+
       res.json({ ...response, creditsUsed: creditsResult.success ? CREDIT_COSTS.AI_CHAT_MESSAGE : 0, creditsRemaining: creditsResult.newBalance });
     } catch (error: any) {
       console.error("Chat error:", error);
@@ -17439,10 +17437,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const personality = await chroniclesAI.getOrCreatePersonality(userId);
       const summary = await chroniclesAI.generatePersonalitySummary(personality);
-      
+
       res.json({ summary });
     } catch (error: any) {
       console.error("Summary error:", error);
@@ -17451,7 +17449,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   app.get("/api/chronicles/values", async (req, res) => {
-    res.json({ 
+    res.json({
       observedValues: chroniclesAI.OBSERVED_VALUES,
       visualPresentations: chroniclesAI.VISUAL_PRESENTATIONS,
     });
@@ -17463,7 +17461,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       res.json({
         era: "Age of Crowns",
         eraYear: "1247 CE",
@@ -17485,7 +17483,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   // ============================================
   // CHRONICLES GAMEPLAY API (Season Zero)
   // ============================================
-  
+
   app.get("/api/chronicles/game/season", async (req, res) => {
     try {
       const season = await chroniclesGameService.getCurrentSeason();
@@ -17510,13 +17508,15 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   app.get("/api/chronicles/game/npcs", async (req, res) => {
     const era = req.query.era as string;
     const filtered = era ? STARTER_NPCS.filter(n => n.era === era) : STARTER_NPCS;
-    res.json({ npcs: filtered.map((n: any) => ({
-      id: n.name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_'),
-      name: n.name,
-      title: n.title,
-      era: n.era,
-      factionId: n.factionId,
-    }))});
+    res.json({
+      npcs: filtered.map((n: any) => ({
+        id: n.name.toLowerCase().replace(/[^a-z0-9]/g, '_').replace(/_+/g, '_'),
+        name: n.name,
+        title: n.title,
+        era: n.era,
+        factionId: n.factionId,
+      }))
+    });
   });
 
   app.post("/api/chronicles/game/character", isChroniclesAuthenticated, async (req: any, res) => {
@@ -17525,12 +17525,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const { name, era } = req.body;
       if (!name) {
         return res.status(400).json({ error: "Character name required" });
       }
-      
+
       const character = await chroniclesGameService.createCharacter(userId, name, era || "medieval");
       res.json(character);
     } catch (error: any) {
@@ -17544,12 +17544,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const { characterId, questId } = req.body;
       if (!questId) {
         return res.status(400).json({ error: "Quest ID required" });
       }
-      
+
       const questInstance = await chroniclesGameService.startQuest(characterId || "default", questId);
       res.json(questInstance);
     } catch (error: any) {
@@ -17563,10 +17563,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const { characterId, questId, decisionId } = req.body;
       const result = await chroniclesGameService.makeDecision(characterId || "default", questId, decisionId);
-      
+
       // Create chronicle proof for this decision
       if (result.success) {
         const proof = await chroniclesGameService.createChronicleProof(
@@ -17577,7 +17577,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         );
         (result as any).chronicleProof = proof;
       }
-      
+
       res.json(result);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -17590,14 +17590,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const { characterId, npcId, message } = req.body;
       if (!npcId || !message) {
         return res.status(400).json({ error: "NPC ID and message required" });
       }
-      
+
       const response = await chroniclesGameService.talkToNpc(characterId || "default", npcId, message);
-      
+
       // Award Shells for NPC conversation (F2P reward)
       let shellsEarned = 0;
       let questProgress = { questsUpdated: [] as string[], questsCompleted: [] as string[] };
@@ -17611,7 +17611,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       } catch (shellErr) {
         // Silently fail - NPC conversations are casual
       }
-      
+
       res.json({ ...response, shellsEarned, questProgress });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
@@ -17624,12 +17624,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const { characterId, factionId } = req.body;
       if (!factionId) {
         return res.status(400).json({ error: "Faction ID required" });
       }
-      
+
       const result = await chroniclesGameService.joinFaction(characterId || "default", factionId);
       res.json(result);
     } catch (error: any) {
@@ -17878,7 +17878,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   // ============================================
   // CHRONICLES TIME TRAVEL SYSTEM - BETA SEASON 0
   // ============================================
-  
+
   // Get all available eras
   app.get("/api/chronicles/eras", async (req, res) => {
     try {
@@ -17888,13 +17888,13 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.status(500).json({ error: error.message });
     }
   });
-  
+
   // Get player's era progress and portal state
   app.get("/api/chronicles/portal", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       // Get or create portal state
       let [portal] = await db.select().from(chronicleTimePortals).where(eq(chronicleTimePortals.userId, userId));
       if (!portal) {
@@ -17902,169 +17902,169 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         // Also create Modern era progress (starting era)
         await db.insert(chroniclePlayerEras).values({ userId, eraCode: 'modern', isUnlocked: true, isCurrent: true, firstEnteredAt: new Date() });
       }
-      
+
       // Get player's era progress
       const playerEras = await db.select().from(chroniclePlayerEras).where(eq(chroniclePlayerEras.userId, userId));
-      
+
       // Get collected artifacts
       const collectedArtifacts = await db.select().from(chroniclePlayerArtifacts).where(eq(chroniclePlayerArtifacts.userId, userId));
-      
+
       // Get all eras for reference
       const allEras = await db.select().from(chronicleEras).where(eq(chronicleEras.isActive, true)).orderBy(chronicleEras.sortOrder);
-      
+
       res.json({ portal, playerEras, collectedArtifacts, allEras, isBeta: true });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
   });
-  
+
   // Get available missions for current era
   app.get("/api/chronicles/missions", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       // Get player's current era
       const [portal] = await db.select().from(chronicleTimePortals).where(eq(chronicleTimePortals.userId, userId));
       const currentEra = portal?.currentEraCode || 'modern';
-      
+
       // Get missions for current era
       const missions = await db.select().from(chronicleEraMissions)
         .where(and(eq(chronicleEraMissions.eraCode, currentEra), eq(chronicleEraMissions.isActive, true)))
         .orderBy(chronicleEraMissions.sortOrder);
-      
+
       // Get player's mission progress
       const progress = await db.select().from(chronicleMissionProgress).where(eq(chronicleMissionProgress.userId, userId));
-      
+
       res.json({ missions, progress, currentEra });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
   });
-  
+
   // Start a mission
   app.post("/api/chronicles/missions/:missionId/start", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { missionId } = req.params;
-      
+
       // Check if already started
       const [existing] = await db.select().from(chronicleMissionProgress)
         .where(and(eq(chronicleMissionProgress.userId, userId), eq(chronicleMissionProgress.missionId, missionId)));
-      
+
       if (existing) {
         return res.json({ progress: existing, alreadyStarted: true });
       }
-      
+
       const [progress] = await db.insert(chronicleMissionProgress)
         .values({ userId, missionId, status: 'active', startedAt: new Date() })
         .returning();
-      
+
       res.json({ progress, started: true });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
   });
-  
+
   // Reveal a hint for a mission
   app.post("/api/chronicles/missions/:missionId/hint", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { missionId } = req.params;
-      
+
       const [progress] = await db.select().from(chronicleMissionProgress)
         .where(and(eq(chronicleMissionProgress.userId, userId), eq(chronicleMissionProgress.missionId, missionId)));
-      
+
       if (!progress) return res.status(400).json({ error: "Mission not started" });
       if (progress.hintsRevealed >= 3) return res.json({ progress, message: "All hints revealed" });
-      
+
       const [updated] = await db.update(chronicleMissionProgress)
         .set({ hintsRevealed: progress.hintsRevealed + 1 })
         .where(eq(chronicleMissionProgress.id, progress.id))
         .returning();
-      
+
       // Get mission to return appropriate hint
       const [mission] = await db.select().from(chronicleEraMissions).where(eq(chronicleEraMissions.id, missionId));
       const hints = [mission?.hint1, mission?.hint2, mission?.hint3].filter(Boolean);
       const revealedHint = hints[updated.hintsRevealed - 1] || null;
-      
+
       res.json({ progress: updated, hint: revealedHint });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
   });
-  
+
   // Submit riddle answer
   app.post("/api/chronicles/missions/:missionId/riddle", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { missionId } = req.params;
       const { answer } = req.body;
-      
+
       const [mission] = await db.select().from(chronicleEraMissions).where(eq(chronicleEraMissions.id, missionId));
       if (!mission?.riddleAnswer) return res.status(400).json({ error: "This mission has no riddle" });
-      
+
       const isCorrect = answer?.toLowerCase().trim() === mission.riddleAnswer.toLowerCase().trim();
-      
+
       if (isCorrect) {
         await db.update(chronicleMissionProgress)
           .set({ riddleSolved: true })
           .where(and(eq(chronicleMissionProgress.userId, userId), eq(chronicleMissionProgress.missionId, missionId)));
       }
-      
+
       res.json({ correct: isCorrect, message: isCorrect ? "Correct! The answer reveals itself." : "That's not quite right. Think again." });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
   });
-  
+
   // Make conflict choice
   app.post("/api/chronicles/missions/:missionId/conflict", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { missionId } = req.params;
       const { choice } = req.body;
-      
+
       await db.update(chronicleMissionProgress)
         .set({ conflictChoiceMade: choice })
         .where(and(eq(chronicleMissionProgress.userId, userId), eq(chronicleMissionProgress.missionId, missionId)));
-      
+
       res.json({ success: true, message: "Your choice has been recorded. The consequences unfold..." });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
   });
-  
+
   // Complete a mission and claim artifact
   app.post("/api/chronicles/missions/:missionId/complete", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { missionId } = req.params;
-      
+
       const [mission] = await db.select().from(chronicleEraMissions).where(eq(chronicleEraMissions.id, missionId));
       if (!mission) return res.status(404).json({ error: "Mission not found" });
-      
+
       const [progress] = await db.select().from(chronicleMissionProgress)
         .where(and(eq(chronicleMissionProgress.userId, userId), eq(chronicleMissionProgress.missionId, missionId)));
-      
+
       if (!progress) return res.status(400).json({ error: "Mission not started" });
       if (progress.status === 'completed') return res.json({ alreadyCompleted: true, message: "Mission already completed" });
-      
+
       // Complete the mission
       await db.update(chronicleMissionProgress)
         .set({ status: 'completed', completedAt: new Date() })
         .where(eq(chronicleMissionProgress.id, progress.id));
-      
+
       // Award artifact if mission has one
       let artifact = null;
       if (mission.artifactRewardId) {
@@ -18075,20 +18075,20 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           });
         }
       }
-      
+
       // Award Shells
       const user = await storage.getUser(userId);
       if (user && mission.shellsReward > 0) {
         await shellsService.addShells(userId, user.firstName || user.email || 'User', mission.shellsReward, 'earn', `Completed: ${mission.title}`, missionId, 'mission');
       }
-      
+
       // Update mission completion count
       await db.update(chronicleEraMissions)
         .set({ timesCompleted: mission.timesCompleted + 1 })
         .where(eq(chronicleEraMissions.id, missionId));
-      
-      res.json({ 
-        completed: true, 
+
+      res.json({
+        completed: true,
         artifact,
         rewards: { shells: mission.shellsReward, experience: mission.experienceReward, reputation: mission.reputationReward }
       });
@@ -18096,7 +18096,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.status(500).json({ error: error.message });
     }
   });
-  
+
   // Get artifacts for an era
   app.get("/api/chronicles/artifacts/:eraCode", async (req, res) => {
     try {
@@ -18108,69 +18108,69 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.status(500).json({ error: error.message });
     }
   });
-  
+
   // Check if player can travel to an era
   app.get("/api/chronicles/portal/check/:eraCode", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { eraCode } = req.params;
-      
+
       // Get era requirements
       const [era] = await db.select().from(chronicleEras).where(eq(chronicleEras.code, eraCode));
       if (!era) return res.status(404).json({ error: "Era not found" });
       if (era.isStartingEra) return res.json({ canTravel: true, isStartingEra: true });
-      
+
       // Count player's artifacts for this era
       const playerArtifacts = await db.select().from(chroniclePlayerArtifacts)
         .innerJoin(chronicleArtifacts, eq(chroniclePlayerArtifacts.artifactId, chronicleArtifacts.id))
         .where(and(eq(chroniclePlayerArtifacts.userId, userId), eq(chronicleArtifacts.eraCode, eraCode)));
-      
+
       const collected = playerArtifacts.length;
       const required = era.artifactsRequired;
       const canTravel = collected >= required;
-      
+
       res.json({ canTravel, collected, required, era });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }
   });
-  
+
   // Activate portal and travel to era
   app.post("/api/chronicles/portal/travel", isChroniclesAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { eraCode } = req.body;
-      
+
       // Verify player can travel
       const [era] = await db.select().from(chronicleEras).where(eq(chronicleEras.code, eraCode));
       if (!era) return res.status(404).json({ error: "Era not found" });
-      
+
       if (!era.isStartingEra) {
         const playerArtifacts = await db.select().from(chroniclePlayerArtifacts)
           .innerJoin(chronicleArtifacts, eq(chroniclePlayerArtifacts.artifactId, chronicleArtifacts.id))
           .where(and(eq(chroniclePlayerArtifacts.userId, userId), eq(chronicleArtifacts.eraCode, eraCode)));
-        
+
         if (playerArtifacts.length < era.artifactsRequired) {
           return res.status(400).json({ error: "Not enough artifacts to power the portal", required: era.artifactsRequired, collected: playerArtifacts.length });
         }
       }
-      
+
       // Update portal state
       await db.update(chronicleTimePortals)
         .set({ currentEraCode: eraCode, lastTravelAt: new Date(), totalTravels: sql`total_travels + 1`, portalStatus: 'active', updatedAt: new Date() })
         .where(eq(chronicleTimePortals.userId, userId));
-      
+
       // Update current era for player
       await db.update(chroniclePlayerEras).set({ isCurrent: false }).where(eq(chroniclePlayerEras.userId, userId));
-      
+
       // Create or update destination era progress
       const [existingEraProgress] = await db.select().from(chroniclePlayerEras)
         .where(and(eq(chroniclePlayerEras.userId, userId), eq(chroniclePlayerEras.eraCode, eraCode)));
-      
+
       if (existingEraProgress) {
         await db.update(chroniclePlayerEras)
           .set({ isCurrent: true, isUnlocked: true, lastVisitedAt: new Date() })
@@ -18178,9 +18178,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       } else {
         await db.insert(chroniclePlayerEras).values({ userId, eraCode, isUnlocked: true, isCurrent: true, firstEnteredAt: new Date() });
       }
-      
-      res.json({ 
-        success: true, 
+
+      res.json({
+        success: true,
         message: `The portal activates. ${era.ambientDescription || 'A new world awaits...'}`,
         era,
         travelComplete: true
@@ -18193,14 +18193,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   // ============================================
   // CREDITS API
   // ============================================
-  
+
   app.get("/api/credits/balance", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const credits = await creditsService.getOrCreateUserCredits(userId);
       res.json({
         balance: credits.creditBalance,
@@ -18231,7 +18231,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const limit = Math.min(parseInt(req.query.limit as string) || 50, 100);
       const transactions = await creditsService.getTransactionHistory(userId, limit);
       res.json({ transactions });
@@ -18247,17 +18247,17 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const { packageId } = req.body;
       if (!packageId) {
         return res.status(400).json({ error: "Package ID required" });
       }
-      
+
       const pkg = await creditsService.getPackageById(packageId);
       if (!pkg) {
         return res.status(404).json({ error: "Package not found" });
       }
-      
+
       // Create Stripe checkout session
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
@@ -18285,7 +18285,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           type: "credits_purchase",
         },
       });
-      
+
       res.json({ checkoutUrl: session.url, sessionId: session.id });
     } catch (error: any) {
       console.error("Create checkout error:", error);
@@ -18303,10 +18303,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const sample = await voiceService.getUserVoiceSample(userId);
       const provider = voiceService.getBestProvider();
-      
+
       res.json({
         hasVoiceSample: !!sample,
         sample: sample ? {
@@ -18335,21 +18335,21 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const { sampleUrl, duration, transcript, personalityId } = req.body;
-      
+
       if (!sampleUrl) {
         return res.status(400).json({ error: "Sample URL required" });
       }
-      
+
       const sample = await voiceService.saveVoiceSample(userId, personalityId || null, {
         sampleUrl,
         sampleDurationSec: duration,
         transcriptText: transcript,
       });
-      
-      res.json({ 
-        success: true, 
+
+      res.json({
+        success: true,
         sample: {
           id: sample.id,
           status: sample.cloneStatus,
@@ -18368,12 +18368,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const sample = await voiceService.getUserVoiceSample(userId);
       if (!sample) {
         return res.status(404).json({ error: "No voice sample found. Please record a sample first." });
       }
-      
+
       const result = await voiceService.createVoiceClone(userId, sample.id);
       res.json(result);
     } catch (error: any) {
@@ -18387,11 +18387,11 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   app.post("/api/voice/tts", async (req: any, res) => {
     try {
       const { text, voice } = req.body;
-      
+
       if (!text || text.length === 0) {
         return res.status(400).json({ error: "Text is required" });
       }
-      
+
       if (text.length > 5000) {
         return res.status(400).json({ error: "Text too long. Maximum 5000 characters per request." });
       }
@@ -18440,12 +18440,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           console.error("[TTS] ElevenLabs error, falling back to OpenAI:", elErr.message);
         }
       }
-      
+
       const openaiKey = process.env.OPENAI_API_KEY;
       if (!openaiKey) {
         return res.status(503).json({ error: "Voice service not configured", fallback: true });
       }
-      
+
       const oaiAbort = new AbortController();
       const oaiTimeout = setTimeout(() => oaiAbort.abort(), 30000);
       const response = await fetch("https://api.openai.com/v1/audio/speech", {
@@ -18463,17 +18463,17 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         signal: oaiAbort.signal,
       });
       clearTimeout(oaiTimeout);
-      
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error("[TTS] OpenAI Nova failed:", response.status, errorText);
-        return res.status(response.status).json({ 
-          error: "Voice generation failed", 
+        return res.status(response.status).json({
+          error: "Voice generation failed",
           fallback: true,
-          details: errorText 
+          details: errorText
         });
       }
-      
+
       console.log("[TTS] OpenAI Nova served as fallback");
       res.set({
         "Content-Type": "audio/mpeg",
@@ -18481,10 +18481,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         "X-Voice-Provider": "openai",
         "X-Voice-Name": "Nova",
       });
-      
+
       const arrayBuffer = await response.arrayBuffer();
       res.send(Buffer.from(arrayBuffer));
-      
+
     } catch (error: any) {
       console.error("[TTS] Error:", error);
       res.status(500).json({ error: error.message || "Voice generation failed", fallback: true });
@@ -18518,7 +18518,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         console.error("[Voices] ElevenLabs list failed:", err.message);
       }
     }
-    res.json({ 
+    res.json({
       voices: [{ id: "nova", name: "Nova", category: "openai" }],
       configured: true,
       provider: "openai",
@@ -18536,11 +18536,11 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const host = (req.query.host as string) || "dwsc.io";
       const code = await referralService.getOrCreateReferralCode(userId, host as any);
-      
-      res.json({ 
+
+      res.json({
         code: code.code,
         host: code.host,
         isActive: code.isActive,
@@ -18562,7 +18562,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const stats = await referralService.getUserStats(userId);
       res.json(stats);
     } catch (error: any) {
@@ -18588,12 +18588,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!code) {
         return res.status(400).json({ error: "Referral code required" });
       }
-      
+
       const referralCode = await referralService.getReferralCodeByCode(code);
       if (!referralCode) {
         return res.status(404).json({ error: "Invalid referral code" });
       }
-      
+
       await referralService.trackReferralClick(code);
       res.json({ success: true });
     } catch (error: any) {
@@ -18608,24 +18608,24 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!refereeId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const { code, host } = req.body;
       if (!code) {
         return res.status(400).json({ error: "Referral code required" });
       }
-      
+
       const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
       const result = await referralService.processNewSignup(
-        refereeId, 
-        code, 
+        refereeId,
+        code,
         host || "dwsc.io",
         { ipAddress: ip as string, userAgent: req.headers["user-agent"] }
       );
-      
+
       if (!result.success) {
         return res.status(400).json({ error: result.error });
       }
-      
+
       res.json({
         success: true,
         referral: result.referral,
@@ -18646,7 +18646,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Authentication required" });
       }
-      
+
       const referrals = await referralService.getUserReferrals(userId);
       res.json({ referrals });
     } catch (error: any) {
@@ -18720,12 +18720,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
     const ip = req.ip || "unknown";
     const lockout = ownerAuthLockouts.get(ip);
-    
+
     if (lockout && Date.now() < lockout.lockedUntil) {
       const waitSeconds = Math.ceil((lockout.lockedUntil - Date.now()) / 1000);
       return res.status(429).json({ error: `Too many failed attempts. Try again in ${waitSeconds} seconds.` });
     }
-    
+
     const { secret } = req.body;
     if (secret && timingSafeEqual(secret, OWNER_SECRET)) {
       ownerAuthLockouts.delete(ip);
@@ -18759,12 +18759,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   app.post("/api/team/auth", rateLimit("team-auth", 5, 5 * 60 * 1000), (req, res) => {
     const ip = req.ip || "unknown";
     const lockout = teamAuthLockouts.get(ip);
-    
+
     if (lockout && Date.now() < lockout.lockedUntil) {
       const waitSeconds = Math.ceil((lockout.lockedUntil - Date.now()) / 1000);
       return res.status(429).json({ error: `Too many failed attempts. Try again in ${waitSeconds} seconds.` });
     }
-    
+
     const { pin } = req.body;
     // Team auth is disabled if TEAM_PIN is not set
     if (TEAM_PIN && pin && pin === TEAM_PIN) {
@@ -18828,14 +18828,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         FROM zealy_quest_events 
         WHERE status = 'granted' AND airdrop_status IS NULL OR airdrop_status = 'pending'
       `);
-      
+
       // Get pending shell conversions (users with shells ready to convert)
       const pendingShellsResult = await db.execute(sql`
         SELECT COUNT(*) as count, COALESCE(SUM(shell_balance), 0) as total_shells
         FROM shell_balances 
         WHERE shell_balance > 0
       `);
-      
+
       // Get pending referral bonuses
       const pendingReferralsResult = await db.execute(sql`
         SELECT COUNT(*) as count, COALESCE(SUM(pending_commission), 0) as total_cents
@@ -18846,17 +18846,17 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const pendingQuests = Number(pendingQuestsResult.rows[0]?.count || 0);
       const pendingShells = Number(pendingShellsResult.rows[0]?.count || 0);
       const pendingReferrals = Number(pendingReferralsResult.rows[0]?.count || 0);
-      
+
       // Calculate total signal to distribute
       const questShells = Number(pendingQuestsResult.rows[0]?.total_shells || 0);
       const userShells = Number(pendingShellsResult.rows[0]?.total_shells || 0);
       const referralCents = Number(pendingReferralsResult.rows[0]?.total_cents || 0);
-      
+
       // Shells convert at 100:1, referrals at $0.001 per SIG
       const questSignal = questShells / 100;
       const shellSignal = userShells / 100;
       const referralSignal = (referralCents / 100) / 0.001; // cents to USD to SIG
-      
+
       res.json({
         pendingQuests,
         pendingShells,
@@ -18880,7 +18880,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   app.post("/api/team/submit-daily-airdrop", teamAuthMiddleware, async (_req, res) => {
     try {
       console.log("[Team] Daily airdrop submission started");
-      
+
       // Mark quest events as processed
       const questUpdate = await db.execute(sql`
         UPDATE zealy_quest_events 
@@ -18888,21 +18888,21 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         WHERE status = 'granted' AND (airdrop_status IS NULL OR airdrop_status = 'pending')
         RETURNING id
       `);
-      
+
       const processedQuests = questUpdate.rows.length;
-      
+
       // Log the submission
       await db.execute(sql`
         INSERT INTO audit_logs (event_type, event_data, created_at)
         VALUES ('daily_airdrop_submitted', ${JSON.stringify({
-          processedQuests,
-          submittedAt: new Date().toISOString(),
-          submittedBy: 'team_admin'
-        })}, NOW())
-      `).catch(() => {});
-      
+        processedQuests,
+        submittedAt: new Date().toISOString(),
+        submittedBy: 'team_admin'
+      })}, NOW())
+      `).catch(() => { });
+
       console.log(`[Team] Daily airdrop submitted: ${processedQuests} quest rewards marked for processing`);
-      
+
       res.json({
         success: true,
         processed: processedQuests,
@@ -18942,7 +18942,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const host = validateHost(req.query.host as string);
       const pageViews = await storage.getPageViewsByHost(host, 1);
       const uniqueVisitors = await storage.getUniqueVisitorsByHost(host, 1);
-      
+
       res.json({
         pageViews,
         uniqueVisitors,
@@ -18959,9 +18959,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const host = validateHost(req.query.host as string);
       const range = (req.query.range as string) || "7d";
-      
+
       const days = range === "24h" ? 1 : range === "7d" ? 7 : 30;
-      
+
       const pageViews = await storage.getPageViewsByHost(host, days);
       const uniqueVisitors = await storage.getUniqueVisitorsByHost(host, days);
       const topPages = await storage.getTopPagesByHost(host, days, 10);
@@ -18969,7 +18969,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const deviceBreakdown = await storage.getDeviceBreakdownByHost(host, days);
       const geoData = await storage.getGeoDataByHost(host, days, 5);
       const pageViewsOverTime = await storage.getPageViewsOverTimeByHost(host, days);
-      
+
       res.json({
         summary: {
           pageViews,
@@ -19073,19 +19073,19 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   // =====================================================
   // GUARDIAN SCANNER API - Token Scanner, Alerts, Comments
   // =====================================================
-  
+
   const { tokenDataCache, CACHE_TTL } = await import("./services/guardian-scanner-cache");
   const { guardianScannerService } = await import("./services/guardian-scanner-service");
-  
+
   app.get("/api/guardian-scanner/tokens", guardianScannerRateLimit, async (req, res) => {
     try {
       const { chain, search, filter } = req.query;
       const chainStr = typeof chain === 'string' ? chain : undefined;
       const searchStr = typeof search === 'string' ? search : undefined;
       const filterStr = typeof filter === 'string' ? filter : 'trending';
-      
+
       let tokens;
-      
+
       if (searchStr && searchStr.length >= 2) {
         tokens = await guardianScannerService.searchTokens(searchStr, chainStr);
       } else if (filterStr === 'gainers') {
@@ -19095,48 +19095,48 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       } else {
         tokens = await guardianScannerService.getTrendingTokens(chainStr);
       }
-      
+
       res.json({ tokens, count: tokens.length });
     } catch (error) {
       console.error("Guardian scanner tokens error:", error);
       res.status(500).json({ error: "Failed to fetch tokens" });
     }
   });
-  
+
   app.get("/api/guardian-scanner/token/:address", guardianScannerRateLimit, async (req, res) => {
     try {
       const { address } = req.params;
       const { chain } = req.query;
-      
+
       let token;
-      
+
       if (chain && typeof chain === 'string') {
         token = await guardianScannerService.getPairByAddress(address, chain);
       } else {
         token = await guardianScannerService.getTokenByAddress(address);
       }
-      
+
       if (!token) {
         return res.status(404).json({ error: "Token not found" });
       }
-      
+
       res.json({ token });
     } catch (error) {
       console.error("Guardian scanner token detail error:", error);
       res.status(500).json({ error: "Failed to fetch token" });
     }
   });
-  
+
   app.get("/api/guardian-scanner/search", guardianScannerRateLimit, async (req, res) => {
     try {
       const { q, chain } = req.query;
       const query = typeof q === 'string' ? q : '';
       const chainStr = typeof chain === 'string' ? chain : undefined;
-      
+
       if (query.length < 2) {
         return res.json({ tokens: [], message: "Query too short" });
       }
-      
+
       const tokens = await guardianScannerService.searchTokens(query, chainStr);
       res.json({ tokens, count: tokens.length });
     } catch (error) {
@@ -19144,86 +19144,86 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.status(500).json({ error: "Failed to search tokens" });
     }
   });
-  
+
   app.get("/api/guardian-scanner/safety/:chain/:address", guardianScannerRateLimit, async (req, res) => {
     try {
       const { chain, address } = req.params;
-      
+
       if (!chain || !address) {
         return res.status(400).json({ error: "Chain and address are required" });
       }
-      
+
       const safety = await guardianScannerService.runSafetyCheckForToken(chain, address);
-      
+
       if (!safety) {
         return res.status(404).json({ error: "Safety check not available for this chain" });
       }
-      
+
       res.json({ safety, chain, address });
     } catch (error) {
       console.error("Guardian scanner safety check error:", error);
       res.status(500).json({ error: "Failed to run safety check" });
     }
   });
-  
+
   app.get("/api/guardian-scanner/token-detail/:address", guardianScannerRateLimit, async (req, res) => {
     try {
       const { address } = req.params;
       const { chain, safety } = req.query;
       const includeSafety = safety === 'true';
-      
+
       let token;
-      
+
       token = await guardianScannerService.getTokenByAddress(address, includeSafety);
-      
+
       if (!token && chain && typeof chain === 'string') {
         token = await guardianScannerService.getPairByAddress(address, chain, includeSafety);
       }
-      
+
       if (!token) {
         return res.status(404).json({ error: "Token not found" });
       }
-      
+
       res.json({ token });
     } catch (error) {
       console.error("Guardian scanner token detail error:", error);
       res.status(500).json({ error: "Failed to fetch token details" });
     }
   });
-  
+
   app.get("/api/guardian-scanner/alerts", guardianAlertRateLimit, async (req, res) => {
     try {
       const userId = req.headers["x-user-id"] as string || "anonymous";
       const cacheKey = `alerts:${userId}`;
-      
+
       const cached = tokenDataCache.get(cacheKey);
       if (cached) {
         return res.json({ alerts: cached, fromCache: true });
       }
-      
+
       const alerts: any[] = [];
       tokenDataCache.set(cacheKey, alerts, CACHE_TTL.USER_ALERTS);
-      
+
       res.json({ alerts, fromCache: false });
     } catch (error) {
       console.error("Guardian scanner alerts error:", error);
       res.status(500).json({ error: "Failed to fetch alerts" });
     }
   });
-  
+
   app.post("/api/guardian-scanner/alerts", guardianAlertRateLimit, async (req, res) => {
     try {
       const { tokenId, type, price, tokenSymbol } = req.body;
       const userId = req.headers["x-user-id"] as string || "anonymous";
-      
+
       if (!tokenId || !type || typeof price !== "number") {
         return res.status(400).json({ error: "tokenId, type, and price are required" });
       }
-      
+
       if (!["above", "below"].includes(type)) {
         return res.status(400).json({ error: "type must be 'above' or 'below'" });
       }
-      
+
       const alert = {
         id: `alert-${Date.now()}`,
         userId,
@@ -19234,23 +19234,23 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         isActive: true,
         createdAt: new Date().toISOString()
       };
-      
+
       tokenDataCache.invalidate(`alerts:${userId}`);
-      
+
       res.json({ success: true, alert });
     } catch (error) {
       console.error("Guardian scanner create alert error:", error);
       res.status(500).json({ error: "Failed to create alert" });
     }
   });
-  
+
   app.delete("/api/guardian-scanner/alerts/:id", guardianAlertRateLimit, async (req, res) => {
     try {
       const { id } = req.params;
       const userId = req.headers["x-user-id"] as string || "anonymous";
-      
+
       tokenDataCache.invalidate(`alerts:${userId}`);
-      
+
       res.json({ success: true, deletedId: id });
     } catch (error) {
       console.error("Guardian scanner delete alert error:", error);
@@ -19357,7 +19357,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           dataHash: `cert-advance-${id}-${nextStatus}`,
           metadata: JSON.stringify({ certId: id, newStatus: nextStatus, timestamp: new Date().toISOString() }),
         });
-      } catch (e) {}
+      } catch (e) { }
       res.json({ success: true, certification: updated });
     } catch (error) {
       console.error("Advance certification error:", error);
@@ -19483,7 +19483,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           AVG(CASE WHEN status = 'completed' THEN usd_amount_cents ELSE NULL END) as avg_purchase_cents
         FROM presale_purchases
       `);
-      
+
       const tierResult = await db.execute(`
         SELECT tier, COUNT(*) as count, SUM(usd_amount_cents) as total_cents
         FROM presale_purchases 
@@ -19588,19 +19588,19 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const limit = parseInt(req.query.limit as string) || 100;
       const claims = await storage.getFaucetClaims();
-      
+
       const today = new Date();
       today.setHours(0, 0, 0, 0);
       const claimsToday = claims.filter(c => new Date(c.claimedAt) >= today).length;
-      
+
       const completed = claims.filter(c => c.status === "completed").length;
       const failed = claims.filter(c => c.status === "failed").length;
       const pending = claims.filter(c => c.status === "pending").length;
-      
+
       const totalDistributed = claims
         .filter(c => c.status === "completed")
         .reduce((sum, c) => sum + BigInt(c.amount), BigInt(0));
-      
+
       res.json({
         claims: claims.slice(0, limit),
         stats: {
@@ -19670,7 +19670,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (isActive !== undefined) updates.isActive = isActive;
       if (maxRewardsPerUser !== undefined) updates.maxRewardsPerUser = maxRewardsPerUser;
       if (totalRewardsCap !== undefined) updates.totalRewardsCap = totalRewardsCap;
-      
+
       const [quest] = await db.update(zealyQuestMappings)
         .set(updates)
         .where(eq(zealyQuestMappings.id, id))
@@ -19714,10 +19714,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       console.log("[Zealy API Sync] Manual sync triggered");
       const results = await zealyService.syncFromApi();
-      res.json({ 
-        success: true, 
+      res.json({
+        success: true,
         message: `Synced ${results.processed} quests, awarded shells to ${results.awarded}`,
-        ...results 
+        ...results
       });
     } catch (error: any) {
       console.error("Zealy API sync error:", error);
@@ -19729,10 +19729,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   app.post("/api/owner/zealy/retry-matches", ownerAuthMiddleware, async (req, res) => {
     try {
       const results = await zealyService.retryPendingMatches();
-      res.json({ 
-        success: true, 
+      res.json({
+        success: true,
         message: `Matched ${results.matched} pending events, ${results.stillPending} still pending`,
-        ...results 
+        ...results
       });
     } catch (error: any) {
       console.error("Zealy retry matches error:", error);
@@ -19806,7 +19806,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const allKyc = await db.select()
         .from(kycVerifications)
         .orderBy(desc(kycVerifications.createdAt));
-      
+
       res.json(allKyc);
     } catch (error) {
       console.error("Get KYC list error:", error);
@@ -19817,20 +19817,20 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   app.post("/api/owner/kyc/:id/approve", ownerAuthMiddleware, async (req, res) => {
     try {
       const { id } = req.params;
-      
+
       const [updated] = await db.update(kycVerifications)
-        .set({ 
+        .set({
           status: "approved",
           verifiedAt: new Date(),
           updatedAt: new Date(),
         })
         .where(eq(kycVerifications.id, id))
         .returning();
-      
+
       if (!updated) {
         return res.status(404).json({ error: "KYC record not found" });
       }
-      
+
       res.json({ success: true, kyc: updated });
     } catch (error) {
       console.error("Approve KYC error:", error);
@@ -19842,20 +19842,20 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const { id } = req.params;
       const { reason } = req.body;
-      
+
       const [updated] = await db.update(kycVerifications)
-        .set({ 
+        .set({
           status: "rejected",
           rejectionReason: reason || "Verification failed",
           updatedAt: new Date(),
         })
         .where(eq(kycVerifications.id, id))
         .returning();
-      
+
       if (!updated) {
         return res.status(404).json({ error: "KYC record not found" });
       }
-      
+
       res.json({ success: true, kyc: updated });
     } catch (error) {
       console.error("Reject KYC error:", error);
@@ -19868,14 +19868,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const status = req.query.status as string;
       let query = db.select().from(businessApplications).orderBy(desc(businessApplications.createdAt));
-      
+
       if (status && status !== "all") {
         const apps = await db.select().from(businessApplications)
           .where(eq(businessApplications.status, status))
           .orderBy(desc(businessApplications.createdAt));
         return res.json(apps);
       }
-      
+
       const apps = await query;
       res.json(apps);
     } catch (error) {
@@ -19888,7 +19888,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const { id } = req.params;
       const { notes, mainStreet } = req.body;
-      
+
       const [updated] = await db.update(businessApplications)
         .set({
           status: "approved",
@@ -19899,21 +19899,21 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         })
         .where(eq(businessApplications.id, id))
         .returning();
-      
+
       if (!updated) {
         return res.status(404).json({ error: "Application not found" });
       }
-      
+
       // Note: membershipTier is tracked separately in business_applications table
       // User membership status derived from approved application, not stored on user
       console.log(`[Business Verification] User ${updated.userId} business membership approved`);
-      
-      trustStamp("business-approved", { businessName: updated.businessName, userId: updated.userId, mainStreet: mainStreet || false }).catch(() => {});
-      
+
+      trustStamp("business-approved", { businessName: updated.businessName, userId: updated.userId, mainStreet: mainStreet || false }).catch(() => { });
+
       if (mainStreet) {
         console.log(`[Business Verification] ${updated.businessName} granted Main Street storefront`);
       }
-      
+
       // Send approval email
       try {
         await sendBusinessApprovalEmail(updated.contactEmail, updated.businessName, mainStreet || false);
@@ -19921,7 +19921,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       } catch (emailError) {
         console.error("[Business Verification] Failed to send approval email:", emailError);
       }
-      
+
       res.json({ success: true, application: updated });
     } catch (error) {
       console.error("Approve business application error:", error);
@@ -19933,11 +19933,11 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const { id } = req.params;
       const { notes } = req.body;
-      
+
       if (!notes) {
         return res.status(400).json({ error: "Rejection reason required" });
       }
-      
+
       const [updated] = await db.update(businessApplications)
         .set({
           status: "rejected",
@@ -19947,11 +19947,11 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         })
         .where(eq(businessApplications.id, id))
         .returning();
-      
+
       if (!updated) {
         return res.status(404).json({ error: "Application not found" });
       }
-      
+
       // Send rejection email
       try {
         await sendBusinessRejectionEmail(updated.contactEmail, updated.businessName, notes);
@@ -19959,7 +19959,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       } catch (emailError) {
         console.error("[Business Verification] Failed to send rejection email:", emailError);
       }
-      
+
       res.json({ success: true, application: updated });
     } catch (error) {
       console.error("Reject business application error:", error);
@@ -20019,8 +20019,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       }
       const profile = await storage.getAffiliateProfile(userId);
       if (!profile) {
-        return res.json({ 
-          airdropBalance: 0, 
+        return res.json({
+          airdropBalance: 0,
           airdropBalanceDwc: "0",
           airdropStatus: "none",
           message: "No affiliate profile found"
@@ -20058,11 +20058,11 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   app.post("/api/owner/zealy/mappings", ownerAuthMiddleware, async (req, res) => {
     try {
       const { zealyQuestId, zealyQuestName, shellsReward, dwcReward, reputationReward, maxRewardsPerUser, totalRewardsCap } = req.body;
-      
+
       if (!zealyQuestId || !zealyQuestName) {
         return res.status(400).json({ error: "Quest ID and name are required" });
       }
-      
+
       const mapping = await zealyService.createQuestMapping({
         zealyQuestId,
         zealyQuestName,
@@ -20072,7 +20072,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         maxRewardsPerUser: maxRewardsPerUser || null,
         totalRewardsCap: totalRewardsCap || null,
       });
-      
+
       res.json(mapping);
     } catch (error) {
       console.error("Failed to create Zealy mapping:", error);
@@ -20084,7 +20084,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const { id } = req.params;
       const { zealyQuestName, shellsReward, dwcReward, reputationReward, maxRewardsPerUser, totalRewardsCap, isActive } = req.body;
-      
+
       const mapping = await zealyService.updateQuestMapping(id, {
         zealyQuestName,
         shellsReward,
@@ -20094,11 +20094,11 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         totalRewardsCap,
         isActive,
       });
-      
+
       if (!mapping) {
         return res.status(404).json({ error: "Quest mapping not found" });
       }
-      
+
       res.json(mapping);
     } catch (error) {
       console.error("Failed to update Zealy mapping:", error);
@@ -20218,10 +20218,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const userResult = await db.execute(sql`
         SELECT id, email, display_name FROM users WHERE LOWER(TRIM(email)) = ${email.toLowerCase().trim()} LIMIT 1
       `);
-      
+
       const userId = userResult.rows[0]?.id;
       const resolvedEmail = (userResult.rows[0] as any)?.email || email;
-      
+
       if (!userId) {
         return res.status(404).json({ error: "No account found with that email. They need to register first." });
       }
@@ -20307,9 +20307,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
       console.log(`[Admin] Manual SIG credit: ${tokenAmount.toLocaleString()} SIG to ${email} (new total: ${newTotal.toLocaleString()} SIG) — reason: ${reason || 'Manual Credit'}`);
 
-      res.json({ 
-        success: true, 
-        credited: tokenAmount, 
+      res.json({
+        success: true,
+        credited: tokenAmount,
         newTotal,
         email: email.toLowerCase().trim(),
         hasAccount: !!userId
@@ -20356,14 +20356,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const memberships = await db.select().from(guildMembers).where(eq(guildMembers.userId, userId));
       const guildIds = memberships.map(m => m.guildId);
-      
+
       if (guildIds.length === 0) {
         return res.json({ guilds: [], memberships: [] });
       }
-      
+
       const userGuilds = await db.select().from(guilds).where(sql`${guilds.id} = ANY(${guildIds})`);
       res.json({ guilds: userGuilds, memberships });
     } catch (error) {
@@ -20376,7 +20376,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const [guild] = await db.select().from(guilds).where(eq(guilds.id, req.params.id));
       if (!guild) return res.status(404).json({ error: "Guild not found" });
-      
+
       const members = await db.select().from(guildMembers).where(eq(guildMembers.guildId, guild.id));
       res.json({ guild, members });
     } catch (error) {
@@ -20389,16 +20389,16 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { name, description, icon, isPublic } = req.body;
       if (!name || name.length < 2) return res.status(400).json({ error: "Guild name required (min 2 characters)" });
-      
+
       // Check if user already leads a guild
       const existingGuilds = await db.select().from(guilds).where(eq(guilds.leaderId, userId));
       if (existingGuilds.length >= 3) {
         return res.status(400).json({ error: "You can only create up to 3 guilds" });
       }
-      
+
       // Create guild
       const [newGuild] = await db.insert(guilds).values({
         name,
@@ -20407,14 +20407,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         leaderId: userId,
         isPublic: isPublic !== false,
       }).returning();
-      
+
       // Add creator as leader
       await db.insert(guildMembers).values({
         guildId: newGuild.id,
         userId,
         role: "leader",
       });
-      
+
       res.json({ success: true, guild: newGuild });
     } catch (error) {
       console.error("Create guild error:", error);
@@ -20426,29 +20426,29 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const [guild] = await db.select().from(guilds).where(eq(guilds.id, req.params.id));
       if (!guild) return res.status(404).json({ error: "Guild not found" });
       if (!guild.isRecruiting) return res.status(400).json({ error: "Guild is not recruiting" });
       if (guild.memberCount >= guild.maxMembers) return res.status(400).json({ error: "Guild is full" });
-      
+
       // Check if already a member
       const existing = await db.select().from(guildMembers)
         .where(and(eq(guildMembers.guildId, guild.id), eq(guildMembers.userId, userId)));
       if (existing.length > 0) return res.status(400).json({ error: "Already a member" });
-      
+
       // Add member
       await db.insert(guildMembers).values({
         guildId: guild.id,
         userId,
         role: "member",
       });
-      
+
       // Update member count
       await db.update(guilds)
         .set({ memberCount: guild.memberCount + 1, updatedAt: new Date() })
         .where(eq(guilds.id, guild.id));
-      
+
       res.json({ success: true });
     } catch (error) {
       console.error("Join guild error:", error);
@@ -20460,19 +20460,19 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const [guild] = await db.select().from(guilds).where(eq(guilds.id, req.params.id));
       if (!guild) return res.status(404).json({ error: "Guild not found" });
       if (guild.leaderId === userId) return res.status(400).json({ error: "Leaders cannot leave. Transfer ownership first." });
-      
+
       await db.delete(guildMembers)
         .where(and(eq(guildMembers.guildId, guild.id), eq(guildMembers.userId, userId)));
-      
+
       // Update member count
       await db.update(guilds)
         .set({ memberCount: Math.max(1, guild.memberCount - 1), updatedAt: new Date() })
         .where(eq(guilds.id, guild.id));
-      
+
       res.json({ success: true });
     } catch (error) {
       console.error("Leave guild error:", error);
@@ -20484,12 +20484,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const [guild] = await db.select().from(guilds).where(eq(guilds.id, req.params.id));
       if (!guild) return res.status(404).json({ error: "Guild not found" });
       if (guild.leaderId !== userId) return res.status(403).json({ error: "Only the guild leader can activate ChronoLink" });
       if (guild.isChronoLinkActive) return res.status(400).json({ error: "ChronoLink already active" });
-      
+
       // Create a Signal Chat community for this guild
       const community = await communityHubService.createCommunity({
         name: guild.name,
@@ -20498,17 +20498,17 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         ownerId: userId,
         isPublic: guild.isPublic,
       });
-      
+
       // Link guild to community
       await db.update(guilds)
-        .set({ 
-          chronoChatCommunityId: community.id, 
+        .set({
+          chronoChatCommunityId: community.id,
           isChronoLinkActive: true,
           shellsBonus: 5, // 5% bonus shells for linked guilds
-          updatedAt: new Date() 
+          updatedAt: new Date()
         })
         .where(eq(guilds.id, guild.id));
-      
+
       res.json({ success: true, community });
     } catch (error) {
       console.error("Activate ChronoLink error:", error);
@@ -20520,22 +20520,22 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const [guild] = await db.select().from(guilds).where(eq(guilds.id, req.params.id));
       if (!guild) return res.status(404).json({ error: "Guild not found" });
       if (guild.leaderId !== userId) return res.status(403).json({ error: "Only the guild leader can update settings" });
-      
+
       const { name, description, icon, isPublic, isRecruiting } = req.body;
       const updates: any = { updatedAt: new Date() };
-      
+
       if (name !== undefined) updates.name = name;
       if (description !== undefined) updates.description = description;
       if (icon !== undefined) updates.icon = icon;
       if (isPublic !== undefined) updates.isPublic = isPublic;
       if (isRecruiting !== undefined) updates.isRecruiting = isRecruiting;
-      
+
       await db.update(guilds).set(updates).where(eq(guilds.id, guild.id));
-      
+
       const [updated] = await db.select().from(guilds).where(eq(guilds.id, guild.id));
       res.json({ success: true, guild: updated });
     } catch (error) {
@@ -20549,23 +20549,23 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const [guild] = await db.select().from(guilds).where(eq(guilds.id, req.params.id));
       if (!guild) return res.status(404).json({ error: "Guild not found" });
-      
+
       // Check if user is a member with invite permission
       const [membership] = await db.select().from(guildMembers)
         .where(and(eq(guildMembers.guildId, guild.id), eq(guildMembers.userId, userId)));
       if (!membership || (membership.role !== "leader" && membership.role !== "officer")) {
         return res.status(403).json({ error: "You don't have permission to create invites" });
       }
-      
+
       // Generate invite code
       const code = Math.random().toString(36).substring(2, 10).toUpperCase();
-      
+
       const { maxUses, expiresIn } = req.body;
       const expiresAt = expiresIn ? new Date(Date.now() + expiresIn * 1000) : null;
-      
+
       const [invite] = await db.insert(guildInvites).values({
         guildId: guild.id,
         inviterId: userId,
@@ -20573,7 +20573,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         maxUses: maxUses || null,
         expiresAt,
       }).returning();
-      
+
       res.json({ success: true, invite, inviteUrl: `/join/${code}`, code });
     } catch (error) {
       console.error("Create invite error:", error);
@@ -20586,24 +20586,24 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const [invite] = await db.select().from(guildInvites).where(eq(guildInvites.code, req.params.code));
       if (!invite) return res.status(404).json({ error: "Invalid invite code" });
-      
+
       if (invite.expiresAt && new Date(invite.expiresAt) < new Date()) {
         return res.status(400).json({ error: "Invite has expired", expired: true });
       }
       if (invite.maxUses && invite.useCount >= invite.maxUses) {
         return res.status(400).json({ error: "Invite has reached max uses", maxedOut: true });
       }
-      
+
       const [guild] = await db.select().from(guilds).where(eq(guilds.id, invite.guildId));
       if (!guild) return res.status(404).json({ error: "Syndicate not found" });
-      
+
       // Get inviter info
       const [inviter] = await db.select({
         id: users.id,
         displayName: users.displayName,
         username: users.username,
       }).from(users).where(eq(users.id, invite.inviterId));
-      
+
       res.json({
         valid: true,
         code: invite.code,
@@ -20634,42 +20634,42 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.id || req.user?.claims?.sub;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const [invite] = await db.select().from(guildInvites).where(eq(guildInvites.code, req.params.code));
       if (!invite) return res.status(404).json({ error: "Invalid invite code" });
-      
+
       if (invite.expiresAt && new Date(invite.expiresAt) < new Date()) {
         return res.status(400).json({ error: "Invite has expired" });
       }
       if (invite.maxUses && invite.useCount >= invite.maxUses) {
         return res.status(400).json({ error: "Invite has reached max uses" });
       }
-      
+
       const [guild] = await db.select().from(guilds).where(eq(guilds.id, invite.guildId));
       if (!guild) return res.status(404).json({ error: "Guild not found" });
       if (guild.memberCount >= guild.maxMembers) return res.status(400).json({ error: "Guild is full" });
-      
+
       // Check if already a member
       const existing = await db.select().from(guildMembers)
         .where(and(eq(guildMembers.guildId, guild.id), eq(guildMembers.userId, userId)));
       if (existing.length > 0) return res.status(400).json({ error: "Already a member" });
-      
+
       // Add member
       await db.insert(guildMembers).values({
         guildId: guild.id,
         userId,
         role: "member",
       });
-      
+
       // Update counts
       await db.update(guilds)
         .set({ memberCount: guild.memberCount + 1, updatedAt: new Date() })
         .where(eq(guilds.id, guild.id));
-      
+
       await db.update(guildInvites)
         .set({ useCount: invite.useCount + 1 })
         .where(eq(guildInvites.id, invite.id));
-      
+
       res.json({ success: true, guild });
     } catch (error) {
       console.error("Join via invite error:", error);
@@ -20695,7 +20695,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const communities = await communityHubService.getUserCommunities(userId);
       res.json({ communities });
     } catch (error) {
@@ -20708,10 +20708,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { name, description, icon, isPublic } = req.body;
       if (!name) return res.status(400).json({ error: "Community name required" });
-      
+
       const community = await communityHubService.createCommunity({
         name,
         description: description || null,
@@ -20719,7 +20719,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         ownerId: userId,
         isPublic: isPublic !== false,
       });
-      
+
       res.json({ success: true, community });
     } catch (error) {
       console.error("Create community error:", error);
@@ -20752,10 +20752,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { name, description, type } = req.body;
       if (!name) return res.status(400).json({ error: "Channel name required" });
-      
+
       const channel = await communityHubService.createChannel({
         communityId: req.params.id,
         name,
@@ -20763,7 +20763,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         type: type || "chat",
         position: 0,
       });
-      
+
       res.json({ success: true, channel });
     } catch (error) {
       console.error("Create channel error:", error);
@@ -20776,7 +20776,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const userId = req.user?.claims?.sub || req.user?.id;
       const username = req.user?.claims?.firstName || req.user?.username || req.user?.email?.split("@")[0] || "User";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const member = await communityHubService.joinCommunity(req.params.id, userId, username);
       res.json({ success: true, member });
     } catch (error) {
@@ -20789,7 +20789,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       await communityHubService.leaveCommunity(req.params.id, userId);
       res.json({ success: true });
     } catch (error) {
@@ -20824,12 +20824,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const userId = req.user?.claims?.sub || req.user?.id;
       const username = req.user?.claims?.firstName || req.user?.username || req.user?.email?.split("@")[0] || "User";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { content, replyToId } = req.body;
       if (!content) return res.status(400).json({ error: "Message content required" });
-      
+
       const channelId = req.params.id;
-      
+
       const message = await communityHubService.sendMessage({
         channelId,
         userId,
@@ -20838,10 +20838,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         replyToId: replyToId || null,
         isBot: false,
       });
-      
+
       // Broadcast to WebSocket subscribers
       broadcastToChannel(channelId, { type: 'NEW_MESSAGE', payload: message });
-      
+
       // Process bot commands if message starts with /
       if (content.startsWith("/")) {
         const botResponse = await walletBotService.processMessage(content, userId, channelId);
@@ -20852,7 +20852,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           }
         }
       }
-      
+
       res.json({ success: true, message });
     } catch (error) {
       console.error("Send message error:", error);
@@ -20864,10 +20864,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const deleted = await communityHubService.deleteMessage(req.params.id, userId);
       if (!deleted) return res.status(403).json({ error: "Cannot delete this message" });
-      
+
       res.json({ success: true });
     } catch (error) {
       console.error("Delete message error:", error);
@@ -20879,10 +20879,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { name, description } = req.body;
       if (!name) return res.status(400).json({ error: "Bot name required" });
-      
+
       const bot = await communityHubService.createBot(req.params.id, name, description || "");
       res.json({ success: true, bot });
     } catch (error) {
@@ -20907,10 +20907,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!apiKey || !channelId || !content) {
         return res.status(400).json({ error: "API key, channel ID, and content required" });
       }
-      
+
       const message = await communityHubService.sendBotMessage(apiKey, channelId, content);
       if (!message) return res.status(403).json({ error: "Invalid bot API key or bot disabled" });
-      
+
       res.json({ success: true, message });
     } catch (error) {
       console.error("Bot message error:", error);
@@ -21298,7 +21298,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const userId = req.user?.claims?.sub || req.user?.id;
       const username = req.user?.claims?.firstName || req.user?.firstName || "User";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const wallet = await shellsService.getOrCreateWallet(userId, username);
       res.json({ wallet });
     } catch (error) {
@@ -21317,7 +21317,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const balance = await shellsService.getBalance(userId);
       res.json(balance);
     } catch (error) {
@@ -21330,7 +21330,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const limit = parseInt(req.query.limit as string) || 50;
       const transactions = await shellsService.getTransactions(userId, limit);
       res.json({ transactions });
@@ -21352,7 +21352,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const userId = req.user?.claims?.sub || req.user?.id;
       const username = req.user?.claims?.firstName || req.user?.firstName || req.user?.username || "Player";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const result = await shellsService.claimStarterBonus(userId, username);
       res.json(result);
     } catch (error) {
@@ -21372,10 +21372,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { SHELL_EARNING_CAPS } = await import("./shells-service");
       const status = await shellsService.getEarnableAmount(userId, 1000);
-      
+
       res.json({
         dailyLimit: SHELL_EARNING_CAPS.dailyMax,
         weeklyLimit: SHELL_EARNING_CAPS.weeklyMax,
@@ -21396,21 +21396,21 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const fromUserId = req.user?.claims?.sub || req.user?.id;
       const fromUsername = req.user?.claims?.firstName || req.user?.firstName || "User";
       if (!fromUserId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { toUserId, toUsername, amount, messageId } = req.body;
       if (!toUserId || !toUsername || !amount || amount <= 0) {
         return res.status(400).json({ error: "Invalid tip data" });
       }
-      
+
       if (fromUserId === toUserId) {
         return res.status(400).json({ error: "Cannot tip yourself" });
       }
-      
+
       const result = await shellsService.tipUser(fromUserId, fromUsername, toUserId, toUsername, amount, messageId);
       if (!result) {
         return res.status(400).json({ error: "Insufficient Shells balance" });
       }
-      
+
       res.json({ success: true, sent: result.sent, received: result.received });
     } catch (error) {
       console.error("Tip error:", error);
@@ -21519,20 +21519,20 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Not authenticated" });
       }
-      
+
       // Get or create profile to ensure user has one
       const profile = await zealyService.getOrCreateRewardProfile(userId);
       const shellBalanceRaw = await shellsService.getBalance(userId);
       const shellBalance = Number(shellBalanceRaw) || 0;
-      
+
       // Check wallet requirement for conversion eligibility
       const canWithdrawCheck = await zealyService.canWithdraw(userId);
-      
+
       const conversionRate = DWC_CONVERSION_RATE; // 100 shells = 1 SIG
       const estimatedDwc = Math.floor(shellBalance / conversionRate);
       const shellValue = shellBalance * 0.001; // $0.001 per shell
       const dwcValue = estimatedDwc * 0.01; // $0.01 per SIG at launch
-      
+
       res.json({
         shellBalance,
         conversionRate,
@@ -21554,8 +21554,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           walletConnected: canWithdrawCheck.canWithdraw,
           canProceed: canWithdrawCheck.canWithdraw,
           reason: canWithdrawCheck.reason,
-          message: canWithdrawCheck.canWithdraw 
-            ? "Ready for TGE conversion" 
+          message: canWithdrawCheck.canWithdraw
+            ? "Ready for TGE conversion"
             : canWithdrawCheck.reason || "Connect your Trust Layer wallet to receive SIG at Token Generation Event",
         },
       });
@@ -21572,29 +21572,29 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Not authenticated" });
       }
-      
+
       // Check wallet requirement for redemption
       const canWithdrawCheck = await zealyService.canWithdraw(userId);
       if (!canWithdrawCheck.canWithdraw) {
-        return res.status(403).json({ 
-          error: "Wallet required", 
+        return res.status(403).json({
+          error: "Wallet required",
           reason: canWithdrawCheck.reason,
-          requiresWallet: true 
+          requiresWallet: true
         });
       }
-      
+
       const { shellAmount } = req.body;
       const amount = parseInt(shellAmount) || 0;
-      
+
       const userBalanceRaw = await shellsService.getBalance(userId);
       const userBalance = Number(userBalanceRaw) || 0;
-      
+
       if (amount > userBalance) {
         return res.status(400).json({ error: "Insufficient shell balance" });
       }
-      
+
       const dwcAmount = Math.floor(amount / DWC_CONVERSION_RATE);
-      
+
       res.json({
         shellsToConvert: amount,
         dwcToReceive: dwcAmount.toString(),
@@ -21615,37 +21615,37 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       if (!userId) {
         return res.status(401).json({ error: "Not authenticated" });
       }
-      
+
       // Enforce wallet requirement
       const canWithdrawCheck = await zealyService.canWithdraw(userId);
       if (!canWithdrawCheck.canWithdraw) {
-        return res.status(403).json({ 
-          error: "Wallet required for redemption", 
+        return res.status(403).json({
+          error: "Wallet required for redemption",
           reason: canWithdrawCheck.reason,
-          requiresWallet: true 
+          requiresWallet: true
         });
       }
-      
+
       // Get profile and mark for conversion
       const profile = await zealyService.getRewardProfile(userId);
       if (!profile) {
         return res.status(404).json({ error: "Reward profile not found" });
       }
-      
+
       if (profile.conversionStatus === "snapshotted" || profile.conversionStatus === "converted") {
         return res.status(400).json({ error: "Redemption already processed or pending" });
       }
-      
+
       const shellBalanceRaw = await shellsService.getBalance(userId);
       const shellBalance = Number(shellBalanceRaw) || 0;
-      
+
       if (shellBalance === 0) {
         return res.status(400).json({ error: "No shells to redeem" });
       }
-      
+
       // Calculate SIG amount
       const dwcAmount = Math.floor(shellBalance / DWC_CONVERSION_RATE);
-      
+
       // Update profile to mark as pending conversion (will process at TGE)
       await db.update(shellRewardProfiles)
         .set({
@@ -21655,7 +21655,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           updatedAt: new Date(),
         })
         .where(eq(shellRewardProfiles.userId, userId));
-      
+
       res.json({
         success: true,
         message: "Redemption request submitted. SIG will be distributed at TGE (April 11, 2026).",
@@ -21686,14 +21686,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const userId = req.user?.claims?.sub || req.user?.id;
       const username = req.user?.claims?.firstName || req.user?.firstName || req.user?.username || "Builder";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const builder = await builderService.getOrCreateBuilder(userId, username);
       const tiers = await builderService.getTiers();
       const currentTier = tiers.find(t => t.tier === builder.tier);
       const nextTier = tiers.find(t => t.tier === builder.tier + 1);
-      
-      res.json({ 
-        builder, 
+
+      res.json({
+        builder,
         currentTier,
         nextTier,
         eligibilityCheck: nextTier ? await builderService.checkTierEligibility(builder.id) : null
@@ -21726,11 +21726,11 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const builder = await builderService.getBuilder(userId);
       const tier = builder?.tier || 1;
       const types = await builderService.getContributionTypes(tier);
-      
+
       res.json({ types, currentTier: tier });
     } catch (error) {
       console.error("Get contribution types error:", error);
@@ -21760,10 +21760,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const status = req.query.status as string | undefined;
       const contributions = await builderService.getContributions(userId, status);
-      
+
       res.json({ contributions });
     } catch (error) {
       console.error("Get contributions error:", error);
@@ -21783,15 +21783,15 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const userId = req.user?.claims?.sub || req.user?.id;
       const username = req.user?.claims?.firstName || req.user?.firstName || req.user?.username || "Builder";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { typeCode, title, description, contentData, targetEra, category } = req.body;
-      
+
       if (!typeCode || !title || !description || !contentData) {
         return res.status(400).json({ error: "Missing required fields: typeCode, title, description, contentData" });
       }
-      
+
       const builder = await builderService.getOrCreateBuilder(userId, username);
-      
+
       const contribution = await builderService.createContribution(
         builder.id,
         userId,
@@ -21802,7 +21802,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         targetEra,
         category
       );
-      
+
       res.json({ success: true, contribution });
     } catch (error) {
       console.error("Create contribution error:", error);
@@ -21821,10 +21821,10 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { id } = req.params;
       const result = await builderService.submitContribution(id, userId);
-      
+
       res.json(result);
     } catch (error) {
       console.error("Submit contribution error:", error);
@@ -21844,17 +21844,17 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const userId = req.user?.claims?.sub || req.user?.id;
       const username = req.user?.claims?.firstName || req.user?.firstName || req.user?.username || "Voter";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { id } = req.params;
       const { voteType, comment } = req.body;
-      
+
       if (!voteType || !["up", "down"].includes(voteType)) {
         return res.status(400).json({ error: "Invalid vote type. Use 'up' or 'down'" });
       }
-      
+
       const builder = await builderService.getOrCreateBuilder(userId, username);
       const result = await builderService.voteOnContribution(id, builder.id, userId, voteType, comment);
-      
+
       res.json(result);
     } catch (error) {
       console.error("Vote error:", error);
@@ -21885,12 +21885,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const builder = await builderService.getBuilder(userId);
       if (!builder || !builder.canReviewContent) {
         return res.status(403).json({ error: "Review permission required (Tier 3+)" });
       }
-      
+
       const pending = await builderService.getPendingReviews(builder.tier);
       res.json({ contributions: pending });
     } catch (error) {
@@ -21910,22 +21910,22 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const builder = await builderService.getBuilder(userId);
       if (!builder || !builder.canReviewContent) {
         return res.status(403).json({ error: "Review permission required (Tier 3+)" });
       }
-      
+
       const { id } = req.params;
       const { feedback, qualityRating } = req.body;
-      
+
       if (!feedback) {
         return res.status(400).json({ error: "Feedback is required" });
       }
-      
+
       const validRatings = ["standard", "quality", "exceptional", "legendary"];
       const rating = validRatings.includes(qualityRating) ? qualityRating : "standard";
-      
+
       const result = await builderService.approveContribution(id, builder.id, feedback, rating);
       res.json(result);
     } catch (error) {
@@ -21945,19 +21945,19 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const builder = await builderService.getBuilder(userId);
       if (!builder || !builder.canReviewContent) {
         return res.status(403).json({ error: "Review permission required (Tier 3+)" });
       }
-      
+
       const { id } = req.params;
       const { feedback } = req.body;
-      
+
       if (!feedback) {
         return res.status(400).json({ error: "Feedback is required for rejections" });
       }
-      
+
       const result = await builderService.rejectContribution(id, builder.id, feedback);
       res.json(result);
     } catch (error) {
@@ -21977,24 +21977,24 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const builder = await builderService.getBuilder(userId);
       if (!builder) {
         return res.status(403).json({ error: "Builder profile required" });
       }
-      
+
       const { id } = req.params;
-      
+
       // Check if user owns this contribution or is a reviewer
       const contribution = await builderService.getContributionById(id);
       if (!contribution) {
         return res.status(404).json({ error: "Contribution not found" });
       }
-      
+
       if (contribution.userId !== userId && !builder.canReviewContent) {
         return res.status(403).json({ error: "Not authorized to publish this contribution" });
       }
-      
+
       const result = await builderService.makeContributionLive(id);
       res.json(result);
     } catch (error) {
@@ -22014,11 +22014,11 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const { id } = req.params;
       const contribution = await builderService.getContributionById(id);
-      
+
       if (!contribution) {
         return res.status(404).json({ error: "Contribution not found" });
       }
-      
+
       res.json({ contribution });
     } catch (error) {
       console.error("Get contribution error:", error);
@@ -22029,7 +22029,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   // ============================================
   // CHRONICLES LIFE SIMULATION API
   // ============================================
-  
+
   // Get character status with needs
   app.get("/api/chronicles/character", async (req: any, res, next: NextFunction) => {
     const authHeader = req.headers.authorization;
@@ -22041,12 +22041,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const status = await needsService.getCharacterStatus(userId);
       if (!status) {
         return res.status(404).json({ error: "Character not found", needsOnboarding: true });
       }
-      
+
       res.json(status);
     } catch (error) {
       console.error("Get character status error:", error);
@@ -22065,23 +22065,23 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { name, primaryTrait, secondaryTrait, era } = req.body;
       if (!name) {
         return res.status(400).json({ error: "Name is required" });
       }
-      
+
       const existing = await needsService.getCharacter(userId);
       if (existing) {
         return res.status(400).json({ error: "Character already exists" });
       }
-      
+
       const character = await needsService.createCharacter(userId, name, {
         primaryTrait,
         secondaryTrait,
         era: era || "modern",
       });
-      
+
       res.json({ success: true, character });
     } catch (error) {
       console.error("Create character error:", error);
@@ -22100,12 +22100,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const character = await needsService.getCharacter(userId);
       if (!character) {
         return res.status(404).json({ error: "Character not found" });
       }
-      
+
       const result = await needsService.dailyCheckIn(character.id, userId);
       res.json(result);
     } catch (error) {
@@ -22125,17 +22125,17 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { activityCode } = req.body;
       if (!activityCode) {
         return res.status(400).json({ error: "Activity code is required" });
       }
-      
+
       const character = await needsService.getCharacter(userId);
       if (!character) {
         return res.status(404).json({ error: "Character not found" });
       }
-      
+
       const result = await needsService.performActivity(character.id, activityCode, userId);
       res.json(result);
     } catch (error) {
@@ -22155,17 +22155,17 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { locationCode } = req.body;
       if (!locationCode) {
         return res.status(400).json({ error: "Location code is required" });
       }
-      
+
       const character = await needsService.getCharacter(userId);
       if (!character) {
         return res.status(404).json({ error: "Character not found" });
       }
-      
+
       const result = await needsService.travelTo(character.id, locationCode);
       res.json(result);
     } catch (error) {
@@ -22228,10 +22228,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const era = (req.query.era as string) || "modern";
       const { npcService } = await import("./npc-service");
       const npcs = await npcService.getNpcsByLocation(location, era);
-      res.json({ npcs: npcs.map(npc => ({
-        ...npc,
-        personality: JSON.parse(npc.personality || "{}"),
-      })) });
+      res.json({
+        npcs: npcs.map(npc => ({
+          ...npc,
+          personality: JSON.parse(npc.personality || "{}"),
+        }))
+      });
     } catch (error) {
       console.error("Get NPCs error:", error);
       res.status(500).json({ error: "Failed to get NPCs" });
@@ -22291,15 +22293,15 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const userId = req.user?.claims?.sub || req.user?.id;
       const username = req.user?.claims?.firstName || req.user?.firstName || req.user?.username || "User";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { action } = req.body;
       if (!action || !SHELL_EARN_RATES[action as keyof typeof SHELL_EARN_RATES]) {
         return res.status(400).json({ error: "Invalid action", validActions: Object.keys(SHELL_EARN_RATES) });
       }
-      
+
       const transaction = await shellsService.awardEngagementShells(userId, username, action as keyof typeof SHELL_EARN_RATES);
       const balance = await shellsService.getBalance(userId);
-      
+
       res.json({ success: true, transaction, balance, earned: SHELL_EARN_RATES[action as keyof typeof SHELL_EARN_RATES] });
     } catch (error) {
       console.error("Earn shells error:", error);
@@ -22313,17 +22315,17 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const userId = req.user?.claims?.sub || req.user?.id;
       const username = req.user?.claims?.firstName || req.user?.firstName || "User";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { packageKey } = req.body;
       if (!packageKey || !SHELL_PACKAGES[packageKey as keyof typeof SHELL_PACKAGES]) {
         return res.status(400).json({ error: "Invalid package" });
       }
-      
+
       const pkg = SHELL_PACKAGES[packageKey as keyof typeof SHELL_PACKAGES];
-      
+
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
-      
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [{
@@ -22348,7 +22350,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           type: "shell_purchase",
         },
       });
-      
+
       res.json({ url: session.url, sessionId: session.id });
     } catch (error) {
       console.error("Shells checkout error:", error);
@@ -22362,53 +22364,53 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const userId = req.user?.claims?.sub || req.user?.id;
       const username = req.user?.claims?.firstName || req.user?.firstName || "User";
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { sessionId } = req.body;
       if (!sessionId) return res.status(400).json({ error: "Session ID required" });
-      
+
       // Check if this session has already been processed (idempotency guard)
       const existingTx = await shellsService.getTransactionByReference(sessionId, "stripe_payment");
       if (existingTx) {
         // Already processed - return success without double-crediting
         const balance = await shellsService.getBalance(userId);
-        return res.json({ 
-          success: true, 
-          alreadyProcessed: true, 
+        return res.json({
+          success: true,
+          alreadyProcessed: true,
           balance,
           message: "This purchase has already been credited"
         });
       }
-      
+
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
-      
+
       const session = await stripe.checkout.sessions.retrieve(sessionId);
-      
+
       if (session.payment_status !== "paid") {
         return res.status(400).json({ error: "Payment not completed" });
       }
-      
+
       if (session.metadata?.userId !== userId) {
         return res.status(403).json({ error: "Session does not belong to this user" });
       }
-      
+
       if (session.metadata?.type !== "shell_purchase") {
         return res.status(400).json({ error: "Invalid session type" });
       }
-      
+
       const packageKey = session.metadata?.packageKey as keyof typeof SHELL_PACKAGES;
       const shellAmount = parseInt(session.metadata?.shellAmount || "0");
-      
+
       if (!packageKey || !shellAmount) {
         return res.status(400).json({ error: "Invalid package data" });
       }
-      
+
       // Credit the Shells (uses sessionId as referenceId for idempotency)
       const transaction = await shellsService.purchaseShells(userId, username, packageKey, session.id);
       const balance = await shellsService.getBalance(userId);
-      
-      trustStamp("shells-purchase", { userId, shells: shellAmount, package: packageKey, amountCents: session.amount_total || 0, source: "stripe" }).catch(() => {});
-      
+
+      trustStamp("shells-purchase", { userId, shells: shellAmount, package: packageKey, amountCents: session.amount_total || 0, source: "stripe" }).catch(() => { });
+
       // Record purchase receipt for DWC conversion tracking
       try {
         await shellsService.recordPurchaseReceipt(
@@ -22423,7 +22425,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         console.error("Failed to record purchase receipt:", receiptError);
         // Don't fail the transaction if receipt recording fails
       }
-      
+
       const shellEmail = session.customer_details?.email || session.customer_email;
       if (shellEmail) {
         try {
@@ -22431,11 +22433,11 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           await sendShellsPurchaseEmail(shellEmail, shellAmount, amountPaid, balance?.balance || shellAmount);
         } catch (emailErr) { console.error("[Shells] Purchase email error:", emailErr); }
       }
-      
-      res.json({ 
-        success: true, 
-        transaction, 
-        balance, 
+
+      res.json({
+        success: true,
+        transaction,
+        balance,
         shellsAdded: shellAmount,
         dwcConversionInfo: {
           rate: DWC_CONVERSION_RATE,
@@ -22454,7 +22456,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   app.get("/api/shells/bundles", async (req, res) => {
     try {
       const bundles = shellsService.getBundles();
-      res.json({ 
+      res.json({
         bundles,
         conversionInfo: {
           rate: DWC_CONVERSION_RATE,
@@ -22473,12 +22475,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { consentType, version } = req.body;
       if (!consentType || !version) {
         return res.status(400).json({ error: "Consent type and version required" });
       }
-      
+
       const consent = await shellsService.recordFinancialConsent(
         userId,
         consentType,
@@ -22486,7 +22488,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         req.ip,
         req.headers["user-agent"]
       );
-      
+
       res.json({ success: true, consent });
     } catch (error) {
       console.error("Accept ToS error:", error);
@@ -22499,12 +22501,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { consentType, version } = req.query;
       if (!consentType || !version) {
         return res.status(400).json({ error: "Consent type and version required" });
       }
-      
+
       const hasAccepted = await shellsService.hasAcceptedToS(userId, consentType as string, version as string);
       res.json({ hasAccepted });
     } catch (error) {
@@ -22525,7 +22527,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const status = await subscriptionService.getSubscriptionStatus(userId);
       res.json(status);
     } catch (error) {
@@ -22548,12 +22550,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
-      
+
       const plan = SUBSCRIPTION_PLANS.pulse_pro;
-      
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [{
@@ -22577,7 +22579,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         cancel_url: `${req.headers.origin}/subscription/cancelled`,
         metadata: { userId, plan: "pulse_pro", billingCycle: "monthly", type: "subscription" },
       });
-      
+
       res.json({ url: session.url, sessionId: session.id });
     } catch (error) {
       console.error("Create Pulse monthly checkout error:", error);
@@ -22589,12 +22591,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
-      
+
       const plan = SUBSCRIPTION_PLANS.pulse_pro;
-      
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [{
@@ -22618,7 +22620,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         cancel_url: `${req.headers.origin}/subscription/cancelled`,
         metadata: { userId, plan: "pulse_pro", billingCycle: "annual", type: "subscription" },
       });
-      
+
       res.json({ url: session.url, sessionId: session.id });
     } catch (error) {
       console.error("Create Pulse annual checkout error:", error);
@@ -22631,12 +22633,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
-      
+
       const plan = SUBSCRIPTION_PLANS.strike_agent;
-      
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [{
@@ -22660,7 +22662,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         cancel_url: `${req.headers.origin}/subscription/cancelled`,
         metadata: { userId, plan: "strike_agent", billingCycle: "monthly", type: "subscription" },
       });
-      
+
       res.json({ url: session.url, sessionId: session.id });
     } catch (error) {
       console.error("Create Strike monthly checkout error:", error);
@@ -22672,12 +22674,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
-      
+
       const plan = SUBSCRIPTION_PLANS.strike_agent;
-      
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [{
@@ -22701,7 +22703,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         cancel_url: `${req.headers.origin}/subscription/cancelled`,
         metadata: { userId, plan: "strike_agent", billingCycle: "annual", type: "subscription" },
       });
-      
+
       res.json({ url: session.url, sessionId: session.id });
     } catch (error) {
       console.error("Create Strike annual checkout error:", error);
@@ -22714,12 +22716,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
-      
+
       const plan = SUBSCRIPTION_PLANS.complete_bundle;
-      
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [{
@@ -22743,7 +22745,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         cancel_url: `${req.headers.origin}/subscription/cancelled`,
         metadata: { userId, plan: "complete_bundle", billingCycle: "monthly", type: "subscription" },
       });
-      
+
       res.json({ url: session.url, sessionId: session.id });
     } catch (error) {
       console.error("Create Bundle monthly checkout error:", error);
@@ -22755,12 +22757,12 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const userId = req.user?.claims?.sub || req.user?.id;
       if (!userId) return res.status(401).json({ error: "Authentication required" });
-      
+
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
-      
+
       const plan = SUBSCRIPTION_PLANS.complete_bundle;
-      
+
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
         line_items: [{
@@ -22784,7 +22786,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         cancel_url: `${req.headers.origin}/subscription/cancelled`,
         metadata: { userId, plan: "complete_bundle", billingCycle: "annual", type: "subscription" },
       });
-      
+
       res.json({ url: session.url, sessionId: session.id });
     } catch (error) {
       console.error("Create Bundle annual checkout error:", error);
@@ -22803,19 +22805,19 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const signature = req.headers["x-pulse-signature"] as string;
       const timestamp = req.headers["x-pulse-timestamp"] as string;
-      
+
       if (!signature || !timestamp) {
         return res.status(400).json({ error: "Missing signature headers" });
       }
-      
+
       // Verify webhook signature
       if (!walletBotService.verifyWebhook(req.body, signature, timestamp)) {
         return res.status(401).json({ error: "Invalid signature" });
       }
-      
+
       const { event, data } = req.body;
       console.log(`[Pulse Webhook] Event: ${event}`, data);
-      
+
       // TODO: Route to appropriate community channels based on event type
       // For now, just acknowledge the webhook
       switch (event) {
@@ -22832,7 +22834,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
           console.log(`[Pulse] Prediction ${data.id}: ${data.isCorrect ? "CORRECT" : "INCORRECT"}`);
           break;
       }
-      
+
       res.status(200).json({ success: true });
     } catch (error) {
       console.error("Pulse webhook error:", error);
@@ -22846,40 +22848,40 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const apiKey = req.headers["x-api-key"] as string;
       const signature = req.headers["x-signature"] as string;
       const timestamp = req.headers["x-timestamp"] as string;
-      
+
       const expectedKey = process.env.PULSE_API_KEY;
       const secret = process.env.PULSE_API_SECRET;
-      
+
       if (!expectedKey || !secret) {
         console.error("[Pulse Webhook] Missing PULSE_API_KEY or PULSE_API_SECRET");
         return res.status(500).json({ error: "Server configuration error" });
       }
-      
+
       if (!apiKey || !signature || !timestamp) {
         return res.status(400).json({ error: "Missing required headers: x-api-key, x-signature, x-timestamp" });
       }
-      
+
       if (apiKey !== expectedKey) {
         return res.status(401).json({ error: "Invalid API key" });
       }
-      
+
       // Verify timestamp is within 5 minutes
       const timestampAge = Date.now() - parseInt(timestamp);
       if (isNaN(timestampAge) || timestampAge > 300000 || timestampAge < -60000) {
         return res.status(401).json({ error: "Invalid or expired timestamp" });
       }
-      
+
       // Verify HMAC signature
       const payload = timestamp + JSON.stringify(req.body);
       const expectedSignature = crypto.createHmac("sha256", secret).update(payload).digest("hex");
-      
+
       if (signature !== expectedSignature) {
         return res.status(401).json({ error: "Invalid signature" });
       }
-      
+
       const { type, data } = req.body;
       console.log(`[Pulse Webhook] Received ${type}:`, JSON.stringify(data).slice(0, 200));
-      
+
       // Handle different data types
       switch (type) {
         case "prediction":
@@ -22891,7 +22893,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         default:
           console.log(`[Pulse] Unknown type: ${type}`);
       }
-      
+
       res.status(200).json({ success: true, received: type });
     } catch (error) {
       console.error("[Pulse Webhook] Error:", error);
@@ -22936,7 +22938,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
     try {
       const category = (req.query.category as string) || "all";
       const limit = parseInt(req.query.limit as string) || 20;
-      
+
       const baseCoins = [
         { id: 'bitcoin', symbol: 'btc', name: 'Bitcoin', price: 67500, change: 2.1, mcap: 1320e9, vol: 35e9 },
         { id: 'ethereum', symbol: 'eth', name: 'Ethereum', price: 3450, change: 1.8, mcap: 415e9, vol: 18e9 },
@@ -22959,9 +22961,9 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         { id: 'sui', symbol: 'sui', name: 'Sui', price: 1.15, change: 6.2, mcap: 3e9, vol: 420e6 },
         { id: 'aptos', symbol: 'apt', name: 'Aptos', price: 9.8, change: -2.1, mcap: 4.2e9, vol: 210e6 },
       ];
-      
+
       let coins = [...baseCoins];
-      
+
       if (category === 'gainers') {
         coins = coins.filter(c => c.change > 0).sort((a, b) => b.change - a.change);
       } else if (category === 'losers') {
@@ -22971,7 +22973,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       } else if (category === 'defi') {
         coins = coins.filter(c => ['uni', 'link', 'inj', 'rndr'].includes(c.symbol));
       }
-      
+
       const result = coins.slice(0, limit).map((c, idx) => ({
         id: c.id,
         symbol: c.symbol,
@@ -22984,7 +22986,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         sparkline: Array.from({ length: 7 }, () => c.price * (0.95 + Math.random() * 0.1)),
         rank: idx + 1,
       }));
-      
+
       res.json(result);
     } catch (error) {
       console.error("Pulse top-coins error:", error);
@@ -22995,14 +22997,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   app.get("/api/pulse/coin/:address", pulseDataRateLimit, async (req: any, res) => {
     try {
       const address = req.params.address;
-      
+
       const existingRec = await db.query.strikeAgentPredictions.findFirst({
         where: (r, { eq }) => eq(r.tokenAddress, address),
       });
-      
+
       const basePrice = 0.0001 + Math.random() * 0.01;
       const change24h = (Math.random() - 0.5) * 30;
-      
+
       const tokenData = {
         id: address,
         symbol: existingRec?.tokenSymbol || address.slice(0, 4).toUpperCase(),
@@ -23032,7 +23034,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         socialLinks: {},
         priceHistory: Array.from({ length: 30 }, () => basePrice * (0.8 + Math.random() * 0.4)),
       };
-      
+
       res.json(tokenData);
     } catch (error) {
       console.error("Pulse coin analysis error:", error);
@@ -23043,25 +23045,25 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   // ==============================================
   // ML STATS & MONITORING ENDPOINTS
   // ==============================================
-  
+
   // ML Stats - Overall prediction system statistics
   app.get("/api/ml/stats", pulseDataRateLimit, async (req: any, res) => {
     try {
       // Get total predictions count
       const totalPredictions = await db.select({ count: sql`count(*)` })
         .from(predictionEvents);
-      
+
       // Get outcomes count
       const totalOutcomes = await db.select({ count: sql`count(*)` })
         .from(predictionOutcomes);
-      
+
       // Get overall accuracy
       const accuracyStats = await db.select({
         total: sql`count(*)`,
         wins: sql`count(*) filter (where is_correct = true)`,
         avgReturn: sql`avg(cast(price_change_percent as decimal))`
       }).from(predictionOutcomes);
-      
+
       // Get accuracy by horizon
       const horizonStats = await db.select({
         horizon: predictionOutcomes.horizon,
@@ -23071,34 +23073,34 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       })
         .from(predictionOutcomes)
         .groupBy(predictionOutcomes.horizon);
-      
+
       // Get recent performance (last 24h, 7d, 30d)
       const now = new Date();
       const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
       const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
       const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-      
+
       const last24h = await db.select({
         total: sql`count(*)`,
         wins: sql`count(*) filter (where is_correct = true)`
       })
         .from(predictionOutcomes)
         .where(gte(predictionOutcomes.evaluatedAt, oneDayAgo));
-      
+
       const last7d = await db.select({
         total: sql`count(*)`,
         wins: sql`count(*) filter (where is_correct = true)`
       })
         .from(predictionOutcomes)
         .where(gte(predictionOutcomes.evaluatedAt, sevenDaysAgo));
-      
+
       const last30d = await db.select({
         total: sql`count(*)`,
         wins: sql`count(*) filter (where is_correct = true)`
       })
         .from(predictionOutcomes)
         .where(gte(predictionOutcomes.evaluatedAt, thirtyDaysAgo));
-      
+
       // Get top performing tokens by joining with predictionEvents for ticker
       const topTokens = await db.select({
         ticker: predictionEvents.ticker,
@@ -23112,14 +23114,14 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         .having(sql`count(*) >= 3`)
         .orderBy(sql`count(*) filter (where ${predictionOutcomes.isCorrect} = true)::float / nullif(count(*), 0) desc`)
         .limit(10);
-      
+
       // Helper to safely compute accuracy percentage
       const computeAccuracy = (wins: any, total: any): string => {
         const numTotal = Number(total || 0);
         const numWins = Number(wins || 0);
         return numTotal > 0 ? ((numWins / numTotal) * 100).toFixed(1) : '0.0';
       };
-      
+
       const stats = {
         overview: {
           totalPredictions: Number(totalPredictions[0]?.count || 0),
@@ -23158,21 +23160,21 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         })),
         generatedAt: new Date().toISOString()
       };
-      
+
       res.json(stats);
     } catch (error) {
       console.error("ML stats error:", error);
       res.status(500).json({ error: "Failed to fetch ML statistics" });
     }
   });
-  
+
   // ML User History - Prediction history for a specific user
   app.get("/api/ml/user-history", pulseDataRateLimit, isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const limit = Math.min(parseInt(req.query.limit) || 50, 100);
       const offset = parseInt(req.query.offset) || 0;
-      
+
       // Get user's predictions with outcomes
       const predictions = await db.select({
         id: predictionEvents.id,
@@ -23192,7 +23194,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         .orderBy(desc(predictionEvents.createdAt))
         .limit(limit)
         .offset(offset);
-      
+
       // Get user's overall stats
       const userStats = await db.select({
         total: sql`count(*)`,
@@ -23202,7 +23204,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         .from(predictionEvents)
         .leftJoin(predictionOutcomes, eq(predictionEvents.id, predictionOutcomes.predictionId))
         .where(eq(predictionEvents.userId, userId));
-      
+
       res.json({
         predictions: predictions.map(p => ({
           id: p.id,
@@ -23221,7 +23223,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
         userStats: {
           totalPredictions: Number(userStats[0]?.total || 0),
           wins: Number(userStats[0]?.wins || 0),
-          accuracy: userStats[0]?.total ? 
+          accuracy: userStats[0]?.total ?
             (Number(userStats[0].wins) / Number(userStats[0].total) * 100).toFixed(1) : '0.0',
           avgReturn: Number(userStats[0]?.avgReturn || 0).toFixed(2)
         },
@@ -23236,7 +23238,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       res.status(500).json({ error: "Failed to fetch user history" });
     }
   });
-  
+
   // ==============================================
   // VEIL E-READER CHAPTERS API (server-side parsing)
   // ==============================================
@@ -23589,8 +23591,7 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
 
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
-      const domains = process.env.REPLIT_DOMAINS?.split(',') || [];
-      const baseUrl = domains.length > 0 ? `https://${domains[0]}` : `http://localhost:5000`;
+      const baseUrl = process.env.SITE_BASE_URL || 'https://trust-layer-1pji.onrender.com';
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ["card"],
@@ -24039,9 +24040,9 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       const { getOrCreateAuthorProfile, updateStripeConnectId } = await import("./author-payouts");
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
-      
+
       let profile = await getOrCreateAuthorProfile(userId, req.body.displayName || "Author");
-      
+
       let accountId = profile.stripeConnectId;
       if (!accountId) {
         const account = await stripe.accounts.create({
@@ -24052,8 +24053,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
         await updateStripeConnectId(userId, accountId);
       }
 
-      const domains = process.env.REPLIT_DOMAINS?.split(',') || [];
-      const baseUrl = domains.length > 0 ? `https://${domains[0]}` : `http://localhost:5000`;
+      const baseUrl = process.env.SITE_BASE_URL || 'https://trust-layer-1pji.onrender.com';
 
       const accountLink = await stripe.accountLinks.create({
         account: accountId,
@@ -24074,7 +24074,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       const userId = req.user.claims.sub;
       const { getAuthorProfile, markOnboardingComplete } = await import("./author-payouts");
       const profile = await getAuthorProfile(userId);
-      
+
       if (!profile || !profile.stripeConnectId) {
         return res.json({ connected: false, onboardingComplete: false });
       }
@@ -24082,7 +24082,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       const { getUncachableStripeClient } = await import("./stripeClient");
       const stripe = await getUncachableStripeClient();
       const account = await stripe.accounts.retrieve(profile.stripeConnectId);
-      
+
       const chargesEnabled = account.charges_enabled;
       const payoutsEnabled = account.payouts_enabled;
       const detailsSubmitted = account.details_submitted;
@@ -24133,7 +24133,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
   // ==============================================
   // EPUB GENERATION FOR THROUGH THE VEIL
   // ==============================================
-  
+
   app.get("/api/veil/epub", async (_req, res) => {
     try {
       const epubCandidates = [
@@ -24143,16 +24143,16 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
         path.join(process.cwd(), "server-data", "Through-The-Veil.epub"),
       ];
       const epubPath = epubCandidates.find(p => fs.existsSync(p));
-      
+
       if (!epubPath) {
         return res.status(404).json({ error: "EPUB file not found" });
       }
-      
+
       const stat = fs.statSync(epubPath);
       res.setHeader("Content-Type", "application/epub+zip");
       res.setHeader("Content-Length", stat.size.toString());
       res.setHeader("Content-Disposition", 'attachment; filename="Through-The-Veil.epub"');
-      
+
       const stream = fs.createReadStream(epubPath);
       stream.pipe(res);
     } catch (error: any) {
@@ -24170,16 +24170,16 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
         path.join(process.cwd(), "server-data", "Through-The-Veil.pdf"),
       ];
       const pdfPath = candidates.find(p => fs.existsSync(p));
-      
+
       if (!pdfPath) {
         return res.status(404).json({ error: "PDF file not found" });
       }
-      
+
       const stat = fs.statSync(pdfPath);
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader("Content-Length", stat.size.toString());
       res.setHeader("Accept-Ranges", "bytes");
-      
+
       const ua = req.headers['user-agent'] || '';
       const isIOS = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/i.test(ua) && /Mobile/i.test(ua));
       if (isIOS) {
@@ -24187,7 +24187,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       } else {
         res.setHeader("Content-Disposition", 'attachment; filename="Through-The-Veil.pdf"');
       }
-      
+
       const stream = fs.createReadStream(pdfPath);
       stream.pipe(res);
     } catch (error: any) {
@@ -24200,7 +24200,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
   app.get("/api/health", async (_req, res) => {
     try {
       const checks: Record<string, { status: string; latency?: number; details?: any }> = {};
-      
+
       // Database check
       const dbStart = Date.now();
       try {
@@ -24209,7 +24209,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       } catch (e) {
         checks.database = { status: 'unhealthy', details: 'Connection failed' };
       }
-      
+
       // Prediction system check
       const predStart = Date.now();
       try {
@@ -24217,18 +24217,18 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
           .from(predictionEvents)
           .orderBy(desc(predictionEvents.createdAt))
           .limit(1);
-        checks.predictionEngine = { 
-          status: 'healthy', 
+        checks.predictionEngine = {
+          status: 'healthy',
           latency: Date.now() - predStart,
           details: { hasPredictions: recentPrediction.length > 0 }
         };
       } catch (e) {
         checks.predictionEngine = { status: 'unhealthy', details: 'Query failed' };
       }
-      
+
       // Check overall status
       const allHealthy = Object.values(checks).every(c => c.status === 'healthy');
-      
+
       res.status(allHealthy ? 200 : 503).json({
         status: allHealthy ? 'healthy' : 'degraded',
         version: '1.0.0',
@@ -24238,7 +24238,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       });
     } catch (error) {
       console.error("Health check error:", error);
-      res.status(503).json({ 
+      res.status(503).json({
         status: 'unhealthy',
         timestamp: new Date().toISOString(),
         error: 'Health check failed'
@@ -24249,7 +24249,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
   // ==============================================
   // CHRONOCHAT COMMUNITY ROUTES
   // ==============================================
-  
+
   const { communities, communityChannels, communityMembers, communityMessages, messageReactions, messageAttachments, insertCommunitySchema, insertChannelSchema, insertMemberSchema, insertCommunityMessageSchema, insertReactionSchema } = await import("@shared/schema");
 
   app.get("/api/communities", async (_req, res) => {
@@ -24280,14 +24280,14 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       const userId = req.user.claims.sub;
       const data = insertCommunitySchema.parse({ ...req.body, ownerId: userId });
       const result = await db.insert(communities).values(data).returning();
-      
+
       await db.insert(communityMembers).values({
         communityId: result[0].id,
         userId,
         username: req.body.username || "Owner",
         role: "admin",
       });
-      
+
       await db.insert(communityChannels).values({
         communityId: result[0].id,
         name: "general",
@@ -24295,7 +24295,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
         type: "chat",
         position: 0,
       });
-      
+
       res.json(result[0]);
     } catch (error) {
       console.error("Create community error:", error);
@@ -24367,7 +24367,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
     try {
       const limit = parseInt(req.query.limit as string) || 50;
       const before = req.query.before as string | undefined;
-      
+
       let conditions = [eq(communityMessages.channelId, req.params.channelId)];
       if (before) {
         conditions.push(sql`${communityMessages.createdAt} < ${before}`);
@@ -24397,10 +24397,10 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       }
       const data = insertCommunityMessageSchema.parse(messageData);
       const result = await db.insert(communityMessages).values(data).returning();
-      
+
       const { broadcastToChannel } = await import("./chat-presence");
       broadcastToChannel(req.params.channelId, { type: "NEW_MESSAGE", payload: result[0] });
-      
+
       res.json(result[0]);
     } catch (error) {
       console.error("Send message error:", error);
@@ -24414,7 +24414,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       const message = await db.select().from(communityMessages).where(eq(communityMessages.id, req.params.messageId));
       if (message.length === 0) return res.status(404).json({ error: "Message not found" });
       if (message[0].userId !== userId) return res.status(403).json({ error: "Not authorized" });
-      
+
       const result = await db.update(communityMessages).set({ content: req.body.content, editedAt: new Date() }).where(eq(communityMessages.id, req.params.messageId)).returning();
       res.json(result[0]);
     } catch (error) {
@@ -24429,7 +24429,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       const message = await db.select().from(communityMessages).where(eq(communityMessages.id, req.params.messageId));
       if (message.length === 0) return res.status(404).json({ error: "Message not found" });
       if (message[0].userId !== userId) return res.status(403).json({ error: "Not authorized" });
-      
+
       await db.delete(communityMessages).where(eq(communityMessages.id, req.params.messageId));
       res.json({ success: true });
     } catch (error) {
@@ -24485,13 +24485,13 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
       const fs = await import("fs");
       const path = await import("path");
       const docPath = path.join(process.cwd(), "docs", "chronicles-game-design.md");
-      
+
       if (!fs.existsSync(docPath)) {
         return res.status(404).json({ error: "Game design document not found" });
       }
-      
+
       const content = fs.readFileSync(docPath, "utf-8");
-      res.json({ 
+      res.json({
         content,
         lastModified: fs.statSync(docPath).mtime.toISOString(),
         lines: content.split("\n").length
@@ -24645,8 +24645,8 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
 
       const platform = code.startsWith("GB-") ? "garagebot"
         : code.startsWith("tldc-") ? "tldc"
-        : code.startsWith("he-") ? "he"
-        : "tl";
+          : code.startsWith("he-") ? "he"
+            : "tl";
 
       if (platform === "tl") {
         const [affiliate] = await db.select().from(ecosystemAffiliates)
@@ -25866,9 +25866,7 @@ Keep responses focused, actionable, and encouraging. Format with markdown. When 
   return httpServer;
 }
 
-const PORTAL_BASE = process.env.REPLIT_DEPLOYMENT_URL 
-  ? `https://${process.env.REPLIT_DEPLOYMENT_URL}` 
-  : (process.env.REPLIT_DEV_DOMAIN ? `https://${process.env.REPLIT_DEV_DOMAIN}` : "https://dwsc.io");
+const PORTAL_BASE = process.env.SITE_BASE_URL || 'https://dwsc.io';
 
 const APP_URL_MAP: Record<string, string> = {
   "orbitstaffing": "https://orbitstaffing.io",
@@ -25927,17 +25925,17 @@ const APP_URL_MAP: Record<string, string> = {
 
 async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
   const localApps = getLocalEcosystemApps();
-  
+
   try {
     const response = await ecosystemClient.getApps() as { success?: boolean; apps?: any[] } | any[];
-    
+
     let apps: any[] = [];
     if (response && typeof response === 'object' && 'apps' in response && Array.isArray(response.apps)) {
       apps = response.apps;
     } else if (Array.isArray(response)) {
       apps = response;
     }
-    
+
     if (apps.length > 0) {
       const hubApps = apps.map((app: any) => {
         const id = app.slug || app.id;
@@ -25956,13 +25954,13 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
           url: APP_URL_MAP[id] || app.appUrl || localMatch?.url || undefined,
         };
       });
-      
+
       const hubIds = new Set(hubApps.map(a => a.id));
       const hubNames = new Set(hubApps.map(a => a.name.toLowerCase()));
-      const additionalLocalApps = localApps.filter(la => 
+      const additionalLocalApps = localApps.filter(la =>
         !hubIds.has(la.id) && !hubNames.has(la.name.toLowerCase())
       );
-      
+
       const excludedIds = new Set(["orbit-chain", "darkwave-chain", "dwsc-chain", "dwsc"]);
       const excludedNames = new Set(["darkwave chain", "dwsc chain", "darkwave trust layer"]);
       const excludedPatterns = ["_retest", "_test", "test3", "test2", "test1"];
@@ -25984,7 +25982,7 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
   } catch (error) {
     console.warn("DarkWave Hub API not available, using local data:", error);
   }
-  
+
   return localApps;
 }
 
