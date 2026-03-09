@@ -1,0 +1,1 @@
+Trust Layer — The Coordinated Trust Layer. A custom Layer 1 BFT-PoA blockchain with a full-stack ecosystem hub featuring DeFi, NFT marketplace, AI predictions, real-time chat, ebook publishing, life simulation gaming, and 32+ integrated applications. Built with React, TypeScript, Express, PostgreSQL, and Rust.

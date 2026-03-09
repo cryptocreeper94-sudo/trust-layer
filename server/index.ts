@@ -69,8 +69,8 @@ app.use((req, res, next) => {
   const host = req.headers.host || '';
   if (host === 'dwsc.io' || host === 'www.dwsc.io') {
     // Don't redirect webhook endpoints - external services need direct access
-    if (req.originalUrl.includes('/api/coinbase/webhook') || 
-        req.originalUrl.includes('/api/stripe/webhook')) {
+    if (req.originalUrl.includes('/api/coinbase/webhook') ||
+      req.originalUrl.includes('/api/stripe/webhook')) {
       return next();
     }
     const newUrl = `https://dwtl.io${req.originalUrl}`;
@@ -84,18 +84,18 @@ app.use((req, res, next) => {
 // Subdomains (alice.tlid.io) → Route to configured website
 app.use((req, res, next) => {
   const host = req.headers.host || '';
-  
+
   // Check if this is a tlid.io request
   if (host.endsWith('tlid.io')) {
     const parts = host.split('.');
-    
+
     // Root domain (tlid.io or www.tlid.io) → Trust Layer landing page
     if (host === 'tlid.io' || host === 'www.tlid.io') {
       // Serve the Trust Layer landing/signup page
       // The SPA router will handle showing the correct page at /
       return next();
     }
-    
+
     // Subdomain (e.g., alice.tlid.io) → Route to configured website
     if (parts.length > 2) {
       const subdomain = parts[0];
@@ -119,7 +119,7 @@ const isProduction = process.env.NODE_ENV === "production";
 
 const cspDirectives = {
   defaultSrc: ["'self'"],
-  scriptSrc: isProduction 
+  scriptSrc: isProduction
     ? ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://js.stripe.com", "https://www.googletagmanager.com", "https://cdnjs.cloudflare.com"]
     : ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://cdnjs.cloudflare.com"],
   styleSrc: isProduction
@@ -250,9 +250,9 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: true, // Always true on Replit (HTTPS)
+    secure: isProduction, // false on localhost (HTTP), true in production (HTTPS)
     maxAge: sessionTtl,
-    sameSite: 'none', // Required for cross-site cookies on deployed apps
+    sameSite: isProduction ? 'none' : 'lax', // 'lax' for localhost, 'none' for cross-site in production
   },
 }));
 
@@ -334,7 +334,7 @@ httpServer.on('error', (err: any) => {
     console.error(`[Error] Port ${port} is already in use. Waiting 2s and retrying...`);
     setTimeout(() => {
       httpServer.close();
-      httpServer.listen({ port, host: "0.0.0.0", reusePort: true });
+      httpServer.listen({ port, host: "0.0.0.0" });
     }, 2000);
   } else {
     console.error('[Error] Server error:', err);
@@ -346,13 +346,12 @@ httpServer.listen(
   {
     port,
     host: "0.0.0.0",
-    reusePort: true,
   },
   () => {
     console.log(`[Health] Server started and listening on 0.0.0.0:${port}`);
     console.log(`[Health] Application ready to accept HTTP requests`);
     log(`serving on port ${port}`);
-    
+
     // Initialize heavy services in background AFTER port is open
     initializeServices().catch(err => {
       console.error('[Init] Fatal error during service initialization:', err);
@@ -370,7 +369,7 @@ async function initializeServices() {
       try {
         console.log('[Stripe] Initializing managed webhooks...');
         await runMigrations({ databaseUrl });
-        
+
         const stripeSync = await getStripeSync();
         const domains = process.env.REPLIT_DOMAINS?.split(',') || [];
         if (domains.length > 0) {
@@ -378,7 +377,7 @@ async function initializeServices() {
           const webhook = await stripeSync.findOrCreateManagedWebhook(webhookUrl);
           console.log(`[Stripe] Managed webhook configured: ${webhook.url || webhookUrl}`);
         }
-        
+
         // Sync existing Stripe data in background
         stripeSync.syncBackfill().then(() => {
           console.log('[Stripe] Data sync complete');
@@ -429,23 +428,23 @@ async function initializeServices() {
 
     // Setup ChronoChat WebSocket presence (legacy)
     setupPresence(httpServer);
-    
+
     // Setup Signal Chat WebSocket (JWT-authenticated, /ws/chat)
     setupSignalChatWS(httpServer);
-    
+
     // Setup Guardian Scanner WebSocket for live price updates
     setupGuardianScannerWS(httpServer);
-    
+
     // Seed core documents if empty
     await seedDocuments();
-    
+
     // Seed Signal Chat channels
     await seedChatChannels();
-    
+
     // Seed city zones and era buildings for Chronicles Estate
     await seedCityZones();
     await seedEraBuildingTemplates();
-    
+
     // Initialize Pulse AI Prediction Services
     try {
       await predictionTrackingService.initialize();
@@ -473,24 +472,24 @@ async function initializeServices() {
     } catch (err: any) {
       console.warn('[AutoPredict] Auto prediction generator skipped:', err.message);
     }
-    
+
     // Marketing auto-deploy scheduler - DISABLED (rebrand in progress)
     // startScheduler();
-    
+
     // Shells airdrop scheduler - runs at 7 AM and 7 PM UTC (1 AM and 1 PM CST)
     startShellsAirdropScheduler();
-    
+
     // Referral payout scheduler - runs at 2 PM and 2 AM UTC (8 AM and 8 PM CST)
     startReferralPayoutScheduler();
-    
+
     // Email update scheduler - sends weekly updates every Sunday at 10 AM UTC
     startEmailUpdateScheduler();
-    
+
     // Membership reconciliation scheduler - runs every 12 hours to unify accounts
     startMembershipReconciliationScheduler();
-    
+
     registerEcosystemAppsToOrbit().catch(e => console.error('[Orbit] App registration failed:', e.message));
-    
+
     // One-time migration: Ensure Kathy's total SIG = 200K
     try {
       const { rows: kathyPurchases } = await db.execute(sql`
@@ -499,14 +498,14 @@ async function initializeServices() {
       `);
       const currentTotal = kathyPurchases.reduce((sum: number, p: any) => sum + Number(p.token_amount), 0);
       const hasManualCredit = kathyPurchases.some((p: any) => p.payment_method === 'manual_credit');
-      
+
       if (currentTotal < 200000) {
         const needed = 200000 - currentTotal;
         const { rows: userRows } = await db.execute(sql`
           SELECT id FROM users WHERE LOWER(TRIM(email)) = 'kathytidwell74@gmail.com' LIMIT 1
         `);
         const userId = userRows[0]?.id || null;
-        
+
         if (hasManualCredit) {
           // Update existing manual credit to the right amount
           const manualId = kathyPurchases.find((p: any) => p.payment_method === 'manual_credit')?.id;
@@ -519,7 +518,7 @@ async function initializeServices() {
             VALUES (gen_random_uuid(), 'kathytidwell74@gmail.com', 'Kathy Grater', ${needed}, 0, 'founders', 'completed', 'manual_credit', ${userId}, NOW())
           `);
         }
-        
+
         // Link any unlinked purchases to her account
         if (userId) {
           await db.execute(sql`
@@ -549,10 +548,10 @@ async function registerEcosystemAppsToOrbit() {
     console.log('[Orbit] Skipping app registration — no API credentials configured');
     return;
   }
-  
-  const appBaseUrl = process.env.REPLIT_DEPLOYMENT_URL 
-    ? `https://${process.env.REPLIT_DEPLOYMENT_URL}` 
-    : process.env.REPL_SLUG 
+
+  const appBaseUrl = process.env.REPLIT_DEPLOYMENT_URL
+    ? `https://${process.env.REPLIT_DEPLOYMENT_URL}`
+    : process.env.REPL_SLUG
       ? `https://${process.env.REPL_SLUG}.replit.app`
       : 'https://dwsc.io';
 

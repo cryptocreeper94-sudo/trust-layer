@@ -7,3 +7,8 @@ vite.config.ts.*
 blockchain/target/
 .local/state/
 *.db.local/state/replit/log-query.db
+
+# Secrets - NEVER commit
+.env
+.env.*
+!.env.example
