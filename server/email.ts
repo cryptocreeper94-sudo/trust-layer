@@ -1,44 +1,21 @@
 import { Resend } from 'resend';
 
-let connectionSettings: any;
-
-async function getCredentials() {
-  const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
-  const xReplitToken = process.env.REPL_IDENTITY 
-    ? 'repl ' + process.env.REPL_IDENTITY 
-    : process.env.WEB_REPL_RENEWAL 
-    ? 'depl ' + process.env.WEB_REPL_RENEWAL 
-    : null;
-
-  if (!xReplitToken) {
-    throw new Error('X_REPLIT_TOKEN not found for repl/depl');
-  }
-
-  connectionSettings = await fetch(
-    'https://' + hostname + '/api/v2/connection?include_secrets=true&connector_names=resend',
-    {
-      headers: {
-        'Accept': 'application/json',
-        'X_REPLIT_TOKEN': xReplitToken
-      }
-    }
-  ).then(res => res.json()).then(data => data.items?.[0]);
-
-  if (!connectionSettings || (!connectionSettings.settings.api_key)) {
-    throw new Error('Resend not connected');
-  }
-  return {
-    apiKey: connectionSettings.settings.api_key, 
-    fromEmail: connectionSettings.settings.from_email
-  };
-}
+let cachedClient: { client: Resend; fromEmail: string } | null = null;
 
 async function getResendClient() {
-  const { apiKey, fromEmail } = await getCredentials();
-  return {
+  if (cachedClient) return cachedClient;
+
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error('RESEND_API_KEY environment variable is not set');
+  }
+
+  cachedClient = {
     client: new Resend(apiKey),
-    fromEmail
+    fromEmail: process.env.RESEND_FROM_EMAIL || 'Trust Layer <team@dwsc.io>',
   };
+  console.log('[Email] Resend client initialized');
+  return cachedClient;
 }
 
 const TEAM_EMAIL = "team@dwsc.io";
@@ -54,21 +31,21 @@ export interface EmailOptions {
 
 export async function sendEmail(options: EmailOptions) {
   const { client, fromEmail } = await getResendClient();
-  
+
   const emailPayload: any = {
     from: fromEmail,
     to: options.to,
     subject: options.subject,
     replyTo: options.replyTo || TEAM_EMAIL,
   };
-  
+
   if (options.html) {
     emailPayload.html = options.html;
   }
   if (options.text) {
     emailPayload.text = options.text;
   }
-  
+
   const result = await client.emails.send(emailPayload);
   return result;
 }
@@ -236,7 +213,7 @@ export async function sendPresaleConfirmationEmail(to: string, amountPaid: strin
   const tierName = tierNames[tier] || tier;
   const totalTokens = tokenAmount + bonusTokens;
   const bonusPercent = tokenAmount > 0 ? Math.round((bonusTokens / tokenAmount) * 100) : 0;
-  
+
   const content = `
     ${heroSection('Purchase Confirmed', 'Your Signal (SIG) tokens have been secured.')}
     
@@ -250,12 +227,12 @@ export async function sendPresaleConfirmationEmail(to: string, amountPaid: strin
     </table>` : ''}
     
     ${receiptTable([
-      { label: 'Amount Paid', value: `$${amountPaid}` },
-      { label: 'Tier', value: tierName },
-      { label: 'Base Tokens', value: `${tokenAmount.toLocaleString()} SIG` },
-      { label: 'Bonus Tokens', value: `+${bonusTokens.toLocaleString()} SIG` },
-      { label: 'Total Allocation', value: `${totalTokens.toLocaleString()} SIG`, bold: true },
-    ])}
+    { label: 'Amount Paid', value: `$${amountPaid}` },
+    { label: 'Tier', value: tierName },
+    { label: 'Base Tokens', value: `${tokenAmount.toLocaleString()} SIG` },
+    { label: 'Bonus Tokens', value: `+${bonusTokens.toLocaleString()} SIG` },
+    { label: 'Total Allocation', value: `${totalTokens.toLocaleString()} SIG`, bold: true },
+  ])}
     
     ${highlightBox(`
       <h3 style="margin:0 0 8px;color:#06b6d4;font-size:15px;font-weight:700;">Next Steps</h3>
@@ -275,7 +252,7 @@ export async function sendPresaleConfirmationEmail(to: string, amountPaid: strin
     </td></tr>
     </table>
   `;
-  
+
   return sendEmail({
     to,
     subject: `Signal (SIG) Purchase Confirmed - ${tierName} Tier | ${totalTokens.toLocaleString()} SIG`,
@@ -291,11 +268,11 @@ export async function sendCrowdfundConfirmationEmail(to: string, amountPaid: str
     ${statCard('Contribution Amount', `$${amountPaid}`, '#00ff88')}
     
     ${receiptTable([
-      { label: 'Donor Name', value: donorName },
-      { label: 'Tier', value: tierName },
-      { label: 'Amount', value: `$${amountPaid}`, bold: true },
-      { label: 'Status', value: 'Confirmed' },
-    ])}
+    { label: 'Donor Name', value: donorName },
+    { label: 'Tier', value: tierName },
+    { label: 'Amount', value: `$${amountPaid}`, bold: true },
+    { label: 'Status', value: 'Confirmed' },
+  ])}
     
     ${highlightBox(`
       <h3 style="margin:0 0 8px;color:#00ff88;font-size:15px;font-weight:700;">What Your Support Enables</h3>
@@ -315,7 +292,7 @@ export async function sendCrowdfundConfirmationEmail(to: string, amountPaid: str
     </td></tr>
     </table>
   `;
-  
+
   return sendEmail({
     to,
     subject: `Crowdfund Contribution Confirmed - $${amountPaid} | Thank You!`,
@@ -335,7 +312,7 @@ export async function sendSubscriptionActivatedEmail(to: string, planName: strin
     guardian_command: "Guardian Command",
   };
   const displayPlan = planDisplayNames[planName] || planName;
-  
+
   const planFeatures: Record<string, string[]> = {
     pulse_pro: ["AI-powered market intelligence", "ML price predictions", "Fear & Greed tracking", "Accuracy analytics dashboard"],
     strike_agent: ["Solana memecoin sniper bot", "AI risk scoring", "Honeypot detection", "One-click Phantom integration"],
@@ -346,7 +323,7 @@ export async function sendSubscriptionActivatedEmail(to: string, planName: strin
     guardian_command: ["Dedicated security team", "Custom integrations", "Priority incident response", "Enterprise SLAs"],
   };
   const features = planFeatures[planName] || ["Full plan access"];
-  
+
   const content = `
     ${heroSection('Subscription Activated', `Welcome to ${displayPlan}!`, '#a855f7')}
     
@@ -357,11 +334,11 @@ export async function sendSubscriptionActivatedEmail(to: string, planName: strin
     ${statCard('Your Plan', displayPlan, '#a855f7')}
     
     ${receiptTable([
-      { label: 'Plan', value: displayPlan },
-      { label: 'Billing Cycle', value: billingCycle === 'annual' ? 'Annual' : 'Monthly' },
-      { label: 'Amount', value: `$${amount}/${billingCycle === 'annual' ? 'yr' : 'mo'}`, bold: true },
-      ...(nextBillingDate ? [{ label: 'Next Billing Date', value: nextBillingDate }] : []),
-    ])}
+    { label: 'Plan', value: displayPlan },
+    { label: 'Billing Cycle', value: billingCycle === 'annual' ? 'Annual' : 'Monthly' },
+    { label: 'Amount', value: `$${amount}/${billingCycle === 'annual' ? 'yr' : 'mo'}`, bold: true },
+    ...(nextBillingDate ? [{ label: 'Next Billing Date', value: nextBillingDate }] : []),
+  ])}
     
     ${highlightBox(`
       <h3 style="margin:0 0 10px;color:#a855f7;font-size:15px;font-weight:700;">Your ${displayPlan} Features</h3>
@@ -378,7 +355,7 @@ export async function sendSubscriptionActivatedEmail(to: string, planName: strin
     </td></tr>
     </table>
   `;
-  
+
   return sendEmail({
     to,
     subject: `${displayPlan} Activated - Your Premium Features Are Live`,
@@ -393,16 +370,16 @@ export async function sendSubscriptionRenewalEmail(to: string, planName: string,
     chronicles_pro: "Chronicles Pro", guardian_watch: "Guardian Watch", guardian_shield: "Guardian Shield", guardian_command: "Guardian Command",
   };
   const displayPlan = planDisplayNames[planName] || planName;
-  
+
   const content = `
     ${heroSection('Subscription Renewed', `Your ${displayPlan} access continues uninterrupted.`, '#a855f7')}
     
     ${receiptTable([
-      { label: 'Plan', value: displayPlan },
-      { label: 'Amount Charged', value: `$${amount}`, bold: true },
-      { label: 'Next Renewal', value: nextBillingDate },
-      { label: 'Status', value: 'Active' },
-    ])}
+    { label: 'Plan', value: displayPlan },
+    { label: 'Amount Charged', value: `$${amount}`, bold: true },
+    { label: 'Next Renewal', value: nextBillingDate },
+    { label: 'Status', value: 'Active' },
+  ])}
     
     ${ctaButton('Go to Dashboard', `${BASE_URL}/home`, 'linear-gradient(135deg,#a855f7,#06b6d4)')}
     
@@ -412,7 +389,7 @@ export async function sendSubscriptionRenewalEmail(to: string, planName: string,
     </td></tr>
     </table>
   `;
-  
+
   return sendEmail({
     to,
     subject: `${displayPlan} Renewed - Thank You for Staying With Us`,
@@ -438,11 +415,11 @@ export async function sendGoldCoinPurchaseEmail(to: string, gcAmount: number, sc
     </table>
     
     ${receiptTable([
-      { label: 'Amount Paid', value: `$${amountPaid}`, bold: true },
-      { label: 'Gold Coins (GC)', value: `${gcAmount.toLocaleString()} GC` },
-      { label: 'Free Sweep Coins (SC)', value: `+${scBonus.toLocaleString()} SC` },
-      { label: 'Status', value: 'Credited Instantly' },
-    ])}
+    { label: 'Amount Paid', value: `$${amountPaid}`, bold: true },
+    { label: 'Gold Coins (GC)', value: `${gcAmount.toLocaleString()} GC` },
+    { label: 'Free Sweep Coins (SC)', value: `+${scBonus.toLocaleString()} SC` },
+    { label: 'Status', value: 'Credited Instantly' },
+  ])}
     
     ${highlightBox(`
       <h3 style="margin:0 0 8px;color:#FFD700;font-size:15px;font-weight:700;">How It Works</h3>
@@ -455,7 +432,7 @@ export async function sendGoldCoinPurchaseEmail(to: string, gcAmount: number, sc
     
     ${ctaButton('Play Now', `${BASE_URL}/arcade`, 'linear-gradient(135deg,#FFD700,#f59e0b)')}
   `;
-  
+
   return sendEmail({
     to,
     subject: `${gcAmount.toLocaleString()} Gold Coins Purchased + ${scBonus.toLocaleString()} Free Sweep Coins`,
@@ -481,10 +458,10 @@ export async function sendCreditsConfirmationEmail(to: string, creditsAmount: nu
     </table>
     
     ${receiptTable([
-      { label: 'Amount Paid', value: `$${amountPaid}`, bold: true },
-      { label: 'Credits Purchased', value: `${creditsAmount.toLocaleString()}` },
-      { label: 'Account Balance', value: `${newBalance.toLocaleString()} credits` },
-    ])}
+    { label: 'Amount Paid', value: `$${amountPaid}`, bold: true },
+    { label: 'Credits Purchased', value: `${creditsAmount.toLocaleString()}` },
+    { label: 'Account Balance', value: `${newBalance.toLocaleString()} credits` },
+  ])}
     
     ${highlightBox(`
       <h3 style="margin:0 0 8px;color:#06b6d4;font-size:15px;font-weight:700;">Use Your Credits For</h3>
@@ -498,7 +475,7 @@ export async function sendCreditsConfirmationEmail(to: string, creditsAmount: nu
     
     ${ctaButton('Use Your Credits', `${BASE_URL}/home`)}
   `;
-  
+
   return sendEmail({
     to,
     subject: `${creditsAmount.toLocaleString()} Credits Added to Your Account`,
@@ -510,7 +487,7 @@ export async function sendCreditsConfirmationEmail(to: string, creditsAmount: nu
 export async function sendGuardianCertificationEmail(to: string, projectName: string, tier: string, amountPaid: string, certificationId?: string) {
   const tierNames: Record<string, string> = { assurance_lite: "Assurance Lite", guardian_premier: "Guardian Premier" };
   const displayTier = tierNames[tier] || tier;
-  
+
   const tierDetails: Record<string, string[]> = {
     assurance_lite: [
       "Automated smart contract analysis",
@@ -527,17 +504,17 @@ export async function sendGuardianCertificationEmail(to: string, projectName: st
     ],
   };
   const details = tierDetails[tier] || ["Comprehensive security analysis"];
-  
+
   const content = `
     ${heroSection('Certification Initiated', `${displayTier} audit for ${projectName}`, '#10b981')}
     
     ${receiptTable([
-      { label: 'Project', value: projectName },
-      { label: 'Audit Tier', value: displayTier },
-      { label: 'Amount Paid', value: `$${amountPaid}`, bold: true },
-      { label: 'Status', value: 'Pending Review' },
-      ...(certificationId ? [{ label: 'Reference ID', value: certificationId }] : []),
-    ])}
+    { label: 'Project', value: projectName },
+    { label: 'Audit Tier', value: displayTier },
+    { label: 'Amount Paid', value: `$${amountPaid}`, bold: true },
+    { label: 'Status', value: 'Pending Review' },
+    ...(certificationId ? [{ label: 'Reference ID', value: certificationId }] : []),
+  ])}
     
     ${highlightBox(`
       <h3 style="margin:0 0 8px;color:#10b981;font-size:15px;font-weight:700;">${displayTier} Includes</h3>
@@ -560,7 +537,7 @@ export async function sendGuardianCertificationEmail(to: string, projectName: st
     
     ${ctaButton('View Certification Status', `${BASE_URL}/guardian-registry`, 'linear-gradient(135deg,#10b981,#06b6d4)')}
   `;
-  
+
   return sendEmail({
     to,
     subject: `Guardian ${displayTier} Certification Initiated - ${projectName}`,
@@ -584,11 +561,11 @@ export async function sendGuardianIntakeEmail(to: string, projectName: string, t
     ${heroSection('Intake Received', `We've received your certification request for ${projectName}.`, '#10b981')}
     
     ${receiptTable([
-      { label: 'Project', value: projectName },
-      { label: 'Interested Tier', value: displayTier },
-      { label: 'Certification ID', value: certificationId },
-      { label: 'Status', value: 'Intake Received' },
-    ])}
+    { label: 'Project', value: projectName },
+    { label: 'Interested Tier', value: displayTier },
+    { label: 'Certification ID', value: certificationId },
+    { label: 'Status', value: 'Intake Received' },
+  ])}
     
     ${highlightBox(`
       <h3 style="margin:0 0 8px;color:#10b981;font-size:15px;font-weight:700;">What Happens Next</h3>
@@ -632,11 +609,11 @@ export async function sendDomainRegistrationEmail(to: string, domainName: string
     </table>
     
     ${receiptTable([
-      { label: 'Domain', value: `${domainName}.tlid` },
-      { label: 'Tier', value: domainTier },
-      { label: 'Duration', value: isLifetime ? 'Lifetime' : 'Annual' },
-      { label: 'Amount Paid', value: `$${amountPaid}`, bold: true },
-    ])}
+    { label: 'Domain', value: `${domainName}.tlid` },
+    { label: 'Tier', value: domainTier },
+    { label: 'Duration', value: isLifetime ? 'Lifetime' : 'Annual' },
+    { label: 'Amount Paid', value: `$${amountPaid}`, bold: true },
+  ])}
     
     ${highlightBox(`
       <h3 style="margin:0 0 8px;color:#ec4899;font-size:15px;font-weight:700;">Your Domain Powers</h3>
@@ -650,7 +627,7 @@ export async function sendDomainRegistrationEmail(to: string, domainName: string
     
     ${ctaButton('Manage Your Domain', `${BASE_URL}/domains`, 'linear-gradient(135deg,#ec4899,#a855f7)')}
   `;
-  
+
   return sendEmail({
     to,
     subject: `Domain Registered: ${domainName}.tlid - ${isLifetime ? 'Lifetime' : 'Annual'} Ownership`,
@@ -666,10 +643,10 @@ export async function sendOrbsPurchaseEmail(to: string, orbsAmount: number, amou
     ${statCard('Orbs Added', `${orbsAmount.toLocaleString()}`, '#f59e0b')}
     
     ${receiptTable([
-      { label: 'Amount Paid', value: `$${amountPaid}`, bold: true },
-      { label: 'Orbs Received', value: `${orbsAmount.toLocaleString()} Orbs` },
-      { label: 'Status', value: 'Credited Instantly' },
-    ])}
+    { label: 'Amount Paid', value: `$${amountPaid}`, bold: true },
+    { label: 'Orbs Received', value: `${orbsAmount.toLocaleString()} Orbs` },
+    { label: 'Status', value: 'Credited Instantly' },
+  ])}
     
     ${highlightBox(`
       <h3 style="margin:0 0 8px;color:#f59e0b;font-size:15px;font-weight:700;">Spend Orbs On</h3>
@@ -683,7 +660,7 @@ export async function sendOrbsPurchaseEmail(to: string, orbsAmount: number, amou
     
     ${ctaButton('Use Your Orbs', `${BASE_URL}/chronicles`, 'linear-gradient(135deg,#f59e0b,#ec4899)')}
   `;
-  
+
   return sendEmail({
     to,
     subject: `${orbsAmount.toLocaleString()} Orbs Added to Your Account`,
@@ -694,7 +671,7 @@ export async function sendOrbsPurchaseEmail(to: string, orbsAmount: number, amou
 
 export async function sendShellsPurchaseEmail(to: string, shellsAmount: number, amountPaid: string, newBalance: number) {
   const sigEquivalent = (shellsAmount * 0.1).toLocaleString();
-  
+
   const content = `
     ${heroSection('Shells Purchased!', 'Your pre-launch currency is ready.', '#06b6d4')}
     
@@ -711,11 +688,11 @@ export async function sendShellsPurchaseEmail(to: string, shellsAmount: number, 
     </table>
     
     ${receiptTable([
-      { label: 'Amount Paid', value: `$${amountPaid}`, bold: true },
-      { label: 'Shells Received', value: `${shellsAmount.toLocaleString()}` },
-      { label: 'Shell Balance', value: `${newBalance.toLocaleString()} Shells` },
-      { label: 'SIG Value at Launch', value: `${sigEquivalent} SIG` },
-    ])}
+    { label: 'Amount Paid', value: `$${amountPaid}`, bold: true },
+    { label: 'Shells Received', value: `${shellsAmount.toLocaleString()}` },
+    { label: 'Shell Balance', value: `${newBalance.toLocaleString()} Shells` },
+    { label: 'SIG Value at Launch', value: `${sigEquivalent} SIG` },
+  ])}
     
     ${highlightBox(`
       <h3 style="margin:0 0 8px;color:#06b6d4;font-size:15px;font-weight:700;">About Shells</h3>
@@ -729,7 +706,7 @@ export async function sendShellsPurchaseEmail(to: string, shellsAmount: number, 
     
     ${ctaButton('View Your Balance', `${BASE_URL}/wallet`)}
   `;
-  
+
   return sendEmail({
     to,
     subject: `${shellsAmount.toLocaleString()} Shells Added - Converts to ${sigEquivalent} SIG at Launch`,
@@ -753,7 +730,7 @@ export async function sendWelcomeEmail(to: string, name: string) {
     
     ${ctaButton('Explore DarkWave', `${BASE_URL}/home`)}
   `;
-  
+
   return sendEmail({ to, subject: "Welcome to Trust Layer!", html: baseTemplate(content) });
 }
 
@@ -786,7 +763,7 @@ export async function sendApiKeyEmail(to: string, name: string, apiKey: string, 
     
     ${ctaButton('API Documentation', `${BASE_URL}/docs`)}
   `;
-  
+
   return sendEmail({ to, subject: `Your DarkWave API Key for ${appName}`, html: baseTemplate(content) });
 }
 
@@ -811,7 +788,7 @@ export async function sendHallmarkEmail(to: string, hallmarkId: string, productN
     
     ${ctaButton('View on Explorer', `${BASE_URL}/explorer`, 'linear-gradient(135deg,#10b981,#06b6d4)')}
   `;
-  
+
   return sendEmail({ to, subject: `Hallmark Generated: ${hallmarkId}`, html: baseTemplate(content) });
 }
 
@@ -840,7 +817,7 @@ export async function sendStakingRewardEmail(to: string, rewardAmount: string, t
     </td></tr>
     </table>
   `;
-  
+
   return sendEmail({ to, subject: `Staking Rewards Claimed: ${rewardAmount} SIG`, html: baseTemplate(content) });
 }
 
@@ -848,7 +825,7 @@ export async function sendStakingRewardEmail(to: string, rewardAmount: string, t
 export async function sendLargeTransferAlert(to: string, amount: string, direction: 'sent' | 'received', txHash: string) {
   const action = direction === 'sent' ? 'Sent' : 'Received';
   const color = direction === 'sent' ? '#f87171' : '#00ff88';
-  
+
   const content = `
     ${heroSection(`Large Transfer ${action}`, undefined, color)}
     
@@ -870,7 +847,7 @@ export async function sendLargeTransferAlert(to: string, amount: string, directi
     
     ${ctaButton('View Transaction', `${BASE_URL}/explorer`)}
   `;
-  
+
   return sendEmail({ to, subject: `Large Transfer Alert: ${amount} SIG ${action}`, html: baseTemplate(content) });
 }
 
@@ -901,7 +878,7 @@ export async function sendFounderWelcomeEmail(to: string, founderNumber: number,
     
     ${ctaButton('Access Your Dashboard', `${BASE_URL}/home`)}
   `;
-  
+
   return sendEmail({ to, subject: `Welcome, Legacy Founder #${founderNumber}!`, html: baseTemplate(content) });
 }
 
@@ -930,7 +907,7 @@ export async function sendReferralBonusEmail(to: string, referralCount: number, 
     </td></tr>
     </table>
   `;
-  
+
   return sendEmail({ to, subject: `Referral Bonus: ${bonusAmount} SIG Earned!`, html: baseTemplate(content) });
 }
 
@@ -972,7 +949,7 @@ export async function sendBridgeCompletionEmail(to: string, amount: string, from
     
     ${ctaButton('View on Explorer', `${BASE_URL}/explorer`)}
   `;
-  
+
   return sendEmail({ to, subject: `Bridge Complete: ${amount} Transferred`, html: baseTemplate(content) });
 }
 
@@ -996,7 +973,7 @@ export async function sendPasswordResetEmail(to: string, resetLink: string) {
     </td></tr>
     </table>
   `;
-  
+
   return sendEmail({ to, subject: "Reset Your Password - DarkWave", html: baseTemplate(content) });
 }
 
@@ -1019,7 +996,7 @@ export async function sendEmailVerificationCode(to: string, code: string, name: 
     </td></tr>
     </table>
   `;
-  
+
   return sendEmail({ to, subject: `Your DarkWave Verification Code: ${code}`, html: baseTemplate(content) });
 }
 
@@ -1048,7 +1025,7 @@ export async function sendWalletCreationReminder(to: string, name: string, token
       </p>
     `, '#FFD700')}
   `;
-  
+
   return sendEmail({ to, subject: "Action Required: Create Your Trust Layer Wallet", html: baseTemplate(content) });
 }
 
@@ -1077,7 +1054,7 @@ export async function sendSignupWelcomeEmail(to: string, name: string, referralC
     
     ${ctaButton('Explore Trust Layer', `${BASE_URL}/home`)}
   `;
-  
+
   return sendEmail({ to, subject: "Welcome to Trust Layer - You're In!", html: baseTemplate(content) });
 }
 
@@ -1091,7 +1068,7 @@ export async function sendBusinessApprovalEmail(to: string, businessName: string
       <p style="margin:8px 0 0;color:#94a3b8;font-size:12px;">Your storefront will appear in city centers across all eras.</p>
     </td></tr>
     </table>` : '';
-  
+
   const content = `
     ${heroSection('Business Verified!', `${businessName} is now a Trust Layer member.`, '#00ff88')}
     
@@ -1110,7 +1087,7 @@ export async function sendBusinessApprovalEmail(to: string, businessName: string
     
     ${ctaButton('Access Business Portal', `${BASE_URL}/business-portal`, 'linear-gradient(135deg,#00ff88,#06b6d4)')}
   `;
-  
+
   return sendEmail({ to, subject: `Business Verified: ${businessName} is Now a Trust Layer Member!`, html: baseTemplate(content) });
 }
 
@@ -1136,7 +1113,7 @@ export async function sendBusinessRejectionEmail(to: string, businessName: strin
     
     ${ctaButton('Submit New Application', `${BASE_URL}/business-application`)}
   `;
-  
+
   return sendEmail({ to, subject: `Business Application Update: ${businessName}`, html: baseTemplate(content) });
 }
 
@@ -1147,15 +1124,15 @@ export async function sendPaymentFailedEmail(to: string, planName: string, amoun
     chronicles_pro: "Chronicles Pro", guardian_watch: "Guardian Watch", guardian_shield: "Guardian Shield", guardian_command: "Guardian Command",
   };
   const displayPlan = planDisplayNames[planName] || planName;
-  
+
   const content = `
     ${heroSection('Payment Issue', `We couldn't process your ${displayPlan} payment.`, '#f87171')}
     
     ${receiptTable([
-      { label: 'Plan', value: displayPlan },
-      { label: 'Amount Due', value: `$${amount}`, bold: true },
-      { label: 'Status', value: 'Payment Failed' },
-    ])}
+    { label: 'Plan', value: displayPlan },
+    { label: 'Amount Due', value: `$${amount}`, bold: true },
+    { label: 'Status', value: 'Payment Failed' },
+  ])}
     
     ${highlightBox(`
       <h3 style="margin:0 0 8px;color:#f87171;font-size:15px;font-weight:700;">What to Do</h3>
@@ -1175,6 +1152,6 @@ export async function sendPaymentFailedEmail(to: string, planName: string, amoun
     </td></tr>
     </table>
   `;
-  
+
   return sendEmail({ to, subject: `Payment Issue - ${displayPlan} Subscription`, html: baseTemplate(content) });
 }
