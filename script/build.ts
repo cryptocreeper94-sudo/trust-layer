@@ -3,10 +3,10 @@ import { execSync } from "child_process";
 if (!process.env.__BUILD_RELAUNCHED && !process.env.NODE_OPTIONS?.includes('max-old-space-size')) {
   process.env.__BUILD_RELAUNCHED = '1';
   try {
-    execSync('NODE_OPTIONS="--max-old-space-size=4096" npx tsx script/build.ts', {
+    execSync('npx tsx script/build.ts', {
       stdio: 'inherit',
       cwd: process.cwd(),
-      env: { ...process.env, __BUILD_RELAUNCHED: '1' },
+      env: { ...process.env, __BUILD_RELAUNCHED: '1', NODE_OPTIONS: '--max-old-space-size=4096' },
     });
     process.exit(0);
   } catch (e: any) {
@@ -29,7 +29,7 @@ async function runRelease() {
 
   const schemaPath = path.join(process.cwd(), 'shared/schema.ts');
   const content = await readFile(schemaPath, 'utf-8');
-  
+
   const match = content.match(/APP_VERSION\s*=\s*"([^"]+)"/);
   const currentVersion = match ? match[1] : '1.0.0';
   console.log(`[Release] Current version: ${currentVersion}`);
@@ -85,11 +85,11 @@ const allowlist = [
 
 async function buildAll() {
   await runRelease();
-  
+
   await rm("dist", { recursive: true, force: true });
 
   console.log("building client...");
-  await viteBuild({ 
+  await viteBuild({
     mode: 'production',
     build: {
       chunkSizeWarningLimit: 5000,
