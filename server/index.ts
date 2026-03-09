@@ -134,7 +134,7 @@ const cspDirectives = {
   objectSrc: ["'none'"],
   baseUri: ["'self'"],
   formAction: ["'self'"],
-  frameAncestors: isProduction ? ["'self'"] : ["'self'", "https://*.replit.dev", "https://*.repl.co", "https://replit.com"],
+  frameAncestors: ["'self'"],
   scriptSrcAttr: null,
   upgradeInsecureRequests: isProduction ? [] : null,
 };
@@ -173,6 +173,9 @@ const ALLOWED_ORIGINS = [
   "https://www.yourlegacy.io",
   "https://chronochat.io",
   "https://www.chronochat.io",
+  "https://trustshield.tech",
+  "https://www.trustshield.tech",
+  "https://trust-layer-1pji.onrender.com",
 ];
 
 // Allow localhost and Replit dev domains in development
@@ -180,10 +183,14 @@ if (process.env.NODE_ENV !== "production") {
   ALLOWED_ORIGINS.push("http://localhost:5000", "http://127.0.0.1:5000");
 }
 
-// Always allow Replit dev domains for cross-app communication
+// Allow *.tlid.io subdomains for cross-app communication
 app.use((req, res, next) => {
   const origin = req.headers.origin;
-  if (origin && (origin.includes('.replit.dev') || origin.includes('.repl.co'))) {
+  if (origin && (
+    origin.endsWith('.tlid.io') ||
+    origin.endsWith('.onrender.com') ||
+    (!isProduction && (origin.includes('localhost') || origin.includes('127.0.0.1')))
+  )) {
     res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Access-Control-Allow-Credentials", "true");
   }
