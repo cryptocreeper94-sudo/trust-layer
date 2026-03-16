@@ -3,7 +3,18 @@ import { Link } from "wouter";
 import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target, ChevronDown, ChevronLeft, ChevronRight, Gift, Search } from "lucide-react";
 import { InfoTooltip } from "@/components/info-tooltip";
 import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.jpg";
-import shieldImage from "/shield-reference.jpg";
+// Hero slideshow videos
+import orbitVideo from "@assets/generated_videos/orbit_staffing_hero.mp4";
+import brewBoardVideo from "@assets/generated_videos/brew_board_hero.mp4";
+import garageBotVideo from "@assets/generated_videos/garagebot_hero.mp4";
+import paintProsVideo from "@assets/generated_videos/paintpros_hero.mp4";
+import trustHomeVideo from "@assets/generated_videos/trusthome_hero.mp4";
+import trustVaultVideo from "@assets/generated_videos/trustvault_hero.mp4";
+import theVoidVideo from "@assets/generated_videos/the_void_hero.mp4";
+import verdaraVideo from "@assets/generated_videos/verdara_hero.mp4";
+import tlDriverVideo from "@assets/generated_videos/tl_driver_connect_hero.mp4";
+import happyEatsVideo from "@assets/generated_videos/happyeats_hero.mp4";
+import lotOpsVideo from "@assets/generated_videos/lotops_pro_hero.mp4";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { OnboardingTour } from "@/components/onboarding-tour";
@@ -16,7 +27,7 @@ import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import { SimpleLoginModal } from "@/components/simple-login";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import stoneAgeImg from "@assets/generated_images/stone_age_village_scene.jpg";
 import medievalImg from "@assets/generated_images/medieval_castle_vertical_portrait.jpg";
@@ -325,6 +336,16 @@ function EcosystemCarousel({ apps }: { apps: EcosystemApp[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const getCardsPerView = () => {
+    if (typeof window === 'undefined') return 4;
+    if (window.innerWidth < 768) return 1;
+    if (window.innerWidth < 1024) return 4;
+    return 5;
+  };
+
+  const totalPages = Math.ceil(apps.length / getCardsPerView());
 
   const checkScroll = () => {
     if (scrollRef.current) {
@@ -332,6 +353,22 @@ function EcosystemCarousel({ apps }: { apps: EcosystemApp[] }) {
       setCanScrollLeft(scrollLeft > 0);
       setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
     }
+  };
+
+  const updateActiveIndex = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      const maxScroll = scrollWidth - clientWidth;
+      if (maxScroll <= 0) return;
+      const progress = scrollLeft / maxScroll;
+      const newIndex = Math.round(progress * (totalPages - 1));
+      setActiveIndex(Math.min(Math.max(0, newIndex), totalPages - 1));
+    }
+  };
+
+  const handleScroll = () => {
+    checkScroll();
+    updateActiveIndex();
   };
 
   const scroll = (direction: 'left' | 'right') => {
@@ -360,27 +397,9 @@ function EcosystemCarousel({ apps }: { apps: EcosystemApp[] }) {
 
   return (
     <div className="relative">
-      <button
-        onClick={() => scroll('left')}
-        className={`absolute -left-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-black/80 backdrop-blur-xl border border-white/20 flex items-center justify-center transition-all ${canScrollLeft ? 'opacity-100 hover:bg-white/10 hover:border-primary/50' : 'opacity-30 cursor-not-allowed'}`}
-        disabled={!canScrollLeft}
-        data-testid="button-ecosystem-carousel-left"
-      >
-        <ChevronLeft className="w-6 h-6 text-white" />
-      </button>
-      
-      <button
-        onClick={() => scroll('right')}
-        className={`absolute -right-4 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full bg-black/80 backdrop-blur-xl border border-white/20 flex items-center justify-center transition-all ${canScrollRight ? 'opacity-100 hover:bg-white/10 hover:border-primary/50' : 'opacity-30 cursor-not-allowed'}`}
-        disabled={!canScrollRight}
-        data-testid="button-ecosystem-carousel-right"
-      >
-        <ChevronRight className="w-6 h-6 text-white" />
-      </button>
-
       <div 
         ref={scrollRef}
-        onScroll={checkScroll}
+        onScroll={handleScroll}
         className="flex gap-4 overflow-x-auto scrollbar-hide py-2 snap-x snap-mandatory px-1"
       >
         {apps.map((app, i) => {
@@ -432,6 +451,37 @@ function EcosystemCarousel({ apps }: { apps: EcosystemApp[] }) {
           );
         })}
       </div>
+
+      {/* Navigation controls below carousel */}
+      <div className="flex items-center justify-center gap-4 mt-4">
+        <button
+          onClick={() => scroll('left')}
+          className={`w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center transition-all ${canScrollLeft ? 'hover:bg-cyan-500/10 hover:border-cyan-400/40' : 'opacity-30 cursor-not-allowed'}`}
+          disabled={!canScrollLeft}
+          data-testid="button-ecosystem-carousel-left"
+        >
+          <ChevronLeft className="w-5 h-5 text-white" />
+        </button>
+        
+        {/* Cyan dot indicators */}
+        <div className="flex items-center gap-1.5">
+          {Array.from({ length: totalPages }).map((_, i) => (
+            <div 
+              key={i}
+              className={`h-1.5 rounded-full transition-all duration-300 ${i === activeIndex ? 'bg-cyan-400 w-4' : 'bg-white/30 w-1.5'}`}
+            />
+          ))}
+        </div>
+        
+        <button
+          onClick={() => scroll('right')}
+          className={`w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center transition-all ${canScrollRight ? 'hover:bg-cyan-500/10 hover:border-cyan-400/40' : 'opacity-30 cursor-not-allowed'}`}
+          disabled={!canScrollRight}
+          data-testid="button-ecosystem-carousel-right"
+        >
+          <ChevronRight className="w-5 h-5 text-white" />
+        </button>
+      </div>
     </div>
   );
 }
@@ -441,6 +491,159 @@ function getTimeGreeting(): string {
   if (hour < 12) return "Good morning";
   if (hour < 17) return "Good afternoon";
   return "Good evening";
+}
+
+// ─── Hero Slideshow ──────────────────────────────────────────────────────────
+
+interface HeroSlide {
+  title: string;
+  subtitle: string;
+  accent: string;
+  link: string;
+  video?: string;
+  image?: string;
+  gradient: string;
+}
+
+const heroSlides: HeroSlide[] = [
+  { title: "ORBIT Staffing OS", subtitle: "100% automated flexible labor marketplace with GPS check-ins, smart matching, payroll, and blockchain compliance", accent: "cyan", link: "https://orbitstaffing.io", video: orbitVideo, gradient: "from-cyan-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "TrustHome", subtitle: "Real estate agent platform with AI video walkthroughs, listing management, client CRM, and smart tools", accent: "emerald", link: "https://trusthome.tlid.io", video: trustHomeVideo, gradient: "from-emerald-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "Trust Vault", subtitle: "Enterprise-grade digital asset protection with biometric security, encrypted storage, and blockchain custody", accent: "blue", link: "https://trustvault.tlid.io", video: trustVaultVideo, gradient: "from-blue-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "THE VOID", subtitle: "Voice-first mental wellness platform with AI-powered venting, guided breathing, mood analytics, and 20+ wellness tools", accent: "purple", link: "https://intothevoid.app", video: theVoidVideo, gradient: "from-purple-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "Verdara", subtitle: "AI outdoor recreation super-app with species ID, trail explorer, trip planner, 170+ US locations, and wild edibles guide", accent: "emerald", link: "https://verdara.tlid.io", video: verdaraVideo, gradient: "from-emerald-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "TL Driver Connect", subtitle: "All-in-one driver app — GPS navigation, receipt scanning, food truck locator, franchise demo, and driver tools", accent: "teal", link: "https://tldriverconnect.com", video: tlDriverVideo, gradient: "from-teal-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "Happy Eats", subtitle: "Nashville food truck platform with zone-based batch ordering, vendor portal, rewards, and 11 delivery zones", accent: "rose", link: "https://happyeats.app", video: happyEatsVideo, gradient: "from-rose-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "Brew & Board Coffee", subtitle: "Community coffee platform with B2B delivery, calendar scheduling, and blockchain-verified receipts", accent: "amber", link: "https://brewandboard.coffee", video: brewBoardVideo, gradient: "from-amber-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "GarageBot", subtitle: "Smart garage and workshop management with IoT integration, tool inventory, and automated maintenance tracking", accent: "zinc", link: "https://garagebot.io", video: garageBotVideo, gradient: "from-zinc-800/80 via-slate-900/60 to-slate-950/90" },
+  { title: "PaintPros", subtitle: "Professional painting contractor management with job scheduling, crew management, and automated invoicing", accent: "orange", link: "https://paintpros.io", video: paintProsVideo, gradient: "from-orange-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "Lot Ops Pro", subtitle: "Autonomous lot management for auto auctions, dealers, and manufacturers with inventory and operations tools", accent: "indigo", link: "https://lotopspro.io", video: lotOpsVideo, gradient: "from-indigo-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "Chronicles", subtitle: "Not a game — a life. Persistent parallel world with emotion-driven AI, living political simulation, and legacy building", accent: "purple", link: "https://yourlegacy.io", image: "/ecosystem/chronicles.jpg", gradient: "from-purple-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "Pulse", subtitle: "Predictive market intelligence powered by AI systems with auto-trading, sentiment analysis, and multi-chain coverage", accent: "cyan", link: "https://darkwavepulse.com", image: "/ecosystem/darkwave-pulse-new.jpg", gradient: "from-cyan-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "Trust Golf", subtitle: "Premium golf companion with 45+ courses, AI swing analysis, USGA handicap tracking, and exclusive tee time deals", accent: "emerald", link: "https://trustgolf.app", image: "/ecosystem/trust-golf.jpg", gradient: "from-green-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "TrustGen 3D", subtitle: "AI-powered 3D creation & code studio with Monaco IDE, Meshy.ai, animation timeline, and blockchain provenance", accent: "purple", link: "https://trustgen.tlid.io", image: "/ecosystem/trustgen.jpg", gradient: "from-violet-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "VedaSolus", subtitle: "Holistic health platform blending Ayurveda & TCM with modern science — AI wellness coach and practitioner marketplace", accent: "teal", link: "https://vedasolus.io", image: "/ecosystem/veda-solus-new.jpg", gradient: "from-teal-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "StrikeAgent", subtitle: "AI sentient trading bot with hashed predictions, verified results, and multiple trading settings", accent: "red", link: "https://strikeagent.io", image: "/ecosystem/strike-agent-new.jpg", gradient: "from-red-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "Bomber", subtitle: "3D long driving golf game with real-time physics, stunning courses, leaderboards, and Trust Golf integration", accent: "lime", link: "https://bomber.tlid.io", image: "/ecosystem/bomber.jpg", gradient: "from-lime-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "TORQUE", subtitle: "Blockchain-verified automotive marketplace and vehicle history platform — buy, sell, and verify with trust records", accent: "zinc", link: "https://garagebot.io/torque", image: "/ecosystem/torque.jpg", gradient: "from-zinc-800/80 via-slate-900/60 to-slate-950/90" },
+  { title: "TradeWorks AI", subtitle: "Advanced AI-powered trading intelligence and market analysis platform with automated strategies", accent: "blue", link: "https://tradeworksai.io", image: "/ecosystem/tradeworks-ai.jpg", gradient: "from-blue-900/80 via-slate-900/60 to-slate-950/90" },
+];
+
+const heroAccents: Record<string, { text: string; dot: string; btn: string }> = {
+  cyan: { text: "text-cyan-400", dot: "bg-cyan-400", btn: "bg-cyan-500/20 border-cyan-500/40 text-cyan-300" },
+  emerald: { text: "text-emerald-400", dot: "bg-emerald-400", btn: "bg-emerald-500/20 border-emerald-500/40 text-emerald-300" },
+  blue: { text: "text-blue-400", dot: "bg-blue-400", btn: "bg-blue-500/20 border-blue-500/40 text-blue-300" },
+  purple: { text: "text-purple-400", dot: "bg-purple-400", btn: "bg-purple-500/20 border-purple-500/40 text-purple-300" },
+  teal: { text: "text-teal-400", dot: "bg-teal-400", btn: "bg-teal-500/20 border-teal-500/40 text-teal-300" },
+  rose: { text: "text-rose-400", dot: "bg-rose-400", btn: "bg-rose-500/20 border-rose-500/40 text-rose-300" },
+  amber: { text: "text-amber-400", dot: "bg-amber-400", btn: "bg-amber-500/20 border-amber-500/40 text-amber-300" },
+  orange: { text: "text-orange-400", dot: "bg-orange-400", btn: "bg-orange-500/20 border-orange-500/40 text-orange-300" },
+  zinc: { text: "text-zinc-400", dot: "bg-zinc-400", btn: "bg-zinc-500/20 border-zinc-500/40 text-zinc-300" },
+  indigo: { text: "text-indigo-400", dot: "bg-indigo-400", btn: "bg-indigo-500/20 border-indigo-500/40 text-indigo-300" },
+  red: { text: "text-red-400", dot: "bg-red-400", btn: "bg-red-500/20 border-red-500/40 text-red-300" },
+  lime: { text: "text-lime-400", dot: "bg-lime-400", btn: "bg-lime-500/20 border-lime-500/40 text-lime-300" },
+};
+
+function SlideMedia({ slide, isActive }: { slide: HeroSlide; isActive: boolean }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !slide.video) return;
+    const handleCanPlay = () => setLoaded(true);
+    video.addEventListener("canplay", handleCanPlay);
+    if (isActive) { video.currentTime = 0; video.play().catch(() => {}); }
+    else { video.pause(); }
+    return () => video.removeEventListener("canplay", handleCanPlay);
+  }, [isActive, slide.video]);
+
+  return (
+    <>
+      <div className={`absolute inset-0 bg-gradient-to-br ${slide.gradient} transition-opacity duration-500 ${loaded || slide.image ? 'opacity-0' : 'opacity-100'}`} />
+      {slide.video ? (
+        <video ref={videoRef} src={slide.video} muted loop playsInline preload={isActive ? "auto" : "metadata"} className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${loaded ? 'opacity-100' : 'opacity-0'}`} />
+      ) : slide.image ? (
+        <img src={slide.image} alt={slide.title} className="absolute inset-0 w-full h-full object-cover" onLoad={() => setLoaded(true)} />
+      ) : null}
+      <div className="absolute inset-0 bg-slate-950/20" />
+    </>
+  );
+}
+
+function HeroSlideshow() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [prevIndex, setPrevIndex] = useState(0);
+  const [transitioning, setTransitioning] = useState(false);
+
+  const goToSlide = useCallback((index: number) => {
+    if (index === activeIndex || transitioning) return;
+    setTransitioning(true);
+    setPrevIndex(activeIndex);
+    setActiveIndex(index);
+    setTimeout(() => setTransitioning(false), 1200);
+  }, [activeIndex, transitioning]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const next = (activeIndex + 1) % heroSlides.length;
+      goToSlide(next);
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [activeIndex, goToSlide]);
+
+  const nextIndex = (activeIndex + 1) % heroSlides.length;
+  const visibleIndices = new Set([activeIndex, prevIndex, nextIndex]);
+  const currentSlide = heroSlides[activeIndex];
+  const accent = heroAccents[currentSlide.accent] || heroAccents.cyan;
+
+  return (
+    <div className="relative w-full mt-4 h-[40vh] md:h-[50vh] rounded-2xl overflow-hidden border border-white/10" data-testid="section-hero-slideshow">
+      {heroSlides.map((slide, i) => {
+        const isActive = i === activeIndex;
+        const isPrev = i === prevIndex && transitioning;
+        const shouldMount = visibleIndices.has(i);
+        return (
+          <div key={i} className="absolute inset-0" style={{ opacity: isActive ? 1 : isPrev ? 1 : 0, transitionDuration: "1200ms", transitionTimingFunction: "ease-in-out", transitionProperty: "opacity", zIndex: isActive ? 2 : isPrev ? 1 : 0, visibility: shouldMount ? "visible" : "hidden" }}>
+            {shouldMount ? <SlideMedia slide={slide} isActive={isActive} /> : <div className={`absolute inset-0 bg-gradient-to-br ${slide.gradient}`} />}
+          </div>
+        );
+      })}
+
+      {/* Gradient overlays */}
+      <div className="absolute inset-0 z-10" style={{ background: "linear-gradient(to bottom, rgba(2,6,23,0.1) 0%, rgba(2,6,23,0.05) 40%, rgba(2,6,23,0.4) 70%, rgba(2,6,23,0.9) 100%)" }} />
+      <div className="absolute inset-0 z-10 bg-gradient-to-r from-slate-950/40 via-transparent to-slate-950/40" />
+
+      {/* Branded overlay content */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 p-6 md:p-10">
+        <div className="flex items-center gap-2 mb-2">
+          <div className={`w-2 h-2 rounded-full ${accent.dot} animate-pulse`} />
+          <span className={`text-[10px] font-semibold uppercase tracking-widest ${accent.text}`}>Trust Layer Ecosystem</span>
+        </div>
+        <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-2 leading-tight" data-testid="text-slideshow-title">{currentSlide.title}</h2>
+        <p className="text-sm md:text-base text-white/60 max-w-xl mb-4" data-testid="text-slideshow-subtitle">{currentSlide.subtitle}</p>
+        <Button
+          variant="outline"
+          className={`backdrop-blur-sm border ${accent.btn} text-sm`}
+          onClick={() => window.open(currentSlide.link, '_blank', 'noopener,noreferrer')}
+          data-testid="button-slideshow-visit"
+        >
+          Visit {currentSlide.title.split(" ")[0]}
+          <ArrowRight className="w-3.5 h-3.5 ml-2" />
+        </Button>
+      </div>
+
+      {/* Dot navigation */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1">
+        {heroSlides.map((_, i) => {
+          const isActive = i === activeIndex;
+          const slideAccent = heroAccents[heroSlides[i].accent] || heroAccents.cyan;
+          return (
+            <div key={i} onClick={() => goToSlide(i)} className={`cursor-pointer rounded-full transition-all duration-300 ${isActive ? slideAccent.dot + ' w-4 h-1.5' : 'bg-white/30 w-1.5 h-1.5'}`} data-testid={`button-slideshow-dot-${i}`} />
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 export default function Home() {
@@ -594,166 +797,13 @@ export default function Home() {
               Where trust becomes the layer of truth.
             </p>
 
-            {/* Signal Emblem with Prism Light Beam Effect */}
-            <div className="relative w-full mt-2 h-80 md:h-96 flex items-center justify-center">
-              {/* Prism Light Beam - danger from upper-left, transformed into flowing Trust Layer below */}
-              <svg 
-                viewBox="0 0 1200 500" 
-                className="absolute inset-0 w-full h-full"
-                preserveAspectRatio="xMidYMid meet"
-              >
-                <defs>
-                  {/* Incoming beam gradient - threatening red/orange diagonal */}
-                  <linearGradient id="dangerBeam" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#dc2626" stopOpacity="0" />
-                    <stop offset="20%" stopColor="#dc2626" stopOpacity="0.8" />
-                    <stop offset="50%" stopColor="#ef4444" stopOpacity="1" />
-                    <stop offset="80%" stopColor="#f97316" stopOpacity="1" />
-                    <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.9" />
-                  </linearGradient>
-                  {/* Flowing wave gradients */}
-                  <linearGradient id="waveGradientCyan" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#22d3ee" stopOpacity="1" />
-                    <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.8" />
-                    <stop offset="100%" stopColor="#0891b2" stopOpacity="0.5" />
-                  </linearGradient>
-                  <linearGradient id="waveGradientPurple" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#a855f7" stopOpacity="1" />
-                    <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.8" />
-                    <stop offset="100%" stopColor="#7c3aed" stopOpacity="0.5" />
-                  </linearGradient>
-                  <linearGradient id="waveGradientPink" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#ec4899" stopOpacity="0.9" />
-                    <stop offset="50%" stopColor="#d946ef" stopOpacity="0.7" />
-                    <stop offset="100%" stopColor="#a855f7" stopOpacity="0.4" />
-                  </linearGradient>
-                  {/* Strong glow filter */}
-                  <filter id="beamGlow" x="-50%" y="-50%" width="200%" height="200%">
-                    <feGaussianBlur stdDeviation="4" result="blur"/>
-                    <feMerge>
-                      <feMergeNode in="blur"/>
-                      <feMergeNode in="blur"/>
-                      <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                  </filter>
-                  <filter id="sparkleGlow" x="-100%" y="-100%" width="300%" height="300%">
-                    <feGaussianBlur stdDeviation="6" result="blur"/>
-                    <feMerge>
-                      <feMergeNode in="blur"/>
-                      <feMergeNode in="blur"/>
-                      <feMergeNode in="blur"/>
-                      <feMergeNode in="SourceGraphic"/>
-                    </feMerge>
-                  </filter>
-                </defs>
-                
-                {/* Digital matrix dots in background */}
-                {[...Array(60)].map((_, i) => {
-                  const x = 100 + (i % 12) * 90 + Math.random() * 30;
-                  const y = 50 + Math.floor(i / 12) * 80 + Math.random() * 20;
-                  return (
-                    <rect
-                      key={`dot-${i}`}
-                      x={x}
-                      y={y}
-                      width="3"
-                      height="3"
-                      fill="#ffffff"
-                      fillOpacity={0.1 + Math.random() * 0.15}
-                      className="animate-pulse"
-                      style={{ animationDelay: `${Math.random() * 2}s`, animationDuration: `${2 + Math.random() * 2}s` }}
-                    />
-                  );
-                })}
-                
-                {/* Incoming danger beam from upper-left diagonal */}
-                <path
-                  d="M150,0 L520,170"
-                  stroke="url(#dangerBeam)"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  filter="url(#beamGlow)"
-                  className="animate-pulse"
-                />
-                {/* Secondary danger strands */}
-                <path d="M160,0 L525,165" stroke="#ef4444" strokeWidth="3" strokeOpacity="0.7" filter="url(#beamGlow)" />
-                <path d="M140,0 L515,175" stroke="#f97316" strokeWidth="2" strokeOpacity="0.6" filter="url(#beamGlow)" />
-                
-                {/* Impact sparkle where beam hits shield */}
-                <circle cx="530" cy="175" r="20" fill="#fbbf24" fillOpacity="0.6" filter="url(#sparkleGlow)" className="animate-ping" style={{ animationDuration: '1.5s' }} />
-                <circle cx="530" cy="175" r="10" fill="#ffffff" fillOpacity="0.9" filter="url(#beamGlow)" />
-                <circle cx="530" cy="175" r="5" fill="#ffffff" fillOpacity="1" />
-                
-                {/* Flowing sine waves emanating from below shield - Layer 1 (cyan) */}
-                {[...Array(8)].map((_, i) => {
-                  const yOffset = 320 + i * 18;
-                  const amplitude = 15 + i * 3;
-                  const freq = 0.015 - i * 0.001;
-                  const points = [];
-                  for (let x = 200; x <= 1000; x += 5) {
-                    const y = yOffset + Math.sin((x - 200) * freq + i * 0.5) * amplitude;
-                    points.push(`${x},${y}`);
-                  }
-                  const opacity = 0.9 - i * 0.08;
-                  return (
-                    <polyline
-                      key={`wave-cyan-${i}`}
-                      points={points.join(' ')}
-                      fill="none"
-                      stroke="#22d3ee"
-                      strokeWidth={2.5 - i * 0.2}
-                      strokeOpacity={opacity}
-                      filter="url(#beamGlow)"
-                      className="animate-pulse"
-                      style={{ animationDelay: `${i * 0.1}s` }}
-                    />
-                  );
-                })}
-                
-                {/* Flowing sine waves - Layer 2 (purple/pink blend) */}
-                {[...Array(6)].map((_, i) => {
-                  const yOffset = 340 + i * 20;
-                  const amplitude = 12 + i * 4;
-                  const freq = 0.012 - i * 0.001;
-                  const points = [];
-                  for (let x = 250; x <= 950; x += 5) {
-                    const y = yOffset + Math.sin((x - 250) * freq + i * 0.7 + 1) * amplitude;
-                    points.push(`${x},${y}`);
-                  }
-                  const colors = ['#a855f7', '#c084fc', '#d946ef', '#ec4899', '#f472b6', '#fb7185'];
-                  return (
-                    <polyline
-                      key={`wave-purple-${i}`}
-                      points={points.join(' ')}
-                      fill="none"
-                      stroke={colors[i]}
-                      strokeWidth={2 - i * 0.15}
-                      strokeOpacity={0.8 - i * 0.1}
-                      filter="url(#beamGlow)"
-                      className="animate-pulse"
-                      style={{ animationDelay: `${i * 0.15 + 0.5}s` }}
-                    />
-                  );
-                })}
-              </svg>
-              
-              {/* Shield - Platinum rim with cosmic black hole center */}
-              <div className="relative z-10 w-72 h-80 md:w-80 md:h-96 flex items-center justify-center" style={{ marginTop: '-40px' }}>
-                <img 
-                  src={shieldImage} 
-                  alt="Trust Layer Shield" 
-                  className="w-full h-full object-contain"
-                  style={{ 
-                    mixBlendMode: 'lighten',
-                    filter: 'drop-shadow(0 0 35px rgba(6, 182, 212, 0.7)) drop-shadow(0 0 18px rgba(168, 85, 247, 0.5))'
-                  }}
-                />
-              </div>
-            </div>
+            {/* Premium Ecosystem Slideshow */}
+            <HeroSlideshow />
 
           </motion.div>
         </div>
       </section>
+
 
       {/* Thin Gradient Divider with Glow */}
       <Link href="/presale">

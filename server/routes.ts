@@ -25874,8 +25874,9 @@ const APP_URL_MAP: Record<string, string> = {
   "darkwave-staffing": "https://orbitstaffing.io",
   "garagebot": "https://garagebot.io",
   "garagebot-prod": "https://garagebot.io",
-  "verdara": "https://verdara.replit.app",
-  "arbora": "https://verdara.replit.app/arbora",
+  "verdara": "https://verdara.tlid.io",
+  "arbora": "https://verdara.tlid.io/arbora",
+  "trust-layer-hub": "https://trusthub.tlid.io",
   "darkwave-studios": "https://darkwavestudios.io",
   "darkwavestudios": "https://darkwavestudios.io",
   "trustshield": "https://trustshield.tech",
@@ -26244,7 +26245,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       verified: true,
       featured: true,
       users: "Trust Layer Verified",
-      url: "https://trusthome.replit.app",
+      url: "https://trusthome.tlid.io",
     },
     {
       id: "signal-chat",
@@ -26269,7 +26270,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       verified: true,
       featured: true,
       users: "Trust Layer Verified",
-      url: "https://trustvault.replit.app",
+      url: "https://trustvault.tlid.io",
     },
     {
       id: "guardian-scanner",
@@ -26332,7 +26333,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       verified: true,
       featured: true,
       users: "Trust Layer Verified",
-      url: "https://verdara.replit.app",
+      url: "https://verdara.tlid.io",
     },
     {
       id: "arbora",
@@ -26344,7 +26345,7 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       gradient: "from-amber-700 to-orange-900",
       verified: true,
       users: "Trust Layer Verified",
-      url: "https://verdara.replit.app/arbora",
+      url: "https://verdara.tlid.io/arbora",
     },
     {
       id: "trust-golf",
