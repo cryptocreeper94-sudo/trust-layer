@@ -104,7 +104,12 @@ export function serveStatic(app: Express) {
   app.use(express.static(distPath, {
     maxAge: '0',
     setHeaders: (res, filePath) => {
+      // Cache hashed JS/CSS assets forever (immutable)
       if (filePath.includes('/assets/') && /\-[a-zA-Z0-9]{8,}\.(js|css)$/.test(filePath)) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      }
+      // Cache video and image assets aggressively (1 year, Cloudflare will edge-cache)
+      if (/\.(mp4|webm|ogg|jpg|jpeg|png|webp|svg|gif|avif)$/i.test(filePath)) {
         res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
       }
     }
