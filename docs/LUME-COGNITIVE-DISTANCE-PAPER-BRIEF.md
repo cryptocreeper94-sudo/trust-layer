@@ -376,7 +376,7 @@ Transpiler	~821	src/transpiler.js
 Total compiler	~12,000+	All source files
 Metric	Value
 Compiler milestones	15
-Test suite	520+ tests
+Test suite	552+ tests
 Pattern Library patterns	34+
 Homophone pairs	10
 Filler words	20

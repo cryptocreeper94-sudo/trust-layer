@@ -327,7 +327,7 @@ Voice-to-code is typically framed as a convenience feature. In Lume, it is an ar
     Metric                       | Value
     -----------------------------|-------
     Compiler milestones          | 15
-    Test suite                   | 520+ tests
+    Test suite                   | 552+ tests
     Pattern Library patterns     | 34+
     Homophone pairs              | 10
     Filler words                 | 20
