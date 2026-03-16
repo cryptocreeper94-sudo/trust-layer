@@ -545,25 +545,35 @@ const heroAccents: Record<string, { text: string; dot: string; btn: string }> = 
 
 function SlideMedia({ slide, isActive }: { slide: HeroSlide; isActive: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !slide.video) return;
-    const handleCanPlay = () => setLoaded(true);
-    video.addEventListener("canplay", handleCanPlay);
-    if (isActive) { video.currentTime = 0; video.play().catch(() => {}); }
-    else { video.pause(); }
-    return () => video.removeEventListener("canplay", handleCanPlay);
+    if (isActive) {
+      video.currentTime = 0;
+      video.play().catch(() => {});
+    } else {
+      video.pause();
+    }
   }, [isActive, slide.video]);
 
   return (
     <>
-      <div className={`absolute inset-0 bg-gradient-to-br ${slide.gradient} transition-opacity duration-500 ${loaded || slide.image ? 'opacity-0' : 'opacity-100'}`} />
+      {/* Gradient fallback while loading */}
+      <div className={`absolute inset-0 bg-gradient-to-br ${slide.gradient}`} />
       {slide.video ? (
-        <video ref={videoRef} src={slide.video} muted loop playsInline preload={isActive ? "auto" : "metadata"} className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${loaded ? 'opacity-100' : 'opacity-0'}`} />
+        <video
+          ref={videoRef}
+          src={slide.video}
+          muted
+          autoPlay={isActive}
+          loop
+          playsInline
+          preload={isActive ? "auto" : "metadata"}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
       ) : slide.image ? (
-        <img src={slide.image} alt={slide.title} className="absolute inset-0 w-full h-full object-cover" onLoad={() => setLoaded(true)} />
+        <img src={slide.image} alt={slide.title} className="absolute inset-0 w-full h-full object-cover" />
       ) : null}
       <div className="absolute inset-0 bg-slate-950/20" />
     </>

@@ -306,7 +306,7 @@ export default function Validators() {
                         <Badge className="bg-green-500/20 text-green-400 text-[10px]">Current</Badge>
                       </div>
                       <p className="text-sm text-muted-foreground">Founders Validators secure the network during launch. Core team operates trusted nodes to ensure stability while the ecosystem grows.</p>
-                      <div className="mt-2 text-xs text-white/60">Target: 3-5 Founders Validators</div>
+                      <div className="mt-2 text-xs text-white/60">Target: 5 Founders Validators</div>
                     </div>
                   </div>
                   <div className="flex gap-4">
@@ -410,16 +410,16 @@ export default function Validators() {
                       </h4>
                       <div className="space-y-2 text-xs">
                         <div className="flex justify-between items-center p-2 rounded bg-white/5">
-                          <span className="text-amber-400 font-semibold">Founder Validators (1-10)</span>
+                          <span className="text-amber-400 font-semibold">Founder Validators (1-5)</span>
+                          <span className="text-white font-bold">100,000 SIG</span>
+                        </div>
+                        <div className="flex justify-between items-center p-2 rounded bg-white/5">
+                          <span className="text-cyan-400 font-semibold">Early Validators (6-25)</span>
+                          <span className="text-white font-bold">50,000 SIG</span>
+                        </div>
+                        <div className="flex justify-between items-center p-2 rounded bg-white/5">
+                          <span className="text-purple-400 font-semibold">Standard Validators (26+)</span>
                           <span className="text-white font-bold">10,000 SIG</span>
-                        </div>
-                        <div className="flex justify-between items-center p-2 rounded bg-white/5">
-                          <span className="text-cyan-400 font-semibold">Early Validators (11-50)</span>
-                          <span className="text-white font-bold">5,000 SIG</span>
-                        </div>
-                        <div className="flex justify-between items-center p-2 rounded bg-white/5">
-                          <span className="text-purple-400 font-semibold">Standard Validators (51+)</span>
-                          <span className="text-white font-bold">1,000 SIG</span>
                         </div>
                       </div>
                       <p className="text-[10px] text-muted-foreground mt-2">* Airdrop at SIG token launch + ongoing transaction fee share</p>
@@ -433,19 +433,19 @@ export default function Validators() {
                       <div className="space-y-1.5 text-xs">
                         <div className="flex justify-between items-center">
                           <span className="text-muted-foreground">30 days active</span>
-                          <span className="text-green-400 font-semibold">+500 SIG</span>
+                          <span className="text-green-400 font-semibold">+5,000 SIG</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-muted-foreground">90 days (3 months)</span>
-                          <span className="text-green-400 font-semibold">+1,500 SIG</span>
+                          <span className="text-green-400 font-semibold">+25,000 SIG</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-muted-foreground">180 days (6 months)</span>
-                          <span className="text-green-400 font-semibold">+3,000 SIG</span>
+                          <span className="text-green-400 font-semibold">+75,000 SIG</span>
                         </div>
                         <div className="flex justify-between items-center">
                           <span className="text-muted-foreground">365 days (1 year)</span>
-                          <span className="text-green-400 font-semibold">+5,000 SIG</span>
+                          <span className="text-green-400 font-semibold">+250,000 SIG</span>
                         </div>
                       </div>
                       <p className="text-[10px] text-muted-foreground mt-2">* Stay active, earn more. Milestones stack!</p>
@@ -460,7 +460,7 @@ export default function Validators() {
                         Refer a friend who becomes a validator and stays 30+ days:
                       </p>
                       <div className="text-center p-2 rounded bg-white/5">
-                        <span className="text-pink-400 font-bold text-lg">+1,000 SIG</span>
+                        <span className="text-pink-400 font-bold text-lg">+10,000 SIG</span>
                         <span className="text-xs text-muted-foreground ml-2">per referral</span>
                       </div>
                     </div>
