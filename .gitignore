@@ -12,3 +12,4 @@ blockchain/target/
 .env
 .env.*
 !.env.example
+.git-old/

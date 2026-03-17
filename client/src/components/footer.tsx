@@ -125,6 +125,8 @@ export function Footer() {
                 <li><Link href="/api-docs" className="hover:text-cyan-400 transition-colors">API Docs</Link></li>
                 <li><Link href="/faq" className="hover:text-cyan-400 transition-colors">FAQ</Link></li>
                 <li><Link href="/feedback" className="hover:text-cyan-400 transition-colors">Feedback</Link></li>
+                <li><a href="https://lume-lang.com" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition-colors text-cyan-400/70">Lume Language</a></li>
+                <li><a href="https://dwsc.io" target="_blank" rel="noopener noreferrer" className="hover:text-cyan-400 transition-colors text-cyan-400/70">DWSC R&D</a></li>
               </ul>
             </div>
             
@@ -148,6 +150,23 @@ export function Footer() {
               </div>
               <p className="text-xs text-white/40">Join our growing community</p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Lume Promotional Banner */}
+      <section className="border-t border-white/5 bg-gradient-to-r from-cyan-950/20 via-slate-950/50 to-teal-950/20">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-center gap-3 text-xs text-white/70">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+            </span>
+            <span>
+              Powered by <a href="https://lume-lang.com" target="_blank" rel="noopener noreferrer" className="text-cyan-400 font-semibold hover:text-cyan-300 transition-colors">Lume</a> — the AI-native programming language
+            </span>
+            <span className="text-white/20">·</span>
+            <a href="https://dwsc.io" target="_blank" rel="noopener noreferrer" className="text-cyan-400/80 hover:text-cyan-300 transition-colors font-medium">DWSC.io</a>
           </div>
         </div>
       </section>
@@ -202,6 +221,10 @@ export function Footer() {
             <Link href="/explore" className="hover:text-cyan-400 transition-colors" data-testid="link-explore">
               Explore
             </Link>
+            <span className="text-white/30">•</span>
+            <a href="https://dwsc.io" target="_blank" rel="noopener noreferrer" className="text-cyan-400/70 hover:text-cyan-400 transition-colors">
+              DWSC
+            </a>
             <span className="text-white/30">•</span>
             <button onClick={openModal} className="text-white/30 hover:text-white/50 transition-colors" data-testid="link-team">
               Team
