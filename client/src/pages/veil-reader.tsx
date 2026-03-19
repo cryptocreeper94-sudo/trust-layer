@@ -891,14 +891,22 @@ export default function VeilReader() {
   };
 
   useEffect(() => {
-    if (autoPlayNextRef.current && toc.length > 0) {
-      autoPlayNextRef.current = false;
-      const timer = setTimeout(() => {
-        handlePlay();
-      }, 500);
-      return () => clearTimeout(timer);
+    if (autoPlayNextRef.current && toc.length > 0 && chapterContent) {
+      // Only play when the chapter content has actually loaded for the current chapter
+      const vol = toc[currentVolume];
+      if (!vol) return;
+      const expectedChap = vol.chapters[currentChapter];
+      if (!expectedChap) return;
+      // Verify the loaded content matches what we're supposed to be on
+      if (chapterContent.id === expectedChap.id && !chapterLoading) {
+        autoPlayNextRef.current = false;
+        const timer = setTimeout(() => {
+          handlePlay();
+        }, 500);
+        return () => clearTimeout(timer);
+      }
     }
-  }, [currentVolume, currentChapter]);
+  }, [currentVolume, currentChapter, chapterContent, chapterLoading]);
 
   const cleanTextForSpeech = (content: string) => {
     return content
