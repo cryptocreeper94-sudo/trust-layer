@@ -25922,6 +25922,7 @@ const APP_URL_MAP: Record<string, string> = {
   "trust-gen": "https://trustgen.tlid.io",
   "through-the-veil": `${PORTAL_BASE}/veil/read`,
   "trust-book": `${PORTAL_BASE}/trust-book`,
+  "signalcast": "https://signalcast.ad",
 };
 
 async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
@@ -26408,6 +26409,19 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       featured: true,
       users: "Trust Layer Verified",
       url: "https://trustgen.tlid.io",
+    },
+    {
+      id: "signalcast",
+      name: "SignalCast",
+      category: "Marketing",
+      description: "AI-powered social media automation engine for the Trust Layer ecosystem. 9 platform connectors (X/Twitter, Facebook, Instagram, Discord, Telegram, Nextdoor, LinkedIn, Reddit, Pinterest). Unified scheduler posts hourly 6am–10pm CST rotating across ecosystem tenants. Embeddable widget drops into any app via a single script tag. TrustGen and TrustVault integration. Tiered subscriptions from $29–$99/mo.",
+      hook: "One Signal. Every Platform.",
+      tags: ["Marketing", "Social Media", "Automation", "AI", "Advertising"],
+      gradient: "from-cyan-500 to-blue-600",
+      verified: true,
+      featured: true,
+      users: "Trust Layer Verified",
+      url: "https://signalcast.ad",
     },
   ];
 }

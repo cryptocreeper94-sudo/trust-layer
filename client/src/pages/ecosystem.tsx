@@ -119,6 +119,7 @@ const ecosystemImages: Record<string, string> = {
   "veil": "/ecosystem/veil-new.jpg",
   "through-the-veil": "/ecosystem/veil-new.jpg",
   "happy-eats": "/ecosystem/happy-eats.jpg",
+  "signalcast": "/ecosystem/trust-layer-icon.png",
 };
 
 function getAppImage(appId: string): string {
@@ -214,7 +215,7 @@ function AppCard({ src, alt, gradient, name, category, verified, tags, url }: {
 }
 
 
-const categories = ["All Apps", "Core", "Security", "DeFi", "Finance", "Gaming", "Enterprise", "AI", "Automotive", "Services", "Identity", "Education", "Analytics", "Community", "Health", "Entertainment", "Outdoor", "Transportation", "Development", "Hospitality"];
+const categories = ["All Apps", "Core", "Security", "DeFi", "Finance", "Gaming", "Enterprise", "AI", "Automotive", "Services", "Identity", "Education", "Analytics", "Community", "Health", "Entertainment", "Outdoor", "Transportation", "Development", "Hospitality", "Marketing"];
 
 export default function Ecosystem() {
   usePageAnalytics();

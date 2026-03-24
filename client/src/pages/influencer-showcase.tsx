@@ -41,6 +41,7 @@ const ECOSYSTEM_CATEGORIES: { name: string; icon: React.ComponentType<{ classNam
       { name: "TrustHome", url: "https://trusthome.replit.app", desc: "Real Estate Agent Super Tool" },
       { name: "TrustVault", url: "/wallet", desc: "Multi-Chain Secure Wallet" },
       { name: "TLID.io", url: "https://tlid.io", desc: "Blockchain Domain Names (.tlid)" },
+      { name: "SignalCast", url: "https://signalcast.ad", desc: "AI Social Media Automation (9 Platforms)" },
       { name: "THE VOID", url: "https://intothevoid.app", desc: "Premium Membership Identity" },
       { name: "Signal Chat", url: "/signal-core", desc: "Encrypted Cross-App Messaging" },
     ],
