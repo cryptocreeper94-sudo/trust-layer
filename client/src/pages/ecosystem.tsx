@@ -119,7 +119,7 @@ const ecosystemImages: Record<string, string> = {
   "veil": "/ecosystem/veil-new.jpg",
   "through-the-veil": "/ecosystem/veil-new.jpg",
   "happy-eats": "/ecosystem/happy-eats.jpg",
-  "signalcast": "/ecosystem/trust-layer-icon.png",
+  "signalcast": "/ecosystem/signalcast.jpg",
 };
 
 function getAppImage(appId: string): string {

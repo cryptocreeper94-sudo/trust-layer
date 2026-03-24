@@ -137,7 +137,7 @@ const ecosystemImages: Record<string, string> = {
   "signal-chat": "/ecosystem/signal-chat.jpg",
   "darkwave-studios": "/ecosystem/darkwave-studios.jpg",
   "tradeworks-ai": "/ecosystem/tradeworks-ai.jpg",
-  "signalcast": "/ecosystem/trust-layer-icon.png",
+  "signalcast": "/ecosystem/signalcast.jpg",
 };
 
 const CHRONICLES_ERAS = [
@@ -527,7 +527,7 @@ const heroSlides: HeroSlide[] = [
   { title: "Bomber", subtitle: "3D long driving golf game with real-time physics, stunning courses, leaderboards, and Trust Golf integration", accent: "lime", link: "https://bomber.tlid.io", image: "/ecosystem/bomber.jpg", gradient: "from-lime-900/80 via-slate-900/60 to-slate-950/90" },
   { title: "TORQUE", subtitle: "Blockchain-verified automotive marketplace and vehicle history platform — buy, sell, and verify with trust records", accent: "zinc", link: "https://garagebot.io/torque", image: "/ecosystem/torque.jpg", gradient: "from-zinc-800/80 via-slate-900/60 to-slate-950/90" },
   { title: "TradeWorks AI", subtitle: "Advanced AI-powered trading intelligence and market analysis platform with automated strategies", accent: "blue", link: "https://tradeworksai.io", image: "/ecosystem/tradeworks-ai.jpg", gradient: "from-blue-900/80 via-slate-900/60 to-slate-950/90" },
-  { title: "SignalCast", subtitle: "AI-powered social media automation with 9 platform connectors, embeddable widget, and ecosystem-wide scheduling", accent: "cyan", link: "https://signalcast.ad", image: "/ecosystem/trust-layer-icon.png", gradient: "from-cyan-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "SignalCast", subtitle: "AI-powered social media automation with 9 platform connectors, embeddable widget, and ecosystem-wide scheduling", accent: "cyan", link: "https://signalcast.ad", image: "/ecosystem/signalcast.jpg", gradient: "from-cyan-900/80 via-slate-900/60 to-slate-950/90" },
 ];
 
 const heroAccents: Record<string, { text: string; dot: string; btn: string }> = {
