@@ -4625,7 +4625,7 @@ export async function registerRoutes(
       <div>
         <h4 style="color:${heading};font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:0 0 12px">Ecosystem</h4>
         <a href="https://dwsc.io/ecosystem" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">All Apps</a>
-        <a href="https://dwsc.io/presale" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Signal Presale</a>
+        <a href="https://dwsc.io/signal" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Signal</a>
         <a href="https://dwsc.io/veil" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">Through The Veil</a>
         <a href="https://darkwavegames.io" target="_blank" rel="noopener" style="display:block;color:${text};text-decoration:none;padding:4px 0;transition:color .2s" onmouseover="this.style.color='${textHover}'" onmouseout="this.style.color='${text}'">The Arcade</a>
       </div>
@@ -4659,8 +4659,8 @@ export async function registerRoutes(
   function renderAnnouncementBar(theme: string): string {
     const isDark = theme !== "light";
     return `<div id="dw-shared-announcement-bar" style="background:linear-gradient(90deg,#06b6d4,#8b5cf6,#ec4899);padding:10px 16px;text-align:center;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;font-weight:600;color:#fff;position:relative;z-index:9999">
-  <span>\uD83D\uDE80 Signal (SIG) Presale is LIVE \u2014 $0.001/SIG \u2014 </span>
-  <a href="https://dwsc.io/presale" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline;font-weight:700;margin-left:4px">Join Now \u2192</a>
+  <span>\u26A1 Signal (SIG) is Charging \u2014 </span>
+  <a href="https://dwsc.io/signal" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline;font-weight:700;margin-left:4px">Learn More \u2192</a>
   <button onclick="this.parentElement.style.display='none'" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:rgba(255,255,255,0.7);cursor:pointer;font-size:16px;padding:4px 8px" aria-label="Close">\u2715</button>
 </div>`;
   }
