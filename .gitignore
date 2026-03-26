@@ -13,3 +13,9 @@ blockchain/target/
 .env.*
 !.env.example
 .git-old/
+.cache/
+.config/replit/
+.local/state/replit/
+.upm/
+.replit
+*.txt

@@ -1,4 +1,4 @@
-import { getStripeSync } from './stripeClient';
+import { getUncachableStripeClient } from './stripeClient';
 
 export class WebhookHandlers {
   static async processWebhook(payload: Buffer, signature: string): Promise<void> {
@@ -10,7 +10,11 @@ export class WebhookHandlers {
       );
     }
 
-    const sync = await getStripeSync();
-    await sync.processWebhook(payload, signature);
+    const stripe = await getUncachableStripeClient();
+    const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+    
+    if (endpointSecret) {
+      stripe.webhooks.constructEvent(payload, signature, endpointSecret);
+    }
   }
 }

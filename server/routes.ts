@@ -358,14 +358,13 @@ export async function registerRoutes(
         return res.status(400).json({ error: "Missing signature or raw body" });
       }
 
-      // Use managed webhook from stripe-replit-sync for signature verification and sync
-      const { getStripeSync } = await import("./stripeClient");
+      // Replacing getStripeSync with standard verifier
+      const { WebhookHandlers } = await import("./webhookHandlers");
       try {
-        const stripeSync = await getStripeSync();
-        await stripeSync.processWebhook(rawBody as Buffer, sig);
+        await WebhookHandlers.processWebhook(rawBody as Buffer, sig);
       } catch (syncErr: any) {
-        console.error("Stripe webhook sync error:", syncErr.message);
-        // Continue to process custom logic even if sync fails
+        console.error("Stripe webhook verification error:", syncErr.message);
+        return res.status(400).json({ error: "Webhook signature verification failed" });
       }
 
       // Parse event for custom business logic (signature already verified by processWebhook)

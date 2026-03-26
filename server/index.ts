@@ -29,8 +29,6 @@ import { setupPresence } from "./chat-presence";
 import { setupSignalChatWS } from "./chat-ws";
 import { seedChatChannels } from "./seedChat";
 import { setupGuardianScannerWS } from "./guardian-scanner-ws";
-import { runMigrations } from "stripe-replit-sync";
-import { getStripeSync } from "./stripeClient";
 import { predictionTrackingService } from "./services/pulse/predictionTrackingService";
 import { predictionLearningService } from "./services/pulse/predictionLearningService";
 import { startMembershipReconciliationScheduler } from "./membership-reconciliation-scheduler";
@@ -369,30 +367,7 @@ httpServer.listen(
 // Background initialization of heavy services
 async function initializeServices() {
   try {
-    // Initialize Stripe managed webhooks
-    const databaseUrl = process.env.DATABASE_URL;
-    if (databaseUrl) {
-      try {
-        console.log('[Stripe] Initializing managed webhooks...');
-        await runMigrations({ databaseUrl });
-
-        const stripeSync = await getStripeSync();
-        const siteBaseUrl = process.env.SITE_BASE_URL || 'https://trust-layer-1pji.onrender.com';
-        const webhookUrl = `${siteBaseUrl}/api/stripe/webhook`;
-        const webhook = await stripeSync.findOrCreateManagedWebhook(webhookUrl);
-        console.log(`[Stripe] Managed webhook configured: ${webhook.url || webhookUrl}`);
-
-        // Sync existing Stripe data in background
-        stripeSync.syncBackfill().then(() => {
-          console.log('[Stripe] Data sync complete');
-        }).catch((err: Error) => {
-          console.error('[Stripe] Data sync error:', err.message);
-        });
-      } catch (err: any) {
-        console.warn('[Stripe] Initialization skipped:', err.message);
-      }
-    }
-
+    // Standard Stripe initialized. (Managed webhooks disabled outside Replit environment.)
     await registerRoutes(httpServer, app);
 
     app.use((err: any, req: Request, res: Response, _next: NextFunction) => {

@@ -1,7 +1,10 @@
 import crypto from "crypto";
 import { blockchain } from "./blockchain-engine";
 
-const DARKWAVE_CHAIN_ID = parseInt(process.env.DARKWAVE_CHAIN_ID || "8453");
+if (!process.env.DARKWAVE_CHAIN_ID) {
+  throw new Error("CRITICAL: DARKWAVE_CHAIN_ID environment variable is required (must not be 8453/Base Mainnet)");
+}
+const DARKWAVE_CHAIN_ID = parseInt(process.env.DARKWAVE_CHAIN_ID);
 
 export interface DarkWaveHashResult {
   success: boolean;

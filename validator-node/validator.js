@@ -10,7 +10,7 @@ const CONFIG = {
   VALIDATOR_SECRET: process.env.VALIDATOR_SECRET || "",
   API_KEY: process.env.TRUSTLAYER_API_KEY || "",
   API_SECRET: process.env.TRUSTLAYER_API_SECRET || "",
-  POLL_INTERVAL_MS: parseInt(process.env.POLL_INTERVAL_MS || "400"),
+  POLL_INTERVAL_MS: parseInt(process.env.POLL_INTERVAL_MS || "3000"),
   HEARTBEAT_INTERVAL_MS: parseInt(process.env.HEARTBEAT_INTERVAL_MS || "30000"),
   PORT: parseInt(process.env.PORT || "3100"),
 };
