@@ -1003,7 +1003,7 @@ export function registerChroniclesChatRoutes(app: Express) {
       let decoded: any;
       try {
         const jwt = await import("jsonwebtoken");
-        decoded = jwt.default.verify(token, process.env.CHRONICLES_JWT_SECRET || "chronicles-secret-key-2024");
+        decoded = jwt.default.verify(token, process.env.CHRONICLES_JWT_SECRET || "");
       } catch {
         return res.status(401).json({ error: "Invalid token" });
       }
@@ -1164,7 +1164,7 @@ export function registerChroniclesChatRoutes(app: Express) {
       let decoded: any;
       try {
         const jwt = await import("jsonwebtoken");
-        decoded = jwt.default.verify(token, process.env.CHRONICLES_JWT_SECRET || "chronicles-secret-key-2024");
+        decoded = jwt.default.verify(token, process.env.CHRONICLES_JWT_SECRET || "");
       } catch {
         return res.status(401).json({ error: "Invalid token" });
       }
@@ -1214,7 +1214,7 @@ export function registerChroniclesChatRoutes(app: Express) {
       let decoded: any;
       try {
         const jwt = await import("jsonwebtoken");
-        decoded = jwt.default.verify(token, process.env.CHRONICLES_JWT_SECRET || "chronicles-secret-key-2024");
+        decoded = jwt.default.verify(token, process.env.CHRONICLES_JWT_SECRET || "");
       } catch {
         return res.status(401).json({ error: "Invalid token" });
       }
