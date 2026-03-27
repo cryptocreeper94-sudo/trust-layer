@@ -45,15 +45,15 @@ export default function SweepstakesRules() {
 
         {/* Currency Explanation */}
         <div className="grid md:grid-cols-2 gap-4 mb-8">
-          <Card className="bg-black/40 border-yellow-500/30">
+          <Card className="bg-black/40 border-teal-500/30">
             <CardContent className="p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-full bg-yellow-500/20 flex items-center justify-center">
-                  <Coins className="w-6 h-6 text-yellow-400" />
+                <div className="w-12 h-12 rounded-full bg-teal-500/20 flex items-center justify-center">
+                  <Coins className="w-6 h-6 text-teal-400" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-yellow-400">Gold Coins (GC)</h3>
-                  <Badge variant="outline" className="bg-yellow-500/10 border-yellow-500/30 text-yellow-400">
+                  <h3 className="text-xl font-bold text-teal-400">Gold Coins (GC)</h3>
+                  <Badge variant="outline" className="bg-teal-500/10 border-teal-500/30 text-teal-400">
                     Virtual Currency
                   </Badge>
                 </div>
@@ -242,8 +242,8 @@ export default function SweepstakesRules() {
                     <li>Submit a redemption request through your account</li>
                     <li>Receive SIG to your connected wallet within 3-5 business days</li>
                   </ol>
-                  <div className="bg-yellow-900/30 border border-yellow-500/30 rounded-lg p-3 mt-4">
-                    <p className="text-yellow-300 text-sm flex items-start gap-2">
+                  <div className="bg-teal-900/30 border border-teal-500/30 rounded-lg p-3 mt-4">
+                    <p className="text-teal-300 text-sm flex items-start gap-2">
                       <AlertTriangle className="w-4 h-4 mt-0.5 flex-shrink-0" />
                       DarkWave Studios, LLC reserves the right to request additional verification 
                       and to deny redemption requests that violate these rules.

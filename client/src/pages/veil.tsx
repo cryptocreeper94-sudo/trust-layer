@@ -160,7 +160,7 @@ export default function Veil() {
           <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-gradient-to-r from-purple-500/15 to-pink-500/15 border border-purple-500/20 backdrop-blur-sm mb-6 sm:mb-8">
             <Sparkles className="w-4 h-4 text-purple-400 animate-pulse" />
             <span className="text-[10px] sm:text-xs text-slate-300 uppercase tracking-[0.15em] font-medium">Complete Edition — 2026</span>
-            <Flame className="w-4 h-4 text-amber-400 animate-pulse" />
+            <Flame className="w-4 h-4 text-purple-400 animate-pulse" />
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-4 sm:mb-6">
@@ -213,10 +213,10 @@ export default function Veil() {
               transition={{ delay: 0.8, duration: 0.5 }}
               className="mt-6 max-w-sm mx-auto"
             >
-              <div className="flex items-center gap-2.5 px-5 py-3 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 backdrop-blur-sm">
-                <MonitorSmartphone className="w-5 h-5 text-amber-400 flex-shrink-0" />
+              <div className="flex items-center gap-2.5 px-5 py-3 rounded-xl bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 backdrop-blur-sm">
+                <MonitorSmartphone className="w-5 h-5 text-purple-400 flex-shrink-0" />
                 <div className="text-left">
-                  <p className="text-amber-300 text-sm font-medium">Add to Home Screen</p>
+                  <p className="text-purple-300 text-sm font-medium">Add to Home Screen</p>
                   <p className="text-slate-400 text-xs mt-0.5">
                     {isIOS
                       ? 'Tap the share icon (box with arrow) then "Add to Home Screen"'
@@ -264,7 +264,7 @@ export default function Veil() {
             { icon: ScrollText, label: "52 Chapters", sub: "Complete Edition", color: "text-purple-400" },
             { icon: Shield, label: "163+ Scriptures", sub: "Cited & Referenced", color: "text-pink-400" },
             { icon: Layers, label: "13 Parts", sub: "Evidence to Journey", color: "text-cyan-400" },
-            { icon: Star, label: "107K Words", sub: "Full Investigation", color: "text-amber-400" },
+            { icon: Star, label: "107K Words", sub: "Full Investigation", color: "text-purple-400" },
           ].map((stat) => (
             <motion.div key={stat.label} variants={item}>
               <GlassCard glow className="text-center h-full">
@@ -329,7 +329,7 @@ export default function Veil() {
 
                 <div className="bg-slate-900/60 rounded-xl p-5 sm:p-6 mb-6 border border-white/5 backdrop-blur-sm">
                   <h4 className="text-white font-semibold mb-4 text-sm sm:text-base flex items-center gap-2">
-                    <Crown className="w-4 h-4 text-amber-400" />
+                    <Crown className="w-4 h-4 text-purple-400" />
                     How to Listen:
                   </h4>
                   <ol className="space-y-3">
@@ -379,7 +379,7 @@ export default function Veil() {
                 </div>
                 <div className="p-5 sm:p-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2.5 rounded-xl bg-gradient-to-br from-red-500/20 to-orange-500/20 border border-red-500/30 flex-shrink-0">
+                    <div className="p-2.5 rounded-xl bg-gradient-to-br from-red-500/20 to-cyan-500/20 border border-red-500/30 flex-shrink-0">
                       <FileText className="w-5 h-5 text-red-400" />
                     </div>
                     <div>
@@ -395,7 +395,7 @@ export default function Veil() {
                       </li>
                     ))}
                   </ul>
-                  <Button onClick={handleDownloadPDF} className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 py-5 text-sm min-h-[48px]" data-testid="button-download-pdf-card">
+                  <Button onClick={handleDownloadPDF} className="w-full bg-gradient-to-r from-red-600 to-cyan-600 hover:from-red-500 hover:to-cyan-500 py-5 text-sm min-h-[48px]" data-testid="button-download-pdf-card">
                     <Download className="w-4 h-4 mr-2" />
                     Download PDF
                   </Button>
@@ -491,8 +491,8 @@ export default function Veil() {
 
           <GlassCard glow className="md:col-span-2 lg:col-span-1">
             <div className="p-6 sm:p-8">
-              <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 w-fit mb-5">
-                <Clock className="w-6 h-6 text-amber-400" />
+              <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/30 w-fit mb-5">
+                <Clock className="w-6 h-6 text-purple-400" />
               </div>
               <h4 className="text-lg font-bold text-white mb-3">Always Updated</h4>
               <p className="text-sm text-slate-400 leading-relaxed mb-5">

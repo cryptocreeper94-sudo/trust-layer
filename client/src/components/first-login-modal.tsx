@@ -97,9 +97,9 @@ export function FirstLoginModal() {
             </div>
 
             <div className="space-y-3 mb-6">
-              <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20">
-                <div className="p-2 rounded-lg bg-amber-500/20">
-                  <Coins className="w-5 h-5 text-amber-400" />
+              <div className="flex items-center gap-3 p-3 rounded-xl bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20">
+                <div className="p-2 rounded-lg bg-purple-500/20">
+                  <Coins className="w-5 h-5 text-purple-400" />
                 </div>
                 <div>
                   <p className="text-white font-medium text-sm">Signal Presale Live</p>
@@ -131,7 +131,7 @@ export function FirstLoginModal() {
             <div className="space-y-2">
               <Button 
                 onClick={handleGoToPresale}
-                className="w-full py-5 text-base font-bold bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 hover:opacity-90 border-0"
+                className="w-full py-5 text-base font-bold bg-gradient-to-r from-purple-500 via-cyan-500 to-red-500 hover:opacity-90 border-0"
                 data-testid="button-first-login-presale"
               >
                 <Sparkles className="w-5 h-5 mr-2" />

@@ -79,10 +79,10 @@ const CATEGORY_COLORS: Record<string, string> = {
   defi: "from-green-500/20 to-emerald-500/20 border-green-500/30",
   wallet: "from-blue-500/20 to-cyan-500/20 border-blue-500/30",
   nft: "from-purple-500/20 to-pink-500/20 border-purple-500/30",
-  governance: "from-amber-500/20 to-orange-500/20 border-amber-500/30",
+  governance: "from-purple-500/20 to-cyan-500/20 border-purple-500/30",
   infrastructure: "from-cyan-500/20 to-blue-500/20 border-cyan-500/30",
   gaming: "from-pink-500/20 to-rose-500/20 border-pink-500/30",
-  security: "from-red-500/20 to-orange-500/20 border-red-500/30",
+  security: "from-red-500/20 to-cyan-500/20 border-red-500/30",
 };
 
 function formatCurrency(cents: number): string {
@@ -265,8 +265,8 @@ function DonationModal({ feature, onSuccess }: { feature?: CrowdfundFeature; onS
             onClick={() => setPaymentMethod("crypto")}
             className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all ${
               paymentMethod === "crypto" 
-                ? "bg-gradient-to-r from-orange-500/20 to-yellow-500/20 text-orange-400 border border-orange-500/30" 
-                : "text-gray-400 hover:text-orange-400 bg-gray-800/50"
+                ? "bg-gradient-to-r from-cyan-500/20 to-teal-500/20 text-cyan-400 border border-cyan-500/30" 
+                : "text-gray-400 hover:text-cyan-400 bg-gray-800/50"
             }`}
             data-testid="button-pay-crypto"
           >
@@ -274,12 +274,12 @@ function DonationModal({ feature, onSuccess }: { feature?: CrowdfundFeature; onS
           </button>
         </div>
         {paymentMethod === "crypto" && (
-          <p className="text-[10px] text-orange-400/70 text-center mt-2">Pay with USDC, BTC, ETH & more</p>
+          <p className="text-[10px] text-cyan-400/70 text-center mt-2">Pay with USDC, BTC, ETH & more</p>
         )}
       </div>
 
       <Button
-        className={`w-full ${paymentMethod === "crypto" ? "bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600" : "bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"}`}
+        className={`w-full ${paymentMethod === "crypto" ? "bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-600 hover:to-teal-600" : "bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"}`}
         onClick={handleDonate}
         disabled={isLoading}
         data-testid="button-donate"
@@ -706,11 +706,11 @@ export default function CrowdfundPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <GlassCard className="p-6 h-full bg-gradient-to-br from-amber-500/5 to-orange-500/5 border-amber-500/20">
+            <GlassCard className="p-6 h-full bg-gradient-to-br from-purple-500/5 to-cyan-500/5 border-purple-500/20">
               <div className="flex items-center gap-2 mb-6">
-                <Lock className="w-5 h-5 text-amber-400" />
+                <Lock className="w-5 h-5 text-purple-400" />
                 <h3 className="text-xl font-bold text-white">Community Voting</h3>
-                <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 ml-auto">
+                <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 ml-auto">
                   Coming Soon
                 </Badge>
               </div>
@@ -718,13 +718,13 @@ export default function CrowdfundPage() {
               <div className="relative min-h-[280px]">
                 <div className="absolute inset-0 bg-gray-900/60 backdrop-blur-sm rounded-lg z-10 flex items-center justify-center">
                   <div className="text-center p-4">
-                    <Lock className="w-10 h-10 text-amber-400 mx-auto mb-3" />
+                    <Lock className="w-10 h-10 text-purple-400 mx-auto mb-3" />
                     <h4 className="text-base font-semibold text-white mb-2">Voting Unlocks with Funding</h4>
                     <p className="text-gray-400 text-xs mb-3">
                       Community voting will be enabled once we reach our initial funding milestone. 
                       Contributors will have weighted voting power.
                     </p>
-                    <Badge variant="outline" className="text-amber-400 border-amber-400/30">
+                    <Badge variant="outline" className="text-purple-400 border-purple-400/30">
                       Target: $25,000
                     </Badge>
                   </div>

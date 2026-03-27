@@ -89,7 +89,7 @@ export default function AdminPartnerRequests() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "pending":
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30"><Clock className="w-3 h-3 mr-1" />Pending</Badge>;
+        return <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30"><Clock className="w-3 h-3 mr-1" />Pending</Badge>;
       case "approved":
         return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30"><CheckCircle className="w-3 h-3 mr-1" />Approved</Badge>;
       case "rejected":
@@ -113,9 +113,9 @@ export default function AdminPartnerRequests() {
         </div>
 
         <div className="grid grid-cols-3 gap-4 mb-8">
-          <Card className="bg-amber-950/20 border-amber-500/20">
+          <Card className="bg-purple-950/20 border-purple-500/20">
             <CardHeader className="pb-2">
-              <CardTitle className="text-amber-400 text-2xl">{pendingRequests.length}</CardTitle>
+              <CardTitle className="text-purple-400 text-2xl">{pendingRequests.length}</CardTitle>
               <CardDescription className="text-white/50">Pending Review</CardDescription>
             </CardHeader>
           </Card>

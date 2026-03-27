@@ -189,7 +189,7 @@ export default function AIAdvisor() {
 
             <GlassCard className="p-4">
               <h3 className="font-bold mb-4 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-amber-400" />
+                <Sparkles className="w-4 h-4 text-purple-400" />
                 AI Recommendations
               </h3>
 

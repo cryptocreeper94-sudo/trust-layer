@@ -242,11 +242,11 @@ export default function GameDeveloper() {
                     </p>
                   </div>
 
-                  <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/30">
+                  <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/30">
                     <div className="flex items-start gap-3">
-                      <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+                      <AlertTriangle className="w-5 h-5 text-purple-400 shrink-0 mt-0.5" />
                       <div>
-                        <p className="text-sm font-medium text-amber-400">Requirements</p>
+                        <p className="text-sm font-medium text-purple-400">Requirements</p>
                         <ul className="text-xs text-muted-foreground mt-1 space-y-1">
                           <li>• Game must use verifiable on-chain randomness</li>
                           <li>• Smart contracts must be included for review</li>
@@ -321,7 +321,7 @@ export default function GameDeveloper() {
             <div className="space-y-6">
               <GlassCard className="p-6">
                 <h3 className="font-bold mb-4 flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-yellow-400" />
+                  <Trophy className="w-5 h-5 text-teal-400" />
                   Recent Submissions
                 </h3>
                 
@@ -348,7 +348,7 @@ export default function GameDeveloper() {
                             </Badge>
                           )}
                           {submission.status === "pending" && (
-                            <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 text-[10px]">
+                            <Badge className="bg-teal-500/20 text-teal-400 border-teal-500/30 text-[10px]">
                               <Clock className="w-3 h-3 mr-1 animate-spin" />
                               In Review
                             </Badge>
@@ -382,7 +382,7 @@ export default function GameDeveloper() {
                 
                 <ul className="space-y-2 text-sm">
                   <li className="flex items-center gap-2">
-                    <Coins className="w-4 h-4 text-yellow-400" />
+                    <Coins className="w-4 h-4 text-teal-400" />
                     <span>70% revenue share on game earnings</span>
                   </li>
                   <li className="flex items-center gap-2">

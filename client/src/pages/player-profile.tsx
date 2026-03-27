@@ -106,7 +106,7 @@ function XPProgressBar({ level, xp, xpToNextLevel }: { level: number; xp: number
                 <Crown className="w-6 h-6 text-white" />
               </div>
               <motion.div
-                className="absolute -bottom-1 -right-1 bg-yellow-400 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full"
+                className="absolute -bottom-1 -right-1 bg-teal-400 text-black text-[10px] font-bold px-1.5 py-0.5 rounded-full"
                 animate={{ scale: [1, 1.1, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
@@ -427,7 +427,7 @@ export default function PlayerProfilePage() {
             </div>
             {/* Level badge */}
             <motion.div
-              className="absolute -bottom-2 -right-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black text-sm font-bold px-3 py-1 rounded-full shadow-lg"
+              className="absolute -bottom-2 -right-2 bg-gradient-to-r from-teal-400 to-cyan-500 text-black text-sm font-bold px-3 py-1 rounded-full shadow-lg"
               animate={{ scale: [1, 1.05, 1] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
@@ -460,7 +460,7 @@ export default function PlayerProfilePage() {
             icon={Coins}
             label="Total Wagered"
             value={`${parseFloat(playerStats.totalWagered).toLocaleString()} SIG`}
-            gradient="bg-gradient-to-br from-yellow-900/30 to-yellow-800/20"
+            gradient="bg-gradient-to-br from-teal-900/30 to-teal-800/20"
             delay={0.15}
           />
           <StatCard
@@ -494,7 +494,7 @@ export default function PlayerProfilePage() {
             label="Best Streak"
             value={`${playerStats.bestStreak} wins`}
             subValue={playerStats.currentStreak > 0 ? `Current: ${playerStats.currentStreak}` : undefined}
-            gradient="bg-gradient-to-br from-orange-900/30 to-orange-800/20"
+            gradient="bg-gradient-to-br from-cyan-900/30 to-cyan-800/20"
             delay={0.35}
           />
         </div>
@@ -544,7 +544,7 @@ export default function PlayerProfilePage() {
             >
               <div className="p-4 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl">
                 <h3 className="text-white font-bold mb-4 flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-yellow-400" />
+                  <Trophy className="w-5 h-5 text-teal-400" />
                   Performance Summary
                 </h3>
                 <div className="space-y-3">
@@ -631,7 +631,7 @@ export default function PlayerProfilePage() {
                     transition={{ delay: i * 0.1 }}
                     className={`p-4 rounded-2xl border text-center ${
                       achievement.unlocked
-                        ? 'border-yellow-500/30 bg-yellow-500/10'
+                        ? 'border-teal-500/30 bg-teal-500/10'
                         : 'border-white/5 bg-white/5 opacity-40'
                     }`}
                   >

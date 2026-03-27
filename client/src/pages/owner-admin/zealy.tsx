@@ -212,13 +212,13 @@ export default function ZealyAdmin() {
 
   const statusColors: Record<string, string> = {
     processed: "text-green-400",
-    rejected: "text-yellow-400",
+    rejected: "text-teal-400",
     failed: "text-red-400",
   };
 
   const statusIcons: Record<string, React.ReactNode> = {
     processed: <CheckCircle className="w-4 h-4 text-green-400" />,
-    rejected: <AlertCircle className="w-4 h-4 text-yellow-400" />,
+    rejected: <AlertCircle className="w-4 h-4 text-teal-400" />,
     failed: <XCircle className="w-4 h-4 text-red-400" />,
   };
 
@@ -270,7 +270,7 @@ export default function ZealyAdmin() {
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               onClick={() => setShowSuggestions(!showSuggestions)}
-              className="flex items-center gap-2 px-4 py-2 bg-slate-800/80 border border-yellow-500/30 rounded-xl text-yellow-400 font-semibold"
+              className="flex items-center gap-2 px-4 py-2 bg-slate-800/80 border border-teal-500/30 rounded-xl text-teal-400 font-semibold"
               data-testid="button-toggle-suggestions"
             >
               <Lightbulb className="w-5 h-5" />
@@ -336,7 +336,7 @@ export default function ZealyAdmin() {
                   <div className="text-sm text-gray-400">Shells Awarded</div>
                 </div>
                 <div className="bg-slate-800/50 rounded-xl p-4 text-center">
-                  <div className="text-3xl font-bold text-yellow-400">{syncResult.pending || 0}</div>
+                  <div className="text-3xl font-bold text-teal-400">{syncResult.pending || 0}</div>
                   <div className="text-sm text-gray-400">Pending Match</div>
                 </div>
               </div>
@@ -352,9 +352,9 @@ export default function ZealyAdmin() {
               exit={{ opacity: 0, height: 0 }}
               className="mb-8 overflow-hidden"
             >
-              <div className="bg-slate-900/60 backdrop-blur-xl border border-yellow-500/20 rounded-2xl p-6">
+              <div className="bg-slate-900/60 backdrop-blur-xl border border-teal-500/20 rounded-2xl p-6">
                 <div className="flex items-center gap-3 mb-4">
-                  <Sparkles className="w-6 h-6 text-yellow-400" />
+                  <Sparkles className="w-6 h-6 text-teal-400" />
                   <div>
                     <h3 className="text-xl font-bold text-white">Quest Templates</h3>
                     <p className="text-sm text-gray-400">Click any quest to import it - you can customize before saving</p>

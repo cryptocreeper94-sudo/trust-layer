@@ -122,11 +122,11 @@ export default function BusinessApplication() {
             </Button>
           </Link>
           
-          <Badge className="mb-4 bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border-amber-500/30">
+          <Badge className="mb-4 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-purple-400 border-purple-500/30">
             <Building2 className="w-3 h-3 mr-1" />
             Business Verification
           </Badge>
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-amber-400 via-orange-400 to-red-400 bg-clip-text text-transparent mb-4">
+          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-purple-400 via-cyan-400 to-red-400 bg-clip-text text-transparent mb-4">
             Business Member Application
           </h1>
           <p className="text-white/70 max-w-2xl mx-auto">
@@ -141,13 +141,13 @@ export default function BusinessApplication() {
               <div key={s} className="flex items-center">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold transition-all ${
                   step >= s 
-                    ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white" 
+                    ? "bg-gradient-to-r from-purple-500 to-cyan-500 text-white" 
                     : "bg-white/10 text-white/40"
                 }`}>
                   {step > s ? <CheckCircle className="w-5 h-5" /> : s}
                 </div>
                 {s < 3 && (
-                  <div className={`w-12 h-1 mx-2 rounded ${step > s ? "bg-amber-500" : "bg-white/10"}`} />
+                  <div className={`w-12 h-1 mx-2 rounded ${step > s ? "bg-purple-500" : "bg-white/10"}`} />
                 )}
               </div>
             ))}
@@ -246,7 +246,7 @@ export default function BusinessApplication() {
                 <Button 
                   onClick={() => setStep(2)} 
                   disabled={!isStep1Valid}
-                  className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500"
+                  className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500"
                   data-testid="button-next-step1"
                 >
                   Continue <ArrowRight className="w-4 h-4 ml-2" />
@@ -266,11 +266,11 @@ export default function BusinessApplication() {
                 <p className="text-white/60 text-sm">We verify businesses to maintain network integrity</p>
               </div>
               
-              <div className="p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+              <div className="p-4 bg-purple-500/10 border border-purple-500/30 rounded-xl">
                 <div className="flex items-start gap-3">
-                  <Shield className="w-5 h-5 text-amber-400 mt-0.5" />
+                  <Shield className="w-5 h-5 text-purple-400 mt-0.5" />
                   <div>
-                    <p className="text-amber-300 font-medium text-sm">Why We Verify</p>
+                    <p className="text-purple-300 font-medium text-sm">Why We Verify</p>
                     <p className="text-white/60 text-xs mt-1">
                       Business verification prevents fraud and ensures every business in our network 
                       is legitimate. Your EIN is used only for verification and is stored securely.
@@ -333,7 +333,7 @@ export default function BusinessApplication() {
                 <Button 
                   onClick={() => setStep(3)} 
                   disabled={!isStep2Valid}
-                  className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500"
+                  className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500"
                   data-testid="button-next-step2"
                 >
                   Continue <ArrowRight className="w-4 h-4 ml-2" />
@@ -415,7 +415,7 @@ export default function BusinessApplication() {
                 <Button 
                   onClick={handleSubmit}
                   disabled={!isStep3Valid || submitMutation.isPending}
-                  className="bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 min-w-[160px]"
+                  className="bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 min-w-[160px]"
                   data-testid="button-submit"
                 >
                   {submitMutation.isPending ? (
@@ -443,7 +443,7 @@ export default function BusinessApplication() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {businessBenefits.map((benefit, i) => (
               <GlassCard key={i} className="p-4 text-center">
-                <benefit.icon className="w-6 h-6 text-amber-400 mx-auto mb-2" />
+                <benefit.icon className="w-6 h-6 text-purple-400 mx-auto mb-2" />
                 <p className="text-sm font-medium text-white mb-1">{benefit.title}</p>
                 <p className="text-xs text-white/50">{benefit.description}</p>
               </GlassCard>

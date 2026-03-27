@@ -399,7 +399,7 @@ export default function GovernanceCharter() {
                       <div className="space-y-1">
                         {role.limitations.map((limit, i) => (
                           <div key={i} className="flex items-center gap-2 text-sm">
-                            <Lock className="w-3 h-3 text-amber-400 flex-shrink-0" />
+                            <Lock className="w-3 h-3 text-purple-400 flex-shrink-0" />
                             <span className="text-slate-400">{limit}</span>
                           </div>
                         ))}

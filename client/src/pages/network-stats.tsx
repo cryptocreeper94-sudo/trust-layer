@@ -131,10 +131,10 @@ export default function NetworkStats() {
             <GlassCard glow data-testid="stat-network-load">
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <Cpu className="w-4 h-4 text-amber-400" />
+                  <Cpu className="w-4 h-4 text-purple-400" />
                   <span className="text-xs text-muted-foreground">Network Load</span>
                 </div>
-                <div className="text-2xl sm:text-3xl font-bold font-mono text-amber-400 tracking-tight">
+                <div className="text-2xl sm:text-3xl font-bold font-mono text-purple-400 tracking-tight">
                   {networkLoad}%
                 </div>
                 <div className="text-[10px] text-muted-foreground">capacity used</div>
@@ -229,7 +229,7 @@ export default function NetworkStats() {
                   ].map((validator) => (
                     <div key={validator.name} className="flex items-center justify-between text-sm">
                       <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${validator.status === 'active' ? 'bg-green-400' : 'bg-amber-400'}`} />
+                        <div className={`w-2 h-2 rounded-full ${validator.status === 'active' ? 'bg-green-400' : 'bg-purple-400'}`} />
                         <span className="text-white">{validator.name}</span>
                       </div>
                       <span className="font-mono text-muted-foreground">{validator.uptime}</span>

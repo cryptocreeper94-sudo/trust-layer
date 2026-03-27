@@ -199,7 +199,7 @@ export default function SignalCoreOfficial() {
               </div>
             </div>
 
-            <div className="mb-10 p-6 bg-gradient-to-r from-red-500/10 to-orange-500/10 print:bg-gray-100 rounded-lg border border-red-500/30 print:border-gray-400">
+            <div className="mb-10 p-6 bg-gradient-to-r from-red-500/10 to-cyan-500/10 print:bg-gray-100 rounded-lg border border-red-500/30 print:border-gray-400">
               <h2 className="text-lg font-semibold text-white print:text-black mb-3 flex items-center gap-2">
                 <Lock className="w-5 h-5 text-red-400 print:text-gray-700" />
                 Enforcement

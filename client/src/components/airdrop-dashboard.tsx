@@ -270,7 +270,7 @@ export function AirdropDashboard() {
                   : isEligible
                   ? "bg-cyan-500/20 text-cyan-400"
                   : hasAirdrop
-                  ? "bg-amber-500/20 text-amber-400"
+                  ? "bg-purple-500/20 text-purple-400"
                   : "bg-gray-500/20 text-gray-400"
               } border-0`}
             >
@@ -406,7 +406,7 @@ export function AirdropDashboard() {
                 {walletMutation.isPending ? "Verifying..." : "Verify"}
               </Button>
             </div>
-            <p className="text-xs text-amber-400 flex items-center gap-1">
+            <p className="text-xs text-purple-400 flex items-center gap-1">
               <AlertCircle className="w-3 h-3" />
               Wallet verification required to receive airdrop
             </p>
@@ -416,17 +416,17 @@ export function AirdropDashboard() {
 
       <GlassCard className="p-4">
         <h3 className="font-semibold text-sm mb-3 flex items-center gap-2">
-          <Star className="w-4 h-4 text-amber-400" />
+          <Star className="w-4 h-4 text-purple-400" />
           Early Adopter Rewards
         </h3>
         <div className="grid grid-cols-3 gap-2">
           <motion.div
             whileHover={{ scale: 1.02 }}
-            className="p-3 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20 text-center"
+            className="p-3 rounded-xl bg-gradient-to-br from-purple-500/10 to-cyan-500/10 border border-purple-500/20 text-center"
             data-testid="reward-bonus-dwc"
           >
-            <Coins className="w-5 h-5 text-amber-400 mx-auto mb-1" />
-            <div className="text-lg font-bold text-amber-400" data-testid="text-bonus-dwc">500</div>
+            <Coins className="w-5 h-5 text-purple-400 mx-auto mb-1" />
+            <div className="text-lg font-bold text-purple-400" data-testid="text-bonus-dwc">500</div>
             <div className="text-[9px] text-muted-foreground">Bonus SIG</div>
           </motion.div>
           <motion.div

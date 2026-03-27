@@ -257,8 +257,8 @@ export default function Liquidity() {
             </p>
           </motion.div>
 
-          <div className="mb-6 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30">
-            <div className="flex items-center justify-center gap-2 text-amber-400">
+          <div className="mb-6 p-4 rounded-xl bg-purple-500/10 border border-purple-500/30">
+            <div className="flex items-center justify-center gap-2 text-purple-400">
               <Info className="w-5 h-5" />
               <span className="font-semibold">Liquidity Pools — Available at Mainnet Launch</span>
             </div>

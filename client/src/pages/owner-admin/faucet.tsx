@@ -19,7 +19,7 @@ const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: n
 );
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+  pending: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
   completed: 'bg-green-500/20 text-green-400 border-green-500/30',
   failed: 'bg-red-500/20 text-red-400 border-red-500/30',
 };
@@ -130,8 +130,8 @@ export default function OwnerFaucet() {
             className="p-5 rounded-2xl bg-slate-900/60 backdrop-blur-lg border border-white/5"
           >
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                <Clock className="w-5 h-5 text-amber-400" />
+              <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                <Clock className="w-5 h-5 text-purple-400" />
               </div>
               <span className="text-gray-400 text-sm">Today</span>
             </div>

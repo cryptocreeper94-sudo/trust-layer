@@ -34,11 +34,11 @@ const isPasswordValid = (pwd: string) => {
 };
 
 const ECOSYSTEM_APPS: Record<string, { label: string; color: string }> = {
-  garagebot: { label: "GarageBot", color: "from-orange-500 to-amber-500" },
+  garagebot: { label: "GarageBot", color: "from-cyan-500 to-purple-500" },
   darkwavegames: { label: "The Arcade", color: "from-purple-500 to-pink-500" },
   darkwavestudios: { label: "DarkWave Studios", color: "from-blue-500 to-cyan-500" },
   yourlegacy: { label: "Your Legacy", color: "from-emerald-500 to-teal-500" },
-  trustshield: { label: "TrustShield", color: "from-red-500 to-orange-500" },
+  trustshield: { label: "TrustShield", color: "from-red-500 to-cyan-500" },
   tlid: { label: "TLID", color: "from-cyan-500 to-blue-500" },
 };
 
@@ -376,7 +376,7 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess, ssoApp: ssoAppPro
                   Google
                 </Button>
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="bg-yellow-500/90 text-black text-[10px] font-bold px-2 py-0.5 rotate-[-15deg] border-y-2 border-black/30 shadow-lg">
+                  <div className="bg-teal-500/90 text-black text-[10px] font-bold px-2 py-0.5 rotate-[-15deg] border-y-2 border-black/30 shadow-lg">
                     COMING SOON
                   </div>
                 </div>
@@ -395,7 +395,7 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess, ssoApp: ssoAppPro
                   GitHub
                 </Button>
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="bg-yellow-500/90 text-black text-[10px] font-bold px-2 py-0.5 rotate-[-15deg] border-y-2 border-black/30 shadow-lg">
+                  <div className="bg-teal-500/90 text-black text-[10px] font-bold px-2 py-0.5 rotate-[-15deg] border-y-2 border-black/30 shadow-lg">
                     COMING SOON
                   </div>
                 </div>
@@ -517,9 +517,9 @@ export function SimpleLoginModal({ isOpen, onClose, onSuccess, ssoApp: ssoAppPro
                   </span>
                 </label>
                 {rememberMe && (
-                  <div className="flex items-start gap-2 p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
-                    <AlertTriangle className="w-4 h-4 text-amber-400 mt-0.5 flex-shrink-0" />
-                    <p className="text-xs text-amber-200/80">
+                  <div className="flex items-start gap-2 p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
+                    <AlertTriangle className="w-4 h-4 text-purple-400 mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-purple-200/80">
                       Anyone with access to this device can access your account during this period. Only use on personal devices.
                     </p>
                   </div>

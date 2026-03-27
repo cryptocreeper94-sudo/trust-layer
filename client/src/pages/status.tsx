@@ -59,7 +59,7 @@ export default function Status() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "operational": return <CheckCircle2 className="w-5 h-5 text-green-400" />;
-      case "degraded": return <AlertCircle className="w-5 h-5 text-yellow-400" />;
+      case "degraded": return <AlertCircle className="w-5 h-5 text-teal-400" />;
       case "down": return <XCircle className="w-5 h-5 text-red-400" />;
     }
   };
@@ -67,7 +67,7 @@ export default function Status() {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "operational": return <Badge className="bg-green-500/20 text-green-400 border-green-500/30">Operational</Badge>;
-      case "degraded": return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Degraded</Badge>;
+      case "degraded": return <Badge className="bg-teal-500/20 text-teal-400 border-teal-500/30">Degraded</Badge>;
       case "down": return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Down</Badge>;
     }
   };
@@ -85,9 +85,9 @@ export default function Status() {
           <div className="flex items-center gap-2">
             <Badge 
               variant="outline" 
-              className={`${allOperational ? 'border-green-500/50 text-green-400 bg-green-500/10' : 'border-yellow-500/50 text-yellow-400 bg-yellow-500/10'} text-[10px] sm:text-xs`}
+              className={`${allOperational ? 'border-green-500/50 text-green-400 bg-green-500/10' : 'border-teal-500/50 text-teal-400 bg-teal-500/10'} text-[10px] sm:text-xs`}
             >
-              <div className={`w-1.5 h-1.5 rounded-full ${allOperational ? 'bg-green-400' : 'bg-yellow-400'} mr-1.5 animate-pulse`} />
+              <div className={`w-1.5 h-1.5 rounded-full ${allOperational ? 'bg-green-400' : 'bg-teal-400'} mr-1.5 animate-pulse`} />
               {allOperational ? "All Systems Operational" : "Some Issues Detected"}
             </Badge>
             <BackButton />
@@ -125,8 +125,8 @@ export default function Status() {
                     <CheckCircle2 className="w-8 h-8 text-green-400" />
                   </div>
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-yellow-500/20 flex items-center justify-center">
-                    <AlertCircle className="w-8 h-8 text-yellow-400" />
+                  <div className="w-16 h-16 rounded-full bg-teal-500/20 flex items-center justify-center">
+                    <AlertCircle className="w-8 h-8 text-teal-400" />
                   </div>
                 )}
                 <div>

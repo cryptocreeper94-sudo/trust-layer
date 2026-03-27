@@ -125,11 +125,11 @@ export default function FounderProgram() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/20 to-yellow-500/20 border border-amber-500/30 mb-6"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-teal-500/20 border border-purple-500/30 mb-6"
           >
-            <Crown className="w-5 h-5 text-amber-400" />
-            <span className="text-amber-400 font-semibold">Limited Time Offer</span>
-            <Sparkles className="w-4 h-4 text-yellow-400" />
+            <Crown className="w-5 h-5 text-purple-400" />
+            <span className="text-purple-400 font-semibold">Limited Time Offer</span>
+            <Sparkles className="w-4 h-4 text-teal-400" />
           </motion.div>
           
           <motion.h1
@@ -138,7 +138,7 @@ export default function FounderProgram() {
             transition={{ delay: 0.1 }}
             className="text-4xl md:text-6xl font-display font-bold mb-4"
           >
-            <span className="bg-gradient-to-r from-amber-400 via-yellow-400 to-orange-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-purple-400 via-teal-400 to-cyan-400 bg-clip-text text-transparent">
               Legacy Founder
             </span>
             <br />
@@ -172,8 +172,8 @@ export default function FounderProgram() {
         <div className="grid lg:grid-cols-2 gap-8 mb-12">
           <GlassCard className="p-6 md:p-8">
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500/20 to-yellow-500/20">
-                <Crown className="w-8 h-8 text-amber-400" />
+              <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-teal-500/20">
+                <Crown className="w-8 h-8 text-purple-400" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-white">Legacy Founder</h2>
@@ -258,7 +258,7 @@ export default function FounderProgram() {
                   onClick={handleCryptoCheckout}
                   disabled={loading || !email}
                   variant="outline"
-                  className="w-full h-12 border-amber-500/30 hover:bg-amber-500/10 text-amber-400"
+                  className="w-full h-12 border-purple-500/30 hover:bg-purple-500/10 text-purple-400"
                   data-testid="button-crypto-checkout"
                 >
                   <Bitcoin className="w-5 h-5 mr-2" />
@@ -269,8 +269,8 @@ export default function FounderProgram() {
               <p className="text-xs text-muted-foreground mt-4 text-center">
                 Secure payment powered by Stripe &amp; Coinbase Commerce
               </p>
-              <div className="mt-3 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20 text-center">
-                <p className="text-[10px] text-amber-400/80 font-medium uppercase tracking-wider">Beta Program — Early Access Pricing</p>
+              <div className="mt-3 px-3 py-2 rounded-lg bg-purple-500/10 border border-purple-500/20 text-center">
+                <p className="text-[10px] text-purple-400/80 font-medium uppercase tracking-wider">Beta Program — Early Access Pricing</p>
               </div>
             </GlassCard>
 

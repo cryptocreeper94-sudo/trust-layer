@@ -116,12 +116,12 @@ export default function ReferralProgram() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-12"
           >
-            <Badge className="mb-4 bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-yellow-500/30">
+            <Badge className="mb-4 bg-gradient-to-r from-teal-500/20 to-cyan-500/20 border-teal-500/30">
               <Gift className="w-3 h-3 mr-1" /> Referral Program
             </Badge>
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
               Grow the Network.{" "}
-              <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent">
                 Earn Rewards.
               </span>
             </h1>
@@ -171,7 +171,7 @@ export default function ReferralProgram() {
             <GlassCard glow>
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-6">
-                  <Gift className="w-5 h-5 text-yellow-400" />
+                  <Gift className="w-5 h-5 text-teal-400" />
                   <h2 className="font-bold text-lg">Multiplier Rewards</h2>
                   {activeTab === "business" && (
                     <Badge className="ml-2 bg-purple-500/20 text-purple-400 border-purple-500/30">+2.5x Business</Badge>
@@ -179,7 +179,7 @@ export default function ReferralProgram() {
                 </div>
 
                 <div className="space-y-4">
-                  <div className="p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/5 rounded-xl border border-yellow-500/20">
+                  <div className="p-4 bg-gradient-to-r from-teal-500/10 to-cyan-500/5 rounded-xl border border-teal-500/20">
                     <div className="flex items-center gap-2 mb-2">
                       <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-xs">BASE</Badge>
                     </div>
@@ -187,7 +187,7 @@ export default function ReferralProgram() {
                       <span className="text-sm">Signup (no purchase)</span>
                       <div className="flex items-center gap-2">
                         <Badge variant="outline" className="text-xs font-mono">1x</Badge>
-                        <span className="font-mono font-bold text-yellow-400">
+                        <span className="font-mono font-bold text-teal-400">
                           {(MULTIPLIERS.none.shells * baseMultiplier).toLocaleString()} Shells
                         </span>
                       </div>
@@ -223,12 +223,12 @@ export default function ReferralProgram() {
                       </div>
                       <div className="font-mono text-purple-400 font-bold">{(MULTIPLIERS.tier_50.shells * baseMultiplier).toLocaleString()}</div>
                     </div>
-                    <div className="p-3 bg-gradient-to-br from-amber-500/10 to-orange-500/5 rounded-lg border border-amber-500/20">
+                    <div className="p-3 bg-gradient-to-br from-purple-500/10 to-cyan-500/5 rounded-lg border border-purple-500/20">
                       <div className="flex items-center justify-between mb-1">
                         <span className="text-xs text-muted-foreground">$100+</span>
-                        <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs font-mono">10x</Badge>
+                        <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs font-mono">10x</Badge>
                       </div>
-                      <div className="font-mono text-amber-400 font-bold">{(MULTIPLIERS.tier_100.shells * baseMultiplier).toLocaleString()}</div>
+                      <div className="font-mono text-purple-400 font-bold">{(MULTIPLIERS.tier_100.shells * baseMultiplier).toLocaleString()}</div>
                     </div>
                   </div>
                 </div>
@@ -238,7 +238,7 @@ export default function ReferralProgram() {
             <GlassCard glow>
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-6">
-                  <Trophy className="w-5 h-5 text-orange-400" />
+                  <Trophy className="w-5 h-5 text-cyan-400" />
                   <h2 className="font-bold text-lg">Milestone Bonuses</h2>
                 </div>
 
@@ -248,16 +248,16 @@ export default function ReferralProgram() {
                       key={i}
                       className={`flex items-center justify-between p-3 rounded-lg transition-all ${
                         totalSignups >= milestone.referrals 
-                          ? "bg-gradient-to-r from-yellow-500/20 to-orange-500/10 border border-yellow-500/30" 
+                          ? "bg-gradient-to-r from-teal-500/20 to-cyan-500/10 border border-teal-500/30" 
                           : "bg-white/5"
                       }`}
                     >
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${
-                          totalSignups >= milestone.referrals ? "bg-yellow-500/20" : "bg-white/10"
+                          totalSignups >= milestone.referrals ? "bg-teal-500/20" : "bg-white/10"
                         }`}>
                           <milestone.icon className={`w-4 h-4 ${
-                            totalSignups >= milestone.referrals ? "text-yellow-400" : "text-muted-foreground"
+                            totalSignups >= milestone.referrals ? "text-teal-400" : "text-muted-foreground"
                           }`} />
                         </div>
                         <div>
@@ -266,7 +266,7 @@ export default function ReferralProgram() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="font-mono font-bold text-orange-400">
+                        <div className="font-mono font-bold text-cyan-400">
                           +{milestone.bonus.toLocaleString()}
                         </div>
                         <div className="text-xs text-muted-foreground">SIG bonus</div>
@@ -305,7 +305,7 @@ export default function ReferralProgram() {
                         />
                       </div>
                       <div className="text-right min-w-[80px]">
-                        <span className="font-mono text-yellow-400">{shells1x.toLocaleString()}</span>
+                        <span className="font-mono text-teal-400">{shells1x.toLocaleString()}</span>
                       </div>
                     </div>
                     
@@ -363,8 +363,8 @@ export default function ReferralProgram() {
                       </div>
                     </div>
                     
-                    <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-amber-500/10 to-transparent rounded-lg border border-amber-500/20">
-                      <Badge className="w-12 bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs font-mono">10x</Badge>
+                    <div className="flex items-center gap-3 p-3 bg-gradient-to-r from-purple-500/10 to-transparent rounded-lg border border-purple-500/20">
+                      <Badge className="w-12 bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs font-mono">10x</Badge>
                       <div className="flex-1">
                         <label className="text-xs text-muted-foreground block mb-1">Purchased $100+</label>
                         <Input
@@ -377,7 +377,7 @@ export default function ReferralProgram() {
                         />
                       </div>
                       <div className="text-right min-w-[80px]">
-                        <span className="font-mono text-amber-400">{shells10x.toLocaleString()}</span>
+                        <span className="font-mono text-purple-400">{shells10x.toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
@@ -393,16 +393,16 @@ export default function ReferralProgram() {
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Referral Shells</span>
-                      <span className="font-mono text-yellow-400">{referralShells.toLocaleString()}</span>
+                      <span className="font-mono text-teal-400">{referralShells.toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between text-sm">
                       <span className="text-muted-foreground">Milestone bonuses</span>
-                      <span className="font-mono text-orange-400">+{earnedMilestoneBonus.toLocaleString()}</span>
+                      <span className="font-mono text-cyan-400">+{earnedMilestoneBonus.toLocaleString()}</span>
                     </div>
                     <div className="border-t border-white/10 pt-2 mt-2">
                       <div className="flex justify-between">
                         <span className="font-semibold">Total Shells</span>
-                        <span className="font-mono text-lg font-bold text-yellow-400">{totalShells.toLocaleString()}</span>
+                        <span className="font-mono text-lg font-bold text-teal-400">{totalShells.toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
@@ -471,12 +471,12 @@ export default function ReferralProgram() {
           <div className="text-center">
             {isAuthenticated ? (
               <Link href="/dashboard">
-                <Button size="lg" className="gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600">
+                <Button size="lg" className="gap-2 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600">
                   Go to Dashboard <ArrowRight className="w-4 h-4" />
                 </Button>
               </Link>
             ) : (
-              <Button size="lg" className="gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600" onClick={() => setShowLoginModal(true)}>
+              <Button size="lg" className="gap-2 bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600" onClick={() => setShowLoginModal(true)}>
                 Start Earning Now <ArrowRight className="w-4 h-4" />
               </Button>
             )}

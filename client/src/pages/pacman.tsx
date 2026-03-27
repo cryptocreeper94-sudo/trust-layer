@@ -426,11 +426,11 @@ export default function Pacman() {
 
               {gameState.highScore > 0 && (
                 <div className="text-center">
-                  <p className="text-amber-400">High Score: {gameState.highScore}</p>
+                  <p className="text-purple-400">High Score: {gameState.highScore}</p>
                 </div>
               )}
 
-              <Button onClick={startGame} className="w-full bg-yellow-500 hover:bg-yellow-400 text-black py-6 text-lg font-bold">
+              <Button onClick={startGame} className="w-full bg-teal-500 hover:bg-teal-400 text-black py-6 text-lg font-bold">
                 <Play className="w-5 h-5 mr-2" />
                 Start Game
               </Button>
@@ -448,7 +448,7 @@ export default function Pacman() {
         <div className="flex items-center justify-between max-w-md mx-auto">
           <div className="flex items-center gap-4">
             <div>
-              <h1 className="font-bold text-yellow-400">Pac-Man</h1>
+              <h1 className="font-bold text-teal-400">Pac-Man</h1>
               <p className="text-xs text-gray-400">Score: {gameState.score}</p>
             </div>
           </div>
@@ -456,7 +456,7 @@ export default function Pacman() {
             {/* Lives */}
             <div className="flex gap-1">
               {Array.from({ length: gameState.lives }).map((_, i) => (
-                <span key={i} className="text-yellow-400 text-lg">●</span>
+                <span key={i} className="text-teal-400 text-lg">●</span>
               ))}
             </div>
             <Button variant="ghost" size="icon" onClick={togglePause} className="hover:bg-white/10">
@@ -494,13 +494,13 @@ export default function Pacman() {
                   )}
                   {cell === 1 && (
                     <div className="w-full h-full flex items-center justify-center">
-                      <div className="w-2 h-2 rounded-full bg-yellow-200" />
+                      <div className="w-2 h-2 rounded-full bg-teal-200" />
                     </div>
                   )}
                   {cell === 2 && (
                     <div className="w-full h-full flex items-center justify-center">
                       <motion.div 
-                        className="w-3 h-3 rounded-full bg-yellow-200"
+                        className="w-3 h-3 rounded-full bg-teal-200"
                         animate={{ scale: [1, 1.3, 1] }}
                         transition={{ repeat: Infinity, duration: 0.5 }}
                       />
@@ -561,7 +561,7 @@ export default function Pacman() {
             <Button
               variant="outline"
               size="lg"
-              className="bg-yellow-500/20 border-yellow-500/50 text-yellow-400 w-16 h-16"
+              className="bg-teal-500/20 border-teal-500/50 text-teal-400 w-16 h-16"
               onTouchStart={() => handleTouchControl("up")}
             >
               <ArrowUp className="w-6 h-6" />
@@ -570,7 +570,7 @@ export default function Pacman() {
               <Button
                 variant="outline"
                 size="lg"
-                className="bg-yellow-500/20 border-yellow-500/50 text-yellow-400 w-16 h-16"
+                className="bg-teal-500/20 border-teal-500/50 text-teal-400 w-16 h-16"
                 onTouchStart={() => handleTouchControl("left")}
               >
                 <ArrowLeftIcon className="w-6 h-6" />
@@ -578,7 +578,7 @@ export default function Pacman() {
               <Button
                 variant="outline"
                 size="lg"
-                className="bg-yellow-500/20 border-yellow-500/50 text-yellow-400 w-16 h-16"
+                className="bg-teal-500/20 border-teal-500/50 text-teal-400 w-16 h-16"
                 onTouchStart={() => handleTouchControl("down")}
               >
                 <ArrowDown className="w-6 h-6" />
@@ -586,7 +586,7 @@ export default function Pacman() {
               <Button
                 variant="outline"
                 size="lg"
-                className="bg-yellow-500/20 border-yellow-500/50 text-yellow-400 w-16 h-16"
+                className="bg-teal-500/20 border-teal-500/50 text-teal-400 w-16 h-16"
                 onTouchStart={() => handleTouchControl("right")}
               >
                 <ArrowRight className="w-6 h-6" />
@@ -606,10 +606,10 @@ export default function Pacman() {
             className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
           >
             <div className="text-center">
-              <Pause className="w-12 h-12 mx-auto mb-4 text-yellow-400" />
+              <Pause className="w-12 h-12 mx-auto mb-4 text-teal-400" />
               <h2 className="text-2xl font-bold mb-4">Paused</h2>
               <div className="space-y-2">
-                <Button onClick={togglePause} className="bg-yellow-500 hover:bg-yellow-400 text-black px-8 w-full">
+                <Button onClick={togglePause} className="bg-teal-500 hover:bg-teal-400 text-black px-8 w-full">
                   Resume
                 </Button>
                 <Button onClick={startGame} variant="outline" className="w-full">
@@ -633,12 +633,12 @@ export default function Pacman() {
             <motion.div
               initial={{ scale: 0.9, y: 20 }}
               animate={{ scale: 1, y: 0 }}
-              className="bg-gradient-to-br from-blue-900 to-purple-900 rounded-3xl p-8 max-w-md w-full mx-4 text-center border-2 border-yellow-500/50"
+              className="bg-gradient-to-br from-blue-900 to-purple-900 rounded-3xl p-8 max-w-md w-full mx-4 text-center border-2 border-teal-500/50"
             >
               {gameState.status === "win" ? (
                 <>
-                  <Trophy className="w-16 h-16 mx-auto mb-4 text-yellow-400" />
-                  <h2 className="text-3xl font-bold mb-2 text-yellow-400">You Win!</h2>
+                  <Trophy className="w-16 h-16 mx-auto mb-4 text-teal-400" />
+                  <h2 className="text-3xl font-bold mb-2 text-teal-400">You Win!</h2>
                 </>
               ) : (
                 <>
@@ -648,11 +648,11 @@ export default function Pacman() {
               )}
               <p className="text-2xl text-white mb-4">Score: {gameState.score}</p>
               {gameState.score >= gameState.highScore && gameState.score > 0 && (
-                <Badge className="mb-4 bg-yellow-500/20 text-yellow-300 border-yellow-500/30">
+                <Badge className="mb-4 bg-teal-500/20 text-teal-300 border-teal-500/30">
                   New High Score!
                 </Badge>
               )}
-              <Button onClick={startGame} className="bg-yellow-500 hover:bg-yellow-400 text-black px-8 font-bold">
+              <Button onClick={startGame} className="bg-teal-500 hover:bg-teal-400 text-black px-8 font-bold">
                 <RotateCcw className="w-4 h-4 mr-2" />
                 Play Again
               </Button>

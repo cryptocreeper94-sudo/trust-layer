@@ -86,8 +86,8 @@ const SUBSCRIPTION_PLANS: SubscriptionPlan[] = [
     monthlyPrice: 39.99,
     annualPrice: 399.99,
     icon: <Crown className="w-8 h-8" />,
-    gradient: "from-amber-400 to-orange-600",
-    glowColor: "amber",
+    gradient: "from-purple-400 to-cyan-600",
+    glowColor: "purple",
     popular: true,
     checkoutEndpoint: "/api/payments/stripe/create-bundle-monthly",
     features: [
@@ -161,7 +161,7 @@ function PricingCard({ plan, billingCycle }: { plan: SubscriptionPlan; billingCy
     >
       {plan.popular && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
-          <div className="bg-gradient-to-r from-amber-400 to-orange-500 text-black text-xs font-bold px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+          <div className="bg-gradient-to-r from-purple-400 to-cyan-500 text-black text-xs font-bold px-4 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
             <Star className="w-3.5 h-3.5 fill-current" />
             MOST POPULAR
           </div>
@@ -169,7 +169,7 @@ function PricingCard({ plan, billingCycle }: { plan: SubscriptionPlan; billingCy
       )}
       
       <GlassCard 
-        className={`h-full p-8 ${plan.popular ? 'border-amber-500/50 ring-2 ring-amber-500/20' : ''}`}
+        className={`h-full p-8 ${plan.popular ? 'border-purple-500/50 ring-2 ring-purple-500/20' : ''}`}
         glow={plan.glowColor as any}
       >
         <div className="flex flex-col h-full">
@@ -247,7 +247,7 @@ export default function Pricing() {
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: "1s" }} />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-500/5 rounded-full blur-3xl" />
       </div>
 
       <div className="relative z-10">

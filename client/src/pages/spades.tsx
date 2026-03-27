@@ -76,7 +76,7 @@ function PlayingCard({
         rounded-lg bg-white border-2 shadow-lg flex flex-col items-center justify-center
         transition-all cursor-pointer
         ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-xl'}
-        ${selected ? 'ring-2 ring-yellow-400 -translate-y-2' : ''}
+        ${selected ? 'ring-2 ring-teal-400 -translate-y-2' : ''}
         ${card.suit === "spades" ? 'border-gray-400' : 'border-gray-300'}
       `}
       data-testid={`card-${card.suit}-${card.rank}`}
@@ -124,7 +124,7 @@ function PlayerArea({
       <div className={`absolute ${positionStyles[position]} flex items-center gap-2 z-10`}>
         <div className={`
           px-3 py-2 rounded-xl backdrop-blur-sm
-          ${isCurrentTurn ? 'bg-yellow-500/30 ring-2 ring-yellow-400' : 'bg-black/40'}
+          ${isCurrentTurn ? 'bg-teal-500/30 ring-2 ring-teal-400' : 'bg-black/40'}
         `}>
           <div className="flex items-center gap-2">
             {player.isAI ? (
@@ -453,7 +453,7 @@ export default function Spades() {
           <Card className="bg-black/40 border-white/20 backdrop-blur-xl">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
-                <Crown className="w-6 h-6 text-yellow-400" />
+                <Crown className="w-6 h-6 text-teal-400" />
                 New Game
               </CardTitle>
             </CardHeader>
@@ -541,7 +541,7 @@ export default function Spades() {
 
       {/* Game Table */}
       <div className="relative w-full h-screen pt-16">
-        <div className="absolute inset-8 md:inset-16 rounded-[50%] bg-green-700/50 border-8 border-amber-900/50 shadow-inner" />
+        <div className="absolute inset-8 md:inset-16 rounded-[50%] bg-green-700/50 border-8 border-purple-900/50 shadow-inner" />
         
         {/* Players */}
         <PlayerArea 
@@ -610,7 +610,7 @@ export default function Spades() {
               animate={{ scale: 1, opacity: 1 }}
               className="bg-black/70 backdrop-blur-sm rounded-2xl p-4"
             >
-              <Trophy className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
+              <Trophy className="w-8 h-8 text-teal-400 mx-auto mb-2" />
               <p className="font-bold">
                 {gameState.players.find(p => p.id === gameState.currentTrick.winnerId)?.name} wins!
               </p>
@@ -662,7 +662,7 @@ export default function Spades() {
                   : 'bg-gradient-to-br from-red-900 to-rose-900 border-red-500/50'}
               `}
             >
-              <Trophy className={`w-16 h-16 mx-auto mb-4 ${gameState.winner === 1 ? 'text-yellow-400' : 'text-gray-400'}`} />
+              <Trophy className={`w-16 h-16 mx-auto mb-4 ${gameState.winner === 1 ? 'text-teal-400' : 'text-gray-400'}`} />
               <h2 className="text-3xl font-bold mb-2">
                 {gameState.winner === 1 ? "Victory!" : "Defeat"}
               </h2>

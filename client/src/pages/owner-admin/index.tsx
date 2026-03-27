@@ -276,13 +276,13 @@ function BentoCard({
   className?: string; 
   span?: "1" | "2" | "row"; 
   href?: string;
-  glow?: "cyan" | "purple" | "pink" | "amber" | "emerald";
+  glow?: "cyan" | "purple" | "pink" | "purple" | "emerald";
 }) {
   const glowColors = {
     cyan: "rgba(0,200,255,0.15)",
     purple: "rgba(168,85,247,0.15)",
     pink: "rgba(236,72,153,0.15)",
-    amber: "rgba(245,158,11,0.15)",
+    purple: "rgba(245,158,11,0.15)",
     emerald: "rgba(16,185,129,0.15)",
   };
   
@@ -351,14 +351,14 @@ function OwnerDashboard() {
 
   const portalModules = [
     { id: "presale", title: "Presale Dashboard", description: "All purchases, revenue analytics, buyer insights", icon: <DollarSign className="w-6 h-6" />, href: "/owner-admin/presale", glow: "emerald" as const },
-    { id: "ops-center", title: "Operations Center", description: "Daily reports, airdrop processing, team dashboard", icon: <Activity className="w-6 h-6" />, href: "/ops-center", glow: "amber" as const },
+    { id: "ops-center", title: "Operations Center", description: "Daily reports, airdrop processing, team dashboard", icon: <Activity className="w-6 h-6" />, href: "/ops-center", glow: "purple" as const },
     { id: "guardian", title: "Guardian Admin", description: "Security certifications, audits, revenue tracking", icon: <Shield className="w-6 h-6" />, href: "/owner-admin/guardian", glow: "emerald" as const },
     { id: "users", title: "User Management", description: "Waitlist, beta testers, whitelist, payments", icon: <Users className="w-6 h-6" />, href: "/owner-admin/users", glow: "cyan" as const },
     { id: "kyc", title: "KYC Verification", description: "Review and approve identity verifications", icon: <ShieldCheck className="w-6 h-6" />, href: "/owner-admin/kyc", glow: "purple" as const },
     { id: "business-verification", title: "Business Verification", description: "Approve business memberships, EIN lookup, Main Street slots", icon: <Gamepad2 className="w-6 h-6" />, href: "/owner-admin/business-verification", glow: "emerald" as const },
     { id: "analytics", title: "Analytics Dashboard", description: "Real visitor data, traffic sources, geographic insights", icon: <BarChart3 className="w-6 h-6" />, href: "/owner-admin/analytics", glow: "purple" as const },
     { id: "seo", title: "SEO Manager", description: "Meta tags, OpenGraph, structured data per route", icon: <Search className="w-6 h-6" />, href: "/owner-admin/seo", glow: "pink" as const },
-    { id: "referrals", title: "Referral Dashboard", description: "Affiliate management, fraud detection, payouts", icon: <Crown className="w-6 h-6" />, href: "/owner-admin/referrals", glow: "amber" as const },
+    { id: "referrals", title: "Referral Dashboard", description: "Affiliate management, fraud detection, payouts", icon: <Crown className="w-6 h-6" />, href: "/owner-admin/referrals", glow: "purple" as const },
     { id: "faucet", title: "Faucet Claims", description: "Monitor testnet token distribution", icon: <Zap className="w-6 h-6" />, href: "/owner-admin/faucet", glow: "cyan" as const },
     { id: "marketing", title: "Marketing Automation", description: `${marketingStats?.totalPosts || 0} branded posts, auto-deployment`, icon: <Megaphone className="w-6 h-6" />, href: "/admin/marketing", glow: "cyan" as const },
     { id: "feedback", title: "Bug Reports & Feedback", description: "User-submitted bugs, feature requests, feedback", icon: <Activity className="w-6 h-6" />, href: "/owner-admin/feedback", glow: "emerald" as const },

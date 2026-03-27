@@ -151,7 +151,7 @@ export default function MultiSigPage() {
       case "mint": return <Plus className="h-4 w-4 text-green-400" />;
       case "burn": return <Trash2 className="h-4 w-4 text-red-400" />;
       case "add_validator": return <Users className="h-4 w-4 text-blue-400" />;
-      case "remove_validator": return <XCircle className="h-4 w-4 text-orange-400" />;
+      case "remove_validator": return <XCircle className="h-4 w-4 text-cyan-400" />;
       case "update_threshold": return <Key className="h-4 w-4 text-purple-400" />;
       default: return <FileCheck className="h-4 w-4" />;
     }
@@ -166,8 +166,8 @@ export default function MultiSigPage() {
           className="mb-8"
         >
           <div className="flex items-center gap-3 mb-2">
-            <div className="p-3 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-600/20 border border-amber-500/30">
-              <Shield className="h-8 w-8 text-amber-400" />
+            <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-cyan-600/20 border border-purple-500/30">
+              <Shield className="h-8 w-8 text-purple-400" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-white">Multi-Sig Validator Committee</h1>
@@ -212,7 +212,7 @@ export default function MultiSigPage() {
               <Clock className="h-4 w-4" />
               Pending Operations
             </div>
-            <div className="text-2xl font-bold text-amber-400">{pendingOps.filter(o => o.status === "pending").length}</div>
+            <div className="text-2xl font-bold text-purple-400">{pendingOps.filter(o => o.status === "pending").length}</div>
           </motion.div>
 
           <motion.div
@@ -235,11 +235,11 @@ export default function MultiSigPage() {
           className="mb-6"
         >
           <CollapsibleTrigger className="w-full">
-            <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-600/10 border border-amber-500/30 hover:border-amber-400/50 transition-colors cursor-pointer">
+            <div className="flex items-center justify-between p-4 rounded-xl bg-gradient-to-r from-purple-500/10 to-cyan-600/10 border border-purple-500/30 hover:border-purple-400/50 transition-colors cursor-pointer">
               <div className="flex items-center gap-3">
-                <Vote className="h-5 w-5 text-amber-400" />
+                <Vote className="h-5 w-5 text-purple-400" />
                 <span className="text-lg font-semibold text-white">Pending Operations</span>
-                <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 text-sm">
+                <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-400 text-sm">
                   {pendingOps.filter(o => o.status === "pending").length} awaiting
                 </span>
               </div>
@@ -266,7 +266,7 @@ export default function MultiSigPage() {
                         <div className="flex flex-wrap items-center gap-2 mt-1 text-sm text-slate-400">
                           <span>Created {op.createdAt}</span>
                           <span className="text-slate-600">•</span>
-                          <span className="text-amber-400">Expires in {op.expiresAt}</span>
+                          <span className="text-purple-400">Expires in {op.expiresAt}</span>
                         </div>
                         {op.amount && (
                           <div className="flex items-center gap-2 mt-2 text-sm">
@@ -280,7 +280,7 @@ export default function MultiSigPage() {
                     <div className="flex items-center gap-2">
                       <div className="text-right mr-4">
                         <div className="text-sm text-slate-400">Signatures</div>
-                        <div className={`text-lg font-bold ${op.currentSignatures >= op.requiredSignatures ? 'text-green-400' : 'text-amber-400'}`}>
+                        <div className={`text-lg font-bold ${op.currentSignatures >= op.requiredSignatures ? 'text-green-400' : 'text-purple-400'}`}>
                           {op.currentSignatures} / {op.requiredSignatures}
                         </div>
                       </div>
@@ -352,7 +352,7 @@ export default function MultiSigPage() {
                     <div className="flex items-center gap-4">
                       <div className={`w-3 h-3 rounded-full ${
                         validator.status === 'active' ? 'bg-green-400 animate-pulse' :
-                        validator.status === 'pending' ? 'bg-amber-400' : 'bg-slate-500'
+                        validator.status === 'pending' ? 'bg-purple-400' : 'bg-slate-500'
                       }`} />
                       <div>
                         <h3 className="font-semibold text-white">{validator.name}</h3>
@@ -380,7 +380,7 @@ export default function MultiSigPage() {
                       </div>
                       <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                         validator.status === 'active' ? 'bg-green-500/20 text-green-400' :
-                        validator.status === 'pending' ? 'bg-amber-500/20 text-amber-400' :
+                        validator.status === 'pending' ? 'bg-purple-500/20 text-purple-400' :
                         'bg-slate-500/20 text-slate-400'
                       }`}>
                         {validator.status.charAt(0).toUpperCase() + validator.status.slice(1)}

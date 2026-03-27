@@ -55,7 +55,7 @@ export default function MembershipCharter() {
     { icon: Lock, title: "Trust", description: "Every interaction backed by verified identity and transparent history", color: "cyan" },
     { icon: Eye, title: "Transparency", description: "All transactions recorded on-chain, auditable by all parties", color: "purple" },
     { icon: Scale, title: "Accountability", description: "Members stake their reputation on every commitment", color: "pink" },
-    { icon: Handshake, title: "Mutual Benefit", description: "Success comes from genuine value exchange, not exploitation", color: "amber" },
+    { icon: Handshake, title: "Mutual Benefit", description: "Success comes from genuine value exchange, not exploitation", color: "purple" },
   ];
 
   const individualBenefits = [
@@ -108,9 +108,9 @@ export default function MembershipCharter() {
     },
     {
       name: "Enterprise",
-      color: "amber",
-      gradient: "from-amber-500/20 to-orange-500/20",
-      border: "border-amber-500/30",
+      color: "purple",
+      gradient: "from-purple-500/20 to-cyan-500/20",
+      border: "border-purple-500/30",
       description: "Full-featured access for businesses",
       features: ["Everything in Guardian", "Unlimited API", "Webhook Events", "Team Seats", "Custom Integrations"],
       price: "$99/mo",
@@ -175,13 +175,13 @@ export default function MembershipCharter() {
                     value.color === "cyan" ? "from-cyan-500/30 to-blue-500/30" :
                     value.color === "purple" ? "from-purple-500/30 to-pink-500/30" :
                     value.color === "pink" ? "from-pink-500/30 to-rose-500/30" :
-                    "from-amber-500/30 to-orange-500/30"
+                    "from-purple-500/30 to-cyan-500/30"
                   } flex items-center justify-center mx-auto mb-4 shadow-lg`}>
                     <value.icon className={`w-7 h-7 ${
                       value.color === "cyan" ? "text-cyan-400" :
                       value.color === "purple" ? "text-purple-400" :
                       value.color === "pink" ? "text-pink-400" :
-                      "text-amber-400"
+                      "text-purple-400"
                     }`} />
                   </div>
                   <h3 className="font-bold text-white text-lg mb-2">{value.title}</h3>
@@ -344,7 +344,7 @@ export default function MembershipCharter() {
                   <h3 className={`text-2xl font-bold mb-1 ${
                     tier.color === "cyan" ? "text-cyan-400" :
                     tier.color === "purple" ? "text-purple-400" :
-                    "text-amber-400"
+                    "text-purple-400"
                   }`}>{tier.name}</h3>
                   <p className="text-sm text-white/60 mb-4">{tier.description}</p>
                   <p className="text-3xl font-bold text-white mb-6">{tier.price}</p>
@@ -354,7 +354,7 @@ export default function MembershipCharter() {
                         <CheckCircle className={`w-4 h-4 flex-shrink-0 ${
                           tier.color === "cyan" ? "text-cyan-400" :
                           tier.color === "purple" ? "text-purple-400" :
-                          "text-amber-400"
+                          "text-purple-400"
                         }`} />
                         {feature}
                       </li>

@@ -73,15 +73,15 @@ function FearGreedGauge({ value, label }: { value: number; label: string }) {
   const rotation = (value / 100) * 180 - 90;
   const getColor = () => {
     if (value <= 25) return "text-red-500";
-    if (value <= 45) return "text-orange-500";
-    if (value <= 55) return "text-yellow-500";
+    if (value <= 45) return "text-cyan-500";
+    if (value <= 55) return "text-teal-500";
     if (value <= 75) return "text-lime-500";
     return "text-green-500";
   };
   const getBgGradient = () => {
     if (value <= 25) return "from-red-500/20 to-red-500/5";
-    if (value <= 45) return "from-orange-500/20 to-orange-500/5";
-    if (value <= 55) return "from-yellow-500/20 to-yellow-500/5";
+    if (value <= 45) return "from-cyan-500/20 to-cyan-500/5";
+    if (value <= 55) return "from-teal-500/20 to-teal-500/5";
     if (value <= 75) return "from-lime-500/20 to-lime-500/5";
     return "from-green-500/20 to-green-500/5";
   };
@@ -141,7 +141,7 @@ function AltcoinSeasonGauge({ value }: { value: number }) {
       <div className="p-4">
         <div className="flex items-center justify-between mb-3">
           <p className="text-xs text-gray-400 uppercase tracking-wider">Altcoin Season</p>
-          <Badge className={`${isAltSeason ? 'bg-purple-500/20 text-purple-400' : isBtcSeason ? 'bg-orange-500/20 text-orange-400' : 'bg-gray-500/20 text-gray-400'}`}>
+          <Badge className={`${isAltSeason ? 'bg-purple-500/20 text-purple-400' : isBtcSeason ? 'bg-cyan-500/20 text-cyan-400' : 'bg-gray-500/20 text-gray-400'}`}>
             {isAltSeason ? 'ALT SEASON' : isBtcSeason ? 'BTC SEASON' : 'NEUTRAL'}
           </Badge>
         </div>
@@ -584,9 +584,9 @@ export default function PulseDashboard() {
       case 'BUY':
         return 'bg-green-500/20 text-green-400 border-green-500/30';
       case 'HOLD':
-        return 'bg-amber-500/20 text-amber-400 border-amber-500/30';
+        return 'bg-purple-500/20 text-purple-400 border-purple-500/30';
       case 'SELL':
-        return 'bg-orange-500/20 text-orange-400 border-orange-500/30';
+        return 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30';
       case 'STRONG_SELL':
         return 'bg-red-500/20 text-red-400 border-red-500/30';
       default:
@@ -606,7 +606,7 @@ export default function PulseDashboard() {
       productDescription="AI-powered market intelligence with ML predictions, Fear & Greed tracking, and verified accuracy analytics."
       price="$14.99"
       checkoutPath="/billing"
-      icon={<Zap className="w-10 h-10 text-amber-400" />}
+      icon={<Zap className="w-10 h-10 text-purple-400" />}
     >
     <div className="min-h-screen bg-slate-950 relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
@@ -707,7 +707,7 @@ export default function PulseDashboard() {
             <GlassCard>
               <div className="p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <Bitcoin className="w-4 h-4 text-orange-400" />
+                  <Bitcoin className="w-4 h-4 text-cyan-400" />
                   <span className="text-xs text-gray-400">BTC Dominance</span>
                 </div>
                 <p className="text-xl font-bold text-white">{market.btcDominance}%</p>
@@ -739,7 +739,7 @@ export default function PulseDashboard() {
           <GlassCard glow>
             <div className="p-4">
               <div className="flex items-center gap-2 mb-3">
-                <Trophy className="w-5 h-5 text-amber-400" />
+                <Trophy className="w-5 h-5 text-purple-400" />
                 <span className="text-sm font-semibold text-white">AI Prediction Accuracy</span>
               </div>
               <div className="text-4xl font-bold text-emerald-400 mb-2">{avgWinRate}%</div>
@@ -911,7 +911,7 @@ export default function PulseDashboard() {
                           <td className="py-3 pr-4">
                             <span className={`text-xs ${
                               pred.confidence === 'HIGH' ? 'text-emerald-400' :
-                              pred.confidence === 'MEDIUM' ? 'text-amber-400' : 'text-white/50'
+                              pred.confidence === 'MEDIUM' ? 'text-purple-400' : 'text-white/50'
                             }`}>
                               {pred.confidence || 'N/A'}
                             </span>

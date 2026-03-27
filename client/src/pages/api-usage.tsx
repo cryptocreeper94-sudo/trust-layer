@@ -184,7 +184,7 @@ export default function ApiUsage() {
           >
             <GlassCard className="p-6" data-testid="card-errors">
               <div className="flex items-center gap-2 mb-4">
-                <AlertTriangle className="w-5 h-5 text-amber-400" />
+                <AlertTriangle className="w-5 h-5 text-purple-400" />
                 <h3 className="font-semibold">Recent Errors</h3>
               </div>
               {MOCK_USAGE.recentErrors.length === 0 ? (

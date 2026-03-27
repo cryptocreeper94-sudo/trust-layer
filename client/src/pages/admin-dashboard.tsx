@@ -37,13 +37,13 @@ function BentoCard({
   className?: string; 
   span?: "1" | "2" | "row"; 
   href?: string;
-  glow?: "cyan" | "purple" | "pink" | "amber";
+  glow?: "cyan" | "purple" | "pink" | "purple";
 }) {
   const glowColors = {
     cyan: "rgba(0,200,255,0.15)",
     purple: "rgba(168,85,247,0.15)",
     pink: "rgba(236,72,153,0.15)",
-    amber: "rgba(245,158,11,0.15)",
+    purple: "rgba(245,158,11,0.15)",
   };
   
   const spanClasses = {
@@ -126,7 +126,7 @@ export default function AdminDashboard() {
   const quickStats: QuickStat[] = [
     { label: "Total Raised", value: `$${((presaleStats?.totalRaisedUsd || 0) + (crowdfundStats?.totalRaised || 0)).toLocaleString()}`, icon: <DollarSign className="w-5 h-5 text-green-400" /> },
     { label: "Token Holders", value: presaleStats?.uniqueHolders || 0, icon: <Users className="w-5 h-5 text-cyan-400" /> },
-    { label: "Tokens Sold", value: (presaleStats?.tokensSold || 0).toLocaleString(), icon: <Zap className="w-5 h-5 text-yellow-400" /> },
+    { label: "Tokens Sold", value: (presaleStats?.tokensSold || 0).toLocaleString(), icon: <Zap className="w-5 h-5 text-teal-400" /> },
     { label: "Marketing Posts", value: marketingStats?.totalPosts || 0, icon: <Megaphone className="w-5 h-5 text-purple-400" /> },
   ];
 
@@ -134,7 +134,7 @@ export default function AdminDashboard() {
     { id: "marketing", title: "Marketing Automation", description: `${marketingStats?.totalPosts || 0} posts ready • Auto-deployment system`, icon: <Megaphone className="w-6 h-6" />, href: "/admin/marketing", glow: "purple" as const, status: "ready" },
     { id: "analytics", title: "Analytics Dashboard", description: "Traffic, engagement, conversions", icon: <BarChart3 className="w-6 h-6" />, href: "/admin/analytics", glow: "cyan" as const, status: "active" },
     { id: "rewards", title: "Rewards Management", description: "Early Adopter program, token allocations", icon: <Gift className="w-6 h-6" />, href: "/admin/rewards", glow: "pink" as const, status: "active" },
-    { id: "partners", title: "Partner Requests", description: "Studio applications, NDA approvals", icon: <Handshake className="w-6 h-6" />, href: "/admin/partner-requests", glow: "amber" as const, status: "active" },
+    { id: "partners", title: "Partner Requests", description: "Studio applications, NDA approvals", icon: <Handshake className="w-6 h-6" />, href: "/admin/partner-requests", glow: "purple" as const, status: "active" },
     { id: "handoff", title: "Dev Handoff", description: "Latest changes & system summary", icon: <Activity className="w-6 h-6" />, href: "/admin/handoff", glow: "cyan" as const, status: "active" },
   ];
 
@@ -209,7 +209,7 @@ export default function AdminDashboard() {
                 <span className="text-sm text-gray-300">ElevenLabs</span>
               </div>
               <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4 text-yellow-400" />
+                <Clock className="w-4 h-4 text-teal-400" />
                 <span className="text-sm text-gray-300">Marketing</span>
               </div>
               <div className="flex items-center gap-2">
@@ -228,8 +228,8 @@ export default function AdminDashboard() {
               Operations Lead Allocation Progress
             </h2>
             <div className="flex items-center gap-2">
-              <Coins className="w-4 h-4 text-yellow-400" />
-              <span className="text-yellow-400 font-bold">5,000,000 SIG</span>
+              <Coins className="w-4 h-4 text-teal-400" />
+              <span className="text-teal-400 font-bold">5,000,000 SIG</span>
             </div>
           </div>
           
@@ -340,13 +340,13 @@ export default function AdminDashboard() {
                     module.glow === 'purple' ? 'from-purple-500/20 to-pink-500/20' :
                     module.glow === 'cyan' ? 'from-cyan-500/20 to-blue-500/20' :
                     module.glow === 'pink' ? 'from-pink-500/20 to-red-500/20' :
-                    'from-amber-500/20 to-orange-500/20'
+                    'from-purple-500/20 to-cyan-500/20'
                   } border border-white/10`}>
                     {module.icon}
                   </div>
                   <div className="flex items-center gap-2">
                     {module.status === 'ready' && (
-                      <span className="px-2 py-1 rounded-full bg-yellow-500/20 text-yellow-400 text-xs border border-yellow-500/30">
+                      <span className="px-2 py-1 rounded-full bg-teal-500/20 text-teal-400 text-xs border border-teal-500/30">
                         Ready to Launch
                       </span>
                     )}

@@ -54,8 +54,8 @@ const allChains: ChainInfo[] = [
   { id: "base", name: "Base", symbol: "BASE", category: "evm-l2", status: "in-diligence", image: baseImg, color: "from-blue-500 to-blue-700", latencyTarget: "~2s" },
   { id: "zksync", name: "zkSync Era", symbol: "ZK", category: "evm-l2", status: "in-diligence", image: zksyncImg, color: "from-violet-500 to-indigo-600", latencyTarget: "~1s" },
   { id: "linea", name: "Linea", symbol: "LINEA", category: "evm-l2", status: "in-diligence", image: lineaImg, color: "from-cyan-500 to-blue-500", latencyTarget: "~3s" },
-  { id: "scroll", name: "Scroll", symbol: "SCR", category: "evm-l2", status: "researching", image: genericChainImg, color: "from-amber-500 to-orange-500", latencyTarget: "~3s" },
-  { id: "bnb", name: "BNB Chain", symbol: "BNB", category: "evm-l1", status: "available-soon", image: bnbImg, color: "from-yellow-500 to-yellow-600", latencyTarget: "~3s" },
+  { id: "scroll", name: "Scroll", symbol: "SCR", category: "evm-l2", status: "researching", image: genericChainImg, color: "from-purple-500 to-cyan-500", latencyTarget: "~3s" },
+  { id: "bnb", name: "BNB Chain", symbol: "BNB", category: "evm-l1", status: "available-soon", image: bnbImg, color: "from-teal-500 to-teal-600", latencyTarget: "~3s" },
   { id: "avalanche", name: "Avalanche", symbol: "AVAX", category: "evm-l1", status: "in-diligence", image: avalancheImg, color: "from-red-500 to-red-600", latencyTarget: "~2s" },
   { id: "fantom", name: "Fantom", symbol: "FTM", category: "evm-l1", status: "researching", image: genericChainImg, color: "from-blue-400 to-cyan-500", latencyTarget: "~1s" },
   { id: "solana", name: "Solana", symbol: "SOL", category: "non-evm", status: "available-soon", image: solanaImg, color: "from-purple-500 to-green-400", latencyTarget: "~400ms" },
@@ -65,7 +65,7 @@ const allChains: ChainInfo[] = [
   { id: "aptos", name: "Aptos", symbol: "APT", category: "non-evm", status: "researching", image: genericChainImg, color: "from-teal-400 to-green-500", latencyTarget: "~400ms" },
   { id: "sui", name: "Sui", symbol: "SUI", category: "non-evm", status: "researching", image: genericChainImg, color: "from-cyan-400 to-blue-500", latencyTarget: "~400ms" },
   { id: "ton", name: "TON", symbol: "TON", category: "non-evm", status: "researching", image: genericChainImg, color: "from-blue-500 to-cyan-400", latencyTarget: "~5s" },
-  { id: "bitcoin", name: "Bitcoin", symbol: "BTC", category: "non-evm", status: "researching", image: bitcoinImg, color: "from-orange-500 to-amber-500", latencyTarget: "~10m" },
+  { id: "bitcoin", name: "Bitcoin", symbol: "BTC", category: "non-evm", status: "researching", image: bitcoinImg, color: "from-cyan-500 to-purple-500", latencyTarget: "~10m" },
   { id: "starknet", name: "Starknet", symbol: "STRK", category: "rollups", status: "in-diligence", image: genericChainImg, color: "from-indigo-500 to-violet-600", latencyTarget: "~2s" },
   { id: "celestia", name: "Celestia", symbol: "TIA", category: "rollups", status: "researching", image: genericChainImg, color: "from-purple-500 to-pink-500", latencyTarget: "~12s" },
 ];
@@ -79,7 +79,7 @@ const categoryInfo: Record<ChainCategory, { label: string; description: string; 
 
 const statusInfo: Record<ReadinessStatus, { label: string; color: string; bgColor: string }> = {
   "available-soon": { label: "Available Soon", color: "text-green-400", bgColor: "bg-green-500/20 border-green-500/30" },
-  "in-diligence": { label: "In Diligence", color: "text-amber-400", bgColor: "bg-amber-500/20 border-amber-500/30" },
+  "in-diligence": { label: "In Diligence", color: "text-purple-400", bgColor: "bg-purple-500/20 border-purple-500/30" },
   "researching": { label: "Researching", color: "text-purple-400", bgColor: "bg-purple-500/20 border-purple-500/30" },
 };
 
@@ -329,7 +329,7 @@ export default function Bridge() {
               {[
                 { label: "Supported Chains", value: "21+", icon: <Zap className="w-4 h-4" />, color: "from-cyan-500/20 to-blue-500/20" },
                 { label: "Bridge Fee", value: "0.1%", icon: <Sparkles className="w-4 h-4" />, color: "from-purple-500/20 to-pink-500/20" },
-                { label: "Avg. Finality", value: "~2min", icon: <Clock className="w-4 h-4" />, color: "from-amber-500/20 to-orange-500/20" },
+                { label: "Avg. Finality", value: "~2min", icon: <Clock className="w-4 h-4" />, color: "from-purple-500/20 to-cyan-500/20" },
                 { label: "Security", value: "Guardian", icon: <Shield className="w-4 h-4" />, color: "from-green-500/20 to-emerald-500/20" },
               ].map((stat, i) => (
                 <motion.div
@@ -480,15 +480,15 @@ export default function Bridge() {
                 transition={{ delay: 0.35 }}
                 className="
                   relative p-6 rounded-3xl overflow-hidden
-                  bg-gradient-to-br from-orange-500/10 via-slate-900/50 to-red-500/10
-                  border border-orange-500/20 backdrop-blur-xl
+                  bg-gradient-to-br from-cyan-500/10 via-slate-900/50 to-red-500/10
+                  border border-cyan-500/20 backdrop-blur-xl
                 "
               >
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/50 to-transparent" />
-                <div className="absolute -top-20 -left-20 w-40 h-40 bg-orange-500/20 rounded-full blur-3xl" />
+                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500/50 to-transparent" />
+                <div className="absolute -top-20 -left-20 w-40 h-40 bg-cyan-500/20 rounded-full blur-3xl" />
                 
                 <h3 className="font-display font-bold text-lg mb-4 flex items-center gap-2">
-                  <Flame className="w-5 h-5 text-orange-400" />
+                  <Flame className="w-5 h-5 text-cyan-400" />
                   Burn & Release Flow
                 </h3>
                 
@@ -505,7 +505,7 @@ export default function Bridge() {
                       transition={{ delay: 0.45 + i * 0.1 }}
                       className="flex items-start gap-3"
                     >
-                      <div className="shrink-0 w-8 h-8 rounded-full bg-orange-500/20 border border-orange-500/30 flex items-center justify-center text-orange-400 font-bold text-sm">
+                      <div className="shrink-0 w-8 h-8 rounded-full bg-cyan-500/20 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-bold text-sm">
                         {item.step}
                       </div>
                       <div>

@@ -165,7 +165,7 @@ export default function UserProfiles() {
               <div className="mt-4 p-3 rounded-lg bg-white/5">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <Trophy className="w-4 h-4 text-amber-400" />
+                    <Trophy className="w-4 h-4 text-purple-400" />
                     <span className="text-sm">Level {profile.level}</span>
                   </div>
                   <span className="text-xs text-muted-foreground">

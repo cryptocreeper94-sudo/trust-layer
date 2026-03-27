@@ -299,7 +299,7 @@ export default function BlogAdmin() {
                       <h3 className="font-medium text-white truncate">{post.title}</h3>
                       <Badge className={statusColors[post.status]}>{post.status}</Badge>
                       {post.featured && (
-                        <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30">
+                        <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30">
                           Featured
                         </Badge>
                       )}

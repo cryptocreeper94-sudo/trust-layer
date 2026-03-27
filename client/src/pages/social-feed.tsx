@@ -194,7 +194,7 @@ export default function SocialFeed() {
                                 <span className="text-xs">{post.reposts}</span>
                               </button>
                             </div>
-                            <Badge className="bg-amber-500/20 text-amber-400 text-[10px]">
+                            <Badge className="bg-purple-500/20 text-purple-400 text-[10px]">
                               <Coins className="w-3 h-3 mr-1" />
                               {post.tips}
                             </Badge>
@@ -268,7 +268,7 @@ export default function SocialFeed() {
                                 <span className="text-xs">{post.reposts}</span>
                               </button>
                             </div>
-                            <Badge className="bg-amber-500/20 text-amber-400 text-[10px]">
+                            <Badge className="bg-purple-500/20 text-purple-400 text-[10px]">
                               <Coins className="w-3 h-3 mr-1" />
                               {post.tips}
                             </Badge>
@@ -284,7 +284,7 @@ export default function SocialFeed() {
             <div className="space-y-4">
               <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
-                  <Flame className="w-4 h-4 text-orange-400" />
+                  <Flame className="w-4 h-4 text-cyan-400" />
                   Trending Topics
                 </h3>
                 <div className="space-y-2">
@@ -299,7 +299,7 @@ export default function SocialFeed() {
 
               <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
-                  <Award className="w-4 h-4 text-amber-400" />
+                  <Award className="w-4 h-4 text-purple-400" />
                   Top Creators
                 </h3>
                 <div className="space-y-3">
@@ -341,7 +341,7 @@ export default function SocialFeed() {
                     <p className="text-[10px] text-muted-foreground">Posts Today</p>
                   </div>
                   <div className="p-2 rounded-lg bg-white/5 text-center">
-                    <p className="text-lg font-bold text-amber-400">{COMMUNITY_STATS.tipsSent}</p>
+                    <p className="text-lg font-bold text-purple-400">{COMMUNITY_STATS.tipsSent}</p>
                     <p className="text-[10px] text-muted-foreground">Tips Sent</p>
                   </div>
                 </div>

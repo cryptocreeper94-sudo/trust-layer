@@ -188,7 +188,7 @@ export default function Developers() {
                     <span className="text-[10px] font-mono text-white/40 uppercase">Live Consensus</span>
                     <div className="flex gap-1">
                       <div className="w-2 h-2 rounded-full bg-red-500" />
-                      <div className="w-2 h-2 rounded-full bg-yellow-500" />
+                      <div className="w-2 h-2 rounded-full bg-teal-500" />
                       <div className="w-2 h-2 rounded-full bg-green-500" />
                     </div>
                   </div>
@@ -216,12 +216,12 @@ export default function Developers() {
                       <code>
                         <span className="text-purple-400">use</span> darkwave_sdk::prelude::*;{"\n\n"}
                         <span className="text-gray-500">/// Define a new Token</span>{"\n"}
-                        <span className="text-blue-400">pub struct</span> <span className="text-yellow-300">DarkWaveToken</span> {"{"}{"\n"}
+                        <span className="text-blue-400">pub struct</span> <span className="text-teal-300">DarkWaveToken</span> {"{"}{"\n"}
                         {"    "}<span className="text-red-400">pub</span> supply: <span className="text-blue-400">u64</span>,{"\n"}
                         {"    "}<span className="text-red-400">pub</span> owner: <span className="text-blue-400">Address</span>,{"\n"}
                         {"}"}{"\n\n"}
-                        <span className="text-purple-400">impl</span> <span className="text-yellow-300">Starship</span> <span className="text-purple-400">for</span> <span className="text-yellow-300">DarkWaveToken</span> {"{"}{"\n"}
-                        {"    "}<span className="text-blue-400">fn</span> <span className="text-yellow-300">transfer</span>(&self, to: Address) {"{"}{"\n"}
+                        <span className="text-purple-400">impl</span> <span className="text-teal-300">Starship</span> <span className="text-purple-400">for</span> <span className="text-teal-300">DarkWaveToken</span> {"{"}{"\n"}
+                        {"    "}<span className="text-blue-400">fn</span> <span className="text-teal-300">transfer</span>(&self, to: Address) {"{"}{"\n"}
                         {"        "}self.emit(TransferEvent {"{"} to {"}"});{"\n"}
                         {"    }"}{"\n"}
                         {"}"}
@@ -271,7 +271,7 @@ export default function Developers() {
                       <div className="text-[10px] text-white/50">Real API data</div>
                     </div>
                   </div>
-                  <p className="text-[11px] text-yellow-400 bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                  <p className="text-[11px] text-teal-400 bg-teal-500/10 border border-teal-500/30 rounded-lg p-3">
                     <span className="font-bold">Note:</span> All coins and transactions in the Sandbox are for testing only - they have no real value. 
                     When you're ready for production, you'll use the Mainnet.
                   </p>

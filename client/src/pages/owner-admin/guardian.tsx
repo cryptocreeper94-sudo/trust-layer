@@ -58,7 +58,7 @@ function getStatusBadge(status: string) {
     case "completed":
       return { bg: "bg-emerald-500/20", text: "text-emerald-400", border: "border-emerald-500/30", label: "Completed" };
     case "in_progress":
-      return { bg: "bg-amber-500/20", text: "text-amber-400", border: "border-amber-500/30", label: "In Progress" };
+      return { bg: "bg-purple-500/20", text: "text-purple-400", border: "border-purple-500/30", label: "In Progress" };
     case "review":
       return { bg: "bg-purple-500/20", text: "text-purple-400", border: "border-purple-500/30", label: "Expert Review" };
     case "report_generation":
@@ -233,7 +233,7 @@ export default function OwnerGuardian() {
           {[
             { label: "Total", value: stats.total, icon: <Shield className="w-5 h-5 text-cyan-400" />, color: "from-cyan-500/20 to-cyan-500/5" },
             { label: "Active", value: stats.active, icon: <Clock className="w-5 h-5 text-blue-400" />, color: "from-blue-500/20 to-blue-500/5" },
-            { label: "In Progress", value: stats.inProgress, icon: <Play className="w-5 h-5 text-amber-400" />, color: "from-amber-500/20 to-amber-500/5" },
+            { label: "In Progress", value: stats.inProgress, icon: <Play className="w-5 h-5 text-purple-400" />, color: "from-purple-500/20 to-purple-500/5" },
             { label: "Completed", value: stats.completed, icon: <CheckCircle2 className="w-5 h-5 text-emerald-400" />, color: "from-emerald-500/20 to-emerald-500/5" },
             { label: "Revenue", value: `$${stats.revenue.toLocaleString()}`, icon: <DollarSign className="w-5 h-5 text-pink-400" />, color: "from-pink-500/20 to-pink-500/5" },
           ].map((stat, i) => (
@@ -352,7 +352,7 @@ export default function OwnerGuardian() {
                             size="sm"
                             onClick={() => handleAdvance(cert.id, cert.status)}
                             disabled={processing === cert.id}
-                            className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700"
+                            className="bg-gradient-to-r from-purple-500 to-cyan-600 hover:from-purple-600 hover:to-cyan-700"
                             data-testid={`button-advance-${cert.id}`}
                           >
                             <Play className="w-4 h-4 mr-1" />

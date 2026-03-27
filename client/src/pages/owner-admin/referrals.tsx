@@ -24,7 +24,7 @@ const GlowOrb = ({ color, size, top, left, delay = 0 }: { color: string; size: n
 const COLORS = ['#06b6d4', '#8b5cf6', '#ec4899', '#f59e0b', '#22c55e'];
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+  pending: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
   qualified: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
   converted: 'bg-green-500/20 text-green-400 border-green-500/30',
   expired: 'bg-gray-500/20 text-gray-400 border-gray-500/30',
@@ -155,7 +155,7 @@ export default function OwnerReferrals() {
     { label: "Total Referrals", value: stats.totalReferrals, icon: <Users className="w-5 h-5 text-cyan-400" /> },
     { label: "Conversions", value: stats.totalConversions, icon: <TrendingUp className="w-5 h-5 text-green-400" /> },
     { label: "Credits Rewarded", value: stats.totalCreditsRewarded.toLocaleString(), icon: <Gift className="w-5 h-5 text-purple-400" /> },
-    { label: "Commission Paid", value: `$${(stats.totalCommissionPaid / 100).toFixed(2)}`, icon: <DollarSign className="w-5 h-5 text-amber-400" /> },
+    { label: "Commission Paid", value: `$${(stats.totalCommissionPaid / 100).toFixed(2)}`, icon: <DollarSign className="w-5 h-5 text-purple-400" /> },
   ];
 
   const tierDistribution = (adminStats?.topAffiliates || []).reduce((acc, a) => {
@@ -243,7 +243,7 @@ export default function OwnerReferrals() {
           >
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold flex items-center gap-2">
-                <Trophy className="w-5 h-5 text-amber-400" />
+                <Trophy className="w-5 h-5 text-purple-400" />
                 Top Affiliates
               </h3>
             </div>
@@ -344,7 +344,7 @@ export default function OwnerReferrals() {
                     <div className="text-xs text-gray-400">{flag.reason}</div>
                     <Badge 
                       variant="outline" 
-                      className={`text-[9px] mt-1 ${flag.severity === 'high' ? 'border-red-500 text-red-400' : 'border-amber-500 text-amber-400'}`}
+                      className={`text-[9px] mt-1 ${flag.severity === 'high' ? 'border-red-500 text-red-400' : 'border-purple-500 text-purple-400'}`}
                     >
                       {flag.severity}
                     </Badge>

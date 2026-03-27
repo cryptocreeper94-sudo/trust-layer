@@ -38,7 +38,7 @@ interface BlogPost {
 const categoryColors: Record<string, string> = {
   blockchain: "from-cyan-500 to-blue-500",
   defi: "from-purple-500 to-pink-500",
-  signal: "from-amber-500 to-orange-500",
+  signal: "from-purple-500 to-cyan-500",
   security: "from-red-500 to-rose-500",
   education: "from-green-500 to-emerald-500",
   general: "from-gray-500 to-slate-500",

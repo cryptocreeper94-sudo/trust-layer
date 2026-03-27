@@ -61,7 +61,7 @@ const CHAINS = [
   { id: "solana", name: "Solana", short: "SOL", icon: "◎", color: "from-purple-500 to-green-400" },
   { id: "ethereum", name: "Ethereum", short: "ETH", icon: "Ξ", color: "from-blue-500 to-purple-500" },
   { id: "base", name: "Base", short: "BASE", icon: "🔵", color: "from-blue-400 to-blue-600" },
-  { id: "bsc", name: "BNB Chain", short: "BSC", icon: "🟡", color: "from-yellow-400 to-yellow-600" },
+  { id: "bsc", name: "BNB Chain", short: "BSC", icon: "🟡", color: "from-teal-400 to-teal-600" },
   { id: "arbitrum", name: "Arbitrum", short: "ARB", icon: "🔷", color: "from-blue-400 to-cyan-500" },
   { id: "polygon", name: "Polygon", short: "MATIC", icon: "🟣", color: "from-purple-500 to-purple-700" },
   { id: "darkwave", name: "DarkWave", short: "DW", icon: "◆", color: "from-cyan-400 to-purple-500" },
@@ -98,9 +98,9 @@ const CATEGORY_FILTERS = [
   { id: "bluechip", label: "Blue Chip", icon: "💎", color: "bg-purple-500/20" },
   { id: "gaming", label: "Gaming", icon: "🎮", color: "bg-pink-500/20" },
   { id: "ai", label: "AI", icon: "🤖", color: "bg-cyan-500/20" },
-  { id: "nft", label: "NFT", icon: "🖼️", color: "bg-orange-500/20" },
+  { id: "nft", label: "NFT", icon: "🖼️", color: "bg-cyan-500/20" },
   { id: "stable", label: "Stable", icon: "💵", color: "bg-emerald-500/20" },
-  { id: "rwa", label: "RWA", icon: "🏠", color: "bg-amber-500/20" },
+  { id: "rwa", label: "RWA", icon: "🏠", color: "bg-purple-500/20" },
 ];
 
 interface SafetyData {
@@ -199,7 +199,7 @@ function PriceChange({ value, className = "" }: { value: number; className?: str
 function AIRecommendationBadge({ recommendation, score }: { recommendation: 'snipe' | 'watch' | 'avoid'; score: number }) {
   const config = {
     snipe: { bg: 'bg-emerald-500/20', border: 'border-emerald-500/40', text: 'text-emerald-400', icon: Crosshair, label: 'SNIPE' },
-    watch: { bg: 'bg-yellow-500/20', border: 'border-yellow-500/40', text: 'text-yellow-400', icon: Eye, label: 'WATCH' },
+    watch: { bg: 'bg-teal-500/20', border: 'border-teal-500/40', text: 'text-teal-400', icon: Eye, label: 'WATCH' },
     avoid: { bg: 'bg-red-500/20', border: 'border-red-500/40', text: 'text-red-400', icon: Ban, label: 'AVOID' },
   }[recommendation];
   
@@ -268,8 +268,8 @@ function GuardianScoreBadge({ score, grade }: { score: number; grade?: string })
   let color = "bg-red-500/20 text-red-400 border-red-500/30";
   if (score >= 80) color = "bg-emerald-500/20 text-emerald-400 border-emerald-500/30";
   else if (score >= 60) color = "bg-cyan-500/20 text-cyan-400 border-cyan-500/30";
-  else if (score >= 40) color = "bg-yellow-500/20 text-yellow-400 border-yellow-500/30";
-  else if (score >= 20) color = "bg-orange-500/20 text-orange-400 border-orange-500/30";
+  else if (score >= 40) color = "bg-teal-500/20 text-teal-400 border-teal-500/30";
+  else if (score >= 20) color = "bg-cyan-500/20 text-cyan-400 border-cyan-500/30";
   
   return (
     <div className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border text-[10px] font-bold ${color}`}>
@@ -311,10 +311,10 @@ function SafetyIndicators({ safety }: { safety: SafetyData }) {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <AlertTriangle className="w-3 h-3 text-yellow-400" />
+              <AlertTriangle className="w-3 h-3 text-teal-400" />
             </TooltipTrigger>
             <TooltipContent className="bg-slate-900 border-white/10">
-              <span className="text-xs text-yellow-400">Mint Authority Enabled</span>
+              <span className="text-xs text-teal-400">Mint Authority Enabled</span>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -323,10 +323,10 @@ function SafetyIndicators({ safety }: { safety: SafetyData }) {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger>
-              <Users className="w-3 h-3 text-orange-400" />
+              <Users className="w-3 h-3 text-cyan-400" />
             </TooltipTrigger>
             <TooltipContent className="bg-slate-900 border-white/10">
-              <span className="text-xs text-orange-400">High Whale Concentration: {safety.whaleConcentration.toFixed(1)}%</span>
+              <span className="text-xs text-cyan-400">High Whale Concentration: {safety.whaleConcentration.toFixed(1)}%</span>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
@@ -338,8 +338,8 @@ function SafetyIndicators({ safety }: { safety: SafetyData }) {
 function BoostBadge({ count }: { count: number }) {
   if (count === 0) return null;
   return (
-    <span className="inline-flex items-center gap-0.5 text-[10px] text-yellow-400 font-medium">
-      <Zap className="w-3 h-3 fill-yellow-400" />
+    <span className="inline-flex items-center gap-0.5 text-[10px] text-teal-400 font-medium">
+      <Zap className="w-3 h-3 fill-teal-400" />
       {formatCompact(count)}
     </span>
   );
@@ -370,19 +370,19 @@ function ExpandedTokenDetails({ token }: { token: Token }) {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-white/50">Mint Authority</span>
-                <span className={token.safety.mintAuthority ? 'text-yellow-400' : 'text-emerald-400'}>
+                <span className={token.safety.mintAuthority ? 'text-teal-400' : 'text-emerald-400'}>
                   {token.safety.mintAuthority ? 'Enabled' : 'Disabled'}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-white/50">Freeze Authority</span>
-                <span className={token.safety.freezeAuthority ? 'text-yellow-400' : 'text-emerald-400'}>
+                <span className={token.safety.freezeAuthority ? 'text-teal-400' : 'text-emerald-400'}>
                   {token.safety.freezeAuthority ? 'Enabled' : 'Disabled'}
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-white/50">Liquidity</span>
-                <span className={token.safety.liquidityLocked ? 'text-emerald-400' : 'text-orange-400'}>
+                <span className={token.safety.liquidityLocked ? 'text-emerald-400' : 'text-cyan-400'}>
                   {token.safety.liquidityLocked ? 'Locked' : 'Unlocked'}
                 </span>
               </div>
@@ -402,13 +402,13 @@ function ExpandedTokenDetails({ token }: { token: Token }) {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-white/50">Whale Concentration</span>
-                <span className={token.safety.whaleConcentration > 50 ? 'text-red-400' : token.safety.whaleConcentration > 30 ? 'text-yellow-400' : 'text-emerald-400'}>
+                <span className={token.safety.whaleConcentration > 50 ? 'text-red-400' : token.safety.whaleConcentration > 30 ? 'text-teal-400' : 'text-emerald-400'}>
                   {token.safety.whaleConcentration.toFixed(1)}%
                 </span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-white/50">Bot Activity</span>
-                <span className={token.safety.botActivity > 30 ? 'text-red-400' : token.safety.botActivity > 15 ? 'text-yellow-400' : 'text-emerald-400'}>
+                <span className={token.safety.botActivity > 30 ? 'text-red-400' : token.safety.botActivity > 15 ? 'text-teal-400' : 'text-emerald-400'}>
                   {token.safety.botActivity.toFixed(1)}%
                 </span>
               </div>
@@ -505,7 +505,7 @@ function ExpandedTokenDetails({ token }: { token: Token }) {
                 </div>
               ))}
               {token.safety.warnings.map((warning, i) => (
-                <div key={i} className="flex items-center gap-1 px-2 py-1 bg-yellow-500/10 border border-yellow-500/20 rounded text-[10px] text-yellow-400">
+                <div key={i} className="flex items-center gap-1 px-2 py-1 bg-teal-500/10 border border-teal-500/20 rounded text-[10px] text-teal-400">
                   <AlertTriangle className="w-3 h-3" />
                   {warning}
                 </div>
@@ -651,7 +651,7 @@ function TokenRow({ token, isExpanded, onToggleExpand, onToggleWatchlist, onTrad
               className="p-1 hover:bg-white/10 rounded"
               data-testid={`watchlist-${token.id}`}
             >
-              <Star className={`w-3.5 h-3.5 ${token.isWatchlisted ? 'fill-yellow-400 text-yellow-400' : 'text-white/30'}`} />
+              <Star className={`w-3.5 h-3.5 ${token.isWatchlisted ? 'fill-teal-400 text-teal-400' : 'text-white/30'}`} />
             </button>
             <button onClick={copyAddress} className="p-1 hover:bg-white/10 rounded" data-testid={`copy-${token.id}`}>
               {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-white/30" />}
@@ -699,9 +699,9 @@ function LeftSidebar({
             <div className="text-emerald-400 font-bold text-sm">{stats.snipeCount}</div>
             <div className="text-[9px] text-emerald-400/70">SNIPE</div>
           </div>
-          <div className="bg-yellow-500/10 rounded p-1.5">
-            <div className="text-yellow-400 font-bold text-sm">{stats.watchCount}</div>
-            <div className="text-[9px] text-yellow-400/70">WATCH</div>
+          <div className="bg-teal-500/10 rounded p-1.5">
+            <div className="text-teal-400 font-bold text-sm">{stats.watchCount}</div>
+            <div className="text-[9px] text-teal-400/70">WATCH</div>
           </div>
           <div className="bg-red-500/10 rounded p-1.5">
             <div className="text-red-400 font-bold text-sm">{stats.avoidCount}</div>
@@ -1157,8 +1157,8 @@ export default function GuardianScanner() {
                 <span className="text-xs text-emerald-400 font-medium">{aiStats.snipeCount} Snipe</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <Eye className="w-3.5 h-3.5 text-yellow-400" />
-                <span className="text-xs text-yellow-400 font-medium">{aiStats.watchCount} Watch</span>
+                <Eye className="w-3.5 h-3.5 text-teal-400" />
+                <span className="text-xs text-teal-400 font-medium">{aiStats.watchCount} Watch</span>
               </div>
               <div className="flex items-center gap-1.5">
                 <Ban className="w-3.5 h-3.5 text-red-400" />
@@ -1187,9 +1187,9 @@ export default function GuardianScanner() {
               <Crosshair className="w-3 h-3 text-emerald-400" />
               <span className="text-[10px] text-emerald-400 font-medium">{aiStats.snipeCount}</span>
             </div>
-            <div className="flex items-center gap-1 px-2 py-1 bg-yellow-500/10 rounded">
-              <Eye className="w-3 h-3 text-yellow-400" />
-              <span className="text-[10px] text-yellow-400 font-medium">{aiStats.watchCount}</span>
+            <div className="flex items-center gap-1 px-2 py-1 bg-teal-500/10 rounded">
+              <Eye className="w-3 h-3 text-teal-400" />
+              <span className="text-[10px] text-teal-400 font-medium">{aiStats.watchCount}</span>
             </div>
             <Badge className={`${connected ? 'bg-emerald-500/20 text-emerald-400' : 'bg-white/10 text-white/40'} text-[10px] px-2 py-0.5`}>
               <span className={`w-1.5 h-1.5 rounded-full mr-1 inline-block ${connected ? 'bg-emerald-400' : 'bg-white/30'}`} />
@@ -1242,7 +1242,7 @@ export default function GuardianScanner() {
             onClick={() => { setActiveFilter("trending"); setRankBy("trending"); }}
             className={`flex items-center gap-1.5 px-3 py-2.5 md:py-1.5 rounded-lg text-xs font-medium min-h-[44px] md:min-h-0 ${
               activeFilter === "trending" 
-                ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30' 
+                ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30' 
                 : 'bg-white/5 text-white/60 border border-white/10 hover:bg-white/10'
             }`}
           >

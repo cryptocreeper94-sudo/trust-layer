@@ -47,7 +47,7 @@ export function TrustCard({
     guardian: "from-purple-500 to-violet-500",
     startup: "from-blue-500 to-cyan-500",
     professional: "from-purple-500 to-pink-500",
-    enterprise: "from-amber-500 to-orange-500",
+    enterprise: "from-purple-500 to-cyan-500",
   };
 
   const tierGradient = tierColors[memberTier.toLowerCase()] || tierColors.pioneer;
@@ -166,7 +166,7 @@ export function TrustCard({
                     <span className="text-[10px] uppercase tracking-wider text-purple-400 font-medium">
                       Trust Layer
                     </span>
-                    <span className="px-1.5 py-0.5 text-[8px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded uppercase">
+                    <span className="px-1.5 py-0.5 text-[8px] font-bold bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded uppercase">
                       Beta
                     </span>
                   </div>
@@ -279,8 +279,8 @@ export function TrustCard({
         </Button>
       </div>
 
-      <div className="max-w-md mx-auto mt-4 p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
-        <p className="text-[10px] text-amber-400/80 text-center leading-relaxed">
+      <div className="max-w-md mx-auto mt-4 p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+        <p className="text-[10px] text-purple-400/80 text-center leading-relaxed">
           <strong>BETA:</strong> This Trust Card is part of the Trust Layer beta program. 
           Do your own research (DYOR). Participation is at your own risk. 
           Features and functionality may change without notice.

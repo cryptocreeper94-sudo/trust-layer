@@ -307,7 +307,7 @@ function MilestoneItem({ milestone, index }: { milestone: Milestone; index: numb
           milestone.status === "in_progress" ? "text-cyan-400" : "text-white"
         }`}>
           {milestone.title}
-          {milestone.isRequired && <span className="ml-2 text-xs text-amber-400/80">Required</span>}
+          {milestone.isRequired && <span className="ml-2 text-xs text-purple-400/80">Required</span>}
         </h4>
         <p className="text-gray-400 text-sm mt-1">{milestone.description}</p>
       </div>

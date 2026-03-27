@@ -186,7 +186,7 @@ export function BridgeInterface() {
         return 'text-green-400 bg-green-500/20 border-green-500/30';
       case 'pending':
       case 'processing':
-        return 'text-amber-400 bg-amber-500/20 border-amber-500/30';
+        return 'text-purple-400 bg-purple-500/20 border-purple-500/30';
       case 'failed':
         return 'text-red-400 bg-red-500/20 border-red-500/30';
       default:
@@ -202,13 +202,13 @@ export function BridgeInterface() {
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30"
+          className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/30"
         >
-          <div className="flex items-center gap-2 text-amber-400">
+          <div className="flex items-center gap-2 text-purple-400">
             <AlertCircle className="w-5 h-5" />
             <span className="font-medium">Testnet Development Mode</span>
           </div>
-          <p className="text-sm text-amber-400/70 mt-1">
+          <p className="text-sm text-purple-400/70 mt-1">
             wSIG contracts not deployed yet. Bridge operations are simulated.
           </p>
         </motion.div>
@@ -280,7 +280,7 @@ export function BridgeInterface() {
             </div>
             <div className="flex justify-between items-center">
               <span className="text-gray-400 text-sm">Status</span>
-              <Badge variant="outline" className={isTestnetMode ? 'text-amber-400 border-amber-500/30' : 'text-green-400 border-green-500/30'}>
+              <Badge variant="outline" className={isTestnetMode ? 'text-purple-400 border-purple-500/30' : 'text-green-400 border-green-500/30'}>
                 {bridgeInfo?.status || 'Loading...'}
               </Badge>
             </div>
@@ -294,7 +294,7 @@ export function BridgeInterface() {
                 {bridgeInfo?.contracts?.ethereum?.deployed ? (
                   <span className="text-green-400">Deployed</span>
                 ) : (
-                  <span className="text-amber-400">Pending</span>
+                  <span className="text-purple-400">Pending</span>
                 )}
               </span>
             </div>
@@ -304,7 +304,7 @@ export function BridgeInterface() {
                 {bridgeInfo?.contracts?.solana?.deployed ? (
                   <span className="text-green-400">Deployed</span>
                 ) : (
-                  <span className="text-amber-400">Pending</span>
+                  <span className="text-purple-400">Pending</span>
                 )}
               </span>
             </div>
@@ -326,7 +326,7 @@ export function BridgeInterface() {
           <Button
             variant={direction === 'inbound' ? 'default' : 'outline'}
             onClick={() => setDirection('inbound')}
-            className={direction === 'inbound' ? 'bg-orange-500 hover:bg-orange-600' : ''}
+            className={direction === 'inbound' ? 'bg-cyan-500 hover:bg-cyan-600' : ''}
             data-testid="btn-bridge-inbound"
           >
             <Flame className="w-4 h-4 mr-2" />
@@ -440,7 +440,7 @@ export function BridgeInterface() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-400">Bridge Fee (0.1%)</span>
-                    <span className="text-amber-400">-{(parseFloat(amount) * 0.001).toFixed(4)}</span>
+                    <span className="text-purple-400">-{(parseFloat(amount) * 0.001).toFixed(4)}</span>
                   </div>
                   <div className="flex justify-between text-sm font-medium border-t border-white/10 pt-2 mt-2">
                     <span className="text-gray-400">You Receive</span>
@@ -504,11 +504,11 @@ export function BridgeInterface() {
                 className="flex items-center justify-between p-3 rounded-lg bg-slate-800/30 hover:bg-slate-800/50 transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <div className={`p-2 rounded-lg ${transfer.type === 'lock' ? 'bg-cyan-500/20' : 'bg-orange-500/20'}`}>
+                  <div className={`p-2 rounded-lg ${transfer.type === 'lock' ? 'bg-cyan-500/20' : 'bg-cyan-500/20'}`}>
                     {transfer.type === 'lock' ? (
                       <Lock className="w-4 h-4 text-cyan-400" />
                     ) : (
-                      <Flame className="w-4 h-4 text-orange-400" />
+                      <Flame className="w-4 h-4 text-cyan-400" />
                     )}
                   </div>
                   <div>

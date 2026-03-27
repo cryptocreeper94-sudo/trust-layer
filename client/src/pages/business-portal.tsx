@@ -208,8 +208,8 @@ export default function BusinessPortal() {
               </GlassCard>
               <GlassCard className="p-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-amber-500/20 flex items-center justify-center">
-                    <Shield className="w-5 h-5 text-amber-400" />
+                  <div className="w-10 h-10 rounded-lg bg-purple-500/20 flex items-center justify-center">
+                    <Shield className="w-5 h-5 text-purple-400" />
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-white">{businessStats.trustScore}</p>
@@ -254,7 +254,7 @@ export default function BusinessPortal() {
                       Verified
                     </Badge>
                   ) : (businessApplication as any)?.status === "pending" ? (
-                    <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">
+                    <Badge className="bg-teal-500/20 text-teal-400 border-teal-500/30">
                       <Clock className="w-3 h-3 mr-1" />
                       Pending Review
                     </Badge>
@@ -283,11 +283,11 @@ export default function BusinessPortal() {
                   </div>
                 ) : (businessApplication as any)?.status === "pending" ? (
                   <div className="space-y-4">
-                    <div className="p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                    <div className="p-4 bg-teal-500/10 border border-teal-500/20 rounded-lg">
                       <div className="flex items-start gap-3">
-                        <Clock className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
+                        <Clock className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="text-yellow-400 font-medium">Application Under Review</p>
+                          <p className="text-teal-400 font-medium">Application Under Review</p>
                           <p className="text-sm text-white/60 mt-1">
                             Your business verification is being reviewed. This typically takes 2-3 business days. 
                             You'll be notified via email once a decision is made.
@@ -579,7 +579,7 @@ export default function BusinessPortal() {
                       <Badge variant="outline" className="border-white/20">{member.role}</Badge>
                       <Badge className={member.status === "active"
                         ? "bg-green-500/20 text-green-400 border-green-500/30"
-                        : "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
+                        : "bg-teal-500/20 text-teal-400 border-teal-500/30"
                       }>
                         {member.status}
                       </Badge>

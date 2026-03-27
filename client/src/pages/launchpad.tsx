@@ -58,7 +58,7 @@ function TokenCard({ token }: { token: LaunchedToken }) {
               <p className="text-[10px] text-muted-foreground">${token.symbol}</p>
             </div>
           </div>
-          <Badge className={`text-[9px] ${token.status === 'live' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}`}>
+          <Badge className={`text-[9px] ${token.status === 'live' ? 'bg-green-500/20 text-green-400' : 'bg-teal-500/20 text-teal-400'}`}>
             {token.status}
           </Badge>
         </div>
@@ -208,7 +208,7 @@ export default function Launchpad() {
                     </Badge>
                     <Badge 
                       variant="outline" 
-                      className={`mr-2 cursor-pointer ${statusFilter === 'presale' ? 'bg-amber-500/20 border-amber-500 text-amber-400' : ''}`}
+                      className={`mr-2 cursor-pointer ${statusFilter === 'presale' ? 'bg-purple-500/20 border-purple-500 text-purple-400' : ''}`}
                       onClick={() => setStatusFilter('presale')}
                       data-testid="filter-presale"
                     >
@@ -245,7 +245,7 @@ export default function Launchpad() {
                 </Badge>
                 <Badge 
                   variant="outline" 
-                  className={`cursor-pointer transition-colors ${statusFilter === 'presale' ? 'bg-amber-500/20 border-amber-500 text-amber-400' : 'hover:bg-white/5'}`}
+                  className={`cursor-pointer transition-colors ${statusFilter === 'presale' ? 'bg-purple-500/20 border-purple-500 text-purple-400' : 'hover:bg-white/5'}`}
                   onClick={() => setStatusFilter('presale')}
                   data-testid="filter-presale-desktop"
                 >
@@ -276,7 +276,7 @@ export default function Launchpad() {
                   
                   {!user ? (
                     <div className="py-8 text-center">
-                      <AlertTriangle className="w-12 h-12 text-amber-400 mx-auto mb-3" />
+                      <AlertTriangle className="w-12 h-12 text-purple-400 mx-auto mb-3" />
                       <h3 className="font-semibold text-white mb-2">Sign In Required</h3>
                       <p className="text-sm text-muted-foreground mb-4">
                         Please sign in to launch a token on Trust Layer.
@@ -368,9 +368,9 @@ export default function Launchpad() {
                       )}
                       
                       {isKycPending && (
-                        <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/30 text-center">
-                          <Clock className="w-5 h-5 text-amber-400 mx-auto mb-1" />
-                          <p className="text-xs text-amber-400">Verification in progress (usually 24-48 hours)</p>
+                        <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/30 text-center">
+                          <Clock className="w-5 h-5 text-purple-400 mx-auto mb-1" />
+                          <p className="text-xs text-purple-400">Verification in progress (usually 24-48 hours)</p>
                         </div>
                       )}
                     </div>
@@ -497,7 +497,7 @@ export default function Launchpad() {
                       <div className="space-y-1 text-xs">
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Platform Fee</span>
-                          <span className="text-amber-400">{PLATFORM_FEE}%</span>
+                          <span className="text-purple-400">{PLATFORM_FEE}%</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-muted-foreground">Auto-Liquidity (Locked)</span>

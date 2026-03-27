@@ -166,8 +166,8 @@ export default function Explorer() {
             <div>
               <h1 className="text-lg font-bold text-white">TrustLayerScan</h1>
               <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-                <span className="text-[10px] text-amber-400">Testnet</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+                <span className="text-[10px] text-purple-400">Testnet</span>
               </div>
             </div>
           </div>
@@ -312,7 +312,7 @@ export default function Explorer() {
                       <div key={tx.txHash} className="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-[10px] font-mono text-secondary truncate max-w-[180px]">{tx.txHash}</span>
-                          <Badge variant="outline" className={`text-[8px] ${tx.status === 'confirmed' ? 'border-green-500/50 text-green-400' : 'border-yellow-500/50 text-yellow-400'}`}>
+                          <Badge variant="outline" className={`text-[8px] ${tx.status === 'confirmed' ? 'border-green-500/50 text-green-400' : 'border-teal-500/50 text-teal-400'}`}>
                             {tx.status}
                           </Badge>
                         </div>
@@ -385,7 +385,7 @@ export default function Explorer() {
                     </div>
                     <div>
                       <div className="text-white/40 mb-0.5">Status</div>
-                      <Badge variant="outline" className={`text-[9px] ${hallmarkData.verified ? 'border-green-500/50 text-green-400' : 'border-yellow-500/50 text-yellow-400'}`}>
+                      <Badge variant="outline" className={`text-[9px] ${hallmarkData.verified ? 'border-green-500/50 text-green-400' : 'border-teal-500/50 text-teal-400'}`}>
                         {hallmarkData.darkwave.status}
                       </Badge>
                     </div>

@@ -251,7 +251,7 @@ const roadmapData: RoadmapPhase[] = [
 
 const statusColors = {
   "completed": "text-green-400 bg-green-400/10 border-green-400/30",
-  "in-progress": "text-yellow-400 bg-yellow-400/10 border-yellow-400/30",
+  "in-progress": "text-teal-400 bg-teal-400/10 border-teal-400/30",
   "planned": "text-slate-400 bg-slate-400/10 border-slate-400/30"
 };
 
@@ -284,7 +284,7 @@ export default function TechnicalRoadmap() {
               <span className="text-sm text-slate-400">Completed</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-yellow-400 animate-pulse"></div>
+              <div className="w-3 h-3 rounded-full bg-teal-400 animate-pulse"></div>
               <span className="text-sm text-slate-400">In Progress</span>
             </div>
             <div className="flex items-center gap-2">

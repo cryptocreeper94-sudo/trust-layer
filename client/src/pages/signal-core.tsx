@@ -106,7 +106,7 @@ export default function SignalCore() {
       role: "Ethical oversight, dispute resolution",
       selection: "Appointed for demonstrated service",
       holder: "To be appointed",
-      color: "from-amber-500 to-orange-500"
+      color: "from-purple-500 to-cyan-500"
     },
     {
       seat: "Guardian Seat",
@@ -190,9 +190,9 @@ export default function SignalCore() {
           transition={{ delay: 0.1 }}
           className="mb-12"
         >
-          <GlassCard glow className="p-6 sm:p-8 border-amber-500/30">
+          <GlassCard glow className="p-6 sm:p-8 border-purple-500/30">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-cyan-500 flex items-center justify-center flex-shrink-0">
                 <AlertTriangle className="w-6 h-6 text-white" />
               </div>
               <div>

@@ -121,11 +121,11 @@ export default function SyndicateInvite() {
             <p className="text-slate-400 mb-6">
               {(error as Error)?.message || "This invite link is no longer valid or has expired."}
             </p>
-            <Link href="/chronicles">
+            <a href="https://yourlegacy.io" target="_blank" rel="noopener noreferrer">
               <Button className="bg-gradient-to-r from-cyan-500 to-purple-500" data-testid="button-go-chronicles">
                 Explore Chronicles
               </Button>
-            </Link>
+            </a>
           </Card>
         </motion.div>
       </div>
@@ -269,7 +269,7 @@ export default function SyndicateInvite() {
                     <Users className="w-4 h-4" />
                     <span className="text-sm">{syndicate?.memberCount}/{syndicate?.maxMembers} members</span>
                   </div>
-                  <div className="flex items-center gap-1 text-amber-400">
+                  <div className="flex items-center gap-1 text-purple-400">
                     <Crown className="w-4 h-4" />
                     <span className="text-sm">Level {syndicate?.level || 1}</span>
                   </div>

@@ -97,7 +97,7 @@ const ECOSYSTEM_FEATURES = [
     description: "Seamless transfers to Ethereum and Solana",
     icon: Globe,
     image: bridgeVisual,
-    gradient: "from-orange-500/20 to-red-600/20",
+    gradient: "from-cyan-500/20 to-red-600/20",
     fullDescription: "Move assets freely between Trust Layer, Ethereum, and Solana with our secure cross-chain bridge. Lock and mint technology ensures your assets are always backed 1:1.",
     features: ["Bridge to Ethereum and Solana", "Secure lock-and-mint mechanism", "Fast transfer times", "Low bridging fees", "Wrapped asset support (wSIG)"],
   },
@@ -115,7 +115,7 @@ const ECOSYSTEM_FEATURES = [
     description: "Community-driven protocol decisions",
     icon: Users,
     image: communityVisual,
-    gradient: "from-amber-500/20 to-orange-600/20",
+    gradient: "from-purple-500/20 to-cyan-600/20",
     fullDescription: "Your voice matters in Trust Layer. Signal holders participate in governance decisions that shape the future of the ecosystem through our decentralized autonomous organization.",
     features: ["Vote on protocol upgrades", "Propose new features", "Treasury allocation decisions", "Transparent on-chain governance", "Voting power based on Signal holdings"],
   },
@@ -126,7 +126,7 @@ function HolographicCard({ children, className = "", glow = "cyan" }: { children
     cyan: "shadow-cyan-500/20",
     purple: "shadow-purple-500/20",
     pink: "shadow-pink-500/20",
-    amber: "shadow-amber-500/20",
+    purple: "shadow-purple-500/20",
   };
   
   return (
@@ -205,7 +205,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
     { id: "founders_25", name: "Founders $25", amount: 2500, bonus: 5, color: "from-green-400 to-emerald-500" },
     { id: "founders_50", name: "Founders $50", amount: 5000, bonus: 10, color: "from-cyan-400 to-blue-500" },
     { id: "founders_100", name: "Founders $100", amount: 10000, bonus: 15, color: "from-purple-400 to-pink-500" },
-    { id: "founders_250", name: "Founders $250", amount: 25000, bonus: 25, color: "from-yellow-400 to-orange-500" },
+    { id: "founders_250", name: "Founders $250", amount: 25000, bonus: 25, color: "from-teal-400 to-cyan-500" },
   ];
   
   const amountCents = useCustom 
@@ -336,7 +336,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
                     <button
                       type="button"
                       onClick={connectEVM}
-                      className="flex-1 py-2.5 px-3 rounded-lg bg-orange-500/20 border border-orange-500/30 text-orange-400 text-sm font-medium hover:bg-orange-500/30 transition-colors flex items-center justify-center gap-2"
+                      className="flex-1 py-2.5 px-3 rounded-lg bg-cyan-500/20 border border-cyan-500/30 text-cyan-400 text-sm font-medium hover:bg-cyan-500/30 transition-colors flex items-center justify-center gap-2"
                     >
                       <Wallet className="w-4 h-4" />
                       MetaMask
@@ -467,8 +467,8 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
                 onClick={() => setPaymentMethod("crypto")}
                 className={`flex-1 py-2.5 px-3 rounded-lg text-sm font-medium transition-all ${
                   paymentMethod === "crypto" 
-                    ? "bg-gradient-to-r from-orange-500/20 to-yellow-500/20 text-orange-400 border border-orange-500/30" 
-                    : "text-gray-400 hover:text-orange-400"
+                    ? "bg-gradient-to-r from-cyan-500/20 to-teal-500/20 text-cyan-400 border border-cyan-500/30" 
+                    : "text-gray-400 hover:text-cyan-400"
                 }`}
                 data-testid="button-pay-crypto-modal"
               >
@@ -476,7 +476,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
               </button>
             </div>
             {paymentMethod === "crypto" && (
-              <p className="text-[10px] text-orange-400/70 text-center mt-2">USDC, BTC, ETH, and more accepted via Coinbase</p>
+              <p className="text-[10px] text-cyan-400/70 text-center mt-2">USDC, BTC, ETH, and more accepted via Coinbase</p>
             )}
           </div>
           
@@ -485,7 +485,7 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
             disabled={!isValidEmail || !isValidName || amountCents < 1000 || checkoutMutation.isPending}
             className={`w-full py-6 text-lg font-bold hover:opacity-90 disabled:opacity-50 ${
               paymentMethod === "crypto" 
-                ? "bg-gradient-to-r from-orange-500 to-yellow-500" 
+                ? "bg-gradient-to-r from-cyan-500 to-teal-500" 
                 : "bg-gradient-to-r from-cyan-600 via-purple-600 to-pink-600"
             }`}
           >
@@ -499,8 +499,8 @@ function QuickBuyModal({ open, onClose }: { open: boolean; onClose: () => void }
             {paymentMethod === "crypto" ? "Pay with Crypto" : "Pay with Card"} - ${(amountCents / 100).toLocaleString()}
           </Button>
           
-          <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
-            <p className="text-xs text-amber-400 text-center">
+          <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
+            <p className="text-xs text-purple-400 text-center">
               No wallet needed now! Your allocation is tracked by email. You'll create a Trust Layer wallet before launch to receive your Signal.
             </p>
           </div>
@@ -561,7 +561,7 @@ function PresaleProgress() {
             <p className="text-xl sm:text-3xl font-bold text-cyan-400">${currentPrice}</p>
             <p className="text-gray-500 text-xs sm:text-sm">Current Price</p>
             {nextMilestone && nextPrice && (
-              <p className="text-xs text-amber-400 mt-1">
+              <p className="text-xs text-purple-400 mt-1">
                 ${nextPrice} at ${(nextMilestone / 1000).toFixed(0)}K raised
               </p>
             )}
@@ -639,9 +639,9 @@ function PresaleProgress() {
             <span className="px-3 py-1.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 text-center whitespace-nowrap">Portal Live</span>
             <span className="px-3 py-1.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 text-center whitespace-nowrap">DEX Live</span>
             <span className="px-3 py-1.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 text-center whitespace-nowrap">Staking Live</span>
-            <span className="px-3 py-1.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 text-center whitespace-nowrap">Chronicles</span>
-            <span className="px-3 py-1.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 text-center whitespace-nowrap">Scanner</span>
-            <span className="px-3 py-1.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/30 text-center whitespace-nowrap col-span-2">Arcade Building</span>
+            <span className="px-3 py-1.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30 text-center whitespace-nowrap">Chronicles</span>
+            <span className="px-3 py-1.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30 text-center whitespace-nowrap">Scanner</span>
+            <span className="px-3 py-1.5 rounded-full bg-purple-500/20 text-purple-400 border border-purple-500/30 text-center whitespace-nowrap col-span-2">Arcade Building</span>
           </div>
           <p className="text-gray-400 text-[10px] leading-relaxed">
             Have an idea for a web app or website? We're building an ecosystem of connected applications. 
@@ -728,7 +728,7 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
   const [paymentMethod, setPaymentMethod] = useState<"card" | "crypto">("card");
   const tierImages = [quantumRealm, deepSpace, cyberpunkCity, fantasyWorld];
   const tierColors: Record<string, string> = {
-    genesis: "from-yellow-400 to-amber-500",
+    genesis: "from-teal-400 to-purple-500",
     founder: "from-purple-400 to-pink-500",
     pioneer: "from-cyan-400 to-blue-500",
     early_bird: "from-green-400 to-emerald-500",
@@ -818,7 +818,7 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
         <div className="relative z-10 p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              {tier.tier === "genesis" && <Crown className="w-6 h-6 text-yellow-400" />}
+              {tier.tier === "genesis" && <Crown className="w-6 h-6 text-teal-400" />}
               {tier.tier === "founder" && <Star className="w-6 h-6 text-purple-400" />}
               {tier.tier === "pioneer" && <Rocket className="w-6 h-6 text-cyan-400" />}
               {tier.tier === "early_bird" && <Gift className="w-6 h-6 text-green-400" />}
@@ -869,8 +869,8 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
                 onClick={() => setPaymentMethod("crypto")}
                 className={`flex-1 py-1.5 px-2 rounded text-xs font-medium transition-all ${
                   paymentMethod === "crypto" 
-                    ? "bg-gradient-to-r from-orange-500/20 to-yellow-500/20 text-orange-400 border border-orange-500/30" 
-                    : "text-gray-400 hover:text-orange-400"
+                    ? "bg-gradient-to-r from-cyan-500/20 to-teal-500/20 text-cyan-400 border border-cyan-500/30" 
+                    : "text-gray-400 hover:text-cyan-400"
                 }`}
                 data-testid={`button-pay-crypto-${tier.tier}`}
               >
@@ -878,7 +878,7 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
               </button>
             </div>
             {paymentMethod === "crypto" && (
-              <p className="text-[9px] text-orange-400/70 text-center mt-1">USDC, BTC, ETH accepted</p>
+              <p className="text-[9px] text-cyan-400/70 text-center mt-1">USDC, BTC, ETH accepted</p>
             )}
           </div>
           
@@ -894,7 +894,7 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
             <Button 
               onClick={handleBuyClick}
               disabled={checkoutMutation.isPending || !isValidEmail}
-              className={`flex-1 bg-gradient-to-r ${paymentMethod === "crypto" ? "from-orange-500 to-yellow-500" : color} hover:opacity-90 border-0 disabled:opacity-50`}
+              className={`flex-1 bg-gradient-to-r ${paymentMethod === "crypto" ? "from-cyan-500 to-teal-500" : color} hover:opacity-90 border-0 disabled:opacity-50`}
               data-testid={`button-select-tier-${tier.tier}`}
             >
               {checkoutMutation.isPending ? (
@@ -910,7 +910,7 @@ function TierCard({ tier, index }: { tier: PresaleTier; index: number }) {
         <DialogContent className="bg-slate-900 border-white/10 w-[95vw] max-w-lg max-h-[85vh] overflow-y-auto p-4 sm:p-6 rounded-xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 sm:gap-3 text-lg sm:text-2xl">
-              {tier.tier === "genesis" && <Crown className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400 flex-shrink-0" />}
+              {tier.tier === "genesis" && <Crown className="w-6 h-6 sm:w-8 sm:h-8 text-teal-400 flex-shrink-0" />}
               {tier.tier === "founder" && <Star className="w-6 h-6 sm:w-8 sm:h-8 text-purple-400 flex-shrink-0" />}
               {tier.tier === "pioneer" && <Rocket className="w-6 h-6 sm:w-8 sm:h-8 text-cyan-400 flex-shrink-0" />}
               {tier.tier === "early_bird" && <Gift className="w-6 h-6 sm:w-8 sm:h-8 text-green-400 flex-shrink-0" />}
@@ -1193,13 +1193,13 @@ function LaunchCountdownBanner() {
           
           <div className="relative z-10 flex flex-col sm:flex-row items-center gap-4 sm:gap-6">
             <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-amber-500 flex items-center justify-center" style={{ boxShadow: "0 0 15px rgba(239,68,68,0.4)" }}>
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-red-500 to-purple-500 flex items-center justify-center" style={{ boxShadow: "0 0 15px rgba(239,68,68,0.4)" }}>
                 <Rocket className="w-5 h-5 text-white" />
               </div>
               <div className="text-left">
                 <div className="flex items-center gap-2">
                   <span className="text-sm sm:text-base font-bold text-white">Signal Launches August 23rd</span>
-                  <Flame className="w-3.5 h-3.5 text-orange-400 animate-pulse" />
+                  <Flame className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
                 </div>
                 <span className="text-[11px] text-white/40">One Year. One Vision. Launch Day.</span>
               </div>
@@ -1393,11 +1393,11 @@ function ReferralBanner({ referrer }: { referrer: string }) {
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-amber-500/20 via-orange-500/20 to-amber-500/20 border border-amber-500/30"
+      className="mb-6 p-4 rounded-2xl bg-gradient-to-r from-purple-500/20 via-cyan-500/20 to-purple-500/20 border border-purple-500/30"
     >
       <div className="flex items-center justify-center gap-3">
-        <User className="w-5 h-5 text-amber-400" />
-        <span className="text-amber-300 font-medium">
+        <User className="w-5 h-5 text-purple-400" />
+        <span className="text-purple-300 font-medium">
           You were referred by: <span className="text-white font-bold">{referrer}</span>
         </span>
       </div>
@@ -1620,9 +1620,9 @@ export default function Presale() {
                   <p className="text-gray-400 text-sm">Before launch, create your Trust Layer wallet to claim tokens</p>
                 </HolographicCard>
                 
-                <HolographicCard className="p-6 pt-4 text-center w-64 lg:w-auto flex-shrink-0" glow="amber">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-amber-500 to-orange-500 flex items-center justify-center text-white font-bold text-sm shadow-lg mx-auto mb-3">4</div>
-                  <Coins className="w-8 h-8 text-amber-400 mx-auto mb-4" />
+                <HolographicCard className="p-6 pt-4 text-center w-64 lg:w-auto flex-shrink-0" glow="purple">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm shadow-lg mx-auto mb-3">4</div>
+                  <Coins className="w-8 h-8 text-purple-400 mx-auto mb-4" />
                   <h3 className="text-lg font-bold text-white mb-2">Receive Signal</h3>
                   <p className="text-gray-400 text-sm">Signal + converted Shells airdropped to your wallet</p>
                 </HolographicCard>
@@ -1699,11 +1699,11 @@ export default function Presale() {
             </Link>
             
             <Link href="/business-application" data-testid="link-business-signup">
-              <HolographicCard className="p-6 text-center cursor-pointer hover:scale-105 transition-transform" glow="amber">
-                <Crown className="w-10 h-10 text-amber-400 mx-auto mb-4" />
+              <HolographicCard className="p-6 text-center cursor-pointer hover:scale-105 transition-transform" glow="purple">
+                <Crown className="w-10 h-10 text-purple-400 mx-auto mb-4" />
                 <h3 className="text-lg font-bold text-white mb-2">Business Member</h3>
                 <p className="text-gray-400 text-sm mb-4">Verified business accounts with API access</p>
-                <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">Requires Verification</Badge>
+                <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">Requires Verification</Badge>
               </HolographicCard>
             </Link>
           </div>

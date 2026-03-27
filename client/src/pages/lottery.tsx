@@ -89,18 +89,18 @@ export default function Lottery() {
           >
             <div className="flex items-center justify-center gap-2 mb-3">
               <motion.div 
-                className="p-3 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-amber-500/20 border border-yellow-500/30"
+                className="p-3 rounded-2xl bg-gradient-to-br from-teal-500/20 to-purple-500/20 border border-teal-500/30"
                 animate={{ 
                   boxShadow: ["0 0 20px rgba(234,179,8,0.2)", "0 0 50px rgba(234,179,8,0.4)", "0 0 20px rgba(234,179,8,0.2)"],
                   scale: [1, 1.05, 1]
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <Ticket className="w-7 h-7 text-yellow-400" />
+                <Ticket className="w-7 h-7 text-teal-400" />
               </motion.div>
             </div>
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">
-              Trust Layer <span className="text-yellow-400">Lottery</span>
+              Trust Layer <span className="text-teal-400">Lottery</span>
             </h1>
             <p className="text-sm text-muted-foreground">
               Weekly draws • Progressive jackpot • Provably fair
@@ -110,18 +110,18 @@ export default function Lottery() {
           {/* Live Jackpot - Always visible */}
           <GlassCard glow className="p-6 mb-6 text-center relative overflow-hidden">
             <motion.div
-              className="absolute inset-0 bg-gradient-to-r from-yellow-500/10 via-transparent to-amber-500/10"
+              className="absolute inset-0 bg-gradient-to-r from-teal-500/10 via-transparent to-purple-500/10"
               animate={{ x: ["-100%", "100%"] }}
               transition={{ duration: 3, repeat: Infinity }}
             />
             <div className="relative">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <Sparkles className="w-5 h-5 text-yellow-400" />
-                <span className="text-sm font-medium text-yellow-400">CURRENT JACKPOT</span>
-                <Sparkles className="w-5 h-5 text-yellow-400" />
+                <Sparkles className="w-5 h-5 text-teal-400" />
+                <span className="text-sm font-medium text-teal-400">CURRENT JACKPOT</span>
+                <Sparkles className="w-5 h-5 text-teal-400" />
               </div>
               <motion.p
-                className="text-5xl md:text-6xl font-bold font-mono bg-gradient-to-r from-yellow-400 to-amber-500 bg-clip-text text-transparent"
+                className="text-5xl md:text-6xl font-bold font-mono bg-gradient-to-r from-teal-400 to-purple-500 bg-clip-text text-transparent"
                 animate={{ scale: [1, 1.02, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
@@ -204,7 +204,7 @@ export default function Lottery() {
 
               {isConnected ? (
                 <Button 
-                  className="w-full h-12 bg-gradient-to-r from-yellow-500 to-amber-500 text-black font-bold"
+                  className="w-full h-12 bg-gradient-to-r from-teal-500 to-purple-500 text-black font-bold"
                   disabled={selectedNumbers.length !== 6}
                   data-testid="button-buy-tickets"
                 >
@@ -227,7 +227,7 @@ export default function Lottery() {
             <div className="space-y-4">
               <GlassCard className="p-4">
                 <h3 className="font-bold mb-3 flex items-center gap-2">
-                  <Trophy className="w-4 h-4 text-amber-400" />
+                  <Trophy className="w-4 h-4 text-purple-400" />
                   Prize Tiers
                 </h3>
                 <div className="space-y-2">
@@ -237,7 +237,7 @@ export default function Lottery() {
                         <p className="text-sm font-medium">{tier.match}</p>
                         <p className="text-xs text-muted-foreground">Odds: {tier.odds}</p>
                       </div>
-                      <Badge className={i === 0 ? "bg-gradient-to-r from-yellow-500 to-amber-500 text-black" : ""}>
+                      <Badge className={i === 0 ? "bg-gradient-to-r from-teal-500 to-purple-500 text-black" : ""}>
                         {tier.prize}
                       </Badge>
                     </div>

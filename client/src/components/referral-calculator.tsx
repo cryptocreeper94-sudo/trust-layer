@@ -71,9 +71,9 @@ export function ReferralCalculator() {
       <div className="p-4 sm:p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
-            <Gift className="w-5 h-5 text-yellow-400" />
+            <Gift className="w-5 h-5 text-teal-400" />
             <h3 className="font-bold text-sm sm:text-base">Your Referral Program</h3>
-            <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 text-xs">PRESALE BONUS</Badge>
+            <Badge className="bg-teal-500/20 text-teal-400 border-teal-500/30 text-xs">PRESALE BONUS</Badge>
           </div>
           <Link href="/referrals">
             <Button variant="ghost" size="sm" className="text-xs gap-1">
@@ -82,21 +82,21 @@ export function ReferralCalculator() {
           </Link>
         </div>
 
-        <div className="mb-6 p-4 bg-gradient-to-r from-yellow-500/10 to-orange-500/5 rounded-xl border border-yellow-500/20">
+        <div className="mb-6 p-4 bg-gradient-to-r from-teal-500/10 to-cyan-500/5 rounded-xl border border-teal-500/20">
           <p className="text-sm text-muted-foreground mb-4 italic">
             "A couple posts a day. That's all it takes. Share your link, grow the network, build your bag."
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div className="p-4 bg-gradient-to-br from-yellow-500/20 to-orange-500/10 rounded-xl border border-yellow-500/30">
+          <div className="p-4 bg-gradient-to-br from-teal-500/20 to-cyan-500/10 rounded-xl border border-teal-500/30">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <Coins className="w-5 h-5 text-yellow-400" />
+                <Coins className="w-5 h-5 text-teal-400" />
                 <span className="text-sm font-semibold">Your Shell Balance</span>
               </div>
             </div>
-            <div className="text-3xl font-bold font-mono text-yellow-400 mb-2" data-testid="shell-balance">
+            <div className="text-3xl font-bold font-mono text-teal-400 mb-2" data-testid="shell-balance">
               {(stats?.totalEarnings || 0).toLocaleString()} Shells
             </div>
             <div className="text-xs text-muted-foreground">
@@ -165,7 +165,7 @@ export function ReferralCalculator() {
                 <div className="text-xs text-muted-foreground">Purchases</div>
               </div>
               <div className="text-center">
-                <div className="text-lg font-bold text-yellow-400">{(stats.totalEarnings || 0).toLocaleString()}</div>
+                <div className="text-lg font-bold text-teal-400">{(stats.totalEarnings || 0).toLocaleString()}</div>
                 <div className="text-xs text-muted-foreground">Shells Earned</div>
               </div>
             </div>
@@ -301,7 +301,7 @@ export function ReferralCalculator() {
               <div className="border-t border-white/10 pt-3 mt-3">
                 <div className="flex justify-between items-center">
                   <span className="font-semibold">Total Shells</span>
-                  <span className="font-mono text-lg font-bold text-yellow-400">{totalShells.toLocaleString()}</span>
+                  <span className="font-mono text-lg font-bold text-teal-400">{totalShells.toLocaleString()}</span>
                 </div>
               </div>
             </div>

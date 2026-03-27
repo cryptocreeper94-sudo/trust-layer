@@ -2,19 +2,19 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target, ChevronDown, ChevronLeft, ChevronRight, Gift, Search } from "lucide-react";
 import { InfoTooltip } from "@/components/info-tooltip";
-import heroBg from "@assets/generated_images/abstract_blockchain_network_nodes_connecting_in_dark_space.jpg";
+import heroBg from "@assets/trust_network_connecting_everything_1769800437573.png";
 // Hero slideshow videos
-import orbitVideo from "@assets/generated_videos/orbit_staffing_hero.mp4";
-import brewBoardVideo from "@assets/generated_videos/brew_board_hero.mp4";
-import garageBotVideo from "@assets/generated_videos/garagebot_hero.mp4";
-import paintProsVideo from "@assets/generated_videos/paintpros_hero.mp4";
-import trustHomeVideo from "@assets/generated_videos/trusthome_hero.mp4";
-import trustVaultVideo from "@assets/generated_videos/trustvault_hero.mp4";
-import theVoidVideo from "@assets/generated_videos/the_void_hero.mp4";
-import verdaraVideo from "@assets/generated_videos/verdara_hero.mp4";
-import tlDriverVideo from "@assets/generated_videos/tl_driver_connect_hero.mp4";
-import happyEatsVideo from "@assets/generated_videos/happyeats_hero.mp4";
-import lotOpsVideo from "@assets/generated_videos/lotops_pro_hero.mp4";
+const orbitVideo = "";
+const brewBoardVideo = "";
+const garageBotVideo = "";
+const paintProsVideo = "";
+const trustHomeVideo = "";
+const trustVaultVideo = "";
+const theVoidVideo = "";
+const verdaraVideo = "";
+const tlDriverVideo = "";
+const happyEatsVideo = "";
+const lotOpsVideo = "";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { OnboardingTour } from "@/components/onboarding-tour";
@@ -69,7 +69,7 @@ function ExploreButton({ url, appName }: { url?: string; appName: string }) {
         <DialogContent className="max-w-md bg-slate-900 border-white/10">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold flex items-center gap-2">
-              <Badge className="bg-amber-500 text-black">Beta</Badge>
+              <Badge className="bg-purple-500 text-black">Beta</Badge>
               {appName}
             </DialogTitle>
             <DialogDescription asChild>
@@ -141,15 +141,15 @@ const ecosystemImages: Record<string, string> = {
 };
 
 const CHRONICLES_ERAS = [
-  { img: stoneAgeImg, era: "Dawn Age", desc: "Stone Age origins", color: "from-amber-500/30 to-orange-600/30" },
-  { img: egyptImg, era: "Kingdom of Ra", desc: "Ancient Egypt", color: "from-yellow-500/30 to-amber-600/30" },
+  { img: stoneAgeImg, era: "Dawn Age", desc: "Stone Age origins", color: "from-purple-500/30 to-cyan-600/30" },
+  { img: egyptImg, era: "Kingdom of Ra", desc: "Ancient Egypt", color: "from-teal-500/30 to-purple-600/30" },
   { img: greeceImg, era: "Hellenic Glory", desc: "Ancient Greece", color: "from-sky-500/30 to-blue-600/30" },
-  { img: romanImg, era: "Imperial Rome", desc: "Roman Empire", color: "from-red-500/30 to-orange-600/30" },
+  { img: romanImg, era: "Imperial Rome", desc: "Roman Empire", color: "from-red-500/30 to-cyan-600/30" },
   { img: vikingImg, era: "Norse Saga", desc: "Viking Age", color: "from-slate-500/30 to-blue-600/30" },
   { img: medievalImg, era: "Age of Crowns", desc: "Medieval kingdoms", color: "from-purple-500/30 to-indigo-600/30" },
   { img: samuraiImg, era: "Shogunate", desc: "Feudal Japan", color: "from-rose-500/30 to-red-600/30" },
   { img: renaissanceImg, era: "Renaissance", desc: "Age of Enlightenment", color: "from-emerald-500/30 to-teal-600/30" },
-  { img: wildWestImg, era: "Frontier", desc: "Wild West", color: "from-orange-500/30 to-amber-600/30" },
+  { img: wildWestImg, era: "Frontier", desc: "Wild West", color: "from-cyan-500/30 to-purple-600/30" },
   { img: steampunkImg, era: "Iron Age", desc: "Industrial Revolution", color: "from-zinc-500/30 to-stone-600/30" },
 ];
 
@@ -290,10 +290,10 @@ function EcosystemAppCard({ app }: { app: EcosystemApp }) {
     "from-slate-600 to-zinc-800": { from: "#475569", to: "#27272a" },
     "from-emerald-600 to-teal-800": { from: "#059669", to: "#115e59" },
     "from-emerald-500 to-teal-600": { from: "#10b981", to: "#0d9488" },
-    "from-amber-600 to-yellow-800": { from: "#d97706", to: "#854d0e" },
+    "from-purple-600 to-teal-800": { from: "#d97706", to: "#854d0e" },
     "from-cyan-600 to-blue-700": { from: "#0891b2", to: "#1d4ed8" },
     "from-cyan-500 to-blue-600": { from: "#06b6d4", to: "#2563eb" },
-    "from-orange-500 to-red-600": { from: "#f97316", to: "#dc2626" },
+    "from-cyan-500 to-red-600": { from: "#f97316", to: "#dc2626" },
     "from-red-600 to-rose-700": { from: "#dc2626", to: "#be123c" },
   };
   const gradColors = colors[app.gradient] || { from: "#0891b2", to: "#1d4ed8" };
@@ -389,10 +389,10 @@ function EcosystemCarousel({ apps }: { apps: EcosystemApp[] }) {
     "from-slate-600 to-zinc-800": { from: "#475569", to: "#27272a" },
     "from-emerald-600 to-teal-800": { from: "#059669", to: "#115e59" },
     "from-emerald-500 to-teal-600": { from: "#10b981", to: "#0d9488" },
-    "from-amber-600 to-yellow-800": { from: "#d97706", to: "#854d0e" },
+    "from-purple-600 to-teal-800": { from: "#d97706", to: "#854d0e" },
     "from-cyan-600 to-blue-700": { from: "#0891b2", to: "#1d4ed8" },
     "from-cyan-500 to-blue-600": { from: "#06b6d4", to: "#2563eb" },
-    "from-orange-500 to-red-600": { from: "#f97316", to: "#dc2626" },
+    "from-cyan-500 to-red-600": { from: "#f97316", to: "#dc2626" },
     "from-red-600 to-rose-700": { from: "#dc2626", to: "#be123c" },
   };
 
@@ -514,9 +514,9 @@ const heroSlides: HeroSlide[] = [
   { title: "Verdara", subtitle: "AI outdoor recreation super-app with species ID, trail explorer, trip planner, 170+ US locations, and wild edibles guide", accent: "emerald", link: "https://verdara.tlid.io", video: verdaraVideo, gradient: "from-emerald-900/80 via-slate-900/60 to-slate-950/90" },
   { title: "TL Driver Connect", subtitle: "All-in-one driver app — GPS navigation, receipt scanning, food truck locator, franchise demo, and driver tools", accent: "teal", link: "https://tldriverconnect.com", video: tlDriverVideo, gradient: "from-teal-900/80 via-slate-900/60 to-slate-950/90" },
   { title: "Happy Eats", subtitle: "Nashville food truck platform with zone-based batch ordering, vendor portal, rewards, and 11 delivery zones", accent: "rose", link: "https://happyeats.app", video: happyEatsVideo, gradient: "from-rose-900/80 via-slate-900/60 to-slate-950/90" },
-  { title: "Brew & Board Coffee", subtitle: "Community coffee platform with B2B delivery, calendar scheduling, and blockchain-verified receipts", accent: "amber", link: "https://brewandboard.coffee", video: brewBoardVideo, gradient: "from-amber-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "Brew & Board Coffee", subtitle: "Community coffee platform with B2B delivery, calendar scheduling, and blockchain-verified receipts", accent: "purple", link: "https://brewandboard.coffee", video: brewBoardVideo, gradient: "from-purple-900/80 via-slate-900/60 to-slate-950/90" },
   { title: "GarageBot", subtitle: "Smart garage and workshop management with IoT integration, tool inventory, and automated maintenance tracking", accent: "zinc", link: "https://garagebot.io", video: garageBotVideo, gradient: "from-zinc-800/80 via-slate-900/60 to-slate-950/90" },
-  { title: "PaintPros", subtitle: "Professional painting contractor management with job scheduling, crew management, and automated invoicing", accent: "orange", link: "https://paintpros.io", video: paintProsVideo, gradient: "from-orange-900/80 via-slate-900/60 to-slate-950/90" },
+  { title: "PaintPros", subtitle: "Professional painting contractor management with job scheduling, crew management, and automated invoicing", accent: "cyan", link: "https://paintpros.io", video: paintProsVideo, gradient: "from-cyan-900/80 via-slate-900/60 to-slate-950/90" },
   { title: "Lot Ops Pro", subtitle: "Autonomous lot management for auto auctions, dealers, and manufacturers with inventory and operations tools", accent: "indigo", link: "https://lotopspro.io", video: lotOpsVideo, gradient: "from-indigo-900/80 via-slate-900/60 to-slate-950/90" },
   { title: "Chronicles", subtitle: "Not a game — a life. Persistent parallel world with emotion-driven AI, living political simulation, and legacy building", accent: "purple", link: "https://yourlegacy.io", image: "/ecosystem/chronicles.jpg", gradient: "from-purple-900/80 via-slate-900/60 to-slate-950/90" },
   { title: "Pulse", subtitle: "Predictive market intelligence powered by AI systems with auto-trading, sentiment analysis, and multi-chain coverage", accent: "cyan", link: "https://darkwavepulse.com", image: "/ecosystem/darkwave-pulse-new.jpg", gradient: "from-cyan-900/80 via-slate-900/60 to-slate-950/90" },
@@ -537,8 +537,6 @@ const heroAccents: Record<string, { text: string; dot: string; btn: string }> = 
   purple: { text: "text-purple-400", dot: "bg-purple-400", btn: "bg-purple-500/20 border-purple-500/40 text-purple-300" },
   teal: { text: "text-teal-400", dot: "bg-teal-400", btn: "bg-teal-500/20 border-teal-500/40 text-teal-300" },
   rose: { text: "text-rose-400", dot: "bg-rose-400", btn: "bg-rose-500/20 border-rose-500/40 text-rose-300" },
-  amber: { text: "text-amber-400", dot: "bg-amber-400", btn: "bg-amber-500/20 border-amber-500/40 text-amber-300" },
-  orange: { text: "text-orange-400", dot: "bg-orange-400", btn: "bg-orange-500/20 border-orange-500/40 text-orange-300" },
   zinc: { text: "text-zinc-400", dot: "bg-zinc-400", btn: "bg-zinc-500/20 border-zinc-500/40 text-zinc-300" },
   indigo: { text: "text-indigo-400", dot: "bg-indigo-400", btn: "bg-indigo-500/20 border-indigo-500/40 text-indigo-300" },
   red: { text: "text-red-400", dot: "bg-red-400", btn: "bg-red-500/20 border-red-500/40 text-red-300" },
@@ -985,14 +983,14 @@ export default function Home() {
                   </div>
                   <div className="grid grid-cols-2 gap-2 mt-2">
                     <Link href="/launchpad">
-                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-orange-500/40 hover:bg-orange-500/20 transition-all text-center group/item" data-testid="link-launchpad">
-                        <Rocket className="w-4 h-4 mx-auto mb-1 text-orange-400" />
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-cyan-500/40 hover:bg-cyan-500/20 transition-all text-center group/item" data-testid="link-launchpad">
+                        <Rocket className="w-4 h-4 mx-auto mb-1 text-cyan-400" />
                         <span className="text-[10px] text-gray-200 group-hover/item:text-white">Launchpad</span>
                       </div>
                     </Link>
                     <Link href="/webhooks">
-                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-amber-500/40 hover:bg-amber-500/20 transition-all text-center group/item" data-testid="link-webhooks">
-                        <Webhook className="w-4 h-4 mx-auto mb-1 text-amber-400" />
+                      <div className="p-2.5 rounded-lg bg-black/40 backdrop-blur-sm border border-white/10 hover:border-purple-500/40 hover:bg-purple-500/20 transition-all text-center group/item" data-testid="link-webhooks">
+                        <Webhook className="w-4 h-4 mx-auto mb-1 text-purple-400" />
                         <span className="text-[10px] text-gray-200 group-hover/item:text-white">Webhooks</span>
                       </div>
                     </Link>
@@ -1061,8 +1059,8 @@ export default function Home() {
                   </div>
                   <div className="p-5 relative z-10 -mt-16">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-12 h-12 rounded-xl bg-orange-500/20 backdrop-blur-sm flex items-center justify-center shrink-0 border border-orange-500/30">
-                        <Rocket className="w-6 h-6 text-orange-400" />
+                      <div className="w-12 h-12 rounded-xl bg-cyan-500/20 backdrop-blur-sm flex items-center justify-center shrink-0 border border-cyan-500/30">
+                        <Rocket className="w-6 h-6 text-cyan-400" />
                       </div>
                       <div>
                         <Badge variant="outline" className="border-green-500/50 text-green-400 text-[10px] mb-1">Live</Badge>
@@ -1070,7 +1068,7 @@ export default function Home() {
                       </div>
                     </div>
                     <p className="text-xs text-white/60 mb-4">Launch your own tokens with fair distribution, vesting schedules, and community tools.</p>
-                    <Button className="w-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-black font-semibold" data-testid="button-open-launchpad">
+                    <Button className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400 text-black font-semibold" data-testid="button-open-launchpad">
                       Launch Now <Rocket className="w-4 h-4 ml-2" />
                     </Button>
                   </div>
@@ -1165,17 +1163,17 @@ export default function Home() {
           <ChroniclesCarousel />
 
           <div className="flex flex-row items-center justify-center gap-3">
-            <Link href="/era-codex">
+            <a href="https://yourlegacy.io/era-codex" target="_blank" rel="noopener noreferrer">
               <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500" data-testid="button-explore-eras">
                 <Sparkles className="w-4 h-4 mr-2" />
                 View Eras
               </Button>
-            </Link>
-            <Link href="/chronicles">
+            </a>
+            <a href="https://yourlegacy.io" target="_blank" rel="noopener noreferrer">
               <Button variant="outline" className="border-purple-500/50 text-purple-400 hover:bg-purple-500/10" data-testid="button-play-chronicles">
                 Play Chronicles
               </Button>
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -1261,7 +1259,7 @@ export default function Home() {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="text-sm font-bold text-white">Chain Abstraction</h3>
-                    <Badge variant="outline" className="text-[9px] border-amber-500/50 text-amber-400 px-1">Coming Soon</Badge>
+                    <Badge variant="outline" className="text-[9px] border-purple-500/50 text-purple-400 px-1">Coming Soon</Badge>
                   </div>
                   <p className="text-xs text-white/50">Manage assets across chains from one account</p>
                 </div>
@@ -1275,7 +1273,7 @@ export default function Home() {
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <h3 className="text-sm font-bold text-white">Cross-Chain</h3>
-                    <Badge variant="outline" className="text-[9px] border-amber-500/50 text-amber-400 px-1">In Dev</Badge>
+                    <Badge variant="outline" className="text-[9px] border-purple-500/50 text-purple-400 px-1">In Dev</Badge>
                   </div>
                   <p className="text-xs text-white/50">Native protocols for secure asset transfers</p>
                 </div>
@@ -1306,10 +1304,10 @@ const gradientColors: Record<string, { from: string; to: string }> = {
   "from-cyan-400 to-blue-500": { from: "#22d3ee", to: "#3b82f6" },
   "from-slate-600 to-zinc-800": { from: "#475569", to: "#27272a" },
   "from-emerald-600 to-teal-800": { from: "#059669", to: "#115e59" },
-  "from-amber-600 to-yellow-800": { from: "#d97706", to: "#854d0e" },
+  "from-purple-600 to-teal-800": { from: "#d97706", to: "#854d0e" },
   "from-cyan-600 to-blue-700": { from: "#0891b2", to: "#1d4ed8" },
   "from-cyan-500 to-blue-600": { from: "#06b6d4", to: "#2563eb" },
-  "from-orange-500 to-red-600": { from: "#f97316", to: "#dc2626" },
+  "from-cyan-500 to-red-600": { from: "#f97316", to: "#dc2626" },
   "from-red-600 to-rose-700": { from: "#dc2626", to: "#be123c" },
 };
 

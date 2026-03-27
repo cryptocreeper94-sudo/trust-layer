@@ -223,7 +223,7 @@ export default function WhaleTracker() {
             </GlassCard>
             <GlassCard hover={false} className="p-4">
               <div className="flex items-center gap-2 mb-2">
-                <Wallet className="w-4 h-4 text-amber-400" />
+                <Wallet className="w-4 h-4 text-purple-400" />
                 <span className="text-[10px] text-muted-foreground">Tracked Whales</span>
               </div>
               <div className="text-xl font-bold">{TOP_WHALES.length}</div>

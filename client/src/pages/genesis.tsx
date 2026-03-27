@@ -117,7 +117,7 @@ export default function GenesisBlock() {
             className="mb-8"
           >
             <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-              <Award className="w-5 h-5 text-amber-400" />
+              <Award className="w-5 h-5 text-purple-400" />
               Founding Principles
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

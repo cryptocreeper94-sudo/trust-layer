@@ -107,7 +107,7 @@ export default function DWSCExecutiveSummary() {
               className="text-center mb-12"
             >
               <div className="flex flex-wrap justify-center gap-2 mb-4">
-                <div className="inline-block px-4 py-1 rounded-full bg-amber-500/20 text-amber-400 text-sm font-medium animate-pulse">
+                <div className="inline-block px-4 py-1 rounded-full bg-purple-500/20 text-purple-400 text-sm font-medium animate-pulse">
                   Chronicles BETA v0.1 LIVE
                 </div>
                 <div className="inline-block px-4 py-1 rounded-full bg-cyan-500/20 text-cyan-400 text-sm font-medium">
@@ -142,7 +142,7 @@ export default function DWSCExecutiveSummary() {
               <p className="text-white/80 leading-relaxed mb-4">
                 The ecosystem comprises three pillars: the <span className="text-purple-400 font-semibold">Trust Layer infrastructure</span>, 
                 the <span className="text-pink-400 font-semibold">Trust Layer Portal</span> for ecosystem access and DeFi services, 
-                and <span className="text-amber-400 font-semibold">Chronicles</span> - an unprecedented adventure platform 
+                and <span className="text-purple-400 font-semibold">Chronicles</span> - an unprecedented adventure platform 
                 spanning 10 verifiable historical eras where YOU are the hero that serves as the flagship application demonstrating 
                 the chain's capabilities.
               </p>
@@ -172,7 +172,7 @@ export default function DWSCExecutiveSummary() {
                 </p>
                 <p>
                   <span className="text-pink-400 font-semibold">Signal (SIG)</span> is not a speculative asset — it's a 
-                  <span className="text-amber-400 font-semibold"> Trust Network Access Token</span>. Signal represents 
+                  <span className="text-purple-400 font-semibold"> Trust Network Access Token</span>. Signal represents 
                   acknowledgement and proof of participation in the trust network. The value is the infrastructure 
                   it unlocks, not speculation.
                 </p>
@@ -225,7 +225,7 @@ export default function DWSCExecutiveSummary() {
                   subtitle: "Pulse & Strike Agent",
                   description: "ML-powered market intelligence platform. Pulse provides verified price predictions with transparent accuracy tracking. Strike Agent detects new opportunities with AI risk scoring.",
                   icon: Zap,
-                  color: "amber",
+                  color: "purple",
                   features: ["Price Predictions", "Risk Scoring", "Memecoin Sniper", "Win Rate Tracking"]
                 },
                 {
@@ -273,7 +273,7 @@ export default function DWSCExecutiveSummary() {
               className="mb-8 text-center"
             >
               <h2 className="text-2xl md:text-3xl font-display font-bold text-white mb-2 flex items-center justify-center gap-3">
-                <Sparkles className="w-6 h-6 text-amber-400" />
+                <Sparkles className="w-6 h-6 text-purple-400" />
                 Complete Platform Features
               </h2>
               <p className="text-white/60">Swipe to explore everything built and operational in the Trust Layer ecosystem</p>
@@ -403,7 +403,7 @@ export default function DWSCExecutiveSummary() {
                 {
                   title: "Ground Floor Pricing",
                   desc: "Signal starts at $0.001 — 8x cheaper than launch price. Early investors see massive potential upside.",
-                  gradient: "from-amber-500 to-orange-500",
+                  gradient: "from-purple-500 to-cyan-500",
                   stat: "8x",
                   statLabel: "potential gain"
                 },
@@ -722,10 +722,10 @@ export default function DWSCExecutiveSummary() {
               className="mb-8"
             >
               <h2 className="text-2xl font-display font-bold text-white mb-2 flex items-center gap-3">
-                <Calendar className="w-6 h-6 text-amber-400" />
+                <Calendar className="w-6 h-6 text-purple-400" />
                 Development Roadmap
               </h2>
-              <p className="text-white/60">Timeline: <span className="text-amber-400 font-semibold">Community-Driven</span> - Beta based on participation</p>
+              <p className="text-white/60">Timeline: <span className="text-purple-400 font-semibold">Community-Driven</span> - Beta based on participation</p>
             </motion.div>
 
             <div className="space-y-4">
@@ -773,7 +773,7 @@ export default function DWSCExecutiveSummary() {
                     phase.status === 'in_progress' 
                       ? 'bg-emerald-950/30 border-emerald-500/30' 
                       : phase.status === 'target'
-                      ? 'bg-amber-950/30 border-amber-500/30'
+                      ? 'bg-purple-950/30 border-purple-500/30'
                       : 'bg-slate-800/50 border-white/10'
                   }`}
                   data-testid={`phase-${i}`}
@@ -781,7 +781,7 @@ export default function DWSCExecutiveSummary() {
                   <div className="flex flex-wrap items-center gap-3 mb-3">
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${
                       phase.status === 'in_progress' ? 'bg-emerald-500/20 text-emerald-400' :
-                      phase.status === 'target' ? 'bg-amber-500/20 text-amber-400' :
+                      phase.status === 'target' ? 'bg-purple-500/20 text-purple-400' :
                       'bg-slate-700 text-white/60'
                     }`}>
                       {phase.phase}
@@ -794,7 +794,7 @@ export default function DWSCExecutiveSummary() {
                       </span>
                     )}
                     {phase.status === 'target' && (
-                      <span className="flex items-center gap-1 text-xs text-amber-400">
+                      <span className="flex items-center gap-1 text-xs text-purple-400">
                         <Target className="w-3 h-3" /> Launch Target
                       </span>
                     )}
@@ -860,7 +860,7 @@ export default function DWSCExecutiveSummary() {
                 </Link>
                 <Link 
                   href="/competitive-analysis"
-                  className="px-6 py-3 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/30 rounded-lg text-amber-400 font-medium transition-colors"
+                  className="px-6 py-3 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/30 rounded-lg text-purple-400 font-medium transition-colors"
                   data-testid="link-competitive"
                 >
                   Competitive Analysis

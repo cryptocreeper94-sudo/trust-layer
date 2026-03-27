@@ -119,7 +119,7 @@ export const WalletConnectModal: React.FC<{ open: boolean; onClose: () => void }
       hasExtension: hasMetaMaskExtension,
       deepLink: openMetaMaskDeepLink,
       installUrl: 'https://metamask.io/download/',
-      color: 'from-orange-500/20 to-orange-600/10',
+      color: 'from-cyan-500/20 to-cyan-600/10',
     },
     {
       id: 'phantom',
@@ -139,7 +139,7 @@ export const WalletConnectModal: React.FC<{ open: boolean; onClose: () => void }
       hasExtension: hasSolflareExtension,
       deepLink: openSolflareDeepLink,
       installUrl: 'https://solflare.com/',
-      color: 'from-orange-400/20 to-yellow-500/10',
+      color: 'from-cyan-400/20 to-teal-500/10',
     },
     {
       id: 'coinbase',

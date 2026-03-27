@@ -297,8 +297,8 @@ const getGuardianColor = (score: string) => {
   switch (score) {
     case "A": return "from-emerald-500 to-green-500";
     case "B": return "from-blue-500 to-cyan-500";
-    case "C": return "from-yellow-500 to-amber-500";
-    case "D": return "from-orange-500 to-red-500";
+    case "C": return "from-teal-500 to-purple-500";
+    case "D": return "from-cyan-500 to-red-500";
     case "F": return "from-red-600 to-red-800";
     default: return "from-gray-500 to-gray-600";
   }
@@ -308,7 +308,7 @@ const getPulseIcon = (signal: string) => {
   switch (signal) {
     case "bullish": return <TrendingUp className="w-4 h-4 text-emerald-400" />;
     case "bearish": return <TrendingDown className="w-4 h-4 text-red-400" />;
-    default: return <Minus className="w-4 h-4 text-yellow-400" />;
+    default: return <Minus className="w-4 h-4 text-teal-400" />;
   }
 };
 
@@ -316,14 +316,14 @@ const getPulseColor = (signal: string) => {
   switch (signal) {
     case "bullish": return "text-emerald-400 bg-emerald-500/20";
     case "bearish": return "text-red-400 bg-red-500/20";
-    default: return "text-yellow-400 bg-yellow-500/20";
+    default: return "text-teal-400 bg-teal-500/20";
   }
 };
 
 const getStatusIcon = (status: "pass" | "warning" | "fail" | "info") => {
   switch (status) {
     case "pass": return <CheckCircle2 className="w-5 h-5 text-emerald-400" />;
-    case "warning": return <AlertCircle className="w-5 h-5 text-yellow-400" />;
+    case "warning": return <AlertCircle className="w-5 h-5 text-teal-400" />;
     case "fail": return <XCircle className="w-5 h-5 text-red-400" />;
     default: return <Info className="w-5 h-5 text-blue-400" />;
   }
@@ -332,7 +332,7 @@ const getStatusIcon = (status: "pass" | "warning" | "fail" | "info") => {
 const getStatusBg = (status: "pass" | "warning" | "fail" | "info") => {
   switch (status) {
     case "pass": return "bg-emerald-500/10 border-emerald-500/30";
-    case "warning": return "bg-yellow-500/10 border-yellow-500/30";
+    case "warning": return "bg-teal-500/10 border-teal-500/30";
     case "fail": return "bg-red-500/10 border-red-500/30";
     default: return "bg-blue-500/10 border-blue-500/30";
   }
@@ -436,15 +436,15 @@ export default function MarketsPage() {
               exit={{ opacity: 0, height: 0 }}
               className="mb-6"
             >
-              <Card className="bg-amber-500/10 border-amber-500/30">
+              <Card className="bg-purple-500/10 border-purple-500/30">
                 <CardContent className="p-4">
                   <div className="flex items-start gap-3">
-                    <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                    <AlertTriangle className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
                     <div className="flex-1">
-                      <h3 className="font-semibold text-amber-400 mb-1">Risk Disclosure</h3>
+                      <h3 className="font-semibold text-purple-400 mb-1">Risk Disclosure</h3>
                       <p className="text-sm text-muted-foreground">
                         Trust Layer Markets provides intelligence, not financial advice. Guardian scores indicate security audits, not investment quality. 
-                        Pulse predictions are probabilistic, not guarantees. <strong className="text-amber-300">DYOR. You can still lose everything.</strong> 
+                        Pulse predictions are probabilistic, not guarantees. <strong className="text-purple-300">DYOR. You can still lose everything.</strong> 
                         But at least you'll know what you're walking into.
                       </p>
                     </div>
@@ -452,7 +452,7 @@ export default function MarketsPage() {
                       variant="ghost" 
                       size="sm" 
                       onClick={() => setShowRiskWarning(false)}
-                      className="text-amber-400 hover:bg-amber-500/20"
+                      className="text-purple-400 hover:bg-purple-500/20"
                       data-testid="button-dismiss-risk-warning"
                     >
                       Dismiss
@@ -497,7 +497,7 @@ export default function MarketsPage() {
           </Card>
           <Card className="bg-white/5 backdrop-blur-xl border-white/10 col-span-2 md:col-span-1">
             <CardContent className="p-4 text-center">
-              <p className="text-2xl font-bold text-amber-400" data-testid="stat-audits">9</p>
+              <p className="text-2xl font-bold text-purple-400" data-testid="stat-audits">9</p>
               <p className="text-xs text-muted-foreground">Security Checks</p>
             </CardContent>
           </Card>
@@ -625,7 +625,7 @@ export default function MarketsPage() {
                       <Users className="w-3 h-3" />
                       {token.holderCount.toLocaleString()}
                     </span>
-                    <span className={`flex items-center gap-1 ${token.botActivity > 50 ? 'text-red-400' : token.botActivity > 25 ? 'text-yellow-400' : 'text-emerald-400'}`}>
+                    <span className={`flex items-center gap-1 ${token.botActivity > 50 ? 'text-red-400' : token.botActivity > 25 ? 'text-teal-400' : 'text-emerald-400'}`}>
                       <Bot className="w-3 h-3" />
                       {token.botActivity}% bots
                     </span>
@@ -688,7 +688,7 @@ export default function MarketsPage() {
                               <p className="text-xs text-muted-foreground">Rugs</p>
                             </div>
                             <div className="text-center p-3 rounded-xl bg-white/5 border border-white/10">
-                              <p className={`text-2xl font-bold ${token.creatorHistory.successRate >= 90 ? 'text-emerald-400' : token.creatorHistory.successRate >= 70 ? 'text-yellow-400' : 'text-red-400'}`}>
+                              <p className={`text-2xl font-bold ${token.creatorHistory.successRate >= 90 ? 'text-emerald-400' : token.creatorHistory.successRate >= 70 ? 'text-teal-400' : 'text-red-400'}`}>
                                 {token.creatorHistory.successRate}%
                               </p>
                               <p className="text-xs text-muted-foreground">Success Rate</p>
@@ -719,7 +719,7 @@ export default function MarketsPage() {
                               detail={token.securityChecks.ownershipRenounced.detail}
                             />
                             <SecurityCheckItem
-                              icon={<Coins className="w-4 h-4 text-amber-400" />}
+                              icon={<Coins className="w-4 h-4 text-purple-400" />}
                               title="Mint Function"
                               status={token.securityChecks.mintDisabled.status}
                               detail={token.securityChecks.mintDisabled.detail}
@@ -731,7 +731,7 @@ export default function MarketsPage() {
                               detail={token.securityChecks.noBlacklist.detail}
                             />
                             <SecurityCheckItem
-                              icon={<Flame className="w-4 h-4 text-orange-400" />}
+                              icon={<Flame className="w-4 h-4 text-cyan-400" />}
                               title="Honeypot Detection"
                               status={token.securityChecks.honeypotFree.status}
                               detail={token.securityChecks.honeypotFree.detail}
@@ -775,7 +775,7 @@ export default function MarketsPage() {
                                 <PieChart className="w-4 h-4 text-purple-400" />
                                 <span className="text-xs text-muted-foreground">Top 10 Holders</span>
                               </div>
-                              <p className={`text-xl font-bold ${token.holderDistribution.top10Percent > 40 ? 'text-red-400' : token.holderDistribution.top10Percent > 25 ? 'text-yellow-400' : 'text-emerald-400'}`}>
+                              <p className={`text-xl font-bold ${token.holderDistribution.top10Percent > 40 ? 'text-red-400' : token.holderDistribution.top10Percent > 25 ? 'text-teal-400' : 'text-emerald-400'}`}>
                                 {token.holderDistribution.top10Percent}%
                               </p>
                               <Progress value={token.holderDistribution.top10Percent} className="h-1 mt-2" />
@@ -793,7 +793,7 @@ export default function MarketsPage() {
                                 <TrendingUp className="w-4 h-4 text-emerald-400" />
                                 <span className="text-xs text-muted-foreground">Buy Pressure</span>
                               </div>
-                              <p className={`text-xl font-bold ${token.tradingMetrics.buyPressure > 60 ? 'text-emerald-400' : token.tradingMetrics.buyPressure > 40 ? 'text-yellow-400' : 'text-red-400'}`}>
+                              <p className={`text-xl font-bold ${token.tradingMetrics.buyPressure > 60 ? 'text-emerald-400' : token.tradingMetrics.buyPressure > 40 ? 'text-teal-400' : 'text-red-400'}`}>
                                 {token.tradingMetrics.buyPressure}%
                               </p>
                               <p className="text-xs text-muted-foreground mt-1">vs sells</p>
@@ -819,13 +819,13 @@ export default function MarketsPage() {
                             <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/20">
                               <div className="flex justify-between items-center mb-3">
                                 <span className="text-sm">Price Impact (on $1,000 buy)</span>
-                                <span className={`font-bold ${token.tradingMetrics.priceImpact1k < 0.5 ? 'text-emerald-400' : token.tradingMetrics.priceImpact1k < 2 ? 'text-yellow-400' : 'text-red-400'}`}>
+                                <span className={`font-bold ${token.tradingMetrics.priceImpact1k < 0.5 ? 'text-emerald-400' : token.tradingMetrics.priceImpact1k < 2 ? 'text-teal-400' : 'text-red-400'}`}>
                                   {token.tradingMetrics.priceImpact1k}%
                                 </span>
                               </div>
                               <div className="h-2 rounded-full bg-white/10 overflow-hidden">
                                 <div 
-                                  className={`h-full ${token.tradingMetrics.priceImpact1k < 0.5 ? 'bg-emerald-500' : token.tradingMetrics.priceImpact1k < 2 ? 'bg-yellow-500' : 'bg-red-500'}`}
+                                  className={`h-full ${token.tradingMetrics.priceImpact1k < 0.5 ? 'bg-emerald-500' : token.tradingMetrics.priceImpact1k < 2 ? 'bg-teal-500' : 'bg-red-500'}`}
                                   style={{ width: `${Math.min(token.tradingMetrics.priceImpact1k * 10, 100)}%` }}
                                 />
                               </div>
@@ -959,7 +959,7 @@ export default function MarketsPage() {
               <span>Pass</span>
             </div>
             <div className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-yellow-400" />
+              <AlertCircle className="w-4 h-4 text-teal-400" />
               <span>Warning</span>
             </div>
             <div className="flex items-center gap-2">
@@ -975,7 +975,7 @@ export default function MarketsPage() {
               <span>Good</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded bg-gradient-to-r from-yellow-500 to-amber-500 flex items-center justify-center text-white font-bold text-xs">C</div>
+              <div className="w-6 h-6 rounded bg-gradient-to-r from-teal-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs">C</div>
               <span>Caution</span>
             </div>
           </div>

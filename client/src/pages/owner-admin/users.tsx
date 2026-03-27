@@ -383,7 +383,7 @@ function SigCreditManager() {
                     {entry.user_id ? (
                       <span className="flex items-center gap-1 text-green-400"><CheckCircle2 className="w-3 h-3" /> Linked</span>
                     ) : (
-                      <span className="flex items-center gap-1 text-amber-400"><Clock className="w-3 h-3" /> Pending</span>
+                      <span className="flex items-center gap-1 text-purple-400"><Clock className="w-3 h-3" /> Pending</span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-gray-400">{new Date(entry.created_at).toLocaleDateString()}</td>
@@ -490,9 +490,9 @@ export default function OwnerUsers() {
           {[
             { label: "Whitelist", value: stats.totalWhitelisted, icon: <Shield className="w-5 h-5 text-purple-400" />, color: "from-purple-500/20 to-purple-500/5" },
             { label: "Presale Orders", value: stats.totalPresaleOrders, icon: <Sparkles className="w-5 h-5 text-pink-400" />, color: "from-pink-500/20 to-pink-500/5" },
-            { label: "Early Adopters", value: stats.totalEarlyAdopters, icon: <Crown className="w-5 h-5 text-amber-400" />, color: "from-amber-500/20 to-amber-500/5" },
+            { label: "Early Adopters", value: stats.totalEarlyAdopters, icon: <Crown className="w-5 h-5 text-purple-400" />, color: "from-purple-500/20 to-purple-500/5" },
             { label: "Waitlist", value: stats.totalWaitlist, icon: <Mail className="w-5 h-5 text-cyan-400" />, color: "from-cyan-500/20 to-cyan-500/5" },
-            { label: "Beta Testers", value: stats.totalBetaTesters, icon: <Star className="w-5 h-5 text-yellow-400" />, color: "from-yellow-500/20 to-yellow-500/5" },
+            { label: "Beta Testers", value: stats.totalBetaTesters, icon: <Star className="w-5 h-5 text-teal-400" />, color: "from-teal-500/20 to-teal-500/5" },
             { label: "Revenue", value: `$${(stats.totalRevenue / 100).toLocaleString()}`, icon: <Wallet className="w-5 h-5 text-green-400" />, color: "from-green-500/20 to-green-500/5" },
           ].map((stat, i) => (
             <motion.div
@@ -612,7 +612,7 @@ export default function OwnerUsers() {
                         <tr key={item.id} className="hover:bg-white/5">
                           <td className="px-4 py-3 font-mono text-cyan-400">{item.email || "-"}</td>
                           <td className="px-4 py-3 font-mono text-xs text-gray-400">{item.walletAddress ? `${item.walletAddress.slice(0,8)}...` : "-"}</td>
-                          <td className="px-4 py-3"><Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">{item.tier || "Standard"}</Badge></td>
+                          <td className="px-4 py-3"><Badge className="bg-teal-500/20 text-teal-400 border-teal-500/30">{item.tier || "Standard"}</Badge></td>
                           <td className="px-4 py-3">
                             {item.status === "active" ? (
                               <span className="flex items-center gap-1 text-green-400"><CheckCircle2 className="w-3 h-3" /> Active</span>
@@ -640,7 +640,7 @@ export default function OwnerUsers() {
                       {filterBySearch(data?.earlyAdopters, ["email", "tier"]).map((item) => (
                         <tr key={item.id} className="hover:bg-white/5">
                           <td className="px-4 py-3 font-mono text-cyan-400">{item.email}</td>
-                          <td className="px-4 py-3"><Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">{item.tier}</Badge></td>
+                          <td className="px-4 py-3"><Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">{item.tier}</Badge></td>
                           <td className="px-4 py-3">
                             {item.status === "active" ? (
                               <span className="flex items-center gap-1 text-green-400"><CheckCircle2 className="w-3 h-3" /> Active</span>
@@ -677,7 +677,7 @@ export default function OwnerUsers() {
                             {item.status === "completed" ? (
                               <span className="flex items-center gap-1 text-green-400"><CheckCircle2 className="w-3 h-3" /> Paid</span>
                             ) : (
-                              <span className="text-amber-400">{item.status}</span>
+                              <span className="text-purple-400">{item.status}</span>
                             )}
                           </td>
                           <td className="px-4 py-3 text-gray-400">{formatDate(item.createdAt)}</td>

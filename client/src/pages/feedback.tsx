@@ -13,7 +13,7 @@ import { useSimpleAuth } from "@/hooks/use-simple-auth";
 
 const FEEDBACK_TYPES = [
   { id: "bug", label: "Bug Report", icon: Bug, color: "red", description: "Something isn't working right" },
-  { id: "feature", label: "Feature Request", icon: Lightbulb, color: "amber", description: "Suggest a new feature" },
+  { id: "feature", label: "Feature Request", icon: Lightbulb, color: "purple", description: "Suggest a new feature" },
   { id: "feedback", label: "General Feedback", icon: MessageSquare, color: "cyan", description: "Share your thoughts" },
 ];
 
@@ -156,10 +156,10 @@ export default function Feedback() {
               animate={{ opacity: 1, y: 0 }}
               className="mb-6"
             >
-              <GlassCard className="p-4 border-amber-500/30 bg-amber-500/5">
+              <GlassCard className="p-4 border-purple-500/30 bg-purple-500/5">
                 <div className="flex items-center gap-3">
-                  <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0" />
-                  <p className="text-sm text-amber-200">
+                  <AlertCircle className="w-5 h-5 text-purple-400 flex-shrink-0" />
+                  <p className="text-sm text-purple-200">
                     <Link href="/" className="underline hover:text-white">Sign in</Link> to track your submissions and receive updates on your reports.
                   </p>
                 </div>
@@ -310,13 +310,13 @@ export default function Feedback() {
             transition={{ delay: 0.2 }}
             className="mt-8"
           >
-            <GlassCard className="p-6 bg-gradient-to-r from-amber-500/5 to-purple-500/5 border-amber-500/20">
+            <GlassCard className="p-6 bg-gradient-to-r from-purple-500/5 to-purple-500/5 border-purple-500/20">
               <div className="flex items-start gap-4">
-                <div className="p-3 rounded-xl bg-amber-500/20">
-                  <Gamepad2 className="w-6 h-6 text-amber-400" />
+                <div className="p-3 rounded-xl bg-purple-500/20">
+                  <Gamepad2 className="w-6 h-6 text-purple-400" />
                 </div>
                 <div>
-                  <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 mb-2">
+                  <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 mb-2">
                     BETA TESTING
                   </Badge>
                   <h3 className="font-bold text-lg mb-2">Chronicles is in Beta</h3>

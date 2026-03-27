@@ -77,13 +77,13 @@ export default function PriceAlerts() {
 
         <main className="flex-1 pt-16 pb-8 px-4 flex items-center justify-center">
           <GlassCard glow className="p-8 text-center max-w-md">
-            <Bell className="w-16 h-16 mx-auto mb-4 text-orange-400" />
+            <Bell className="w-16 h-16 mx-auto mb-4 text-cyan-400" />
             <h2 className="text-2xl font-bold mb-2">Price Alerts</h2>
             <p className="text-muted-foreground mb-6">
               Never miss a price movement. Set custom alerts and get notified via push, email, or Telegram.
             </p>
             <Link href="/wallet">
-              <Button className="bg-gradient-to-r from-orange-500 to-red-500" data-testid="button-connect-alerts">
+              <Button className="bg-gradient-to-r from-cyan-500 to-red-500" data-testid="button-connect-alerts">
                 <Wallet className="w-4 h-4 mr-2" />
                 Connect Wallet to Set Alerts
               </Button>
@@ -117,17 +117,17 @@ export default function PriceAlerts() {
           >
             <div className="flex items-center justify-center gap-2 mb-3">
               <motion.div 
-                className="p-3 rounded-2xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30"
+                className="p-3 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-red-500/20 border border-cyan-500/30"
                 animate={{ 
                   boxShadow: ["0 0 20px rgba(249,115,22,0.2)", "0 0 50px rgba(249,115,22,0.4)", "0 0 20px rgba(249,115,22,0.2)"]
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <Bell className="w-7 h-7 text-orange-400" />
+                <Bell className="w-7 h-7 text-cyan-400" />
               </motion.div>
             </div>
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">
-              Price <span className="text-orange-400">Alerts</span>
+              Price <span className="text-cyan-400">Alerts</span>
             </h1>
             <p className="text-sm text-muted-foreground">
               Never miss a price movement • Multi-channel notifications
@@ -151,7 +151,7 @@ export default function PriceAlerts() {
               <p className="text-[10px] text-muted-foreground">Monitoring</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <Volume2 className="w-5 h-5 mx-auto mb-1 text-amber-400" />
+              <Volume2 className="w-5 h-5 mx-auto mb-1 text-purple-400" />
               <p className="text-xl font-bold">3</p>
               <p className="text-[10px] text-muted-foreground">Channels</p>
             </GlassCard>
@@ -236,7 +236,7 @@ export default function PriceAlerts() {
                     </div>
                   </div>
                   <Button 
-                    className="w-full bg-gradient-to-r from-orange-500 to-red-500" 
+                    className="w-full bg-gradient-to-r from-cyan-500 to-red-500" 
                     onClick={createAlert}
                     disabled={!newAlert.price}
                     data-testid="button-save-alert"

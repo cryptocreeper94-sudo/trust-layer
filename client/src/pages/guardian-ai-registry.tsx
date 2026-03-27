@@ -40,8 +40,8 @@ const TIER_BADGES: Record<string, { color: string; icon: typeof Shield }> = {
 function TrustScoreBar({ score, label }: { score: number; label: string }) {
   const getColor = (s: number) => {
     if (s >= 80) return 'bg-green-500';
-    if (s >= 60) return 'bg-yellow-500';
-    if (s >= 40) return 'bg-orange-500';
+    if (s >= 60) return 'bg-teal-500';
+    if (s >= 40) return 'bg-cyan-500';
     return 'bg-red-500';
   };
 
@@ -267,7 +267,7 @@ export default function GuardianAIRegistry() {
                           <span className="text-sm font-medium text-white">Trust Score</span>
                           <span className={`text-lg font-bold ${
                             agent.overallTrustScore >= 80 ? 'text-green-400' :
-                            agent.overallTrustScore >= 60 ? 'text-yellow-400' : 'text-red-400'
+                            agent.overallTrustScore >= 60 ? 'text-teal-400' : 'text-red-400'
                           }`}>
                             {agent.overallTrustScore}/100
                           </span>

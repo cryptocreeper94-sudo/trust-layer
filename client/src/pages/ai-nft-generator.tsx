@@ -77,7 +77,7 @@ export default function AINFTGenerator() {
     Common: "bg-gray-500/20 text-gray-400",
     Rare: "bg-blue-500/20 text-blue-400",
     Epic: "bg-purple-500/20 text-purple-400",
-    Legendary: "bg-amber-500/20 text-amber-400",
+    Legendary: "bg-purple-500/20 text-purple-400",
   };
 
   return (
@@ -353,7 +353,7 @@ export default function AINFTGenerator() {
               className="mt-8"
             >
               <h2 className="font-bold mb-4 flex items-center gap-2">
-                <Star className="w-4 h-4 text-amber-400" />
+                <Star className="w-4 h-4 text-purple-400" />
                 Recent Creations
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">

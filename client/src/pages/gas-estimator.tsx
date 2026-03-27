@@ -83,17 +83,17 @@ export default function GasEstimator() {
           >
             <div className="flex items-center justify-center gap-2 mb-3">
               <motion.div 
-                className="p-3 rounded-2xl bg-gradient-to-br from-orange-500/20 to-red-500/20 border border-orange-500/30"
+                className="p-3 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-red-500/20 border border-cyan-500/30"
                 animate={{ 
                   boxShadow: ["0 0 20px rgba(249,115,22,0.2)", "0 0 50px rgba(249,115,22,0.4)", "0 0 20px rgba(249,115,22,0.2)"]
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <Fuel className="w-7 h-7 text-orange-400" />
+                <Fuel className="w-7 h-7 text-cyan-400" />
               </motion.div>
             </div>
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">
-              Gas <span className="text-orange-400">Estimator</span>
+              Gas <span className="text-cyan-400">Estimator</span>
             </h1>
             <p className="text-sm text-muted-foreground">
               Real-time transaction cost predictions
@@ -135,12 +135,12 @@ export default function GasEstimator() {
             <GlassCard className="col-span-2 row-span-1 p-4 flex items-center justify-between">
               <div>
                 <div className="flex items-center gap-2 mb-1">
-                  <AlertTriangle className="w-4 h-4 text-orange-400" />
+                  <AlertTriangle className="w-4 h-4 text-cyan-400" />
                   <span className="text-xs text-muted-foreground">High (Fast)</span>
                 </div>
-                <div className="text-2xl font-bold text-orange-400">${currentGas.high.toFixed(5)}</div>
+                <div className="text-2xl font-bold text-cyan-400">${currentGas.high.toFixed(5)}</div>
               </div>
-              <Badge className="bg-orange-500/20 text-orange-400">Priority</Badge>
+              <Badge className="bg-cyan-500/20 text-cyan-400">Priority</Badge>
             </GlassCard>
 
             <GlassCard className="col-span-3 row-span-2 p-4 flex flex-col">

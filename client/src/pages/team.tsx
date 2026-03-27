@@ -198,9 +198,9 @@ function FinancialCalculator() {
         </Card>
       </div>
 
-      <GlassCard className="border-amber-500/30">
+      <GlassCard className="border-purple-500/30">
         <div className="p-4">
-          <h4 className="font-semibold text-amber-400 mb-2">Airdrop Liability</h4>
+          <h4 className="font-semibold text-purple-400 mb-2">Airdrop Liability</h4>
           <p className="text-sm text-muted-foreground">
             Total SIG to distribute: <span className="text-white font-bold">{(model.founderSpots * model.dwtAirdrop).toLocaleString()} SIG</span>
           </p>
@@ -467,7 +467,7 @@ function AdminLinksGrid() {
     { title: "Billing Admin", href: "/billing", icon: Settings, description: "Subscriptions and payments", color: "cyan" },
     { title: "Block Explorer", href: "/explorer", icon: Rocket, description: "Blockchain explorer", color: "primary" },
     { title: "Validators", href: "/validators", icon: Shield, description: "Network validators", color: "secondary" },
-    { title: "Multi-Sig", href: "/multisig", icon: Lock, description: "Committee management", color: "amber" },
+    { title: "Multi-Sig", href: "/multisig", icon: Lock, description: "Committee management", color: "purple" },
     { title: "Proof of Reserve", href: "/proof-of-reserve", icon: BarChart3, description: "Reserve verification", color: "green" },
   ];
 
@@ -476,7 +476,7 @@ function AdminLinksGrid() {
     secondary: "bg-secondary/10 text-secondary",
     green: "bg-green-500/10 text-green-400",
     cyan: "bg-cyan-500/10 text-cyan-400",
-    amber: "bg-amber-500/10 text-amber-400",
+    purple: "bg-purple-500/10 text-purple-400",
   };
 
   return (

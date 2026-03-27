@@ -52,7 +52,7 @@ export default function AirdropClaim() {
 
   const getTierColor = (tier?: string) => {
     switch (tier?.toLowerCase()) {
-      case "founder": return "from-amber-500 to-orange-600";
+      case "founder": return "from-purple-500 to-cyan-600";
       case "genesis": return "from-purple-500 to-pink-600";
       default: return "from-blue-500 to-cyan-600";
     }
@@ -175,7 +175,7 @@ export default function AirdropClaim() {
                     </div>
 
                     {eligibility.alreadyClaimed ? (
-                      <div className="text-center text-amber-400 text-sm">
+                      <div className="text-center text-purple-400 text-sm">
                         <AlertCircle className="w-4 h-4 inline mr-2" />
                         You've already claimed your airdrop
                       </div>

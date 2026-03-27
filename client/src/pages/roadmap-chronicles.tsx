@@ -267,7 +267,7 @@ function MilestoneItem({ milestone, index }: { milestone: Milestone; index: numb
           milestone.status === "in_progress" ? "text-purple-400" : "text-white"
         }`}>
           {milestone.title}
-          {milestone.isRequired && <span className="ml-2 text-xs text-amber-400/80">Required</span>}
+          {milestone.isRequired && <span className="ml-2 text-xs text-purple-400/80">Required</span>}
         </h4>
         <p className="text-gray-400 text-sm mt-1">{milestone.description}</p>
       </div>
@@ -304,7 +304,7 @@ export default function RoadmapChronicles() {
             </motion.div>
             
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
                 Game Development Roadmap
               </span>
             </h1>
@@ -312,9 +312,9 @@ export default function RoadmapChronicles() {
               Follow our journey to create the most ambitious AI-powered adventure platform ever made. 
               Your character isn't an avatar—it's an extension of your psyche.
             </p>
-            <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/30">
-              <Users className="w-4 h-4 text-amber-400" />
-              <span className="text-amber-300 text-sm">Community-driven timeline — your involvement shapes when we launch</span>
+            <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30">
+              <Users className="w-4 h-4 text-purple-400" />
+              <span className="text-purple-300 text-sm">Community-driven timeline — your involvement shapes when we launch</span>
             </div>
           </div>
 
@@ -340,7 +340,7 @@ export default function RoadmapChronicles() {
                     <span className="text-purple-400 font-semibold ml-1">{inProgressMilestones}</span> in progress of {totalMilestones} milestones
                   </p>
                 </div>
-                <div className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">
+                <div className="text-4xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
                   {Math.round(overallProgress)}%
                 </div>
               </div>
@@ -349,7 +349,7 @@ export default function RoadmapChronicles() {
                   initial={{ width: 0 }}
                   animate={{ width: `${overallProgress}%` }}
                   transition={{ duration: 1.5, ease: "easeOut" }}
-                  className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500"
+                  className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500"
                 />
               </div>
             </div>

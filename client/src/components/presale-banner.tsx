@@ -148,7 +148,7 @@ export function PresaleBanner() {
                       <span className="font-semibold text-white" data-testid="presale-stat-raised">{formatUSD(stats.totalRaisedUsd)}</span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <Coins className="w-3 h-3 text-yellow-400" />
+                      <Coins className="w-3 h-3 text-teal-400" />
                       <span className="text-white/60">Price:</span>
                       <span className="font-semibold text-white" data-testid="presale-stat-price">${stats.currentTokenPrice}</span>
                     </div>
@@ -173,7 +173,7 @@ export function PresaleBanner() {
                           <span className="text-[9px] text-white/40">
                             {formatUSD(untilNextIncrease)} to price increase
                           </span>
-                          <span className="text-[9px] text-orange-400 font-medium">
+                          <span className="text-[9px] text-cyan-400 font-medium">
                             → ${nextMilestone.price}/SIG
                           </span>
                         </div>
@@ -182,7 +182,7 @@ export function PresaleBanner() {
                             initial={{ width: 0 }}
                             animate={{ width: `${Math.min(milestoneProgress, 100)}%` }}
                             transition={{ duration: 1.5, ease: "easeOut" }}
-                            className="h-full rounded-full bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500"
+                            className="h-full rounded-full bg-gradient-to-r from-green-500 via-teal-500 to-cyan-500"
                           />
                         </div>
                       </div>
@@ -208,11 +208,11 @@ export function PresaleBanner() {
                     <div className="mt-1">
                       <div className="flex items-center justify-between mb-0.5">
                         <span className="text-[9px] text-white/30">{formatUSD(untilNextIncrease)} to price ↑</span>
-                        <span className="text-[9px] text-orange-400">→ ${nextMilestone.price}</span>
+                        <span className="text-[9px] text-cyan-400">→ ${nextMilestone.price}</span>
                       </div>
                       <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                         <div
-                          className="h-full rounded-full bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500"
+                          className="h-full rounded-full bg-gradient-to-r from-green-500 via-teal-500 to-cyan-500"
                           style={{ width: `${Math.min(milestoneProgress, 100)}%` }}
                         />
                       </div>
@@ -252,7 +252,7 @@ export function PresaleBanner() {
                       </div>
                       <div className="bg-white/5 rounded-lg p-2.5">
                         <div className="flex items-center gap-1 mb-1">
-                          <Coins className="w-3 h-3 text-yellow-400" />
+                          <Coins className="w-3 h-3 text-teal-400" />
                           <span className="text-[10px] text-white/50">SIG Price</span>
                         </div>
                         <span className="text-sm font-bold text-white" data-testid="presale-expanded-price">${stats.currentTokenPrice}</span>
@@ -292,16 +292,16 @@ export function PresaleBanner() {
                     {nextMilestone && (
                       <div className="bg-white/5 rounded-lg p-2.5 mb-3">
                         <div className="flex items-center gap-1.5 mb-1.5">
-                          <Target className="w-3 h-3 text-orange-400" />
+                          <Target className="w-3 h-3 text-cyan-400" />
                           <span className="text-[10px] text-white/50">Next Price Increase</span>
                         </div>
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-xs text-white/70">{formatUSD(untilNextIncrease)} remaining</span>
-                          <span className="text-xs text-orange-400 font-semibold">→ ${nextMilestone.price}/SIG</span>
+                          <span className="text-xs text-cyan-400 font-semibold">→ ${nextMilestone.price}/SIG</span>
                         </div>
                         <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                           <div
-                            className="h-full rounded-full bg-gradient-to-r from-green-500 via-yellow-500 to-orange-500 transition-all duration-500"
+                            className="h-full rounded-full bg-gradient-to-r from-green-500 via-teal-500 to-cyan-500 transition-all duration-500"
                             style={{ width: `${Math.min(milestoneProgress, 100)}%` }}
                           />
                         </div>

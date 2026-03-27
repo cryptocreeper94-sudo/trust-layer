@@ -234,8 +234,8 @@ export default function DashboardPro() {
             <BentoCard colSpan={1} rowSpan={1} delay={0.25} href="/staking">
               <div className="p-4 h-full flex flex-col justify-between">
                 <div className="flex items-center gap-2">
-                  <div className="p-2 rounded-lg bg-amber-500/20">
-                    <Lock className="w-4 h-4 text-amber-400" />
+                  <div className="p-2 rounded-lg bg-purple-500/20">
+                    <Lock className="w-4 h-4 text-purple-400" />
                   </div>
                 </div>
                 <div>
@@ -265,7 +265,7 @@ export default function DashboardPro() {
               <div className="p-4 h-full flex flex-col">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-2">
-                    <Trophy className="w-4 h-4 text-amber-400" />
+                    <Trophy className="w-4 h-4 text-purple-400" />
                     <span className="font-bold">Top Traders</span>
                   </div>
                   <Link href="/leaderboard">
@@ -282,7 +282,7 @@ export default function DashboardPro() {
                       className="flex items-center gap-3 p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-pointer"
                     >
                       <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                        i === 0 ? 'bg-amber-500 text-black' : i === 1 ? 'bg-gray-400 text-black' : 'bg-amber-700 text-white'
+                        i === 0 ? 'bg-purple-500 text-black' : i === 1 ? 'bg-gray-400 text-black' : 'bg-purple-700 text-white'
                       }`}>
                         {trader.rank}
                       </div>

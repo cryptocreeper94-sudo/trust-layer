@@ -25,19 +25,19 @@ interface Project {
 }
 
 const languageIcons: Record<string, React.ReactNode> = {
-  javascript: <FileCode className="w-5 h-5 text-yellow-400" />,
+  javascript: <FileCode className="w-5 h-5 text-teal-400" />,
   typescript: <FileCode className="w-5 h-5 text-blue-400" />,
-  html: <Globe className="w-5 h-5 text-orange-400" />,
+  html: <Globe className="w-5 h-5 text-cyan-400" />,
   python: <Code2 className="w-5 h-5 text-green-400" />,
-  rust: <Box className="w-5 h-5 text-orange-500" />,
+  rust: <Box className="w-5 h-5 text-cyan-500" />,
 };
 
 const languageColors: Record<string, string> = {
-  javascript: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+  javascript: "bg-teal-500/20 text-teal-400 border-teal-500/30",
   typescript: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-  html: "bg-orange-500/20 text-orange-400 border-orange-500/30",
+  html: "bg-cyan-500/20 text-cyan-400 border-cyan-500/30",
   python: "bg-green-500/20 text-green-400 border-green-500/30",
-  rust: "bg-orange-600/20 text-orange-500 border-orange-600/30",
+  rust: "bg-cyan-600/20 text-cyan-500 border-cyan-600/30",
 };
 
 export default function StudioProjects() {

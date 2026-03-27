@@ -156,7 +156,7 @@ export default function WalletProfiler() {
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className={`px-3 py-1 rounded-lg ${walletData.riskScore < 40 ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'}`}>
+                    <div className={`px-3 py-1 rounded-lg ${walletData.riskScore < 40 ? 'bg-green-500/20 text-green-400' : 'bg-teal-500/20 text-teal-400'}`}>
                       <Shield className="w-4 h-4 inline mr-1" />
                       <span className="text-xs">Risk: {walletData.riskScore}</span>
                     </div>
@@ -288,7 +288,7 @@ export default function WalletProfiler() {
                       tx.type === 'sell' ? 'bg-red-500/20' :
                       tx.type === 'swap' ? 'bg-blue-500/20' :
                       tx.type === 'stake' ? 'bg-purple-500/20' :
-                      'bg-amber-500/20'
+                      'bg-purple-500/20'
                     }`}>
                       {tx.type === 'buy' ? <ArrowDownRight className="w-4 h-4 text-green-400" /> :
                        tx.type === 'sell' ? <ArrowUpRight className="w-4 h-4 text-red-400" /> :

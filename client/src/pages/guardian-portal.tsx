@@ -120,7 +120,7 @@ function CertificationProgress({ certification }: { certification: any }) {
 function getStatusColor(status: string) {
   switch (status) {
     case "completed": return "text-emerald-400";
-    case "in_progress": return "text-amber-400";
+    case "in_progress": return "text-purple-400";
     case "pending": return "text-blue-400";
     case "revoked": return "text-red-400";
     default: return "text-gray-400";
@@ -130,8 +130,8 @@ function getStatusColor(status: string) {
 function getSeverityColor(severity: string) {
   switch (severity) {
     case "critical": return "bg-red-500/20 text-red-400 border-red-500/30";
-    case "high": return "bg-orange-500/20 text-orange-400 border-orange-500/30";
-    case "medium": return "bg-amber-500/20 text-amber-400 border-amber-500/30";
+    case "high": return "bg-cyan-500/20 text-cyan-400 border-cyan-500/30";
+    case "medium": return "bg-purple-500/20 text-purple-400 border-purple-500/30";
     case "low": return "bg-blue-500/20 text-blue-400 border-blue-500/30";
     default: return "bg-gray-500/20 text-gray-400 border-gray-500/30";
   }
@@ -139,7 +139,7 @@ function getSeverityColor(severity: string) {
 
 function getHealthColor(score: number) {
   if (score >= 90) return "text-emerald-400";
-  if (score >= 70) return "text-amber-400";
+  if (score >= 70) return "text-purple-400";
   return "text-red-400";
 }
 
@@ -264,7 +264,7 @@ export default function GuardianPortal() {
             icon={AlertTriangle}
             label="Open Incidents"
             value={String(guardianStats?.openIncidents ?? 0)}
-            color="from-amber-500 to-orange-600"
+            color="from-purple-500 to-cyan-600"
           />
           <StatsCard
             icon={Database}
@@ -284,7 +284,7 @@ export default function GuardianPortal() {
               className={`capitalize ${activeTab === tab ? "bg-white/10 text-white" : "text-white/60 hover:text-white"}`}
               data-testid={`tab-${tab}`}
             >
-              {tab === "shield" && <Badge className="ml-2 bg-amber-500/20 text-amber-400 text-xs">Coming Soon</Badge>}
+              {tab === "shield" && <Badge className="ml-2 bg-purple-500/20 text-purple-400 text-xs">Coming Soon</Badge>}
               {tab}
             </Button>
           ))}
@@ -407,7 +407,7 @@ export default function GuardianPortal() {
               <GlassCard className="p-6">
                 <div className="flex items-center justify-between mb-6">
                   <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-                    <AlertTriangle className="w-5 h-5 text-amber-400" />
+                    <AlertTriangle className="w-5 h-5 text-purple-400" />
                     Recent Incidents
                   </h2>
                   <Button variant="ghost" size="sm" className="text-white/60 hover:text-white">
@@ -440,7 +440,7 @@ export default function GuardianPortal() {
                           <span>{new Date(incident.createdAt).toLocaleDateString()}</span>
                         </div>
                         <div className="mt-2">
-                          <span className={`text-xs capitalize ${incident.status === "resolved" ? "text-emerald-400" : "text-amber-400"}`}>
+                          <span className={`text-xs capitalize ${incident.status === "resolved" ? "text-emerald-400" : "text-purple-400"}`}>
                             {incident.status}
                           </span>
                         </div>
@@ -518,9 +518,9 @@ export default function GuardianPortal() {
                               {(asset.healthScore || 75) >= 80 ? (
                                 <CheckCircle className="w-4 h-4 text-emerald-400" />
                               ) : (
-                                <AlertTriangle className="w-4 h-4 text-amber-400" />
+                                <AlertTriangle className="w-4 h-4 text-purple-400" />
                               )}
-                              <span className={`text-sm ${(asset.healthScore || 75) >= 80 ? "text-emerald-400" : "text-amber-400"}`}>
+                              <span className={`text-sm ${(asset.healthScore || 75) >= 80 ? "text-emerald-400" : "text-purple-400"}`}>
                                 {(asset.healthScore || 75) >= 80 ? "Healthy" : "Monitor"}
                               </span>
                             </div>
@@ -551,7 +551,7 @@ export default function GuardianPortal() {
             <GlassCard className="p-6">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-lg font-semibold text-white flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5 text-amber-400" />
+                  <AlertTriangle className="w-5 h-5 text-purple-400" />
                   Security Incidents
                 </h2>
                 <div className="flex items-center gap-2">
@@ -587,7 +587,7 @@ export default function GuardianPortal() {
                           <p className="text-sm text-white/60">Asset ID: {incident.assetId}</p>
                         </div>
                         <div className="text-right">
-                          <div className={`text-sm capitalize font-medium ${incident.status === "resolved" ? "text-emerald-400" : "text-amber-400"}`}>
+                          <div className={`text-sm capitalize font-medium ${incident.status === "resolved" ? "text-emerald-400" : "text-purple-400"}`}>
                             {incident.status}
                           </div>
                           <div className="text-xs text-white/60 mt-1">{new Date(incident.createdAt).toLocaleDateString()}</div>
@@ -623,9 +623,9 @@ export default function GuardianPortal() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <GlassCard className="p-8 bg-gradient-to-br from-amber-500/10 via-orange-500/5 to-transparent">
+            <GlassCard className="p-8 bg-gradient-to-br from-purple-500/10 via-cyan-500/5 to-transparent">
               <div className="text-center mb-8">
-                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-cyan-600 flex items-center justify-center mx-auto mb-4">
                   <Shield className="w-8 h-8 text-white" />
                 </div>
                 <h2 className="text-3xl font-bold text-white mb-2">Guardian Shield</h2>
@@ -633,9 +633,9 @@ export default function GuardianPortal() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <GlassCard className="p-6 border-amber-500/20">
+                <GlassCard className="p-6 border-purple-500/20">
                   <h3 className="text-lg font-semibold text-white mb-2">Guardian Watch</h3>
-                  <div className="text-3xl font-bold text-amber-400 mb-4">$299<span className="text-lg text-white/60">/mo</span></div>
+                  <div className="text-3xl font-bold text-purple-400 mb-4">$299<span className="text-lg text-white/60">/mo</span></div>
                   <ul className="space-y-2 text-sm text-white/70">
                     <li className="flex items-center gap-2">
                       <CheckCircle className="w-4 h-4 text-emerald-400" />
@@ -693,9 +693,9 @@ export default function GuardianPortal() {
               </div>
 
               <div className="bg-white/5 border border-white/10 rounded-2xl p-6 text-center">
-                <Badge className="bg-amber-500/20 text-amber-400 mb-4">Coming Soon</Badge>
+                <Badge className="bg-purple-500/20 text-purple-400 mb-4">Coming Soon</Badge>
                 <p className="text-white/80 mb-4">Guardian Shield is launching soon with advanced anomaly detection and 24/7 SOC operations for your blockchain assets.</p>
-                <Button className="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700">
+                <Button className="bg-gradient-to-r from-purple-500 to-cyan-600 hover:from-purple-600 hover:to-cyan-700">
                   <Bell className="w-4 h-4 mr-2" />
                   Join Waitlist
                 </Button>
@@ -738,10 +738,10 @@ export default function GuardianPortal() {
                     >
                       <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                         stamp.stampType === "certification" ? "bg-cyan-500/20" :
-                        stamp.stampType === "incident" ? "bg-amber-500/20" : "bg-purple-500/20"
+                        stamp.stampType === "incident" ? "bg-purple-500/20" : "bg-purple-500/20"
                       }`}>
                         {stamp.stampType === "certification" ? <Award className="w-5 h-5 text-cyan-400" /> :
-                         stamp.stampType === "incident" ? <AlertTriangle className="w-5 h-5 text-amber-400" /> :
+                         stamp.stampType === "incident" ? <AlertTriangle className="w-5 h-5 text-purple-400" /> :
                          <Wallet className="w-5 h-5 text-purple-400" />}
                       </div>
                       <div className="flex-1 min-w-0">

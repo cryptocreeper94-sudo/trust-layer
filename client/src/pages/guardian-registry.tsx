@@ -34,7 +34,7 @@ function getTierInfo(tier: string) {
 
 function getScoreColor(score: number) {
   if (score >= 90) return "text-emerald-400";
-  if (score >= 70) return "text-amber-400";
+  if (score >= 70) return "text-purple-400";
   return "text-red-400";
 }
 

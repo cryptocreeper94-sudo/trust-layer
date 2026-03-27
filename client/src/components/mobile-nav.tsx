@@ -59,10 +59,10 @@ const navCategories = [
     label: "Chronicles",
     icon: BookOpen,
     items: [
-      { href: "/chronicles", label: "Enter Chronicles", icon: BookOpen, badge: "Play" },
-      { href: "/legacy", label: "Build Your Legacy", icon: Star },
-      { href: "/era-codex", label: "Era Codex", icon: BookText },
-      { href: "/scenario-generator", label: "Scenario Generator", icon: Sparkles },
+      { href: "https://yourlegacy.io", label: "Enter Chronicles", icon: BookOpen, badge: "Play", external: true },
+      { href: "https://yourlegacy.io/legacy", label: "Build Your Legacy", icon: Star, external: true },
+      { href: "https://yourlegacy.io/era-codex", label: "Era Codex", icon: BookText, external: true },
+      { href: "https://yourlegacy.io/scenario-generator", label: "Scenario Generator", icon: Sparkles, external: true },
       { href: "/creator-program", label: "Creator Program", icon: Palette },
     ]
   },
@@ -220,7 +220,7 @@ const navCategories = [
       { href: "/arcade", label: "The Arcade", icon: Gamepad2 },
       { href: "/studio", label: "Trust Studio", icon: Sparkles },
       { href: "/academy", label: "Academy", icon: BookOpen },
-      { href: "/chronicles", label: "YourLegacy.io", icon: Star },
+      { href: "https://yourlegacy.io", label: "YourLegacy.io", icon: Star, external: true },
       { href: "/signal-chat", label: "Signal Chat", icon: MessageCircle },
     ]
   },

@@ -84,7 +84,7 @@ export default function InvestmentSimulator() {
     { label: "Conservative", price: 0.05, color: "text-blue-400" },
     { label: "Moderate", price: 0.15, color: "text-purple-400" },
     { label: "Optimistic", price: 0.50, color: "text-pink-400" },
-    { label: "Moonshot", price: 1.00, color: "text-amber-400" },
+    { label: "Moonshot", price: 1.00, color: "text-purple-400" },
   ];
 
   return (
@@ -223,7 +223,7 @@ export default function InvestmentSimulator() {
               />
             </div>
 
-            <div className="p-6 rounded-xl bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-amber-500/10 border border-purple-500/20 mb-6" data-testid="display-total-tokens">
+            <div className="p-6 rounded-xl bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-purple-500/10 border border-purple-500/20 mb-6" data-testid="display-total-tokens">
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <p className="text-gray-400 text-sm">Total SIG Tokens</p>
@@ -240,7 +240,7 @@ export default function InvestmentSimulator() {
                 label="Future Value"
                 value={`$${calculations.futureValue.toLocaleString(undefined, { maximumFractionDigits: 0 })}`}
                 subtext={`@ $${targetPrice.toFixed(2)}/token`}
-                gradient="from-amber-500/10 to-orange-500/10"
+                gradient="from-purple-500/10 to-cyan-500/10"
               />
               <ResultCard
                 label="Potential Profit"
@@ -250,12 +250,12 @@ export default function InvestmentSimulator() {
               />
             </div>
 
-            <div className="p-4 rounded-xl bg-gradient-to-r from-amber-500/10 to-pink-500/10 border border-amber-500/20" data-testid="display-multiplier">
+            <div className="p-4 rounded-xl bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20" data-testid="display-multiplier">
               <div className="flex items-center gap-3">
-                <Rocket className="w-8 h-8 text-amber-400" />
+                <Rocket className="w-8 h-8 text-purple-400" />
                 <div>
                   <p className="text-gray-400 text-sm">Multiplier</p>
-                  <p className="text-3xl font-bold text-amber-400" data-testid="text-multiplier">
+                  <p className="text-3xl font-bold text-purple-400" data-testid="text-multiplier">
                     {calculations.multiplier.toFixed(1)}x
                   </p>
                 </div>

@@ -214,7 +214,7 @@ function CandlestickChart({ timeRange }: { timeRange: string }) {
       {/* TradingView-style header */}
       <div className="absolute top-2 left-2 z-10 text-[10px] text-white/60">
         <span className="text-cyan-400">◎</span> PENGUIN/SOL on PumpSwap · 15 · dexscreener.com
-        <span className="ml-2 px-1.5 py-0.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded text-[9px] font-medium">Example Analysis</span>
+        <span className="ml-2 px-1.5 py-0.5 bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded text-[9px] font-medium">Example Analysis</span>
       </div>
       
       {/* Price overlay */}
@@ -336,12 +336,12 @@ function GuardianScorePanel({ token }: { token: TokenDetail }) {
     bgColor = "from-emerald-500/20 to-emerald-600/10";
   } else if (score >= 50) {
     riskLevel = "Medium Risk";
-    riskColor = "text-yellow-400";
-    bgColor = "from-yellow-500/20 to-yellow-600/10";
+    riskColor = "text-teal-400";
+    bgColor = "from-teal-500/20 to-teal-600/10";
   } else if (score >= 20) {
     riskLevel = "High Risk";
-    riskColor = "text-orange-400";
-    bgColor = "from-orange-500/20 to-orange-600/10";
+    riskColor = "text-cyan-400";
+    bgColor = "from-cyan-500/20 to-cyan-600/10";
   }
 
   return (
@@ -350,7 +350,7 @@ function GuardianScorePanel({ token }: { token: TokenDetail }) {
         <div className="flex items-center gap-2">
           <Shield className={`w-5 h-5 ${riskColor}`} />
           <span className="text-sm font-bold text-white">Guardian Score</span>
-          <span className="px-1.5 py-0.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded text-[9px] font-medium">Example</span>
+          <span className="px-1.5 py-0.5 bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded text-[9px] font-medium">Example</span>
         </div>
         <div className={`text-2xl font-bold ${riskColor}`}>{score}</div>
       </div>
@@ -371,7 +371,7 @@ function GuardianScorePanel({ token }: { token: TokenDetail }) {
           {token.liquidityLocked ? (
             <span className="text-emerald-400 flex items-center gap-1"><Lock className="w-3 h-3" /> Locked</span>
           ) : (
-            <span className="text-orange-400 flex items-center gap-1"><Unlock className="w-3 h-3" /> Unlocked</span>
+            <span className="text-cyan-400 flex items-center gap-1"><Unlock className="w-3 h-3" /> Unlocked</span>
           )}
         </div>
         <div className="flex items-center justify-between">
@@ -411,7 +411,7 @@ function MLPredictionPanel({ prediction }: { prediction: TokenDetail["mlPredicti
       <div className="flex items-center gap-2 mb-3">
         <Brain className="w-5 h-5 text-purple-400" />
         <span className="text-sm font-bold text-white">ML Prediction</span>
-        <span className="px-1.5 py-0.5 bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded text-[9px] font-medium">Example</span>
+        <span className="px-1.5 py-0.5 bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded text-[9px] font-medium">Example</span>
       </div>
       
       <div className="flex items-center gap-3 mb-3">
@@ -672,7 +672,7 @@ export default function GuardianScannerDetail() {
         
         {/* Trending tokens ticker - horizontal scroll on mobile */}
         <div className="flex items-center gap-3 text-xs overflow-x-auto hide-scrollbar">
-          <span className="text-orange-400 shrink-0">🔥 PENGUIN <span className="text-emerald-400">↑200</span> 151%</span>
+          <span className="text-cyan-400 shrink-0">🔥 PENGUIN <span className="text-emerald-400">↑200</span> 151%</span>
           <span className="text-white/60 shrink-0">$SKR 353%</span>
           <span className="text-white/60 shrink-0">REEsCoin <span className="text-emerald-400">↑500</span> 718%</span>
         </div>
@@ -920,12 +920,12 @@ export default function GuardianScannerDetail() {
                 onClick={() => setIsWatchlisted(!isWatchlisted)}
                 className={`flex-1 py-3 rounded-xl font-medium text-sm flex items-center justify-center gap-2 transition-colors ${
                   isWatchlisted
-                    ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
+                    ? 'bg-teal-500/20 text-teal-400 border border-teal-500/30'
                     : 'bg-white/5 text-white/70 hover:bg-white/10'
                 }`}
                 data-testid="watchlist-btn"
               >
-                <Star className={`w-4 h-4 ${isWatchlisted ? 'fill-yellow-400' : ''}`} />
+                <Star className={`w-4 h-4 ${isWatchlisted ? 'fill-teal-400' : ''}`} />
                 Watchlist
               </button>
               <button

@@ -39,7 +39,7 @@ const categoryIcons: Record<string, any> = {
 const categoryGradients: Record<string, string> = {
   trading: "from-green-500 to-emerald-600",
   portfolio: "from-blue-500 to-cyan-600",
-  quest: "from-amber-500 to-orange-600",
+  quest: "from-purple-500 to-cyan-600",
   social: "from-pink-500 to-rose-600",
   analytics: "from-purple-500 to-violet-600",
   custom: "from-slate-500 to-slate-600"
@@ -259,7 +259,7 @@ export default function AIAgentMarketplace() {
                         </div>
                         <div className="flex items-center gap-2">
                           {agent.featured && (
-                            <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">
+                            <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
                               <Sparkles className="w-3 h-3 mr-1" />
                               Featured
                             </Badge>
@@ -281,7 +281,7 @@ export default function AIAgentMarketplace() {
                       </p>
 
                       <div className="flex items-center gap-4 mb-4 text-sm">
-                        <div className="flex items-center gap-1 text-amber-400">
+                        <div className="flex items-center gap-1 text-purple-400">
                           <Star className="w-4 h-4 fill-current" />
                           <span>{agent.rating}</span>
                         </div>

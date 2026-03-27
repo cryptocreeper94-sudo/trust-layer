@@ -13,9 +13,9 @@ import { InfoButton } from "@/components/info-button";
 import { useAuth } from "@/hooks/use-auth";
 
 const TIERS = [
-  { name: "Bronze", minXp: 0, color: "from-amber-700 to-amber-900", icon: Star },
+  { name: "Bronze", minXp: 0, color: "from-purple-700 to-purple-900", icon: Star },
   { name: "Silver", minXp: 1000, color: "from-gray-300 to-gray-500", icon: Star },
-  { name: "Gold", minXp: 5000, color: "from-yellow-400 to-amber-500", icon: Crown },
+  { name: "Gold", minXp: 5000, color: "from-teal-400 to-purple-500", icon: Crown },
   { name: "Platinum", minXp: 15000, color: "from-cyan-300 to-blue-500", icon: Crown },
   { name: "Diamond", minXp: 50000, color: "from-purple-400 to-pink-500", icon: Sparkles },
 ];
@@ -64,7 +64,7 @@ export default function Quests() {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "easy": return "text-green-400 bg-green-500/20 border-green-500/30";
-      case "medium": return "text-amber-400 bg-amber-500/20 border-amber-500/30";
+      case "medium": return "text-purple-400 bg-purple-500/20 border-purple-500/30";
       case "hard": return "text-red-400 bg-red-500/20 border-red-500/30";
       default: return "text-blue-400 bg-blue-500/20 border-blue-500/30";
     }
@@ -128,7 +128,7 @@ export default function Quests() {
                     <div className="text-[10px] text-muted-foreground uppercase">Level</div>
                   </div>
                   <div className="bg-[rgba(12,18,36,0.65)] backdrop-blur-xl border border-white/[0.08] rounded-xl p-3 text-center shadow-[0_0_20px_rgba(251,191,36,0.1)]">
-                    <div className="text-xl sm:text-2xl font-bold text-amber-400 tracking-tight">{userXp.toLocaleString()}</div>
+                    <div className="text-xl sm:text-2xl font-bold text-purple-400 tracking-tight">{userXp.toLocaleString()}</div>
                     <div className="text-[10px] text-muted-foreground uppercase">Total XP</div>
                   </div>
                   <div className="bg-[rgba(12,18,36,0.65)] backdrop-blur-xl border border-white/[0.08] rounded-xl p-3 text-center shadow-[0_0_20px_rgba(168,85,247,0.1)]">
@@ -137,8 +137,8 @@ export default function Quests() {
                   </div>
                   <div className="bg-[rgba(12,18,36,0.65)] backdrop-blur-xl border border-white/[0.08] rounded-xl p-3 text-center shadow-[0_0_20px_rgba(251,146,60,0.1)]">
                     <div className="flex items-center justify-center gap-1">
-                      <Flame className="w-4 sm:w-5 h-4 sm:h-5 text-orange-400" />
-                      <span className="text-xl sm:text-2xl font-bold text-orange-400 tracking-tight">{streakDays}</span>
+                      <Flame className="w-4 sm:w-5 h-4 sm:h-5 text-cyan-400" />
+                      <span className="text-xl sm:text-2xl font-bold text-cyan-400 tracking-tight">{streakDays}</span>
                     </div>
                     <div className="text-[10px] text-muted-foreground uppercase">Day Streak</div>
                   </div>
@@ -157,7 +157,7 @@ export default function Quests() {
             <GlassCard glow>
               <div className="p-4 sm:p-6">
                 <h3 className="text-base sm:text-lg font-bold mb-4 flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-amber-400 shrink-0" /> Tier Benefits
+                  <Trophy className="w-5 h-5 text-purple-400 shrink-0" /> Tier Benefits
                 </h3>
                 <div className="space-y-3">
                   {TIERS.map((tier, i) => {
@@ -234,7 +234,7 @@ export default function Quests() {
                           <span className="text-xs font-medium">{quest.xpReward} XP</span>
                         </div>
                         <div className="flex items-center gap-1">
-                          <Gift className="w-3.5 h-3.5 text-amber-400" />
+                          <Gift className="w-3.5 h-3.5 text-purple-400" />
                           <span className="text-xs font-medium">{quest.tokenReward} SIG</span>
                         </div>
                       </div>
@@ -288,7 +288,7 @@ export default function Quests() {
                           <p className="text-sm text-muted-foreground">{mission.description}</p>
                         </div>
                         <div className="text-right">
-                          <div className="flex items-center gap-1 text-amber-400 mb-1">
+                          <div className="flex items-center gap-1 text-purple-400 mb-1">
                             <Gift className="w-4 h-4" />
                             <span className="font-bold">{parseInt(mission.rewardPool).toLocaleString()} SIG</span>
                           </div>
@@ -327,7 +327,7 @@ export default function Quests() {
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-6">
                     <h3 className="text-lg font-bold flex items-center gap-2">
-                      <Trophy className="w-5 h-5 text-amber-400" /> XP Leaderboard
+                      <Trophy className="w-5 h-5 text-purple-400" /> XP Leaderboard
                     </h3>
                     <Badge variant="outline" className="text-xs">Updated live</Badge>
                   </div>
@@ -346,9 +346,9 @@ export default function Quests() {
                         data-testid={`row-leaderboard-${entry.rank}`}
                       >
                         <div className={`w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm ${
-                          entry.rank === 1 ? 'bg-amber-500 text-black' :
+                          entry.rank === 1 ? 'bg-purple-500 text-black' :
                           entry.rank === 2 ? 'bg-gray-300 text-black' :
-                          entry.rank === 3 ? 'bg-amber-700 text-white' :
+                          entry.rank === 3 ? 'bg-purple-700 text-white' :
                           'bg-white/10 text-white'
                         }`}>
                           {entry.rank}
@@ -358,7 +358,7 @@ export default function Quests() {
                           <div className="text-xs text-muted-foreground">{entry.tier}</div>
                         </div>
                         <div className="text-right">
-                          <div className="font-bold text-amber-400">{entry.xp.toLocaleString()}</div>
+                          <div className="font-bold text-purple-400">{entry.xp.toLocaleString()}</div>
                           <div className="text-[10px] text-muted-foreground">XP</div>
                         </div>
                       </div>

@@ -165,7 +165,7 @@ export default function Members() {
                         )}
                         <div className="flex items-center gap-2 mt-2">
                           {member.isEarlyAdopter && (
-                            <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-[10px]">
+                            <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-[10px]">
                               <Star className="w-2 h-2 mr-1" /> Early Adopter
                             </Badge>
                           )}

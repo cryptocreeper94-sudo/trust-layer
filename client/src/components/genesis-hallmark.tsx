@@ -212,7 +212,7 @@ export function GenesisHallmarkCard() {
               <div className="grid grid-cols-2 gap-3 mb-6">
                 <div className="p-3 rounded-lg bg-white/5 border border-white/10">
                   <div className="flex items-center gap-2 mb-1">
-                    <Zap className="w-3 h-3 text-yellow-400" />
+                    <Zap className="w-3 h-3 text-teal-400" />
                     <span className="text-[10px] text-white/50 uppercase">Block Time</span>
                   </div>
                   <div className="text-sm font-bold text-white">{genesis.metadata.blockTime}</div>

@@ -106,8 +106,8 @@ export default function TrustCooperative() {
                 </p>
               </div>
               
-              <div className="p-6 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20">
-                <Shield className="w-8 h-8 text-amber-400 mb-4" />
+              <div className="p-6 rounded-xl bg-gradient-to-br from-purple-500/10 to-cyan-500/10 border border-purple-500/20">
+                <Shield className="w-8 h-8 text-purple-400 mb-4" />
                 <h3 className="font-semibold text-lg text-white mb-2">Trust-Based</h3>
                 <p className="text-sm text-muted-foreground">
                   Not a system of laws with loopholes and lawyers. A system of trust where 
@@ -250,8 +250,8 @@ export default function TrustCooperative() {
               </div>
             </Link>
             <Link href="/governance-treasury">
-              <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-amber-500/30 transition-all cursor-pointer group" data-testid="link-governance-treasury">
-                <Shield className="w-5 h-5 text-amber-400 mb-2 group-hover:scale-110 transition-transform" />
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10 hover:border-purple-500/30 transition-all cursor-pointer group" data-testid="link-governance-treasury">
+                <Shield className="w-5 h-5 text-purple-400 mb-2 group-hover:scale-110 transition-transform" />
                 <h4 className="font-semibold text-white text-sm">Governance Treasury</h4>
                 <p className="text-xs text-muted-foreground">Multi-sig controlled funds</p>
               </div>

@@ -31,7 +31,7 @@ const features = [
     icon: Layers,
     title: "Project Templates",
     description: "Start fast with React, Node.js, Python, Vue, Next.js, Django, Go, or Rust templates",
-    color: "text-amber-400"
+    color: "text-purple-400"
   },
   {
     icon: Terminal,
@@ -49,7 +49,7 @@ const features = [
     icon: Rocket,
     title: "One-Click Deploy",
     description: "Deploy your projects instantly to the Trust Layer network with custom domains",
-    color: "text-orange-400"
+    color: "text-cyan-400"
   },
   {
     icon: Database,
@@ -95,7 +95,7 @@ const learningPath = [
     title: "Understand Credits",
     description: "Learn how AI credits work so you can use them efficiently",
     icon: DollarSign,
-    color: "from-amber-500 to-orange-500",
+    color: "from-purple-500 to-cyan-500",
     link: "/studio/docs#credits",
     time: "5 min",
     priority: "Important"
@@ -243,10 +243,10 @@ export default function StudioLanding() {
             transition={{ delay: 0.3 }}
             className="max-w-2xl mx-auto mb-8"
           >
-            <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3 text-left">
-              <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+            <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-4 flex items-start gap-3 text-left">
+              <AlertTriangle className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-amber-300 font-medium text-sm mb-1">AI Features Use Credits</p>
+                <p className="text-purple-300 font-medium text-sm mb-1">AI Features Use Credits</p>
                 <p className="text-white/60 text-sm">
                   Using the AI assistant costs credits. Learning the basics first means fewer prompts 
                   needed and more efficient use of your credits. We recommend completing the learning 
@@ -416,7 +416,7 @@ export default function StudioLanding() {
                 <div className="h-10 bg-slate-800/80 border-b border-white/5 flex items-center px-4 gap-2">
                   <div className="flex gap-1.5">
                     <div className="w-3 h-3 rounded-full bg-red-500/60" />
-                    <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
+                    <div className="w-3 h-3 rounded-full bg-teal-500/60" />
                     <div className="w-3 h-3 rounded-full bg-green-500/60" />
                   </div>
                   <span className="text-xs text-white/40 ml-4">Trust Layer Studio — my-project</span>
@@ -433,7 +433,7 @@ export default function StudioLanding() {
                         App.tsx
                       </div>
                       <div className="flex items-center gap-2 text-white/60 px-2 py-1">
-                        <FileCode className="w-3 h-3 text-yellow-400" />
+                        <FileCode className="w-3 h-3 text-teal-400" />
                         index.ts
                       </div>
                       <div className="flex items-center gap-2 text-white/60 px-2 py-1">
@@ -458,7 +458,7 @@ export default function StudioLanding() {
                     <div className="text-white/30 mt-2 mb-1">6</div>
                     <div className="pl-4"><span className="text-purple-400">return</span> (</div>
                     <div className="text-white/30 mt-2 mb-1">7</div>
-                    <div className="pl-8">&lt;<span className="text-cyan-400">button</span> <span className="text-yellow-400">onClick</span>={"{"}() =&gt; setCount(c =&gt; c + 1){"}"}&gt;</div>
+                    <div className="pl-8">&lt;<span className="text-cyan-400">button</span> <span className="text-teal-400">onClick</span>={"{"}() =&gt; setCount(c =&gt; c + 1){"}"}&gt;</div>
                   </div>
                   
                   {/* AI Panel */}

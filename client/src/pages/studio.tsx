@@ -494,9 +494,9 @@ interface Config {
 }
 
 const getFileIcon = (name: string, isFolder: boolean) => {
-  if (isFolder) return <Folder className="w-4 h-4 text-amber-400" />;
+  if (isFolder) return <Folder className="w-4 h-4 text-purple-400" />;
   if (name.endsWith(".js") || name.endsWith(".ts") || name.endsWith(".tsx")) 
-    return <FileCode className="w-4 h-4 text-yellow-400" />;
+    return <FileCode className="w-4 h-4 text-teal-400" />;
   if (name.endsWith(".json")) return <FileJson className="w-4 h-4 text-green-400" />;
   if (name.endsWith(".md")) return <FileText className="w-4 h-4 text-blue-400" />;
   return <File className="w-4 h-4 text-gray-400" />;
@@ -2358,7 +2358,7 @@ console.log('Trust Layer Studio loaded!');`,
                   </a>
                   <a href="/tutorials" onClick={() => setShowHelpMenu(false)}>
                     <div className="w-full flex items-center gap-3 px-3 py-2 text-sm text-left hover:bg-white/5 transition-colors">
-                      <Video className="w-4 h-4 text-amber-400" />
+                      <Video className="w-4 h-4 text-purple-400" />
                       <div>
                         <p className="font-medium">Video Tutorials</p>
                         <p className="text-xs text-white/40">Watch step-by-step guides</p>
@@ -3052,7 +3052,7 @@ console.log('Trust Layer Studio loaded!');`,
                   .filter((s: any) => !s.environment || s.environment === "shared" || s.environment === envMode)
                   .map((secret) => (
                     <div key={secret.id} className="flex items-center gap-2 p-2 rounded bg-[#0a0b10] text-xs">
-                      <Lock className="w-3 h-3 text-amber-400 shrink-0" />
+                      <Lock className="w-3 h-3 text-purple-400 shrink-0" />
                       <span className="font-mono">{secret.key}</span>
                       <span className="text-muted-foreground">= ••••••</span>
                       {(secret as any).environment && (secret as any).environment !== "shared" && (
@@ -3174,7 +3174,7 @@ console.log('Trust Layer Studio loaded!');`,
                 {getFileIcon(tab.name, false)}
                 <span className="max-w-24 truncate">{tab.name}</span>
                 {unsavedFiles.has(tab.id) && (
-                  <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" title="Unsaved changes" />
+                  <span className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" title="Unsaved changes" />
                 )}
                 <button
                   onClick={(e) => handleCloseTab(e, tab.id)}
@@ -3356,7 +3356,7 @@ console.log('Trust Layer Studio loaded!');`,
                 size="sm"
                 variant={bottomTab === "packages" ? "secondary" : "ghost"}
                 onClick={() => setBottomTab("packages")}
-                className={`h-6 text-xs px-2 transition-all duration-200 ${bottomTab === "packages" ? "bg-amber-500/20 text-amber-400 shadow-[0_0_10px_rgba(245,158,11,0.3)]" : "hover:bg-white/5"}`}
+                className={`h-6 text-xs px-2 transition-all duration-200 ${bottomTab === "packages" ? "bg-purple-500/20 text-purple-400 shadow-[0_0_10px_rgba(245,158,11,0.3)]" : "hover:bg-white/5"}`}
                 data-testid="button-packages-tab"
               >
                 <Package className="w-3 h-3 mr-1" /> Packages
@@ -3390,7 +3390,7 @@ console.log('Trust Layer Studio loaded!');`,
                 {diagnosticsSummary.errors > 0 ? (
                   <span className="text-red-400">{diagnosticsSummary.errors}E</span>
                 ) : diagnosticsSummary.warnings > 0 ? (
-                  <span className="text-amber-400">{diagnosticsSummary.warnings}W</span>
+                  <span className="text-purple-400">{diagnosticsSummary.warnings}W</span>
                 ) : (
                   "Problems"
                 )}
@@ -3532,7 +3532,7 @@ console.log('Trust Layer Studio loaded!');`,
                           {currentDeployment.status === "live" ? (
                             <CheckCircle className="w-5 h-5 text-green-400" />
                           ) : currentDeployment.status === "building" ? (
-                            <Loader2 className="w-5 h-5 text-amber-400 animate-spin" />
+                            <Loader2 className="w-5 h-5 text-purple-400 animate-spin" />
                           ) : (
                             <Cloud className="w-5 h-5 text-muted-foreground" />
                           )}
@@ -3626,7 +3626,7 @@ console.log('Trust Layer Studio loaded!');`,
                       value={newPackageName}
                       onChange={(e) => setNewPackageName(e.target.value)}
                       placeholder={packageManager === "pip" ? "package-name" : "package-name@version"}
-                      className="h-7 text-xs bg-[#0a0b10] flex-1 border-[#1a1b2e] focus:border-amber-500/50 transition-colors"
+                      className="h-7 text-xs bg-[#0a0b10] flex-1 border-[#1a1b2e] focus:border-purple-500/50 transition-colors"
                       onKeyDown={(e) => e.key === "Enter" && handleInstallPackage()}
                       data-testid="input-package-name"
                     />
@@ -3634,7 +3634,7 @@ console.log('Trust Layer Studio loaded!');`,
                       size="sm" 
                       onClick={handleInstallPackage}
                       disabled={installingPackage || !newPackageName.trim()}
-                      className="h-7 text-xs bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:bg-amber-500/30 hover:shadow-[0_0_15px_rgba(245,158,11,0.4)] transition-all disabled:opacity-50"
+                      className="h-7 text-xs bg-purple-500/20 text-purple-400 border border-purple-500/30 hover:bg-purple-500/30 hover:shadow-[0_0_15px_rgba(245,158,11,0.4)] transition-all disabled:opacity-50"
                       data-testid="button-install-package"
                     >
                       {installingPackage ? (
@@ -3648,7 +3648,7 @@ console.log('Trust Layer Studio loaded!');`,
                   {packageManager && (
                     <div className="mb-2 flex items-center gap-2">
                       <span className="text-xs text-muted-foreground">Manager:</span>
-                      <span className="text-xs text-amber-400 font-mono">{packageManager}</span>
+                      <span className="text-xs text-purple-400 font-mono">{packageManager}</span>
                     </div>
                   )}
                   <div className="space-y-1">
@@ -3660,10 +3660,10 @@ console.log('Trust Layer Studio loaded!');`,
                       packages.map((pkg) => (
                         <div 
                           key={pkg.name}
-                          className="flex items-center justify-between p-1.5 rounded bg-[#0a0b10] border border-[#1a1b2e] hover:border-amber-500/30 hover:bg-amber-500/5 transition-all group"
+                          className="flex items-center justify-between p-1.5 rounded bg-[#0a0b10] border border-[#1a1b2e] hover:border-purple-500/30 hover:bg-purple-500/5 transition-all group"
                         >
                           <div className="flex items-center gap-2">
-                            <Package className="w-3 h-3 text-amber-400 shrink-0" />
+                            <Package className="w-3 h-3 text-purple-400 shrink-0" />
                             <span className="text-xs text-gray-200">{pkg.name}</span>
                             <span className="text-xs text-muted-foreground font-mono">{pkg.version}</span>
                           </div>
@@ -3860,7 +3860,7 @@ console.log('Trust Layer Studio loaded!');`,
                     <div className="flex items-center gap-2">
                       <span className="text-xs text-muted-foreground uppercase">Diagnostics</span>
                       {diagnosticsSummary.errors > 0 && <span className="text-[10px] px-1.5 py-0.5 rounded bg-red-500/20 text-red-400">{diagnosticsSummary.errors} errors</span>}
-                      {diagnosticsSummary.warnings > 0 && <span className="text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400">{diagnosticsSummary.warnings} warnings</span>}
+                      {diagnosticsSummary.warnings > 0 && <span className="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-400">{diagnosticsSummary.warnings} warnings</span>}
                       {diagnosticsSummary.info > 0 && <span className="text-[10px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400">{diagnosticsSummary.info} info</span>}
                     </div>
                     <Button
@@ -3878,14 +3878,14 @@ console.log('Trust Layer Studio loaded!');`,
                         key={i}
                         className={`flex items-start gap-2 p-2 rounded text-xs border transition-all cursor-pointer hover:bg-white/5 ${
                           d.severity === "error" ? "border-red-500/20 bg-red-500/5" :
-                          d.severity === "warning" ? "border-amber-500/20 bg-amber-500/5" :
+                          d.severity === "warning" ? "border-purple-500/20 bg-purple-500/5" :
                           "border-blue-500/20 bg-blue-500/5"
                         }`}
                         data-testid={`diagnostic-${i}`}
                       >
                         <div className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 mt-0.5 ${
                           d.severity === "error" ? "bg-red-500/20 text-red-400" :
-                          d.severity === "warning" ? "bg-amber-500/20 text-amber-400" :
+                          d.severity === "warning" ? "bg-purple-500/20 text-purple-400" :
                           "bg-blue-500/20 text-blue-400"
                         }`}>
                           {d.severity === "error" ? <X className="w-2.5 h-2.5" /> : d.severity === "warning" ? <AlertTriangle className="w-2.5 h-2.5" /> : <Info className="w-2.5 h-2.5" />}
@@ -4318,7 +4318,7 @@ console.log('Trust Layer Studio loaded!');`,
             {/* AI Panel Header */}
             <div className="flex items-center justify-between p-4 border-b border-[#1a1b2e] bg-gradient-to-r from-purple-500/10 to-cyan-500/10">
               <div className="flex items-center gap-2">
-                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${agentMode ? "bg-gradient-to-r from-amber-500 to-orange-500" : "bg-gradient-to-r from-purple-500 to-cyan-500"}`}>
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${agentMode ? "bg-gradient-to-r from-purple-500 to-cyan-500" : "bg-gradient-to-r from-purple-500 to-cyan-500"}`}>
                   {agentMode ? <Cpu className="w-5 h-5 text-white" /> : <Sparkles className="w-5 h-5 text-white" />}
                 </div>
                 <div>
@@ -4331,7 +4331,7 @@ console.log('Trust Layer Studio loaded!');`,
                   size="sm"
                   variant={agentMode ? "default" : "ghost"}
                   onClick={() => setAgentMode(!agentMode)}
-                  className={`h-7 text-xs px-2 ${agentMode ? "bg-amber-500/20 text-amber-400 border border-amber-500/30" : "hover:bg-white/5"}`}
+                  className={`h-7 text-xs px-2 ${agentMode ? "bg-purple-500/20 text-purple-400 border border-purple-500/30" : "hover:bg-white/5"}`}
                   data-testid="button-toggle-agent"
                 >
                   <Cpu className="w-3 h-3 mr-1" /> Agent
@@ -4403,8 +4403,8 @@ console.log('Trust Layer Studio loaded!');`,
                 </div>
               ) : (
                 <div className="text-center py-12">
-                  <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${agentMode ? "bg-gradient-to-r from-amber-500/20 to-orange-500/20" : "bg-gradient-to-r from-purple-500/20 to-cyan-500/20"}`}>
-                    {agentMode ? <Cpu className="w-8 h-8 text-amber-400" /> : <MessageSquare className="w-8 h-8 text-cyan-400" />}
+                  <div className={`w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center ${agentMode ? "bg-gradient-to-r from-purple-500/20 to-cyan-500/20" : "bg-gradient-to-r from-purple-500/20 to-cyan-500/20"}`}>
+                    {agentMode ? <Cpu className="w-8 h-8 text-purple-400" /> : <MessageSquare className="w-8 h-8 text-cyan-400" />}
                   </div>
                   <h4 className="text-lg font-medium text-white mb-2">{agentMode ? "Agent Ready" : "Ask me anything!"}</h4>
                   <p className="text-sm text-muted-foreground max-w-xs mx-auto">
@@ -4458,7 +4458,7 @@ console.log('Trust Layer Studio loaded!');`,
                   size="sm"
                   onClick={askAiAssistant}
                   disabled={aiLoading || !aiPrompt.trim()}
-                  className={`h-10 px-4 ${agentMode ? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400" : "bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400"}`}
+                  className={`h-10 px-4 ${agentMode ? "bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400" : "bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400"}`}
                   data-testid="button-ask-ai"
                 >
                   {aiLoading ? (
@@ -4505,7 +4505,7 @@ console.log('Trust Layer Studio loaded!');`,
             </span>
           )}
           {diagnosticsSummary.warnings > 0 && (
-            <span className="text-amber-400 cursor-pointer" onClick={() => setBottomTab("problems")}>
+            <span className="text-purple-400 cursor-pointer" onClick={() => setBottomTab("problems")}>
               {diagnosticsSummary.warnings} warning{diagnosticsSummary.warnings > 1 ? "s" : ""}
             </span>
           )}

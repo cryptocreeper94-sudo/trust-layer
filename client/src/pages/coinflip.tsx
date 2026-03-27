@@ -99,7 +99,7 @@ function StreakIndicator({ results }: { results: ("heads" | "tails")[] }) {
       className={`
         flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold
         ${isHotStreak 
-          ? 'bg-gradient-to-r from-orange-500/30 to-red-500/30 border border-orange-400/50 text-orange-300' 
+          ? 'bg-gradient-to-r from-cyan-500/30 to-red-500/30 border border-cyan-400/50 text-cyan-300' 
           : 'bg-white/5 border border-white/10 text-gray-400'}
       `}
     >
@@ -108,7 +108,7 @@ function StreakIndicator({ results }: { results: ("heads" | "tails")[] }) {
           animate={{ scale: [1, 1.3, 1] }}
           transition={{ duration: 0.5, repeat: Infinity }}
         >
-          <Flame className="w-4 h-4 text-orange-400" />
+          <Flame className="w-4 h-4 text-cyan-400" />
         </motion.div>
       )}
       <span>
@@ -117,7 +117,7 @@ function StreakIndicator({ results }: { results: ("heads" | "tails")[] }) {
       {isHotStreak && (
         <>
           {[...Array(Math.min(streak - 2, 5))].map((_, i) => (
-            <Flame key={i} className="w-3 h-3 text-orange-400" />
+            <Flame key={i} className="w-3 h-3 text-cyan-400" />
           ))}
         </>
       )}
@@ -301,7 +301,7 @@ export default function Coinflip() {
         style={{ backgroundImage: `url(${coinflipBg})` }}
       />
 
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-yellow-900/10 via-transparent to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-teal-900/10 via-transparent to-transparent pointer-events-none" />
       
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {[...Array(20)].map((_, i) => (
@@ -346,7 +346,7 @@ export default function Coinflip() {
                     color: '#fbbf24',
                   }} />
                 </motion.div>
-                <span className="bg-gradient-to-r from-yellow-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-lg">
+                <span className="bg-gradient-to-r from-teal-200 via-teal-400 to-purple-500 bg-clip-text text-transparent drop-shadow-lg">
                   Royal Coin Flip
                 </span>
               </h1>
@@ -378,13 +378,13 @@ export default function Coinflip() {
         {currentBalance && (
           <div className="flex items-center justify-center gap-4 mb-6">
             <div 
-              className={`flex items-center gap-3 px-4 py-2 rounded-xl cursor-pointer transition-all ${currencyType === 'GC' ? 'bg-yellow-500/20 ring-2 ring-yellow-400/50' : 'bg-black/30 hover:bg-black/40'}`}
+              className={`flex items-center gap-3 px-4 py-2 rounded-xl cursor-pointer transition-all ${currencyType === 'GC' ? 'bg-teal-500/20 ring-2 ring-teal-400/50' : 'bg-black/30 hover:bg-black/40'}`}
               onClick={() => setCurrencyType("GC")}
             >
-              <Coins className="w-5 h-5 text-yellow-400" />
+              <Coins className="w-5 h-5 text-teal-400" />
               <div>
-                <div className="text-xs text-yellow-400/80">Gold Coins {isDemo && "(Demo)"}</div>
-                <div className="text-lg font-bold text-yellow-400">{formatNumber(currentBalance.goldCoins)}</div>
+                <div className="text-xs text-teal-400/80">Gold Coins {isDemo && "(Demo)"}</div>
+                <div className="text-lg font-bold text-teal-400">{formatNumber(currentBalance.goldCoins)}</div>
               </div>
             </div>
             <div 
@@ -458,8 +458,8 @@ export default function Coinflip() {
                       boxShadow: 'inset 0 0 0 3px rgba(253,224,71,0.5), inset 0 0 0 8px rgba(180,83,9,0.3)',
                     }} />
 
-                    <div className="absolute inset-[12px] rounded-full border-2 border-yellow-600/40 pointer-events-none" />
-                    <div className="absolute inset-[18px] rounded-full border border-yellow-500/20 pointer-events-none" />
+                    <div className="absolute inset-[12px] rounded-full border-2 border-teal-600/40 pointer-events-none" />
+                    <div className="absolute inset-[18px] rounded-full border border-teal-500/20 pointer-events-none" />
 
                     {!isFlipping && (
                       <motion.div
@@ -485,10 +485,10 @@ export default function Coinflip() {
                     )}
 
                     <div className="text-center relative z-10">
-                      <Crown className="w-20 h-20 md:w-28 md:h-28 text-yellow-900 mx-auto mb-1" style={{
+                      <Crown className="w-20 h-20 md:w-28 md:h-28 text-teal-900 mx-auto mb-1" style={{
                         filter: 'drop-shadow(0 2px 4px rgba(146,64,14,0.5))',
                       }} />
-                      <span className="text-lg md:text-2xl font-black text-yellow-900 tracking-wider" style={{
+                      <span className="text-lg md:text-2xl font-black text-teal-900 tracking-wider" style={{
                         textShadow: '0 1px 0 rgba(253,224,71,0.5)',
                       }}>HEADS</span>
                     </div>
@@ -509,14 +509,14 @@ export default function Coinflip() {
                       boxShadow: 'inset 0 0 0 3px rgba(253,224,71,0.5), inset 0 0 0 8px rgba(180,83,9,0.3)',
                     }} />
 
-                    <div className="absolute inset-[12px] rounded-full border-2 border-yellow-600/40 pointer-events-none" />
-                    <div className="absolute inset-[18px] rounded-full border border-yellow-500/20 pointer-events-none" />
+                    <div className="absolute inset-[12px] rounded-full border-2 border-teal-600/40 pointer-events-none" />
+                    <div className="absolute inset-[18px] rounded-full border border-teal-500/20 pointer-events-none" />
 
                     <div className="text-center relative z-10">
-                      <Star className="w-20 h-20 md:w-28 md:h-28 text-yellow-900 mx-auto mb-1" style={{
+                      <Star className="w-20 h-20 md:w-28 md:h-28 text-teal-900 mx-auto mb-1" style={{
                         filter: 'drop-shadow(0 2px 4px rgba(146,64,14,0.5))',
                       }} />
-                      <span className="text-lg md:text-2xl font-black text-yellow-900 tracking-wider" style={{
+                      <span className="text-lg md:text-2xl font-black text-teal-900 tracking-wider" style={{
                         textShadow: '0 1px 0 rgba(253,224,71,0.5)',
                       }}>TAILS</span>
                     </div>
@@ -531,7 +531,7 @@ export default function Coinflip() {
                   className={`
                     px-8 py-6 text-lg font-bold rounded-xl transition-all
                     ${choice === "heads" 
-                      ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black scale-105 ring-2 ring-yellow-300 shadow-lg shadow-yellow-500/30' 
+                      ? 'bg-gradient-to-r from-teal-400 to-purple-500 text-black scale-105 ring-2 ring-teal-300 shadow-lg shadow-teal-500/30' 
                       : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'}
                   `}
                   data-testid="choice-heads"
@@ -545,7 +545,7 @@ export default function Coinflip() {
                   className={`
                     px-8 py-6 text-lg font-bold rounded-xl transition-all
                     ${choice === "tails" 
-                      ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black scale-105 ring-2 ring-yellow-300 shadow-lg shadow-yellow-500/30' 
+                      ? 'bg-gradient-to-r from-teal-400 to-purple-500 text-black scale-105 ring-2 ring-teal-300 shadow-lg shadow-teal-500/30' 
                       : 'bg-white/10 hover:bg-white/20 text-white border border-white/10'}
                   `}
                   data-testid="choice-tails"
@@ -570,11 +570,11 @@ export default function Coinflip() {
               borderBottom: '1px solid rgba(218,165,32,0.15)',
               background: 'linear-gradient(90deg, rgba(184,134,11,0.08), transparent, rgba(184,134,11,0.08))',
             }}>
-              <span className="text-yellow-400/80 font-semibold text-sm tracking-wide uppercase flex items-center gap-2">
+              <span className="text-teal-400/80 font-semibold text-sm tracking-wide uppercase flex items-center gap-2">
                 <Coins className="w-4 h-4" />
                 Bet Amount
               </span>
-              <Badge className="bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border-yellow-500/40 text-yellow-300 font-bold">
+              <Badge className="bg-gradient-to-r from-teal-500/20 to-purple-500/20 border-teal-500/40 text-teal-300 font-bold">
                 1.96x Payout
               </Badge>
             </div>
@@ -586,12 +586,12 @@ export default function Coinflip() {
                   size="sm"
                   onClick={halfBet}
                   disabled={isFlipping}
-                  className="border-yellow-600/30 bg-yellow-500/5 hover:bg-yellow-500/15 text-yellow-400 font-bold"
+                  className="border-teal-600/30 bg-teal-500/5 hover:bg-teal-500/15 text-teal-400 font-bold"
                 >
                   ½
                 </Button>
                 <div className="flex-1 text-center">
-                  <div className="text-3xl font-black bg-gradient-to-r from-yellow-300 via-yellow-400 to-amber-400 bg-clip-text text-transparent">
+                  <div className="text-3xl font-black bg-gradient-to-r from-teal-300 via-teal-400 to-purple-400 bg-clip-text text-transparent">
                     {formatNumber(betAmount)} {currencyType}
                   </div>
                 </div>
@@ -600,7 +600,7 @@ export default function Coinflip() {
                   size="sm"
                   onClick={doubleBet}
                   disabled={isFlipping}
-                  className="border-yellow-600/30 bg-yellow-500/5 hover:bg-yellow-500/15 text-yellow-400 font-bold"
+                  className="border-teal-600/30 bg-teal-500/5 hover:bg-teal-500/15 text-teal-400 font-bold"
                 >
                   2x
                 </Button>
@@ -615,10 +615,10 @@ export default function Coinflip() {
                     onClick={() => quickBet(amount)}
                     disabled={isFlipping}
                     className={`
-                      border-yellow-600/20 font-semibold transition-all
+                      border-teal-600/20 font-semibold transition-all
                       ${betAmount === amount 
-                        ? 'bg-gradient-to-r from-yellow-500/20 to-amber-500/20 text-yellow-300 ring-1 ring-yellow-400/50 shadow-md shadow-yellow-500/10' 
-                        : 'hover:bg-yellow-500/10 text-gray-400 hover:text-yellow-400'}
+                        ? 'bg-gradient-to-r from-teal-500/20 to-purple-500/20 text-teal-300 ring-1 ring-teal-400/50 shadow-md shadow-teal-500/10' 
+                        : 'hover:bg-teal-500/10 text-gray-400 hover:text-teal-400'}
                     `}
                   >
                     {amount}
@@ -638,7 +638,7 @@ export default function Coinflip() {
               className={`
                 px-16 py-8 text-2xl font-black rounded-full transition-all relative overflow-hidden
                 ${!isFlipping && getBalance() >= betAmount
-                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 hover:from-yellow-300 hover:via-amber-400 hover:to-orange-400 text-black shadow-xl shadow-amber-500/30'
+                  ? 'bg-gradient-to-r from-teal-400 via-purple-500 to-cyan-500 hover:from-teal-300 hover:via-purple-400 hover:to-cyan-400 text-black shadow-xl shadow-purple-500/30'
                   : 'bg-gray-700 text-gray-400 cursor-not-allowed'
                 }
               `}
@@ -802,7 +802,7 @@ export default function Coinflip() {
         }}>
           <CardContent className="p-4">
             <div className="flex items-center gap-2 mb-3">
-              <History className="w-5 h-5 text-yellow-400/60" />
+              <History className="w-5 h-5 text-teal-400/60" />
               <span className="text-gray-400 font-medium">Recent Results</span>
             </div>
             
@@ -816,12 +816,12 @@ export default function Coinflip() {
                     className={`
                       w-8 h-8 rounded-full flex items-center justify-center
                       ${result === "heads" 
-                        ? 'bg-yellow-500/20 border border-yellow-500/50' 
+                        ? 'bg-teal-500/20 border border-teal-500/50' 
                         : 'bg-purple-500/20 border border-purple-500/50'}
                     `}
                   >
                     {result === "heads" ? (
-                      <Crown className="w-4 h-4 text-yellow-400" />
+                      <Crown className="w-4 h-4 text-teal-400" />
                     ) : (
                       <Star className="w-4 h-4 text-purple-400" />
                     )}
@@ -835,7 +835,7 @@ export default function Coinflip() {
             {recentResults.length > 0 && (
               <div className="flex gap-4 mt-4 pt-4 border-t border-white/10 text-sm text-gray-400">
                 <div className="flex items-center gap-1">
-                  <Crown className="w-4 h-4 text-yellow-400" />
+                  <Crown className="w-4 h-4 text-teal-400" />
                   <span>Heads: {recentResults.filter(r => r === "heads").length}</span>
                 </div>
                 <div className="flex items-center gap-1">

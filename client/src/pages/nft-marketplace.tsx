@@ -162,7 +162,7 @@ export default function NftMarketplace() {
               <div className="text-[10px] text-muted-foreground">Collections</div>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
-              <div className="text-lg font-bold text-amber-400">0.5%</div>
+              <div className="text-lg font-bold text-purple-400">0.5%</div>
               <div className="text-[10px] text-muted-foreground">Platform Fee</div>
             </div>
           </motion.div>

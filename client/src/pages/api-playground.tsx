@@ -191,8 +191,8 @@ export default function ApiPlayground() {
                   </div>
                 </div>
                 
-                <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/30">
-                  <p className="text-[11px] text-yellow-400">
+                <div className="p-3 rounded-lg bg-teal-500/10 border border-teal-500/30">
+                  <p className="text-[11px] text-teal-400">
                     <span className="font-bold">Important:</span> This is a test network. All coins, wallets, and transactions here are for 
                     testing only and have no monetary value. When you're ready to use real SIG, you'll use the Mainnet instead.
                   </p>

@@ -26,9 +26,9 @@ const SLOT_THEMES = {
     id: "egyptian",
     name: "Egyptian Gold",
     description: "Discover the treasures of the Pharaohs",
-    bgGradient: "from-amber-900/80 via-yellow-900/60 to-amber-950/80",
-    accentColor: "text-yellow-400",
-    borderColor: "border-yellow-500/30",
+    bgGradient: "from-purple-900/80 via-teal-900/60 to-purple-950/80",
+    accentColor: "text-teal-400",
+    borderColor: "border-teal-500/30",
     symbols: ["👁️", "🏺", "🐍", "⚱️", "🔱", "💎", "👑", "⭐"],
     payTable: {
       "👑👑👑": 100,
@@ -68,7 +68,7 @@ const SLOT_THEMES = {
     id: "dragon",
     name: "Dragon's Treasure",
     description: "Awaken the dragon for legendary riches",
-    bgGradient: "from-red-900/80 via-orange-900/60 to-red-950/80",
+    bgGradient: "from-red-900/80 via-cyan-900/60 to-red-950/80",
     accentColor: "text-red-400",
     borderColor: "border-red-500/30",
     symbols: ["🐉", "🔥", "💰", "🗡️", "🛡️", "⚔️", "💎", "👑"],
@@ -190,16 +190,16 @@ function SparkleText({ children }: { children: React.ReactNode }) {
         animate={{ rotate: [0, 15, -15, 0], scale: [1, 1.2, 1] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-yellow-300" />
+        <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-teal-300" />
       </motion.span>
-      <span className="text-lg md:text-2xl font-extrabold tracking-widest bg-gradient-to-r from-yellow-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-lg">
+      <span className="text-lg md:text-2xl font-extrabold tracking-widest bg-gradient-to-r from-teal-200 via-teal-400 to-purple-500 bg-clip-text text-transparent drop-shadow-lg">
         {children}
       </span>
       <motion.span
         animate={{ rotate: [0, -15, 15, 0], scale: [1, 1.2, 1] }}
         transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
       >
-        <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-yellow-300" />
+        <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-teal-300" />
       </motion.span>
     </div>
   );
@@ -214,7 +214,7 @@ function CornerDot({ position }: { position: string }) {
   };
   return (
     <div className={`absolute ${posClasses[position]} z-10`}>
-      <div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-gradient-to-br from-yellow-300 via-amber-400 to-yellow-600 border-2 border-yellow-200 shadow-lg shadow-yellow-500/50" />
+      <div className="w-4 h-4 md:w-5 md:h-5 rounded-full bg-gradient-to-br from-teal-300 via-purple-400 to-teal-600 border-2 border-teal-200 shadow-lg shadow-teal-500/50" />
     </div>
   );
 }
@@ -532,13 +532,13 @@ export default function Slots() {
         {currentBalance && (
           <div className="flex items-center justify-center gap-6 mb-6">
             <div 
-              className={`flex items-center gap-3 px-4 py-2 rounded-xl cursor-pointer transition-all ${currencyType === 'GC' ? 'bg-yellow-500/20 ring-2 ring-yellow-400/50' : 'bg-black/30 hover:bg-black/40'}`}
+              className={`flex items-center gap-3 px-4 py-2 rounded-xl cursor-pointer transition-all ${currencyType === 'GC' ? 'bg-teal-500/20 ring-2 ring-teal-400/50' : 'bg-black/30 hover:bg-black/40'}`}
               onClick={() => setCurrencyType("GC")}
             >
-              <Coins className="w-6 h-6 text-yellow-400" />
+              <Coins className="w-6 h-6 text-teal-400" />
               <div>
-                <div className="text-xs text-yellow-400/80">Gold Coins {isDemo && "(Demo)"}</div>
-                <div className="text-lg font-bold text-yellow-400">{formatNumber(currentBalance.goldCoins)}</div>
+                <div className="text-xs text-teal-400/80">Gold Coins {isDemo && "(Demo)"}</div>
+                <div className="text-lg font-bold text-teal-400">{formatNumber(currentBalance.goldCoins)}</div>
               </div>
             </div>
             <div 
@@ -569,11 +569,11 @@ export default function Slots() {
             transition={{ duration: 1, repeat: isSpinning ? Infinity : 0 }}
           >
             {/* Metallic gradient border */}
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-yellow-400/40 via-amber-700/30 to-yellow-900/40 p-[3px]">
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-teal-400/40 via-purple-700/30 to-teal-900/40 p-[3px]">
               <div className="w-full h-full rounded-3xl bg-gradient-to-b from-gray-800 to-gray-950" />
             </div>
 
-            <div className="relative bg-gradient-to-b from-gray-800/95 to-gray-950/95 rounded-3xl p-5 md:p-8 border-2 border-yellow-600/30">
+            <div className="relative bg-gradient-to-b from-gray-800/95 to-gray-950/95 rounded-3xl p-5 md:p-8 border-2 border-teal-600/30">
               {/* Corner Decorations */}
               <CornerDot position="top-left" />
               <CornerDot position="top-right" />
@@ -585,9 +585,9 @@ export default function Slots() {
 
               {/* Top decoration - Jackpot */}
               <div className="absolute -top-5 left-1/2 transform -translate-x-1/2 z-20">
-                <div className={`px-6 py-2 rounded-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-2 border-yellow-500/50 flex items-center gap-2 shadow-lg shadow-yellow-500/20`}>
-                  <Trophy className="w-5 h-5 text-yellow-400" />
-                  <span className="font-bold text-yellow-400">JACKPOT: {formatNumber(theme.jackpot)}</span>
+                <div className={`px-6 py-2 rounded-full bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-2 border-teal-500/50 flex items-center gap-2 shadow-lg shadow-teal-500/20`}>
+                  <Trophy className="w-5 h-5 text-teal-400" />
+                  <span className="font-bold text-teal-400">JACKPOT: {formatNumber(theme.jackpot)}</span>
                 </div>
               </div>
 
@@ -597,12 +597,12 @@ export default function Slots() {
               </div>
               
               {/* Reels Container */}
-              <div className="bg-black/80 rounded-2xl p-4 md:p-6 mb-6 border border-yellow-600/20 shadow-inner relative">
+              <div className="bg-black/80 rounded-2xl p-4 md:p-6 mb-6 border border-teal-600/20 shadow-inner relative">
                 <div className="flex justify-center gap-3 md:gap-5">
                   {[0, 1, 2].map((reelIndex) => (
                     <div 
                       key={reelIndex}
-                      className="relative w-24 h-28 md:w-32 md:h-40 bg-gradient-to-b from-gray-900 via-gray-950 to-black rounded-xl border-2 border-yellow-700/30 overflow-hidden shadow-[inset_0_2px_10px_rgba(0,0,0,0.8)]"
+                      className="relative w-24 h-28 md:w-32 md:h-40 bg-gradient-to-b from-gray-900 via-gray-950 to-black rounded-xl border-2 border-teal-700/30 overflow-hidden shadow-[inset_0_2px_10px_rgba(0,0,0,0.8)]"
                     >
                       <motion.div 
                         animate={reelControls[reelIndex]}
@@ -633,8 +633,8 @@ export default function Slots() {
                 </div>
                 
                 {/* Win Line */}
-                <div className="absolute left-4 right-4 top-1/2 transform -translate-y-1/2 h-0.5 bg-gradient-to-r from-transparent via-yellow-400 to-transparent opacity-50" />
-                <div className="absolute left-4 right-4 top-1/2 transform -translate-y-1/2 h-px bg-gradient-to-r from-transparent via-yellow-300/80 to-transparent blur-sm" />
+                <div className="absolute left-4 right-4 top-1/2 transform -translate-y-1/2 h-0.5 bg-gradient-to-r from-transparent via-teal-400 to-transparent opacity-50" />
+                <div className="absolute left-4 right-4 top-1/2 transform -translate-y-1/2 h-px bg-gradient-to-r from-transparent via-teal-300/80 to-transparent blur-sm" />
               </div>
 
               {/* Win Display */}
@@ -655,7 +655,7 @@ export default function Slots() {
                       <motion.div
                         initial={{ y: -20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
-                        className="text-3xl md:text-5xl font-extrabold mb-3 bg-gradient-to-r from-yellow-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(255,200,0,0.5)]"
+                        className="text-3xl md:text-5xl font-extrabold mb-3 bg-gradient-to-r from-teal-200 via-teal-400 to-purple-500 bg-clip-text text-transparent drop-shadow-[0_0_20px_rgba(255,200,0,0.5)]"
                       >
                         🎉 YOU WIN! 🎉
                       </motion.div>
@@ -663,7 +663,7 @@ export default function Slots() {
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ delay: 0.2, type: "spring" }}
-                        className="text-5xl md:text-7xl font-black bg-gradient-to-r from-yellow-300 via-amber-400 to-orange-500 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(255,150,0,0.6)]"
+                        className="text-5xl md:text-7xl font-black bg-gradient-to-r from-teal-300 via-purple-400 to-cyan-500 bg-clip-text text-transparent drop-shadow-[0_0_30px_rgba(255,150,0,0.6)]"
                       >
                         {formatNumber(lastWin)} {currencyType}
                       </motion.div>
@@ -671,7 +671,7 @@ export default function Slots() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.5 }}
-                        className="mt-2 text-yellow-300/80 text-lg"
+                        className="mt-2 text-teal-300/80 text-lg"
                       >
                         ✨ Congratulations! ✨
                       </motion.div>
@@ -717,7 +717,7 @@ export default function Slots() {
                   className={`
                     px-12 py-6 text-xl font-bold rounded-full shadow-lg transition-all
                     ${!isSpinning && getBalance() >= betAmount
-                      ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 hover:from-yellow-300 hover:via-amber-400 hover:to-orange-400 text-black hover:scale-105 shadow-yellow-500/30 hover:shadow-yellow-500/50'
+                      ? 'bg-gradient-to-r from-teal-400 via-purple-500 to-cyan-500 hover:from-teal-300 hover:via-purple-400 hover:to-cyan-400 text-black hover:scale-105 shadow-teal-500/30 hover:shadow-teal-500/50'
                       : 'bg-gray-700 text-gray-400 cursor-not-allowed'
                     }
                   `}

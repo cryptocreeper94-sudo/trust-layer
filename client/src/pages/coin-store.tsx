@@ -138,9 +138,9 @@ export default function CoinStore() {
       case "starter": return "from-blue-500/20 to-blue-600/10";
       case "value": return "from-green-500/20 to-emerald-600/10";
       case "popular": return "from-purple-500/20 to-violet-600/10";
-      case "mega": return "from-orange-500/20 to-amber-600/10";
+      case "mega": return "from-cyan-500/20 to-purple-600/10";
       case "premium": return "from-pink-500/20 to-rose-600/10";
-      case "whale": return "from-yellow-400/20 to-amber-500/10";
+      case "whale": return "from-teal-400/20 to-purple-500/10";
       default: return "from-gray-500/20 to-gray-600/10";
     }
   };
@@ -150,9 +150,9 @@ export default function CoinStore() {
       case "starter": return "border-blue-500/30 hover:border-blue-400/50";
       case "value": return "border-green-500/30 hover:border-green-400/50";
       case "popular": return "border-purple-500/30 hover:border-purple-400/50 ring-2 ring-purple-500/20";
-      case "mega": return "border-orange-500/30 hover:border-orange-400/50";
+      case "mega": return "border-cyan-500/30 hover:border-cyan-400/50";
       case "premium": return "border-pink-500/30 hover:border-pink-400/50";
-      case "whale": return "border-yellow-400/30 hover:border-yellow-300/50 ring-2 ring-yellow-400/20";
+      case "whale": return "border-teal-400/30 hover:border-teal-300/50 ring-2 ring-teal-400/20";
       default: return "border-gray-500/30 hover:border-gray-400/50";
     }
   };
@@ -191,14 +191,14 @@ export default function CoinStore() {
       <div className="relative z-10 container mx-auto px-4 py-8 max-w-6xl">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-200 bg-clip-text text-transparent flex items-center gap-3" data-testid="page-title-coin-store">
-              <Coins className="w-10 h-10 text-yellow-400" />
+            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-teal-200 via-teal-400 to-teal-200 bg-clip-text text-transparent flex items-center gap-3" data-testid="page-title-coin-store">
+              <Coins className="w-10 h-10 text-teal-400" />
               Coin Store
             </h1>
             <p className="text-gray-400 mt-2">Purchase Gold Coins to play games. Get FREE Sweeps Coins with every purchase!</p>
-            <div className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-              <span className="text-[10px] text-amber-400 font-semibold uppercase tracking-wider">Beta — Early Access</span>
+            <div className="inline-flex items-center gap-1.5 mt-2 px-2.5 py-1 rounded-full bg-purple-500/10 border border-purple-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+              <span className="text-[10px] text-purple-400 font-semibold uppercase tracking-wider">Beta — Early Access</span>
             </div>
           </div>
           
@@ -210,12 +210,12 @@ export default function CoinStore() {
             >
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center">
                     <Coins className="w-5 h-5 text-black" />
                   </div>
                   <div>
-                    <div className="text-xs text-yellow-400/80">Gold Coins</div>
-                    <div className="text-lg font-bold text-yellow-400" data-testid="balance-gc">{formatNumber(balance.goldCoins)}</div>
+                    <div className="text-xs text-teal-400/80">Gold Coins</div>
+                    <div className="text-lg font-bold text-teal-400" data-testid="balance-gc">{formatNumber(balance.goldCoins)}</div>
                   </div>
                 </div>
                 <div className="w-px h-10 bg-white/20" />
@@ -258,10 +258,10 @@ export default function CoinStore() {
             </CardContent>
           </Card>
           
-          <Card className="bg-gradient-to-br from-yellow-900/30 to-yellow-900/10 border-yellow-500/30 backdrop-blur-xl">
+          <Card className="bg-gradient-to-br from-teal-900/30 to-teal-900/10 border-teal-500/30 backdrop-blur-xl">
             <CardContent className="p-6 flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-yellow-500/20 flex items-center justify-center">
-                <TrendingUp className="w-7 h-7 text-yellow-400" />
+              <div className="w-14 h-14 rounded-full bg-teal-500/20 flex items-center justify-center">
+                <TrendingUp className="w-7 h-7 text-teal-400" />
               </div>
               <div>
                 <h3 className="font-semibold text-white">Redeem SC for Prizes</h3>
@@ -294,7 +294,7 @@ export default function CoinStore() {
                       </div>
                     )}
                     {isWhale && (
-                      <div className="absolute -top-1 -right-1 bg-gradient-to-r from-yellow-400 to-amber-500 text-black text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">
+                      <div className="absolute -top-1 -right-1 bg-gradient-to-r from-teal-400 to-purple-500 text-black text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">
                         BEST VALUE
                       </div>
                     )}
@@ -302,7 +302,7 @@ export default function CoinStore() {
                     <CardHeader className="pb-2">
                       <div className="flex items-center justify-between">
                         <div className="w-14 h-14 rounded-2xl bg-black/30 flex items-center justify-center border border-white/10">
-                          <Icon className={`w-7 h-7 ${isWhale ? 'text-yellow-400' : isPopular ? 'text-purple-400' : 'text-white/80'}`} />
+                          <Icon className={`w-7 h-7 ${isWhale ? 'text-teal-400' : isPopular ? 'text-purple-400' : 'text-white/80'}`} />
                         </div>
                         <Badge variant="outline" className="bg-green-500/20 border-green-500/50 text-green-400">
                           +{pack.bonusSc} SC FREE
@@ -314,16 +314,16 @@ export default function CoinStore() {
                     <CardContent className="pb-4">
                       <div className="flex items-baseline gap-2 mb-4">
                         <div className="flex items-center gap-1">
-                          <Coins className="w-6 h-6 text-yellow-400" />
-                          <span className="text-3xl font-bold text-yellow-400">{formatNumber(pack.goldCoins)}</span>
+                          <Coins className="w-6 h-6 text-teal-400" />
+                          <span className="text-3xl font-bold text-teal-400">{formatNumber(pack.goldCoins)}</span>
                         </div>
-                        <span className="text-yellow-400/80">GC</span>
+                        <span className="text-teal-400/80">GC</span>
                       </div>
                       
                       <div className="flex items-center justify-between">
                         <div className="text-2xl font-bold text-white">${pack.priceUsd}</div>
                         <Button 
-                          className={`${isWhale ? 'bg-gradient-to-r from-yellow-400 to-amber-500 text-black hover:from-yellow-300 hover:to-amber-400' : isPopular ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400' : 'bg-white/10 hover:bg-white/20'} transition-all group-hover:scale-105`}
+                          className={`${isWhale ? 'bg-gradient-to-r from-teal-400 to-purple-500 text-black hover:from-teal-300 hover:to-purple-400' : isPopular ? 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-400 hover:to-pink-400' : 'bg-white/10 hover:bg-white/20'} transition-all group-hover:scale-105`}
                           data-testid={`buy-button-${pack.id}`}
                         >
                           Buy Now <ChevronRight className="w-4 h-4 ml-1" />
@@ -375,8 +375,8 @@ export default function CoinStore() {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center flex-shrink-0">
-                <span className="text-yellow-400 font-bold">1</span>
+              <div className="w-10 h-10 rounded-full bg-teal-500/20 flex items-center justify-center flex-shrink-0">
+                <span className="text-teal-400 font-bold">1</span>
               </div>
               <div>
                 <h4 className="font-semibold text-white mb-1">Buy Gold Coins</h4>
@@ -438,7 +438,7 @@ export default function CoinStore() {
                 </div>
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-gray-400">Gold Coins</span>
-                  <span className="font-semibold text-yellow-400">{formatNumber(selectedPack.goldCoins)} GC</span>
+                  <span className="font-semibold text-teal-400">{formatNumber(selectedPack.goldCoins)} GC</span>
                 </div>
                 <div className="flex justify-between items-center mb-3">
                   <span className="text-gray-400">FREE Bonus</span>

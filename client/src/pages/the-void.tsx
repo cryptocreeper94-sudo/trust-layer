@@ -100,7 +100,7 @@ export default function TheVoid() {
     { icon: Fingerprint, title: "Void ID", desc: "Unique V-XXXXXXXX identity minted on-chain as your premium hallmark", gradient: "from-purple-500 to-indigo-600" },
     { icon: Shield, title: "DW-STAMP-1.0", desc: "SHA-256 hash-chained blockchain stamps with full chain integrity verification", gradient: "from-cyan-500 to-blue-600" },
     { icon: Link2, title: "Bridge Protocol", desc: "Link your Signal Chat identity to your Trust Layer Void ID seamlessly", gradient: "from-emerald-500 to-teal-600" },
-    { icon: Crown, title: "Premium Badge", desc: "Verified Void premium member flair across the entire Trust Layer ecosystem", gradient: "from-amber-500 to-orange-600" },
+    { icon: Crown, title: "Premium Badge", desc: "Verified Void premium member flair across the entire Trust Layer ecosystem", gradient: "from-purple-500 to-cyan-600" },
     { icon: Users, title: "Affiliate Rewards", desc: "Your Void ID doubles as a referral code — earn 5 bonus credits per Premium referral", gradient: "from-pink-500 to-rose-600" },
     { icon: Globe, title: "Cross-Ecosystem SSO", desc: "Single sign-on across all 31 Trust Layer apps with your Trust Layer ID and Void credentials", gradient: "from-violet-500 to-purple-600" },
   ];
@@ -446,15 +446,15 @@ export default function TheVoid() {
                   </div>
 
                   <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-purple-500 to-cyan-600 flex items-center justify-center flex-shrink-0 shadow-lg">
                       <span className="text-sm font-bold text-white">4</span>
                     </div>
                     <div className="min-w-0">
                       <h3 className="text-sm sm:text-base font-semibold text-white mb-1">Bridge Protocol</h3>
                       <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
                         Links Signal Chat users to Trust Layer Void IDs. The bridge generates a Trust Layer ID
-                        (<code className="text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded text-xs">tl-&#123;base36-ts&#125;-&#123;rand&#125;</code>)
-                        and embeds the <code className="text-amber-300 bg-amber-500/10 px-1.5 py-0.5 rounded text-xs">voidId</code> claim in JWT tokens for cross-ecosystem SSO.
+                        (<code className="text-purple-300 bg-purple-500/10 px-1.5 py-0.5 rounded text-xs">tl-&#123;base36-ts&#125;-&#123;rand&#125;</code>)
+                        and embeds the <code className="text-purple-300 bg-purple-500/10 px-1.5 py-0.5 rounded text-xs">voidId</code> claim in JWT tokens for cross-ecosystem SSO.
                       </p>
                     </div>
                   </div>

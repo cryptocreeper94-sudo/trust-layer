@@ -112,8 +112,8 @@ export default function OwnerPresale() {
     { 
       label: "SIG Sold", 
       value: (stats?.totalTokensSold || 0).toLocaleString(), 
-      icon: <Coins className="w-5 h-5 text-amber-400" />,
-      color: "amber"
+      icon: <Coins className="w-5 h-5 text-purple-400" />,
+      color: "purple"
     },
   ];
 
@@ -393,7 +393,7 @@ export default function OwnerPresale() {
                           purchase.status === 'completed' 
                             ? 'bg-green-500/20 text-green-400' 
                             : purchase.status === 'pending'
-                            ? 'bg-yellow-500/20 text-yellow-400'
+                            ? 'bg-teal-500/20 text-teal-400'
                             : 'bg-red-500/20 text-red-400'
                         }`}>
                           {purchase.status}

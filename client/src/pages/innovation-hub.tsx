@@ -117,7 +117,7 @@ export default function InnovationHub() {
       title: "Quest Mining",
       description: "Earn Shells and Signal through verifiable contributions",
       icon: Target,
-      gradient: "from-amber-500 to-orange-600",
+      gradient: "from-purple-500 to-cyan-600",
       href: "/quests",
       stats: `${quests?.quests?.length || 8} active quests`,
       size: "small"
@@ -345,7 +345,7 @@ export default function InnovationHub() {
                             shard.shardType === 'defi' ? 'bg-gradient-to-br from-emerald-500 to-teal-600' :
                             shard.shardType === 'nft' ? 'bg-gradient-to-br from-pink-500 to-rose-600' :
                             shard.shardType === 'ai' ? 'bg-gradient-to-br from-cyan-500 to-blue-600' :
-                            shard.shardType === 'social' ? 'bg-gradient-to-br from-amber-500 to-orange-600' :
+                            shard.shardType === 'social' ? 'bg-gradient-to-br from-purple-500 to-cyan-600' :
                             'bg-gradient-to-br from-slate-500 to-slate-600'
                           }`}>
                             {shard.shardType === 'gaming' ? <Gamepad2 className="w-6 h-6 text-white" /> :
@@ -359,7 +359,7 @@ export default function InnovationHub() {
                             <span className="text-xs text-white/40 capitalize">{shard.shardType} Shard</span>
                           </div>
                         </div>
-                        <Badge className={`${shard.status === 'active' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-amber-500/20 text-amber-400 border-amber-500/30'} border`}>
+                        <Badge className={`${shard.status === 'active' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' : 'bg-purple-500/20 text-purple-400 border-purple-500/30'} border`}>
                           {shard.status}
                         </Badge>
                       </div>
@@ -388,8 +388,8 @@ export default function InnovationHub() {
                               viewport={{ once: true }}
                               transition={{ duration: 1, ease: "easeOut" }}
                               className={`h-full rounded-full ${
-                                shard.currentLoad > 80 ? 'bg-gradient-to-r from-red-500 to-orange-500' :
-                                shard.currentLoad > 50 ? 'bg-gradient-to-r from-amber-500 to-yellow-500' :
+                                shard.currentLoad > 80 ? 'bg-gradient-to-r from-red-500 to-cyan-500' :
+                                shard.currentLoad > 50 ? 'bg-gradient-to-r from-purple-500 to-teal-500' :
                                 'bg-gradient-to-r from-emerald-500 to-cyan-500'
                               }`}
                             />
@@ -412,7 +412,7 @@ export default function InnovationHub() {
         </section>
 
         <section className="py-16 px-4 relative">
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-amber-500/3 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/3 to-transparent" />
           
           <div className="container mx-auto max-w-7xl relative">
             <motion.div
@@ -422,7 +422,7 @@ export default function InnovationHub() {
               className="mb-10"
             >
               <div className="flex items-center gap-4 mb-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-[0_0_30px_rgba(245,158,11,0.4)]">
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-cyan-600 flex items-center justify-center shadow-[0_0_30px_rgba(245,158,11,0.4)]">
                   <Target className="w-6 h-6 text-white" />
                 </div>
                 <div>
@@ -443,12 +443,12 @@ export default function InnovationHub() {
               >
                 <GlassCard glow>
                   <div className="p-6 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-pink-500/10" />
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-amber-500/20 to-transparent rounded-full blur-3xl" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-cyan-500/10 to-pink-500/10" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-purple-500/20 to-transparent rounded-full blur-3xl" />
                     
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
                       <div>
-                        <Badge className="bg-amber-500/20 text-amber-400 border border-amber-500/30 mb-3 shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+                        <Badge className="bg-purple-500/20 text-purple-400 border border-purple-500/30 mb-3 shadow-[0_0_15px_rgba(245,158,11,0.3)]">
                           <Star className="w-3 h-3 mr-1" />
                           Active Season
                         </Badge>
@@ -456,7 +456,7 @@ export default function InnovationHub() {
                         <p className="text-white/50 mt-1">{seasons.seasons[0].description}</p>
                       </div>
                       <div className="text-right">
-                        <div className="text-3xl font-bold bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+                        <div className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
                           {parseInt(seasons.seasons[0].totalPrizePoolDwc || '0').toLocaleString()} SIG
                         </div>
                         <div className="text-sm text-white/40">Total Prize Pool</div>
@@ -482,8 +482,8 @@ export default function InnovationHub() {
                       <div className="flex items-start justify-between mb-3">
                         <Badge className={`text-xs border ${
                           quest.difficultyLevel === 'easy' ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30' :
-                          quest.difficultyLevel === 'medium' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' :
-                          quest.difficultyLevel === 'hard' ? 'bg-orange-500/20 text-orange-400 border-orange-500/30' :
+                          quest.difficultyLevel === 'medium' ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' :
+                          quest.difficultyLevel === 'hard' ? 'bg-cyan-500/20 text-cyan-400 border-cyan-500/30' :
                           'bg-purple-500/20 text-purple-400 border-purple-500/30'
                         }`}>
                           {quest.difficultyLevel}

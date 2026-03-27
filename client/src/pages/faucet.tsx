@@ -163,7 +163,7 @@ export default function Faucet() {
               <div className="text-[10px] text-muted-foreground">Claims today</div>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
-              <div className="text-lg font-bold text-amber-400">
+              <div className="text-lg font-bold text-purple-400">
                 {infoLoading ? "..." : formatAmount(faucetInfo?.totalDistributed || "0")}
               </div>
               <div className="text-[10px] text-muted-foreground">Total given</div>
@@ -287,12 +287,12 @@ export default function Faucet() {
                           >
                             <div className="flex items-center gap-2 min-w-0">
                               <div className={`p-1.5 rounded ${
-                                claim.status === "completed" ? "bg-green-500/20" : "bg-amber-500/20"
+                                claim.status === "completed" ? "bg-green-500/20" : "bg-purple-500/20"
                               }`}>
                                 {claim.status === "completed" ? (
                                   <CheckCircle className="w-3 h-3 text-green-400" />
                                 ) : (
-                                  <Clock className="w-3 h-3 text-amber-400 animate-pulse" />
+                                  <Clock className="w-3 h-3 text-purple-400 animate-pulse" />
                                 )}
                               </div>
                               <div className="min-w-0">
@@ -315,7 +315,7 @@ export default function Faucet() {
                                 variant="outline" 
                                 className={`text-[9px] ${
                                   claim.status === "completed" ? "border-green-500/50 text-green-400" :
-                                  "border-amber-500/50 text-amber-400"
+                                  "border-purple-500/50 text-purple-400"
                                 }`}
                               >
                                 {claim.status}
@@ -350,11 +350,11 @@ export default function Faucet() {
               </ul>
             </div>
 
-            <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+            <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20">
               <div className="flex items-start gap-2">
-                <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                <p className="text-[10px] text-amber-200">
-                  <strong className="text-amber-300">Testnet Only:</strong> These tokens have no real value and are for development purposes only.
+                <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                <p className="text-[10px] text-purple-200">
+                  <strong className="text-purple-300">Testnet Only:</strong> These tokens have no real value and are for development purposes only.
                 </p>
               </div>
             </div>

@@ -43,7 +43,7 @@ const CONTRIBUTION_TYPES = [
     icon: Scroll,
     title: "Lore & History",
     desc: "Write the ancient texts, prophecies, and historical events that shape the narrative",
-    color: "from-amber-500 to-orange-500",
+    color: "from-purple-500 to-cyan-500",
     example: "Creation myths, faction histories, legends",
     img: loreImg
   },
@@ -160,7 +160,7 @@ export default function CreatorProgram() {
                 <span className="text-sm">Your Legacy, Forever</span>
               </div>
               <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
-                <Zap className="w-4 h-4 text-amber-400" />
+                <Zap className="w-4 h-4 text-purple-400" />
                 <span className="text-sm">Powered by SIG</span>
               </div>
             </div>
@@ -243,7 +243,7 @@ export default function CreatorProgram() {
                         >
                           <div className="bg-black/60 backdrop-blur-sm rounded-xl p-4 space-y-3">
                             <div className="flex items-center gap-2 text-sm text-gray-200">
-                              <Lock className="w-4 h-4 text-amber-400" />
+                              <Lock className="w-4 h-4 text-purple-400" />
                               <span>Submissions open to Founding Creators</span>
                             </div>
                             <div className="flex items-center gap-2 text-sm text-gray-200">
@@ -350,7 +350,7 @@ export default function CreatorProgram() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <Badge className="mb-4 bg-amber-500/20 text-amber-300 border-amber-500/30">
+            <Badge className="mb-4 bg-purple-500/20 text-purple-300 border-purple-500/30">
               Coming Soon
             </Badge>
             <h2 className="text-3xl sm:text-4xl font-display font-bold mb-4">
@@ -426,7 +426,7 @@ export default function CreatorProgram() {
             <div className="relative">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-500 blur-3xl opacity-20" />
               <GlassCard className="relative p-8 sm:p-12 border-2 border-purple-500/30">
-                <Crown className="w-12 h-12 mx-auto mb-6 text-amber-400" />
+                <Crown className="w-12 h-12 mx-auto mb-6 text-purple-400" />
                 <h2 className="text-2xl sm:text-3xl font-display font-bold mb-4">
                   Become a Founding Creator
                 </h2>

@@ -52,8 +52,8 @@ interface EarlyAdopterStats {
 const QUICK_LINKS = [
   { href: "/my-hub", icon: LayoutDashboard, label: "Your Portal", color: "purple" },
   { href: "/presale", icon: ShoppingBag, label: "Buy Signal", color: "cyan" },
-  { href: "/chronicles", icon: Gamepad2, label: "Chronicles", color: "purple", image: samuraiImage },
-  { href: "/rewards", icon: Gift, label: "Rewards", color: "amber" },
+  { href: "https://yourlegacy.io", icon: Gamepad2, label: "Chronicles", color: "purple", image: samuraiImage, external: true },
+  { href: "/rewards", icon: Gift, label: "Rewards", color: "purple" },
   { href: "/academy", icon: BookOpen, label: "Academy", color: "pink" },
   { href: "/community-hub", icon: Users, label: "Community", color: "emerald" },
   { href: "/ecosystem", icon: Globe, label: "Ecosystem", color: "blue" },
@@ -218,13 +218,13 @@ export default function MyTokensPage() {
                 <GlassCard className="h-full">
                   <div className="p-5 h-full">
                     <div className="flex items-center gap-2 mb-4">
-                      <Award className="w-5 h-5 text-amber-400" />
+                      <Award className="w-5 h-5 text-purple-400" />
                       <span className="text-sm font-medium text-white/70">Member Status</span>
                     </div>
                     {earlyAdopterData?.isEarlyAdopter ? (
                       <>
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full text-sm font-medium">
+                          <span className="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm font-medium">
                             Early Adopter #{earlyAdopterData.signupPosition}
                           </span>
                         </div>
@@ -295,8 +295,8 @@ export default function MyTokensPage() {
                 Explore the Ecosystem
               </h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {QUICK_LINKS.map((link, i) => (
-                  <Link href={link.href} key={link.href}>
+                {QUICK_LINKS.map((link, i) => {
+                  const content = (
                     <motion.div
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -332,8 +332,17 @@ export default function MyTokensPage() {
                         )}
                       </GlassCard>
                     </motion.div>
-                  </Link>
-                ))}
+                  );
+                  return link.external ? (
+                    <a href={link.href} key={link.href} target="_blank" rel="noopener noreferrer">
+                      {content}
+                    </a>
+                  ) : (
+                    <Link href={link.href} key={link.href}>
+                      {content}
+                    </Link>
+                  );
+                })}
               </div>
             </motion.div>
 
@@ -373,15 +382,15 @@ export default function MyTokensPage() {
                     <GlassCard>
                       <div className="p-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                            <Award className="w-5 h-5 text-amber-400" />
+                          <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                            <Award className="w-5 h-5 text-purple-400" />
                           </div>
                           <div>
                             <div className="text-sm font-semibold text-white">Early Bonus</div>
                             <div className="text-xs text-white/50">5% extra</div>
                           </div>
                         </div>
-                        <div className="text-lg font-bold text-amber-400">
+                        <div className="text-lg font-bold text-purple-400">
                           +{(bag?.sources?.earlyAdopterBonus?.tokens || 0).toLocaleString()}
                         </div>
                       </div>
@@ -475,10 +484,10 @@ export default function MyTokensPage() {
                               {purchase.status === 'confirmed' ? (
                                 <CheckCircle className="w-4 h-4 text-emerald-400" />
                               ) : (
-                                <AlertCircle className="w-4 h-4 text-amber-400" />
+                                <AlertCircle className="w-4 h-4 text-purple-400" />
                               )}
                               <span className={`text-xs font-medium uppercase ${
-                                purchase.status === 'confirmed' ? 'text-emerald-400' : 'text-amber-400'
+                                purchase.status === 'confirmed' ? 'text-emerald-400' : 'text-purple-400'
                               }`}>
                                 {purchase.status}
                               </span>
@@ -523,7 +532,7 @@ export default function MyTokensPage() {
                 className="mb-8"
               >
                 <h2 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-                  <Star className="w-5 h-5 text-amber-400" />
+                  <Star className="w-5 h-5 text-purple-400" />
                   Getting Started
                 </h2>
                 <GlassCard>
@@ -559,11 +568,11 @@ export default function MyTokensPage() {
                         <div>
                           <h4 className="text-sm font-semibold text-white">Explore Chronicles</h4>
                           <p className="text-xs text-white/50">Journey through 70+ historical eras in our discernment-based game</p>
-                          <Link href="/chronicles">
+                          <a href="https://yourlegacy.io" target="_blank" rel="noopener noreferrer">
                             <Button size="sm" variant="outline" className="mt-2 border-purple-500/30 text-purple-400 hover:bg-purple-500/10">
                               Play Chronicles <ChevronRight className="w-3 h-3 ml-1" />
                             </Button>
-                          </Link>
+                          </a>
                         </div>
                       </div>
                       <div className="flex items-start gap-4">
@@ -616,9 +625,9 @@ export default function MyTokensPage() {
                 </GlassCard>
               </Link>
               <Link href="/support">
-                <GlassCard className="hover:border-amber-500/50 transition-colors cursor-pointer">
+                <GlassCard className="hover:border-purple-500/50 transition-colors cursor-pointer">
                   <div className="p-4 flex flex-col items-center text-center">
-                    <Shield className="w-6 h-6 text-amber-400 mb-2" />
+                    <Shield className="w-6 h-6 text-purple-400 mb-2" />
                     <span className="text-xs font-medium text-white">Support</span>
                   </div>
                 </GlassCard>

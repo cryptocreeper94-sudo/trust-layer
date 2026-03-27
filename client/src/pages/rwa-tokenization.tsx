@@ -41,8 +41,8 @@ const assetTypeIcons: Record<string, any> = {
 const assetTypeGradients: Record<string, string> = {
   real_estate: "from-blue-500 to-indigo-600",
   equity: "from-green-500 to-emerald-600",
-  bond: "from-amber-500 to-orange-600",
-  commodity: "from-yellow-500 to-amber-600",
+  bond: "from-purple-500 to-cyan-600",
+  commodity: "from-teal-500 to-purple-600",
   collectible: "from-pink-500 to-rose-600",
   invoice: "from-slate-500 to-slate-600",
   ip_rights: "from-purple-500 to-violet-600"
@@ -185,7 +185,7 @@ export default function RWATokenization() {
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute top-1/2 right-1/3 w-[400px] h-[400px] bg-amber-500/8 rounded-full blur-3xl animate-pulse delay-500" />
+        <div className="absolute top-1/2 right-1/3 w-[400px] h-[400px] bg-purple-500/8 rounded-full blur-3xl animate-pulse delay-500" />
         <div className="absolute bottom-1/3 left-1/3 w-[350px] h-[350px] bg-emerald-500/8 rounded-full blur-3xl animate-pulse delay-700" />
       </div>
 
@@ -307,7 +307,7 @@ export default function RWATokenization() {
                             </Badge>
                           )}
                           <Badge className={`${
-                            asset.status === 'offering' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' :
+                            asset.status === 'offering' ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' :
                             asset.status === 'trading' ? 'bg-green-500/20 text-green-400 border-green-500/30' :
                             'bg-blue-500/20 text-blue-400 border-blue-500/30'
                           }`}>
@@ -390,7 +390,7 @@ export default function RWATokenization() {
               </p>
             </GlassCard>
             <GlassCard className="text-center" data-testid="card-feature-fractional">
-              <Coins className="w-12 h-12 mx-auto mb-4 text-amber-400" />
+              <Coins className="w-12 h-12 mx-auto mb-4 text-purple-400" />
               <h3 className="text-lg font-bold text-white mb-2">Fractional Ownership</h3>
               <p className="text-slate-400 text-sm">
                 Own a piece of premium assets starting from just $100

@@ -436,7 +436,7 @@ export default function StudioDocs() {
                   <span className="text-white/60">Chat mode: $0.05/request</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-amber-500"></div>
+                  <div className="w-3 h-3 rounded-full bg-purple-500"></div>
                   <span className="text-white/60">Agent mode: $0.25/session</span>
                 </div>
               </div>
@@ -450,7 +450,7 @@ export default function StudioDocs() {
               Toggle it on in the AI panel and describe a task — the agent will read your files, 
               plan changes, and execute them across your project.
             </p>
-            <GlassCard className="p-4 bg-amber-500/10 border-amber-500/30">
+            <GlassCard className="p-4 bg-purple-500/10 border-purple-500/30">
               <p className="text-white font-medium mb-2">What Agent Mode can do:</p>
               <ul className="text-white/60 text-sm space-y-1">
                 <li>Read and understand all project files</li>
@@ -762,9 +762,9 @@ export default function StudioDocs() {
                 </div>
               </div>
             </div>
-            <GlassCard className="p-4 bg-amber-500/10 border-amber-500/30 mt-4">
+            <GlassCard className="p-4 bg-purple-500/10 border-purple-500/30 mt-4">
               <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
                 <div>
                   <p className="text-white font-medium">Setup Required</p>
                   <p className="text-white/60 text-sm">GitHub integration requires a GitHub OAuth App to be configured by the platform admin. Contact team@dwsc.io if the Connect button shows "Configure".</p>
@@ -945,10 +945,10 @@ export default function StudioDocs() {
               </GlassCard>
               <GlassCard className="p-4">
                 <div className="flex items-center gap-3 mb-2">
-                  <div className="w-4 h-4 rounded bg-amber-500/20 flex items-center justify-center">
-                    <AlertTriangle className="w-2.5 h-2.5 text-amber-400" />
+                  <div className="w-4 h-4 rounded bg-purple-500/20 flex items-center justify-center">
+                    <AlertTriangle className="w-2.5 h-2.5 text-purple-400" />
                   </div>
-                  <span className="text-white font-medium">Warnings (Amber)</span>
+                  <span className="text-white font-medium">Warnings (Purple)</span>
                 </div>
                 <p className="text-white/60 text-sm">Potential issues — code works but could cause problems</p>
               </GlassCard>
@@ -1317,9 +1317,9 @@ export default function StudioDocs() {
               Your installed packages are listed in <code className="text-cyan-400">package.json</code> (Node.js) or <code className="text-cyan-400">requirements.txt</code> (Python). 
               The Packages panel shows all currently installed packages with version numbers.
             </p>
-            <GlassCard className="p-4 bg-amber-500/10 border-amber-500/30">
+            <GlassCard className="p-4 bg-purple-500/10 border-purple-500/30">
               <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+                <AlertCircle className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
                 <p className="text-white/60 text-sm">Be careful about removing packages that other packages depend on. If something breaks after removing a package, reinstall it.</p>
               </div>
             </GlassCard>
@@ -1411,7 +1411,7 @@ export default function StudioDocs() {
               <GlassCard className="p-4">
                 <div className="flex items-center justify-between">
                   <span className="text-white font-medium">Agent Mode</span>
-                  <Badge variant="outline" className="bg-amber-500/10 text-amber-400 border-amber-500/30">$0.25 per session</Badge>
+                  <Badge variant="outline" className="bg-purple-500/10 text-purple-400 border-purple-500/30">$0.25 per session</Badge>
                 </div>
                 <p className="text-white/60 text-sm mt-2">Autonomous multi-file coding, refactoring, feature building</p>
               </GlassCard>
@@ -1748,7 +1748,7 @@ export default function StudioDocs() {
               </GlassCard>
               <GlassCard className="p-4 hover:border-cyan-500/30 transition-colors">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-yellow-500 to-orange-600 flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-teal-500 to-cyan-600 flex items-center justify-center flex-shrink-0">
                     <Zap className="w-6 h-6 text-white" />
                   </div>
                   <div>
@@ -1759,7 +1759,7 @@ export default function StudioDocs() {
                       The most comprehensive JavaScript tutorial on the web. 
                       From basics to advanced topics, with interactive examples.
                     </p>
-                    <Badge className="mt-2 bg-yellow-500/20 text-yellow-400 border-yellow-500/30">JavaScript Deep Dive</Badge>
+                    <Badge className="mt-2 bg-teal-500/20 text-teal-400 border-teal-500/30">JavaScript Deep Dive</Badge>
                   </div>
                 </div>
               </GlassCard>
@@ -1842,18 +1842,18 @@ export default function StudioDocs() {
                 <p className="text-white font-medium">Weather App</p>
                 <p className="text-white/60 text-sm mt-1">Fetch data from an API and display it beautifully.</p>
               </GlassCard>
-              <GlassCard className="p-4 bg-gradient-to-br from-yellow-500/10 to-transparent">
+              <GlassCard className="p-4 bg-gradient-to-br from-teal-500/10 to-transparent">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                  <span className="text-yellow-400 text-xs font-medium">INTERMEDIATE</span>
+                  <div className="w-2 h-2 rounded-full bg-teal-500"></div>
+                  <span className="text-teal-400 text-xs font-medium">INTERMEDIATE</span>
                 </div>
                 <p className="text-white font-medium">Blog Platform</p>
                 <p className="text-white/60 text-sm mt-1">Create, edit, and display blog posts with a database backend.</p>
               </GlassCard>
-              <GlassCard className="p-4 bg-gradient-to-br from-yellow-500/10 to-transparent">
+              <GlassCard className="p-4 bg-gradient-to-br from-teal-500/10 to-transparent">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                  <span className="text-yellow-400 text-xs font-medium">INTERMEDIATE</span>
+                  <div className="w-2 h-2 rounded-full bg-teal-500"></div>
+                  <span className="text-teal-400 text-xs font-medium">INTERMEDIATE</span>
                 </div>
                 <p className="text-white font-medium">E-commerce Store</p>
                 <p className="text-white/60 text-sm mt-1">Product listings, cart, and checkout flow with payments.</p>

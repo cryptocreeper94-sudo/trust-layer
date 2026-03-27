@@ -309,7 +309,7 @@ export default function DomainManager() {
                   </span>
                 </h1>
                 {domain.isPremium && (
-                  <Badge className="bg-gradient-to-r from-amber-500 to-yellow-500 text-black">
+                  <Badge className="bg-gradient-to-r from-purple-500 to-teal-500 text-black">
                     <Crown className="w-3 h-3 mr-1" /> Premium
                   </Badge>
                 )}
@@ -344,10 +344,10 @@ export default function DomainManager() {
         </motion.div>
 
         {!isOwner && (
-          <GlassCard className="p-4 mb-6 border-amber-500/30 bg-amber-500/10">
+          <GlassCard className="p-4 mb-6 border-purple-500/30 bg-purple-500/10">
             <div className="flex items-center gap-3">
-              <Shield className="w-5 h-5 text-amber-400" />
-              <p className="text-amber-200">
+              <Shield className="w-5 h-5 text-purple-400" />
+              <p className="text-purple-200">
                 You are viewing this domain. Connect the owner wallet to make changes.
               </p>
             </div>

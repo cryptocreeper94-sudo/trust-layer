@@ -71,7 +71,7 @@ function formatDate(dateStr: string): string {
 
 const pricingTiers = [
   { chars: "1-2 chars", yearly: "Reserved", lifetime: "Enterprise", tag: "Reserved", gradient: "from-red-500 via-rose-400 to-red-600", isReserved: true, image: deepSpaceBg },
-  { chars: "3 chars", yearly: "$350/year", lifetime: "$8,750", tag: "Ultra Premium", gradient: "from-amber-500 via-yellow-400 to-amber-600", image: quantumBg },
+  { chars: "3 chars", yearly: "$350/year", lifetime: "$8,750", tag: "Ultra Premium", gradient: "from-purple-500 via-teal-400 to-purple-600", image: quantumBg },
   { chars: "4 chars", yearly: "$120/year", lifetime: "$3,000", tag: "Premium", gradient: "from-purple-500 to-violet-600", image: cyberpunkBg },
   { chars: "5 chars", yearly: "$45/year", lifetime: "$1,125", tag: "Standard+", gradient: "from-blue-500 to-indigo-600", image: medievalBg },
   { chars: "6-10 chars", yearly: "$20/year", lifetime: "$500", tag: "Standard", gradient: "from-cyan-500 to-teal-600", image: fantasyBg },
@@ -322,9 +322,9 @@ export default function DomainsPage() {
           {/* Owner Access Code Toggle */}
           <div className="mt-4 text-center">
             {isOwnerAuthenticated ? (
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-500/20 border border-amber-500/30">
-                <Crown className="w-4 h-4 text-amber-400" />
-                <span className="text-sm text-amber-400 font-medium">Owner Mode Active</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-purple-500/20 border border-purple-500/30">
+                <Crown className="w-4 h-4 text-purple-400" />
+                <span className="text-sm text-purple-400 font-medium">Owner Mode Active</span>
                 <button
                   onClick={handleOwnerLogout}
                   className="ml-2 text-xs text-white/50 hover:text-white transition-colors underline"
@@ -355,13 +355,13 @@ export default function DomainsPage() {
                       value={ownerCode}
                       onChange={(e) => setOwnerCode(e.target.value)}
                       onKeyDown={(e) => e.key === "Enter" && handleOwnerAuth()}
-                      className="max-w-xs bg-white/5 border-amber-500/30 text-white text-center"
+                      className="max-w-xs bg-white/5 border-purple-500/30 text-white text-center"
                       data-testid="input-owner-code"
                     />
                     <Button
                       onClick={handleOwnerAuth}
                       disabled={ownerAuthLoading || !ownerCode}
-                      className="bg-amber-500 hover:bg-amber-600 text-black font-medium"
+                      className="bg-purple-500 hover:bg-purple-600 text-black font-medium"
                       data-testid="button-submit-owner-code"
                     >
                       {ownerAuthLoading ? "Authenticating..." : "Submit"}
@@ -401,7 +401,7 @@ export default function DomainsPage() {
                     </div>
                   </div>
                   {searchResult.isPremium && (
-                    <Badge className="bg-gradient-to-r from-amber-500 to-yellow-500 text-black">
+                    <Badge className="bg-gradient-to-r from-purple-500 to-teal-500 text-black">
                       <Crown className="w-3 h-3 mr-1" /> Premium
                     </Badge>
                   )}
@@ -467,7 +467,7 @@ export default function DomainsPage() {
                             setShowRegisterDialog(true);
                           }
                         }}
-                        className={`w-full ${isOwnerAuthenticated ? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600" : "bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"}`}
+                        className={`w-full ${isOwnerAuthenticated ? "bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600" : "bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"}`}
                         data-testid="button-register-domain"
                       >
                         {isOwnerAuthenticated ? (
@@ -571,7 +571,7 @@ export default function DomainsPage() {
               <p className="text-white/60">Unique Owners</p>
             </GlassCard>
             <GlassCard className="p-6 text-center">
-              <Crown className="w-8 h-8 text-amber-400 mx-auto mb-2" />
+              <Crown className="w-8 h-8 text-purple-400 mx-auto mb-2" />
               <p className="text-3xl font-bold text-white">{stats.premiumCount.toLocaleString()}</p>
               <p className="text-white/60">Premium Domains</p>
             </GlassCard>
@@ -598,7 +598,7 @@ export default function DomainsPage() {
                       {domain.name}.{domain.tld}
                     </h3>
                     {domain.isPremium && (
-                      <Badge className="bg-gradient-to-r from-amber-500 to-yellow-500 text-black">
+                      <Badge className="bg-gradient-to-r from-purple-500 to-teal-500 text-black">
                         <Crown className="w-3 h-3" />
                       </Badge>
                     )}
@@ -651,7 +651,7 @@ export default function DomainsPage() {
                       </p>
                     </div>
                     {domain.isPremium && (
-                      <Crown className="w-5 h-5 text-amber-400" />
+                      <Crown className="w-5 h-5 text-purple-400" />
                     )}
                   </div>
                 </GlassCard>
@@ -760,16 +760,16 @@ export default function DomainsPage() {
               )}
 
               {isOwnerAuthenticated ? (
-                <div className="p-4 rounded-lg bg-amber-500/10 border border-amber-500/30">
+                <div className="p-4 rounded-lg bg-purple-500/10 border border-purple-500/30">
                   <div className="flex items-center justify-center gap-2 mb-2">
-                    <Crown className="w-5 h-5 text-amber-400" />
-                    <span className="text-amber-400 font-bold">Owner Mode Active</span>
+                    <Crown className="w-5 h-5 text-purple-400" />
+                    <span className="text-purple-400 font-bold">Owner Mode Active</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-white/60">Owner Price</span>
                     <span className="text-xl font-bold text-emerald-400">FREE</span>
                   </div>
-                  <p className="text-xs text-amber-400/70 text-center mt-2">
+                  <p className="text-xs text-purple-400/70 text-center mt-2">
                     Domains registered as owner are free with lifetime ownership
                   </p>
                 </div>
@@ -834,7 +834,7 @@ export default function DomainsPage() {
               <Button
                 onClick={handleRegister}
                 disabled={registerMutation.isPending}
-                className={`w-full ${isOwnerAuthenticated ? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600" : "bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"}`}
+                className={`w-full ${isOwnerAuthenticated ? "bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600" : "bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"}`}
                 data-testid="button-confirm-register"
               >
                 {registerMutation.isPending ? "Registering..." : (

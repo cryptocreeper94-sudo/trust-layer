@@ -232,7 +232,7 @@ export default function Tokenomics() {
                           {row.cliff === "None" ? (
                             <CheckCircle className="w-4 h-4 text-green-400" />
                           ) : (
-                            <Clock className="w-4 h-4 text-amber-400" />
+                            <Clock className="w-4 h-4 text-purple-400" />
                           )}
                           {row.cliff}
                         </div>
@@ -297,8 +297,8 @@ export default function Tokenomics() {
             <GlassCard glow hover={false}>
               <div className="p-6 md:p-8">
                 <div className="flex items-start gap-4 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center shrink-0">
-                    <Shield className="w-6 h-6 text-amber-400" />
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 flex items-center justify-center shrink-0">
+                    <Shield className="w-6 h-6 text-purple-400" />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-white mb-2">No Burn, No Inflation</h3>

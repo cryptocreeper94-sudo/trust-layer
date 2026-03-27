@@ -73,7 +73,7 @@ export default function OwnerAnalytics() {
     { label: "Page Views", value: analyticsData?.summary?.pageViews || 0, icon: <Eye className="w-5 h-5 text-cyan-400" />, change: "+12%" },
     { label: "Unique Visitors", value: analyticsData?.summary?.uniqueVisitors || 0, icon: <Users className="w-5 h-5 text-purple-400" />, change: "+8%" },
     { label: "Avg. Session", value: analyticsData?.summary?.avgSessionDuration || "0:00", icon: <Clock className="w-5 h-5 text-pink-400" />, change: "+5%" },
-    { label: "Bounce Rate", value: `${analyticsData?.summary?.bounceRate || 0}%`, icon: <TrendingUp className="w-5 h-5 text-amber-400" />, change: "-3%" },
+    { label: "Bounce Rate", value: `${analyticsData?.summary?.bounceRate || 0}%`, icon: <TrendingUp className="w-5 h-5 text-purple-400" />, change: "-3%" },
   ];
 
   return (
@@ -280,7 +280,7 @@ export default function OwnerAnalytics() {
             style={{ boxShadow: "0 0 30px rgba(245,158,11,0.1)" }}
           >
             <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-              <Globe className="w-5 h-5 text-amber-400" />
+              <Globe className="w-5 h-5 text-purple-400" />
               Top Referrers
             </h3>
             <div className="space-y-3">

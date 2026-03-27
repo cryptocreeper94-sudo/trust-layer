@@ -139,7 +139,7 @@ const QUICK_PRESETS = [
     name: "Aggressive",
     icon: Rocket,
     description: "Higher risk, more opportunities",
-    color: "from-orange-500 to-red-600",
+    color: "from-cyan-500 to-red-600",
     config: {
       confidenceThreshold: 55,
       accuracyThreshold: 50,
@@ -156,22 +156,22 @@ const CHAINS = [
   { id: "base", name: "Base", color: "bg-blue-400" },
   { id: "polygon", name: "Polygon", color: "bg-purple-400" },
   { id: "arbitrum", name: "Arbitrum", color: "bg-blue-600" },
-  { id: "bsc", name: "BSC", color: "bg-yellow-500" },
+  { id: "bsc", name: "BSC", color: "bg-teal-500" },
 ];
 
 function FearGreedGauge({ value, label }: { value: number; label: string }) {
   const rotation = (value / 100) * 180 - 90;
   const getColor = () => {
     if (value <= 25) return "text-red-500";
-    if (value <= 45) return "text-orange-500";
-    if (value <= 55) return "text-yellow-500";
+    if (value <= 45) return "text-cyan-500";
+    if (value <= 55) return "text-teal-500";
     if (value <= 75) return "text-lime-500";
     return "text-green-500";
   };
   const getBgGradient = () => {
     if (value <= 25) return "from-red-500/20 to-red-500/5";
-    if (value <= 45) return "from-orange-500/20 to-orange-500/5";
-    if (value <= 55) return "from-yellow-500/20 to-yellow-500/5";
+    if (value <= 45) return "from-cyan-500/20 to-cyan-500/5";
+    if (value <= 55) return "from-teal-500/20 to-teal-500/5";
     if (value <= 75) return "from-lime-500/20 to-lime-500/5";
     return "from-green-500/20 to-green-500/5";
   };
@@ -240,7 +240,7 @@ function MetricCard({ label, value, change, icon: Icon, compact }: { label: stri
 function CompactSignalCard({ signal, onAnalyze }: { signal: QuantSignal; onAnalyze?: (address: string) => void }) {
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-green-400";
-    if (score >= 60) return "text-yellow-400";
+    if (score >= 60) return "text-teal-400";
     return "text-red-400";
   };
   const getGrade = (score: number) => {
@@ -268,7 +268,7 @@ function CompactSignalCard({ signal, onAnalyze }: { signal: QuantSignal; onAnaly
         <span className="text-[9px] text-gray-400">${(parseFloat(signal.marketCapUsd) / 1e6).toFixed(0)}M</span>
       </div>
       <div className="mt-1.5 h-1 bg-gray-800 rounded-full overflow-hidden">
-        <div className={`h-full rounded-full ${signal.compositeScore >= 70 ? "bg-green-500" : signal.compositeScore >= 50 ? "bg-yellow-500" : "bg-red-500"}`} style={{ width: `${signal.compositeScore}%` }} />
+        <div className={`h-full rounded-full ${signal.compositeScore >= 70 ? "bg-green-500" : signal.compositeScore >= 50 ? "bg-teal-500" : "bg-red-500"}`} style={{ width: `${signal.compositeScore}%` }} />
       </div>
     </motion.button>
   );
@@ -277,7 +277,7 @@ function CompactSignalCard({ signal, onAnalyze }: { signal: QuantSignal; onAnaly
 function SignalCard({ signal, onAnalyze }: { signal: QuantSignal; onAnalyze?: (address: string) => void }) {
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-green-400 bg-green-500/20 border-green-500/30";
-    if (score >= 60) return "text-yellow-400 bg-yellow-500/20 border-yellow-500/30";
+    if (score >= 60) return "text-teal-400 bg-teal-500/20 border-teal-500/30";
     return "text-red-400 bg-red-500/20 border-red-500/30";
   };
   const getGrade = (score: number) => {
@@ -294,7 +294,7 @@ function SignalCard({ signal, onAnalyze }: { signal: QuantSignal; onAnalyze?: (a
     base: "bg-blue-500/20 text-blue-400 border-blue-500/30",
     polygon: "bg-purple-500/20 text-purple-400 border-purple-500/30",
     arbitrum: "bg-blue-500/20 text-blue-400 border-blue-500/30",
-    bsc: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+    bsc: "bg-teal-500/20 text-teal-400 border-teal-500/30",
   };
 
   return (
@@ -339,13 +339,13 @@ function SignalCard({ signal, onAnalyze }: { signal: QuantSignal; onAnalyze?: (a
         </div>
         <div className="flex-1 text-center p-2 rounded-lg bg-black/20">
           <p className="text-[10px] text-gray-500">Technical</p>
-          <p className={`text-sm font-bold ${signal.technicalScore >= 60 ? "text-green-400" : "text-yellow-400"}`}>
+          <p className={`text-sm font-bold ${signal.technicalScore >= 60 ? "text-green-400" : "text-teal-400"}`}>
             {signal.technicalScore}
           </p>
         </div>
         <div className="flex-1 text-center p-2 rounded-lg bg-black/20">
           <p className="text-[10px] text-gray-500">Momentum</p>
-          <p className={`text-sm font-bold ${signal.momentumScore >= 60 ? "text-green-400" : "text-yellow-400"}`}>
+          <p className={`text-sm font-bold ${signal.momentumScore >= 60 ? "text-green-400" : "text-teal-400"}`}>
             {signal.momentumScore}
           </p>
         </div>
@@ -375,7 +375,7 @@ function SignalCard({ signal, onAnalyze }: { signal: QuantSignal; onAnalyze?: (a
 function TradingModeSelector({ currentMode, onModeChange, disabled }: { currentMode: string; onModeChange: (mode: string) => void; disabled?: boolean }) {
   const modes = [
     { id: "observer", label: "Observer", icon: Eye, desc: "AI watches & learns from market", color: "gray" },
-    { id: "approval", label: "Approval", icon: CheckCircle, desc: "Review & approve each trade", color: "yellow" },
+    { id: "approval", label: "Approval", icon: CheckCircle, desc: "Review & approve each trade", color: "teal" },
     { id: "semi_auto", label: "Semi-Auto", icon: Bot, desc: "Auto-trades high confidence signals", color: "cyan" },
     { id: "full_auto", label: "Full Auto", icon: Rocket, desc: "Fully autonomous trading", color: "green" },
   ];
@@ -661,7 +661,7 @@ function SuggestionCard({ suggestion, onApprove, onReject }: { suggestion: Trade
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="p-4 rounded-xl bg-white/5 border border-yellow-500/30"
+      className="p-4 rounded-xl bg-white/5 border border-teal-500/30"
     >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
@@ -673,7 +673,7 @@ function SuggestionCard({ suggestion, onApprove, onReject }: { suggestion: Trade
             <p className="text-[10px] text-gray-400">{suggestion.chain}</p>
           </div>
         </div>
-        <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">{suggestion.confidence}%</Badge>
+        <Badge className="bg-teal-500/20 text-teal-400 border-teal-500/30">{suggestion.confidence}%</Badge>
       </div>
       <p className="text-xs text-gray-300 mb-3">{suggestion.reasoning}</p>
       <div className="flex gap-2">
@@ -837,10 +837,10 @@ export function PulseMiniApp() {
             <Loader2 className="w-6 h-6 text-cyan-400 animate-spin" />
           </div>
         ) : !marketData ? (
-          <div className="p-3 rounded-xl bg-yellow-500/10 border border-yellow-500/20">
+          <div className="p-3 rounded-xl bg-teal-500/10 border border-teal-500/20">
             <div className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-yellow-400 flex-shrink-0" />
-              <p className="text-xs text-yellow-400">Connect API for live data</p>
+              <AlertCircle className="w-4 h-4 text-teal-400 flex-shrink-0" />
+              <p className="text-xs text-teal-400">Connect API for live data</p>
             </div>
           </div>
         ) : (
@@ -870,10 +870,10 @@ export function PulseMiniApp() {
             <div className="col-span-2 p-2 rounded-xl bg-white/5 border border-white/10">
               <p className="text-[9px] text-gray-500 uppercase mb-1">Fear & Greed</p>
               <div className="flex items-center justify-between">
-                <p className={`text-xl font-bold ${marketData.fearGreed <= 25 ? "text-red-400" : marketData.fearGreed <= 45 ? "text-orange-400" : marketData.fearGreed <= 55 ? "text-yellow-400" : "text-green-400"}`}>
+                <p className={`text-xl font-bold ${marketData.fearGreed <= 25 ? "text-red-400" : marketData.fearGreed <= 45 ? "text-cyan-400" : marketData.fearGreed <= 55 ? "text-teal-400" : "text-green-400"}`}>
                   {marketData.fearGreed}
                 </p>
-                <span className={`text-[10px] px-1.5 py-0.5 rounded ${marketData.fearGreed <= 25 ? "bg-red-500/20 text-red-400" : marketData.fearGreed <= 45 ? "bg-orange-500/20 text-orange-400" : "bg-yellow-500/20 text-yellow-400"}`}>
+                <span className={`text-[10px] px-1.5 py-0.5 rounded ${marketData.fearGreed <= 25 ? "bg-red-500/20 text-red-400" : marketData.fearGreed <= 45 ? "bg-cyan-500/20 text-cyan-400" : "bg-teal-500/20 text-teal-400"}`}>
                   {marketData.fearGreedLabel}
                 </span>
               </div>
@@ -963,7 +963,7 @@ export function PulseMiniApp() {
               </div>
             ) : (
               <div className="p-4 rounded-xl bg-white/5 text-center">
-                <AlertTriangle className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
+                <AlertTriangle className="w-8 h-8 text-teal-400 mx-auto mb-2" />
                 <p className="text-xs text-gray-400">No signals available</p>
               </div>
             )}
@@ -1025,12 +1025,12 @@ export function PulseMiniApp() {
               </GlassCard>
               <GlassCard className="p-4">
                 <div className="flex items-center gap-2 mb-3">
-                  <Bot className="w-5 h-5 text-yellow-400" />
+                  <Bot className="w-5 h-5 text-teal-400" />
                   <h3 className="font-medium text-white">AI Recommendation</h3>
                 </div>
                 <ul className="space-y-2 text-sm text-gray-400">
                   <li className="flex items-center gap-2"><Zap className="w-3 h-3 text-green-400" /> SNIPE - High opportunity</li>
-                  <li className="flex items-center gap-2"><Eye className="w-3 h-3 text-yellow-400" /> WATCH - Monitor closely</li>
+                  <li className="flex items-center gap-2"><Eye className="w-3 h-3 text-teal-400" /> WATCH - Monitor closely</li>
                   <li className="flex items-center gap-2"><X className="w-3 h-3 text-red-400" /> AVOID - Too risky</li>
                 </ul>
               </GlassCard>
@@ -1072,10 +1072,10 @@ export function PulseMiniApp() {
             <GlassCard className="p-4">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-medium text-white flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-yellow-400" />
+                  <Clock className="w-4 h-4 text-teal-400" />
                   Pending Suggestions
                 </h3>
-                <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">0</Badge>
+                <Badge className="bg-teal-500/20 text-teal-400 border-teal-500/30">0</Badge>
               </div>
               <p className="text-sm text-gray-400 text-center py-4">
                 {tradingConfig.mode === "approval" 

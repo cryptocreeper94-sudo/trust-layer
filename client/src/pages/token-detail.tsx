@@ -460,7 +460,7 @@ const TRADING_PRESETS = {
   },
   medium: {
     name: 'Medium',
-    color: 'yellow',
+    color: 'teal',
     icon: '⚖️',
     description: 'Balanced risk/reward approach',
     stopLossPercent: 10,
@@ -757,7 +757,7 @@ function AutoSnipePanel({
           {Object.entries(predictionStats.categoryAccuracy).map(([cat, acc]) => (
             <div key={cat} className="flex-shrink-0 bg-slate-800/50 rounded-lg px-2 py-1 flex items-center gap-1.5">
               <span className="text-[9px] text-white/50 capitalize">{cat}</span>
-              <span className={`text-[10px] font-bold ${acc >= 80 ? 'text-emerald-400' : acc >= 70 ? 'text-yellow-400' : 'text-red-400'}`}>
+              <span className={`text-[10px] font-bold ${acc >= 80 ? 'text-emerald-400' : acc >= 70 ? 'text-teal-400' : 'text-red-400'}`}>
                 {acc}%
               </span>
             </div>
@@ -770,7 +770,7 @@ function AutoSnipePanel({
       ═══════════════════════════════════════════════════════════════════ */}
       <div className="p-4 border-b border-white/10">
         <div className="flex items-center gap-2 mb-3">
-          <Zap className="w-4 h-4 text-yellow-400" />
+          <Zap className="w-4 h-4 text-teal-400" />
           <span className="text-sm font-medium text-white">Quick Presets</span>
           <span className="text-[10px] text-white/40">(One-click setup)</span>
         </div>
@@ -783,7 +783,7 @@ function AutoSnipePanel({
               className={`p-3 rounded-xl border transition-all text-center ${
                 selectedPreset === key
                   ? key === 'safe' ? 'bg-emerald-500/20 border-emerald-500/50' :
-                    key === 'medium' ? 'bg-yellow-500/20 border-yellow-500/50' :
+                    key === 'medium' ? 'bg-teal-500/20 border-teal-500/50' :
                     'bg-red-500/20 border-red-500/50'
                   : 'bg-slate-800/50 border-white/10 hover:border-white/20'
               }`}
@@ -792,7 +792,7 @@ function AutoSnipePanel({
               <div className="text-2xl mb-1">{preset.icon}</div>
               <div className={`text-xs font-bold ${
                 key === 'safe' ? 'text-emerald-400' :
-                key === 'medium' ? 'text-yellow-400' : 'text-red-400'
+                key === 'medium' ? 'text-teal-400' : 'text-red-400'
               }`}>
                 {preset.name}
               </div>
@@ -1222,7 +1222,7 @@ function BuySellMetricsPanel({ token }: { token: TokenData }) {
   
   const recommendationConfig = {
     BUY: { color: 'text-emerald-400', bg: 'bg-emerald-500/20', border: 'border-emerald-500/30', icon: ArrowUp },
-    HOLD: { color: 'text-yellow-400', bg: 'bg-yellow-500/20', border: 'border-yellow-500/30', icon: Circle },
+    HOLD: { color: 'text-teal-400', bg: 'bg-teal-500/20', border: 'border-teal-500/30', icon: Circle },
     SELL: { color: 'text-red-400', bg: 'bg-red-500/20', border: 'border-red-500/30', icon: ArrowDown },
   }[recommendation];
   
@@ -1455,8 +1455,8 @@ function HelpModal() {
           </div>
           <div className="p-3 bg-slate-800/50 rounded-lg border border-white/5">
             <div className="flex items-center gap-2 mb-2">
-              <Eye className="w-4 h-4 text-yellow-400" />
-              <span className="font-medium text-yellow-400">WATCH</span>
+              <Eye className="w-4 h-4 text-teal-400" />
+              <span className="font-medium text-teal-400">WATCH</span>
             </div>
             <p>Monitor closely. Moderate risk/reward. Wait for better entry or more confirmation.</p>
           </div>
@@ -1475,7 +1475,7 @@ function HelpModal() {
                 <span>Liquidity Locked - Funds secured in time-locked contract</span>
               </div>
               <div className="flex items-center gap-2">
-                <AlertTriangle className="w-3.5 h-3.5 text-yellow-400" />
+                <AlertTriangle className="w-3.5 h-3.5 text-teal-400" />
                 <span>Mint Authority - Owner can create more tokens</span>
               </div>
               <div className="flex items-center gap-2">
@@ -1493,7 +1493,7 @@ function HelpModal() {
 function AIBadge({ recommendation, score }: { recommendation: 'snipe' | 'watch' | 'avoid'; score: number }) {
   const config = {
     snipe: { bg: 'bg-emerald-500/20', border: 'border-emerald-500/40', text: 'text-emerald-400', icon: Crosshair, label: 'SNIPE' },
-    watch: { bg: 'bg-yellow-500/20', border: 'border-yellow-500/40', text: 'text-yellow-400', icon: Eye, label: 'WATCH' },
+    watch: { bg: 'bg-teal-500/20', border: 'border-teal-500/40', text: 'text-teal-400', icon: Eye, label: 'WATCH' },
     avoid: { bg: 'bg-red-500/20', border: 'border-red-500/40', text: 'text-red-400', icon: Ban, label: 'AVOID' },
   }[recommendation];
   
@@ -1733,8 +1733,8 @@ export default function TokenDetail() {
             <span className="text-white/40">/</span>
             <span className="text-white/60">{token.nativeSymbol}</span>
             <Badge className="bg-green-500/20 text-green-400 text-[10px] px-1.5">🌱 {token.age}</Badge>
-            {token.rank && <Badge className="bg-orange-500/20 text-orange-400 text-[10px] px-1.5">🔥 #{token.rank}</Badge>}
-            {token.boosts > 0 && <Badge className="bg-yellow-500/20 text-yellow-400 text-[10px] px-1.5">⚡{token.boosts}</Badge>}
+            {token.rank && <Badge className="bg-cyan-500/20 text-cyan-400 text-[10px] px-1.5">🔥 #{token.rank}</Badge>}
+            {token.boosts > 0 && <Badge className="bg-teal-500/20 text-teal-400 text-[10px] px-1.5">⚡{token.boosts}</Badge>}
           </div>
           <div className="flex items-center justify-center gap-1.5 mt-1 text-xs text-white/40">
             <span>{token.chainIcon} {token.chain}</span>
@@ -1911,11 +1911,11 @@ export default function TokenDetail() {
         <div className="flex gap-2 px-4 mb-4">
           <Button 
             variant="outline" 
-            className={`flex-1 h-11 border-white/10 ${isWatchlisted ? 'bg-yellow-500/20 border-yellow-500/30 text-yellow-400' : 'bg-slate-800/50'}`}
+            className={`flex-1 h-11 border-white/10 ${isWatchlisted ? 'bg-teal-500/20 border-teal-500/30 text-teal-400' : 'bg-slate-800/50'}`}
             onClick={() => setIsWatchlisted(!isWatchlisted)}
             data-testid="watchlist-btn"
           >
-            <Star className={`w-4 h-4 mr-2 ${isWatchlisted ? 'fill-yellow-400' : ''}`} />
+            <Star className={`w-4 h-4 mr-2 ${isWatchlisted ? 'fill-teal-400' : ''}`} />
             Watchlist
           </Button>
           <Button variant="outline" className="flex-1 h-11 bg-slate-800/50 border-white/10" data-testid="alerts-btn">
@@ -1942,7 +1942,7 @@ export default function TokenDetail() {
               </div>
               <Badge className={`${
                 token.aiRecommendation === 'snipe' ? 'bg-emerald-500/30 text-emerald-300 border-emerald-500/50' :
-                token.aiRecommendation === 'watch' ? 'bg-yellow-500/30 text-yellow-300 border-yellow-500/50' :
+                token.aiRecommendation === 'watch' ? 'bg-teal-500/30 text-teal-300 border-teal-500/50' :
                 'bg-red-500/30 text-red-300 border-red-500/50'
               } border px-3 py-1`}>
                 <span className="font-bold">{token.aiRecommendation.toUpperCase()}</span>
@@ -1975,7 +1975,7 @@ export default function TokenDetail() {
               <div className="flex items-center gap-2">
                 <div className="flex-1 bg-slate-800/30 rounded-lg p-2 flex items-center justify-between">
                   <span className="text-[10px] text-white/50">R:R Ratio</span>
-                  <span className={`text-xs font-bold ${token.strikeAgent.riskReward >= 2 ? 'text-emerald-400' : 'text-yellow-400'}`}>
+                  <span className={`text-xs font-bold ${token.strikeAgent.riskReward >= 2 ? 'text-emerald-400' : 'text-teal-400'}`}>
                     1:{token.strikeAgent.riskReward.toFixed(1)}
                   </span>
                 </div>
@@ -2149,23 +2149,23 @@ export default function TokenDetail() {
                 <div className="bg-slate-800/50 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[10px] text-white/40 uppercase">Momentum</span>
-                    <span className={`text-xs font-medium ${token.mlPrediction.momentum > 60 ? 'text-emerald-400' : token.mlPrediction.momentum > 40 ? 'text-yellow-400' : 'text-red-400'}`}>
+                    <span className={`text-xs font-medium ${token.mlPrediction.momentum > 60 ? 'text-emerald-400' : token.mlPrediction.momentum > 40 ? 'text-teal-400' : 'text-red-400'}`}>
                       {token.mlPrediction.momentum}%
                     </span>
                   </div>
                   <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-red-500 via-yellow-500 to-emerald-500" style={{ width: `${token.mlPrediction.momentum}%` }} />
+                    <div className="h-full bg-gradient-to-r from-red-500 via-teal-500 to-emerald-500" style={{ width: `${token.mlPrediction.momentum}%` }} />
                   </div>
                 </div>
                 <div className="bg-slate-800/50 rounded-lg p-3">
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-[10px] text-white/40 uppercase">Risk Score</span>
-                    <span className={`text-xs font-medium ${token.mlPrediction.riskScore < 40 ? 'text-emerald-400' : token.mlPrediction.riskScore < 70 ? 'text-yellow-400' : 'text-red-400'}`}>
+                    <span className={`text-xs font-medium ${token.mlPrediction.riskScore < 40 ? 'text-emerald-400' : token.mlPrediction.riskScore < 70 ? 'text-teal-400' : 'text-red-400'}`}>
                       {token.mlPrediction.riskScore}%
                     </span>
                   </div>
                   <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                    <div className="h-full bg-gradient-to-r from-emerald-500 via-yellow-500 to-red-500" style={{ width: `${token.mlPrediction.riskScore}%` }} />
+                    <div className="h-full bg-gradient-to-r from-emerald-500 via-teal-500 to-red-500" style={{ width: `${token.mlPrediction.riskScore}%` }} />
                   </div>
                 </div>
               </div>
@@ -2214,7 +2214,7 @@ export default function TokenDetail() {
                 <span className="text-xs text-white/50">Price Action</span>
                 <span className={`text-xs font-bold ${
                   token.technicalIndicators.priceAction === 'breakout' ? 'text-emerald-400' : 
-                  token.technicalIndicators.priceAction === 'breakdown' ? 'text-red-400' : 'text-yellow-400'
+                  token.technicalIndicators.priceAction === 'breakdown' ? 'text-red-400' : 'text-teal-400'
                 }`}>
                   {token.technicalIndicators.priceAction.toUpperCase()}
                 </span>
@@ -2257,7 +2257,7 @@ export default function TokenDetail() {
             {/* Bot Activity */}
             <div className="bg-slate-800/30 rounded-xl border border-white/5 p-3">
               <div className="flex items-center gap-1.5 mb-2">
-                <Bot className="w-3.5 h-3.5 text-orange-400" />
+                <Bot className="w-3.5 h-3.5 text-cyan-400" />
                 <span className="text-xs font-medium">Bot Activity</span>
               </div>
               <div className="space-y-2 text-[11px]">
@@ -2267,7 +2267,7 @@ export default function TokenDetail() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-white/40">Bundle %</span>
-                  <span className={token.botActivity.bundlePercent > 15 ? 'text-yellow-400' : 'text-white'}>{token.botActivity.bundlePercent.toFixed(1)}%</span>
+                  <span className={token.botActivity.bundlePercent > 15 ? 'text-teal-400' : 'text-white'}>{token.botActivity.bundlePercent.toFixed(1)}%</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-white/40">Snipers</span>
@@ -2275,7 +2275,7 @@ export default function TokenDetail() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-white/40">Risk Level</span>
-                  <span className={token.botActivity.percent > 30 ? 'text-red-400' : token.botActivity.percent > 15 ? 'text-yellow-400' : 'text-emerald-400'}>
+                  <span className={token.botActivity.percent > 30 ? 'text-red-400' : token.botActivity.percent > 15 ? 'text-teal-400' : 'text-emerald-400'}>
                     {token.botActivity.percent > 30 ? 'HIGH' : token.botActivity.percent > 15 ? 'MED' : 'LOW'}
                   </span>
                 </div>
@@ -2299,19 +2299,19 @@ export default function TokenDetail() {
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Audit</span>
               <div className="flex items-center gap-2">
-                <span className={`text-sm ${token.audit.status === 'pass' ? 'text-emerald-400' : token.audit.status === 'warning' ? 'text-yellow-400' : 'text-red-400'}`}>
+                <span className={`text-sm ${token.audit.status === 'pass' ? 'text-emerald-400' : token.audit.status === 'warning' ? 'text-teal-400' : 'text-red-400'}`}>
                   {token.audit.status === 'pass' ? 'No issues' : token.audit.issues.length + ' issues'}
                 </span>
                 {token.audit.status === 'pass' ? (
                   <CheckCircle className="w-4 h-4 text-emerald-400" />
                 ) : (
-                  <AlertTriangle className="w-4 h-4 text-yellow-400" />
+                  <AlertTriangle className="w-4 h-4 text-teal-400" />
                 )}
                 <ChevronDown className="w-4 h-4 text-white/40" />
               </div>
             </div>
             <p className="text-[10px] text-white/40 mt-2">
-              <span className="text-yellow-400">Warning!</span> Audits may not be 100% accurate! <span className="text-cyan-400 cursor-pointer">More</span>
+              <span className="text-teal-400">Warning!</span> Audits may not be 100% accurate! <span className="text-cyan-400 cursor-pointer">More</span>
             </p>
           </div>
 
@@ -2320,7 +2320,7 @@ export default function TokenDetail() {
             <div className="flex items-center gap-2 mb-3">
               <Shield className="w-4 h-4 text-cyan-400" />
               <span className="text-sm font-medium">Guardian Safety Score</span>
-              <Badge className={`ml-auto ${token.safety.score >= 70 ? 'bg-emerald-500/20 text-emerald-400' : token.safety.score >= 40 ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'}`}>
+              <Badge className={`ml-auto ${token.safety.score >= 70 ? 'bg-emerald-500/20 text-emerald-400' : token.safety.score >= 40 ? 'bg-teal-500/20 text-teal-400' : 'bg-red-500/20 text-red-400'}`}>
                 {token.safety.score}/100 ({token.safety.grade})
               </Badge>
             </div>
@@ -2333,19 +2333,19 @@ export default function TokenDetail() {
               </div>
               <div className="flex items-center justify-between p-2 bg-slate-800/50 rounded">
                 <span className="text-white/50">Mint Auth</span>
-                <span className={token.safety.mintAuthority ? 'text-yellow-400' : 'text-emerald-400'}>
+                <span className={token.safety.mintAuthority ? 'text-teal-400' : 'text-emerald-400'}>
                   {token.safety.mintAuthority ? 'Enabled' : 'Disabled'}
                 </span>
               </div>
               <div className="flex items-center justify-between p-2 bg-slate-800/50 rounded">
                 <span className="text-white/50">Freeze Auth</span>
-                <span className={token.safety.freezeAuthority ? 'text-yellow-400' : 'text-emerald-400'}>
+                <span className={token.safety.freezeAuthority ? 'text-teal-400' : 'text-emerald-400'}>
                   {token.safety.freezeAuthority ? 'Enabled' : 'Disabled'}
                 </span>
               </div>
               <div className="flex items-center justify-between p-2 bg-slate-800/50 rounded">
                 <span className="text-white/50">Liquidity</span>
-                <span className={token.liquidityLocked ? 'text-emerald-400' : 'text-orange-400'}>
+                <span className={token.liquidityLocked ? 'text-emerald-400' : 'text-cyan-400'}>
                   {token.liquidityLocked ? 'Locked' : 'Unlocked'}
                 </span>
               </div>
@@ -2353,22 +2353,22 @@ export default function TokenDetail() {
           </div>
 
           {/* Boost */}
-          <div className="bg-gradient-to-r from-yellow-500/10 to-orange-500/10 rounded-xl p-4 border border-yellow-500/20">
+          <div className="bg-gradient-to-r from-teal-500/10 to-cyan-500/10 rounded-xl p-4 border border-teal-500/20">
             <div className="flex items-center justify-center gap-2">
-              <Zap className="w-5 h-5 text-yellow-400 fill-yellow-400" />
-              <span className="font-bold text-yellow-400">Boost</span>
-              <Badge className="bg-yellow-500/30 text-yellow-300">{token.boosts}</Badge>
+              <Zap className="w-5 h-5 text-teal-400 fill-teal-400" />
+              <span className="font-bold text-teal-400">Boost</span>
+              <Badge className="bg-teal-500/30 text-teal-300">{token.boosts}</Badge>
             </div>
           </div>
 
           {/* Community Reactions */}
           <div className="grid grid-cols-4 gap-2">
             <button className="bg-slate-800/50 rounded-xl p-3 text-center border border-white/5 hover:bg-slate-800/70">
-              <Rocket className="w-5 h-5 mx-auto mb-1 text-orange-400" />
+              <Rocket className="w-5 h-5 mx-auto mb-1 text-cyan-400" />
               <span className="text-sm font-medium">{token.reactions.rocket}</span>
             </button>
             <button className="bg-slate-800/50 rounded-xl p-3 text-center border border-white/5 hover:bg-slate-800/70">
-              <Flame className="w-5 h-5 mx-auto mb-1 text-orange-500" />
+              <Flame className="w-5 h-5 mx-auto mb-1 text-cyan-500" />
               <span className="text-sm font-medium">{token.reactions.fire}</span>
             </button>
             <button className="bg-slate-800/50 rounded-xl p-3 text-center border border-white/5 hover:bg-slate-800/70">

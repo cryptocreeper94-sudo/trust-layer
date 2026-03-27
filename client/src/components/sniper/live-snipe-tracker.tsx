@@ -123,7 +123,7 @@ export function LiveSnipeTracker({ userId }: LiveSnipeTrackerProps) {
       case 'active':
         return <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">Active</Badge>;
       case 'pending_exit':
-        return <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30">Pending Exit</Badge>;
+        return <Badge className="bg-teal-500/20 text-teal-400 border-teal-500/30">Pending Exit</Badge>;
       case 'stopped_out':
         return <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Stopped</Badge>;
       case 'take_profit':
@@ -323,7 +323,7 @@ export function LiveSnipeTracker({ userId }: LiveSnipeTrackerProps) {
                             <Button
                               variant="outline"
                               size="sm"
-                              className="border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10"
+                              className="border-teal-500/30 text-teal-400 hover:bg-teal-500/10"
                               onClick={(e) => {
                                 e.stopPropagation();
                               }}

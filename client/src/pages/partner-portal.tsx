@@ -83,7 +83,7 @@ const VISION_SLIDES = [
     title: "The Many Lenses",
     subtitle: "Reality adapts to what you believe",
     description: "No two players experience the same Chronicles. The AI learns your patterns organically and shapes narratives that feel personally tailored.",
-    gradient: "from-pink-500 to-orange-600",
+    gradient: "from-pink-500 to-cyan-600",
     icon: Brain,
   },
   {
@@ -97,7 +97,7 @@ const VISION_SLIDES = [
     title: "Production-Ready Infrastructure",
     subtitle: "200K+ TPS blockchain powering the ecosystem",
     description: "Trust Layer is live and operational. We need world-class partners for graphics, AI, and narrative systems.",
-    gradient: "from-amber-500 to-red-600",
+    gradient: "from-purple-500 to-red-600",
     icon: Zap,
   },
 ];
@@ -654,7 +654,7 @@ function AccessRequestForm({ onBack }: { onBack: () => void }) {
               />
             </div>
 
-            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+            <div className="p-4 rounded-xl bg-purple-500/10 border border-purple-500/20">
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
@@ -764,8 +764,8 @@ function PasswordGate({ onUnlock }: { onUnlock: () => void }) {
           style={{ boxShadow: "0 0 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)" }}
         >
           <div className="flex items-center gap-3 mb-6 pb-6 border-b border-white/10">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-              <Lock className="w-5 h-5 text-amber-400" />
+            <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+              <Lock className="w-5 h-5 text-purple-400" />
             </div>
             <div>
               <h2 className="text-white font-semibold">Secure Access Required</h2>
@@ -869,7 +869,7 @@ function PartnerContent() {
             <span className="font-display font-bold text-lg tracking-tight">DarkWave Studios</span>
           </Link>
           <div className="flex items-center gap-3">
-            <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 animate-pulse">
+            <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 animate-pulse">
               <Zap className="w-3 h-3 mr-1" />
               BETA v0.1 LIVE
             </Badge>
@@ -896,7 +896,7 @@ function PartnerContent() {
               className="text-center"
             >
               <div className="flex flex-wrap justify-center gap-2 mb-6">
-                <Badge className="px-4 py-2 bg-gradient-to-r from-amber-500/30 to-orange-500/30 border-amber-500/50 text-amber-400 backdrop-blur-sm animate-pulse">
+                <Badge className="px-4 py-2 bg-gradient-to-r from-purple-500/30 to-cyan-500/30 border-purple-500/50 text-purple-400 backdrop-blur-sm animate-pulse">
                   <Zap className="w-4 h-4 mr-2" />
                   SEASON ZERO LIVE - BETA v0.1
                 </Badge>
@@ -1269,7 +1269,7 @@ function PartnerContent() {
                         item.status === 'Live' || item.status === 'Production' 
                           ? 'border-emerald-500/50 text-emerald-400' 
                           : item.status === 'Partnership Needed'
-                          ? 'border-amber-500/50 text-amber-400'
+                          ? 'border-purple-500/50 text-purple-400'
                           : 'border-cyan-500/50 text-cyan-400'
                       }`}
                     >
@@ -1286,16 +1286,16 @@ function PartnerContent() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="mt-8 p-6 rounded-xl bg-gradient-to-r from-amber-950/30 via-purple-950/30 to-cyan-950/30 border border-amber-500/20"
+              className="mt-8 p-6 rounded-xl bg-gradient-to-r from-purple-950/30 via-purple-950/30 to-cyan-950/30 border border-purple-500/20"
             >
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center shrink-0">
-                  <Sparkles className="w-6 h-6 text-amber-400" />
+                <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center shrink-0">
+                  <Sparkles className="w-6 h-6 text-purple-400" />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-2">Partnership Opportunity</h3>
                   <p className="text-white/70">
-                    We're seeking partners for <span className="text-amber-400">graphics/engine development</span> and 
+                    We're seeking partners for <span className="text-purple-400">graphics/engine development</span> and 
                     <span className="text-purple-400"> AI system implementation</span>. The blockchain infrastructure and 
                     web portal are production-ready. We need world-class talent to bring the game experience to life.
                   </p>

@@ -206,12 +206,12 @@ export function DwcBagDashboard({ compact = false }: { compact?: boolean }) {
 
         <GlassCard className="p-4">
           <div className="flex items-center gap-2 mb-2">
-            <Trophy className="w-4 h-4 text-amber-400" />
+            <Trophy className="w-4 h-4 text-purple-400" />
             <span className="text-xs text-gray-400">Early Bonus</span>
           </div>
           <p className="text-lg font-bold text-white">{formatNumber(sources.earlyAdopterBonus.tokens)}</p>
           {sources.earlyAdopterBonus.isEarlyAdopter && (
-            <p className="text-xs text-amber-500">#{sources.earlyAdopterBonus.signupPosition} Early Adopter</p>
+            <p className="text-xs text-purple-500">#{sources.earlyAdopterBonus.signupPosition} Early Adopter</p>
           )}
         </GlassCard>
       </div>

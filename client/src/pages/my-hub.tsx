@@ -191,7 +191,7 @@ export default function MyHub() {
     { href: "/swap", label: "Swap", icon: ArrowLeftRight, color: "purple", description: "Trade tokens" },
     { href: "/staking", label: "Staking", icon: TrendingUp, color: "emerald", description: "Earn rewards" },
     { href: "/nft", label: "NFTs", icon: ImageIcon, color: "pink", description: "Collect & trade" },
-    { href: "/bridge", label: "Bridge", icon: Globe, color: "amber", description: "Cross-chain transfers" },
+    { href: "/bridge", label: "Bridge", icon: Globe, color: "purple", description: "Cross-chain transfers" },
     { href: "/portfolio", label: "Portfolio", icon: PieChart, color: "blue", description: "Track holdings" },
   ];
 
@@ -236,7 +236,7 @@ export default function MyHub() {
     },
     {
       title: "About Us",
-      color: "amber",
+      color: "purple",
       links: [
         { href: "/vision", label: "Our Vision", icon: Sparkles },
         { href: "/ecosystem", label: "Ecosystem Map", icon: Globe },
@@ -257,7 +257,7 @@ export default function MyHub() {
     if (memberNum <= 10) return { 
       label: "Founder", 
       icon: "🏆",
-      className: "bg-amber-500/20 text-amber-400 border-amber-500/30"
+      className: "bg-purple-500/20 text-purple-400 border-purple-500/30"
     };
     if (memberNum <= 50) return { 
       label: "Pioneer", 
@@ -433,9 +433,9 @@ export default function MyHub() {
                     {notifications.map(notif => (
                       <div key={notif.id} className={`p-3 border-b border-white/5 hover:bg-white/5 transition-colors ${!notif.read ? 'bg-cyan-500/5' : ''}`}>
                         <div className="flex items-start gap-2">
-                          <div className={`p-1.5 rounded-lg ${notif.type === 'reward' ? 'bg-emerald-500/20' : notif.type === 'quest' ? 'bg-amber-500/20' : 'bg-cyan-500/20'}`}>
+                          <div className={`p-1.5 rounded-lg ${notif.type === 'reward' ? 'bg-emerald-500/20' : notif.type === 'quest' ? 'bg-purple-500/20' : 'bg-cyan-500/20'}`}>
                             {notif.type === 'reward' ? <Gift className="w-3 h-3 text-emerald-400" /> : 
-                             notif.type === 'quest' ? <Target className="w-3 h-3 text-amber-400" /> : 
+                             notif.type === 'quest' ? <Target className="w-3 h-3 text-purple-400" /> : 
                              <Bell className="w-3 h-3 text-cyan-400" />}
                           </div>
                           <div className="flex-1 min-w-0">
@@ -528,7 +528,7 @@ export default function MyHub() {
                             </Badge>
                           )}
                           {memberData?.isEarlyAdopter && !tenureBadge && (
-                            <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 ml-2">
+                            <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 ml-2">
                               <Star className="w-3 h-3 mr-1" /> Early Adopter
                             </Badge>
                           )}
@@ -567,7 +567,7 @@ export default function MyHub() {
                       </div>
                       <div className="p-4 rounded-xl bg-white/5 border border-white/10">
                         <p className="text-white/50 text-sm mb-1">Your Tier</p>
-                        <p className="text-2xl font-bold text-amber-400 capitalize">{rewardProfile?.profile?.tier || 'Participant'}</p>
+                        <p className="text-2xl font-bold text-purple-400 capitalize">{rewardProfile?.profile?.tier || 'Participant'}</p>
                         <p className="text-xs text-white/40">{rewardProfile?.profile?.multiplier || 1}x multiplier</p>
                       </div>
                       <div className="p-4 rounded-xl bg-white/5 border border-white/10">
@@ -585,7 +585,7 @@ export default function MyHub() {
                         <p className="text-white/50 text-xs mb-1">MEMBER CARD</p>
                         <p className="text-4xl font-bold text-white mb-2">#{memberData?.memberNumber || '...'}</p>
                         {memberData?.isEarlyAdopter && (
-                          <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 mb-3">
+                          <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 mb-3">
                             <Star className="w-3 h-3 mr-1" /> Early Adopter
                           </Badge>
                         )}
@@ -622,8 +622,8 @@ export default function MyHub() {
             <div className="p-4 rounded-2xl bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border border-cyan-500/20">
               <div className="flex flex-col md:flex-row items-center gap-4">
                 <div className="flex items-center gap-3 flex-1">
-                  <div className="p-2 rounded-xl bg-amber-500/20">
-                    <Trophy className="w-6 h-6 text-amber-400" />
+                  <div className="p-2 rounded-xl bg-purple-500/20">
+                    <Trophy className="w-6 h-6 text-purple-400" />
                   </div>
                   <div>
                     <p className="font-semibold">Progress to Founders Tier</p>
@@ -633,7 +633,7 @@ export default function MyHub() {
                 <div className="w-full md:w-64">
                   <Progress value={progressToFounders} className="h-3" />
                 </div>
-                <Badge className={progressToFounders >= 100 ? "bg-amber-500/20 text-amber-400" : "bg-white/10 text-white/60"}>
+                <Badge className={progressToFounders >= 100 ? "bg-purple-500/20 text-purple-400" : "bg-white/10 text-white/60"}>
                   {progressToFounders >= 100 ? "Founders Achieved!" : `${Math.round(progressToFounders)}%`}
                 </Badge>
               </div>
@@ -685,7 +685,7 @@ export default function MyHub() {
             className="mb-8"
           >
             <GlassCard className="p-5 relative overflow-hidden" glow>
-              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-amber-500" />
+              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500" />
               <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
                 <div className="flex items-center gap-3 flex-1">
                   <div className="p-3 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/30">
@@ -757,17 +757,17 @@ export default function MyHub() {
                 <GlassCard className="p-5 h-full" glow>
                   <div className="flex items-center justify-between mb-4">
                     <h3 className="font-semibold flex items-center gap-2">
-                      <AlertCircle className="w-4 h-4 text-amber-400" />
+                      <AlertCircle className="w-4 h-4 text-purple-400" />
                       Action Needed
                     </h3>
-                    <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-xs">
+                    <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-xs">
                       {pendingActions.length}
                     </Badge>
                   </div>
                   <div className="space-y-3">
                     {pendingActions.map(action => (
                       <Link key={action.id} href={action.href}>
-                        <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/20 transition-colors cursor-pointer">
+                        <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20 hover:bg-purple-500/20 transition-colors cursor-pointer">
                           <p className="font-medium text-sm">{action.title}</p>
                           <p className="text-xs text-white/50">{action.description}</p>
                         </div>
@@ -802,7 +802,7 @@ export default function MyHub() {
                       const typeColors: Record<string, string> = {
                         presale: 'text-purple-400 bg-purple-500/20',
                         subscription: 'text-cyan-400 bg-cyan-500/20',
-                        credits: 'text-amber-400 bg-amber-500/20',
+                        credits: 'text-purple-400 bg-purple-500/20',
                         guardian: 'text-emerald-400 bg-emerald-500/20',
                         ebook: 'text-pink-400 bg-pink-500/20',
                         crowdfund: 'text-blue-400 bg-blue-500/20',
@@ -963,13 +963,13 @@ export default function MyHub() {
                       </div>
                     </Link>
                     <Link href="/members">
-                      <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10 hover:border-amber-500/30 transition-all cursor-pointer group">
+                      <div className="p-4 rounded-xl bg-slate-800/50 border border-white/10 hover:border-purple-500/30 transition-all cursor-pointer group">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 rounded-lg bg-amber-500/20">
-                            <Users className="w-5 h-5 text-amber-400" />
+                          <div className="p-2 rounded-lg bg-purple-500/20">
+                            <Users className="w-5 h-5 text-purple-400" />
                           </div>
                           <div>
-                            <p className="font-medium group-hover:text-amber-400 transition-colors">Explore Trust Circle</p>
+                            <p className="font-medium group-hover:text-purple-400 transition-colors">Explore Trust Circle</p>
                             <p className="text-xs text-white/50">Find trusted members near you</p>
                           </div>
                         </div>
@@ -1228,8 +1228,8 @@ export default function MyHub() {
           >
             <GlassCard className="p-6">
               <div className="flex items-center gap-3 mb-4">
-                <div className="p-2 rounded-xl bg-amber-500/20">
-                  <Gamepad2 className="w-6 h-6 text-amber-400" />
+                <div className="p-2 rounded-xl bg-purple-500/20">
+                  <Gamepad2 className="w-6 h-6 text-purple-400" />
                 </div>
                 <div>
                   <h3 className="font-bold">Chronicles</h3>
@@ -1245,11 +1245,11 @@ export default function MyHub() {
                   <span className="text-white/60">Game Items</span>
                   <span className="font-bold">0</span>
                 </div>
-                <Link href="/chronicles">
-                  <Button className="w-full mt-2 bg-gradient-to-r from-amber-500 to-orange-500">
+                <a href="https://yourlegacy.io" target="_blank" rel="noopener noreferrer">
+                  <Button className="w-full mt-2 bg-gradient-to-r from-purple-500 to-cyan-500">
                     Enter Chronicles <ChevronRight className="w-4 h-4 ml-2" />
                   </Button>
-                </Link>
+                </a>
               </div>
             </GlassCard>
 

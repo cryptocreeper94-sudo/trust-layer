@@ -433,7 +433,7 @@ export default function Tetris() {
 
               {gameState.highScore > 0 && (
                 <div className="text-center">
-                  <p className="text-amber-400">High Score: {gameState.highScore.toLocaleString()}</p>
+                  <p className="text-purple-400">High Score: {gameState.highScore.toLocaleString()}</p>
                 </div>
               )}
 
@@ -610,7 +610,7 @@ export default function Tetris() {
               className="bg-gradient-to-br from-purple-900 to-indigo-900 rounded-3xl p-8 max-w-md w-full mx-4 text-center border-2 border-purple-500/50"
             >
               {gameState.score >= gameState.highScore && gameState.score > 0 ? (
-                <Trophy className="w-16 h-16 mx-auto mb-4 text-yellow-400" />
+                <Trophy className="w-16 h-16 mx-auto mb-4 text-teal-400" />
               ) : (
                 <span className="text-5xl block mb-4">🧱</span>
               )}
@@ -618,7 +618,7 @@ export default function Tetris() {
               <p className="text-2xl text-white mb-2">{gameState.score.toLocaleString()}</p>
               <p className="text-gray-400 mb-4">Level {gameState.level} • {gameState.lines} lines</p>
               {gameState.score >= gameState.highScore && gameState.score > 0 && (
-                <Badge className="mb-4 bg-yellow-500/20 text-yellow-300 border-yellow-500/30">
+                <Badge className="mb-4 bg-teal-500/20 text-teal-300 border-teal-500/30">
                   New High Score!
                 </Badge>
               )}

@@ -498,8 +498,8 @@ export default function AdminMarketing() {
             </div>
 
             {/* Setup Instructions */}
-            <div className="p-4 rounded-xl border border-amber-500/30 bg-amber-500/10 backdrop-blur-lg">
-              <h3 className="text-lg font-semibold text-amber-400 mb-3 flex items-center gap-2">
+            <div className="p-4 rounded-xl border border-purple-500/30 bg-purple-500/10 backdrop-blur-lg">
+              <h3 className="text-lg font-semibold text-purple-400 mb-3 flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4" />
                 Platform Setup
               </h3>

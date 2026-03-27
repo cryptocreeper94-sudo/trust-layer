@@ -42,7 +42,7 @@ const CASINO_GAMES: GameItem[] = [
     image: dragonSlots,
     href: "/slots",
     badge: "HOT",
-    badgeColor: "from-red-500 to-orange-500",
+    badgeColor: "from-red-500 to-cyan-500",
     icon: <Flame className="w-4 h-4" />,
     players: "2.4K playing",
     hot: true,
@@ -66,7 +66,7 @@ const CASINO_GAMES: GameItem[] = [
     image: coinflipArt,
     href: "/coinflip",
     badge: "1.96x",
-    badgeColor: "from-yellow-500 to-amber-500",
+    badgeColor: "from-teal-500 to-purple-500",
     icon: <Coins className="w-4 h-4" />,
     players: "3.1K playing",
     hot: true,
@@ -188,7 +188,7 @@ function GameCarousel({ title, subtitle, games, icon, accentColor = "cyan" }: {
   const colorMap: Record<string, { text: string; border: string; glow: string; bg: string }> = {
     cyan: { text: "text-cyan-400", border: "border-cyan-500/30", glow: "shadow-cyan-500/20", bg: "from-cyan-500/20" },
     purple: { text: "text-purple-400", border: "border-purple-500/30", glow: "shadow-purple-500/20", bg: "from-purple-500/20" },
-    yellow: { text: "text-yellow-400", border: "border-yellow-500/30", glow: "shadow-yellow-500/20", bg: "from-yellow-500/20" },
+    teal: { text: "text-teal-400", border: "border-teal-500/30", glow: "shadow-teal-500/20", bg: "from-teal-500/20" },
     pink: { text: "text-pink-400", border: "border-pink-500/30", glow: "shadow-pink-500/20", bg: "from-pink-500/20" },
     green: { text: "text-green-400", border: "border-green-500/30", glow: "shadow-green-500/20", bg: "from-green-500/20" },
   };
@@ -313,7 +313,7 @@ function GameCard({ game, index, accentColor }: { game: GameItem; index: number;
                   animate={{ opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 >
-                  <Flame className="w-5 h-5 text-orange-400 drop-shadow-[0_0_8px_rgba(251,146,60,0.8)]" />
+                  <Flame className="w-5 h-5 text-cyan-400 drop-shadow-[0_0_8px_rgba(251,146,60,0.8)]" />
                 </motion.div>
               </div>
             )}
@@ -338,7 +338,7 @@ function GameCard({ game, index, accentColor }: { game: GameItem; index: number;
           <motion.div
             className={`absolute inset-0 rounded-2xl border-2 pointer-events-none transition-all duration-300 ${isHovered ? 'border-white/20 shadow-2xl' : 'border-white/5'}`}
             style={{
-              boxShadow: isHovered ? `0 0 30px rgba(${accentColor === 'yellow' ? '234,179,8' : accentColor === 'cyan' ? '6,182,212' : accentColor === 'purple' ? '168,85,247' : accentColor === 'green' ? '34,197,94' : '236,72,153'},0.15)` : 'none',
+              boxShadow: isHovered ? `0 0 30px rgba(${accentColor === 'teal' ? '234,179,8' : accentColor === 'cyan' ? '6,182,212' : accentColor === 'purple' ? '168,85,247' : accentColor === 'green' ? '34,197,94' : '236,72,153'},0.15)` : 'none',
             }}
           />
 
@@ -390,7 +390,7 @@ function FeaturedBanner() {
                 transition={{ duration: 2, repeat: Infinity }}
                 className="inline-block"
               >
-                <Badge className="bg-gradient-to-r from-red-500 to-orange-500 text-white text-xs font-bold px-3 py-1 border-0">
+                <Badge className="bg-gradient-to-r from-red-500 to-cyan-500 text-white text-xs font-bold px-3 py-1 border-0">
                   <Flame className="w-3 h-3 mr-1" /> FEATURED
                 </Badge>
               </motion.div>
@@ -402,7 +402,7 @@ function FeaturedBanner() {
               The ancient dragon awakens! Spin the reels and claim your share of the legendary treasure hoard.
             </p>
             <Link href="/slots">
-              <Button className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-400 hover:to-orange-400 text-white font-bold px-6 py-3 rounded-xl shadow-xl" data-testid="featured-play-now">
+              <Button className="bg-gradient-to-r from-red-500 to-cyan-500 hover:from-red-400 hover:to-cyan-400 text-white font-bold px-6 py-3 rounded-xl shadow-xl" data-testid="featured-play-now">
                 <Zap className="w-4 h-4 mr-2" />
                 Play Now
               </Button>
@@ -435,7 +435,7 @@ function FeaturedBanner() {
 
 function StatsBar() {
   const stats = [
-    { label: "Total Players", value: "12.4K", icon: <Trophy className="w-4 h-4 text-yellow-400" /> },
+    { label: "Total Players", value: "12.4K", icon: <Trophy className="w-4 h-4 text-teal-400" /> },
     { label: "Games Available", value: "11", icon: <Gamepad2 className="w-4 h-4 text-cyan-400" /> },
     { label: "Total Wagered", value: "2.1M GC", icon: <Coins className="w-4 h-4 text-green-400" /> },
     { label: "Biggest Win", value: "500K GC", icon: <Crown className="w-4 h-4 text-purple-400" /> },
@@ -467,8 +467,8 @@ function CurrencyExplainer() {
   return (
     <GlassCard className="p-6 sm:p-8 mb-10" glow>
       <div className="flex items-start gap-4 mb-6">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-500/20 to-green-500/20 border border-yellow-500/30 flex items-center justify-center shrink-0">
-          <Coins className="w-5 h-5 text-yellow-400" />
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500/20 to-green-500/20 border border-teal-500/30 flex items-center justify-center shrink-0">
+          <Coins className="w-5 h-5 text-teal-400" />
         </div>
         <div>
           <h3 className="text-lg font-bold text-white mb-1">How Sweepstakes Games Work</h3>
@@ -476,10 +476,10 @@ function CurrencyExplainer() {
         </div>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="p-5 rounded-xl bg-yellow-500/5 border border-yellow-500/20">
+        <div className="p-5 rounded-xl bg-teal-500/5 border border-teal-500/20">
           <div className="flex items-center gap-2 mb-3">
-            <Coins className="w-5 h-5 text-yellow-400" />
-            <span className="font-bold text-yellow-400">Gold Coins (GC)</span>
+            <Coins className="w-5 h-5 text-teal-400" />
+            <span className="font-bold text-teal-400">Gold Coins (GC)</span>
           </div>
           <p className="text-sm text-slate-400 leading-relaxed">Purchase Gold Coins to play for fun. No real-money value. Buy packages to get started!</p>
         </div>
@@ -534,7 +534,7 @@ export default function Arcade() {
             subtitle="Play with Gold Coins, win Sweeps Coins for prizes"
             games={CASINO_GAMES}
             icon={<Crown className="w-5 h-5" />}
-            accentColor="yellow"
+            accentColor="teal"
           />
 
           <CurrencyExplainer />

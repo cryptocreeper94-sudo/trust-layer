@@ -176,7 +176,7 @@ export default function Portfolio() {
               <div className="text-[10px] text-muted-foreground">Tokens</div>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
-              <Lock className="w-4 h-4 text-amber-400 mx-auto mb-1" />
+              <Lock className="w-4 h-4 text-purple-400 mx-auto mb-1" />
               <div className="text-sm font-bold text-muted-foreground">{portfolio.staking.stakedValue > 0 ? formatUsd(portfolio.staking.stakedValue) : "--"}</div>
               <div className="text-[10px] text-muted-foreground">Staked</div>
             </div>
@@ -264,7 +264,7 @@ export default function Portfolio() {
                 <GlassCard glow className="p-4">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-sm font-bold">Staking Overview</span>
-                    <Badge className="bg-amber-500/20 text-amber-400 text-[10px]">{portfolio.staking.apy > 0 ? `${portfolio.staking.apy}% APY` : 'Up to 12% APY'}</Badge>
+                    <Badge className="bg-purple-500/20 text-purple-400 text-[10px]">{portfolio.staking.apy > 0 ? `${portfolio.staking.apy}% APY` : 'Up to 12% APY'}</Badge>
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div className="p-2 rounded-lg bg-white/5">
@@ -302,7 +302,7 @@ export default function Portfolio() {
                 )}
 
                 <Link href="/staking">
-                  <Button className="w-full h-10 bg-gradient-to-r from-amber-500 to-orange-500 text-black font-bold">
+                  <Button className="w-full h-10 bg-gradient-to-r from-purple-500 to-cyan-500 text-black font-bold">
                     {portfolio.staking.positions.length > 0 ? 'Manage Staking' : 'Start Staking'}
                     <ExternalLink className="w-4 h-4 ml-2" />
                   </Button>

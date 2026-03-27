@@ -26,7 +26,7 @@ const audioImg = "/images/trust-book-audio.jpg";
 const PLATFORM_FEATURES = [
   { icon: BookOpen, title: "Immersive E-Reader", desc: "Full-screen reading with adjustable fonts, themes, and progress tracking across all devices.", gradient: "from-cyan-500 to-blue-600" },
   { icon: Headphones, title: "AI Narration", desc: "Every book narrated by premium AI voices. Listen while you commute, exercise, or unwind.", gradient: "from-purple-500 to-pink-600" },
-  { icon: Download, title: "Multi-Format", desc: "Read online, download PDF, or export EPUB. Your library, your format, your choice.", gradient: "from-amber-500 to-orange-600" },
+  { icon: Download, title: "Multi-Format", desc: "Read online, download PDF, or export EPUB. Your library, your format, your choice.", gradient: "from-purple-500 to-cyan-600" },
   { icon: Smartphone, title: "Mobile-First PWA", desc: "Install on any device. Works offline. True app experience without the app store.", gradient: "from-emerald-500 to-teal-600" },
   { icon: Shield, title: "Blockchain Verified", desc: "Every publication timestamped on the Trust Layer blockchain. Provenance you can verify.", gradient: "from-red-500 to-rose-600" },
   { icon: Users, title: "Author Publishing", desc: "Publish your own work. Transparent royalties tracked on-chain. No gatekeepers.", gradient: "from-indigo-500 to-violet-600" },
@@ -47,7 +47,7 @@ const TESTIMONIALS = [
 
 const STATUS_CONFIG: Record<string, { icon: any; color: string; label: string }> = {
   draft: { icon: Clock, color: 'text-slate-400', label: 'Draft' },
-  pending_review: { icon: AlertCircle, color: 'text-amber-400', label: 'Pending Review' },
+  pending_review: { icon: AlertCircle, color: 'text-purple-400', label: 'Pending Review' },
   approved: { icon: CheckCircle, color: 'text-emerald-400', label: 'Approved' },
   rejected: { icon: XCircle, color: 'text-red-400', label: 'Rejected' },
   published: { icon: CheckCircle, color: 'text-cyan-400', label: 'Published' },
@@ -173,7 +173,7 @@ function AuthorEarningsDashboard({ userId }: { userId: string }) {
               </div>
               <div className="p-3 rounded-xl bg-white/5 border border-white/10">
                 <p className="text-white/40 text-xs">Pending Payout</p>
-                <p className="text-xl font-bold text-amber-400" data-testid="text-pending-payout">
+                <p className="text-xl font-bold text-purple-400" data-testid="text-pending-payout">
                   ${((stats?.pendingPayout || 0) / 100).toFixed(2)}
                 </p>
               </div>
@@ -202,9 +202,9 @@ function AuthorEarningsDashboard({ userId }: { userId: string }) {
             )}
 
             {!connectStatus?.onboardingComplete ? (
-              <div className="p-4 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 mb-4">
+              <div className="p-4 rounded-xl bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20 mb-4">
                 <div className="flex items-start gap-3">
-                  <CreditCard className="w-5 h-5 text-amber-400 mt-0.5 flex-shrink-0" />
+                  <CreditCard className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
                     <p className="text-sm font-medium text-white mb-1">Set Up Payouts</p>
                     <p className="text-xs text-white/50 mb-3">
@@ -215,7 +215,7 @@ function AuthorEarningsDashboard({ userId }: { userId: string }) {
                       onClick={handleConnectOnboarding}
                       disabled={connectLoading}
                       size="sm"
-                      className="bg-gradient-to-r from-amber-500 to-orange-500 text-black font-semibold"
+                      className="bg-gradient-to-r from-purple-500 to-cyan-500 text-black font-semibold"
                       data-testid="button-connect-stripe"
                     >
                       {connectLoading ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <ExternalLink className="w-4 h-4 mr-1" />}
@@ -253,7 +253,7 @@ function AuthorEarningsDashboard({ userId }: { userId: string }) {
                   {dashboard.recentEarnings.slice(0, 5).map((earning: any) => (
                     <div key={earning.id} className="flex items-center justify-between p-2 rounded-lg bg-white/5 text-sm" data-testid={`earning-row-${earning.id}`}>
                       <div className="flex items-center gap-2">
-                        <Badge className={earning.status === "paid" ? "bg-emerald-500/20 text-emerald-400 text-xs" : "bg-amber-500/20 text-amber-400 text-xs"}>
+                        <Badge className={earning.status === "paid" ? "bg-emerald-500/20 text-emerald-400 text-xs" : "bg-purple-500/20 text-purple-400 text-xs"}>
                           {earning.status}
                         </Badge>
                         <span className="text-white/60 text-xs">Book #{earning.bookId}</span>
@@ -470,11 +470,11 @@ export default function TrustBook() {
       <section id="section-discover" className="py-16 relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
-            <Badge className="mb-4 px-3 py-1.5 bg-amber-500/10 border-amber-500/30 text-amber-400 text-xs">
+            <Badge className="mb-4 px-3 py-1.5 bg-purple-500/10 border-purple-500/30 text-purple-400 text-xs">
               <Star className="w-3 h-3 mr-1" /> Featured Publication
             </Badge>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black mb-4">
-              <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-red-400 bg-clip-text text-transparent">Through The Veil</span>
+              <span className="bg-gradient-to-r from-purple-400 via-cyan-400 to-red-400 bg-clip-text text-transparent">Through The Veil</span>
             </h2>
             <p className="text-white/50 max-w-xl mx-auto text-sm sm:text-base">
               A 107,000-word investigation into the hidden architecture of history. 52 chapters. 13 parts.
@@ -490,7 +490,7 @@ export default function TrustBook() {
                   <div className="relative z-10 p-6 sm:p-8 flex flex-col justify-end h-full">
                     <div className="flex gap-2 mb-3">
                       <Badge className="bg-cyan-500/20 border-cyan-500/30 text-cyan-400 text-xs"><Sparkles className="w-3 h-3 mr-1" /> Launch Title</Badge>
-                      <Badge className="bg-amber-500/20 border-amber-500/30 text-amber-400 text-xs">Non-Fiction</Badge>
+                      <Badge className="bg-purple-500/20 border-purple-500/30 text-purple-400 text-xs">Non-Fiction</Badge>
                       <Badge className="bg-purple-500/20 border-purple-500/30 text-purple-400 text-xs">Investigation</Badge>
                     </div>
                     <h3 className="text-2xl sm:text-3xl font-display font-black text-white mb-3">Through The Veil</h3>
@@ -509,7 +509,7 @@ export default function TrustBook() {
                         </Button>
                       </Link>
                       <Link href="/veil/read">
-                        <Button className="gap-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500" data-testid="button-buy-veil">
+                        <Button className="gap-2 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500" data-testid="button-buy-veil">
                           <Sparkles className="w-4 h-4" /> Buy for $4.99
                         </Button>
                       </Link>
@@ -602,7 +602,7 @@ export default function TrustBook() {
                         {book.wordCount && <span>{(book.wordCount / 1000).toFixed(0)}K words</span>}
                         {book.chapterCount && <><span>·</span><span>{book.chapterCount} chapters</span></>}
                         {parseFloat(book.rating) > 0 && (
-                          <><span>·</span><span className="flex items-center gap-0.5"><Star className="w-3 h-3 text-amber-400 fill-amber-400" />{parseFloat(book.rating).toFixed(1)}</span></>
+                          <><span>·</span><span className="flex items-center gap-0.5"><Star className="w-3 h-3 text-purple-400 fill-purple-400" />{parseFloat(book.rating).toFixed(1)}</span></>
                         )}
                       </div>
                     </div>
@@ -709,7 +709,7 @@ export default function TrustBook() {
                             <p className="text-xs text-white/40 line-clamp-2 mb-2">{book.description}</p>
                             <div className="flex items-center gap-3 text-[10px] text-white/30">
                               <span>{book.genre}</span><span>·</span><span>${(book.price / 100).toFixed(2)}</span>
-                              {book.reviewNotes && <><span>·</span><span className="text-amber-400/60">Review notes</span></>}
+                              {book.reviewNotes && <><span>·</span><span className="text-purple-400/60">Review notes</span></>}
                             </div>
                           </div>
                         );
@@ -925,7 +925,7 @@ export default function TrustBook() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
               {[
                 { icon: Lock, label: "Censorship-Free", desc: "Publish without fear", gradient: "from-purple-500 to-pink-600" },
-                { icon: Zap, label: "Instant Publishing", desc: "Upload and go live", gradient: "from-amber-500 to-orange-600" },
+                { icon: Zap, label: "Instant Publishing", desc: "Upload and go live", gradient: "from-purple-500 to-cyan-600" },
                 { icon: Globe, label: "Global Reach", desc: "Readers worldwide", gradient: "from-emerald-500 to-teal-600" },
               ].map(item => (
                 <GlassCard key={item.label}>
@@ -1100,7 +1100,7 @@ export default function TrustBook() {
                 <GlassCard>
                   <div className="p-5 text-center">
                     <div className="flex justify-center gap-1 mb-3">
-                      {[...Array(t.rating)].map((_, j) => <Star key={j} className="w-4 h-4 text-amber-400 fill-amber-400" />)}
+                      {[...Array(t.rating)].map((_, j) => <Star key={j} className="w-4 h-4 text-purple-400 fill-purple-400" />)}
                     </div>
                     <p className="text-sm text-white/70 italic">"{t.text}"</p>
                   </div>
@@ -1128,7 +1128,7 @@ export default function TrustBook() {
                 </Button>
               </Link>
               <Link href="/veil/read">
-                <Button size="lg" className="h-14 px-10 text-base gap-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-500 hover:to-orange-500 shadow-2xl shadow-amber-500/25 rounded-xl" data-testid="button-buy-now-bottom">
+                <Button size="lg" className="h-14 px-10 text-base gap-2 bg-gradient-to-r from-purple-600 to-cyan-600 hover:from-purple-500 hover:to-cyan-500 shadow-2xl shadow-purple-500/25 rounded-xl" data-testid="button-buy-now-bottom">
                   <Sparkles className="w-5 h-5" /> Buy Full Book — $4.99
                 </Button>
               </Link>

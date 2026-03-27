@@ -39,7 +39,7 @@ function ExploreButton({ url, appName }: { url?: string; appName: string }) {
         <DialogContent className="max-w-md bg-slate-900 border-white/10">
           <DialogHeader>
             <DialogTitle className="text-xl font-bold flex items-center gap-2">
-              <Badge className="bg-amber-500 text-black">Beta</Badge>
+              <Badge className="bg-purple-500 text-black">Beta</Badge>
               {appName}
             </DialogTitle>
             <DialogDescription asChild>
@@ -139,11 +139,11 @@ const gradientColors: Record<string, { from: string; to: string }> = {
   "from-emerald-600 to-teal-800": { from: "#059669", to: "#115e59" },
   "from-emerald-500 to-teal-600": { from: "#10b981", to: "#0d9488" },
   "from-emerald-500 to-green-700": { from: "#10b981", to: "#15803d" },
-  "from-amber-600 to-yellow-800": { from: "#d97706", to: "#854d0e" },
-  "from-amber-500 to-orange-600": { from: "#f59e0b", to: "#ea580c" },
-  "from-amber-700 to-orange-900": { from: "#b45309", to: "#7c2d12" },
+  "from-purple-600 to-teal-800": { from: "#d97706", to: "#854d0e" },
+  "from-purple-500 to-cyan-600": { from: "#f59e0b", to: "#ea580c" },
+  "from-purple-700 to-cyan-900": { from: "#b45309", to: "#7c2d12" },
   "from-cyan-600 to-blue-700": { from: "#0891b2", to: "#1d4ed8" },
-  "from-orange-500 to-red-600": { from: "#f97316", to: "#dc2626" },
+  "from-cyan-500 to-red-600": { from: "#f97316", to: "#dc2626" },
   "from-red-600 to-rose-700": { from: "#dc2626", to: "#be123c" },
   "from-red-500 to-rose-600": { from: "#ef4444", to: "#e11d48" },
   "from-blue-500 to-cyan-600": { from: "#3b82f6", to: "#0891b2" },

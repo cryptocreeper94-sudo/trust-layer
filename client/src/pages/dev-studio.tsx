@@ -315,7 +315,7 @@ export default function DevStudio() {
                 <div className="flex-1 bg-black/40 rounded-lg border border-white/5 overflow-hidden">
                   <div className="h-6 bg-white/5 border-b border-white/5 flex items-center px-3 gap-1.5">
                     <div className="w-2 h-2 rounded-full bg-red-500/50" />
-                    <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
+                    <div className="w-2 h-2 rounded-full bg-teal-500/50" />
                     <div className="w-2 h-2 rounded-full bg-green-500/50" />
                     <span className="text-[10px] text-white/30 ml-2">token.dwv</span>
                   </div>
@@ -323,7 +323,7 @@ export default function DevStudio() {
                     <div><span className="text-purple-400">contract</span> <span className="text-cyan-400">SIGToken</span> {"{"}</div>
                     <div className="pl-3"><span className="text-white/50">name:</span> <span className="text-green-400">"Signal"</span></div>
                     <div className="pl-3"><span className="text-white/50">symbol:</span> <span className="text-green-400">"SIG"</span></div>
-                    <div className="pl-3"><span className="text-white/50">supply:</span> <span className="text-yellow-400">100_000_000</span></div>
+                    <div className="pl-3"><span className="text-white/50">supply:</span> <span className="text-teal-400">100_000_000</span></div>
                     <div className="text-purple-400">{"}"}</div>
                   </div>
                 </div>
@@ -380,7 +380,7 @@ export default function DevStudio() {
 
             <GlassCard>
               <div className="h-full p-4 flex flex-col justify-center">
-                <Cpu className="w-5 h-5 text-orange-400 mb-2" />
+                <Cpu className="w-5 h-5 text-cyan-400 mb-2" />
                 <div className="text-xl font-bold text-white">Unlimited</div>
                 <div className="text-[10px] text-white/40">Build minutes</div>
               </div>
@@ -399,7 +399,7 @@ export default function DevStudio() {
                 <div className="h-full p-4 flex flex-col justify-center">
                   <div className="flex items-center justify-between mb-1">
                     <feature.icon className={`w-5 h-5 ${
-                      i === 0 ? 'text-purple-400' : i === 1 ? 'text-yellow-400' : i === 2 ? 'text-cyan-400' : i === 3 ? 'text-indigo-400' : 'text-pink-400'
+                      i === 0 ? 'text-purple-400' : i === 1 ? 'text-teal-400' : i === 2 ? 'text-cyan-400' : i === 3 ? 'text-indigo-400' : 'text-pink-400'
                     }`} />
                     {feature.live && <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-green-500/20 text-green-400 border border-green-500/30 font-bold uppercase">Live</span>}
                   </div>

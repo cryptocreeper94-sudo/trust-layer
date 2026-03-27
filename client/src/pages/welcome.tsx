@@ -39,7 +39,7 @@ const PATHWAYS = [
     icon: Users,
     title: "I Want to Join the Community",
     description: "Connect with other members, participate in discussions, and earn rewards for your engagement.",
-    color: "from-orange-500 to-amber-500",
+    color: "from-cyan-500 to-purple-500",
     link: "/community",
     linkText: "Join Community"
   }

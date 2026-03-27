@@ -247,13 +247,13 @@ export default function TxSimulator() {
                       </div>
 
                       {result.warnings.length > 0 && (
-                        <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+                        <div className="p-3 rounded-lg bg-teal-500/10 border border-teal-500/20">
                           <div className="flex items-center gap-2 mb-1">
-                            <AlertTriangle className="w-4 h-4 text-yellow-400" />
-                            <span className="text-sm font-medium text-yellow-400">Warnings</span>
+                            <AlertTriangle className="w-4 h-4 text-teal-400" />
+                            <span className="text-sm font-medium text-teal-400">Warnings</span>
                           </div>
                           {result.warnings.map((warning, i) => (
-                            <p key={i} className="text-xs text-yellow-400/80">{warning}</p>
+                            <p key={i} className="text-xs text-teal-400/80">{warning}</p>
                           ))}
                         </div>
                       )}

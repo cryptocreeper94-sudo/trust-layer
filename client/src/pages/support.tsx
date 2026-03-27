@@ -27,7 +27,7 @@ const CATEGORIES = [
 const QUICK_LINKS = [
   { icon: Zap, title: "FAQ", description: "Common questions answered", href: "/faq", color: "from-cyan-500 to-blue-500" },
   { icon: Shield, title: "Documentation", description: "Technical guides & specs", href: "/doc-hub", color: "from-purple-500 to-pink-500" },
-  { icon: HeartHandshake, title: "Community", description: "Join the conversation", href: "/community-hub", color: "from-orange-500 to-red-500" },
+  { icon: HeartHandshake, title: "Community", description: "Join the conversation", href: "/community-hub", color: "from-cyan-500 to-red-500" },
 ];
 
 interface SupportTicket {
@@ -89,7 +89,7 @@ export default function SupportPage() {
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case "open": return <Clock className="w-4 h-4 text-yellow-400" />;
+      case "open": return <Clock className="w-4 h-4 text-teal-400" />;
       case "in_progress": return <AlertCircle className="w-4 h-4 text-blue-400" />;
       case "resolved": return <CheckCircle className="w-4 h-4 text-green-400" />;
       default: return <MessageSquare className="w-4 h-4 text-gray-400" />;
@@ -366,7 +366,7 @@ export default function SupportPage() {
                                       className={`text-[9px] ${
                                         ticket.status === "resolved" ? "border-green-500/30 text-green-400 bg-green-500/10" :
                                         ticket.status === "in_progress" ? "border-blue-500/30 text-blue-400 bg-blue-500/10" :
-                                        "border-yellow-500/30 text-yellow-400 bg-yellow-500/10"
+                                        "border-teal-500/30 text-teal-400 bg-teal-500/10"
                                       }`}
                                     >
                                       {getStatusLabel(ticket.status)}

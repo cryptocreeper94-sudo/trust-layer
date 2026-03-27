@@ -115,8 +115,8 @@ function SecurityIndicator({ label, safe, severity = 'medium' }: { label: string
     : severity === 'high' 
     ? 'bg-red-500/20 text-red-400 border-red-500/40'
     : severity === 'medium'
-    ? 'bg-amber-500/20 text-amber-400 border-amber-500/40'
-    : 'bg-orange-500/20 text-orange-400 border-orange-500/40';
+    ? 'bg-purple-500/20 text-purple-400 border-purple-500/40'
+    : 'bg-cyan-500/20 text-cyan-400 border-cyan-500/40';
     
   return (
     <div className={`flex items-center justify-between p-3 rounded-lg border ${colors}`}>
@@ -213,9 +213,9 @@ export default function CoinAnalysisPage() {
       icon: Target,
     },
     hold: {
-      bg: 'bg-gradient-to-r from-amber-500/20 to-yellow-500/20',
-      border: 'border-amber-500/40',
-      text: 'text-amber-400',
+      bg: 'bg-gradient-to-r from-purple-500/20 to-teal-500/20',
+      border: 'border-purple-500/40',
+      text: 'text-purple-400',
       label: 'HOLD',
       icon: Eye,
     },
@@ -395,7 +395,7 @@ export default function CoinAnalysisPage() {
             </div>
             <span className={`text-2xl font-bold ${
               token.securityScore >= 70 ? 'text-emerald-400' : 
-              token.securityScore >= 40 ? 'text-amber-400' : 'text-red-400'
+              token.securityScore >= 40 ? 'text-purple-400' : 'text-red-400'
             }`}>
               {Math.round(token.securityScore)}/100
             </span>
@@ -421,13 +421,13 @@ export default function CoinAnalysisPage() {
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-white/60">Top 10 Holders</span>
-                <span className={`font-medium ${token.top10HoldersPercent > 50 ? 'text-red-400' : token.top10HoldersPercent > 30 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                <span className={`font-medium ${token.top10HoldersPercent > 50 ? 'text-red-400' : token.top10HoldersPercent > 30 ? 'text-purple-400' : 'text-emerald-400'}`}>
                   {token.top10HoldersPercent.toFixed(1)}%
                 </span>
               </div>
               <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                 <div 
-                  className={`h-full ${token.top10HoldersPercent > 50 ? 'bg-red-500' : token.top10HoldersPercent > 30 ? 'bg-amber-500' : 'bg-emerald-500'}`}
+                  className={`h-full ${token.top10HoldersPercent > 50 ? 'bg-red-500' : token.top10HoldersPercent > 30 ? 'bg-purple-500' : 'bg-emerald-500'}`}
                   style={{ width: `${token.top10HoldersPercent}%` }}
                 />
               </div>
@@ -436,13 +436,13 @@ export default function CoinAnalysisPage() {
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-white/60">Bot Activity</span>
-                <span className={`font-medium ${token.botPercent > 10 ? 'text-red-400' : token.botPercent > 5 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                <span className={`font-medium ${token.botPercent > 10 ? 'text-red-400' : token.botPercent > 5 ? 'text-purple-400' : 'text-emerald-400'}`}>
                   {token.botPercent.toFixed(1)}%
                 </span>
               </div>
               <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                 <div 
-                  className={`h-full ${token.botPercent > 10 ? 'bg-red-500' : token.botPercent > 5 ? 'bg-amber-500' : 'bg-emerald-500'}`}
+                  className={`h-full ${token.botPercent > 10 ? 'bg-red-500' : token.botPercent > 5 ? 'bg-purple-500' : 'bg-emerald-500'}`}
                   style={{ width: `${Math.min(token.botPercent * 5, 100)}%` }}
                 />
               </div>
@@ -451,13 +451,13 @@ export default function CoinAnalysisPage() {
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-white/60">Bundle Trades</span>
-                <span className={`font-medium ${token.bundlePercent > 15 ? 'text-red-400' : token.bundlePercent > 5 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                <span className={`font-medium ${token.bundlePercent > 15 ? 'text-red-400' : token.bundlePercent > 5 ? 'text-purple-400' : 'text-emerald-400'}`}>
                   {token.bundlePercent.toFixed(1)}%
                 </span>
               </div>
               <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                 <div 
-                  className={`h-full ${token.bundlePercent > 15 ? 'bg-red-500' : token.bundlePercent > 5 ? 'bg-amber-500' : 'bg-emerald-500'}`}
+                  className={`h-full ${token.bundlePercent > 15 ? 'bg-red-500' : token.bundlePercent > 5 ? 'bg-purple-500' : 'bg-emerald-500'}`}
                   style={{ width: `${Math.min(token.bundlePercent * 5, 100)}%` }}
                 />
               </div>
@@ -474,7 +474,7 @@ export default function CoinAnalysisPage() {
             token.aiRecommendation === 'buy' 
               ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg shadow-emerald-500/30' 
               : token.aiRecommendation === 'hold'
-              ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30'
+              ? 'bg-gradient-to-r from-purple-500 to-cyan-500 text-white shadow-lg shadow-purple-500/30'
               : 'bg-white/10 text-white/60'
           }`}
           data-testid="button-trade"

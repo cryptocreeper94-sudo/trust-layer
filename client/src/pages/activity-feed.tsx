@@ -64,11 +64,11 @@ const INITIAL_ACTIVITIES: ActivityItem[] = Array.from({ length: 15 }, () => ({
 const typeConfig: Record<ActivityItem["type"], { icon: any; color: string; bgColor: string }> = {
   swap: { icon: Repeat, color: "text-blue-400", bgColor: "bg-blue-500/20" },
   stake: { icon: Lock, color: "text-purple-400", bgColor: "bg-purple-500/20" },
-  unstake: { icon: Lock, color: "text-orange-400", bgColor: "bg-orange-500/20" },
+  unstake: { icon: Lock, color: "text-cyan-400", bgColor: "bg-cyan-500/20" },
   mint: { icon: Sparkles, color: "text-pink-400", bgColor: "bg-pink-500/20" },
   transfer: { icon: ArrowUpRight, color: "text-cyan-400", bgColor: "bg-cyan-500/20" },
   claim: { icon: Gift, color: "text-green-400", bgColor: "bg-green-500/20" },
-  liquidity: { icon: TrendingUp, color: "text-amber-400", bgColor: "bg-amber-500/20" },
+  liquidity: { icon: TrendingUp, color: "text-purple-400", bgColor: "bg-purple-500/20" },
   nft: { icon: Sparkles, color: "text-pink-400", bgColor: "bg-pink-500/20" },
 };
 

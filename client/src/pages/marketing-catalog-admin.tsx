@@ -465,7 +465,7 @@ export default function MarketingCatalogAdmin() {
               </Badge>
               <Badge 
                 variant={filter === "seasonal" ? "default" : "outline"}
-                className={`cursor-pointer ${filter === "seasonal" ? "bg-orange-600" : "border-slate-700"}`}
+                className={`cursor-pointer ${filter === "seasonal" ? "bg-cyan-600" : "border-slate-700"}`}
                 onClick={() => setFilter("seasonal")}
               >
                 <Calendar className="w-3 h-3 mr-1" />
@@ -490,7 +490,7 @@ export default function MarketingCatalogAdmin() {
                             {msg.theme}
                           </Badge>
                           {DISCORD_TELEGRAM_MESSAGES.seasonal.includes(msg) ? (
-                            <Badge className="text-xs bg-orange-600/20 text-orange-400 border-orange-500/30">
+                            <Badge className="text-xs bg-cyan-600/20 text-cyan-400 border-cyan-500/30">
                               <Calendar className="w-3 h-3 mr-1" />
                               Seasonal
                             </Badge>

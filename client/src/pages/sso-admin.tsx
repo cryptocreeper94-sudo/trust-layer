@@ -207,13 +207,13 @@ export default function SsoAdmin() {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="mb-6 rounded-2xl border border-amber-500/30 bg-amber-500/10 backdrop-blur-xl p-6"
+              className="mb-6 rounded-2xl border border-purple-500/30 bg-purple-500/10 backdrop-blur-xl p-6"
             >
               <div className="flex items-start gap-3 mb-4">
-                <AlertTriangle className="w-6 h-6 text-amber-400 shrink-0 mt-0.5" />
+                <AlertTriangle className="w-6 h-6 text-purple-400 shrink-0 mt-0.5" />
                 <div>
-                  <h3 className="text-lg font-bold text-amber-300">Save These Credentials</h3>
-                  <p className="text-amber-200/70 text-sm">The API Secret will never be shown again. Copy and store it securely.</p>
+                  <h3 className="text-lg font-bold text-purple-300">Save These Credentials</h3>
+                  <p className="text-purple-200/70 text-sm">The API Secret will never be shown again. Copy and store it securely.</p>
                 </div>
               </div>
               
@@ -252,7 +252,7 @@ export default function SsoAdmin() {
                   variant="outline"
                   size="sm"
                   onClick={() => setNewCredentials(null)}
-                  className="border-amber-500/30 text-amber-300 hover:bg-amber-500/10"
+                  className="border-purple-500/30 text-purple-300 hover:bg-purple-500/10"
                 >
                   I've saved these credentials
                 </Button>

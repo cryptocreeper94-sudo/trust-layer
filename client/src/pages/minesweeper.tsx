@@ -475,7 +475,7 @@ export default function Minesweeper() {
               </div>
             </div>
             <div className="flex items-center gap-4">
-              <Badge variant="outline" className="border-yellow-500/50 text-yellow-400" data-testid="badge-bet">
+              <Badge variant="outline" className="border-teal-500/50 text-teal-400" data-testid="badge-bet">
                 Bet: {formatNumber(sweepsGame.betAmount)} {sweepsGame.currencyType}
               </Badge>
               <Badge variant="outline" className="border-green-500/50 text-green-400" data-testid="badge-multiplier">
@@ -498,7 +498,7 @@ export default function Minesweeper() {
                 </>
               ) : (
                 <>
-                  <Trophy className="w-5 h-5 text-yellow-400" />
+                  <Trophy className="w-5 h-5 text-teal-400" />
                   <span className="font-bold">Cashed Out! {currentMultiplier}x = {formatNumber(potentialPayout)} {sweepsGame.currencyType}</span>
                 </>
               )}
@@ -592,7 +592,7 @@ export default function Minesweeper() {
             <div className="flex items-center justify-center gap-2">
               {gameState.status === "won" ? (
                 <>
-                  <Trophy className="w-5 h-5 text-yellow-400" />
+                  <Trophy className="w-5 h-5 text-teal-400" />
                   <span className="font-bold">You Win!</span>
                 </>
               ) : (
@@ -665,14 +665,14 @@ export default function Minesweeper() {
         {currentBalance && (
           <div className="flex items-center justify-center gap-4 mb-6">
             <div
-              className={`flex items-center gap-3 px-4 py-2 rounded-xl cursor-pointer transition-all ${currencyType === 'GC' ? 'bg-yellow-500/20 ring-2 ring-yellow-400/50' : 'bg-black/30 hover:bg-black/40'}`}
+              className={`flex items-center gap-3 px-4 py-2 rounded-xl cursor-pointer transition-all ${currencyType === 'GC' ? 'bg-teal-500/20 ring-2 ring-teal-400/50' : 'bg-black/30 hover:bg-black/40'}`}
               onClick={() => setCurrencyType("GC")}
               data-testid="select-currency-gc"
             >
-              <Coins className="w-5 h-5 text-yellow-400" />
+              <Coins className="w-5 h-5 text-teal-400" />
               <div>
-                <div className="text-xs text-yellow-400/80">Gold Coins {isDemo && "(Demo)"}</div>
-                <div className="text-lg font-bold text-yellow-400">{formatNumber(currentBalance.goldCoins)}</div>
+                <div className="text-xs text-teal-400/80">Gold Coins {isDemo && "(Demo)"}</div>
+                <div className="text-lg font-bold text-teal-400">{formatNumber(currentBalance.goldCoins)}</div>
               </div>
             </div>
             <div

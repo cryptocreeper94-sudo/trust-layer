@@ -81,7 +81,7 @@ export function FavoriteButton({ item }: { item: Omit<FavoriteItem, "addedAt"> }
       variant="ghost"
       size="icon"
       onClick={toggle}
-      className={`h-8 w-8 ${isActive ? "text-yellow-400" : "text-muted-foreground hover:text-yellow-400"}`}
+      className={`h-8 w-8 ${isActive ? "text-teal-400" : "text-muted-foreground hover:text-teal-400"}`}
       data-testid={`button-favorite-${item.id}`}
     >
       <Star className={`w-4 h-4 ${isActive ? "fill-current" : ""}`} />
@@ -109,7 +109,7 @@ export function WatchlistPanel() {
       >
         <Eye className="w-4 h-4" />
         {favorites.length > 0 && (
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-500 text-black text-[10px] rounded-full flex items-center justify-center font-bold">
+          <span className="absolute -top-1 -right-1 w-4 h-4 bg-teal-500 text-black text-[10px] rounded-full flex items-center justify-center font-bold">
             {favorites.length}
           </span>
         )}
@@ -135,7 +135,7 @@ export function WatchlistPanel() {
             >
               <div className="flex items-center justify-between p-4 border-b border-white/10">
                 <div className="flex items-center gap-2">
-                  <Star className="w-5 h-5 text-yellow-400" />
+                  <Star className="w-5 h-5 text-teal-400" />
                   <h2 className="font-semibold">Watchlist</h2>
                   <span className="text-xs text-muted-foreground">({favorites.length})</span>
                 </div>

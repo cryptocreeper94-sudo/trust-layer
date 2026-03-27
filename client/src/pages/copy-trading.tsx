@@ -52,7 +52,7 @@ function TraderCard({ trader, rank }: { trader: Trader; rank: number }) {
   
   const riskColors = {
     low: { bg: "bg-green-500/20", text: "text-green-400", border: "border-green-500/30" },
-    medium: { bg: "bg-yellow-500/20", text: "text-yellow-400", border: "border-yellow-500/30" },
+    medium: { bg: "bg-teal-500/20", text: "text-teal-400", border: "border-teal-500/30" },
     high: { bg: "bg-red-500/20", text: "text-red-400", border: "border-red-500/30" },
   };
   
@@ -78,18 +78,18 @@ function TraderCard({ trader, rank }: { trader: Trader; rank: number }) {
             <div className="flex items-center gap-3">
               <div className="relative">
                 <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-2xl ${
-                  rank === 1 ? 'bg-amber-500/20 border-2 border-amber-500' :
+                  rank === 1 ? 'bg-purple-500/20 border-2 border-purple-500' :
                   rank === 2 ? 'bg-gray-400/20 border-2 border-gray-400' :
-                  rank === 3 ? 'bg-amber-700/20 border-2 border-amber-700' :
+                  rank === 3 ? 'bg-purple-700/20 border-2 border-purple-700' :
                   'bg-white/10 border border-white/20'
                 }`}>
                   {trader.avatar}
                 </div>
                 {rank <= 3 && (
                   <div className={`absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ${
-                    rank === 1 ? 'bg-amber-500 text-black' :
+                    rank === 1 ? 'bg-purple-500 text-black' :
                     rank === 2 ? 'bg-gray-400 text-black' :
-                    'bg-amber-700 text-white'
+                    'bg-purple-700 text-white'
                   }`}>
                     {rank}
                   </div>

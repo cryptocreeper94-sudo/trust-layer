@@ -166,7 +166,7 @@ export function FloatingChat() {
               <div className="flex items-center gap-2">
                 <MessageCircle className="w-5 h-5 text-white" />
                 <span className="font-semibold text-white">Signal Chat</span>
-                <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-yellow-400'}`} />
+                <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-teal-400'}`} />
                 {foundersStatus?.isFounder && (
                   <FoundersBadge tier={foundersStatus.tier as any} size="sm" showLabel={false} />
                 )}

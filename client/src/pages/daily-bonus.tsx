@@ -24,12 +24,12 @@ interface SweepsBalance {
 }
 
 const WHEEL_SEGMENTS = [
-  { id: 1, color: "from-yellow-400 to-amber-500", prize: "500 GC", type: "gc", value: 500 },
+  { id: 1, color: "from-teal-400 to-purple-500", prize: "500 GC", type: "gc", value: 500 },
   { id: 2, color: "from-green-400 to-emerald-500", prize: "1 SC", type: "sc", value: 1 },
   { id: 3, color: "from-purple-400 to-violet-500", prize: "750 GC", type: "gc", value: 750 },
   { id: 4, color: "from-pink-400 to-rose-500", prize: "2 SC", type: "sc", value: 2 },
   { id: 5, color: "from-blue-400 to-cyan-500", prize: "1000 GC", type: "gc", value: 1000 },
-  { id: 6, color: "from-orange-400 to-red-500", prize: "3 SC", type: "sc", value: 3 },
+  { id: 6, color: "from-cyan-400 to-red-500", prize: "3 SC", type: "sc", value: 3 },
   { id: 7, color: "from-indigo-400 to-purple-500", prize: "2000 GC", type: "gc", value: 2000 },
   { id: 8, color: "from-teal-400 to-green-500", prize: "5 SC", type: "sc", value: 5 },
 ];
@@ -184,8 +184,8 @@ export default function DailyBonus() {
         {/* Header */}
         <div className="flex items-center gap-4 mb-8">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-200 bg-clip-text text-transparent flex items-center gap-3" data-testid="page-title">
-              <Gift className="w-10 h-10 text-yellow-400" />
+            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-teal-200 via-teal-400 to-teal-200 bg-clip-text text-transparent flex items-center gap-3" data-testid="page-title">
+              <Gift className="w-10 h-10 text-teal-400" />
               Daily Bonus
             </h1>
             <p className="text-gray-400 mt-1">Spin the wheel and claim your free rewards!</p>
@@ -201,12 +201,12 @@ export default function DailyBonus() {
           >
             <div className="flex items-center justify-center gap-8">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center">
                   <Coins className="w-6 h-6 text-black" />
                 </div>
                 <div>
-                  <div className="text-xs text-yellow-400/80">Gold Coins</div>
-                  <div className="text-xl font-bold text-yellow-400" data-testid="balance-gc">{formatNumber(balance.goldCoins)}</div>
+                  <div className="text-xs text-teal-400/80">Gold Coins</div>
+                  <div className="text-xl font-bold text-teal-400" data-testid="balance-gc">{formatNumber(balance.goldCoins)}</div>
                 </div>
               </div>
               <div className="w-px h-12 bg-white/20" />
@@ -227,7 +227,7 @@ export default function DailyBonus() {
         <div className="relative flex flex-col items-center mb-8">
           {/* Wheel Pointer */}
           <div className="absolute top-0 z-20 transform -translate-y-2">
-            <div className="w-0 h-0 border-l-[20px] border-r-[20px] border-t-[30px] border-l-transparent border-r-transparent border-t-yellow-400 drop-shadow-lg" />
+            <div className="w-0 h-0 border-l-[20px] border-r-[20px] border-t-[30px] border-l-transparent border-r-transparent border-t-teal-400 drop-shadow-lg" />
           </div>
           
           {/* Wheel Container */}
@@ -237,7 +237,7 @@ export default function DailyBonus() {
             
             {/* Wheel */}
             <motion.div
-              className="relative w-[300px] h-[300px] md:w-[350px] md:h-[350px] rounded-full border-8 border-yellow-400/50 shadow-2xl overflow-hidden"
+              className="relative w-[300px] h-[300px] md:w-[350px] md:h-[350px] rounded-full border-8 border-teal-400/50 shadow-2xl overflow-hidden"
               animate={controls}
               style={{ rotate: rotation }}
             >
@@ -272,7 +272,7 @@ export default function DailyBonus() {
               
               {/* Center button */}
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 border-4 border-yellow-300 shadow-lg flex items-center justify-center">
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-teal-400 to-purple-600 border-4 border-teal-300 shadow-lg flex items-center justify-center">
                   <Sparkles className="w-8 h-8 text-white" />
                 </div>
               </div>
@@ -287,7 +287,7 @@ export default function DailyBonus() {
               className={`
                 px-10 py-6 text-xl font-bold rounded-full shadow-lg transition-all
                 ${dailyStatus?.canClaim && !isSpinning
-                  ? 'bg-gradient-to-r from-yellow-400 via-amber-500 to-orange-500 hover:from-yellow-300 hover:via-amber-400 hover:to-orange-400 text-black hover:scale-105'
+                  ? 'bg-gradient-to-r from-teal-400 via-purple-500 to-cyan-500 hover:from-teal-300 hover:via-purple-400 hover:to-cyan-400 text-black hover:scale-105'
                   : 'bg-gray-700 text-gray-400 cursor-not-allowed'
                 }
               `}
@@ -332,16 +332,16 @@ export default function DailyBonus() {
                 <motion.div
                   animate={{ rotate: [0, 360] }}
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 flex items-center justify-center"
+                  className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-teal-400 to-purple-600 flex items-center justify-center"
                 >
                   <Trophy className="w-12 h-12 text-white" />
                 </motion.div>
                 
-                <h2 className="text-3xl font-bold text-yellow-400 mb-4">YOU WON!</h2>
+                <h2 className="text-3xl font-bold text-teal-400 mb-4">YOU WON!</h2>
                 
                 <div className="bg-black/30 rounded-xl p-4 mb-6">
                   <div className="text-lg text-gray-300 mb-2">Wheel Prize</div>
-                  <div className={`text-3xl font-bold ${wonPrize.type === 'sc' ? 'text-green-400' : 'text-yellow-400'}`}>
+                  <div className={`text-3xl font-bold ${wonPrize.type === 'sc' ? 'text-green-400' : 'text-teal-400'}`}>
                     {wonPrize.prize}
                   </div>
                 </div>
@@ -350,7 +350,7 @@ export default function DailyBonus() {
                   <div className="bg-black/30 rounded-xl p-4 mb-6">
                     <div className="text-lg text-gray-300 mb-2">Day {dailyStatus.streakDay} Streak Bonus</div>
                     <div className="flex items-center justify-center gap-4">
-                      <div className="text-yellow-400 font-bold">+{dailyStatus.bonusGc} GC</div>
+                      <div className="text-teal-400 font-bold">+{dailyStatus.bonusGc} GC</div>
                       <div className="text-green-400 font-bold">+{dailyStatus.bonusSc} SC</div>
                     </div>
                   </div>
@@ -371,7 +371,7 @@ export default function DailyBonus() {
         <Card className="bg-gradient-to-br from-gray-900/80 to-gray-950/80 border-purple-500/30 backdrop-blur-xl">
           <CardContent className="p-6">
             <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-              <Flame className="w-5 h-5 text-orange-400" />
+              <Flame className="w-5 h-5 text-cyan-400" />
               7-Day Streak Rewards
             </h3>
             
@@ -403,7 +403,7 @@ export default function DailyBonus() {
                     <div className={`text-xs font-bold ${isCompleted ? 'text-green-400' : isCurrent ? 'text-white' : 'text-gray-500'}`}>
                       Day {reward.day}
                     </div>
-                    <div className="text-xs text-yellow-400 mt-1">{reward.gc}</div>
+                    <div className="text-xs text-teal-400 mt-1">{reward.gc}</div>
                     <div className="text-xs text-green-400">{reward.sc}</div>
                   </div>
                 );

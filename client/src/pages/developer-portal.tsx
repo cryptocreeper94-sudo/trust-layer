@@ -1196,7 +1196,7 @@ console.log('All successful:', result.allSuccessful);`}
                   <div className="space-y-3">
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       <div className="p-3 bg-white/5 rounded-lg">
-                        <div className="text-2xl font-bold text-amber-400">50%</div>
+                        <div className="text-2xl font-bold text-purple-400">50%</div>
                         <div className="text-xs">Treasury Reserve</div>
                         <div className="text-xs text-muted-foreground">500M SIG - Sustainability</div>
                       </div>
@@ -1334,9 +1334,9 @@ console.log('All successful:', result.allSuccessful);`}
                 </div>
               </div>
 
-              <div className="p-5 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20">
+              <div className="p-5 rounded-xl bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20">
                 <h4 className="font-semibold text-lg text-white mb-3 flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-amber-400" />
+                  <Shield className="w-5 h-5 text-purple-400" />
                   Accountability & Transparency
                 </h4>
                 <p className="text-muted-foreground text-sm">
@@ -1387,8 +1387,8 @@ console.log('All successful:', result.allSuccessful);`}
               </Link>
               
               <Link href="/governance-treasury">
-                <div className="p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20 hover:border-amber-500/40 transition-all cursor-pointer group">
-                  <Database className="w-6 h-6 text-amber-400 mb-3 group-hover:scale-110 transition-transform" />
+                <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-cyan-500/10 border border-purple-500/20 hover:border-purple-500/40 transition-all cursor-pointer group">
+                  <Database className="w-6 h-6 text-purple-400 mb-3 group-hover:scale-110 transition-transform" />
                   <h4 className="font-semibold text-white mb-1">Governance Treasury</h4>
                   <p className="text-xs text-muted-foreground">Multi-sig treasury with 3-of-5 council approval. No single person controls funds.</p>
                 </div>
@@ -1428,8 +1428,8 @@ console.log('All successful:', result.allSuccessful);`}
           {/* Operations Lead Allocation */}
           <BentoCard span={3} glow>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 flex items-center justify-center">
-                <Gift className="w-6 h-6 text-amber-400" />
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/30 flex items-center justify-center">
+                <Gift className="w-6 h-6 text-purple-400" />
               </div>
               <div>
                 <h3 className="font-display font-bold text-xl text-white">Operations Lead Allocation</h3>
@@ -1446,7 +1446,7 @@ console.log('All successful:', result.allSuccessful);`}
                 <div className="space-y-2">
                   <div className="flex justify-between p-3 rounded-lg bg-white/5">
                     <span className="text-muted-foreground">Total Allocation</span>
-                    <span className="font-bold text-amber-400">5,000,000 SIG</span>
+                    <span className="font-bold text-purple-400">5,000,000 SIG</span>
                   </div>
                   <div className="flex justify-between p-3 rounded-lg bg-white/5">
                     <span className="text-muted-foreground">% of Supply</span>
@@ -1495,16 +1495,16 @@ console.log('All successful:', result.allSuccessful);`}
                   </div>
                   <div className="flex items-center justify-between p-2 rounded-lg bg-white/5">
                     <div className="flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-amber-500" />
+                      <div className="w-2 h-2 rounded-full bg-purple-500" />
                       <span className="text-muted-foreground">$10M Market Cap</span>
                     </div>
-                    <span className="text-amber-400 font-bold">+1.5M SIG (Full)</span>
+                    <span className="text-purple-400 font-bold">+1.5M SIG (Full)</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 rounded-xl bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20">
+            <div className="p-4 rounded-xl bg-gradient-to-r from-purple-500/10 to-cyan-500/10 border border-purple-500/20">
               <h4 className="font-semibold text-white mb-3 flex items-center gap-2">
                 <CheckCircle className="w-4 h-4 text-green-400" />
                 Value Projections
@@ -1524,7 +1524,7 @@ console.log('All successful:', result.allSuccessful);`}
                 </div>
                 <div>
                   <p className="text-xs text-muted-foreground mb-1">At $1.00</p>
-                  <p className="font-bold text-amber-400">$5,000,000</p>
+                  <p className="font-bold text-purple-400">$5,000,000</p>
                 </div>
               </div>
             </div>
@@ -1616,8 +1616,8 @@ app.get('/auth/callback',
                   ))}
                 </div>
 
-                <div className="mt-4 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
-                  <p className="text-xs text-amber-300">
+                <div className="mt-4 p-3 rounded-xl bg-purple-500/10 border border-purple-500/20">
+                  <p className="text-xs text-purple-300">
                     <strong>Getting Started:</strong> Contact the Trust Layer team to register your app and receive your API credentials. Never expose your API Secret in client-side code.
                   </p>
                 </div>

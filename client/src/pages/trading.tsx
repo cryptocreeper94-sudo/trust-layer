@@ -74,7 +74,7 @@ export default function Trading() {
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
           </Link>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-amber-500/50 text-amber-400 text-[10px]">Testnet Preview</Badge>
+            <Badge variant="outline" className="border-purple-500/50 text-purple-400 text-[10px]">Testnet Preview</Badge>
             <BackButton />
           </div>
         </div>
@@ -237,7 +237,7 @@ export default function Trading() {
 
               <GlassCard className="p-3">
                 <h3 className="text-sm font-bold mb-3 flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-yellow-400/50" />
+                  <Zap className="w-4 h-4 text-teal-400/50" />
                   Quick Trade
                   <Badge className="text-[8px] bg-white/10 text-white/50">Coming Soon</Badge>
                 </h3>

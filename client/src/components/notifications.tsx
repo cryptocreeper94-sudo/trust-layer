@@ -19,7 +19,7 @@ const notificationIcons = {
 const notificationColors = {
   info: "text-blue-400",
   success: "text-green-400",
-  warning: "text-yellow-400",
+  warning: "text-teal-400",
   ecosystem: "text-primary",
 };
 

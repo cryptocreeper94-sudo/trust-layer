@@ -641,7 +641,7 @@ export default function Galaga() {
                 </div>
                 
                 {gameState.highScore > 0 && (
-                  <p className="text-amber-400 mb-4">High Score: {gameState.highScore.toLocaleString()}</p>
+                  <p className="text-purple-400 mb-4">High Score: {gameState.highScore.toLocaleString()}</p>
                 )}
                 
                 <Button onClick={startGame} className="bg-purple-600 hover:bg-purple-500 px-8">
@@ -678,7 +678,7 @@ export default function Galaga() {
                 exit={{ opacity: 0 }}
                 className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm rounded-xl"
               >
-                <Zap className="w-12 h-12 mb-4 text-yellow-400" />
+                <Zap className="w-12 h-12 mb-4 text-teal-400" />
                 <h2 className="text-2xl font-bold mb-2">Level {gameState.level} Complete!</h2>
                 <p className="text-gray-400 mb-4">Score: {gameState.score.toLocaleString()}</p>
                 <Button onClick={nextLevel} className="bg-green-600 hover:bg-green-500 px-8">
@@ -695,7 +695,7 @@ export default function Galaga() {
                 className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm rounded-xl"
               >
                 {gameState.score >= gameState.highScore && gameState.score > 0 ? (
-                  <Trophy className="w-12 h-12 mb-4 text-yellow-400" />
+                  <Trophy className="w-12 h-12 mb-4 text-teal-400" />
                 ) : (
                   <Target className="w-12 h-12 mb-4 text-red-400" />
                 )}
@@ -703,7 +703,7 @@ export default function Galaga() {
                 <p className="text-xl text-white mb-2">Score: {gameState.score.toLocaleString()}</p>
                 <p className="text-gray-400 mb-4">Level: {gameState.level}</p>
                 {gameState.score >= gameState.highScore && gameState.score > 0 && (
-                  <Badge className="mb-4 bg-yellow-500/20 text-yellow-300 border-yellow-500/30">
+                  <Badge className="mb-4 bg-teal-500/20 text-teal-300 border-teal-500/30">
                     New High Score!
                   </Badge>
                 )}

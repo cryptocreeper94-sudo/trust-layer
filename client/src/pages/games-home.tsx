@@ -38,8 +38,8 @@ const FEATURED_GAMES = [
     description: "Spin the ancient reels and unlock the dragon's treasure hoard.",
     image: dragonSlots,
     href: "/slots",
-    gradient: "from-red-500 to-orange-500",
-    glow: "orange",
+    gradient: "from-red-500 to-cyan-500",
+    glow: "cyan",
     players: "2.4K",
     tag: "FEATURED",
   },
@@ -50,15 +50,15 @@ const FEATURED_GAMES = [
     description: "Double or nothing on every flip. Simple, fast, addictive.",
     image: coinflipArt,
     href: "/coinflip",
-    gradient: "from-yellow-500 to-amber-500",
-    glow: "yellow",
+    gradient: "from-teal-500 to-purple-500",
+    glow: "teal",
     players: "3.1K",
     tag: "HOT",
   },
 ];
 
 const QUICK_PLAY = [
-  { id: "slots", title: "Slots", icon: Crown, href: "/slots", color: "text-yellow-400", bg: "from-yellow-500/20" },
+  { id: "slots", title: "Slots", icon: Crown, href: "/slots", color: "text-teal-400", bg: "from-teal-500/20" },
   { id: "crash", title: "Crash", icon: Rocket, href: "/crash", color: "text-cyan-400", bg: "from-cyan-500/20" },
   { id: "coinflip", title: "Coin Flip", icon: Coins, href: "/coinflip", color: "text-green-400", bg: "from-green-500/20" },
   { id: "snake", title: "Snake", icon: Gamepad2, href: "/snake", color: "text-pink-400", bg: "from-pink-500/20" },
@@ -265,7 +265,7 @@ function LiveStats() {
           {[
             { label: "Active Players", value: 12400, suffix: "+", icon: <Users className="w-5 h-5 text-cyan-400" />, color: "border-cyan-500/20" },
             { label: "Games Played", value: 847000, suffix: "+", icon: <Gamepad2 className="w-5 h-5 text-pink-400" />, color: "border-pink-500/20" },
-            { label: "GC Wagered", value: 2100000, suffix: "", icon: <Coins className="w-5 h-5 text-yellow-400" />, color: "border-yellow-500/20" },
+            { label: "GC Wagered", value: 2100000, suffix: "", icon: <Coins className="w-5 h-5 text-teal-400" />, color: "border-teal-500/20" },
             { label: "Biggest Win", value: 500000, suffix: " GC", icon: <Crown className="w-5 h-5 text-purple-400" />, color: "border-purple-500/20" },
           ].map((stat, i) => (
             <motion.div
@@ -424,7 +424,7 @@ function GameCategories() {
       description: "Slots, Crash, Coinflip and more",
       games: 4,
       image: leprechaunSlots,
-      gradient: "from-yellow-500 to-amber-500",
+      gradient: "from-teal-500 to-purple-500",
       href: "/arcade",
     },
     {
@@ -497,12 +497,12 @@ function CurrencySection() {
     <section className="mb-14">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <GlassCard className="p-6 sm:p-8 md:p-10 relative overflow-hidden" glow>
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-yellow-500/5 to-transparent rounded-full blur-3xl" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-teal-500/5 to-transparent rounded-full blur-3xl" />
 
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-8">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500/20 to-green-500/20 border border-yellow-500/30 flex items-center justify-center">
-                <Coins className="w-6 h-6 text-yellow-400" />
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-teal-500/20 to-green-500/20 border border-teal-500/30 flex items-center justify-center">
+                <Coins className="w-6 h-6 text-teal-400" />
               </div>
               <div>
                 <h3 className="text-xl font-bold text-white">Dual Currency System</h3>
@@ -513,14 +513,14 @@ function CurrencySection() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <motion.div
                 whileHover={{ scale: 1.02 }}
-                className="p-5 sm:p-6 rounded-xl bg-gradient-to-br from-yellow-500/5 to-amber-500/5 border border-yellow-500/15"
+                className="p-5 sm:p-6 rounded-xl bg-gradient-to-br from-teal-500/5 to-purple-500/5 border border-teal-500/15"
               >
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-yellow-500 to-amber-500 flex items-center justify-center shadow-lg shadow-yellow-500/20">
+                  <div className="w-10 h-10 rounded-full bg-gradient-to-r from-teal-500 to-purple-500 flex items-center justify-center shadow-lg shadow-teal-500/20">
                     <Coins className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <div className="font-bold text-yellow-400">Gold Coins (GC)</div>
+                    <div className="font-bold text-teal-400">Gold Coins (GC)</div>
                     <div className="text-[10px] text-white/40 uppercase tracking-wider">For Fun</div>
                   </div>
                 </div>
@@ -546,7 +546,7 @@ function CurrencySection() {
 
             <div className="mt-6 flex justify-center">
               <Link href="/coin-store">
-                <Button className="bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-black font-bold px-8 py-3 rounded-xl" data-testid="cta-coin-store">
+                <Button className="bg-gradient-to-r from-teal-500 to-purple-500 hover:from-teal-400 hover:to-purple-400 text-black font-bold px-8 py-3 rounded-xl" data-testid="cta-coin-store">
                   <Store className="w-4 h-4 mr-2" />
                   Visit Coin Store
                 </Button>

@@ -68,7 +68,7 @@ function PlayingCard({
         cursor-grab active:cursor-grabbing select-none touch-none
         transition-all duration-150
         ${isDragging ? "opacity-50 scale-95" : "hover:shadow-xl hover:-translate-y-0.5"}
-        ${isHinted ? "ring-2 ring-yellow-400 animate-pulse" : ""}
+        ${isHinted ? "ring-2 ring-teal-400 animate-pulse" : ""}
         ${isValidDrop ? "ring-2 ring-green-400 shadow-[0_0_15px_rgba(34,197,94,0.5)]" : ""}
         ${isRed(card.suit) ? "border-red-200" : "border-gray-300"}
       `}
@@ -555,7 +555,7 @@ export default function Solitaire() {
               animate={{ scale: 1, y: 0 }}
               className="bg-gradient-to-br from-green-900 to-emerald-900 rounded-3xl p-8 max-w-md w-full text-center border-2 border-green-500/50"
             >
-              <Trophy className="w-16 h-16 mx-auto mb-4 text-yellow-400" />
+              <Trophy className="w-16 h-16 mx-auto mb-4 text-teal-400" />
               <h2 className="text-3xl font-bold mb-2">You Win!</h2>
               <p className="text-gray-300 mb-4">
                 Completed in {formatTime(elapsedTime)} with {gameState.moves} moves

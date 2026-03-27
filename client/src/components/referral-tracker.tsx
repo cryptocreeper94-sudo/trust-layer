@@ -75,7 +75,7 @@ const TIER_COLORS: Record<string, string> = {
   explorer: "from-gray-500 to-gray-600",
   builder: "from-blue-500 to-cyan-500",
   architect: "from-purple-500 to-pink-500",
-  oracle: "from-amber-500 to-orange-500",
+  oracle: "from-purple-500 to-cyan-500",
 };
 
 async function fetchReferralStats(): Promise<ReferralStats> {
@@ -246,7 +246,7 @@ export function ReferralTracker() {
             Your Referral Link
           </h4>
           {(stats?.pendingCommission || 0) > 0 && (
-            <Badge className="bg-amber-500/20 text-amber-400 text-[9px]">
+            <Badge className="bg-purple-500/20 text-purple-400 text-[9px]">
               ${((stats?.pendingCommission || 0) / 100).toFixed(2)} Pending
             </Badge>
           )}
@@ -279,7 +279,7 @@ export function ReferralTracker() {
 
       <GlassCard className="p-3">
         <h4 className="font-semibold text-sm mb-3 flex items-center gap-2">
-          <Trophy className="w-4 h-4 text-amber-400" />
+          <Trophy className="w-4 h-4 text-purple-400" />
           Recent Referrals
         </h4>
         <div className="space-y-2">
@@ -293,7 +293,7 @@ export function ReferralTracker() {
               data-testid={`referral-row-${ref.id}`}
             >
               <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${ref.status === 'converted' ? 'bg-green-400' : ref.status === 'qualified' ? 'bg-blue-400' : 'bg-amber-400'}`} />
+                <div className={`w-2 h-2 rounded-full ${ref.status === 'converted' ? 'bg-green-400' : ref.status === 'qualified' ? 'bg-blue-400' : 'bg-purple-400'}`} />
                 <span className="text-sm font-medium capitalize">{ref.status}</span>
               </div>
               <div className="text-right">
@@ -366,8 +366,8 @@ export function ReferralTracker() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center shrink-0">
-                <Trophy className="w-4 h-4 text-amber-400" />
+              <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center shrink-0">
+                <Trophy className="w-4 h-4 text-purple-400" />
               </div>
               <div>
                 <h4 className="font-semibold text-sm">4. Level Up</h4>

@@ -155,7 +155,7 @@ export function MemberBadge({ userId }: { userId?: string }) {
         <BadgeCheck className="w-4 h-4 sm:w-5 sm:h-5 text-cyan-400" />
         <span className="text-xs sm:text-sm font-bold text-white">#{memberNumber}</span>
         {isEarlyAdopter && (
-          <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-amber-400" />
+          <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-purple-400" />
         )}
         <ChevronDown className={`w-3 h-3 sm:w-3.5 sm:h-3.5 text-white/60 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </motion.button>
@@ -238,12 +238,12 @@ export function MemberBadge({ userId }: { userId?: string }) {
                   )}
 
                   {isEarlyAdopter && (
-                    <div className="mb-4 p-2 rounded-lg bg-amber-500/10 border border-amber-500/30">
+                    <div className="mb-4 p-2 rounded-lg bg-purple-500/10 border border-purple-500/30">
                       <div className="flex items-center gap-2">
-                        <Trophy className="w-4 h-4 text-amber-400" />
-                        <span className="text-xs font-semibold text-amber-400">Early Adopter Status</span>
+                        <Trophy className="w-4 h-4 text-purple-400" />
+                        <span className="text-xs font-semibold text-purple-400">Early Adopter Status</span>
                       </div>
-                      <p className="text-[10px] text-amber-400/70 mt-1">
+                      <p className="text-[10px] text-purple-400/70 mt-1">
                         First 500 members get bonus rewards
                       </p>
                     </div>
@@ -288,7 +288,7 @@ export function MemberBadge({ userId }: { userId?: string }) {
                   <div className="space-y-2">
                     <Link href="/my-hub" onClick={() => setIsOpen(false)}>
                       <Button 
-                        className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black text-xs h-9 font-semibold"
+                        className="w-full bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 text-black text-xs h-9 font-semibold"
                         data-testid="button-my-hub"
                       >
                         <Gift className="w-4 h-4 mr-2" />

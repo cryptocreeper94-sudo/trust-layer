@@ -220,17 +220,17 @@ export default function Predictions() {
           >
             <div className="flex items-center justify-center gap-2 mb-3">
               <motion.div 
-                className="p-3 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30"
+                className="p-3 rounded-2xl bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border border-purple-500/30"
                 animate={{ 
                   boxShadow: ["0 0 20px rgba(245,158,11,0.2)", "0 0 50px rgba(245,158,11,0.4)", "0 0 20px rgba(245,158,11,0.2)"]
                 }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                <Target className="w-7 h-7 text-amber-400" />
+                <Target className="w-7 h-7 text-purple-400" />
               </motion.div>
             </div>
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">
-              Prediction <span className="text-amber-400">Markets</span>
+              Prediction <span className="text-purple-400">Markets</span>
             </h1>
             <p className="text-sm text-muted-foreground">
               Bet on future events • Earn SIG • Decentralized oracle resolution
@@ -255,7 +255,7 @@ export default function Predictions() {
               <p className="text-[10px] text-muted-foreground">Traders</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <Trophy className="w-5 h-5 mx-auto mb-1 text-amber-400" />
+              <Trophy className="w-5 h-5 mx-auto mb-1 text-purple-400" />
               <p className="text-xl font-bold">{isConnected ? "0" : "--"}</p>
               <p className="text-[10px] text-muted-foreground">Your Bets</p>
             </GlassCard>
@@ -272,7 +272,7 @@ export default function Predictions() {
                   </p>
                 </div>
                 <Link href="/wallet">
-                  <Button className="bg-gradient-to-r from-amber-500 to-orange-500" data-testid="button-connect-predictions">
+                  <Button className="bg-gradient-to-r from-purple-500 to-cyan-500" data-testid="button-connect-predictions">
                     <Wallet className="w-4 h-4 mr-2" />
                     Connect Wallet
                   </Button>
@@ -346,7 +346,7 @@ export default function Predictions() {
                       Connect your wallet to view and track your bets.
                     </p>
                     <Link href="/wallet">
-                      <Button className="bg-gradient-to-r from-amber-500 to-orange-500">
+                      <Button className="bg-gradient-to-r from-purple-500 to-cyan-500">
                         Connect Wallet
                       </Button>
                     </Link>
@@ -362,7 +362,7 @@ export default function Predictions() {
               Have a prediction? Create a market and earn fees when others bet.
             </p>
             {isConnected ? (
-              <Button className="bg-gradient-to-r from-amber-500 to-orange-500" data-testid="button-create-market">
+              <Button className="bg-gradient-to-r from-purple-500 to-cyan-500" data-testid="button-create-market">
                 <Target className="w-4 h-4 mr-2" />
                 Create Market
               </Button>

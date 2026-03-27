@@ -154,7 +154,7 @@ function StatusIcon({ status }: { status: string }) {
     case "operational":
       return <CheckCircle className="w-4 h-4 text-green-500" />;
     case "degraded":
-      return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      return <AlertTriangle className="w-4 h-4 text-teal-500" />;
     case "down":
       return <XCircle className="w-4 h-4 text-red-500" />;
     default:
@@ -279,7 +279,7 @@ function TeamDashboard() {
                   <StatusIcon status={overallStatus} />
                   <span className={`text-sm font-medium ${
                     overallStatus === "operational" ? "text-green-400" :
-                    overallStatus === "degraded" ? "text-yellow-400" : "text-red-400"
+                    overallStatus === "degraded" ? "text-teal-400" : "text-red-400"
                   }`}>
                     {overallStatus === "operational" ? "All Systems Operational" :
                      overallStatus === "degraded" ? "Some Systems Degraded" : "System Issues Detected"}
@@ -335,15 +335,15 @@ function TeamDashboard() {
 
           <GlassCard className="p-6" glow>
             <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
-              <Coins className="w-5 h-5 text-amber-400" />
+              <Coins className="w-5 h-5 text-purple-400" />
               Presale Status
             </h3>
 
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-3">
-                <div className="p-3 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                <div className="p-3 rounded-lg bg-purple-500/10 border border-purple-500/20">
                   <p className="text-xs text-gray-400 mb-1">Current Price</p>
-                  <p className="text-lg font-bold text-amber-400">${presaleStats?.currentPrice || "0.001"}</p>
+                  <p className="text-lg font-bold text-purple-400">${presaleStats?.currentPrice || "0.001"}</p>
                 </div>
                 <div className="p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
                   <p className="text-xs text-gray-400 mb-1">Tokens Sold</p>
@@ -405,10 +405,10 @@ function TeamDashboard() {
               </Link>
               <Link 
                 href="/presale"
-                className="flex items-center justify-between p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 hover:border-amber-400/40 transition-colors group cursor-pointer"
+                className="flex items-center justify-between p-3 rounded-lg bg-purple-500/10 border border-purple-500/20 hover:border-purple-400/40 transition-colors group cursor-pointer"
               >
-                <span className="text-sm text-amber-300">Presale Page</span>
-                <ArrowRight className="w-4 h-4 text-amber-500 group-hover:text-amber-400" />
+                <span className="text-sm text-purple-300">Presale Page</span>
+                <ArrowRight className="w-4 h-4 text-purple-500 group-hover:text-purple-400" />
               </Link>
             </div>
           </GlassCard>
@@ -416,7 +416,7 @@ function TeamDashboard() {
 
         <GlassCard className="p-6" glow>
           <h3 className="text-lg font-semibold text-white flex items-center gap-2 mb-4">
-            <Trophy className="w-5 h-5 text-amber-400" />
+            <Trophy className="w-5 h-5 text-purple-400" />
             Recent Quest Completions
           </h3>
 
@@ -438,7 +438,7 @@ function TeamDashboard() {
                   <div className="flex items-center gap-3">
                     <div className={`w-2 h-2 rounded-full ${
                       event.status === "granted" ? "bg-green-500" : 
-                      event.status === "pending" ? "bg-yellow-500" : "bg-red-500"
+                      event.status === "pending" ? "bg-teal-500" : "bg-red-500"
                     }`} />
                     <div>
                       <p className="text-sm text-white">{event.questName || event.zealyQuestId}</p>
@@ -457,11 +457,11 @@ function TeamDashboard() {
           )}
         </GlassCard>
 
-        <div className="mt-8 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20">
+        <div className="mt-8 p-4 rounded-xl bg-purple-500/10 border border-purple-500/20">
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+            <AlertTriangle className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
             <div>
-              <p className="text-sm font-medium text-amber-400">Your Role</p>
+              <p className="text-sm font-medium text-purple-400">Your Role</p>
               <p className="text-xs text-gray-400 mt-1">
                 Monitor the Zealy campaign progress and system health. If you see any system issues (red indicators), 
                 please contact the owner immediately. For quest management, use the Zealy dashboard directly.

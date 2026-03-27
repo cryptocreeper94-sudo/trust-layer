@@ -124,7 +124,7 @@ const BUSINESS_TIERS = [
       "White-label options",
       "SLA guarantees",
     ],
-    gradient: "from-amber-500 to-orange-500",
+    gradient: "from-purple-500 to-cyan-500",
     icon: Globe,
   },
 ];
@@ -414,7 +414,7 @@ export default function TrustLayerPage() {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/30 mb-4">
               <Network className="w-4 h-4 text-purple-400" />
               <span className="text-sm text-purple-300">Join the Network</span>
-              <span className="px-2 py-0.5 text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 rounded uppercase">
+              <span className="px-2 py-0.5 text-[10px] font-bold bg-purple-500/20 text-purple-400 border border-purple-500/30 rounded uppercase">
                 Beta
               </span>
             </div>
@@ -541,8 +541,8 @@ export default function TrustLayerPage() {
                     </Button>
                   </Link>
                 </div>
-                <div className="mt-8 p-4 rounded-lg bg-amber-500/10 border border-amber-500/20 max-w-2xl mx-auto">
-                  <p className="text-xs text-amber-400/80 text-center leading-relaxed">
+                <div className="mt-8 p-4 rounded-lg bg-purple-500/10 border border-purple-500/20 max-w-2xl mx-auto">
+                  <p className="text-xs text-purple-400/80 text-center leading-relaxed">
                     <strong>BETA DISCLAIMER:</strong> The Trust Layer is currently in beta. 
                     All features and functionality are subject to change without notice. 
                     Do your own research (DYOR). Participation is at your own risk. 

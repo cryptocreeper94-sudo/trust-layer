@@ -115,7 +115,7 @@ export function GamesNav() {
                     <Icon className="w-3.5 h-3.5" />
                     {link.label}
                     {link.hot && (
-                      <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-orange-400 animate-pulse" />
+                      <span className="absolute -top-1 -right-1 w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
                     )}
                   </button>
                 </Link>
@@ -150,7 +150,7 @@ export function GamesNav() {
             <Link href="/wallet">
               <Button
                 size="sm"
-                className="h-8 px-3 text-xs font-bold bg-gradient-to-r from-yellow-500/20 to-amber-500/20 hover:from-yellow-500/30 hover:to-amber-500/30 text-yellow-400 border border-yellow-500/20 rounded-lg"
+                className="h-8 px-3 text-xs font-bold bg-gradient-to-r from-teal-500/20 to-purple-500/20 hover:from-teal-500/30 hover:to-purple-500/30 text-teal-400 border border-teal-500/20 rounded-lg"
                 data-testid="button-games-wallet"
               >
                 <Coins className="w-3.5 h-3.5 mr-1" />

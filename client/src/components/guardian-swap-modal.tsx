@@ -65,7 +65,7 @@ const CHAIN_CONFIG: Record<string, {
     chainId: '0x38',
     dexUrl: 'https://pancakeswap.finance/swap',
     walletType: 'evm',
-    color: 'from-yellow-400 to-orange-500'
+    color: 'from-teal-400 to-cyan-500'
   },
   polygon: { 
     name: 'Polygon', 
@@ -137,7 +137,7 @@ const CHAIN_CONFIG: Record<string, {
     chainId: '0x82750',
     dexUrl: 'https://syncswap.xyz/swap',
     walletType: 'evm',
-    color: 'from-orange-400 to-orange-600'
+    color: 'from-cyan-400 to-cyan-600'
   },
   mantle: { 
     name: 'Mantle', 
@@ -153,7 +153,7 @@ const CHAIN_CONFIG: Record<string, {
     chainId: '0x13e31',
     dexUrl: 'https://thruster.finance/swap',
     walletType: 'evm',
-    color: 'from-yellow-500 to-yellow-600'
+    color: 'from-teal-500 to-teal-600'
   },
 };
 
@@ -263,7 +263,7 @@ export function GuardianSwapModal({ isOpen, onClose, token }: GuardianSwapModalP
 
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-emerald-400";
-    if (score >= 50) return "text-yellow-400";
+    if (score >= 50) return "text-teal-400";
     return "text-red-400";
   };
 

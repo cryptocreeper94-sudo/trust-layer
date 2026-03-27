@@ -48,7 +48,7 @@ const TX_TYPE_CONFIG: Record<string, { icon: any; color: string; label: string }
   send: { icon: ArrowUpRight, color: "text-red-400", label: "Sent" },
   receive: { icon: ArrowDownLeft, color: "text-green-400", label: "Received" },
   swap: { icon: RefreshCw, color: "text-primary", label: "Swap" },
-  stake: { icon: () => <span className="text-xs">🔒</span>, color: "text-amber-400", label: "Stake" },
+  stake: { icon: () => <span className="text-xs">🔒</span>, color: "text-purple-400", label: "Stake" },
   claim: { icon: () => <span className="text-xs">🎁</span>, color: "text-green-400", label: "Claim" },
   bridge: { icon: () => <span className="text-xs">🌉</span>, color: "text-purple-400", label: "Bridge" },
 };
@@ -59,12 +59,12 @@ const STAMP_CATEGORY_CONFIG: Record<string, { label: string; color: string; icon
   "credits-purchase": { label: "Credits", color: "text-blue-400", icon: "⚡" },
   "guardian-certification": { label: "Guardian Cert", color: "text-red-400", icon: "🛡️" },
   "subscription-activated": { label: "Subscription", color: "text-purple-400", icon: "⭐" },
-  "shells-purchase": { label: "Shells", color: "text-amber-400", icon: "🐚" },
+  "shells-purchase": { label: "Shells", color: "text-purple-400", icon: "🐚" },
   "domain-registration": { label: "Domain", color: "text-cyan-400", icon: "🌐" },
   "nft-mint": { label: "NFT Mint", color: "text-pink-400", icon: "🖼️" },
   "business-approved": { label: "Business", color: "text-violet-400", icon: "🏢" },
   "member-trust-card": { label: "Trust Card", color: "text-teal-400", icon: "💳" },
-  "hallmark": { label: "Hallmark", color: "text-orange-400", icon: "🏛️" },
+  "hallmark": { label: "Hallmark", color: "text-cyan-400", icon: "🏛️" },
 };
 
 export default function Transactions() {
@@ -159,7 +159,7 @@ export default function Transactions() {
               <div className="text-[10px] text-muted-foreground">Confirmed</div>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
-              <div className="text-lg font-bold text-amber-400">
+              <div className="text-lg font-bold text-purple-400">
                 {transactions.filter((t: any) => t.status === "pending").length}
               </div>
               <div className="text-[10px] text-muted-foreground">Pending</div>
@@ -304,7 +304,7 @@ export default function Transactions() {
                                 Confirmed
                               </Badge>
                             ) : (
-                              <Badge className="bg-amber-500/20 text-amber-400 text-[9px] py-0 h-4">
+                              <Badge className="bg-purple-500/20 text-purple-400 text-[9px] py-0 h-4">
                                 <RefreshCw className="w-2 h-2 mr-1 animate-spin" />
                                 Pending
                               </Badge>
@@ -422,7 +422,7 @@ export default function Transactions() {
                           <div>
                             <div className="flex items-center gap-2">
                               <span className={`font-semibold text-sm ${config.color}`}>{config.label}</span>
-                              <Badge className={`text-[9px] py-0 h-4 ${stamp.status === "confirmed" ? "bg-green-500/20 text-green-400" : "bg-amber-500/20 text-amber-400"}`}>
+                              <Badge className={`text-[9px] py-0 h-4 ${stamp.status === "confirmed" ? "bg-green-500/20 text-green-400" : "bg-purple-500/20 text-purple-400"}`}>
                                 {stamp.status === "confirmed" ? <CheckCircle2 className="w-2 h-2 mr-1" /> : <Clock className="w-2 h-2 mr-1" />}
                                 {stamp.status}
                               </Badge>
@@ -475,7 +475,7 @@ export default function Transactions() {
                         {parsedMeta.shells && (
                           <div className="flex items-center justify-between text-xs">
                             <span className="text-muted-foreground">Shells</span>
-                            <span className="text-amber-400 font-medium">{Number(parsedMeta.shells).toLocaleString()}</span>
+                            <span className="text-purple-400 font-medium">{Number(parsedMeta.shells).toLocaleString()}</span>
                           </div>
                         )}
                         {parsedMeta.domain && (

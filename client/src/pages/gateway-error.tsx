@@ -45,8 +45,8 @@ export default function GatewayError() {
               </div>
             )}
             {errorType === "no-website" && (
-              <div className="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-full">
-                <AlertCircle className="w-8 h-8 text-yellow-400" />
+              <div className="p-4 bg-teal-500/10 border border-teal-500/30 rounded-full">
+                <AlertCircle className="w-8 h-8 text-teal-400" />
               </div>
             )}
             {errorType === "under-construction" && (

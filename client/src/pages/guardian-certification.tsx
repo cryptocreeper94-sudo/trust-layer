@@ -834,9 +834,9 @@ function TierCard({ tier, index }: { tier: typeof CERTIFICATION_TIERS[0]; index:
               </div>
               <p className="text-white/40 text-sm mt-1">{tier.priceNote}</p>
               {tier.launchPricing && (
-                <div className="mt-2 inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/40 rounded-full">
-                  <Rocket className="w-3 h-3 text-amber-400" />
-                  <span className="text-amber-400 text-xs font-bold uppercase tracking-wider">Launch Pricing</span>
+                <div className="mt-2 inline-flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/40 rounded-full">
+                  <Rocket className="w-3 h-3 text-purple-400" />
+                  <span className="text-purple-400 text-xs font-bold uppercase tracking-wider">Launch Pricing</span>
                 </div>
               )}
             </div>
@@ -1274,7 +1274,7 @@ export default function GuardianCertificationPage() {
                           <div className="flex items-center gap-2 mb-1">
                             <h3 className="text-white font-semibold" data-testid={`text-doc-title-${index}`}>{doc.title}</h3>
                             {!doc.available && (
-                              <span className="px-2 py-0.5 bg-amber-500/20 text-amber-400 rounded text-xs">Coming Soon</span>
+                              <span className="px-2 py-0.5 bg-purple-500/20 text-purple-400 rounded text-xs">Coming Soon</span>
                             )}
                           </div>
                           <p className="text-white/50 text-sm mb-3">{doc.description}</p>
@@ -1308,7 +1308,7 @@ export default function GuardianCertificationPage() {
                     <h3 className="text-xl font-bold text-white mb-2">Bug Bounty Program</h3>
                     <p className="text-white/60 mb-4">Coming Soon - We're launching a public bug bounty through Immunefi to strengthen our security posture and demonstrate commitment to transparency.</p>
                     <div className="flex flex-wrap gap-3 justify-center md:justify-start">
-                      <span className="px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full text-sm border border-amber-500/30">Coming Soon</span>
+                      <span className="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm border border-purple-500/30">Coming Soon</span>
                       <span className="px-3 py-1 bg-white/5 text-white/50 rounded-full text-sm">Up to $50,000 rewards</span>
                     </div>
                   </div>
@@ -1396,7 +1396,7 @@ export default function GuardianCertificationPage() {
                         </div>
                       )}
                       <div className="absolute -top-1 -right-1">
-                        <span className="px-3 py-1 bg-amber-500/90 text-amber-950 rounded-full text-xs font-bold uppercase">
+                        <span className="px-3 py-1 bg-purple-500/90 text-purple-950 rounded-full text-xs font-bold uppercase">
                           Coming Soon
                         </span>
                       </div>
@@ -1503,7 +1503,7 @@ export default function GuardianCertificationPage() {
                           milestone.status === "completed" 
                             ? "border-green-500/30 bg-green-950/10" 
                             : milestone.status === "in_progress"
-                            ? "border-amber-500/30 bg-amber-950/10"
+                            ? "border-purple-500/30 bg-purple-950/10"
                             : ""
                         }`}
                         data-testid={`card-milestone-${index}`}
@@ -1516,7 +1516,7 @@ export default function GuardianCertificationPage() {
                             milestone.status === "completed" 
                               ? "bg-green-500/20 text-green-400"
                               : milestone.status === "in_progress"
-                              ? "bg-amber-500/20 text-amber-400"
+                              ? "bg-purple-500/20 text-purple-400"
                               : "bg-white/10 text-white/50"
                           }`}>
                             {milestone.status === "completed" ? "Completed" : milestone.status === "in_progress" ? "In Progress" : "Upcoming"}
@@ -1544,24 +1544,24 @@ export default function GuardianCertificationPage() {
         </section>
 
         {/* Pioneer Program Section */}
-        <section className="py-20 px-4 bg-gradient-to-b from-transparent via-amber-950/10 to-transparent">
+        <section className="py-20 px-4 bg-gradient-to-b from-transparent via-purple-950/10 to-transparent">
           <div className="container mx-auto max-w-5xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <GlassCard className="p-8 md:p-12 bg-gradient-to-r from-amber-950/20 via-orange-950/20 to-red-950/20 border-amber-500/30 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-amber-500/10 to-transparent rounded-full blur-3xl" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-orange-500/10 to-transparent rounded-full blur-3xl" />
+              <GlassCard className="p-8 md:p-12 bg-gradient-to-r from-purple-950/20 via-cyan-950/20 to-red-950/20 border-purple-500/30 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-purple-500/10 to-transparent rounded-full blur-3xl" />
+                <div className="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-cyan-500/10 to-transparent rounded-full blur-3xl" />
                 
                 <div className="relative">
                   <div className="flex items-center gap-3 mb-6">
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-amber-500/30 to-orange-500/30 flex items-center justify-center">
-                      <Rocket className="w-7 h-7 text-amber-400" />
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-purple-500/30 to-cyan-500/30 flex items-center justify-center">
+                      <Rocket className="w-7 h-7 text-purple-400" />
                     </div>
                     <div>
-                      <span className="px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full text-xs font-bold uppercase tracking-wider">Limited Offer</span>
+                      <span className="px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-xs font-bold uppercase tracking-wider">Limited Offer</span>
                     </div>
                   </div>
                   
@@ -1575,7 +1575,7 @@ export default function GuardianCertificationPage() {
                   <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
                     {PIONEER_BENEFITS.map((benefit, index) => (
                       <div key={benefit.title} className="p-4 bg-white/5 rounded-xl border border-white/10" data-testid={`card-pioneer-benefit-${index}`}>
-                        <benefit.icon className="w-8 h-8 text-amber-400 mb-3" />
+                        <benefit.icon className="w-8 h-8 text-purple-400 mb-3" />
                         <h4 className="text-white font-semibold mb-1">{benefit.title}</h4>
                         <p className="text-white/50 text-sm">{benefit.description}</p>
                       </div>
@@ -1587,7 +1587,7 @@ export default function GuardianCertificationPage() {
                       subject="Pioneer Program Application"
                       trigger={
                         <button
-                          className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 rounded-xl text-white font-semibold text-lg transition-all hover:scale-105 shadow-lg shadow-amber-500/25"
+                          className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 rounded-xl text-white font-semibold text-lg transition-all hover:scale-105 shadow-lg shadow-purple-500/25"
                           data-testid="link-apply-pioneer"
                         >
                           <Rocket className="w-5 h-5" />
@@ -1596,7 +1596,7 @@ export default function GuardianCertificationPage() {
                       }
                     />
                     <span className="text-white/40 text-sm">
-                      <span className="text-amber-400 font-bold">3 of 5</span> spots remaining
+                      <span className="text-purple-400 font-bold">3 of 5</span> spots remaining
                     </span>
                   </div>
                 </div>
@@ -1705,7 +1705,7 @@ export default function GuardianCertificationPage() {
                           {project.status === "Certified" ? (
                             <BadgeCheck className="w-6 h-6 text-green-400" />
                           ) : project.status === "In Progress" ? (
-                            <Activity className="w-6 h-6 text-amber-400" />
+                            <Activity className="w-6 h-6 text-purple-400" />
                           ) : (
                             <Clock className="w-6 h-6 text-white/40" />
                           )}
@@ -1727,7 +1727,7 @@ export default function GuardianCertificationPage() {
                             project.status === "Certified" 
                               ? "bg-green-500/20 text-green-400 border border-green-500/30"
                               : project.status === "In Progress"
-                              ? "bg-amber-500/20 text-amber-400 border border-amber-500/30"
+                              ? "bg-purple-500/20 text-purple-400 border border-purple-500/30"
                               : "bg-white/10 text-white/50 border border-white/10"
                           }`}
                           data-testid={`status-project-${index}`}

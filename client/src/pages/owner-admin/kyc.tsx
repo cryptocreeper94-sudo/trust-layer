@@ -47,7 +47,7 @@ function KycCard({ kyc, onApprove, onReject }: {
   const [rejectionReason, setRejectionReason] = useState("");
 
   const statusColors = {
-    pending: "bg-amber-500/20 text-amber-400 border-amber-500/30",
+    pending: "bg-purple-500/20 text-purple-400 border-purple-500/30",
     approved: "bg-green-500/20 text-green-400 border-green-500/30",
     rejected: "bg-red-500/20 text-red-400 border-red-500/30",
     not_started: "bg-gray-500/20 text-gray-400 border-gray-500/30",
@@ -283,7 +283,7 @@ export default function KycAdmin() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {[
             { label: "Total", value: stats.total, color: "cyan" },
-            { label: "Pending", value: stats.pending, color: "amber" },
+            { label: "Pending", value: stats.pending, color: "purple" },
             { label: "Approved", value: stats.approved, color: "green" },
             { label: "Rejected", value: stats.rejected, color: "red" },
           ].map((stat) => (
@@ -360,12 +360,12 @@ export default function KycAdmin() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-8 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20"
+          className="mt-8 p-4 rounded-xl bg-purple-500/10 border border-purple-500/20"
         >
           <div className="flex items-start gap-3">
-            <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+            <AlertTriangle className="w-5 h-5 text-purple-400 shrink-0 mt-0.5" />
             <div>
-              <h4 className="font-semibold text-amber-400 mb-1">Development Mode</h4>
+              <h4 className="font-semibold text-purple-400 mb-1">Development Mode</h4>
               <p className="text-sm text-gray-400">
                 This is a manual approval system. For production, integrate with a third-party KYC provider 
                 like Sumsub, Jumio, or Onfido for automated identity verification.

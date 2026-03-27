@@ -105,18 +105,18 @@ const categories: Category[] = [
       { label: "Partner Requests", description: "Incoming partnership applications", href: "/owner-admin", icon: <HandCoins className="size-5" />, image: hubReferralNetwork, glowColor: "shadow-rose-500/30" },
       { label: "User Feedback", description: "Read and respond to user feedback", href: "/owner-admin/feedback", icon: <MessageSquare className="size-5" />, image: hubChatMessaging, glowColor: "shadow-purple-400/30" },
       { label: "Team Admin", description: "Manage team access and roles", href: "/team-admin", icon: <UserCog className="size-5" />, image: hubMembershipVip, glowColor: "shadow-violet-500/30" },
-      { label: "Zealy Integration", description: "Community engagement platform", href: "/owner-admin/zealy", icon: <Zap className="size-5" />, image: ccRewards, glowColor: "shadow-yellow-500/30", badge: "Earn" },
+      { label: "Zealy Integration", description: "Community engagement platform", href: "/owner-admin/zealy", icon: <Zap className="size-5" />, image: ccRewards, glowColor: "shadow-teal-500/30", badge: "Earn" },
     ]
   },
   {
     title: "Marketing & Content",
     icon: <Megaphone className="size-4" />,
-    gradient: "from-orange-500 to-rose-500",
+    gradient: "from-cyan-500 to-rose-500",
     description: "Social media automation, blog management, messaging campaigns, marketing catalogs, and content creation tools. Drive growth and engagement from one place.",
     cards: [
-      { label: "Marketing Hub", description: "Campaign management & automation", href: "/owner-admin/messaging", icon: <Megaphone className="size-5" />, image: ccMarketing, glowColor: "shadow-orange-500/30", featured: false },
+      { label: "Marketing Hub", description: "Campaign management & automation", href: "/owner-admin/messaging", icon: <Megaphone className="size-5" />, image: ccMarketing, glowColor: "shadow-cyan-500/30", featured: false },
       { label: "Blog Admin", description: "Create and manage blog content", href: "/blog-admin", icon: <Newspaper className="size-5" />, image: hubLearnExplore, glowColor: "shadow-rose-500/30" },
-      { label: "Messaging Center", description: "Send announcements & notifications", href: "/owner-admin/messaging", icon: <Mail className="size-5" />, image: hubChatMessaging, glowColor: "shadow-amber-500/30" },
+      { label: "Messaging Center", description: "Send announcements & notifications", href: "/owner-admin/messaging", icon: <Mail className="size-5" />, image: hubChatMessaging, glowColor: "shadow-purple-500/30" },
       { label: "Marketing Catalog", description: "Manage marketing asset library", href: "/marketing-catalog/admin", icon: <Palette className="size-5" />, image: hubNftGallery, glowColor: "shadow-pink-500/30" },
       { label: "Marketing Dev", description: "Marketing development tools", href: "/marketing-catalog/dev", icon: <Code className="size-5" />, image: ccDeveloper, glowColor: "shadow-red-500/30", badge: "Dev" },
       { label: "Competitive Analysis", description: "Market positioning analysis", href: "/competitive-analysis", icon: <PieChart className="size-5" />, image: hubPortfolioChart, glowColor: "shadow-violet-500/30" },
@@ -141,12 +141,12 @@ const categories: Category[] = [
   {
     title: "Security & Guardian",
     icon: <ShieldCheck className="size-4" />,
-    gradient: "from-red-500 to-orange-500",
+    gradient: "from-red-500 to-cyan-500",
     description: "Guardian certification program, AI agent registry, security scanning, shield monitoring, and all security infrastructure. Protect the ecosystem and certify trust.",
     cards: [
       { label: "Guardian Portal", description: "Security certification management", href: "/owner-admin/guardian", icon: <ShieldCheck className="size-5" />, image: ccSecurity, glowColor: "shadow-red-500/30", featured: false },
-      { label: "Guardian Scanner", description: "AI-powered token security analysis", href: "/guardian-scanner", icon: <Search className="size-5" />, image: hubGuardianSentinel, glowColor: "shadow-orange-500/30", badge: "AI" },
-      { label: "Guardian AI Registry", description: "Certified AI agent registry", href: "/guardian-ai-registry", icon: <Bot className="size-5" />, image: hubAiTools, glowColor: "shadow-amber-500/30" },
+      { label: "Guardian Scanner", description: "AI-powered token security analysis", href: "/guardian-scanner", icon: <Search className="size-5" />, image: hubGuardianSentinel, glowColor: "shadow-cyan-500/30", badge: "AI" },
+      { label: "Guardian AI Registry", description: "Certified AI agent registry", href: "/guardian-ai-registry", icon: <Bot className="size-5" />, image: hubAiTools, glowColor: "shadow-purple-500/30" },
       { label: "Guardian Shield", description: "Continuous security monitoring", href: "/guardian-shield", icon: <Shield className="size-5" />, image: hubIdentitySecurity, glowColor: "shadow-rose-500/30" },
       { label: "Guardian Certification", description: "Audit certification program", href: "/guardian-certification", icon: <ScrollText className="size-5" />, image: hubSmartContract, glowColor: "shadow-red-400/30" },
     ]
@@ -168,13 +168,13 @@ const categories: Category[] = [
   {
     title: "Rewards & Referrals",
     icon: <Gift className="size-4" />,
-    gradient: "from-yellow-500 to-orange-500",
+    gradient: "from-teal-500 to-cyan-500",
     description: "Referral program management, airdrop distribution, rewards configuration, early adopter tracking, and Shell economy controls. Keep the community engaged and rewarded.",
     cards: [
-      { label: "Referral Manager", description: "Referral program stats & payouts", href: "/owner-admin/referrals", icon: <Star className="size-5" />, image: ccRewards, glowColor: "shadow-yellow-500/30", featured: false, badge: "Earn" },
-      { label: "Rewards Config", description: "Configure reward distributions", href: "/owner-admin/referrals", icon: <Gift className="size-5" />, image: hubEarnRewards, glowColor: "shadow-amber-500/30" },
-      { label: "Airdrop Claims", description: "Manage airdrop distribution", href: "/airdrop", icon: <Sparkles className="size-5" />, image: hubPresaleLaunch, glowColor: "shadow-orange-500/30" },
-      { label: "Leaderboard", description: "Community rankings and scores", href: "/leaderboard", icon: <Trophy className="size-5" />, image: hubReferralNetwork, glowColor: "shadow-yellow-400/30" },
+      { label: "Referral Manager", description: "Referral program stats & payouts", href: "/owner-admin/referrals", icon: <Star className="size-5" />, image: ccRewards, glowColor: "shadow-teal-500/30", featured: false, badge: "Earn" },
+      { label: "Rewards Config", description: "Configure reward distributions", href: "/owner-admin/referrals", icon: <Gift className="size-5" />, image: hubEarnRewards, glowColor: "shadow-purple-500/30" },
+      { label: "Airdrop Claims", description: "Manage airdrop distribution", href: "/airdrop", icon: <Sparkles className="size-5" />, image: hubPresaleLaunch, glowColor: "shadow-cyan-500/30" },
+      { label: "Leaderboard", description: "Community rankings and scores", href: "/leaderboard", icon: <Trophy className="size-5" />, image: hubReferralNetwork, glowColor: "shadow-teal-400/30" },
     ]
   },
   {
@@ -203,7 +203,7 @@ const categories: Category[] = [
       { label: "Webhooks", description: "Event webhook configuration", href: "/webhooks", icon: <Radio className="size-5" />, image: hubEcosystemGlobe, glowColor: "shadow-teal-500/30" },
       { label: "Studio", description: "Blockchain IDE and tools", href: "/studio", icon: <Cpu className="size-5" />, image: ccSettings, glowColor: "shadow-green-400/30" },
       { label: "Doc Hub", description: "System documentation hub", href: "/doc-hub", icon: <BookOpen className="size-5" />, image: hubLearnExplore, glowColor: "shadow-cyan-500/30" },
-      { label: "Code Snippets", description: "Reusable code snippet library", href: "/code-snippets", icon: <FileText className="size-5" />, image: ccAnalytics, glowColor: "shadow-amber-500/30" },
+      { label: "Code Snippets", description: "Reusable code snippet library", href: "/code-snippets", icon: <FileText className="size-5" />, image: ccAnalytics, glowColor: "shadow-purple-500/30" },
       { label: "Dev Studio", description: "Development sandbox environment", href: "/dev-studio", icon: <Server className="size-5" />, image: hubExplorerBlocks, glowColor: "shadow-violet-500/30" },
     ]
   },
@@ -360,7 +360,7 @@ function LaunchCardComponent({ card, index }: { card: LaunchCard; index: number 
 
       {card.badge && (
         <div className="absolute top-3 right-3 z-20">
-          <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white rounded-full bg-gradient-to-r from-orange-500 to-rose-500 shadow-lg">
+          <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white rounded-full bg-gradient-to-r from-cyan-500 to-rose-500 shadow-lg">
             {card.badge}
           </span>
         </div>

@@ -195,7 +195,7 @@ export default function MemberPortal() {
                   <p className="text-xs text-white/60">Shells</p>
                 </GlassCard>
                 <GlassCard className="p-4 text-center">
-                  <Star className="w-6 h-6 text-amber-400 mx-auto mb-2" />
+                  <Star className="w-6 h-6 text-purple-400 mx-auto mb-2" />
                   <p className="text-2xl font-bold text-white">{(memberCard as any)?.rewardPoints || 0}</p>
                   <p className="text-xs text-white/60">Points</p>
                 </GlassCard>
@@ -341,7 +341,7 @@ export default function MemberPortal() {
                     <div className="flex items-center gap-2">
                       <Badge className={conn.status === "verified" 
                         ? "bg-green-500/20 text-green-400 border-green-500/30"
-                        : "bg-yellow-500/20 text-yellow-400 border-yellow-500/30"
+                        : "bg-teal-500/20 text-teal-400 border-teal-500/30"
                       }>
                         {conn.status}
                       </Badge>

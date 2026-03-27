@@ -175,7 +175,7 @@ export default function ProofOfReservePage() {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2 }}
-            className="p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-600/10 border border-amber-500/30"
+            className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-cyan-600/10 border border-purple-500/30"
           >
             <div className="flex items-center gap-2 text-slate-400 text-sm mb-1">
               <CheckCircle className="h-4 w-4" />
@@ -184,7 +184,7 @@ export default function ProofOfReservePage() {
             <div className={`text-2xl font-bold ${overallRatio >= 100 ? 'text-emerald-400' : 'text-red-400'}`}>
               {overallRatio.toFixed(2)}%
             </div>
-            <div className="text-xs text-amber-400 mt-1">1:1 backing verified</div>
+            <div className="text-xs text-purple-400 mt-1">1:1 backing verified</div>
           </motion.div>
 
           <motion.div
@@ -277,7 +277,7 @@ export default function ProofOfReservePage() {
                       </div>
                       <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full ${
                         reserve.status === 'healthy' ? 'bg-emerald-500/20 text-emerald-400' :
-                        reserve.status === 'warning' ? 'bg-amber-500/20 text-amber-400' :
+                        reserve.status === 'warning' ? 'bg-purple-500/20 text-purple-400' :
                         'bg-red-500/20 text-red-400'
                       }`}>
                         {reserve.status === 'healthy' && <CheckCircle className="h-4 w-4" />}
@@ -406,11 +406,11 @@ export default function ProofOfReservePage() {
                   <div className="flex items-center gap-4">
                     <div className={`p-2 rounded-lg ${
                       audit.result === 'passed' ? 'bg-emerald-500/20' :
-                      audit.result === 'warning' ? 'bg-amber-500/20' :
+                      audit.result === 'warning' ? 'bg-purple-500/20' :
                       'bg-red-500/20'
                     }`}>
                       {audit.result === 'passed' ? <CheckCircle className="h-5 w-5 text-emerald-400" /> :
-                       audit.result === 'warning' ? <AlertCircle className="h-5 w-5 text-amber-400" /> :
+                       audit.result === 'warning' ? <AlertCircle className="h-5 w-5 text-purple-400" /> :
                        <AlertCircle className="h-5 w-5 text-red-400" />}
                     </div>
                     <div>
@@ -422,13 +422,13 @@ export default function ProofOfReservePage() {
                   <div className="flex items-center gap-6">
                     <div className="text-center">
                       <div className="text-slate-400 text-sm">Findings</div>
-                      <div className={`font-semibold ${audit.findings === 0 ? 'text-emerald-400' : 'text-amber-400'}`}>
+                      <div className={`font-semibold ${audit.findings === 0 ? 'text-emerald-400' : 'text-purple-400'}`}>
                         {audit.findings}
                       </div>
                     </div>
                     <div className={`px-3 py-1 rounded-full text-sm font-medium ${
                       audit.result === 'passed' ? 'bg-emerald-500/20 text-emerald-400' :
-                      audit.result === 'warning' ? 'bg-amber-500/20 text-amber-400' :
+                      audit.result === 'warning' ? 'bg-purple-500/20 text-purple-400' :
                       'bg-red-500/20 text-red-400'
                     }`}>
                       {audit.result.charAt(0).toUpperCase() + audit.result.slice(1)}

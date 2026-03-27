@@ -40,7 +40,7 @@ const defaultAllocations: AllocationCategory[] = [
   { category: "development", percentage: 30, label: "Development", description: "Engineering, tools, infrastructure", color: "cyan", icon: "Code" },
   { category: "marketing", percentage: 20, label: "Marketing", description: "Advertising, community, partnerships", color: "purple", icon: "Megaphone" },
   { category: "staking_rewards", percentage: 20, label: "Staking Rewards", description: "APY for SIG stakers", color: "green", icon: "TrendingUp" },
-  { category: "team_founder", percentage: 15, label: "Team & Founder", description: "Core team compensation", color: "amber", icon: "Users" },
+  { category: "team_founder", percentage: 15, label: "Team & Founder", description: "Core team compensation", color: "purple", icon: "Users" },
   { category: "operations", percentage: 10, label: "Operations", description: "Legal, hosting, security", color: "blue", icon: "Settings" },
   { category: "reserve", percentage: 5, label: "Reserve", description: "Future opportunities", color: "pink", icon: "Shield" },
 ];
@@ -49,7 +49,7 @@ const protocolFees = [
   { source: "DEX Swaps", fee: "0.3%", icon: ArrowRightLeft, color: "cyan" },
   { source: "NFT Marketplace", fee: "2.5%", icon: Sparkles, color: "purple" },
   { source: "Bridge", fee: "0.1%", icon: ExternalLink, color: "pink" },
-  { source: "Launchpad", fee: "Listing", icon: TrendingUp, color: "amber" },
+  { source: "Launchpad", fee: "Listing", icon: TrendingUp, color: "purple" },
 ];
 
 function getIcon(iconName: string) {
@@ -69,7 +69,7 @@ function getColorClasses(color: string) {
     cyan: { bg: "bg-cyan-500/20", text: "text-cyan-400", border: "border-cyan-500/30", glow: "shadow-cyan-500/20" },
     purple: { bg: "bg-purple-500/20", text: "text-purple-400", border: "border-purple-500/30", glow: "shadow-purple-500/20" },
     green: { bg: "bg-green-500/20", text: "text-green-400", border: "border-green-500/30", glow: "shadow-green-500/20" },
-    amber: { bg: "bg-amber-500/20", text: "text-amber-400", border: "border-amber-500/30", glow: "shadow-amber-500/20" },
+    purple: { bg: "bg-purple-500/20", text: "text-purple-400", border: "border-purple-500/30", glow: "shadow-purple-500/20" },
     blue: { bg: "bg-blue-500/20", text: "text-blue-400", border: "border-blue-500/30", glow: "shadow-blue-500/20" },
     pink: { bg: "bg-pink-500/20", text: "text-pink-400", border: "border-pink-500/30", glow: "shadow-pink-500/20" },
   };

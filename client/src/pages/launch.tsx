@@ -125,7 +125,7 @@ const LAUNCH_PHASES: LaunchPhase[] = [
     dateRange: "March — June 2026",
     icon: <Globe className="w-5 h-5" />,
     image: communityImg,
-    gradient: "from-amber-500 to-orange-600",
+    gradient: "from-purple-500 to-cyan-600",
     glowColor: "rgba(245,158,11,0.3)",
     items: [
       { id: "e1", title: "Chronicles", description: "Parallel life simulation — Season Zero beta complete, on hold pending graphics overhaul", status: "in-progress", priority: "critical", link: "/chronicles" },
@@ -423,11 +423,11 @@ export default function LaunchCountdown() {
                   boxShadow: "0 0 30px rgba(6,182,212,0.1)",
                 }}
               >
-                <Flame className="w-4 h-4 text-orange-400 animate-pulse" />
+                <Flame className="w-4 h-4 text-cyan-400 animate-pulse" />
                 <span className="text-sm font-medium bg-gradient-to-r from-cyan-300 to-purple-300 bg-clip-text text-transparent">
                   One Year. One Vision. Launch Day.
                 </span>
-                <Flame className="w-4 h-4 text-orange-400 animate-pulse" style={{ animationDelay: "0.3s" }} />
+                <Flame className="w-4 h-4 text-cyan-400 animate-pulse" style={{ animationDelay: "0.3s" }} />
               </motion.div>
 
               <h1 className="text-4xl sm:text-5xl md:text-7xl font-black mb-4 tracking-tight">
@@ -487,7 +487,7 @@ export default function LaunchCountdown() {
             {[
               { label: "Overall Progress", value: `${overallProgress}%`, icon: <TrendingUp className="w-4 h-4" />, color: "cyan" },
               { label: "Tasks Complete", value: `${stats.done}/${stats.total}`, icon: <CheckCircle2 className="w-4 h-4" />, color: "emerald" },
-              { label: "In Progress", value: `${stats.inProgress}`, icon: <Clock className="w-4 h-4" />, color: "amber" },
+              { label: "In Progress", value: `${stats.inProgress}`, icon: <Clock className="w-4 h-4" />, color: "purple" },
               { label: "Critical Path", value: `${stats.criticalDone}/${stats.criticalTotal}`, icon: <AlertCircle className="w-4 h-4" />, color: "red" },
             ].map((stat, i) => (
               <div

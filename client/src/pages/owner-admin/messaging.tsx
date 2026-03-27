@@ -369,8 +369,8 @@ export default function MessagingCatalog() {
           className="mt-12 bg-slate-900/50 border border-white/10 rounded-2xl p-6"
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-500/20">
-              <Crown className="w-5 h-5 text-amber-400" />
+            <div className="p-2 rounded-lg bg-gradient-to-br from-purple-500/20 to-cyan-500/20">
+              <Crown className="w-5 h-5 text-purple-400" />
             </div>
             <div>
               <h3 className="font-bold text-white">Operational Hierarchy</h3>

@@ -161,7 +161,7 @@ export function AmbientAudioController({ era, location, isNight = false }: Ambie
                     {state.isNight ? (
                       <Moon className="w-3 h-3 text-purple-400" />
                     ) : (
-                      <Sun className="w-3 h-3 text-yellow-400" />
+                      <Sun className="w-3 h-3 text-teal-400" />
                     )}
                     <span className="text-[10px] text-slate-500">
                       {state.isNight ? "Night Mode" : "Day Mode"}

@@ -264,17 +264,17 @@ function OperationsDashboard() {
             <div className="flex items-center gap-3">
               <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full ${
                 overallStatus === "operational" ? "bg-green-500/20 border border-green-500/40" :
-                overallStatus === "degraded" ? "bg-yellow-500/20 border border-yellow-500/40" :
+                overallStatus === "degraded" ? "bg-teal-500/20 border border-teal-500/40" :
                 "bg-red-500/20 border border-red-500/40"
               }`}>
                 <div className={`w-2 h-2 rounded-full ${
                   overallStatus === "operational" ? "bg-green-500 animate-pulse" :
-                  overallStatus === "degraded" ? "bg-yellow-500 animate-pulse" :
+                  overallStatus === "degraded" ? "bg-teal-500 animate-pulse" :
                   "bg-red-500 animate-pulse"
                 }`} />
                 <span className={`text-xs font-medium ${
                   overallStatus === "operational" ? "text-green-400" :
-                  overallStatus === "degraded" ? "text-yellow-400" :
+                  overallStatus === "degraded" ? "text-teal-400" :
                   "text-red-400"
                 }`}>
                   {overallStatus === "operational" ? "ALL SYSTEMS GO" : overallStatus.toUpperCase()}
@@ -325,7 +325,7 @@ function OperationsDashboard() {
                 { label: "Presale Raised", value: `$${presaleStats?.totalRaised?.toLocaleString() || "0"}`, icon: DollarSign, color: "emerald", subtext: `${presaleStats?.tokensSold?.toLocaleString() || 0} SIG sold` },
                 { label: "Active Members", value: zealyStats?.participants || "0", icon: Users, color: "cyan", subtext: "Zealy participants" },
                 { label: "Shells Distributed", value: zealyStats?.totalShellsGranted?.toLocaleString() || "0", icon: Shell, color: "purple", subtext: "Total rewards" },
-                { label: "Pending Airdrops", value: dailyReport?.pendingTotal || "0", icon: Send, color: "amber", subtext: "Ready to process" },
+                { label: "Pending Airdrops", value: dailyReport?.pendingTotal || "0", icon: Send, color: "purple", subtext: "Ready to process" },
               ].map((metric, i) => (
                 <motion.div
                   key={metric.label}
@@ -350,7 +350,7 @@ function OperationsDashboard() {
             <GlassCard className="p-6" glow>
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-bold text-white flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-amber-400" />
+                  <Zap className="w-5 h-5 text-purple-400" />
                   Quick Actions
                 </h3>
                 <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">TEAM ACCESS</Badge>
@@ -372,14 +372,14 @@ function OperationsDashboard() {
                 <button
                   onClick={() => submitDailyAirdrop.mutate()}
                   disabled={submitDailyAirdrop.isPending || (dailyReport?.pendingTotal || 0) === 0}
-                  className="p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/30 hover:border-amber-400/50 transition-all text-left group disabled:opacity-50"
+                  className="p-4 rounded-xl bg-gradient-to-br from-purple-500/10 to-cyan-500/10 border border-purple-500/30 hover:border-purple-400/50 transition-all text-left group disabled:opacity-50"
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <Send className="w-6 h-6 text-amber-400" />
+                    <Send className="w-6 h-6 text-purple-400" />
                     {submitDailyAirdrop.isPending ? (
-                      <RefreshCw className="w-4 h-4 text-amber-400 animate-spin" />
+                      <RefreshCw className="w-4 h-4 text-purple-400 animate-spin" />
                     ) : (
-                      <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-amber-400 transition-colors" />
+                      <ChevronRight className="w-4 h-4 text-gray-500 group-hover:text-purple-400 transition-colors" />
                     )}
                   </div>
                   <p className="font-semibold text-white">Submit Daily Airdrop</p>
@@ -419,7 +419,7 @@ function OperationsDashboard() {
                       <div className="flex items-center gap-3">
                         <div className={`w-2 h-2 rounded-full ${
                           event.status === "granted" ? "bg-green-500" : 
-                          event.status === "pending" ? "bg-yellow-500" : "bg-red-500"
+                          event.status === "pending" ? "bg-teal-500" : "bg-red-500"
                         }`} />
                         <div>
                           <p className="text-sm text-white">{event.questName || event.zealyQuestId}</p>
@@ -447,7 +447,7 @@ function OperationsDashboard() {
                   <h2 className="text-xl font-bold text-white">Daily Airdrop Report</h2>
                   <p className="text-gray-400 text-sm">{currentDate}</p>
                 </div>
-                <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30 text-lg px-4 py-1">
+                <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 text-lg px-4 py-1">
                   {dailyReport?.pendingTotal || 0} PENDING
                 </Badge>
               </div>
@@ -526,7 +526,7 @@ function OperationsDashboard() {
         {activeTab === "airdrop" && (
           <GlassCard className="p-6" glow>
             <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-              <Send className="w-6 h-6 text-amber-400" />
+              <Send className="w-6 h-6 text-purple-400" />
               Airdrop Processing Queue
             </h2>
             
@@ -604,7 +604,7 @@ function OperationsDashboard() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="p-3 rounded-lg bg-white/5">
                     <p className="text-xs text-gray-400">Current Price</p>
-                    <p className="text-lg font-bold text-amber-400">${presaleStats?.currentPrice || "0.001"}</p>
+                    <p className="text-lg font-bold text-purple-400">${presaleStats?.currentPrice || "0.001"}</p>
                   </div>
                   <div className="p-3 rounded-lg bg-white/5">
                     <p className="text-xs text-gray-400">Launch Price</p>

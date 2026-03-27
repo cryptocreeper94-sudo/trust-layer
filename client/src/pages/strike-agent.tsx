@@ -102,9 +102,9 @@ const recommendationStyles = {
     glow: 'shadow-[0_0_30px_rgba(16,185,129,0.3)]'
   },
   watch: {
-    bg: 'bg-gradient-to-r from-amber-500/20 to-yellow-500/20',
-    border: 'border-amber-500/40',
-    text: 'text-amber-400',
+    bg: 'bg-gradient-to-r from-purple-500/20 to-teal-500/20',
+    border: 'border-purple-500/40',
+    text: 'text-purple-400',
     icon: Eye,
     label: 'WATCH',
     glow: 'shadow-[0_0_30px_rgba(245,158,11,0.3)]'
@@ -281,13 +281,13 @@ function SettingsModal({ open, onClose, settings, onSave }: {
           
           <div className="border-t border-white/10 pt-6">
             <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-              <Bell className="w-4 h-4 text-amber-400" />
+              <Bell className="w-4 h-4 text-purple-400" />
               Notifications
             </h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between py-2">
                 <div className="flex items-center gap-3">
-                  {local.soundAlerts ? <Volume2 className="w-5 h-5 text-amber-400" /> : <VolumeX className="w-5 h-5 text-white/40" />}
+                  {local.soundAlerts ? <Volume2 className="w-5 h-5 text-purple-400" /> : <VolumeX className="w-5 h-5 text-white/40" />}
                   <div>
                     <div className="text-sm text-white">Sound Alerts</div>
                     <div className="text-xs text-white/40">Play sound for new snipe opportunities</div>
@@ -295,7 +295,7 @@ function SettingsModal({ open, onClose, settings, onSave }: {
                 </div>
                 <button
                   onClick={() => setLocal({ ...local, soundAlerts: !local.soundAlerts })}
-                  className={`w-12 h-7 rounded-full transition-colors ${local.soundAlerts ? 'bg-amber-500' : 'bg-white/20'}`}
+                  className={`w-12 h-7 rounded-full transition-colors ${local.soundAlerts ? 'bg-purple-500' : 'bg-white/20'}`}
                 >
                   <div className={`w-5 h-5 rounded-full bg-white shadow-lg transition-transform ${local.soundAlerts ? 'translate-x-6' : 'translate-x-1'}`} />
                 </button>
@@ -438,7 +438,7 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
                   className="p-1 hover:bg-white/10 rounded-lg transition-colors"
                 >
                   {isFavorite ? (
-                    <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                    <Star className="w-4 h-4 text-purple-400 fill-purple-400" />
                   ) : (
                     <StarOff className="w-4 h-4 text-white/30" />
                   )}
@@ -462,7 +462,7 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
             </div>
             <div className="flex items-center gap-1">
               <BarChart3 className="w-3 h-3 text-white/40" />
-              <span className={`text-lg font-bold ${(rec.aiScore || 0) >= 70 ? 'text-emerald-400' : (rec.aiScore || 0) >= 40 ? 'text-amber-400' : 'text-red-400'}`}>
+              <span className={`text-lg font-bold ${(rec.aiScore || 0) >= 70 ? 'text-emerald-400' : (rec.aiScore || 0) >= 40 ? 'text-purple-400' : 'text-red-400'}`}>
                 {rec.aiScore || 0}
               </span>
             </div>
@@ -495,7 +495,7 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
             </div>
             <div className={`text-sm font-semibold ${
               rec.isHoneypot ? 'text-red-400' : 
-              (rec.mintAuthorityActive === false && rec.freezeAuthorityActive === false) ? 'text-emerald-400' : 'text-amber-400'
+              (rec.mintAuthorityActive === false && rec.freezeAuthorityActive === false) ? 'text-emerald-400' : 'text-purple-400'
             }`}>
               {rec.isHoneypot ? 'Risk' : 
                (rec.mintAuthorityActive === false && rec.freezeAuthorityActive === false) ? 'Safe' : 'Check'}
@@ -575,7 +575,7 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
                   {rec.botPercent && (
                     <div className="bg-white/5 rounded-lg p-2 flex items-center justify-between">
                       <span className="text-[10px] text-white/50">Bot Activity</span>
-                      <span className={`text-xs font-bold ${parseFloat(rec.botPercent) > 30 ? 'text-red-400' : parseFloat(rec.botPercent) > 15 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                      <span className={`text-xs font-bold ${parseFloat(rec.botPercent) > 30 ? 'text-red-400' : parseFloat(rec.botPercent) > 15 ? 'text-purple-400' : 'text-emerald-400'}`}>
                         {parseFloat(rec.botPercent).toFixed(1)}%
                       </span>
                     </div>
@@ -583,7 +583,7 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
                   {rec.bundlePercent && (
                     <div className="bg-white/5 rounded-lg p-2 flex items-center justify-between">
                       <span className="text-[10px] text-white/50">Bundle Txns</span>
-                      <span className={`text-xs font-bold ${parseFloat(rec.bundlePercent) > 30 ? 'text-red-400' : parseFloat(rec.bundlePercent) > 15 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                      <span className={`text-xs font-bold ${parseFloat(rec.bundlePercent) > 30 ? 'text-red-400' : parseFloat(rec.bundlePercent) > 15 ? 'text-purple-400' : 'text-emerald-400'}`}>
                         {parseFloat(rec.bundlePercent).toFixed(1)}%
                       </span>
                     </div>
@@ -591,7 +591,7 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
                   {rec.top10HoldersPercent && (
                     <div className="bg-white/5 rounded-lg p-2 flex items-center justify-between">
                       <span className="text-[10px] text-white/50">Top 10 Holders</span>
-                      <span className={`text-xs font-bold ${parseFloat(rec.top10HoldersPercent) > 70 ? 'text-red-400' : parseFloat(rec.top10HoldersPercent) > 50 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                      <span className={`text-xs font-bold ${parseFloat(rec.top10HoldersPercent) > 70 ? 'text-red-400' : parseFloat(rec.top10HoldersPercent) > 50 ? 'text-purple-400' : 'text-emerald-400'}`}>
                         {parseFloat(rec.top10HoldersPercent).toFixed(1)}%
                       </span>
                     </div>
@@ -599,7 +599,7 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
                   {rec.holderCount && (
                     <div className="bg-white/5 rounded-lg p-2 flex items-center justify-between">
                       <span className="text-[10px] text-white/50">Holders</span>
-                      <span className={`text-xs font-bold ${rec.holderCount > 100 ? 'text-emerald-400' : rec.holderCount > 30 ? 'text-amber-400' : 'text-red-400'}`}>
+                      <span className={`text-xs font-bold ${rec.holderCount > 100 ? 'text-emerald-400' : rec.holderCount > 30 ? 'text-purple-400' : 'text-red-400'}`}>
                         {rec.holderCount.toLocaleString()}
                       </span>
                     </div>
@@ -607,7 +607,7 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
                   {rec.liquidityUsd && (
                     <div className="bg-white/5 rounded-lg p-2 flex items-center justify-between">
                       <span className="text-[10px] text-white/50">Liquidity</span>
-                      <span className={`text-xs font-bold ${parseFloat(rec.liquidityUsd) > 10000 ? 'text-emerald-400' : parseFloat(rec.liquidityUsd) > 1000 ? 'text-amber-400' : 'text-red-400'}`}>
+                      <span className={`text-xs font-bold ${parseFloat(rec.liquidityUsd) > 10000 ? 'text-emerald-400' : parseFloat(rec.liquidityUsd) > 1000 ? 'text-purple-400' : 'text-red-400'}`}>
                         ${(parseFloat(rec.liquidityUsd) / 1000).toFixed(1)}K
                       </span>
                     </div>
@@ -701,7 +701,7 @@ function TokenCard({ rec, expanded, onToggle, isFavorite, onToggleFavorite }: {
                     rec.aiRecommendation === 'snipe' 
                       ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white' 
                       : rec.aiRecommendation === 'watch'
-                      ? 'bg-gradient-to-r from-amber-500 to-orange-500 text-white'
+                      ? 'bg-gradient-to-r from-purple-500 to-cyan-500 text-white'
                       : 'bg-white/10 text-white/60'
                   }`}
                   data-testid="button-trade"
@@ -980,7 +980,7 @@ export default function StrikeAgentPage() {
                       ) : (
                         <button
                           onClick={() => ethereumWallet.connectMetaMask().catch(() => {})}
-                          className="w-full py-2 bg-gradient-to-r from-orange-500 to-yellow-500 text-white text-xs font-bold rounded-lg"
+                          className="w-full py-2 bg-gradient-to-r from-cyan-500 to-teal-500 text-white text-xs font-bold rounded-lg"
                           data-testid="button-connect-metamask"
                         >
                           Connect MetaMask
@@ -1027,7 +1027,7 @@ export default function StrikeAgentPage() {
               className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium whitespace-nowrap transition-all ${
                 filter === f 
                   ? f === 'snipe' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40'
-                  : f === 'watch' ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+                  : f === 'watch' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/40'
                   : f === 'avoid' ? 'bg-red-500/20 text-red-400 border border-red-500/40'
                   : f === 'favorites' ? 'bg-purple-500/20 text-purple-400 border border-purple-500/40'
                   : 'bg-white/20 text-white border border-white/40'
@@ -1173,9 +1173,9 @@ export default function StrikeAgentPage() {
             <div className="flex items-center gap-2 mb-2">
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold ${
                 market.fearGreed >= 75 ? 'bg-emerald-500/20 text-emerald-400' :
-                market.fearGreed >= 55 ? 'bg-amber-500/20 text-amber-400' :
+                market.fearGreed >= 55 ? 'bg-purple-500/20 text-purple-400' :
                 market.fearGreed >= 45 ? 'bg-white/10 text-white/70' :
-                market.fearGreed >= 25 ? 'bg-orange-500/20 text-orange-400' :
+                market.fearGreed >= 25 ? 'bg-cyan-500/20 text-cyan-400' :
                 'bg-red-500/20 text-red-400'
               }`}>
                 {market.fearGreed}
@@ -1215,7 +1215,7 @@ export default function StrikeAgentPage() {
             <div className="flex items-center gap-2">
               <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
                 <div 
-                  className={`h-full ${market.altcoinSeason >= 75 ? 'bg-emerald-500' : market.altcoinSeason >= 25 ? 'bg-cyan-500' : 'bg-amber-500'}`}
+                  className={`h-full ${market.altcoinSeason >= 75 ? 'bg-emerald-500' : market.altcoinSeason >= 25 ? 'bg-cyan-500' : 'bg-purple-500'}`}
                   style={{ width: `${market.altcoinSeason}%` }}
                 />
               </div>
@@ -1293,10 +1293,10 @@ export default function StrikeAgentPage() {
             <span className="text-[10px] text-emerald-400 font-medium">{counts.snipe} Snipe</span>
           </div>
           <div className="flex flex-col items-center gap-1">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center">
-              <Eye className="w-5 h-5 text-amber-400" />
+            <div className="w-10 h-10 rounded-xl bg-purple-500/20 flex items-center justify-center">
+              <Eye className="w-5 h-5 text-purple-400" />
             </div>
-            <span className="text-[10px] text-amber-400 font-medium">{counts.watch} Watch</span>
+            <span className="text-[10px] text-purple-400 font-medium">{counts.watch} Watch</span>
           </div>
           <div className="flex flex-col items-center gap-1">
             <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center">

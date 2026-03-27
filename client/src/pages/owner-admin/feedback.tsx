@@ -12,14 +12,14 @@ import { Badge } from "@/components/ui/badge";
 
 const STATUS_OPTIONS = [
   { id: "new", label: "New", color: "cyan", icon: Clock },
-  { id: "in_progress", label: "In Progress", color: "amber", icon: AlertTriangle },
+  { id: "in_progress", label: "In Progress", color: "purple", icon: AlertTriangle },
   { id: "resolved", label: "Resolved", color: "emerald", icon: CheckCircle },
   { id: "wont_fix", label: "Won't Fix", color: "red", icon: XCircle },
 ];
 
 const PRIORITY_OPTIONS = [
   { id: "low", label: "Low", color: "gray" },
-  { id: "medium", label: "Medium", color: "amber" },
+  { id: "medium", label: "Medium", color: "purple" },
   { id: "high", label: "High", color: "red" },
   { id: "critical", label: "Critical", color: "purple" },
 ];
@@ -87,11 +87,11 @@ function ReportCard({ report, onUpdate }: { report: FeedbackReport; onUpdate: ()
         <div className="flex items-start gap-3">
           <div className={`p-2 rounded-lg ${
             report.type === "bug" ? "bg-red-500/20" : 
-            report.type === "feature" ? "bg-amber-500/20" : "bg-cyan-500/20"
+            report.type === "feature" ? "bg-purple-500/20" : "bg-cyan-500/20"
           }`}>
             <TypeIcon className={`w-4 h-4 ${
               report.type === "bug" ? "text-red-400" : 
-              report.type === "feature" ? "text-amber-400" : "text-cyan-400"
+              report.type === "feature" ? "text-purple-400" : "text-cyan-400"
             }`} />
           </div>
           

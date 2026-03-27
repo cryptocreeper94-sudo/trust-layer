@@ -15,7 +15,7 @@ export const MemberProfile: React.FC<{ member: Member; onDM: (id: string) => voi
 
       <div className="mt-3 flex gap-2">
         <button onClick={() => onDM(member.id)} className="py-2 px-3 rounded-md bg-cyan-500 text-black" data-testid="dm-btn">Message</button>
-        {onKick && <button onClick={() => onKick(member.id)} className="py-2 px-3 rounded-md bg-yellow-600 text-black" data-testid="kick-btn">Kick</button>}
+        {onKick && <button onClick={() => onKick(member.id)} className="py-2 px-3 rounded-md bg-teal-600 text-black" data-testid="kick-btn">Kick</button>}
         {onBan && <button onClick={() => onBan(member.id)} className="py-2 px-3 rounded-md bg-red-600 text-white" data-testid="ban-btn">Ban</button>}
       </div>
     </div>

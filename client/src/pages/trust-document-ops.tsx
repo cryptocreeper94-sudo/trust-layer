@@ -112,7 +112,7 @@ export default function TrustDocumentOps() {
             <div className="space-y-6 mb-8">
               <div>
                 <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
-                  <Award className="w-5 h-5 text-amber-400" />
+                  <Award className="w-5 h-5 text-purple-400" />
                   Appointment
                 </h3>
                 <p className="text-muted-foreground text-sm leading-relaxed">
@@ -128,7 +128,7 @@ export default function TrustDocumentOps() {
                   Token Allocation
                 </h3>
                 <p className="text-muted-foreground text-sm leading-relaxed mb-3">
-                  Party B shall receive a total allocation of <span className="text-amber-400 font-bold">5,000,000 SIG</span> (0.5% of total supply), 
+                  Party B shall receive a total allocation of <span className="text-purple-400 font-bold">5,000,000 SIG</span> (0.5% of total supply), 
                   subject to graduated milestone-based vesting:
                 </p>
                 <div className="bg-black/30 rounded-lg p-4 space-y-2 text-sm">
@@ -150,7 +150,7 @@ export default function TrustDocumentOps() {
                   </div>
                   <div className="flex justify-between border-t border-white/10 pt-2">
                     <span className="text-muted-foreground">$10M Market Cap</span>
-                    <span className="text-amber-400 font-bold">+1,500,000 SIG (Complete)</span>
+                    <span className="text-purple-400 font-bold">+1,500,000 SIG (Complete)</span>
                   </div>
                 </div>
                 <p className="text-xs text-muted-foreground mt-2">
@@ -160,7 +160,7 @@ export default function TrustDocumentOps() {
 
               <div>
                 <h3 className="font-semibold text-white mb-3 flex items-center gap-2">
-                  <User className="w-5 h-5 text-amber-400" />
+                  <User className="w-5 h-5 text-purple-400" />
                   Party B Responsibilities
                 </h3>
                 <p className="text-muted-foreground text-sm mb-3">
@@ -169,23 +169,23 @@ export default function TrustDocumentOps() {
                 </p>
                 <ul className="text-muted-foreground text-sm space-y-2">
                   <li className="flex items-start gap-2">
-                    <span className="text-amber-400 mt-1">•</span>
+                    <span className="text-purple-400 mt-1">•</span>
                     <span><span className="text-white">Active & Consistent Contribution</span> - Regular, meaningful work toward Trust Layer development and operations</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-amber-400 mt-1">•</span>
+                    <span className="text-purple-400 mt-1">•</span>
                     <span><span className="text-white">Loyalty & Alignment</span> - Commitment to the project's success and alignment with Signal Core principles</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-amber-400 mt-1">•</span>
+                    <span className="text-purple-400 mt-1">•</span>
                     <span><span className="text-white">Effectiveness</span> - Delivering results, not just effort. Quality of contribution matters.</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-amber-400 mt-1">•</span>
+                    <span className="text-purple-400 mt-1">•</span>
                     <span><span className="text-white">Good Faith Communication</span> - Transparent, honest communication. No ghosting, no hidden agendas.</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-amber-400 mt-1">•</span>
+                    <span className="text-purple-400 mt-1">•</span>
                     <span><span className="text-white">Long-term Commitment</span> - This is a building journey, not a quick payout. Expect years of work.</span>
                   </li>
                 </ul>

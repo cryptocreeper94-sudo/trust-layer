@@ -225,7 +225,7 @@ export default function Swap() {
               <div className="text-[10px] text-muted-foreground">Supported Tokens</div>
             </div>
             <div className="p-3 rounded-xl bg-white/5 border border-white/10 text-center">
-              <div className="text-lg font-bold text-amber-400">0.3%</div>
+              <div className="text-lg font-bold text-purple-400">0.3%</div>
               <div className="text-[10px] text-muted-foreground">Swap Fee</div>
             </div>
           </motion.div>
@@ -362,9 +362,9 @@ export default function Swap() {
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="mt-3 p-3 rounded-lg bg-amber-500/10 border border-amber-500/30"
+                    className="mt-3 p-3 rounded-lg bg-purple-500/10 border border-purple-500/30"
                   >
-                    <div className="flex items-center justify-center gap-2 text-amber-400 text-sm">
+                    <div className="flex items-center justify-center gap-2 text-purple-400 text-sm">
                       <Clock className="w-4 h-4" />
                       <span>Live quotes available at mainnet launch</span>
                     </div>
@@ -501,11 +501,11 @@ export default function Swap() {
             transition={{ delay: 0.4 }}
             className="mt-4"
           >
-            <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+            <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20">
               <div className="flex items-start gap-2">
-                <AlertCircle className="w-4 h-4 text-amber-400 shrink-0 mt-0.5" />
-                <p className="text-[10px] text-amber-200">
-                  <strong className="text-amber-300">Testnet:</strong> This DEX operates on Trust Layer testnet. Trade with test tokens only.
+                <AlertCircle className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
+                <p className="text-[10px] text-purple-200">
+                  <strong className="text-purple-300">Testnet:</strong> This DEX operates on Trust Layer testnet. Trade with test tokens only.
                 </p>
               </div>
             </div>

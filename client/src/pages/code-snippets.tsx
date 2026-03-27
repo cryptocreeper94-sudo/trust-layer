@@ -190,7 +190,7 @@ ws.onmessage = (event) => {
 ];
 
 const LANGUAGE_COLORS = {
-  javascript: "from-yellow-500 to-orange-500",
+  javascript: "from-teal-500 to-cyan-500",
   python: "from-blue-500 to-green-500",
   curl: "from-gray-500 to-gray-700",
   solidity: "from-purple-500 to-pink-500",

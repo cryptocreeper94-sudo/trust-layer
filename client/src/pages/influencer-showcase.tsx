@@ -160,7 +160,7 @@ const PILLARS = [
     subtitle: "3D Life Simulation",
     description: "A persistent parallel world across Medieval, Wild West, and Modern eras. Emotion-driven AI, political simulation, real economies, and AI-generated storylines.",
     stats: "3 Eras",
-    gradient: "from-amber-500 to-orange-600",
+    gradient: "from-purple-500 to-cyan-600",
   },
   {
     icon: Building2,
@@ -207,8 +207,8 @@ const PARTNER_TIERS = [
   {
     name: "Elite KOL",
     icon: Crown,
-    color: "from-amber-500 to-orange-500",
-    border: "border-amber-500/40",
+    color: "from-purple-500 to-cyan-500",
+    border: "border-purple-500/40",
     glow: "shadow-[0_0_60px_rgba(245,158,11,0.3)]",
     req: "100K+ followers",
     bonus: "100,000 SIG",
@@ -222,7 +222,7 @@ const TOKEN_ALLOCATION = [
   { name: "Staking Rewards", pct: 15, color: "bg-purple-500" },
   { name: "Development & Team", pct: 15, color: "bg-blue-500" },
   { name: "Ecosystem Growth", pct: 10, color: "bg-emerald-500" },
-  { name: "Community Rewards", pct: 10, color: "bg-amber-500" },
+  { name: "Community Rewards", pct: 10, color: "bg-purple-500" },
 ];
 
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } };
@@ -293,7 +293,7 @@ export default function InfluencerShowcasePage() {
       <GlowOrb color="bg-cyan-500/8" position="top-0 left-1/4" size="w-[500px] h-[500px]" delay={0} />
       <GlowOrb color="bg-purple-500/8" position="top-1/4 right-0" size="w-[600px] h-[600px]" delay={1} />
       <GlowOrb color="bg-pink-500/6" position="top-1/2 left-0" size="w-[400px] h-[400px]" delay={2} />
-      <GlowOrb color="bg-amber-500/5" position="bottom-1/4 right-1/4" size="w-[500px] h-[500px]" delay={1.5} />
+      <GlowOrb color="bg-purple-500/5" position="bottom-1/4 right-1/4" size="w-[500px] h-[500px]" delay={1.5} />
       <GlowOrb color="bg-cyan-500/5" position="bottom-0 left-1/3" size="w-[600px] h-[600px]" delay={0.5} />
 
       <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-[#050508]/80 backdrop-blur-2xl">
@@ -490,11 +490,11 @@ export default function InfluencerShowcasePage() {
         <div className="container mx-auto max-w-6xl">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={stagger}>
             <motion.div variants={fadeUp} className="text-center mb-12">
-              <Badge className="mb-4 bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-300 border-amber-500/30">
+              <Badge className="mb-4 bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-purple-300 border-purple-500/30">
                 <Wallet className="w-3 h-3 mr-1.5" /> SIG Token
               </Badge>
               <h2 className="text-3xl sm:text-4xl font-display font-bold mb-3">
-                <span className="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">
                   Signal (SIG) Tokenomics
                 </span>
               </h2>
@@ -533,7 +533,7 @@ export default function InfluencerShowcasePage() {
                       </div>
                       <div>
                         <p className="text-xs text-white/30 uppercase tracking-wider mb-1">Pre-Launch Currency</p>
-                        <p className="text-xl font-bold font-display bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">Shells</p>
+                        <p className="text-xl font-bold font-display bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text text-transparent">Shells</p>
                       </div>
                     </div>
                   </div>
@@ -584,7 +584,7 @@ export default function InfluencerShowcasePage() {
                 <Crown className="w-3 h-3 mr-1.5" /> KOL & Influencer Program
               </Badge>
               <h2 className="text-3xl sm:text-4xl font-display font-bold mb-3">
-                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-amber-400 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
                   Partner With Us
                 </span>
               </h2>

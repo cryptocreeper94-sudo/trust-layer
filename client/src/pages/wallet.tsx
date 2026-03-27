@@ -71,7 +71,7 @@ const SUPPORTED_CHAINS = [
   { id: 'base', name: 'Base', symbol: 'ETH', icon: '🔵', color: 'from-blue-500 to-blue-600', explorer: 'https://basescan.org' },
   { id: 'polygon', name: 'Polygon', symbol: 'MATIC', icon: '⬡', color: 'from-purple-400 to-violet-500', explorer: 'https://polygonscan.com' },
   { id: 'arbitrum', name: 'Arbitrum', symbol: 'ETH', icon: '🔷', color: 'from-blue-400 to-cyan-500', explorer: 'https://arbiscan.io' },
-  { id: 'bsc', name: 'BNB Chain', symbol: 'BNB', icon: '🔶', color: 'from-yellow-400 to-orange-500', explorer: 'https://bscscan.com' },
+  { id: 'bsc', name: 'BNB Chain', symbol: 'BNB', icon: '🔶', color: 'from-teal-400 to-cyan-500', explorer: 'https://bscscan.com' },
   { id: 'optimism', name: 'Optimism', symbol: 'ETH', icon: '🔴', color: 'from-red-400 to-red-500', explorer: 'https://optimistic.etherscan.io' },
   { id: 'avalanche', name: 'Avalanche', symbol: 'AVAX', icon: '🔺', color: 'from-red-500 to-rose-500', explorer: 'https://snowtrace.io' },
 ];
@@ -671,9 +671,9 @@ export default function WalletPage() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 mb-6">
-            <Sparkles className="w-4 h-4 text-amber-400" />
-            <span className="text-sm text-amber-300">Shells Economy Wallet</span>
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30 mb-6">
+            <Sparkles className="w-4 h-4 text-purple-400" />
+            <span className="text-sm text-purple-300">Shells Economy Wallet</span>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-purple-400 bg-clip-text text-transparent">
@@ -685,7 +685,7 @@ export default function WalletPage() {
           </p>
           <div className="max-w-xl mx-auto p-4 rounded-xl bg-slate-800/50 border border-white/10">
             <p className="text-sm text-gray-300">
-              <strong className="text-amber-400">Pre-Launch Mode:</strong> This wallet is for Shells only. For presale purchases, use your preferred third-party wallet (MetaMask for Ethereum, Phantom for Solana, etc.) with the "Buy Crypto" button below.
+              <strong className="text-purple-400">Pre-Launch Mode:</strong> This wallet is for Shells only. For presale purchases, use your preferred third-party wallet (MetaMask for Ethereum, Phantom for Solana, etc.) with the "Buy Crypto" button below.
             </p>
           </div>
         </motion.div>
@@ -1039,14 +1039,14 @@ export default function WalletPage() {
                 animate={{ opacity: 1, height: 'auto' }}
                 className="mb-8"
               >
-                <Card className="bg-amber-500/10 border-amber-500/30">
+                <Card className="bg-purple-500/10 border-purple-500/30">
                   <CardContent className="p-6">
                     <div className="flex items-start gap-4">
-                      <div className="p-3 rounded-xl bg-amber-500/20">
-                        <Key className="w-6 h-6 text-amber-400" />
+                      <div className="p-3 rounded-xl bg-purple-500/20">
+                        <Key className="w-6 h-6 text-purple-400" />
                       </div>
                       <div className="flex-1">
-                        <h3 className="font-semibold text-amber-400 mb-2">Backup Your Recovery Phrase</h3>
+                        <h3 className="font-semibold text-purple-400 mb-2">Backup Your Recovery Phrase</h3>
                         <p className="text-sm text-muted-foreground mb-4">
                           Write down these 12 words and store them safely. This is the ONLY way to recover your wallet.
                         </p>
@@ -1087,7 +1087,7 @@ export default function WalletPage() {
                           <Button
                             size="sm"
                             onClick={() => setMnemonic("")}
-                            className="bg-amber-500 hover:bg-amber-600"
+                            className="bg-purple-500 hover:bg-purple-600"
                             data-testid="button-confirm-backup"
                           >
                             <Check className="w-4 h-4 mr-2" />

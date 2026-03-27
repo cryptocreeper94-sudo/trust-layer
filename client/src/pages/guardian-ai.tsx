@@ -482,14 +482,14 @@ export default function GuardianAI() {
                       <div className="flex items-center gap-4">
                         <div className={`w-16 h-16 rounded-xl flex items-center justify-center text-2xl font-black ${
                           scanResult.score >= 85 ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/20' :
-                          scanResult.score >= 70 ? 'bg-amber-500/15 text-amber-400 border border-amber-500/20' :
+                          scanResult.score >= 70 ? 'bg-purple-500/15 text-purple-400 border border-purple-500/20' :
                           'bg-red-500/15 text-red-400 border border-red-500/20'
                         }`}>
                           {scanResult.score}
                         </div>
                         <div>
                           <div className="text-white font-bold text-lg">Quick Security Score</div>
-                          <div className={`text-sm font-medium ${scanResult.safe ? 'text-emerald-400' : 'text-amber-400'}`}>
+                          <div className={`text-sm font-medium ${scanResult.safe ? 'text-emerald-400' : 'text-purple-400'}`}>
                             {scanResult.safe ? 'Looks Safe' : 'Issues Detected'} - {scanResult.risks.length} finding{scanResult.risks.length !== 1 ? 's' : ''}
                           </div>
                         </div>
@@ -499,7 +499,7 @@ export default function GuardianAI() {
                       <div className="space-y-2">
                         {scanResult.risks.map((risk, i) => (
                           <div key={i} className="flex items-start gap-3 p-3 rounded-lg bg-slate-800/40 border border-white/[0.03]">
-                            <AlertTriangle className="w-4 h-4 text-amber-400 mt-0.5 shrink-0" />
+                            <AlertTriangle className="w-4 h-4 text-purple-400 mt-0.5 shrink-0" />
                             <span className="text-sm text-slate-300">{risk}</span>
                           </div>
                         ))}
@@ -623,7 +623,7 @@ export default function GuardianAI() {
                 <img src={certifiedImg} alt="Certified Badge" className="absolute inset-0 w-full h-full object-cover opacity-20" />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent" />
                 <div className="relative p-10 flex flex-col justify-end h-full">
-                  <BadgeCheck className="w-8 h-8 text-amber-400 mb-4" />
+                  <BadgeCheck className="w-8 h-8 text-purple-400 mb-4" />
                   <h3 className="text-xl font-bold text-white mb-2">Verified Badge</h3>
                   <p className="text-slate-400 text-sm leading-relaxed">Display the Guardian AI Certified badge across your site, app, and marketing materials.</p>
                 </div>

@@ -10,7 +10,7 @@ function StatusIcon({ status }: { status: ServiceHealth["status"] }) {
     case "operational":
       return <CheckCircle className="w-4 h-4 text-green-500" />;
     case "degraded":
-      return <AlertTriangle className="w-4 h-4 text-yellow-500" />;
+      return <AlertTriangle className="w-4 h-4 text-teal-500" />;
     case "down":
       return <XCircle className="w-4 h-4 text-red-500" />;
   }
@@ -19,7 +19,7 @@ function StatusIcon({ status }: { status: ServiceHealth["status"] }) {
 function StatusBadge({ status }: { status: ServiceHealth["status"] }) {
   const variants = {
     operational: "bg-green-500/20 text-green-400 border-green-500/30",
-    degraded: "bg-yellow-500/20 text-yellow-400 border-yellow-500/30",
+    degraded: "bg-teal-500/20 text-teal-400 border-teal-500/30",
     down: "bg-red-500/20 text-red-400 border-red-500/30"
   };
   
@@ -39,7 +39,7 @@ function StatusBadge({ status }: { status: ServiceHealth["status"] }) {
 function OverallStatusIndicator({ status }: { status: ServiceHealth["status"] }) {
   const colors = {
     operational: "bg-green-500",
-    degraded: "bg-yellow-500",
+    degraded: "bg-teal-500",
     down: "bg-red-500"
   };
   

@@ -117,11 +117,11 @@ export default function TokenAnalytics() {
             </BentoCard>
 
             <BentoCard colSpan={4} rowSpan={2} delay={0.35}>
-              <ComingSoonCard icon={Wallet} title="Top Holders" iconColor="text-amber-400" />
+              <ComingSoonCard icon={Wallet} title="Top Holders" iconColor="text-purple-400" />
             </BentoCard>
 
             <BentoCard colSpan={2} rowSpan={2} delay={0.4}>
-              <ComingSoonCard icon={Zap} title="Smart Money Flow" iconColor="text-yellow-400" />
+              <ComingSoonCard icon={Zap} title="Smart Money Flow" iconColor="text-teal-400" />
             </BentoCard>
 
           </div>

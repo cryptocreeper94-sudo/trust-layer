@@ -147,7 +147,7 @@ const categoryConfig = {
   "chronicles-estate": {
     label: "Chronicles Estate",
     icon: Building2,
-    gradient: "from-amber-400 via-orange-400 to-red-400",
+    gradient: "from-purple-400 via-cyan-400 to-red-400",
     bgGlow: "rgba(251,146,60,0.15)"
   },
   "strategic": {
@@ -166,7 +166,7 @@ const categoryConfig = {
 
 const statusConfig = {
   pending: { icon: Circle, color: "text-slate-400", bg: "bg-slate-500/20", label: "Upcoming" },
-  "in-progress": { icon: Clock, color: "text-amber-400", bg: "bg-amber-500/20", label: "In Progress" },
+  "in-progress": { icon: Clock, color: "text-purple-400", bg: "bg-purple-500/20", label: "In Progress" },
   completed: { icon: Check, color: "text-emerald-400", bg: "bg-emerald-500/20", label: "Complete" }
 };
 
@@ -230,8 +230,8 @@ export default function ComingFeatures() {
             </GlassCard>
             <GlassCard glow className="px-6 py-3">
               <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center">
-                  <Clock className="w-5 h-5 text-amber-400" />
+                <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+                  <Clock className="w-5 h-5 text-purple-400" />
                 </div>
                 <div className="text-left">
                   <p className="text-2xl font-bold text-white">{inProgressCount}</p>

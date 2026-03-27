@@ -102,7 +102,7 @@ export default function NftCreator() {
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
           </Link>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-orange-500/50 text-orange-400 text-[10px]">Creator</Badge>
+            <Badge variant="outline" className="border-cyan-500/50 text-cyan-400 text-[10px]">Creator</Badge>
             <BackButton />
           </div>
         </div>
@@ -112,12 +112,12 @@ export default function NftCreator() {
         <div className="container mx-auto max-w-2xl">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-3">
-              <motion.div className="p-2 rounded-xl bg-orange-500/20 border border-orange-500/30" animate={{ rotate: [0, 5, -5, 0] }} transition={{ duration: 3, repeat: Infinity }}>
-                <Palette className="w-6 h-6 text-orange-400" />
+              <motion.div className="p-2 rounded-xl bg-cyan-500/20 border border-cyan-500/30" animate={{ rotate: [0, 5, -5, 0] }} transition={{ duration: 3, repeat: Infinity }}>
+                <Palette className="w-6 h-6 text-cyan-400" />
               </motion.div>
             </div>
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">
-              NFT <span className="text-orange-400">Creator</span>
+              NFT <span className="text-cyan-400">Creator</span>
             </h1>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
               Create and mint your own NFTs on Trust Layer. No code required.
@@ -129,11 +129,11 @@ export default function NftCreator() {
               {[1, 2, 3, 4].map(s => (
                 <div key={s} className="flex items-center">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
-                    step >= s ? 'bg-orange-500 text-white' : 'bg-white/10 text-muted-foreground'
+                    step >= s ? 'bg-cyan-500 text-white' : 'bg-white/10 text-muted-foreground'
                   }`}>
                     {step > s ? <CheckCircle className="w-4 h-4" /> : s}
                   </div>
-                  {s < 4 && <div className={`w-8 h-0.5 ${step > s ? 'bg-orange-500' : 'bg-white/10'}`} />}
+                  {s < 4 && <div className={`w-8 h-0.5 ${step > s ? 'bg-cyan-500' : 'bg-white/10'}`} />}
                 </div>
               ))}
             </div>
@@ -144,12 +144,12 @@ export default function NftCreator() {
               <GlassCard>
                 <div className="p-6">
                   <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-                    <ImageIcon className="w-5 h-5 text-orange-400" /> Upload Artwork
+                    <ImageIcon className="w-5 h-5 text-cyan-400" /> Upload Artwork
                   </h2>
                   
                   <div className="mb-6">
                     <label className={`block aspect-square max-w-sm mx-auto rounded-xl border-2 border-dashed transition-all cursor-pointer ${
-                      imagePreview ? 'border-orange-500' : 'border-white/20 hover:border-white/40'
+                      imagePreview ? 'border-cyan-500' : 'border-white/20 hover:border-white/40'
                     }`}>
                       <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" data-testid="input-nft-image" />
                       {imagePreview ? (
@@ -165,7 +165,7 @@ export default function NftCreator() {
                   </div>
                   
                   <div className="flex justify-end">
-                    <Button className="bg-orange-500 hover:bg-orange-600" onClick={() => setStep(2)} disabled={!canProceed()} data-testid="button-next-step">
+                    <Button className="bg-cyan-500 hover:bg-cyan-600" onClick={() => setStep(2)} disabled={!canProceed()} data-testid="button-next-step">
                       Next Step
                     </Button>
                   </div>
@@ -179,7 +179,7 @@ export default function NftCreator() {
               <GlassCard>
                 <div className="p-6">
                   <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-                    <FileText className="w-5 h-5 text-orange-400" /> NFT Details
+                    <FileText className="w-5 h-5 text-cyan-400" /> NFT Details
                   </h2>
                   
                   <div className="space-y-4">
@@ -228,7 +228,7 @@ export default function NftCreator() {
                   
                   <div className="flex justify-between mt-6">
                     <Button variant="outline" className="border-white/10" onClick={() => setStep(1)}>Back</Button>
-                    <Button className="bg-orange-500 hover:bg-orange-600" onClick={() => setStep(3)} disabled={!canProceed()} data-testid="button-next-step-2">
+                    <Button className="bg-cyan-500 hover:bg-cyan-600" onClick={() => setStep(3)} disabled={!canProceed()} data-testid="button-next-step-2">
                       Next Step
                     </Button>
                   </div>
@@ -242,7 +242,7 @@ export default function NftCreator() {
               <GlassCard>
                 <div className="p-6">
                   <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
-                    <Tag className="w-5 h-5 text-orange-400" /> Attributes (Optional)
+                    <Tag className="w-5 h-5 text-cyan-400" /> Attributes (Optional)
                   </h2>
                   
                   <div className="space-y-3 mb-4">
@@ -286,7 +286,7 @@ export default function NftCreator() {
                   
                   <div className="flex justify-between mt-6">
                     <Button variant="outline" className="border-white/10" onClick={() => setStep(2)}>Back</Button>
-                    <Button className="bg-orange-500 hover:bg-orange-600" onClick={() => mintMutation.mutate()} disabled={mintMutation.isPending} data-testid="button-mint-nft">
+                    <Button className="bg-cyan-500 hover:bg-cyan-600" onClick={() => mintMutation.mutate()} disabled={mintMutation.isPending} data-testid="button-mint-nft">
                       {mintMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Sparkles className="w-4 h-4 mr-2" />}
                       Mint NFT
                     </Button>

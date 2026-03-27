@@ -106,7 +106,7 @@ export function QuickSnipeModal({
 
   const safetyColor = safetyData 
     ? safetyData.safetyScore >= 70 ? 'text-green-400' 
-    : safetyData.safetyScore >= 40 ? 'text-yellow-400' 
+    : safetyData.safetyScore >= 40 ? 'text-teal-400' 
     : 'text-red-400'
     : 'text-gray-400';
 
@@ -216,7 +216,7 @@ export function QuickSnipeModal({
                   </div>
                   <div>
                     <span className="text-gray-400">R:R Ratio:</span>
-                    <span className={`ml-1 font-medium ${riskRewardRatio >= 2 ? 'text-green-400' : riskRewardRatio >= 1 ? 'text-yellow-400' : 'text-red-400'}`}>
+                    <span className={`ml-1 font-medium ${riskRewardRatio >= 2 ? 'text-green-400' : riskRewardRatio >= 1 ? 'text-teal-400' : 'text-red-400'}`}>
                       1:{riskRewardRatio.toFixed(2)}
                     </span>
                   </div>
@@ -295,7 +295,7 @@ export function QuickSnipeModal({
 
               <div className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg">
                 <div className="flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-yellow-400" />
+                  <Zap className="w-4 h-4 text-teal-400" />
                   <span className="text-gray-400 text-sm">Auto-Sell on TP/SL</span>
                 </div>
                 <button
@@ -329,7 +329,7 @@ export function QuickSnipeModal({
               <Button
                 className={`flex-1 ${
                   isConfirming && countdown > 0 
-                    ? 'bg-yellow-500 hover:bg-yellow-600' 
+                    ? 'bg-teal-500 hover:bg-teal-600' 
                     : 'bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700'
                 }`}
                 onClick={handleConfirmClick}

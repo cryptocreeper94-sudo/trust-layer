@@ -284,7 +284,7 @@ export default function Webhooks() {
             <span className="font-display font-bold text-lg tracking-tight hidden sm:inline">Trust Layer</span>
           </Link>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="border-yellow-500/50 text-yellow-400 text-[10px]">API</Badge>
+            <Badge variant="outline" className="border-teal-500/50 text-teal-400 text-[10px]">API</Badge>
             <BackButton />
           </div>
         </div>
@@ -294,12 +294,12 @@ export default function Webhooks() {
         <div className="container mx-auto max-w-4xl">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
             <div className="flex items-center justify-center gap-2 mb-3">
-              <motion.div className="p-2 rounded-xl bg-yellow-500/20 border border-yellow-500/30" animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 2, repeat: Infinity }}>
-                <Webhook className="w-6 h-6 text-yellow-400" />
+              <motion.div className="p-2 rounded-xl bg-teal-500/20 border border-teal-500/30" animate={{ rotate: [0, 10, -10, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                <Webhook className="w-6 h-6 text-teal-400" />
               </motion.div>
             </div>
             <h1 className="text-2xl md:text-3xl font-display font-bold mb-2">
-              Webhooks & <span className="text-yellow-400">Events API</span>
+              Webhooks & <span className="text-teal-400">Events API</span>
             </h1>
             <p className="text-sm text-muted-foreground max-w-md mx-auto">
               Get real-time notifications for blockchain events. Build reactive applications.
@@ -309,7 +309,7 @@ export default function Webhooks() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
             <GlassCard hover={false}>
               <div className="p-3 text-center">
-                <Zap className="w-5 h-5 text-yellow-400 mx-auto mb-1" />
+                <Zap className="w-5 h-5 text-teal-400 mx-auto mb-1" />
                 <div className="text-lg font-bold text-white">{webhooks.length}</div>
                 <div className="text-[10px] text-muted-foreground">Active Webhooks</div>
               </div>
@@ -341,14 +341,14 @@ export default function Webhooks() {
             <h2 className="text-xl font-bold">Your Webhooks</h2>
             <Dialog open={createOpen} onOpenChange={setCreateOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-yellow-500 hover:bg-yellow-600 text-black h-10 px-4" data-testid="button-create-webhook">
+                <Button className="bg-teal-500 hover:bg-teal-600 text-black h-10 px-4" data-testid="button-create-webhook">
                   <Plus className="w-4 h-4 mr-2" /> Create Webhook
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto bg-background border-white/10">
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
-                    <Webhook className="w-5 h-5 text-yellow-400" /> Create Webhook
+                    <Webhook className="w-5 h-5 text-teal-400" /> Create Webhook
                   </DialogTitle>
                 </DialogHeader>
                 <div className="space-y-4 mt-4">
@@ -372,7 +372,7 @@ export default function Webhooks() {
                     </div>
                   </div>
                   
-                  <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black" onClick={() => createMutation.mutate()} disabled={createMutation.isPending || !formData.url || formData.events.length === 0} data-testid="button-submit-webhook">
+                  <Button className="w-full bg-teal-500 hover:bg-teal-600 text-black" onClick={() => createMutation.mutate()} disabled={createMutation.isPending || !formData.url || formData.events.length === 0} data-testid="button-submit-webhook">
                     {createMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Plus className="w-4 h-4 mr-2" />}
                     Create Webhook
                   </Button>
@@ -390,7 +390,7 @@ export default function Webhooks() {
                   <p className="text-sm text-muted-foreground mb-4">
                     Create your first webhook to receive real-time blockchain event notifications.
                   </p>
-                  <Button onClick={() => setCreateOpen(true)} className="bg-yellow-500 hover:bg-yellow-600 text-black">
+                  <Button onClick={() => setCreateOpen(true)} className="bg-teal-500 hover:bg-teal-600 text-black">
                     <Plus className="w-4 h-4 mr-2" /> Create Your First Webhook
                   </Button>
                 </div>
@@ -415,7 +415,7 @@ export default function Webhooks() {
           <GlassCard className="mt-8" glow>
             <div className="p-6">
               <h3 className="text-lg font-bold mb-3 flex items-center gap-2">
-                <Zap className="w-5 h-5 text-yellow-400" /> Quick Start
+                <Zap className="w-5 h-5 text-teal-400" /> Quick Start
               </h3>
               <div className="bg-black/40 rounded-lg p-4 font-mono text-xs text-green-400/80 overflow-x-auto">
                 <pre>{`// Example webhook payload
@@ -442,7 +442,7 @@ export default function Webhooks() {
         <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto bg-background border-white/10">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <Edit2 className="w-5 h-5 text-yellow-400" /> Edit Webhook
+              <Edit2 className="w-5 h-5 text-teal-400" /> Edit Webhook
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 mt-4">
@@ -477,7 +477,7 @@ export default function Webhooks() {
             </div>
             
             <Button 
-              className="w-full bg-yellow-500 hover:bg-yellow-600 text-black" 
+              className="w-full bg-teal-500 hover:bg-teal-600 text-black" 
               onClick={() => editingWebhook && updateMutation.mutate({ 
                 id: editingWebhook.id, 
                 url: editFormData.url, 

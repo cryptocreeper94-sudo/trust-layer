@@ -59,7 +59,7 @@ export default function MLDashboard() {
   const getAccuracyColor = (accuracy: string) => {
     const val = parseFloat(accuracy);
     if (val >= 70) return "text-green-400";
-    if (val >= 55) return "text-yellow-400";
+    if (val >= 55) return "text-teal-400";
     return "text-red-400";
   };
 
@@ -353,7 +353,7 @@ export default function MLDashboard() {
             >
               <GlassCard glow className="p-6">
                 <h2 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
-                  <Trophy className="w-5 h-5 text-yellow-400" />
+                  <Trophy className="w-5 h-5 text-teal-400" />
                   Top Performing Tokens
                 </h2>
                 

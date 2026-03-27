@@ -85,11 +85,11 @@ export default function Terms() {
             </div>
           </div>
 
-          <GlassCard className="p-6 border-yellow-500/20 bg-yellow-500/5" data-testid="card-important-notice">
+          <GlassCard className="p-6 border-teal-500/20 bg-teal-500/5" data-testid="card-important-notice">
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-teal-500 flex-shrink-0 mt-0.5" />
               <div>
-                <h3 className="font-semibold text-yellow-500">Important Notice</h3>
+                <h3 className="font-semibold text-teal-500">Important Notice</h3>
                 <p className="text-sm text-muted-foreground">
                   Please read these terms carefully before using Trust Layer. 
                   By using our services, you agree to be legally bound by these terms.

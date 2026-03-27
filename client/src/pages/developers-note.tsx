@@ -151,7 +151,7 @@ export default function DevelopersNote() {
                 We're breaking the pattern. We're rejecting the manipulative language that this industry uses to extract money from regular people. Signal represents access to a trust network, participation in something real, and proof that you're part of a community that actually builds things.
               </p>
 
-              <h3 className="text-xl font-semibold text-amber-400 mt-10 mb-4">What We're Actually Building</h3>
+              <h3 className="text-xl font-semibold text-purple-400 mt-10 mb-4">What We're Actually Building</h3>
               
               <p className="text-white/80 leading-relaxed mb-6">
                 We're not promising you'll get rich. We're not selling you a dream of easy money. We're not going to tell you to "just wait" while we work on things behind closed doors.

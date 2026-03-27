@@ -86,7 +86,7 @@ export default function GovernanceTreasury() {
       role: "Ethical Oversight",
       description: "Dispute resolution authority. Whistleblower protection. Appointed for demonstrated service.",
       icon: <Scale className="w-5 h-5" />,
-      color: "amber",
+      color: "purple",
       address: null,
       holder: "To Be Appointed",
       status: "vacant"
@@ -119,7 +119,6 @@ export default function GovernanceTreasury() {
       purple: { bg: "bg-purple-500/20", text: "text-purple-400", border: "border-purple-500/30" },
       cyan: { bg: "bg-cyan-500/20", text: "text-cyan-400", border: "border-cyan-500/30" },
       green: { bg: "bg-green-500/20", text: "text-green-400", border: "border-green-500/30" },
-      amber: { bg: "bg-amber-500/20", text: "text-amber-400", border: "border-amber-500/30" },
       pink: { bg: "bg-pink-500/20", text: "text-pink-400", border: "border-pink-500/30" },
     };
     return colors[color] || colors.cyan;
@@ -130,7 +129,7 @@ export default function GovernanceTreasury() {
       case "active":
         return <Badge className="bg-green-500/20 text-green-400 border-green-500/30"><CheckCircle2 className="w-3 h-3 mr-1" /> Active</Badge>;
       case "pending":
-        return <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30"><AlertCircle className="w-3 h-3 mr-1" /> Pending</Badge>;
+        return <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30"><AlertCircle className="w-3 h-3 mr-1" /> Pending</Badge>;
       default:
         return <Badge className="bg-slate-500/20 text-slate-400 border-slate-500/30"><Lock className="w-3 h-3 mr-1" /> Vacant</Badge>;
     }
@@ -248,7 +247,7 @@ export default function GovernanceTreasury() {
                 </div>
                 <div className="h-10 w-px bg-white/10 hidden sm:block" />
                 <div className="text-center px-4">
-                  <p className="text-3xl font-bold text-amber-400">{pendingSeats}</p>
+                  <p className="text-3xl font-bold text-purple-400">{pendingSeats}</p>
                   <p className="text-xs text-slate-400">Pending</p>
                 </div>
               </div>
@@ -325,10 +324,10 @@ export default function GovernanceTreasury() {
           transition={{ delay: 0.5 }}
           className="mb-10"
         >
-          <GlassCard className="p-6 border-amber-500/30">
+          <GlassCard className="p-6 border-purple-500/30">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/30 flex items-center justify-center flex-shrink-0">
-                <Key className="w-6 h-6 text-amber-400" />
+              <div className="w-12 h-12 rounded-xl bg-purple-500/20 border border-purple-500/30 flex items-center justify-center flex-shrink-0">
+                <Key className="w-6 h-6 text-purple-400" />
               </div>
               <div>
                 <h3 className="text-lg font-bold text-white mb-2">How Multi-Sig Protection Works</h3>

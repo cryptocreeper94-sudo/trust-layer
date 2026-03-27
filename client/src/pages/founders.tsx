@@ -58,7 +58,7 @@ export default function FoundersPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 relative overflow-hidden">
-      <div className="absolute top-20 left-10 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute top-20 left-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse" />
       <div className="absolute bottom-40 right-10 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-3xl" />
 
@@ -73,20 +73,20 @@ export default function FoundersPage() {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: "spring" }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/20 to-orange-500/20 border border-amber-500/30 mb-6"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-purple-500/20 to-cyan-500/20 border border-purple-500/30 mb-6"
             >
-              <Crown className="w-5 h-5 text-amber-400" />
-              <span className="text-amber-300 font-medium">Exclusive Telegram Offer</span>
+              <Crown className="w-5 h-5 text-purple-400" />
+              <span className="text-purple-300 font-medium">Exclusive Telegram Offer</span>
             </motion.div>
 
             <h1 className="text-4xl md:text-6xl font-display font-bold mb-6">
-              <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-red-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-purple-400 via-cyan-400 to-red-400 bg-clip-text text-transparent">
                 Founders Circle
               </span>
             </h1>
 
             <p className="text-xl md:text-2xl text-white/80 mb-4 max-w-2xl mx-auto">
-              The first <span className="text-amber-400 font-bold">100 buyers</span> get up to{" "}
+              The first <span className="text-purple-400 font-bold">100 buyers</span> get up to{" "}
               <span className="text-green-400 font-bold">100% bonus Signal</span> based on their tier
             </p>
 
@@ -102,7 +102,7 @@ export default function FoundersPage() {
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               <div className="bg-gradient-to-br from-slate-800/50 to-slate-900/50 rounded-2xl p-6 md:p-8 border border-white/10">
                 <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                  <Gift className="w-6 h-6 text-amber-400" />
+                  <Gift className="w-6 h-6 text-purple-400" />
                   The Founders Deal
                 </h2>
                 <div className="space-y-5">
@@ -137,8 +137,8 @@ export default function FoundersPage() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 rounded-2xl p-6 md:p-8 border border-amber-500/20">
-                <h3 className="text-lg font-semibold text-amber-400 mb-4 flex items-center gap-2">
+              <div className="bg-gradient-to-br from-purple-500/10 to-cyan-500/10 rounded-2xl p-6 md:p-8 border border-purple-500/20">
+                <h3 className="text-lg font-semibold text-purple-400 mb-4 flex items-center gap-2">
                   <Sparkles className="w-5 h-5" />
                   Bonus Tiers
                 </h3>
@@ -168,7 +168,7 @@ export default function FoundersPage() {
               <Link href="/presale?ref=founders">
                 <Button 
                   size="lg" 
-                  className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-lg px-12 py-6 h-auto"
+                  className="bg-gradient-to-r from-purple-500 to-cyan-500 hover:from-purple-600 hover:to-cyan-600 text-white font-bold text-lg px-12 py-6 h-auto"
                   data-testid="button-claim-founders-spot"
                 >
                   <Crown className="w-5 h-5 mr-2" />
@@ -192,7 +192,7 @@ export default function FoundersPage() {
               <p className="text-white/60 text-sm leading-relaxed">Once spots are filled, this offer closes permanently</p>
             </GlassCard>
             <GlassCard className="p-8 text-center">
-              <Zap className="w-10 h-10 text-amber-400 mx-auto mb-4" />
+              <Zap className="w-10 h-10 text-purple-400 mx-auto mb-4" />
               <h3 className="font-semibold text-white mb-3">Instant Confirmation</h3>
               <p className="text-white/60 text-sm leading-relaxed">Your Founders status is confirmed immediately</p>
             </GlassCard>
@@ -200,7 +200,7 @@ export default function FoundersPage() {
 
           <GlassCard className="p-8 md:p-10 mb-8">
             <h3 className="text-lg font-semibold text-white mb-5 flex items-center gap-2">
-              <Star className="w-5 h-5 text-amber-400" />
+              <Star className="w-5 h-5 text-purple-400" />
               Why Signal? Why Now?
             </h3>
             <div className="prose prose-invert max-w-none text-white/70">

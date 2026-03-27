@@ -98,11 +98,11 @@ export default function VirtualCurrencyTerms() {
             </div>
           </GlassCard>
 
-          <GlassCard className="p-6 border-yellow-500/30 bg-yellow-500/5" data-testid="card-risk-warning">
+          <GlassCard className="p-6 border-teal-500/30 bg-teal-500/5" data-testid="card-risk-warning">
             <div className="flex items-start gap-3">
-              <AlertTriangle className="w-6 h-6 text-yellow-500 flex-shrink-0 mt-0.5" />
+              <AlertTriangle className="w-6 h-6 text-teal-500 flex-shrink-0 mt-0.5" />
               <div>
-                <h3 className="font-semibold text-yellow-500 text-lg">Important Risk Warning</h3>
+                <h3 className="font-semibold text-teal-500 text-lg">Important Risk Warning</h3>
                 <p className="text-gray-300 text-sm mt-1">
                   Virtual currencies and cryptocurrencies are highly speculative and involve substantial risk. 
                   The value of SIG after launch is not guaranteed and may fluctuate significantly. 

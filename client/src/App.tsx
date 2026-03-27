@@ -147,8 +147,6 @@ const Validators = lazy(() => import("@/pages/validators"));
 const Wallet = lazy(() => import("@/pages/wallet"));
 const Status = lazy(() => import("@/pages/status"));
 const ApiDocs = lazy(() => import("@/pages/api-docs"));
-const ChroniclesAIDemo = lazy(() => import("@/pages/chronicles-locked"));
-const BuildYourLegacy = lazy(() => import("@/pages/build-your-legacy"));
 const ErrorPage = lazy(() => import("@/pages/error"));
 const ForgotPassword = lazy(() => import("@/pages/forgot-password"));
 const ResetPassword = lazy(() => import("@/pages/reset-password"));
@@ -194,12 +192,8 @@ const Veil = lazy(() => import("@/pages/veil"));
 const VeilReader = lazy(() => import("@/pages/veil-reader"));
 const VeilPrintVol2 = lazy(() => import("@/pages/veil-print-vol2"));
 const TheVoid = lazy(() => import("@/pages/the-void"));
-const ChronoChat = lazy(() => import("@/pages/chronochat"));
-const ChronoChatInvite = lazy(() => import("@/pages/chronochat-invite"));
 const SignalChat = lazy(() => import("@/pages/signal-chat"));
 const CreatorProgram = lazy(() => import("@/pages/creator-program"));
-const EraCodex = lazy(() => import("@/pages/era-codex"));
-const ScenarioGenerator = lazy(() => import("@/pages/scenario-generator"));
 const Crowdfund = lazy(() => import("@/pages/crowdfund"));
 const Rewards = lazy(() => import("@/pages/rewards"));
 const MyHub = lazy(() => import("@/pages/my-hub"));
@@ -211,21 +205,9 @@ const TrustLayerLanding = lazy(() => import("@/pages/trust-layer-landing"));
 const PresaleSuccess = lazy(() => import("@/pages/presale-success"));
 const Founders = lazy(() => import("@/pages/founders"));
 const InvestmentSimulator = lazy(() => import("@/pages/investment-simulator"));
-const RoadmapChronicles = lazy(() => import("@/pages/roadmap-chronicles"));
 const RoadmapEcosystem = lazy(() => import("@/pages/roadmap-ecosystem"));
 const TechnicalRoadmap = lazy(() => import("@/pages/technical-roadmap"));
-const ChroniclesLocked = lazy(() => import("@/pages/chronicles-locked"));
 const SyndicateInvite = lazy(() => import("@/pages/syndicate-invite"));
-const ChronoHome = lazy(() => import("@/pages/chrono-home"));
-const ChronoEras = lazy(() => import("@/pages/chrono-eras"));
-const ChronoGameplay = lazy(() => import("@/pages/chrono-gameplay"));
-const ChronoEconomy = lazy(() => import("@/pages/chrono-economy"));
-const ChronoCommunity = lazy(() => import("@/pages/chrono-community"));
-const ChronoRoadmap = lazy(() => import("@/pages/chrono-roadmap"));
-const ChronoDashboard = lazy(() => import("@/pages/chrono-dashboard"));
-const ChronoTeam = lazy(() => import("@/pages/chrono-team"));
-const ChronoCreators = lazy(() => import("@/pages/chrono-creators"));
-const ChroniclesExecutiveSummary = lazy(() => import("@/pages/chronicles-locked"));
 const SocialFeed = lazy(() => import("@/pages/social-feed"));
 const InnovationHub = lazy(() => import("@/pages/innovation-hub"));
 const Lottery = lazy(() => import("@/pages/lottery"));
@@ -236,7 +218,6 @@ const Achievements = lazy(() => import("@/pages/achievements"));
 const Domains = lazy(() => import("@/pages/domains"));
 const DomainManager = lazy(() => import("@/pages/domain-manager"));
 const PartnerPortal = lazy(() => import("@/pages/partner-portal"));
-const ChroniclesAdmin = lazy(() => import("@/pages/chronicles-locked"));
 const Tokenomics = lazy(() => import("@/pages/tokenomics"));
 const FAQ = lazy(() => import("@/pages/faq"));
 const SupportPage = lazy(() => import("@/pages/support"));
@@ -342,13 +323,8 @@ function GamesRouter() {
         <Route path="/veil/read" component={VeilReader} />
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
         <Route path="/the-void" component={TheVoid} />
-        <Route path="/chronochat" component={ChronoChat} />
-        <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
-        <Route path="/signal-chat" component={ChronoChat} />
-        <Route path="/signal-chat/invite/:code" component={ChronoChatInvite} />
+        <Route path="/signal-chat" component={SignalChat} />
         <Route path="/creator-program" component={CreatorProgram} />
-        <Route path="/era-codex" component={EraCodex} />
-        <Route path="/scenario-generator" component={ScenarioGenerator} />
         <Route path="/crowdfund" component={Crowdfund} />
         <Route path="/community" component={CommunityHub} />
         <Route path="/presale" component={Presale} />
@@ -357,7 +333,6 @@ function GamesRouter() {
         <Route path="/investment-simulator" component={InvestmentSimulator} />
         <Route path="/launch" component={LaunchCountdown} />
         <Route path="/roadmap" component={RoadmapEcosystem} />
-        <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />
         <Route path="/crash" component={Crash} />
         <Route path="/predictions" component={Predictions} />
@@ -380,11 +355,7 @@ function ChronoRouter() {
       <ScrollToTop />
       <Switch>
         <Route path="/" component={ChronoHome} />
-        <Route path="/chronicles" component={ChroniclesLocked} />
-        <Route path="/chronicles/:rest*" component={ChroniclesLocked} />
-        <Route path="/chronicles-estate" component={ChroniclesLocked} />
         <Route path="/join/:code" component={SyndicateInvite} />
-        <Route path="/legacy" component={BuildYourLegacy} />
         <Route path="/eras" component={ChronoEras} />
         <Route path="/gameplay" component={ChronoGameplay} />
         <Route path="/economy" component={ChronoEconomy} />
@@ -401,10 +372,7 @@ function ChronoRouter() {
         <Route path="/veil/read" component={VeilReader} />
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
         <Route path="/the-void" component={TheVoid} />
-        <Route path="/chronochat" component={ChronoChat} />
-        <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
-        <Route path="/signal-chat" component={ChronoChat} />
-        <Route path="/signal-chat/invite/:code" component={ChronoChatInvite} />
+        <Route path="/signal-chat" component={SignalChat} />
         <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/crowdfund" component={Crowdfund} />
@@ -572,7 +540,6 @@ function DWSCRouter() {
         <Route path="/feedback" component={Feedback} />
         <Route path="/team-admin" component={TeamAdminPortal} />
         <Route path="/ops-center" component={TeamOperations} />
-        <Route path="/chronicles-admin" component={ChroniclesAdmin} />
         <Route path="/terms" component={Terms} />
         <Route path="/virtual-currency-terms" component={VirtualCurrencyTerms} />
         <Route path="/privacy" component={Privacy} />
@@ -640,10 +607,7 @@ function DWSCRouter() {
         <Route path="/veil/read" component={VeilReader} />
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
         <Route path="/the-void" component={TheVoid} />
-        <Route path="/chronochat" component={ChronoChat} />
-        <Route path="/chronochat/invite/:code" component={ChronoChatInvite} />
-        <Route path="/signal-chat" component={ChronoChat} />
-        <Route path="/signal-chat/invite/:code" component={ChronoChatInvite} />
+        <Route path="/signal-chat" component={SignalChat} />
         <Route path="/creator-program" component={CreatorProgram} />
         <Route path="/era-codex" component={EraCodex} />
         <Route path="/scenario-generator" component={ScenarioGenerator} />
@@ -654,7 +618,6 @@ function DWSCRouter() {
         <Route path="/investment-simulator" component={InvestmentSimulator} />
         <Route path="/launch" component={LaunchCountdown} />
         <Route path="/roadmap" component={RoadmapEcosystem} />
-        <Route path="/roadmap-chronicles" component={RoadmapChronicles} />
         <Route path="/roadmap-ecosystem" component={RoadmapEcosystem} />
         <Route path="/technical-roadmap" component={TechnicalRoadmap} />
         <Route path="/innovation" component={InnovationHub} />
@@ -750,7 +713,7 @@ function Router() {
 function AppShell({ appType }: { appType: string }) {
   const [location] = useLocation();
   const isStandalonePWA = location.startsWith("/signal-chat");
-  const noFooterPaths = ["/chronicles/play", "/chronicles/interior", "/chronicles/city", "/chronicles/npc-chat", "/chronicles/faith", "/studio/editor"];
+  const noFooterPaths = ["/studio/editor"];
   const hideFooter = isStandalonePWA || noFooterPaths.some(p => location.startsWith(p));
 
   return (

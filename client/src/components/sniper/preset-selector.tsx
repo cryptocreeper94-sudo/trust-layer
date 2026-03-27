@@ -138,9 +138,9 @@ export function PresetSelector({ selectedPreset, onPresetChange }: PresetSelecto
                             </div>
                             {preset.tradeConfig.trailingStopEnabled && (
                               <div className="flex items-center gap-2 text-xs">
-                                <TrendingUp className="w-3 h-3 text-yellow-400" />
+                                <TrendingUp className="w-3 h-3 text-teal-400" />
                                 <span className="text-white/70">Trail Stop:</span>
-                                <span className="text-yellow-400 font-medium">{preset.tradeConfig.trailingStopPercent}%</span>
+                                <span className="text-teal-400 font-medium">{preset.tradeConfig.trailingStopPercent}%</span>
                               </div>
                             )}
                           </div>
@@ -148,12 +148,12 @@ export function PresetSelector({ selectedPreset, onPresetChange }: PresetSelecto
                           <div className="space-y-2">
                             <p className="text-[10px] font-semibold text-white/50 uppercase">Execution</p>
                             <div className="flex items-center gap-2 text-xs">
-                              <Activity className="w-3 h-3 text-orange-400" />
+                              <Activity className="w-3 h-3 text-cyan-400" />
                               <span className="text-white/70">Slippage:</span>
                               <span className="text-white font-medium">{preset.executionConfig.slippagePercent}%</span>
                             </div>
                             <div className="flex items-center gap-2 text-xs">
-                              <Zap className="w-3 h-3 text-yellow-400" />
+                              <Zap className="w-3 h-3 text-teal-400" />
                               <span className="text-white/70">Priority:</span>
                               <span className="text-white font-medium">{(preset.executionConfig.priorityFeeSol * 1000).toFixed(1)} mSOL</span>
                             </div>
@@ -176,7 +176,7 @@ export function PresetSelector({ selectedPreset, onPresetChange }: PresetSelecto
                               <span className="text-white font-medium">${(preset.safetyFilters.minLiquidityUsd / 1000).toFixed(0)}K</span>
                             </div>
                             <div className="flex items-center gap-2 text-xs">
-                              <Bot className="w-3 h-3 text-amber-400" />
+                              <Bot className="w-3 h-3 text-purple-400" />
                               <span className="text-white/70">Max Bot:</span>
                               <span className="text-white font-medium">{preset.safetyFilters.maxBotPercent}%</span>
                             </div>

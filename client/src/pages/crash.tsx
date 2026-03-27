@@ -64,9 +64,9 @@ interface ChatMessage {
 }
 
 const REWARD_TIERS = [
-  { name: "Bronze", minWager: 0, rewardRate: 0.001, color: "text-orange-400", bg: "from-orange-500/20", icon: "🥉" },
+  { name: "Bronze", minWager: 0, rewardRate: 0.001, color: "text-cyan-400", bg: "from-cyan-500/20", icon: "🥉" },
   { name: "Silver", minWager: 10000, rewardRate: 0.002, color: "text-gray-300", bg: "from-gray-400/20", icon: "🥈" },
-  { name: "Gold", minWager: 100000, rewardRate: 0.003, color: "text-yellow-400", bg: "from-yellow-500/20", icon: "🥇" },
+  { name: "Gold", minWager: 100000, rewardRate: 0.003, color: "text-teal-400", bg: "from-teal-500/20", icon: "🥇" },
   { name: "Platinum", minWager: 1000000, rewardRate: 0.005, color: "text-purple-400", bg: "from-purple-500/20", icon: "💎" },
   { name: "Diamond", minWager: 10000000, rewardRate: 0.01, color: "text-cyan-400", bg: "from-cyan-500/20", icon: "👑" },
 ];
@@ -522,8 +522,8 @@ function CrashHistoryStrip({ history }: { history: number[] }) {
             <Badge
               className={`text-[10px] md:text-xs font-mono shrink-0 px-2 py-0.5 ${
                 h < 1.5 ? "bg-red-500/30 text-red-400 border-red-500/50" : 
-                h < 2 ? "bg-orange-500/30 text-orange-400 border-orange-500/50" : 
-                h < 3 ? "bg-yellow-500/30 text-yellow-400 border-yellow-500/50" : 
+                h < 2 ? "bg-cyan-500/30 text-cyan-400 border-cyan-500/50" : 
+                h < 3 ? "bg-teal-500/30 text-teal-400 border-teal-500/50" : 
                 h < 5 ? "bg-green-500/30 text-green-400 border-green-500/50" : 
                 h < 10 ? "bg-cyan-500/30 text-cyan-400 border-cyan-500/50" :
                 "bg-purple-500/30 text-purple-400 border-purple-500/50 animate-pulse"
@@ -554,10 +554,10 @@ function LiveLedger({ secured, riding, lost }: { secured: number; riding: number
       </div>
       <div className="text-center border-x border-white/10">
         <div className="flex items-center justify-center gap-1 mb-1">
-          <Rocket className="w-3 h-3 text-yellow-400" />
+          <Rocket className="w-3 h-3 text-teal-400" />
           <span className="text-[10px] text-muted-foreground uppercase">Riding</span>
         </div>
-        <p className="text-sm font-bold text-yellow-400 font-mono">{formatSIG(riding)}</p>
+        <p className="text-sm font-bold text-teal-400 font-mono">{formatSIG(riding)}</p>
       </div>
       <div className="text-center">
         <div className="flex items-center justify-center gap-1 mb-1">
@@ -1266,7 +1266,7 @@ export default function CrashGame() {
                       animate={{ scale: [1, 1.03, 1] }}
                       transition={{ duration: 0.5, repeat: Infinity }}
                     >
-                      <Badge className="bg-gradient-to-r from-yellow-500/40 to-orange-500/40 backdrop-blur-sm text-yellow-400 border-yellow-500/50 text-xs px-2">
+                      <Badge className="bg-gradient-to-r from-teal-500/40 to-cyan-500/40 backdrop-blur-sm text-teal-400 border-teal-500/50 text-xs px-2">
                         <Clock className="w-3 h-3 mr-1" />
                         {countdown}s
                       </Badge>
@@ -1471,7 +1471,7 @@ export default function CrashGame() {
                       initial={{ scale: 0, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                       className={`flex-shrink-0 px-2 py-1 rounded-lg text-xs font-mono font-bold ${
-                        point >= 10 ? "bg-gradient-to-br from-yellow-500/30 to-amber-500/20 text-yellow-400 border border-yellow-500/40" :
+                        point >= 10 ? "bg-gradient-to-br from-teal-500/30 to-purple-500/20 text-teal-400 border border-teal-500/40" :
                         point >= 2 ? "bg-gradient-to-br from-green-500/30 to-emerald-500/20 text-green-400 border border-green-500/40" :
                         "bg-gradient-to-br from-red-500/30 to-rose-500/20 text-red-400 border border-red-500/40"
                       }`}
@@ -1557,7 +1557,7 @@ export default function CrashGame() {
                       <TabsTrigger value="standard" className="text-[9px] py-1 data-[state=active]:bg-purple-500/40" disabled={roundStatus !== "waiting"}>
                         <Target className="w-3 h-3 mr-1" />Std
                       </TabsTrigger>
-                      <TabsTrigger value="progressive" className="text-[9px] py-1 data-[state=active]:bg-yellow-500/40" disabled={roundStatus !== "waiting"}>
+                      <TabsTrigger value="progressive" className="text-[9px] py-1 data-[state=active]:bg-teal-500/40" disabled={roundStatus !== "waiting"}>
                         <Percent className="w-3 h-3 mr-1" />Prog
                       </TabsTrigger>
                       <TabsTrigger value="autoTP" className="text-[9px] py-1 data-[state=active]:bg-cyan-500/40" disabled={roundStatus !== "waiting"}>
@@ -1575,14 +1575,14 @@ export default function CrashGame() {
                       <TabsContent value="progressive" className="mt-0 space-y-2">
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] text-white/50">Take %</span>
-                          <Badge className="bg-yellow-500/20 text-yellow-400 text-[10px] font-mono">{progressivePercent}%</Badge>
+                          <Badge className="bg-teal-500/20 text-teal-400 text-[10px] font-mono">{progressivePercent}%</Badge>
                         </div>
                         <Slider
                           value={[progressivePercent]}
                           onValueChange={(v) => setProgressivePercent(v[0])}
                           min={1} max={99} step={1}
                           disabled={roundStatus !== "waiting" && !hasBet}
-                          className="[&>span:first-child]:bg-yellow-500/30 [&_[role=slider]]:bg-yellow-500"
+                          className="[&>span:first-child]:bg-teal-500/30 [&_[role=slider]]:bg-teal-500"
                         />
                       </TabsContent>
                       <TabsContent value="autoTP" className="mt-0">
@@ -1853,9 +1853,9 @@ export default function CrashGame() {
                 </div>
                 {/* Airdrop */}
                 <div className="text-center">
-                  <p className="text-sm font-bold text-yellow-400 font-mono">{Math.floor(nextAirdrop / 60)}m</p>
+                  <p className="text-sm font-bold text-teal-400 font-mono">{Math.floor(nextAirdrop / 60)}m</p>
                   <p className="text-[9px] text-white/50">Next Airdrop</p>
-                  <p className="text-[10px] text-yellow-400/70 font-mono">{airdropPool.toFixed(0)} Pool</p>
+                  <p className="text-[10px] text-teal-400/70 font-mono">{airdropPool.toFixed(0)} Pool</p>
                 </div>
               </div>
               

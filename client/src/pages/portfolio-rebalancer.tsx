@@ -126,7 +126,7 @@ export default function PortfolioRebalancer() {
             </GlassCard>
             <GlassCard hover={false} className="p-3">
               <div className="text-[10px] text-muted-foreground mb-1">Drift</div>
-              <div className="text-xl font-bold text-yellow-400">
+              <div className="text-xl font-bold text-teal-400">
                 {Math.max(...assets.map(a => Math.abs(a.currentPercent - a.targetPercent))).toFixed(1)}%
               </div>
             </GlassCard>
@@ -136,7 +136,7 @@ export default function PortfolioRebalancer() {
                 {rebalanceActions.length === 0 ? (
                   <><CheckCircle2 className="w-4 h-4 text-green-400" /> Balanced</>
                 ) : (
-                  <><AlertCircle className="w-4 h-4 text-yellow-400" /> Needs Rebalance</>
+                  <><AlertCircle className="w-4 h-4 text-teal-400" /> Needs Rebalance</>
                 )}
               </div>
             </GlassCard>

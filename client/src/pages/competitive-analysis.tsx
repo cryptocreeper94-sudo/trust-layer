@@ -177,7 +177,7 @@ const uniqueFeatures = [
     title: "Quest Mining",
     description: "Earn tokens by contributing to the ecosystem. Verifiable quests with on-chain rewards.",
     icon: Target,
-    gradient: "from-amber-500 to-orange-600",
+    gradient: "from-purple-500 to-cyan-600",
     competitors: "0/4 competitors"
   },
   {
@@ -203,7 +203,7 @@ function FeatureCheck({ value }: { value: boolean | string }) {
   if (value === false) {
     return <X className="w-5 h-5 text-red-400/50" />;
   }
-  return <span className="text-xs text-amber-400">{value}</span>;
+  return <span className="text-xs text-purple-400">{value}</span>;
 }
 
 export default function CompetitiveAnalysis() {
@@ -409,8 +409,8 @@ export default function CompetitiveAnalysis() {
                           </td>
                         ))}
                       </tr>
-                      <tr className="border-b border-white/5 bg-amber-500/5">
-                        <td className="p-4 text-amber-400 text-sm font-medium flex items-center gap-2">
+                      <tr className="border-b border-white/5 bg-purple-500/5">
+                        <td className="p-4 text-purple-400 text-sm font-medium flex items-center gap-2">
                           <Target className="w-4 h-4" />
                           Quest Mining
                         </td>
@@ -647,7 +647,7 @@ export default function CompetitiveAnalysis() {
                   <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl" />
                   
                   <div className="relative z-10">
-                    <Trophy className="w-14 h-14 text-amber-400 mx-auto mb-6" />
+                    <Trophy className="w-14 h-14 text-purple-400 mx-auto mb-6" />
                     <h2 className="text-3xl md:text-4xl font-display font-bold text-white mb-4">
                       Ready to Build on the Best?
                     </h2>

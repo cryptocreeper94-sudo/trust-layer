@@ -105,7 +105,7 @@ function ProposalCard({ proposal }: { proposal: Proposal }) {
     active: { color: "bg-blue-500/20 text-blue-400", icon: Clock },
     passed: { color: "bg-green-500/20 text-green-400", icon: CheckCircle2 },
     rejected: { color: "bg-red-500/20 text-red-400", icon: XCircle },
-    pending: { color: "bg-yellow-500/20 text-yellow-400", icon: AlertCircle },
+    pending: { color: "bg-teal-500/20 text-teal-400", icon: AlertCircle },
   };
   
   const status = statusConfig[proposal.status];
@@ -261,8 +261,8 @@ export default function DAOGovernance() {
                     <label className="text-sm mb-2 block">Category</label>
                     <Input placeholder="e.g., Treasury, Technical, Grants" className="bg-white/5 border-white/10" />
                   </div>
-                  <div className="p-3 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
-                    <div className="flex items-center gap-2 text-yellow-400 text-sm">
+                  <div className="p-3 rounded-lg bg-teal-500/10 border border-teal-500/20">
+                    <div className="flex items-center gap-2 text-teal-400 text-sm">
                       <AlertCircle className="w-4 h-4" />
                       Requires 10,000 SIG to submit a proposal
                     </div>

@@ -107,7 +107,7 @@ function SecretEntry({ onSuccess }: { onSuccess: () => void }) {
               animate={{ scale: [1, 1.2, 1], rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <Sparkles className="w-5 h-5 text-amber-400" />
+              <Sparkles className="w-5 h-5 text-purple-400" />
             </motion.div>
           </motion.div>
           <h1 className="text-3xl font-bold bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
@@ -193,7 +193,7 @@ interface Domain {
 
 const SUPPORTED_TLDS = [
   { value: "tlid", label: ".tlid", color: "from-cyan-500 to-blue-500", icon: Zap },
-  { value: "legacy", label: ".legacy", color: "from-amber-500 to-orange-500", icon: Crown },
+  { value: "legacy", label: ".legacy", color: "from-purple-500 to-cyan-500", icon: Crown },
   { value: "chrono", label: ".chrono", color: "from-purple-500 to-pink-500", icon: Clock },
   { value: "pulse", label: ".pulse", color: "from-green-500 to-emerald-500", icon: Star },
 ];
@@ -257,7 +257,7 @@ function DomainCard({ domain, onDelete, onCopy, index }: {
               
               <div className="flex items-center gap-2 mt-2 flex-wrap">
                 {domain.isPremium && (
-                  <Badge className="bg-gradient-to-r from-amber-500/20 to-orange-500/20 text-amber-400 border-amber-500/30 gap-1">
+                  <Badge className="bg-gradient-to-r from-purple-500/20 to-cyan-500/20 text-purple-400 border-purple-500/30 gap-1">
                     <Crown className="w-3 h-3" /> Premium
                   </Badge>
                 )}

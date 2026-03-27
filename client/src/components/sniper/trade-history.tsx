@@ -184,7 +184,7 @@ export function TradeHistory({ userId }: TradeHistoryProps) {
       case 'stop_loss':
         return <Badge className="bg-red-500/20 text-red-400 text-xs">SL</Badge>;
       case 'trailing_stop':
-        return <Badge className="bg-yellow-500/20 text-yellow-400 text-xs">Trail</Badge>;
+        return <Badge className="bg-teal-500/20 text-teal-400 text-xs">Trail</Badge>;
       case 'manual':
         return <Badge className="bg-blue-500/20 text-blue-400 text-xs">Manual</Badge>;
       default:
@@ -285,18 +285,18 @@ export function TradeHistory({ userId }: TradeHistoryProps) {
                 >
                   <GlassCard 
                     className={`p-3 cursor-pointer transition-colors ${
-                      trade.status === 'pending' ? 'border-yellow-500/20' : ''
+                      trade.status === 'pending' ? 'border-teal-500/20' : ''
                     }`}
                   >
                     <div onClick={() => setExpandedTrade(isExpanded ? null : trade.id)}>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                            trade.status === 'pending' ? 'bg-yellow-500/20' :
+                            trade.status === 'pending' ? 'bg-teal-500/20' :
                             isPositive ? 'bg-green-500/20' : 'bg-red-500/20'
                           }`}>
                             {trade.status === 'pending' ? (
-                              <Clock className="w-4 h-4 text-yellow-400" />
+                              <Clock className="w-4 h-4 text-teal-400" />
                             ) : isPositive ? (
                               <ArrowUpRight className="w-4 h-4 text-green-400" />
                             ) : (
@@ -338,7 +338,7 @@ export function TradeHistory({ userId }: TradeHistoryProps) {
                                 </div>
                               </>
                             ) : (
-                              <Badge className="bg-yellow-500/20 text-yellow-400">Pending</Badge>
+                              <Badge className="bg-teal-500/20 text-teal-400">Pending</Badge>
                             )}
                           </div>
                           <motion.div

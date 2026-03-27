@@ -209,16 +209,16 @@ export default function Dashboard() {
             </Link>
             
             <Link href="/membership-charter">
-              <GlassCard glow className="p-5 cursor-pointer hover:border-amber-500/30 transition-all group h-full">
+              <GlassCard glow className="p-5 cursor-pointer hover:border-purple-500/30 transition-all group h-full">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/30 to-orange-500/30 flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-amber-400" />
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/30 to-cyan-500/30 flex items-center justify-center">
+                    <FileText className="w-5 h-5 text-purple-400" />
                   </div>
                   <div className="flex-1">
                     <h3 className="font-bold text-white">Charter</h3>
                     <p className="text-xs text-white/60">Member benefits</p>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-amber-400 transition-colors" />
+                  <ArrowRight className="w-4 h-4 text-white/40 group-hover:text-purple-400 transition-colors" />
                 </div>
                 <p className="text-sm text-white/50">Mission, values, tiers & pricing</p>
               </GlassCard>
@@ -298,7 +298,7 @@ export default function Dashboard() {
                   </Link>
                   <Link href="/treasury">
                     <div className="p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors cursor-pointer text-center">
-                      <Wallet className="w-5 h-5 mx-auto mb-2 text-yellow-400" />
+                      <Wallet className="w-5 h-5 mx-auto mb-2 text-teal-400" />
                       <div className="text-xs font-medium">Treasury</div>
                     </div>
                   </Link>

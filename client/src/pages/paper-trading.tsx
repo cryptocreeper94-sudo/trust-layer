@@ -163,7 +163,7 @@ export default function PaperTrading() {
               <p className="text-[10px] text-muted-foreground">ROI</p>
             </GlassCard>
             <GlassCard hover={false} className="p-3 text-center">
-              <Award className="w-5 h-5 mx-auto mb-1 text-amber-400" />
+              <Award className="w-5 h-5 mx-auto mb-1 text-purple-400" />
               <p className="text-xl font-bold">{trades.length}</p>
               <p className="text-[10px] text-muted-foreground">Trades Made</p>
             </GlassCard>

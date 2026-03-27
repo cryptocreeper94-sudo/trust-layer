@@ -32,7 +32,7 @@ interface BlogPost {
 const categoryColors: Record<string, string> = {
   blockchain: "from-cyan-500 to-blue-500",
   defi: "from-purple-500 to-pink-500",
-  signal: "from-amber-500 to-orange-500",
+  signal: "from-purple-500 to-cyan-500",
   security: "from-red-500 to-rose-500",
   education: "from-green-500 to-emerald-500",
   general: "from-gray-500 to-slate-500",
@@ -57,7 +57,7 @@ function BlogCard({ post, featured = false }: { post: BlogPost; featured?: boole
                 {post.category}
               </Badge>
               {post.featured && (
-                <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/30">
+                <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30">
                   <Sparkles className="w-3 h-3 mr-1" />
                   Featured
                 </Badge>
@@ -214,7 +214,7 @@ export default function Blog() {
             {featuredPosts.length > 0 && (
               <div className="mb-12">
                 <h2 className="text-2xl font-bold text-white mb-6 flex items-center gap-2">
-                  <TrendingUp className="w-6 h-6 text-amber-400" />
+                  <TrendingUp className="w-6 h-6 text-purple-400" />
                   Featured Articles
                 </h2>
                 <div className="grid md:grid-cols-2 gap-6">

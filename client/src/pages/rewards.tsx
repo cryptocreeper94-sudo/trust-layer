@@ -14,7 +14,7 @@ const CROWDFUND_TIERS = [
   { name: "Supporter", min: 25, max: 99, bonus: 10, color: "from-slate-500 to-slate-600" },
   { name: "Backer", min: 100, max: 499, bonus: 25, color: "from-cyan-500 to-blue-600" },
   { name: "Advocate", min: 500, max: 1999, bonus: 40, color: "from-purple-500 to-pink-600" },
-  { name: "Founder", min: 2000, max: null, bonus: 60, color: "from-amber-500 to-orange-600" },
+  { name: "Founder", min: 2000, max: null, bonus: 60, color: "from-purple-500 to-cyan-600" },
 ];
 
 function getTierFromAmount(cents: number): typeof CROWDFUND_TIERS[0] | null {
@@ -199,7 +199,7 @@ export default function Rewards() {
           >
             <GlassCard className="p-6">
               <h2 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <Trophy className="w-5 h-5 text-amber-400" />
+                <Trophy className="w-5 h-5 text-purple-400" />
                 Your Rewards Status
               </h2>
               <div className="grid md:grid-cols-3 gap-4">
@@ -298,12 +298,12 @@ export default function Rewards() {
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-600/20 border border-amber-500/30">
+                <div className="p-4 rounded-xl bg-gradient-to-br from-purple-500/20 to-purple-600/20 border border-purple-500/30">
                   <div className="flex items-center gap-2 mb-2">
-                    <ArrowUpRight className="w-4 h-4 text-amber-400" />
+                    <ArrowUpRight className="w-4 h-4 text-purple-400" />
                     <span className="font-medium">Est. SIG at TGE</span>
                   </div>
-                  <p className="text-2xl font-bold text-amber-400" data-testid="text-estimated-dwc">
+                  <p className="text-2xl font-bold text-purple-400" data-testid="text-estimated-dwc">
                     {rewardProfile.conversion.estimatedDwc.toLocaleString()}
                   </p>
                   <p className="text-sm text-white/60">
@@ -373,7 +373,7 @@ export default function Rewards() {
                 </div>
                 <p className="text-white/70">
                   <span className="text-cyan-400 font-bold">At Launch</span> — Your {rewardProfile.shellBalance.toLocaleString()} Shells will convert to{' '}
-                  <span className="text-amber-400 font-bold">{rewardProfile.conversion.estimatedDwc.toLocaleString()} SIG</span>
+                  <span className="text-purple-400 font-bold">{rewardProfile.conversion.estimatedDwc.toLocaleString()} SIG</span>
                   {!rewardProfile.profile.hasWallet && (
                     <span className="text-rose-400 ml-2">(Connect wallet to receive tokens)</span>
                   )}
@@ -417,8 +417,8 @@ export default function Rewards() {
               </div>
               
               <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
-                <div className="w-10 h-10 rounded-full bg-amber-500/20 flex items-center justify-center mx-auto mb-3">
-                  <span className="text-lg font-bold text-amber-400">3</span>
+                <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center mx-auto mb-3">
+                  <span className="text-lg font-bold text-purple-400">3</span>
                 </div>
                 <h4 className="font-semibold mb-1">Connect Wallet</h4>
                 <p className="text-sm text-white/60">Link your Trust Layer wallet to be eligible for TGE airdrop</p>
@@ -596,7 +596,7 @@ export default function Rewards() {
               <AccordionItem value="what-if-no-wallet" className="border border-white/10 rounded-xl px-4 bg-white/5">
                 <AccordionTrigger className="text-left hover:no-underline">
                   <span className="flex items-center gap-2">
-                    <Wallet className="w-4 h-4 text-amber-400" />
+                    <Wallet className="w-4 h-4 text-purple-400" />
                     What if I don't have a wallet connected yet?
                   </span>
                 </AccordionTrigger>
@@ -653,7 +653,7 @@ export default function Rewards() {
                   Your tier is based on your engagement level:
                   <div className="mt-2 space-y-2">
                     <div className="flex justify-between items-center p-2 bg-white/5 rounded">
-                      <span className="font-medium text-amber-400">Founders</span>
+                      <span className="font-medium text-purple-400">Founders</span>
                       <span>2x multiplier (50+ quests, 30+ days active)</span>
                     </div>
                     <div className="flex justify-between items-center p-2 bg-white/5 rounded">

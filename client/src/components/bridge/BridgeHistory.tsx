@@ -13,7 +13,7 @@ export const BridgeHistory: React.FC<{ items?: BridgeTransaction[] }> = ({ items
               <div className="text-xs text-slate-400">{tx.amount} • {new Date(tx.createdAt).toLocaleString()}</div>
             </div>
             <div className="flex flex-col items-end">
-              <div className={`text-xs px-2 py-1 rounded ${tx.status === 'completed' ? 'bg-green-600 text-black' : tx.status === 'failed' ? 'bg-red-600' : 'bg-yellow-500 text-black'}`}>{tx.status}</div>
+              <div className={`text-xs px-2 py-1 rounded ${tx.status === 'completed' ? 'bg-green-600 text-black' : tx.status === 'failed' ? 'bg-red-600' : 'bg-teal-500 text-black'}`}>{tx.status}</div>
               {tx.txHash && (
                 <a 
                   className="text-xs text-cyan-300 mt-1 hover:underline" 
