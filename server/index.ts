@@ -98,11 +98,19 @@ app.use(async (req, res, next) => {
 
       // Reserved ecosystem subdomains — always pass through to the main app
       const RESERVED_SUBDOMAINS = [
+        // Ecosystem apps
         'throughtheveil', 'thevoid', 'happyeats', 'driverconnect',
         'trusthome', 'trustvault', 'signalcast', 'lumeline',
-        'darkwavestudios', 'darkwavegames', 'chronochat',
         'academy', 'guardian', 'pulse', 'studio', 'veil',
-        'api', 'www', 'mail', 'admin', 'dev', 'staging',
+        // Brand names — must never resolve to claim pages
+        'trustlayer', 'trust', 'darkwave', 'darkwavestudios',
+        'darkwavegames', 'dwtl', 'dwsc', 'tlid',
+        'strikeagent', 'strike', 'vedasolus', 'veda',
+        'yourlegacy', 'legacy', 'signal', 'sig',
+        'intothevoid', 'void', 'trustshield', 'trustgen',
+        'trustbook', 'chrono', 'chronicles', 'lumecraft',
+        // Infrastructure
+        'api', 'www', 'mail', 'admin', 'dev', 'staging', 'test',
       ];
       if (RESERVED_SUBDOMAINS.includes(subdomain)) {
         req.tlidSubdomain = subdomain;

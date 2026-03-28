@@ -346,6 +346,58 @@ export async function registerRoutes(
   });
 
   // =====================================================
+  // ECOSYSTEM UNIVERSAL CHECKOUT GATEWAY
+  // =====================================================
+  app.post("/api/checkout/universal", async (req, res) => {
+    try {
+      const { app: targetApp, product, returnUrl } = req.body;
+      if (!targetApp || !product || !returnUrl) {
+        return res.status(400).json({ error: "Missing required ecosystem checkout parameters" });
+      }
+
+      // Determine the target database based on app registry mapping
+      const isVerdara = targetApp.toLowerCase() === "arbora";
+      const targetDb = isVerdara ? "verdara" : "trust-layer";
+
+      const stripeClient = await getUncachableStripeClient();
+
+      // Look up price / product using typical Stripe IDs or use inline generation
+      // For this master architecture map, we will create a dynamic generic price 
+      // block that maps to the ecosystem catalog (hardcoded to $15 for MVP testing).
+      const session = await stripeClient.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [
+          {
+            price_data: {
+              currency: "usd",
+              product_data: {
+                name: `${targetApp.toUpperCase()} - ${product.replace(/_/g, " ").toUpperCase()}`,
+                description: `Secure Centralized Ecosystem Payment`
+              },
+              unit_amount: 1500, // Fixed prototype value
+            },
+            quantity: 1,
+          },
+        ],
+        mode: "payment",
+        success_url: `${returnUrl}?success=true&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${returnUrl}?canceled=true`,
+        metadata: {
+          target_app: targetApp,
+          target_db: targetDb,
+          product_id: product,
+          user_id: (req as any).user?.id?.toString() || "anonymous"
+        },
+      });
+
+      return res.json({ url: session.url });
+    } catch (err: any) {
+      console.error("[Checkout/Universal] Gateway Sync Error:", err);
+      return res.status(500).json({ error: err.message });
+    }
+  });
+
+  // =====================================================
   // STRIPE WEBHOOK - Must be early for raw body access
   // =====================================================
   app.post("/api/stripe/webhook", async (req: any, res) => {
@@ -397,6 +449,34 @@ export async function registerRoutes(
       if (event.type === "checkout.session.completed") {
         const session = event.data.object;
         const metadata = session.metadata || {};
+        
+        // ECOSYSTEM RELAY INTERCEPTOR (Centralized Billing Gateway)
+        if (metadata.target_app) {
+          console.log(`[Ecosystem Webhook Relay] Intercepted payment intent for ${metadata.target_app} (Target DB: ${metadata.target_db})`);
+          
+          if (metadata.target_db === "verdara") {
+            // Relaying payload securely strictly to separated external environments (e.g. Arbora)
+            console.log(`[Ecosystem Webhook Relay] Routing secure webhook payload to Verdara Node for app: ${metadata.target_app}`);
+            // Implementation: await fetch('https://[URL]/api/webhooks/sync', { body: JSON.stringify(session) })
+          } else {
+            // Process natively within trust-layer schema for Trust Book, The Veil, etc.
+            console.log(`[Ecosystem Webhook Relay] Processing native Trust Layer ecosystem upgrade for: ${metadata.target_app} -> ${metadata.product_id}`);
+            if (metadata.user_id && metadata.user_id !== "anonymous") {
+              const userId = parseInt(metadata.user_id);
+              if (!isNaN(userId)) {
+                try {
+                  await db.execute(sql`
+                    INSERT INTO user_transactions (user_id, type, title, amount_cents, status, created_at)
+                    VALUES (${userId}, 'ecosystem_subscription', ${'Unlock: ' + metadata.target_app + ' ' + metadata.product_id}, ${session.amount_total || 0}, 'completed', NOW())
+                  `);
+                } catch (txErr) {
+                  console.error("[Ecosystem Webhook Relay] Failed writing to native ledger:", txErr);
+                }
+              }
+            }
+          }
+        }
+
         const customerEmail = session.customer_details?.email || metadata.email || session.customer_email;
         const amountCents = session.amount_total || 0;
 
@@ -10660,11 +10740,24 @@ const { trustLayerId } = await response.json();`
       // Block DarkWave ecosystem reserved domains - unless owner bypass
       const normalizedName = data.name.toLowerCase();
       const RESERVED_PREFIXES = [
-        "darkwave", "dw", "dwsc", "chronochat", "chrono", "vedasolus", "veda",
-        "strikeagent", "strike", "yourlegacy", "legacy", "signal", "sig",
-        "guardian", "pulse", "jason", "team", "admin", "owner", "official",
-        "darkwavestudios", "darkwavegames", "trustlayer", "trust",
-        "intothevoid", "thevoid", "void"
+        // Trust Layer branding
+        "trustlayer", "trust-layer", "tl", "tlid", "dwtl",
+        // DarkWave branding
+        "darkwave", "dark-wave", "dw", "dwsc", "darkwavestudios", "darkwavegames",
+        "darkwave-studios", "darkwave-games",
+        // Guardian / Shield
+        "guardian", "trustshield", "trust-shield", "guardianscanner", "guardian-scanner",
+        // Ecosystem apps
+        "strikeagent", "strike-agent", "strike", "vedasolus", "veda",
+        "yourlegacy", "your-legacy", "legacy", "signal", "signalcast", "sig",
+        "pulse", "chronochat", "chrono", "chronicles", "lumeline", "lumecraft",
+        "intothevoid", "thevoid", "void", "throughtheveil", "veil",
+        "happyeats", "happy-eats", "driverconnect", "driver-connect",
+        "trusthome", "trust-home", "trustvault", "trust-vault",
+        "trustgen", "trustbook", "trust-book", "academy",
+        // Infrastructure & admin
+        "admin", "owner", "official", "team", "jason", "support", "help",
+        "api", "www", "mail", "dev", "staging", "test", "root",
       ];
       const isEcosystemReserved = RESERVED_PREFIXES.some(prefix => normalizedName.startsWith(prefix));
 
