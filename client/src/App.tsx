@@ -274,6 +274,19 @@ const AffiliateDashboard = lazy(() => import("@/pages/affiliate-dashboard"));
 const EcosystemCheckout = lazy(() => import("@/pages/ecosystem-checkout"));
 const EraCodex = lazy(() => import("@/pages/era-codex"));
 const ScenarioGenerator = lazy(() => import("@/pages/scenario-generator"));
+const ChroniclesLocked = lazy(() => import("@/pages/chronicles-locked"));
+const ChroniclesExecutiveSummary = lazy(() => import("@/pages/chronicles-executive-summary"));
+const ChronoCommunity = lazy(() => import("@/pages/chrono-community"));
+const ChronoCreators = lazy(() => import("@/pages/chrono-creators"));
+const ChronoDashboard = lazy(() => import("@/pages/chrono-dashboard"));
+const ChronoEconomy = lazy(() => import("@/pages/chrono-economy"));
+const ChronoEras = lazy(() => import("@/pages/chrono-eras"));
+const ChronoGameplay = lazy(() => import("@/pages/chrono-gameplay"));
+const ChronoHome = lazy(() => import("@/pages/chrono-home"));
+const ChronoRoadmap = lazy(() => import("@/pages/chrono-roadmap"));
+const ChronoTeam = lazy(() => import("@/pages/chrono-team"));
+const BuildYourLegacy = lazy(() => import("@/pages/build-your-legacy"));
+const NotFound = lazy(() => import("@/pages/not-found"));
 
 function ScrollToTop() {
   const [location] = useLocation();
