@@ -2,7 +2,7 @@ import { db } from "./db";
 import { eq, sql, and, desc } from "drizzle-orm";
 import { chroniclesGameState, playerChoices, playerPersonalities, chronicleAccounts, landPlots, cityZones, chatUsers, chatChannels, chatMessages, voiceSamples, voiceMessages, userCredits, creditTransactions, playerLegacy, npcRelationships, worldEvents, worldEventParticipation, homeInteriors, decisionTrail, seasonProgress, playerPets } from "@shared/schema";
 import OpenAI from "openai";
-import { SEASON_ZERO_QUESTS, STARTER_FACTIONS, STARTER_NPCS, ERA_SETTINGS, ERAS, WORLD_ZONES, ZONE_ACTIVITIES, NPC_SCHEDULES, MINIGAME_CONFIGS, getWorldTimeInfo, getZoneAmbientState, getAllZonesForEra } from "./chronicles-service";
+import { SEASON_ZERO_QUESTS, STARTER_FACTIONS, STARTER_NPCS, ERA_SETTINGS, ERAS, WORLD_ZONES, ZONE_ACTIVITIES, NPC_SCHEDULES, MINIGAME_CONFIGS, getWorldTimeInfo, getZoneAmbientState, getAllZonesForEra, NARRATIVE_ARCS } from "./chronicles-service";
 import { zonePresence, minigameSessions } from "@shared/schema";
 import { generateToken, hashPassword, generateTrustLayerId } from "./trustlayer-sso";
 import type { Express, Request, Response, NextFunction } from "express";
@@ -107,17 +107,43 @@ export function registerChroniclesPlayRoutes(app: Express) {
       const seasonProgress = Math.round((completedSeasonQuests / totalSeasonQuests) * 100);
       const seasonComplete = completedSeasonQuests >= totalSeasonQuests;
 
-      const eraProgress: Record<string, { total: number; completed: number; pct: number }> = {};
+      let narrativeProgress: Record<string, number> = {};
+      try { narrativeProgress = JSON.parse(state.narrativeProgress || '{}'); } catch { narrativeProgress = {}; }
+
+      const eraProgress: Record<string, { total: number; completed: number; pct: number; activeArc?: any; nextArc?: any }> = {};
       for (const era of ["modern", "medieval", "wildwest"]) {
         const eraQuests = SEASON_ZERO_QUESTS.filter(q => q.era === era);
         const eraCompleted = eraQuests.filter(q => completedSet.has(q.id)).length;
-        eraProgress[era] = { total: eraQuests.length, completed: eraCompleted, pct: Math.round((eraCompleted / eraQuests.length) * 100) };
+        
+        const currentChapter = narrativeProgress[era] || 0;
+        const nextChapter = currentChapter + 1;
+        const eraArcs = NARRATIVE_ARCS[era] || [];
+        const activeArc = eraArcs.find((arc: any) => arc.chapter === currentChapter) || null;
+        const nextArc = eraArcs.find((arc: any) => arc.chapter === nextChapter) || (currentChapter === 0 ? eraArcs[0] : null);
+
+        const totalEraSituationsCompleted = (state.completedSituations || []).filter((sId: string) => {
+          const q = SEASON_ZERO_QUESTS.find(sq => sq.id === sId);
+          if (q) return q.era === era;
+          return typeof sId === 'string' && sId.startsWith(`daily_${era}`);
+        }).length;
+
+        eraProgress[era] = { 
+          total: eraQuests.length, 
+          completed: eraCompleted, 
+          pct: Math.round((eraCompleted / eraQuests.length) * 100),
+          activeArc,
+          nextArc: nextArc ? {
+            ...nextArc,
+            currentProgress: totalEraSituationsCompleted,
+            required: nextArc.requiredDecisions
+          } : null
+        };
       }
 
       const eraUnlocks = {
         modern: { unlocked: true, requiredLevel: 1 },
-        medieval: { unlocked: state.level >= 3, requiredLevel: 3 },
-        wildwest: { unlocked: state.level >= 5, requiredLevel: 5 },
+        medieval: { unlocked: state.level >= 5, requiredLevel: 5 },
+        wildwest: { unlocked: state.level >= 10, requiredLevel: 10 },
       };
 
       res.json({
@@ -155,7 +181,7 @@ export function registerChroniclesPlayRoutes(app: Express) {
 
       if (!state) return res.status(404).json({ error: "Game state not found" });
 
-      const eraLevelRequirements: Record<string, number> = { modern: 1, medieval: 3, wildwest: 5 };
+      const eraLevelRequirements: Record<string, number> = { modern: 1, medieval: 5, wildwest: 10 };
       const requiredLevel = eraLevelRequirements[era] || 1;
       if (state.level < requiredLevel) {
         return res.status(403).json({ 
@@ -174,9 +200,38 @@ export function registerChroniclesPlayRoutes(app: Express) {
         return true;
       });
 
+      let narrativeProgress: Record<string, number> = {};
+      try { narrativeProgress = JSON.parse(state.narrativeProgress || '{}'); } catch { narrativeProgress = {}; }
+      
+      const currentChapter = narrativeProgress[era] || 0;
+      const nextChapter = currentChapter + 1;
+      const eraArcs = NARRATIVE_ARCS[era] || [];
+      const pendingArc = eraArcs.find((arc: any) => arc.chapter === nextChapter);
+      
+      const completedEraSituations = (state.completedSituations || []).filter((sId: string) => {
+        const q = SEASON_ZERO_QUESTS.find(sq => sq.id === sId);
+        if (q) return q.era === era;
+        return typeof sId === 'string' && sId.startsWith(`daily_${era}`);
+      }).length;
+
       let situation: any;
       let isGenerated = false;
-      if (available.length > 0) {
+      let isStoryEvent = false;
+
+      if (pendingArc && completedEraSituations >= pendingArc.requiredDecisions && !completedSet.has(pendingArc.id)) {
+        isStoryEvent = true;
+        isGenerated = true;
+        situation = {
+          id: pendingArc.id,
+          title: `Chapter ${pendingArc.chapter}: ${pendingArc.title}`,
+          description: `The world shifts around you. You are on the precipice of a major revelation. ${pendingArc.description}`,
+          difficulty: "hard",
+          category: "story_event",
+          isStoryEvent: true,
+          arc: pendingArc,
+          educationalTheme: `This moment tests your core philosophy and advances your overarching journey in the ${ERA_SETTINGS[era]?.worldDescription.split(' ')[0] || ''} era.`
+        };
+      } else if (available.length > 0) {
         const arrival = available.filter(q => q.category === "arrival");
         if (arrival.length > 0) {
           situation = arrival[0];
@@ -368,7 +423,26 @@ Return JSON:
 
       if (!state) return res.status(404).json({ error: "Game state not found" });
 
-      const quest = SEASON_ZERO_QUESTS.find(q => q.id === scenarioId);
+      let quest = SEASON_ZERO_QUESTS.find(q => q.id === scenarioId);
+      
+      let arcEvent = null;
+      if (!quest) {
+        for (const [eraKey, arcs] of Object.entries(NARRATIVE_ARCS)) {
+          const found = arcs.find((a: any) => a.id === scenarioId);
+          if (found) {
+            arcEvent = found;
+            quest = {
+              id: found.id,
+              era: eraKey,
+              title: found.title,
+              description: found.description,
+              difficulty: "hard",
+              category: "story_event",
+            } as any;
+            break;
+          }
+        }
+      }
       const difficulty = quest?.difficulty || "medium";
       const baseXp = DIFFICULTY_XP[difficulty] || 250;
       const baseShells = DIFFICULTY_SHELLS[difficulty] || 150;
@@ -461,6 +535,13 @@ Return JSON:
         completedSituations.push(scenarioId);
       }
 
+      let narrativeProgress: Record<string, number> = {};
+      try { narrativeProgress = JSON.parse(state.narrativeProgress || '{}'); } catch { narrativeProgress = {}; }
+      
+      if (arcEvent && !completedSituations.includes(scenarioId)) {
+        narrativeProgress[arcEvent.era || era] = arcEvent.chapter;
+      }
+
       let newLevel = state.level;
       let leveledUp = false;
       while (newExperience >= newLevel * 1000) {
@@ -523,6 +604,7 @@ Return JSON:
         level: newLevel,
         gameLog: JSON.stringify(gameLog),
         npcRelationships: JSON.stringify(currentRels),
+        narrativeProgress: JSON.stringify(narrativeProgress),
         currentStreak: newStreak,
         longestStreak,
         lastPlayedAt: now,

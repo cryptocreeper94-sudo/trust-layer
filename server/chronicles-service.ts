@@ -180,6 +180,28 @@ export const STARTER_FACTIONS = [
 ];
 
 // ============================================
+// NARRATIVE ARCS - The core campaigns for each era
+// ============================================
+
+export const NARRATIVE_ARCS: Record<string, { id: string; chapter: number; requiredDecisions: number; title: string; description: string; rewardEcho: string }[]> = {
+  modern: [
+    { id: "mod_arc_1", chapter: 1, requiredDecisions: 3, title: "The Awakening", description: "You notice glitches in the city's digital fabric. Nexus Corp is looking for anomalies like you.", rewardEcho: "Echo of the Grid" },
+    { id: "mod_arc_2", chapter: 2, requiredDecisions: 10, title: "The Signal's Reach", description: "The Underground approaches you with proof of the Convergence.", rewardEcho: "Echo of the Truth" },
+    { id: "mod_arc_3", chapter: 3, requiredDecisions: 20, title: "Nexus Breach", description: "You infiltrate the quantum core. The truth of the timelines is revealed.", rewardEcho: "Echo of the First Chrononaut" }
+  ],
+  medieval: [
+    { id: "med_arc_1", chapter: 1, requiredDecisions: 3, title: "The Whispering Woods", description: "The Old Faith senses a disruption in the leylines. They claim you are the cause.", rewardEcho: "Echo of the Ancient Tree" },
+    { id: "med_arc_2", chapter: 2, requiredDecisions: 10, title: "The Shadow's Move", description: "The Shadow Council tries to recruit you to unlock an ancient vault.", rewardEcho: "Echo of the Secret Kingdom" },
+    { id: "med_arc_3", chapter: 3, requiredDecisions: 20, title: "The Gateway Unearthed", description: "The vault opens, revealing technology that shouldn't exist in this era.", rewardEcho: "Echo of the Lost Age" }
+  ],
+  wildwest: [
+    { id: "ww_arc_1", chapter: 1, requiredDecisions: 3, title: "The Strange Ore", description: "A prospector shows you a glowing crystal that defies physics. The Railroad wants it.", rewardEcho: "Echo of the Frontier" },
+    { id: "ww_arc_2", chapter: 2, requiredDecisions: 10, title: "The Ghost Train", description: "A train carrying the crystals disappears into thin air. You are hired to find it.", rewardEcho: "Echo of the Vanishing Point" },
+    { id: "ww_arc_3", chapter: 3, requiredDecisions: 20, title: "The Chronos Strike", description: "You discover the crystals power a temporal rift. You must decide who controls it.", rewardEcho: "Echo of the Chronos Strike" }
+  ]
+};
+
+// ============================================
 // QUESTS - Season Zero (all 3 eras)
 // ~25 per era, 75+ total. Life situations, not missions.
 // No railroading. No "correct" answers. Just life happening.

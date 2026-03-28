@@ -126,7 +126,6 @@ function HolographicCard({ children, className = "", glow = "cyan" }: { children
     cyan: "shadow-cyan-500/20",
     purple: "shadow-purple-500/20",
     pink: "shadow-pink-500/20",
-    purple: "shadow-purple-500/20",
   };
   
   return (

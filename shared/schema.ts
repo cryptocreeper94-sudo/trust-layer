@@ -1847,7 +1847,7 @@ export const LEGACY_FOUNDER_CONFIG = {
   ],
 } as const;
 
-export const APP_VERSION = "1.2.54";
+export const APP_VERSION = "1.2.55";
 
 export const referralTracking = pgTable("referral_tracking", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
@@ -2956,6 +2956,9 @@ export const chroniclesGameState = pgTable("chronicles_game_state", {
   factionsJoined: text("factions_joined").array().notNull().default(sql`'{}'::text[]`),
   completedSituations: text("completed_situations").array().notNull().default(sql`'{}'::text[]`),
   achievements: text("achievements").array().notNull().default(sql`'{}'::text[]`),
+  
+  narrativeProgress: text("narrative_progress").notNull().default('{}'),
+  activeQuests: text("active_quests").notNull().default('[]'),
   
   currentStreak: integer("current_streak").notNull().default(0),
   longestStreak: integer("longest_streak").notNull().default(0),

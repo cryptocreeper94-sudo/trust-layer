@@ -276,13 +276,12 @@ function BentoCard({
   className?: string; 
   span?: "1" | "2" | "row"; 
   href?: string;
-  glow?: "cyan" | "purple" | "pink" | "purple" | "emerald";
+  glow?: "cyan" | "purple" | "pink" | "emerald";
 }) {
   const glowColors = {
     cyan: "rgba(0,200,255,0.15)",
     purple: "rgba(168,85,247,0.15)",
     pink: "rgba(236,72,153,0.15)",
-    purple: "rgba(245,158,11,0.15)",
     emerald: "rgba(16,185,129,0.15)",
   };
   

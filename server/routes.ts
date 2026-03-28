@@ -17672,8 +17672,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       const level = state.level || 1;
       const eraUnlocks = {
         modern: { unlocked: true, requiredLevel: 1 },
-        medieval: { unlocked: level >= 3, requiredLevel: 3 },
-        wildwest: { unlocked: level >= 5, requiredLevel: 5 },
+        medieval: { unlocked: level >= 5, requiredLevel: 5 },
+        wildwest: { unlocked: level >= 10, requiredLevel: 10 },
       };
 
       const situationsPerEra = 25;
@@ -17712,8 +17712,8 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
       }
 
       const level = state.level || 1;
-      if (era === "medieval" && level < 3) return res.status(403).json({ error: "Reach level 3 to unlock Medieval era" });
-      if (era === "wildwest" && level < 5) return res.status(403).json({ error: "Reach level 5 to unlock Wild West era" });
+      if (era === "medieval" && level < 5) return res.status(403).json({ error: "Reach level 5 to unlock Medieval era" });
+      if (era === "wildwest" && level < 10) return res.status(403).json({ error: "Reach level 10 to unlock Wild West era" });
 
       const hasCredits = await creditsService.hasCredits(userId, CREDIT_COSTS.SCENARIO_GENERATION);
       if (!hasCredits) {
