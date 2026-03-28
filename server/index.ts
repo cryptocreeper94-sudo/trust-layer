@@ -77,28 +77,64 @@ app.use((req, res, next) => {
   next();
 });
 
-// Handle tlid.io domain routing
-// Root tlid.io → Trust Layer signup page
-// Subdomains (alice.tlid.io) → Route to configured website
-app.use((req, res, next) => {
+// Handle tlid.io domain routing with ownership validation
+// Root tlid.io → TLID registry landing page
+// Subdomains (alice.tlid.io) → Validate ownership, redirect to configured website or show claim page
+app.use(async (req, res, next) => {
   const host = req.headers.host || '';
 
   // Check if this is a tlid.io request
   if (host.endsWith('tlid.io')) {
     const parts = host.split('.');
 
-    // Root domain (tlid.io or www.tlid.io) → Trust Layer landing page
+    // Root domain (tlid.io or www.tlid.io) → Serve the TLID registry
     if (host === 'tlid.io' || host === 'www.tlid.io') {
-      // Serve the Trust Layer landing/signup page
-      // The SPA router will handle showing the correct page at /
       return next();
     }
 
-    // Subdomain (e.g., alice.tlid.io) → Route to configured website
+    // Subdomain (e.g., alice.tlid.io) → Validate domain ownership
     if (parts.length > 2) {
-      const subdomain = parts[0];
-      // Store subdomain for gateway routing (handled by routes.ts)
-      req.tlidSubdomain = subdomain;
+      const subdomain = parts[0].toLowerCase();
+
+      // Skip API calls — let those pass through to the normal router
+      if (req.path.startsWith('/api/')) {
+        req.tlidSubdomain = subdomain;
+        return next();
+      }
+
+      try {
+        // Check if this domain is registered and active
+        const { rows } = await db.execute(sql`
+          SELECT name, website, avatar_url, description, owner_address, 
+                 ownership_type, expires_at, is_premium
+          FROM blockchain_domains 
+          WHERE LOWER(name) = ${subdomain} 
+          AND (expires_at IS NULL OR expires_at > NOW())
+          LIMIT 1
+        `);
+
+        const domain = rows[0] as any;
+
+        if (domain) {
+          // ✅ Domain is registered and active
+          // If they have a website configured, redirect to it
+          if (domain.website) {
+            const target = domain.website.startsWith('http') ? domain.website : `https://${domain.website}`;
+            return res.redirect(302, target);
+          }
+
+          // Otherwise serve a mini-profile page for this domain
+          return res.status(200).send(generateDomainProfilePage(subdomain, domain));
+        } else {
+          // ❌ Domain is NOT registered — serve "Claim this domain" landing page
+          return res.status(200).send(generateClaimPage(subdomain));
+        }
+      } catch (err) {
+        console.error(`[TLID] Subdomain lookup error for ${subdomain}:`, err);
+        // On DB error, fall through to main app
+        req.tlidSubdomain = subdomain;
+        return next();
+      }
     }
   }
   next();
@@ -565,3 +601,103 @@ process.on("uncaughtException", (err: Error) => {
   });
   process.exit(1);
 });
+
+// ═══ TLID Subdomain Page Generators ═══
+
+function generateClaimPage(subdomain: string): string {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>${subdomain}.tlid — Available | TLID Registry</title>
+  <meta name="description" content="The domain ${subdomain}.tlid is available. Register it now on the TLID Registry.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',system-ui,sans-serif;background:#030712;color:#f0f4f8;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+    .orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:.15;animation:drift 20s ease-in-out infinite alternate}
+    .o1{width:500px;height:500px;background:#00ffd4;top:-200px;right:-100px}
+    .o2{width:400px;height:400px;background:#8a5cf6;bottom:-150px;left:-50px;animation-delay:8s}
+    @keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(-40px,30px)}}
+    .card{position:relative;z-index:1;text-align:center;max-width:480px;padding:48px 40px;background:rgba(12,18,36,.6);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.06);border-radius:24px}
+    .avail{display:inline-flex;align-items:center;gap:6px;padding:4px 16px;border-radius:999px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.15);font-size:11px;font-weight:700;color:#6ee7b7;text-transform:uppercase;letter-spacing:.08em;margin-bottom:20px}
+    h1{font-size:2.4rem;font-weight:900;letter-spacing:-.04em;margin-bottom:8px;background:linear-gradient(135deg,#f0f9ff,#00ffd4,#f0f9ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .sub{font-size:14px;color:rgba(255,255,255,.45);margin-bottom:32px;line-height:1.6}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:16px 36px;border-radius:16px;border:none;background:linear-gradient(135deg,#00ffd4,#00b4d8);color:#030712;font-size:15px;font-weight:800;cursor:pointer;transition:all .2s;text-decoration:none;font-family:inherit}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 0 30px rgba(0,255,212,.2)}
+    .info{margin-top:24px;font-size:11px;color:rgba(255,255,255,.2)}
+    .info a{color:rgba(0,255,212,.4);text-decoration:none}
+    .info a:hover{color:#00ffd4}
+  </style>
+</head>
+<body>
+  <div class="bg"><div class="orb o1"></div><div class="orb o2"></div></div>
+  <div class="card">
+    <div class="avail">✓ Available</div>
+    <h1>${subdomain}.tlid</h1>
+    <p class="sub">This domain is not yet registered. Claim it now and make it yours — starting at just <strong>$4/year</strong> or own it forever.</p>
+    <a href="https://tlid.io/?claim=${encodeURIComponent(subdomain)}" class="btn">🌐 Register This Domain</a>
+    <p class="info">Powered by <a href="https://tlid.io">TLID Registry</a> · <a href="https://dwtl.io">Trust Layer</a></p>
+  </div>
+</body>
+</html>`;
+}
+
+function generateDomainProfilePage(subdomain: string, domain: any): string {
+  const avatar = domain.avatar_url || `https://api.dicebear.com/7.x/shapes/svg?seed=${subdomain}`;
+  const desc = domain.description || `${subdomain}.tlid — a registered domain on the Trust Layer blockchain.`;
+  const ownerShort = domain.owner_address ? `${domain.owner_address.slice(0,6)}...${domain.owner_address.slice(-4)}` : 'Unknown';
+  const badge = domain.is_premium ? '<span style="padding:3px 10px;border-radius:999px;background:rgba(138,92,246,.12);border:1px solid rgba(138,92,246,.2);font-size:9px;font-weight:700;color:#c4b5fd;text-transform:uppercase;letter-spacing:.08em;margin-left:8px">Premium</span>' : '';
+  const ownershipLabel = domain.ownership_type === 'lifetime' ? '∞ Lifetime' : 'Annual';
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>${subdomain}.tlid | Trust Layer Domain</title>
+  <meta name="description" content="${desc}">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',system-ui,sans-serif;background:#030712;color:#f0f4f8;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .bg{position:fixed;inset:0;pointer-events:none;z-index:0}
+    .orb{position:absolute;border-radius:50%;filter:blur(120px);opacity:.12;animation:drift 25s ease-in-out infinite alternate}
+    .o1{width:500px;height:500px;background:#00ffd4;top:-200px;left:-100px}
+    .o2{width:400px;height:400px;background:#8a5cf6;bottom:-100px;right:-50px;animation-delay:5s}
+    @keyframes drift{0%{transform:translate(0,0)}100%{transform:translate(-30px,40px)}}
+    .card{position:relative;z-index:1;text-align:center;max-width:480px;padding:48px 40px;background:rgba(12,18,36,.6);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.06);border-radius:24px}
+    .avatar{width:80px;height:80px;border-radius:20px;margin:0 auto 16px;border:2px solid rgba(0,255,212,.15);object-fit:cover}
+    h1{font-size:2rem;font-weight:900;letter-spacing:-.03em;margin-bottom:6px;background:linear-gradient(135deg,#f0f9ff,#00ffd4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .desc{font-size:13px;color:rgba(255,255,255,.4);margin-bottom:24px;line-height:1.6}
+    .meta{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+    .meta-item{padding:14px;border-radius:12px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)}
+    .meta-label{font-size:9px;color:rgba(255,255,255,.2);text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-bottom:4px}
+    .meta-val{font-size:13px;font-weight:700}
+    .verified{display:inline-flex;align-items:center;gap:4px;padding:5px 14px;border-radius:999px;background:rgba(0,255,212,.06);border:1px solid rgba(0,255,212,.12);font-size:10px;font-weight:700;color:#00ffd4}
+    .info{margin-top:20px;font-size:10px;color:rgba(255,255,255,.15)}
+    .info a{color:rgba(0,255,212,.3);text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="bg"><div class="orb o1"></div><div class="orb o2"></div></div>
+  <div class="card">
+    <img class="avatar" src="${avatar}" alt="${subdomain}">
+    <h1>${subdomain}.tlid${badge}</h1>
+    <p class="desc">${desc}</p>
+    <div class="meta">
+      <div class="meta-item">
+        <div class="meta-label">Owner</div>
+        <div class="meta-val">${ownerShort}</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Ownership</div>
+        <div class="meta-val">${ownershipLabel}</div>
+      </div>
+    </div>
+    <div class="verified">🔒 Blockchain Verified</div>
+    <p class="info">Powered by <a href="https://tlid.io">TLID Registry</a> · <a href="https://dwtl.io">Trust Layer</a></p>
+  </div>
+</body>
+</html>`;
+}
