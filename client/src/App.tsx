@@ -271,6 +271,9 @@ const GuardianAI = lazy(() => import("@/pages/guardian-ai"));
 const GuardianAIRegistry = lazy(() => import("@/pages/guardian-ai-registry"));
 const GuardianShield = lazy(() => import("@/pages/guardian-shield"));
 const AffiliateDashboard = lazy(() => import("@/pages/affiliate-dashboard"));
+const EcosystemCheckout = lazy(() => import("@/pages/ecosystem-checkout"));
+const EraCodex = lazy(() => import("@/pages/era-codex"));
+const ScenarioGenerator = lazy(() => import("@/pages/scenario-generator"));
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -423,6 +426,7 @@ function DWSCRouter() {
         <Route path="/trust-layer" component={TrustLayerLanding} />
         <Route path="/portal" component={Home} />
         <Route path="/home" component={Home} />
+        <Route path="/checkout/universal" component={EcosystemCheckout} />
         <Route path="/note" component={DevelopersNote} />
         <Route path="/join/:code" component={SyndicateInvite} />
         <Route path="/rewards" component={Rewards} />
