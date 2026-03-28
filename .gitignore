@@ -1,5 +1,5 @@
 node_modules
-dist
+# dist is committed for production (Render can't build this codebase)
 .DS_Store
 server/public
 vite.config.ts.*

@@ -1,22 +1,12 @@
 #!/bin/bash
 # Render Build Script — Trust Layer (dwtl.io)
+# Pre-built dist is committed to the repo. Only install deps.
 set -e
 
-echo "📦 [Render] Trust Layer build starting..."
+echo "📦 [Render] Trust Layer deploy starting..."
 
-# Increase Node.js heap for large Vite builds
-export NODE_OPTIONS="--max-old-space-size=2048"
+# Install production deps only (dist is pre-built)
+echo "📚 Installing production dependencies..."
+npm install --production --legacy-peer-deps || npm install --production --force
 
-# Install ALL deps (devDependencies needed for tsx, vite, etc.)
-echo "📚 Installing dependencies..."
-NODE_ENV=development npm install --legacy-peer-deps || npm install --force
-
-# Build (tsx script/build.ts — bundles server + client)
-echo "🔧 Building application with ${NODE_OPTIONS}..."
-npm run build || {
-  echo "⚠️ Build failed, retrying with cleared cache..."
-  npm cache clean --force
-  npm run build
-}
-
-echo "✅ [Render] Trust Layer build complete!"
+echo "✅ [Render] Ready to start!"
