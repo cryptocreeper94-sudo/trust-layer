@@ -1,1 +1,0 @@
-import{j as e}from"./index-DvfyBWRd.js";function t(){return e.jsx("div",{style:{minHeight:"100vh",background:"#0f172a",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center"},children:e.jsx("p",{children:"Coming Soon"})})}export{t as default};

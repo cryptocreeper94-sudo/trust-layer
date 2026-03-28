@@ -1,1 +1,0 @@
-export default function ChronoCommunity() { return (<div style={{minHeight:'100vh',background:'#0f172a',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center'}}><p>Coming Soon</p></div>); }
