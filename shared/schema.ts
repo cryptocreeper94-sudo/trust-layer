@@ -336,7 +336,7 @@ export const ECOSYSTEM_APP_REGISTRY = [
   { id: 13, name: "StrikeAgent", prefix: "SA", domain: "strikeagent.tlid.io" },
   { id: 14, name: "Pulse", prefix: "PU", domain: "pulse.tlid.io" },
   { id: 15, name: "Chronicles", prefix: "CH", domain: "chronicles.tlid.io" },
-  { id: 16, name: "The Arcade", prefix: "AR", domain: "thearcade.tlid.io" },
+  { id: 16, name: "The Arcade", prefix: "AR", domain: "darkwavegames.io" },
   { id: 17, name: "Bomber", prefix: "BO", domain: "bomber.tlid.io" },
   { id: 18, name: "Trust Golf", prefix: "TG", domain: "trustgolf.tlid.io" },
   { id: 19, name: "ORBIT Staffing OS", prefix: "OR", domain: "orbit.tlid.io" },
@@ -1847,7 +1847,7 @@ export const LEGACY_FOUNDER_CONFIG = {
   ],
 } as const;
 
-export const APP_VERSION = "1.2.60";
+export const APP_VERSION = "1.2.63";
 
 export const referralTracking = pgTable("referral_tracking", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),

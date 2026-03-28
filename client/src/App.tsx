@@ -170,7 +170,6 @@ const UserProfiles = lazy(() => import("@/pages/user-profiles"));
 const DAOGovernance = lazy(() => import("@/pages/dao-governance"));
 const TxSimulator = lazy(() => import("@/pages/tx-simulator"));
 const PortfolioRebalancer = lazy(() => import("@/pages/portfolio-rebalancer"));
-const Arcade = lazy(() => import("@/pages/arcade"));
 const Crash = lazy(() => import("@/pages/crash"));
 const Predictions = lazy(() => import("@/pages/predictions"));
 const PlayerProfile = lazy(() => import("@/pages/player-profile"));
@@ -266,7 +265,7 @@ const BlogPost = lazy(() => import("@/pages/blog-post"));
 const BlogAdmin = lazy(() => import("@/pages/blog-admin"));
 const TrustLayer = lazy(() => import("@/pages/trust-layer"));
 const GuardianScanner = lazy(() => import("@/pages/guardian-scanner"));
-const GuardianScannerDetail = lazy(() => import("@/pages/token-detail"));
+// Removed GuardianScannerDetail import
 const GuardianAI = lazy(() => import("@/pages/guardian-ai"));
 const GuardianAIRegistry = lazy(() => import("@/pages/guardian-ai-registry"));
 const GuardianShield = lazy(() => import("@/pages/guardian-shield"));
@@ -306,7 +305,6 @@ function GamesRouter() {
       <Switch>
         <Route path="/" component={GamesHome} />
         <Route path="/join/:code" component={SyndicateInvite} />
-        <Route path="/arcade" component={Arcade} />
         <Route path="/arcade/profile" component={PlayerProfile} />
         <Route path="/arcade/profile/:userId" component={PlayerProfile} />
         <Route path="/coin-store" component={CoinStore} />
@@ -413,7 +411,6 @@ function DWSCRouter() {
                 case "/guardian-ai": return GuardianAI;
                 case "/signal-chat": return SignalCore;
                 case "/domains": return Domains;
-                case "/arcade": return Arcade;
                 case "/veil/read": return VeilReader;
                 default: return ExploreHub;
               }
@@ -502,7 +499,7 @@ function DWSCRouter() {
         <Route path="/ml-dashboard" component={MLDashboard} />
         <Route path="/strike-agent" component={StrikeAgent} />
         <Route path="/guardian-scanner" component={GuardianScanner} />
-        <Route path="/guardian-scanner/:chain/:symbol" component={GuardianScannerDetail} />
+        
         <Route path="/coin/:id" component={CoinAnalysis} />
         <Route path="/nft" component={NftMarketplace} />
         <Route path="/portfolio" component={Portfolio} />
@@ -580,7 +577,6 @@ function DWSCRouter() {
         <Route path="/governance" component={DAOGovernance} />
         <Route path="/simulate" component={TxSimulator} />
         <Route path="/rebalancer" component={PortfolioRebalancer} />
-        <Route path="/arcade" component={Arcade} />
         <Route path="/crash" component={Crash} />
         <Route path="/predictions" component={Predictions} />
         <Route path="/social" component={SocialFeed} />
@@ -653,7 +649,7 @@ function TrustShieldRouter() {
         <Route path="/guardian-whitepaper" component={GuardianWhitepaper} />
         <Route path="/guardian-portal" component={GuardianPortal} />
         <Route path="/guardian-scanner" component={GuardianScanner} />
-        <Route path="/guardian-scanner/:chain/:symbol" component={GuardianScannerDetail} />
+        
         <Route path="/login" component={Welcome} />
         <Route path="/signup" component={Welcome} />
         <Route path="/terms" component={Terms} />
@@ -749,7 +745,6 @@ const TLID_SUBDOMAIN_ROUTES: Record<string, string> = {
   "trustshield": "/guardian-scanner",
   "academy": "/academy",
   "thevoid": "/the-void",
-  "arcade": "/arcade",
   "tlid": "/domains",
   "torque": "/ecosystem",
   "trusthub": "/explore",

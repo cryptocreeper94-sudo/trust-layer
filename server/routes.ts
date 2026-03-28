@@ -19163,210 +19163,6 @@ Keep responses concise (2-3 sentences max), friendly, and helpful. If asked abou
   });
 
   // =====================================================
-  // GUARDIAN SCANNER API - Token Scanner, Alerts, Comments
-  // =====================================================
-
-  const { tokenDataCache, CACHE_TTL } = await import("./services/guardian-scanner-cache");
-  const { guardianScannerService } = await import("./services/guardian-scanner-service");
-
-  app.get("/api/guardian-scanner/tokens", guardianScannerRateLimit, async (req, res) => {
-    try {
-      const { chain, search, filter } = req.query;
-      const chainStr = typeof chain === 'string' ? chain : undefined;
-      const searchStr = typeof search === 'string' ? search : undefined;
-      const filterStr = typeof filter === 'string' ? filter : 'trending';
-
-      let tokens;
-
-      if (searchStr && searchStr.length >= 2) {
-        tokens = await guardianScannerService.searchTokens(searchStr, chainStr);
-      } else if (filterStr === 'gainers') {
-        tokens = await guardianScannerService.getTopGainers(chainStr);
-      } else if (filterStr === 'new') {
-        tokens = await guardianScannerService.getNewPairs(chainStr);
-      } else {
-        tokens = await guardianScannerService.getTrendingTokens(chainStr);
-      }
-
-      res.json({ tokens, count: tokens.length });
-    } catch (error) {
-      console.error("Guardian scanner tokens error:", error);
-      res.status(500).json({ error: "Failed to fetch tokens" });
-    }
-  });
-
-  app.get("/api/guardian-scanner/token/:address", guardianScannerRateLimit, async (req, res) => {
-    try {
-      const { address } = req.params;
-      const { chain } = req.query;
-
-      let token;
-
-      if (chain && typeof chain === 'string') {
-        token = await guardianScannerService.getPairByAddress(address, chain);
-      } else {
-        token = await guardianScannerService.getTokenByAddress(address);
-      }
-
-      if (!token) {
-        return res.status(404).json({ error: "Token not found" });
-      }
-
-      res.json({ token });
-    } catch (error) {
-      console.error("Guardian scanner token detail error:", error);
-      res.status(500).json({ error: "Failed to fetch token" });
-    }
-  });
-
-  app.get("/api/guardian-scanner/search", guardianScannerRateLimit, async (req, res) => {
-    try {
-      const { q, chain } = req.query;
-      const query = typeof q === 'string' ? q : '';
-      const chainStr = typeof chain === 'string' ? chain : undefined;
-
-      if (query.length < 2) {
-        return res.json({ tokens: [], message: "Query too short" });
-      }
-
-      const tokens = await guardianScannerService.searchTokens(query, chainStr);
-      res.json({ tokens, count: tokens.length });
-    } catch (error) {
-      console.error("Guardian scanner search error:", error);
-      res.status(500).json({ error: "Failed to search tokens" });
-    }
-  });
-
-  app.get("/api/guardian-scanner/safety/:chain/:address", guardianScannerRateLimit, async (req, res) => {
-    try {
-      const { chain, address } = req.params;
-
-      if (!chain || !address) {
-        return res.status(400).json({ error: "Chain and address are required" });
-      }
-
-      const safety = await guardianScannerService.runSafetyCheckForToken(chain, address);
-
-      if (!safety) {
-        return res.status(404).json({ error: "Safety check not available for this chain" });
-      }
-
-      res.json({ safety, chain, address });
-    } catch (error) {
-      console.error("Guardian scanner safety check error:", error);
-      res.status(500).json({ error: "Failed to run safety check" });
-    }
-  });
-
-  app.get("/api/guardian-scanner/token-detail/:address", guardianScannerRateLimit, async (req, res) => {
-    try {
-      const { address } = req.params;
-      const { chain, safety } = req.query;
-      const includeSafety = safety === 'true';
-
-      let token;
-
-      token = await guardianScannerService.getTokenByAddress(address, includeSafety);
-
-      if (!token && chain && typeof chain === 'string') {
-        token = await guardianScannerService.getPairByAddress(address, chain, includeSafety);
-      }
-
-      if (!token) {
-        return res.status(404).json({ error: "Token not found" });
-      }
-
-      res.json({ token });
-    } catch (error) {
-      console.error("Guardian scanner token detail error:", error);
-      res.status(500).json({ error: "Failed to fetch token details" });
-    }
-  });
-
-  app.get("/api/guardian-scanner/alerts", guardianAlertRateLimit, async (req, res) => {
-    try {
-      const userId = req.headers["x-user-id"] as string || "anonymous";
-      const cacheKey = `alerts:${userId}`;
-
-      const cached = tokenDataCache.get(cacheKey);
-      if (cached) {
-        return res.json({ alerts: cached, fromCache: true });
-      }
-
-      const alerts: any[] = [];
-      tokenDataCache.set(cacheKey, alerts, CACHE_TTL.USER_ALERTS);
-
-      res.json({ alerts, fromCache: false });
-    } catch (error) {
-      console.error("Guardian scanner alerts error:", error);
-      res.status(500).json({ error: "Failed to fetch alerts" });
-    }
-  });
-
-  app.post("/api/guardian-scanner/alerts", guardianAlertRateLimit, async (req, res) => {
-    try {
-      const { tokenId, type, price, tokenSymbol } = req.body;
-      const userId = req.headers["x-user-id"] as string || "anonymous";
-
-      if (!tokenId || !type || typeof price !== "number") {
-        return res.status(400).json({ error: "tokenId, type, and price are required" });
-      }
-
-      if (!["above", "below"].includes(type)) {
-        return res.status(400).json({ error: "type must be 'above' or 'below'" });
-      }
-
-      const alert = {
-        id: `alert-${Date.now()}`,
-        userId,
-        tokenId,
-        tokenSymbol: tokenSymbol || "UNKNOWN",
-        type,
-        price,
-        isActive: true,
-        createdAt: new Date().toISOString()
-      };
-
-      tokenDataCache.invalidate(`alerts:${userId}`);
-
-      res.json({ success: true, alert });
-    } catch (error) {
-      console.error("Guardian scanner create alert error:", error);
-      res.status(500).json({ error: "Failed to create alert" });
-    }
-  });
-
-  app.delete("/api/guardian-scanner/alerts/:id", guardianAlertRateLimit, async (req, res) => {
-    try {
-      const { id } = req.params;
-      const userId = req.headers["x-user-id"] as string || "anonymous";
-
-      tokenDataCache.invalidate(`alerts:${userId}`);
-
-      res.json({ success: true, deletedId: id });
-    } catch (error) {
-      console.error("Guardian scanner delete alert error:", error);
-      res.status(500).json({ error: "Failed to delete alert" });
-    }
-  });
-
-  app.post("/api/guardian-scanner/moderate-comment", guardianCommentRateLimit, async (req, res) => {
-    try {
-      const { content } = req.body;
-      if (!content || typeof content !== "string") {
-        return res.status(400).json({ error: "Comment content is required" });
-      }
-      const { moderateComment, getSentimentFromContent } = await import("./services/comment-moderation");
-      const result = moderateComment(content);
-      const detectedSentiment = getSentimentFromContent(content);
-      res.json({ ...result, detectedSentiment });
-    } catch (error) {
-      console.error("Comment moderation error:", error);
-      res.status(500).json({ error: "Failed to moderate comment" });
-    }
-  });
-
-  // =====================================================
   // OWNER ADMIN - GUARDIAN CERTIFICATION APIs
   // =====================================================
 
@@ -26196,10 +25992,10 @@ function getLocalEcosystemApps(): EcosystemApp[] {
     {
       id: "tradeworks-ai",
       name: "TradeWorks AI",
-      category: "AI Trading",
-      description: "Advanced AI-powered trading intelligence and market analysis platform with automated strategies.",
-      hook: "AI-Powered Trading Intelligence",
-      tags: ["AI", "Trading", "Analytics", "Automation"],
+      category: "Enterprise",
+      description: "The Professional Field Toolkit for Home Services. AI-powered scheduling, dispatching, routing, and real-time business intelligence.",
+      hook: "AI-Powered Field Services",
+      tags: ["AI", "Enterprise", "Services", "Automation", "CRM"],
       gradient: "from-blue-500 to-cyan-600",
       verified: true,
       users: "Trust Layer Verified",
@@ -26404,12 +26200,12 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       url: `${PORTAL_BASE}/guardian-screener`,
     },
     {
-      id: "darkwave-academy",
-      name: "Academy",
+      id: "trust-layer-academy",
+      name: "Trust Layer Academy",
       category: "Education",
-      description: "Education and certification platform for crypto fundamentals, multi-chain ecosystems, DeFi strategies, security best practices, and Trust Layer operations.",
-      hook: "Learn. Certify. Master Crypto.",
-      tags: ["Education", "Certification", "Crypto", "Learning"],
+      description: "The definitive Master TOC and education platform for the entire Trust Layer ecosystem. From Web3 onboarding to advanced AI, DeFi, and immersive 3D engineering masterclasses.",
+      hook: "Learn. Certify. Master Web3.",
+      tags: ["Education", "Certification", "Crypto", "Learning", "Web3", "Engineering"],
       gradient: "from-blue-500 to-indigo-600",
       verified: true,
       users: "Trust Layer Verified",

@@ -37,7 +37,7 @@ const ecosystemProducts = [
   { name: "Signal Chat", desc: "Real-time encrypted messaging platform", icon: MessageSquare, category: "Communication" },
   { name: "Lume Language", desc: "AI-native programming language with compiler", icon: Code, category: "Developer Tools" },
   { name: "TrustGen 3D", desc: "AI-powered 3D asset creation with provenance", icon: Palette, category: "Creative Tools" },
-  { name: "Lume Academy", desc: "8-track education platform with certifications", icon: GraduationCap, category: "Education" },
+  { name: "Trust Layer Academy", desc: "15-track education platform with certifications", icon: GraduationCap, category: "Education" },
   { name: "The Arcade", desc: "Premium gaming destination with multiple titles", icon: Gamepad2, category: "Gaming" },
   { name: "DarkWave Pulse", desc: "ML-powered market intelligence engine", icon: Activity, category: "Intelligence" },
   { name: "Strike Agent", desc: "AI-powered trading signal detection", icon: Target, category: "Intelligence" },
@@ -165,7 +165,7 @@ Key differentiators:
 - Built-in security scoring (Guardian Suite)
 - AI-native programming language (Lume)
 - AI-powered 3D asset creation (TrustGen)
-- 8-track education platform (Lume Academy)
+- 15-track education platform (Trust Layer Academy)
 
 --------------------------------------------------------------------------------
 
@@ -193,7 +193,7 @@ DeFi:           DEX/Token Swap, Staking, Liquid Staking, Liquidity Pools,
 Security:       Guardian Scanner, Guardian Screener, Guardian Shield, 
                 Guardian Certification
 Gaming:         DarkWave Chronicles (3D), The Arcade, Bomber 3D
-Education:      Lume Academy (8 tracks, 64+ courses, 4 certifications)
+Education:      Trust Layer Academy (15 tracks, 100+ courses, 4 certifications)
 Developer:      Lume Language, DarkWave Studio IDE, Developer Portal
 Creative:       TrustGen 3D (AI-powered asset creation)
 Publishing:     Trust Book (70% author royalty)

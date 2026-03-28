@@ -70,7 +70,7 @@ const ECOSYSTEM_CATEGORIES: { name: string; icon: React.ComponentType<{ classNam
     apps: [
       { name: "Chronicles", url: "https://yourlegacy.io", desc: "3D Life Simulation — Live Your Legacy" },
       { name: "The Arcade", url: "https://darkwavegames.io", desc: "Provably Fair Blockchain Games" },
-      { name: "Bomber", url: "https://bomber.tlid.io", desc: "3D Long Driving Golf Game" },
+      { name: "Trust Golf", url: "https://trustgolf.app", desc: "3D Long Driving Golf Game" },
       { name: "Trust Golf", url: "https://trustgolf.app", desc: "Premium Golf Companion App" },
     ],
   },

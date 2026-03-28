@@ -8,6 +8,7 @@ import {
   Target, ArrowRight, Flame, Crown, Eye, Radio,
   Code, Terminal, Cpu, Braces, Languages, Lightbulb,
   Rocket, Binary, Server, Monitor, Smartphone, Bot, Box,
+  Gamepad2, Building2, ShieldCheck, MessageSquare, BrainCircuit,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,94 +31,159 @@ const STRIPE_PRICES = {
 };
 
 const courseCategories = [
+  // PART 1: Free Ecosystem Onboarding
   {
-    id: "programming-foundations",
-    title: "Programming Foundations",
-    description: "Understand what a programming language really is — no gatekeepers, no governing body. Just a compiler that reads text and turns it into something a computer can execute.",
-    icon: Code,
+    id: "web3-crypto-foundations",
+    title: "Web3 & Crypto Foundations",
+    description: "The absolute basics of blockchain, cryptography, wallets, and decentralized identity. Start here to understand the Trust Layer.",
+    icon: Shield,
     color: "cyan",
-    courses: 8,
-    hours: 12,
-    level: "Beginner",
-    topics: ["What is a Programming Language?", "How Compilers Work", "Variables, Functions & Loops", "The Lexer-Parser-Transpiler Pipeline", "Your First Program"],
+    courses: 4, hours: 6, level: "Beginner",
+    topics: ["Wallets", "Cryptography Basics", "Decentralized Identity", "Consensus Mechanisms", "Smart Contract Basics"],
+    tier: "free"
   },
   {
-    id: "language-history",
-    title: "The Major Languages",
-    description: "Learn the origin stories — HTML from CERN, CSS from Norway, JavaScript built in 10 days, C from Bell Labs. Every language was born from one person's frustration.",
-    icon: BookOpen,
+    id: "trust-layer-architecture",
+    title: "The Trust Layer Architecture",
+    description: "Integrating Decentralized SSO, WebAuthn Passkeys, the Hub, and the Vault.",
+    icon: Layers,
     color: "purple",
-    courses: 6,
-    hours: 10,
-    level: "Beginner",
-    topics: ["HTML — Tim Berners-Lee & CERN", "CSS — Separating Structure from Style", "JavaScript — 10 Days That Changed Everything", "C — The Foundation of Everything", "The Pattern: Frustration Creates Innovation"],
+    courses: 5, hours: 8, level: "Beginner",
+    topics: ["Decentralized SSO", "WebAuthn Passkeys", "The Hub Ecosystem", "The Vault Security"],
+    tier: "free"
   },
   {
-    id: "javascript-mastery",
-    title: "JavaScript: Buttons to Everything",
-    description: "Trace JavaScript's journey from validating form fields to running the entire internet. DOM manipulation, AJAX, Node.js, React, and the AI frontier.",
+    id: "tokenized-assets",
+    title: "Tokenized Asset Architecture",
+    description: "NFTs, Digital Twins, deploying custom tokens via TokenPairs, Hallmarks and Trust Stamps.",
+    icon: Coins,
+    color: "cyan",
+    courses: 6, hours: 10, level: "Intermediate",
+    topics: ["NFTs & Digital Twins", "Deploying TokenPairs", "The Hallmark System", "Trust Stamps", "TLID Registry Gateway"],
+    tier: "free"
+  },
+  {
+    id: "guardian-scanner",
+    title: "Advanced Security & Guardians",
+    description: "Implementing the three-layer security model, real-time threat detection, and Reality Oracles.",
+    icon: ShieldCheck,
+    color: "purple",
+    courses: 5, hours: 8, level: "Advanced",
+    topics: ["Three-Layer Security Model", "Real-Time Threat Detection", "Reality Oracles", "Data Feeds"],
+    tier: "free"
+  },
+  {
+    id: "ai-agent-creator",
+    title: "AI Agents & Execution",
+    description: "Building autonomous Strike Agents and Pulse Agents, and generating aiExecutionProofs.",
+    icon: Bot,
+    color: "cyan",
+    courses: 7, hours: 12, level: "Intermediate",
+    topics: ["Strike Agents", "Pulse Agents", "Deployment & Tracking", "aiExecutionProofs", "Deterministic LLMs"],
+    tier: "free"
+  },
+  {
+    id: "lume-foundations",
+    title: "Lume Foundations",
+    description: "Master the world's first AI-native programming language. Natural language parsed directly into AST tokens.",
+    icon: Sparkles,
+    color: "purple",
+    courses: 9, hours: 18, level: "All Levels",
+    topics: ["English Mode Intent Resolver", "Readable Syntax", "Fetch, Ask & Show", "Autonomous Sandbox Execution", "Voice-to-Code Pipeline"],
+    tier: "free"
+  },
+  {
+    id: "games-and-worlds",
+    title: "3D, Games & Immersive Worlds",
+    description: "Build narrative state trees with the Chronicles SDK, or WebGL browser games like Bomber 3D and The Arcade.",
+    icon: Gamepad2,
+    color: "cyan",
+    courses: 6, hours: 10, level: "Intermediate",
+    topics: ["The Arcade Infrastructure", "Chronicles SDK & State Trees", "TrustGen 3D Auto-Rigging", "Bomber 3D WebGL Physics"],
+    tier: "free"
+  },
+  {
+    id: "communications",
+    title: "Communications & Communities",
+    description: "Signal Chat Engineering, 17-table schema, and End-to-End Encryption protocol implementation.",
+    icon: MessageSquare,
+    color: "purple",
+    courses: 5, hours: 8, level: "Intermediate",
+    topics: ["Signal Chat 17-Table Schema", "WebSockets Integration", "End-to-End Encryption", "Guilds & Social Hierarchies", "SignalCast Automation"],
+    tier: "free"
+  },
+
+  // PART 2: Premium Engineering Masterclasses
+  {
+    id: "smart-contract-engineering",
+    title: "Smart Contract Engineering",
+    description: "Advanced Solidity, Rust (Solana), security auditing, and gas optimization.",
     icon: Braces,
     color: "cyan",
-    courses: 10,
-    hours: 16,
-    level: "Intermediate",
-    topics: ["DOM Manipulation & the Living Page", "AJAX & Background Communication", "Node.js — JavaScript Leaves the Browser", "React, Angular & Vue Frameworks", "WebGL, AI & the Modern Frontier"],
+    courses: 10, hours: 20, level: "Advanced",
+    topics: ["Advanced Solidity", "Rust for Solana", "Security Auditing", "Gas Optimization", "Reentrancy Attacks"],
+    tier: "premium"
+  },
+  {
+    id: "defi-architecture",
+    title: "DeFi Platform Architecture",
+    description: "The math and systems behind AMMs, Liquidity Pools, and Decentralized Exchanges.",
+    icon: Building2,
+    color: "purple",
+    courses: 8, hours: 16, level: "Advanced",
+    topics: ["Automated Market Makers (AMMs)", "Liquidity Pools", "Staking Contracts", "Decentralized Exchanges (DEX)"],
+    tier: "premium"
+  },
+  {
+    id: "decentralized-ai-orchestration",
+    title: "Decentralized AI Orchestration",
+    description: "Multi-agent swarms, RAG integrations, and robust LLM system design.",
+    icon: BrainCircuit,
+    color: "cyan",
+    courses: 6, hours: 12, level: "Advanced",
+    topics: ["Multi-Agent Swarms", "RAG Integrations", "Robust LLM Architecture", "Context Routing"],
+    tier: "premium"
   },
   {
     id: "compiler-engineering",
     title: "Compiler Engineering",
-    description: "Build a compiler from scratch. Understand lexers, parsers, ASTs, and transpilers — the three-stage pipeline that turns human-readable code into executable programs.",
+    description: "Build a compiler from scratch. Understand lexers, parsers, ASTs, and transpilers.",
     icon: Cpu,
     color: "purple",
-    courses: 7,
-    hours: 14,
-    level: "Advanced",
-    topics: ["Lexer: Breaking Text into Tokens", "Parser: Building the AST", "Transpiler: Generating Output", "The Complete Compilation Flow", "Error Handling & Edge Cases"],
-  },
-  {
-    id: "lume-language",
-    title: "The Lume Language",
-    description: "Master the world's first AI-native programming language. AI isn't a library you bolt on — it's a keyword. One word replaces dozens of lines of setup code.",
-    icon: Sparkles,
-    color: "cyan",
-    courses: 9,
-    hours: 18,
-    level: "All Levels",
-    topics: ["AI as a Native Keyword", "Readable Syntax by Design", "Fetch, Ask & Show", "Lume Compiler Internals", "Publishing to npm"],
+    courses: 7, hours: 14, level: "Advanced",
+    topics: ["Lexical Analysis", "Parser & AST Generation", "Transpilation", "Error Handling"],
+    tier: "premium"
   },
   {
     id: "digital-architecture",
-    title: "Digital Architecture",
-    description: "Understand how the digital world is built — operating systems, platforms, the web as universal translator, and why software scales infinitely.",
+    title: "Self-Sustaining Digital Architecture",
+    description: "Deep dives into Lume's autonomous runtime (Monitor, Heal, Optimize, Evolve).",
     icon: Layers,
-    color: "purple",
-    courses: 6,
-    hours: 10,
-    level: "Intermediate",
-    topics: ["Windows vs macOS — Same Bricks, Different Architects", "The Web as Universal Translator", "Where Code Actually Runs", "Digital Durability & Self-Sustaining Systems", "The Democratization of Software"],
-  },
-  {
-    id: "self-sustaining",
-    title: "Self-Sustaining Runtime",
-    description: "Build software that takes care of itself. Four layers — monitoring, healing, optimizing, and evolving — that make your Lume programs autonomous.",
-    icon: Shield,
     color: "cyan",
-    courses: 12,
-    hours: 22,
-    level: "Advanced",
-    topics: ["Layer 1: Self-Monitoring & Metrics", "Layer 2: Self-Healing & Circuit Breakers", "Layer 3: Self-Optimizing with AI", "Layer 4: Self-Evolving Daemon", "Safety Guardrails & Mutation Logs"],
+    courses: 12, hours: 22, level: "Advanced",
+    topics: ["Layer 1: Self-Monitoring", "Layer 2: Self-Healing", "Layer 3: Self-Optimizing", "Layer 4: Self-Evolving"],
+    tier: "premium"
   },
   {
-    id: "trustgen-3d",
-    title: "AI-Powered 3D Creation",
-    description: "Create 3D models, animations, and scenes using AI. From text-to-3D generation and character rigging to blockchain provenance — every asset gets an on-chain hallmark.",
-    icon: Box,
+    id: "decentralized-cryptography",
+    title: "Decentralized Cryptography",
+    description: "Building verifiable data structures, zero-knowledge proofs, and secure ledgers.",
+    icon: Lock,
     color: "purple",
-    courses: 6,
-    hours: 10,
-    level: "Intermediate",
-    topics: ["Text-to-3D Prompt Engineering", "AI Animation & Character Rigging", "Blockchain Provenance & Hallmarking", "Multi-Model Scene Composition", "LOD Management & Export Formats", "Ecosystem Integration & Publishing"],
+    courses: 8, hours: 15, level: "Advanced",
+    topics: ["Verifiable Data Structures", "Zero-Knowledge Mechanisms", "zk-SNARKs", "Secure Ledgers"],
+    tier: "premium"
   },
+  {
+    id: "webgl-physics",
+    title: "High-Performance WebGL & Physics",
+    description: "Writing custom shaders, handling buffer geometry, and drawing 60fps in the browser.",
+    icon: Box,
+    color: "cyan",
+    courses: 7, hours: 14, level: "Advanced",
+    topics: ["Custom Shaders", "Buffer Geometry", "Physics Engines", "Browser Optimization"],
+    tier: "premium"
+  }
 ];
 
 const certifications = [
@@ -126,31 +192,31 @@ const certifications = [
     title: "Certified Lume Foundations",
     abbrev: "CLF",
     description: "Demonstrates foundational understanding of programming languages, compilers, and the Lume ecosystem.",
-    prereqs: ["Programming Foundations", "The Major Languages"],
+    prereqs: ["Lume Foundations", "Web3 & Crypto Foundations"],
     badge: "from-cyan-500 to-cyan-600",
   },
   {
     id: "cle",
     title: "Certified Lume Engineer",
     abbrev: "CLE",
-    description: "Validates advanced Lume development skills including compiler engineering and AI-native programming.",
-    prereqs: ["Compiler Engineering", "The Lume Language"],
+    description: "Validates advanced development skills including compiler engineering and AI-native programming.",
+    prereqs: ["Compiler Engineering", "Digital Architecture"],
     badge: "from-purple-500 to-purple-600",
+  },
+  {
+    id: "cde",
+    title: "Certified DeFi Engineer",
+    abbrev: "CDE",
+    description: "Expert-level certification covering smart contract engineering, audits, and decentralized exchange architecture.",
+    prereqs: ["Smart Contract Engineering", "DeFi Platform Architecture"],
+    badge: "from-cyan-500 to-purple-500",
   },
   {
     id: "cda",
     title: "Certified Digital Architect",
     abbrev: "CDA",
-    description: "Expert-level certification covering full-stack digital architecture, platform engineering, and system design.",
-    prereqs: ["JavaScript Mastery", "Digital Architecture", "Compiler Engineering"],
-    badge: "from-cyan-500 to-purple-500",
-  },
-  {
-    id: "csr",
-    title: "Certified Self-Sustaining Runtime Engineer",
-    abbrev: "CSR",
     description: "Master-level certification for building autonomous software — self-monitoring, self-healing, self-optimizing, and self-evolving systems.",
-    prereqs: ["The Lume Language", "Self-Sustaining Runtime", "Compiler Engineering"],
+    prereqs: ["Self-Sustaining Digital Architecture", "Decentralized AI Orchestration"],
     badge: "from-purple-500 to-cyan-500",
   },
 ];
@@ -161,12 +227,12 @@ const pricingTiers = [
     name: "Explorer",
     price: "Free",
     period: "",
-    description: "Start your learning journey with programming foundations and community access.",
+    description: "Start your learning journey with Trust Layer and Ecosystem onboarding courses.",
     features: [
-      "Programming Foundations course track",
-      "The Major Languages track",
+      "Web3 & Crypto Foundations",
+      "All Ecosystem SDK Guides",
       "Community forums access",
-      "Weekly live Q&A sessions",
+      "TrustGen & Signals Docs",
       "Progress tracking dashboard",
     ],
     cta: "Start Free",
@@ -178,14 +244,14 @@ const pricingTiers = [
     name: "Scholar",
     price: "$19.99",
     period: "/mo",
-    description: "Full access to all courses, certification exams, and priority support.",
+    description: "Full access to all premium engineering masterclasses and priority support.",
     features: [
-      "All 8 course tracks (64+ courses)",
-      "Certification exam access",
-      "Lume language deep dives",
+      "All 15 course tracks (100+ courses)",
+      "Smart Contract & DeFi Engineering",
       "Compiler engineering labs",
+      "WebGL & Decen. AI Masterclasses",
       "Downloadable resources",
-      "Priority support",
+      "Certification Exam access",
       "Monthly workshops",
     ],
     cta: "Start Learning",
@@ -202,7 +268,7 @@ const pricingTiers = [
     features: [
       "Everything in Scholar",
       "1-on-1 mentorship sessions",
-      "Advanced compiler workshops",
+      "Advanced DeFi architecture workshops",
       "Build-your-own-language project",
       "Early access to new courses",
       "Exclusive Master credentials",
@@ -430,7 +496,7 @@ export default function AcademyPage() {
 
       <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          <img src={heroImg} alt="Lume Academy" className="w-full h-full object-cover opacity-20" />
+          <img src={heroImg} alt="Trust Layer Academy" className="w-full h-full object-cover opacity-20" />
           <div className="absolute inset-0 bg-gradient-to-b from-[#06060a]/50 via-[#06060a]/80 to-[#06060a]" />
           <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 via-transparent to-purple-500/5" />
         </div>
@@ -478,7 +544,7 @@ export default function AcademyPage() {
           >
             <Badge className="mb-6 px-4 py-2 bg-gradient-to-r from-cyan-500/20 to-purple-500/20 border-cyan-500/30 text-white text-sm backdrop-blur-sm shadow-lg shadow-cyan-500/10" data-testid="badge-academy">
               <GraduationCap className="w-4 h-4 mr-2 text-cyan-400" />
-              Lume Academy
+              Trust Layer Academy
             </Badge>
           </motion.div>
 
@@ -507,8 +573,8 @@ export default function AcademyPage() {
             transition={{ delay: 0.8 }}
             className="text-lg sm:text-xl text-white/60 max-w-2xl mx-auto mb-10 leading-relaxed"
           >
-            The premier education platform for understanding programming languages, compilers,
-            and the digital world — featuring the Lume language, where AI is a native keyword.
+            The definitive Master TOC and education platform for the entire Trust Layer ecosystem.
+            From Web3 onboarding to advanced AI, DeFi, and immersive 3D engineering masterclasses.
           </motion.p>
 
           <motion.div
@@ -552,10 +618,10 @@ export default function AcademyPage() {
             className="grid grid-cols-2 md:grid-cols-4 gap-4"
           >
             {[
-              { label: "Courses", value: "64+", icon: BookOpen },
-              { label: "Hours", value: "112+", icon: Clock },
+              { label: "Courses", value: "100+", icon: BookOpen },
+              { label: "Hours", value: "200+", icon: Clock },
               { label: "Certifications", value: "4", icon: Award },
-              { label: "Tracks", value: "8", icon: Target },
+              { label: "Tracks", value: "15", icon: Target },
             ].map((stat) => (
               <motion.div key={stat.label} variants={fadeUp}>
                 <AnimatedCounter {...stat} />
@@ -596,7 +662,7 @@ export default function AcademyPage() {
               className="space-y-6"
             >
               <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
-                <Lightbulb className="w-3 h-3 mr-1" /> Why Lume Academy
+                <Lightbulb className="w-3 h-3 mr-1" /> Why Trust Layer Academy
               </Badge>
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-black">
                 <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
@@ -1236,7 +1302,7 @@ export default function AcademyPage() {
               <h2 className="text-3xl sm:text-4xl font-display font-black mb-8">
                 Why{" "}
                 <span className="bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                  Lume Academy
+                  Trust Layer Academy
                 </span>
               </h2>
               <div className="space-y-4">

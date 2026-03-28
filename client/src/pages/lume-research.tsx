@@ -946,7 +946,7 @@ export default function LumeResearch() {
   const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
-    document.title = "Research & Publications | Lume Academy";
+    document.title = "Research & Publications | Trust Layer Academy";
   }, []);
 
   const currentSections = activeTab === "whitepaper" ? whitepaperSections : specSections;
@@ -995,7 +995,7 @@ export default function LumeResearch() {
             </div>
 
             <Badge className="mb-4 bg-purple-500/20 text-purple-400 border-purple-500/30">
-              <GraduationCap className="w-3 h-3 mr-1" /> Lume Academy Research
+              <GraduationCap className="w-3 h-3 mr-1" /> Trust Layer Academy Research
             </Badge>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-black mb-4">
               <span className="bg-gradient-to-r from-cyan-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">

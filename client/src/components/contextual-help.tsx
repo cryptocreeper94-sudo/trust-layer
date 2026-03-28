@@ -213,11 +213,11 @@ const helpSections: HelpSection[] = [
   },
   {
     id: "academy",
-    title: "Lume Academy",
+    title: "Trust Layer Academy",
     icon: <GraduationCap className="w-4 h-4" />,
     entries: [
       {
-        title: "About Lume Academy",
+        title: "About Trust Layer Academy",
         content: "Learn programming from the ground up through 8 course tracks — from Programming Foundations to AI-Powered 3D Creation. Built around Lume, the world's first AI-native programming language.",
         link: { label: "Visit Academy", href: "/academy" }
       },
@@ -732,7 +732,7 @@ export function ContextualHelp() {
                           {([
                             { icon: <BookOpen className="w-4 h-4" />, label: "Learning Center", desc: "In-depth guides on every topic", href: "/learn" },
                             { icon: <HelpCircle className="w-4 h-4" />, label: "FAQ", desc: "Frequently asked questions", href: "/faq" },
-                            { icon: <GraduationCap className="w-4 h-4" />, label: "Lume Academy", desc: "Learn programming with AI", href: "/academy" },
+                            { icon: <GraduationCap className="w-4 h-4" />, label: "Trust Layer Academy", desc: "Learn programming with AI", href: "/academy" },
                             { icon: <Shield className="w-4 h-4" />, label: "Guardian Whitepaper", desc: "Security architecture deep dive", href: "/guardian-whitepaper" },
                             { icon: <MessageSquare className="w-4 h-4" />, label: "Support Center", desc: "Submit a ticket for help", href: "/support" },
                             { icon: <Users className="w-4 h-4" />, label: "Signal Chat", desc: "Connect with the community", href: "/signal-chat" },

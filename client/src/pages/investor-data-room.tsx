@@ -75,7 +75,7 @@ const marketOpportunities = [
   { market: "Real Estate", size: "$3.7T", icon: Building2, desc: "TrustHome verified agent platform disrupting traditional agent credentialing" },
   { market: "DeFi", size: "$2.3T", icon: TrendingUp, desc: "Full DeFi stack: DEX, staking, bridge, liquid staking, launchpad" },
   { market: "Gaming", size: "$180B", icon: Gamepad2, desc: "DarkWave Chronicles 3D, Arcade, and blockchain-powered gaming" },
-  { market: "Education", size: "$400B", icon: GraduationCap, desc: "Lume Academy: 8 tracks, 64+ courses, professional certifications" },
+  { market: "Education", size: "$400B", icon: GraduationCap, desc: "Trust Layer Academy: 15 tracks, 100+ courses, professional certifications" },
 ];
 
 function generateReportText(label?: string): string {
@@ -108,7 +108,7 @@ MARKET OPPORTUNITY
 Real Estate: $3.7T — TrustHome blockchain-verified agent platform
 DeFi:        $2.3T — Full stack: DEX, staking, bridge, launchpad
 Gaming:      $180B — DarkWave Chronicles 3D, Arcade, blockchain gaming
-Education:   $400B — Lume Academy, 8 tracks, 64+ courses
+Education:   $400B — Trust Layer Academy, 15 tracks, 100+ courses
 
 TECHNOLOGY MOAT
 ----------------

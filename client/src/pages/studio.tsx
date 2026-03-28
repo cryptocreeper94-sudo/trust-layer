@@ -451,7 +451,7 @@ what you want naturally and the AI-native runtime handles the rest.
 
 ## Learn More
 
-Visit the Research & Publications section in Lume Academy for the full
+Visit the Research & Publications section in Trust Layer Academy for the full
 whitepaper and master specification.` },
     ]
   },
