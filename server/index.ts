@@ -96,6 +96,19 @@ app.use(async (req, res, next) => {
     if (parts.length > 2) {
       const subdomain = parts[0].toLowerCase();
 
+      // Reserved ecosystem subdomains — always pass through to the main app
+      const RESERVED_SUBDOMAINS = [
+        'throughtheveil', 'thevoid', 'happyeats', 'driverconnect',
+        'trusthome', 'trustvault', 'signalcast', 'lumeline',
+        'darkwavestudios', 'darkwavegames', 'chronochat',
+        'academy', 'guardian', 'pulse', 'studio', 'veil',
+        'api', 'www', 'mail', 'admin', 'dev', 'staging',
+      ];
+      if (RESERVED_SUBDOMAINS.includes(subdomain)) {
+        req.tlidSubdomain = subdomain;
+        return next();
+      }
+
       // Skip API calls — let those pass through to the normal router
       if (req.path.startsWith('/api/')) {
         req.tlidSubdomain = subdomain;
