@@ -264,7 +264,7 @@ const Blog = lazy(() => import("@/pages/blog"));
 const BlogPost = lazy(() => import("@/pages/blog-post"));
 const BlogAdmin = lazy(() => import("@/pages/blog-admin"));
 const TrustLayer = lazy(() => import("@/pages/trust-layer"));
-const GuardianScanner = lazy(() => import("@/pages/guardian-scanner"));
+// Removed GuardianScanner import
 // Removed GuardianScannerDetail import
 const GuardianAI = lazy(() => import("@/pages/guardian-ai"));
 const GuardianAIRegistry = lazy(() => import("@/pages/guardian-ai-registry"));
