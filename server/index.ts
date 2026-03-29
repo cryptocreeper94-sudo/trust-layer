@@ -589,7 +589,7 @@ async function registerEcosystemAppsToOrbit() {
   const appBaseUrl = process.env.SITE_BASE_URL || 'https://trust-layer-1pji.onrender.com';
 
   const apps = [
-    { appName: 'The Void', appSlug: 'the-void', appUrl: 'https://thevoid.tlid.io', description: 'Premium membership identity system with Void IDs and DW-STAMP hallmarks', category: 'entertainment', permissions: ['read:profile', 'read:membership'] },
+    { appName: 'The Void', appSlug: 'the-void', appUrl: 'https://thevoid.tlid.io', description: 'A cathartic voice-first venting and metal wellness app with tons of built-in features, guided breathing, mood analytics and more.', category: 'health', permissions: ['read:profile', 'read:membership'] },
     { appName: 'Happy Eats', appSlug: 'happy-eats', appUrl: 'https://happyeats.tlid.io', description: 'Food truck ordering platform with zone-based batch ordering', category: 'food-delivery', permissions: ['read:profile', 'write:orders'] },
     { appName: 'TL Driver Connect', appSlug: 'driver-connect', appUrl: 'https://driverconnect.tlid.io', description: 'Blockchain-verified driver coordination and logistics platform', category: 'transportation', permissions: ['read:profile', 'write:logistics'] },
     { appName: 'Trust Home', appSlug: 'trust-home', appUrl: 'https://trusthome.tlid.io', description: 'Personal Trust Layer dashboard for membership, balance, and activity', category: 'core', permissions: ['read:profile', 'read:membership', 'read:balance'] },

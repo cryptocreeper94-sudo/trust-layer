@@ -1,19 +1,33 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ChevronRight, ChevronUp, ExternalLink, Sparkles } from "lucide-react";
+import { ChevronDown, ChevronRight, ChevronUp, ExternalLink, Sparkles, ArrowRight } from "lucide-react";
+import { useLocation } from "wouter";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+  type CarouselApi,
+} from "@/components/ui/carousel";
+
+import hubTrading from "@/assets/generated_images/hub_trading_defi.jpg";
+import ccGames from "@/assets/generated_images/cc_games_arcade.jpg";
+import hubAI from "@/assets/generated_images/hub_ai_tools.jpg";
+import hubCommunity from "@/assets/generated_images/hub_community_social.jpg";
+import hubIdentity from "@/assets/generated_images/hub_identity_security.jpg";
+import hubEcosystem from "@/assets/generated_images/hub_ecosystem_globe.jpg";
+import hubHome from "@/assets/generated_images/hub_home_overview.jpg";
+import theVoidImg from "@/assets/generated_images/hub_learn_explore.jpg";
 
 interface DirectoryApp {
   id: string;
   name: string;
   category: string;
   hook: string;
+  description?: string;
   url?: string;
   featured?: boolean;
-}
-
-interface CategoryGroup {
-  category: string;
-  apps: DirectoryApp[];
 }
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -26,94 +40,62 @@ const CATEGORY_ICONS: Record<string, string> = {
   "Community": "💬",
   "AI Trading": "🤖",
   "Analytics": "📈",
-  "Enterprise": "🏢",
-  "Automotive": "🚗",
-  "Transportation": "🚚",
-  "Services": "🛠️",
-  "Hospitality": "☕",
   "Identity": "🆔",
-  "Education": "🎓",
-  "Publishing": "📖",
-  "Development": "⚙️",
-  "Outdoor & Recreation": "🌿",
-  "Sports & Fitness": "⛳",
-  "Health & Wellness": "🧘",
-  "Food & Delivery": "🍔",
+  "Mental Wellness": "🧘",
 };
 
-const CATEGORY_ORDER = [
-  "Core", "Security", "DeFi", "Finance", "AI Trading", "Analytics",
-  "Gaming", "Entertainment", "Community", "Identity", "Education", "Publishing",
-  "Development", "Enterprise", "Automotive", "Transportation", "Services",
-  "Hospitality", "Outdoor & Recreation", "Sports & Fitness", "Health & Wellness",
-  "Food & Delivery",
-];
+const DEFAULT_CATEGORY_IMAGES: Record<string, string> = {
+  "Core": hubHome,
+  "Security": hubIdentity,
+  "DeFi": hubTrading,
+  "Finance": hubTrading,
+  "Gaming": ccGames,
+  "Entertainment": ccGames,
+  "Community": hubCommunity,
+  "AI Trading": hubAI,
+  "Analytics": hubAI,
+  "Identity": hubIdentity,
+  "Mental Wellness": theVoidImg,
+};
+
+const SPECIFIC_APP_IMAGES: Record<string, string> = {
+  "the-void": theVoidImg,
+};
 
 export function EcosystemDirectory({
-  compact = false,
-  maxCategories,
   className = "",
-  defaultCollapsed = false,
+  compact, // kept to maintain interface but visual will be consistent
+  maxCategories,
+  defaultCollapsed,
 }: {
   compact?: boolean;
   maxCategories?: number;
   className?: string;
   defaultCollapsed?: boolean;
 }) {
+  const [, navigate] = useLocation();
   const [apps, setApps] = useState<DirectoryApp[]>([]);
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
-  const [collapsed, setCollapsed] = useState(defaultCollapsed);
   const [loading, setLoading] = useState(true);
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     fetch("/api/ecosystem/directory")
       .then((r) => r.json())
       .then((data) => {
         setApps(data.apps || []);
-        if (!compact && !defaultCollapsed) {
-          setExpandedCategories(new Set((data.apps || []).map((a: DirectoryApp) => a.category)));
-        }
         setLoading(false);
       })
       .catch(() => setLoading(false));
-  }, [compact, defaultCollapsed]);
+  }, []);
 
-  const grouped: CategoryGroup[] = [];
-  const catMap = new Map<string, DirectoryApp[]>();
-  for (const app of apps) {
-    const list = catMap.get(app.category) || [];
-    list.push(app);
-    catMap.set(app.category, list);
-  }
-  for (const cat of CATEGORY_ORDER) {
-    if (catMap.has(cat)) {
-      grouped.push({ category: cat, apps: catMap.get(cat)! });
-    }
-  }
-  catMap.forEach((appList, cat) => {
-    if (!CATEGORY_ORDER.includes(cat)) {
-      grouped.push({ category: cat, apps: appList });
-    }
-  });
-
-  const displayGroups = maxCategories ? grouped.slice(0, maxCategories) : grouped;
-
-  const toggleCategory = (cat: string) => {
-    setExpandedCategories((prev) => {
-      const next = new Set(prev);
-      if (next.has(cat)) next.delete(cat);
-      else next.add(cat);
-      return next;
-    });
-  };
-
-  const toggleAll = () => {
-    if (expandedCategories.size === grouped.length) {
-      setExpandedCategories(new Set());
-    } else {
-      setExpandedCategories(new Set(grouped.map((g) => g.category)));
-    }
-  };
+  useEffect(() => {
+    if (!api) return;
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap());
+    api.on("select", () => setCurrent(api.selectedScrollSnap()));
+  }, [api]);
 
   if (loading) {
     return (
@@ -130,123 +112,106 @@ export function EcosystemDirectory({
   }
 
   return (
-    <div
-      className={`bg-slate-900/50 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden ${className}`}
-      data-testid="ecosystem-directory"
-    >
-      <button
-        onClick={() => setCollapsed(!collapsed)}
-        className="w-full flex items-center justify-between px-5 py-3 border-b border-white/5 bg-gradient-to-r from-cyan-500/5 to-purple-500/5 hover:from-cyan-500/10 hover:to-purple-500/10 transition-all cursor-pointer group"
-        data-testid="directory-collapse-toggle"
-      >
-        <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-cyan-400" />
-          <h3 className="text-sm font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-            Ecosystem Directory
-          </h3>
-          <span className="text-[10px] text-white/30 bg-white/5 px-2 py-0.5 rounded-full">
-            {apps.length} apps
-          </span>
+    <div className={`mb-16 scroll-mt-32 ${className}`} data-testid="ecosystem-directory-carousel">
+      <div className="mb-7 px-1">
+        <div className="flex items-center gap-4 mb-3">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center shrink-0 shadow-lg">
+            <Sparkles className="text-white w-5 h-5" />
+          </div>
+          <h2 className="text-xl font-bold text-white">Core Ecosystem Platform</h2>
+          <span className="text-white/20 text-xs ml-1 bg-white/5 px-2 py-0.5 rounded-full">{apps.length} Apps</span>
         </div>
-        <div className="flex items-center gap-2">
-          {collapsed && (
-            <span className="text-[10px] text-white/30 hidden sm:inline">Click to expand</span>
-          )}
-          {collapsed ? (
-            <ChevronDown className="w-4 h-4 text-white/40 group-hover:text-cyan-400 transition-colors" />
-          ) : (
-            <ChevronUp className="w-4 h-4 text-white/40 group-hover:text-cyan-400 transition-colors" />
-          )}
+        <p className="text-white/40 text-sm leading-relaxed max-w-2xl pl-14">
+          The verified on-chain applications directly managed by the Trust Layer foundation. Explore the unified grid of official platforms.
+        </p>
+      </div>
+
+      <div className="relative px-8 md:px-14">
+        <Carousel
+          opts={{ align: "start", dragFree: true, containScroll: "trimSnaps", loop: false }}
+          setApi={setApi}
+          className="w-full"
+        >
+          <CarouselContent className="-ml-5">
+            {apps.map((app, i) => {
+              const image = SPECIFIC_APP_IMAGES[app.id] || DEFAULT_CATEGORY_IMAGES[app.category] || hubEcosystem;
+              const iconEmoji = CATEGORY_ICONS[app.category] || "⚡";
+
+              return (
+                <CarouselItem key={app.id} className="pl-5 basis-full sm:basis-[310px] md:basis-[340px]">
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: Math.min(i * 0.04, 0.4), duration: 0.4 }}
+                    onClick={() => app.url?.startsWith("http") ? window.open(app.url, "_blank", "noopener,noreferrer") : navigate(app.url || `/${app.id}`)}
+                    className="group relative overflow-hidden rounded-2xl border border-white/5 cursor-pointer transition-all duration-300 hover:scale-[1.03] hover:border-white/15 min-h-[240px]"
+                    style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.4)" }}
+                  >
+                    <div className="absolute inset-0">
+                      <img
+                        src={image}
+                        alt=""
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        style={{ filter: "brightness(1.1)" }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 to-black/30" />
+                    </div>
+
+                    {app.featured && (
+                      <div className="absolute top-3 right-3 z-20">
+                        <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white rounded-full bg-gradient-to-r from-purple-500 to-cyan-500 shadow-lg">
+                          Featured
+                        </span>
+                      </div>
+                    )}
+
+                    <div className="relative z-10 h-full flex flex-col justify-end p-5">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/15 to-white/5 border border-white/10 flex items-center justify-center shrink-0 backdrop-blur-sm shadow-lg">
+                          <span className="text-white text-lg">{iconEmoji}</span>
+                        </div>
+                        <div className="min-w-0">
+                          <h3 className="text-white font-bold text-[15px] leading-tight truncate">{app.name}</h3>
+                          <p className="text-white/50 text-xs mt-1 truncate">{app.category}</p>
+                        </div>
+                      </div>
+
+                      <p className="text-white/60 text-xs line-clamp-2 mt-2 mb-3 min-h-[32px]">
+                        {app.hook || app.description}
+                      </p>
+
+                      <div className="flex items-center gap-1 text-white/30 group-hover:text-cyan-400/70 transition-colors mt-auto">
+                        <span className="text-[10px] uppercase tracking-wider font-medium">Open App</span>
+                        {app.url?.startsWith("http") ? (
+                          <ExternalLink className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+                        ) : (
+                          <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-1" />
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                </CarouselItem>
+              );
+            })}
+          </CarouselContent>
+          <CarouselPrevious className="flex -left-2 md:-left-5 w-10 h-10 bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white shadow-xl" />
+          <CarouselNext className="flex -right-2 md:-right-5 w-10 h-10 bg-white/5 border-white/10 text-white hover:bg-white/10 hover:text-white shadow-xl" />
+        </Carousel>
+        
+        <div className="flex sm:hidden items-center justify-center gap-1.5 mt-6 flex-wrap px-4">
+          {Array.from({ length: count }).map((_, i) => (
+            <button
+              key={i}
+              onClick={() => api?.scrollTo(i)}
+              className={`rounded-full transition-all duration-300 ${
+                i === current
+                  ? "w-3 h-3 bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.6)]"
+                  : "w-2 h-2 bg-white/20 hover:bg-white/40"
+              }`}
+            />
+          ))}
         </div>
-      </button>
-
-      <AnimatePresence initial={false}>
-        {!collapsed && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden"
-          >
-            <div className="flex items-center justify-end px-5 py-1.5 border-b border-white/[0.03]">
-              <button
-                onClick={(e) => { e.stopPropagation(); toggleAll(); }}
-                className="text-[10px] text-white/40 hover:text-cyan-400 transition-colors px-2 py-1 rounded hover:bg-white/5"
-                data-testid="directory-toggle-all"
-              >
-                {expandedCategories.size === grouped.length ? "Collapse All" : "Expand All"}
-              </button>
-            </div>
-
-            <div className="divide-y divide-white/[0.03]">
-              {displayGroups.map((group) => {
-                const isOpen = expandedCategories.has(group.category);
-                const icon = CATEGORY_ICONS[group.category] || "⚡";
-
-                return (
-                  <div key={group.category}>
-                    <button
-                      onClick={() => toggleCategory(group.category)}
-                      className="w-full flex items-center gap-2 px-5 py-2.5 hover:bg-white/[0.02] transition-colors text-left group"
-                      data-testid={`directory-category-${group.category.toLowerCase().replace(/\s+/g, "-")}`}
-                    >
-                      <span className="text-sm">{icon}</span>
-                      <span className="text-xs font-semibold text-white/70 group-hover:text-white/90 transition-colors flex-1">
-                        {group.category}
-                      </span>
-                      <span className="text-[10px] text-white/30 mr-1">{group.apps.length}</span>
-                      {isOpen ? (
-                        <ChevronDown className="w-3 h-3 text-white/30" />
-                      ) : (
-                        <ChevronRight className="w-3 h-3 text-white/30" />
-                      )}
-                    </button>
-
-                    <AnimatePresence>
-                      {isOpen && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.15 }}
-                          className="overflow-hidden"
-                        >
-                          <div className="px-5 pb-2">
-                            {group.apps.map((app) => (
-                              <a
-                                key={app.id}
-                                href={app.url || `/${app.id}`}
-                                className="flex items-center gap-2 py-1.5 px-3 -mx-1 rounded-lg hover:bg-white/[0.04] transition-colors group/app"
-                                data-testid={`directory-app-${app.id}`}
-                              >
-                                <span className="text-xs font-medium text-cyan-400 group-hover/app:text-cyan-300 transition-colors min-w-0 truncate">
-                                  {app.name}
-                                </span>
-                                {app.featured && (
-                                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 flex-shrink-0 shadow-[0_0_4px_rgba(6,182,212,0.6)]" />
-                                )}
-                                {!compact && app.hook && (
-                                  <span className="text-[10px] text-white/25 truncate flex-1 text-right">
-                                    {app.hook}
-                                  </span>
-                                )}
-                                {app.url && (app.url.startsWith("http") && !app.url.includes(window.location.hostname)) && (
-                                  <ExternalLink className="w-2.5 h-2.5 text-white/15 flex-shrink-0" />
-                                )}
-                              </a>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </div>
     </div>
   );
 }
