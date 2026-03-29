@@ -272,6 +272,7 @@ const EcosystemCheckout = lazy(() => import("@/pages/ecosystem-checkout"));
 const EraCodex = lazy(() => import("@/pages/era-codex"));
 const ScenarioGenerator = lazy(() => import("@/pages/scenario-generator"));
 const SaaSPortfolio = lazy(() => import("@/pages/saas-portfolio"));
+const SaaSOnboarding = lazy(() => import("@/pages/saas-onboarding"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function ScrollToTop() {
@@ -637,6 +638,8 @@ function DWSCRouter() {
         <Route path="/coming-features" component={ComingFeatures} />
         <Route path="/saas" component={SaaSPortfolio} />
         <Route path="/franchise" component={SaaSPortfolio} />
+        <Route path="/onboard" component={SaaSOnboarding} />
+        <Route path="/get-started" component={SaaSOnboarding} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>

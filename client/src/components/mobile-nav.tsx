@@ -206,22 +206,29 @@ const navCategories = [
     label: "Business",
     icon: Building2,
     items: [
+      { href: "/saas", label: "SaaS Franchise", icon: Rocket, badge: "New" },
       { href: "/business-portal", label: "Business Portal", icon: Building2 },
       { href: "/business-application", label: "Business Application", icon: FileText },
       { href: "/team", label: "Team", icon: Users },
+      { href: "/pricing", label: "Pricing", icon: Coins },
+      { href: "/billing", label: "Billing", icon: FileText },
     ]
   },
   {
     label: "Ecosystem Apps",
     icon: Globe,
     items: [
-      { href: "/domains", label: "TLID.io - Domains", icon: Globe },
+      { href: "/explore", label: "Explore Everything", icon: Compass },
+      { href: "/saas", label: "SaaS Franchise Platform", icon: Rocket, badge: "New" },
+      { href: "/domains", label: "TLID.io — Domains", icon: Globe },
       { href: "/trust-shield", label: "TrustShield.tech", icon: Shield },
       { href: "/arcade", label: "The Arcade", icon: Gamepad2 },
-      { href: "/studio", label: "Trust Studio", icon: Sparkles },
+      { href: "https://yourlegacy.io", label: "Chronicles", icon: BookOpen, external: true },
+      { href: "/veil", label: "Through The Veil", icon: BookText },
+      { href: "/studio", label: "DarkWave Studio", icon: Sparkles },
       { href: "/academy", label: "Academy", icon: BookOpen },
-      { href: "https://yourlegacy.io", label: "YourLegacy.io", icon: Star, external: true },
       { href: "/signal-chat", label: "Signal Chat", icon: MessageCircle },
+      { href: "https://trustgen3d.com", label: "TrustGen 3D", icon: Box, external: true },
     ]
   },
 ];

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { GlassCard } from "@/components/glass-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -248,6 +248,7 @@ function StatusBadge({ status }: { status: string }) {
 
 function ProductCard({ product, index }: { product: Product; index: number }) {
   const [hovered, setHovered] = useState(false);
+  const [, navigate] = useLocation();
 
   return (
     <motion.div
@@ -322,18 +323,11 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
 
           {/* CTA */}
           <Button
+            onClick={() => navigate(`/onboard?product=${product.id}`)}
             className="w-full gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white text-sm"
             data-testid={`btn-demo-${product.id}`}
           >
-            {product.status === "live" ? (
-              <>
-                <Play className="w-3.5 h-3.5" /> View Live Demo
-              </>
-            ) : (
-              <>
-                <Rocket className="w-3.5 h-3.5" /> Request Demo
-              </>
-            )}
+            <Rocket className="w-3.5 h-3.5" /> Get Started
           </Button>
         </div>
       </GlassCard>
@@ -384,7 +378,9 @@ function PricingCard({ tier, index }: { tier: typeof PRICING_TIERS[0]; index: nu
           className={`w-full gap-2 ${tier.popular ? "bg-gradient-to-r from-cyan-500 to-purple-500 hover:opacity-90 text-white font-bold" : "bg-white/5 hover:bg-white/10 border border-white/10 text-white"}`}
           data-testid={`btn-pricing-${tier.name.toLowerCase()}`}
         >
-          Get Started <ArrowRight className="w-4 h-4" />
+          <Link href={`/onboard?tier=${tier.name.toLowerCase()}`}>
+            <span className="flex items-center justify-center gap-2">Get Started <ArrowRight className="w-4 h-4" /></span>
+          </Link>
         </Button>
       </GlassCard>
     </motion.div>
@@ -395,6 +391,7 @@ function PricingCard({ tier, index }: { tier: typeof PRICING_TIERS[0]; index: nu
 
 export default function SaaSPortfolio() {
   const [activeTab, setActiveTab] = useState<"trades" | "enterprise" | "ai">("trades");
+  const [, navigate] = useLocation();
 
   const tabProducts = {
     trades: TRADE_VERTICALS,
@@ -439,7 +436,7 @@ export default function SaaSPortfolio() {
             </p>
 
             <div className="flex flex-wrap justify-center gap-4 mb-12">
-              <Button className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:opacity-90 text-white font-bold px-8 py-6 text-lg gap-2 rounded-xl shadow-lg shadow-cyan-500/20" data-testid="hero-get-started">
+              <Button onClick={() => navigate("/onboard")} className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:opacity-90 text-white font-bold px-8 py-6 text-lg gap-2 rounded-xl shadow-lg shadow-cyan-500/20" data-testid="hero-get-started">
                 <Rocket className="w-5 h-5" /> Get Started
               </Button>
               <Button variant="outline" className="border-white/20 hover:bg-white/5 text-white px-8 py-6 text-lg gap-2 rounded-xl" data-testid="hero-watch-demo">
@@ -685,7 +682,7 @@ export default function SaaSPortfolio() {
                   No developers. No design team. No waiting.
                 </p>
                 <div className="flex flex-wrap justify-center gap-4">
-                  <Button className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:opacity-90 text-white font-bold px-10 py-6 text-lg gap-2 rounded-xl shadow-lg shadow-cyan-500/20" data-testid="cta-get-started">
+                  <Button onClick={() => navigate("/onboard")} className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:opacity-90 text-white font-bold px-10 py-6 text-lg gap-2 rounded-xl shadow-lg shadow-cyan-500/20" data-testid="cta-get-started">
                     <Rocket className="w-5 h-5" /> Launch My Platform
                   </Button>
                   <Link href="/signal-chat">
