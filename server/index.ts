@@ -109,6 +109,7 @@ app.use(async (req, res, next) => {
         'yourlegacy', 'legacy', 'signal', 'sig',
         'intothevoid', 'void', 'trustshield', 'trustgen',
         'trustbook', 'chrono', 'chronicles', 'lumecraft',
+        'trusthub', 'torque', 'ecosystem',
         // Infrastructure
         'api', 'www', 'mail', 'admin', 'dev', 'staging', 'test',
       ];

@@ -409,13 +409,17 @@ function DWSCRouter() {
                 case "/signal-chat": return SignalCore;
                 case "/domains": return Domains;
                 case "/veil/read": return VeilReader;
+                case "/veil": return Veil;
+                case "/explore": return ExploreHub;
+                case "/trust-shield": return TrustShieldCockpit;
+                case "/ecosystem": return EcosystemMap;
                 default: return ExploreHub;
               }
             })();
             return <RouteComponent />;
           }}</Route>
         ) : (
-          <Route path="/" component={ExploreHub} />
+          <Route path="/" component={TrustLayerLanding} />
         )}
         <Route path="/presale" component={Presale} />
         <Route path="/trust-layer" component={TrustLayerLanding} />
