@@ -271,6 +271,7 @@ const AffiliateDashboard = lazy(() => import("@/pages/affiliate-dashboard"));
 const EcosystemCheckout = lazy(() => import("@/pages/ecosystem-checkout"));
 const EraCodex = lazy(() => import("@/pages/era-codex"));
 const ScenarioGenerator = lazy(() => import("@/pages/scenario-generator"));
+const SaaSPortfolio = lazy(() => import("@/pages/saas-portfolio"));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 function ScrollToTop() {
@@ -634,6 +635,8 @@ function DWSCRouter() {
         <Route path="/daily-bonus" component={DailyBonus} />
         <Route path="/gateway-error" component={GatewayError} />
         <Route path="/coming-features" component={ComingFeatures} />
+        <Route path="/saas" component={SaaSPortfolio} />
+        <Route path="/franchise" component={SaaSPortfolio} />
         <Route component={NotFound} />
       </Switch>
     </Suspense>
@@ -756,6 +759,8 @@ const TLID_SUBDOMAIN_ROUTES: Record<string, string> = {
   "trustbook": "/trust-book",
   "launch": "/launch",
   "ecosystem": "/influencer",
+  "saas": "/saas",
+  "franchise": "/saas",
 };
 
 function getTlidSubdomainRoute(): string | null {
