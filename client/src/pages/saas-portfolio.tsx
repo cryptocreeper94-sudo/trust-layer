@@ -64,6 +64,7 @@ const TRADE_VERTICALS: Product[] = [
     icon: <Droplets className="w-6 h-6" />, gradient: "from-blue-800 to-indigo-900",
     glowColor: "shadow-blue-500/20",
     status: "ready", category: "trade", domain: "plumbpros.io", market: "$130B",
+    image: "/ecosystem/saas-plumbing.png",
     features: ["Pipe Sizing Calc", "24/7 Emergency Booking", "Camera Inspection", "Parts Inventory", "Dispatch", "Payments"]
   },
   {
@@ -71,6 +72,7 @@ const TRADE_VERTICALS: Product[] = [
     icon: <Trees className="w-6 h-6" />, gradient: "from-emerald-800 to-lime-900",
     glowColor: "shadow-emerald-500/20",
     status: "ready", category: "trade", domain: "landscapepros.io", market: "$130B",
+    image: "/ecosystem/saas-landscaping.png",
     features: ["3D Design Tool", "Mulch/Sod Calculator", "Irrigation Planner", "Weather Integration", "Crew Routes", "Payments"]
   },
   {
@@ -78,6 +80,7 @@ const TRADE_VERTICALS: Product[] = [
     icon: <Hammer className="w-6 h-6" />, gradient: "from-stone-700 to-zinc-800",
     glowColor: "shadow-stone-500/20",
     status: "ready", category: "trade", domain: "buildpros.io", market: "$1.5T",
+    image: "/ecosystem/saas-construction.png",
     features: ["Project Management", "Bid Management", "3D Renderings", "Gantt Scheduling", "Cost Tracking", "Payments"]
   },
 ];
