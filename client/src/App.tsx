@@ -112,7 +112,6 @@ const MembershipCharter = lazy(() => import("@/pages/membership-charter"));
 const MemberPortal = lazy(() => import("@/pages/member-portal"));
 const BusinessPortal = lazy(() => import("@/pages/business-portal"));
 const BusinessApplication = lazy(() => import("@/pages/business-application"));
-const Studio = lazy(() => import("@/pages/studio"));
 const StudioLanding = lazy(() => import("@/pages/studio-landing"));
 const StudioProjects = lazy(() => import("@/pages/studio-projects"));
 const StudioDocs = lazy(() => import("@/pages/studio-docs"));
@@ -264,8 +263,8 @@ const Blog = lazy(() => import("@/pages/blog"));
 const BlogPost = lazy(() => import("@/pages/blog-post"));
 const BlogAdmin = lazy(() => import("@/pages/blog-admin"));
 const TrustLayer = lazy(() => import("@/pages/trust-layer"));
-// Removed GuardianScanner import
-// Removed GuardianScannerDetail import
+const GuardianScanner = lazy(() => import("@/pages/guardian-scanner-detail"));
+const GuardianScannerDetail = lazy(() => import("@/pages/guardian-scanner-detail"));
 const GuardianAI = lazy(() => import("@/pages/guardian-ai"));
 const GuardianAIRegistry = lazy(() => import("@/pages/guardian-ai-registry"));
 const GuardianShield = lazy(() => import("@/pages/guardian-shield"));
@@ -486,7 +485,6 @@ function DWSCRouter() {
         <Route path="/business-application" component={BusinessApplication} />
         <Route path="/dev-studio" component={DevStudio} />
         <Route path="/studio" component={StudioLanding} />
-        <Route path="/studio/editor" component={Studio} />
         <Route path="/studio/projects" component={StudioProjects} />
         <Route path="/studio/docs" component={StudioDocs} />
         <Route path="/team" component={Team} />
@@ -668,7 +666,6 @@ function StudiosRouter() {
       <Switch>
         <Route path="/" component={StudioLanding} />
         <Route path="/studio" component={StudioLanding} />
-        <Route path="/studio/editor" component={Studio} />
         <Route path="/studio/docs" component={StudioDocs} />
         <Route path="/dev-studio" component={DevStudio} />
         <Route path="/studio/projects" component={StudioProjects} />
