@@ -1,0 +1,1 @@
+import{j as t,g as n}from"./index-B9Ykmr3s.js";function i({className:e,...s}){return t.jsxDEV("div",{className:n("animate-pulse rounded-md bg-primary/10",e),...s},void 0,!1,{fileName:"D:/trust-layer/client/src/components/ui/skeleton.tsx",lineNumber:8,columnNumber:5},this)}export{i as S};

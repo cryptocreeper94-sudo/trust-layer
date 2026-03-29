@@ -416,14 +416,16 @@ export default function TrustLayerLanding() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
               >
-                <GlassCard glow className="h-full p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="p-2.5 rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/20 flex-shrink-0">
-                      <feature.icon className="w-5 h-5 text-cyan-400" />
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="font-bold text-white mb-1.5">{feature.title}</h3>
-                      <p className="text-white/60 text-sm leading-relaxed">{feature.description}</p>
+                <GlassCard glow className="h-full">
+                  <div className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="p-2.5 rounded-lg bg-gradient-to-br from-cyan-500/20 to-purple-500/20 border border-cyan-500/20 flex-shrink-0">
+                        <feature.icon className="w-5 h-5 text-cyan-400" />
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="font-bold text-white mb-1.5">{feature.title}</h3>
+                        <p className="text-white/60 text-sm leading-relaxed">{feature.description}</p>
+                      </div>
                     </div>
                   </div>
                 </GlassCard>
@@ -432,43 +434,45 @@ export default function TrustLayerLanding() {
           </div>
 
           <div className="mt-10 text-center">
-            <GlassCard className="inline-block p-6 max-w-lg mx-auto">
-              <div className="flex items-center justify-center gap-4 mb-4">
-                <div className="w-20 h-24 rounded-lg bg-gradient-to-br from-slate-800 to-slate-900 border border-cyan-500/30 flex flex-col items-center justify-center p-2 shadow-lg shadow-cyan-500/10">
-                  <Shield className="w-6 h-6 text-cyan-400 mb-1" />
-                  <span className="text-[8px] text-white/50 uppercase">Trust Layer</span>
-                  <span className="text-sm font-bold text-white">#247</span>
-                  <span className="text-[6px] text-cyan-400 mt-0.5">Verified Member</span>
+            <GlassCard className="inline-block max-w-lg mx-auto">
+              <div className="p-6">
+                <div className="flex items-center justify-center gap-4 mb-4">
+                  <div className="w-20 h-24 rounded-lg bg-gradient-to-br from-slate-800 to-slate-900 border border-cyan-500/30 flex flex-col items-center justify-center p-2 shadow-lg shadow-cyan-500/10">
+                    <Shield className="w-6 h-6 text-cyan-400 mb-1" />
+                    <span className="text-[8px] text-white/50 uppercase">Trust Layer</span>
+                    <span className="text-sm font-bold text-white">#247</span>
+                    <span className="text-[6px] text-cyan-400 mt-0.5">Verified Member</span>
+                  </div>
+                  <div className="text-left">
+                    <p className="text-xs text-white/50 mb-1">Your membership includes:</p>
+                    <ul className="text-xs text-white/70 space-y-0.5">
+                      <li className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3 h-3 text-green-400" />
+                        Unique Trust Number
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3 h-3 text-green-400" />
+                        Blockchain-verified hash
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3 h-3 text-green-400" />
+                        Downloadable card image
+                      </li>
+                      <li className="flex items-center gap-1.5">
+                        <CheckCircle2 className="w-3 h-3 text-green-400" />
+                        Scannable QR code
+                      </li>
+                    </ul>
+                  </div>
                 </div>
-                <div className="text-left">
-                  <p className="text-xs text-white/50 mb-1">Your membership includes:</p>
-                  <ul className="text-xs text-white/70 space-y-0.5">
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3 h-3 text-green-400" />
-                      Unique Trust Number
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3 h-3 text-green-400" />
-                      Blockchain-verified hash
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3 h-3 text-green-400" />
-                      Downloadable card image
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <CheckCircle2 className="w-3 h-3 text-green-400" />
-                      Scannable QR code
-                    </li>
-                  </ul>
-                </div>
+                <Button
+                  className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400"
+                  onClick={handleGetStarted}
+                  data-testid="button-card-signup"
+                >
+                  {isAuthenticated ? "View My Card" : "Get Your Card Now"}
+                </Button>
               </div>
-              <Button
-                className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-400 hover:to-purple-400"
-                onClick={handleGetStarted}
-                data-testid="button-card-signup"
-              >
-                {isAuthenticated ? "View My Card" : "Get Your Card Now"}
-              </Button>
             </GlassCard>
           </div>
         </div>
@@ -493,14 +497,16 @@ export default function TrustLayerLanding() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <GlassCard glow className="h-full p-6 sm:p-8">
-                  <div className="flex items-start gap-4">
-                    <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/20 flex-shrink-0">
-                      <benefit.icon className="w-6 h-6 text-cyan-400" />
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="font-bold text-lg text-white mb-2">{benefit.title}</h3>
-                      <p className="text-white/60 leading-relaxed">{benefit.description}</p>
+                <GlassCard glow className="h-full">
+                  <div className="p-6 sm:p-8">
+                    <div className="flex items-start gap-4">
+                      <div className="p-3 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/20 flex-shrink-0">
+                        <benefit.icon className="w-6 h-6 text-cyan-400" />
+                      </div>
+                      <div className="min-w-0">
+                        <h3 className="font-bold text-lg text-white mb-2">{benefit.title}</h3>
+                        <p className="text-white/60 leading-relaxed">{benefit.description}</p>
+                      </div>
                     </div>
                   </div>
                 </GlassCard>
@@ -604,87 +610,91 @@ export default function TrustLayerLanding() {
       <section className="py-16 px-4 bg-slate-900/50">
         <div className="container mx-auto max-w-4xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <GlassCard glow className="p-6 sm:p-8 flex flex-col h-full">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="p-2.5 rounded-lg bg-cyan-500/20 border border-cyan-500/20 flex-shrink-0">
-                  <User className="w-5 h-5 text-cyan-400" />
+            <GlassCard glow className="h-full">
+              <div className="p-6 sm:p-8 flex flex-col h-full">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="p-2.5 rounded-lg bg-cyan-500/20 border border-cyan-500/20 flex-shrink-0">
+                    <User className="w-5 h-5 text-cyan-400" />
+                  </div>
+                  <h3 className="text-xl font-bold">Individuals</h3>
                 </div>
-                <h3 className="text-xl font-bold">Individuals</h3>
-              </div>
-              <p className="text-white/60 mb-6 text-sm leading-relaxed">
-                Join for free and receive your Trust Card, earn rewards through referrals, and
-                access verified services across the ecosystem.
-              </p>
-              <ul className="space-y-4 mb-8 text-sm flex-grow px-2">
-                <li className="flex items-start gap-3 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
-                  <span>Free membership forever</span>
-                </li>
-                <li className="flex items-start gap-3 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
-                  <span>Earn Shells through referrals</span>
-                </li>
-                <li className="flex items-start gap-3 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
-                  <span>Access to community features</span>
-                </li>
-              </ul>
-              <Button
-                className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold mt-auto"
-                onClick={handleGetStarted}
-                data-testid="button-individual-signup"
-              >
-                {isAuthenticated ? "Go to My Hub" : "Join as Individual"}
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </GlassCard>
-
-            <GlassCard glow className="p-6 sm:p-8 flex flex-col h-full">
-              <div className="flex items-center gap-3 mb-5">
-                <div className="p-2.5 rounded-lg bg-purple-500/20 border border-purple-500/20 flex-shrink-0">
-                  <Building2 className="w-5 h-5 text-purple-400" />
-                </div>
-                <div className="flex flex-col gap-1">
-                  <h3 className="text-xl font-bold">Businesses</h3>
-                  <Badge variant="outline" className="w-fit text-[10px] border-purple-500/30 text-purple-400">
-                    Requires Personal Account
-                  </Badge>
-                </div>
-              </div>
-              <p className="text-white/60 mb-6 text-sm leading-relaxed">
-                Verify your business on the Trust Layer for API access, team management, and
-                enhanced referral rewards.
-              </p>
-              <ul className="space-y-4 mb-8 text-sm flex-grow px-2">
-                <li className="flex items-start gap-3 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
-                  <span>Verified business badge</span>
-                </li>
-                <li className="flex items-start gap-3 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
-                  <span>2.5x referral rewards</span>
-                </li>
-                <li className="flex items-start gap-3 text-white/70">
-                  <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
-                  <span>API access & webhooks</span>
-                </li>
-              </ul>
-              <Link href={isAuthenticated ? "/business-application" : "#"} className="mt-auto">
+                <p className="text-white/60 mb-6 text-sm leading-relaxed">
+                  Join for free and receive your Trust Card, earn rewards through referrals, and
+                  access verified services across the ecosystem.
+                </p>
+                <ul className="space-y-4 mb-8 text-sm flex-grow px-2">
+                  <li className="flex items-start gap-3 text-white/70">
+                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                    <span>Free membership forever</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-white/70">
+                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                    <span>Earn Shells through referrals</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-white/70">
+                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                    <span>Access to community features</span>
+                  </li>
+                </ul>
                 <Button
-                  variant="outline"
-                  className="w-full border-purple-500/30 text-purple-400 hover:bg-purple-500/10"
-                  onClick={(e) => {
-                    if (!isAuthenticated) {
-                      e.preventDefault();
-                      setShowLoginModal(true);
-                    }
-                  }}
-                  data-testid="button-business-signup"
+                  className="w-full bg-cyan-500 hover:bg-cyan-400 text-black font-bold mt-auto"
+                  onClick={handleGetStarted}
+                  data-testid="button-individual-signup"
                 >
-                  {isAuthenticated ? "Apply for Business" : "Sign Up First"}
+                  {isAuthenticated ? "Go to My Hub" : "Join as Individual"}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
-              </Link>
+              </div>
+            </GlassCard>
+
+            <GlassCard glow className="h-full">
+              <div className="p-6 sm:p-8 flex flex-col h-full">
+                <div className="flex items-center gap-3 mb-5">
+                  <div className="p-2.5 rounded-lg bg-purple-500/20 border border-purple-500/20 flex-shrink-0">
+                    <Building2 className="w-5 h-5 text-purple-400" />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <h3 className="text-xl font-bold">Businesses</h3>
+                    <Badge variant="outline" className="w-fit text-[10px] border-purple-500/30 text-purple-400">
+                      Requires Personal Account
+                    </Badge>
+                  </div>
+                </div>
+                <p className="text-white/60 mb-6 text-sm leading-relaxed">
+                  Verify your business on the Trust Layer for API access, team management, and
+                  enhanced referral rewards.
+                </p>
+                <ul className="space-y-4 mb-8 text-sm flex-grow px-2">
+                  <li className="flex items-start gap-3 text-white/70">
+                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                    <span>Verified business badge</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-white/70">
+                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                    <span>2.5x referral rewards</span>
+                  </li>
+                  <li className="flex items-start gap-3 text-white/70">
+                    <CheckCircle2 className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                    <span>API access & webhooks</span>
+                  </li>
+                </ul>
+                <Link href={isAuthenticated ? "/business-application" : "#"} className="mt-auto">
+                  <Button
+                    variant="outline"
+                    className="w-full border-purple-500/30 text-purple-400 hover:bg-purple-500/10"
+                    onClick={(e) => {
+                      if (!isAuthenticated) {
+                        e.preventDefault();
+                        setShowLoginModal(true);
+                      }
+                    }}
+                    data-testid="button-business-signup"
+                  >
+                    {isAuthenticated ? "Apply for Business" : "Sign Up First"}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+              </div>
             </GlassCard>
           </div>
         </div>

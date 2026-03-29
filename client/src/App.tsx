@@ -419,7 +419,7 @@ function DWSCRouter() {
             return <RouteComponent />;
           }}</Route>
         ) : (
-          <Route path="/" component={TrustLayerLanding} />
+          <Route path="/" component={ExploreHub} />
         )}
         <Route path="/presale" component={Presale} />
         <Route path="/trust-layer" component={TrustLayerLanding} />
