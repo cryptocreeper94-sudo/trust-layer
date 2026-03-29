@@ -26311,6 +26311,30 @@ function getLocalEcosystemApps(): EcosystemApp[] {
       users: "Trust Layer Verified",
       url: "https://signalcast.ad",
     },
+    {
+      id: "darkwave-studios",
+      name: "DarkWave Studios",
+      category: "Creative Tools",
+      description: "Premium web development agency and digital product studio. Custom-built applications, websites, and blockchain-integrated platforms for startups and enterprises.",
+      hook: "Premium Web Development Agency",
+      tags: ["Agency", "Development", "Design", "Web"],
+      gradient: "from-purple-600 to-indigo-800",
+      verified: true,
+      users: "Trust Layer Verified",
+      url: "https://darkwavestudios.io",
+    },
+    {
+      id: "through-the-veil",
+      name: "Through The Veil",
+      category: "Publishing",
+      description: "An immersive novel exploring the intersection of consciousness, technology, and human connection. Available in PDF and EPUB with AI narration through Trust Book.",
+      hook: "The Novel That Started It All",
+      tags: ["Novel", "Publishing", "Fiction", "AI Narration"],
+      gradient: "from-violet-800 to-purple-950",
+      verified: true,
+      users: "Trust Layer Verified",
+      url: "https://dwtl.io/veil/read",
+    },
   ];
 }
 
