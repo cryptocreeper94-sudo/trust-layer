@@ -116,7 +116,7 @@ const learningPath = [
     description: "You're ready! Start coding with confidence",
     icon: Rocket,
     color: "from-green-500 to-emerald-500",
-    link: "/studio/editor",
+    link: "https://darkwave.studio",
     time: "Ready",
     priority: "Let's Go"
   }
@@ -182,12 +182,12 @@ export default function StudioLanding() {
               Help
             </Button>
             {isAuthenticated ? (
-              <Link href="/studio/editor">
+              <a href="https://darkwave.studio" target="_blank" rel="noreferrer">
                 <Button className="bg-cyan-500 hover:bg-cyan-600 text-black font-semibold" data-testid="button-open-studio">
                   Open Studio
                   <ChevronRight className="w-4 h-4 ml-1" />
                 </Button>
-              </Link>
+              </a>
             ) : (
               <Button 
                 onClick={() => setShowLoginModal(true)}
@@ -302,9 +302,9 @@ export default function StudioLanding() {
                           </div>
                         </div>
                       </button>
-                    ) : item.link === "/studio/editor" ? (
+                    ) : item.link === "https://darkwave.studio" ? (
                       isAuthenticated ? (
-                        <Link href={item.link}>
+                        <a href={item.link} target="_blank" rel="noreferrer" className="block w-full h-full text-left">
                           <div className="h-full bg-slate-800/50 border border-white/10 rounded-xl p-5 hover:border-green-500/30 transition-all group relative overflow-hidden">
                             <div className="absolute top-0 right-0 px-2 py-1 text-xs font-medium bg-gradient-to-r from-transparent to-slate-800/80">
                               <span className="text-green-400">{item.time}</span>
@@ -320,7 +320,7 @@ export default function StudioLanding() {
                               <ArrowRight className="w-4 h-4" />
                             </div>
                           </div>
-                        </Link>
+                        </a>
                       ) : (
                         <button
                           onClick={() => setShowLoginModal(true)}
@@ -600,12 +600,12 @@ export default function StudioLanding() {
                   Join thousands of developers building on Trust Layer. Free to use with your Trust Layer account.
                 </p>
                 {isAuthenticated ? (
-                  <Link href="/studio/editor">
+                  <a href="https://darkwave.studio" target="_blank" rel="noreferrer">
                     <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-black font-bold px-8" data-testid="button-open-studio-cta">
                       <Rocket className="w-5 h-5 mr-2" />
                       Open Studio
                     </Button>
-                  </Link>
+                  </a>
                 ) : (
                   <Button 
                     size="lg"

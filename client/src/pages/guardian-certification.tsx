@@ -491,7 +491,7 @@ function IntakeWizard() {
                   </div>
                 </div>
 
-                <Link href="/guardian-portal">
+                <Link href="/trust-shield">
                   <button
                     className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-cyan-600 to-purple-600 hover:from-cyan-500 hover:to-purple-500 rounded-xl text-white font-semibold transition-all hover:scale-[1.02]"
                     data-testid="link-track-certification"

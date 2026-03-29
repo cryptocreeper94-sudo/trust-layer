@@ -349,7 +349,7 @@ const contextMappings: ContextMapping[] = [
     ]
   },
   {
-    routes: ["/guardian-scanner", "/guardian-shield", "/guardian-ai", "/guardian-certification", "/guardian-registry"],
+    routes: ["/guardian-scanner", "/guardian-shield", "/trust-shield", "/guardian-certification", "/guardian-scanner-registry"],
     sectionIds: ["guardian", "getting-started"],
     quickTips: [
       "Scan any address or contract to check its security score before interacting.",

@@ -399,7 +399,7 @@ export default function OwnerGuardian() {
                               size="sm"
                               variant="outline"
                               className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10"
-                              onClick={() => window.open(`/guardian-ai-registry?cert=${cert.id}`, '_blank')}
+                              onClick={() => window.open(`/guardian-scanner-registry?cert=${cert.id}`, '_blank')}
                               data-testid={`button-registry-${cert.id}`}
                             >
                               <FileText className="w-4 h-4 mr-1" />

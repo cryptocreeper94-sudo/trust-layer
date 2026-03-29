@@ -8,12 +8,12 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { usePageAnalytics } from "@/hooks/use-analytics";
 import { GlassCard } from "@/components/glass-card";
 
-const TOKEN_ALLOCATION = [
+const ASSET_ALLOCATION = [
   { name: "Treasury Reserve", value: 50, color: "#f59e0b", icon: Shield, description: "Long-term sustainability, emergency fund, future growth" },
   { name: "Staking Rewards", value: 15, color: "#22c55e", icon: TrendingUp, description: "Validator and liquid staking APY distributions (12%)" },
   { name: "Development & Team", value: 15, color: "#a855f7", icon: Building, description: "Core team, advisors, operations (4-year vesting)" },
-  { name: "Ecosystem Growth", value: 10, color: "#ec4899", icon: Rocket, description: "Partnerships, grants, exchange listings, integrations" },
-  { name: "Community Rewards", value: 10, color: "#3b82f6", icon: Gift, description: "Presale rewards (1%), airdrops, community events (9%)" },
+  { name: "Ecosystem Growth", value: 10, color: "#ec4899", icon: Rocket, description: "Partnerships, grants, exchange integrations" },
+  { name: "Community Rewards", value: 10, color: "#3b82f6", icon: Gift, description: "Presale rewards (1%), allocations, community events (9%)" },
 ];
 
 const VESTING_SCHEDULE = [
@@ -29,8 +29,8 @@ const UTILITY_CASES = [
   { title: "Staking Rewards", description: "Stake Signal to earn passive yield and secure the network", icon: TrendingUp },
   { title: "Governance", description: "Vote on protocol upgrades and treasury allocation", icon: Users },
   { title: "Chronicles Access", description: "Purchase in-game items, eras, and premium features", icon: Sparkles },
-  { title: "DEX Trading", description: "Trade tokens and provide liquidity on Trust Layer DEX", icon: BarChart3 },
-  { title: "NFT Marketplace", description: "Buy, sell, and mint NFTs using Signal", icon: Gift },
+  { title: "DEX Trading", description: "Trade assets and provide liquidity on Trust Layer DEX", icon: BarChart3 },
+  { title: "Digital Marketplace", description: "Buy, sell, and mint digital verified assets using Signal", icon: Gift },
 ];
 
 export default function Tokenomics() {
@@ -46,7 +46,7 @@ export default function Tokenomics() {
           </Link>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="border-purple-500/50 text-purple-400 bg-purple-500/10 text-[10px] sm:text-xs whitespace-nowrap">
-              <Coins className="w-3 h-3 mr-1" /> Tokenomics
+              <Coins className="w-3 h-3 mr-1" /> Asset Economics
             </Badge>
             <BackButton />
           </div>
@@ -64,7 +64,7 @@ export default function Tokenomics() {
               Signal Economics
             </Badge>
             <h1 className="text-4xl md:text-5xl font-display font-bold mb-4">
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">Signal Tokenomics</span>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">Signal System Economics</span>
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Designed for sustainability, utility, and long-term value. No burn mechanics, no inflation traps.
@@ -92,8 +92,8 @@ export default function Tokenomics() {
             </GlassCard>
             <GlassCard glow hover={false}>
               <div className="p-4 text-center">
-                <div className="text-2xl md:text-3xl font-bold text-pink-400">TBA</div>
-                <div className="text-[10px] text-white/50 uppercase tracking-wider">TGE Date</div>
+                <div className="text-2xl md:text-3xl font-bold text-pink-400">Aug 23, 2026</div>
+                <div className="text-[10px] text-white/50 uppercase tracking-wider">AGE Date</div>
               </div>
             </GlassCard>
           </div>
@@ -112,7 +112,7 @@ export default function Tokenomics() {
               <BarChart3 className="w-6 h-6 text-cyan-400" />
               Signal Allocation
             </h2>
-            <p className="text-muted-foreground text-sm">Distribution designed for ecosystem growth and long-term sustainability</p>
+            <p className="text-muted-foreground text-sm">Asset distribution designed for ecosystem growth and long-term sustainability</p>
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
@@ -120,7 +120,7 @@ export default function Tokenomics() {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
-                    data={TOKEN_ALLOCATION}
+                    data={ASSET_ALLOCATION}
                     cx="50%"
                     cy="50%"
                     innerRadius={80}
@@ -129,7 +129,7 @@ export default function Tokenomics() {
                     dataKey="value"
                     stroke="transparent"
                   >
-                    {TOKEN_ALLOCATION.map((entry, index) => (
+                    {ASSET_ALLOCATION.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={entry.color} />
                     ))}
                   </Pie>
@@ -158,7 +158,7 @@ export default function Tokenomics() {
             </div>
 
             <div className="space-y-3">
-              {TOKEN_ALLOCATION.map((item, index) => (
+              {ASSET_ALLOCATION.map((item, index) => (
                 <motion.div
                   key={item.name}
                   initial={{ opacity: 0, x: 20 }}
@@ -213,7 +213,7 @@ export default function Tokenomics() {
                     <th className="text-left p-4 text-white/50 font-medium text-xs uppercase tracking-wider">Category</th>
                     <th className="text-left p-4 text-white/50 font-medium text-xs uppercase tracking-wider">Cliff</th>
                     <th className="text-left p-4 text-white/50 font-medium text-xs uppercase tracking-wider">Vesting Period</th>
-                    <th className="text-left p-4 text-white/50 font-medium text-xs uppercase tracking-wider">TGE Unlock</th>
+                    <th className="text-left p-4 text-white/50 font-medium text-xs uppercase tracking-wider">AGE Unlock</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -310,18 +310,22 @@ export default function Tokenomics() {
                   </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="p-4 rounded-lg bg-white/[0.03] border border-white/5">
                     <div className="text-2xl font-bold text-green-400 mb-1">Fixed</div>
-                    <div className="text-xs text-white/50">Supply - No new tokens ever minted</div>
+                    <div className="text-xs text-white/50">Supply - No new assets ever generated</div>
                   </div>
                   <div className="p-4 rounded-lg bg-white/[0.03] border border-white/5">
                     <div className="text-2xl font-bold text-cyan-400 mb-1">Transparent</div>
-                    <div className="text-xs text-white/50">All allocations on-chain and verifiable</div>
+                    <div className="text-xs text-white/50">All allocations unconditionally verifiable</div>
                   </div>
                   <div className="p-4 rounded-lg bg-white/[0.03] border border-white/5">
-                    <div className="text-2xl font-bold text-purple-400 mb-1">Sustainable</div>
-                    <div className="text-xs text-white/50">Revenue-backed, not speculation-driven</div>
+                    <div className="text-2xl font-bold text-purple-400 mb-1">Zero-Gas Staking</div>
+                    <div className="text-xs text-white/50">Database-native compounding (100% free UX)</div>
+                  </div>
+                  <div className="p-4 rounded-lg bg-white/[0.03] border border-white/5">
+                    <div className="text-2xl font-bold text-pink-400 mb-1">Bridge Vault</div>
+                    <div className="text-xs text-white/50">Multi-chain SIG minting by physical isolation</div>
                   </div>
                 </div>
               </div>

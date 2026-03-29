@@ -50,13 +50,13 @@
 
 :root {
   /* Dark Tech Theme */
-  --background: 230 35% 7%; /* Deep Space Blue */
+  --background: 240 25% 3%; /* Void Black (#06060a) */
   --foreground: 210 40% 98%;
 
-  --card: 230 35% 10%;
+  --card: 240 25% 5%;
   --card-foreground: 210 40% 98%;
 
-  --popover: 230 35% 10%;
+  --popover: 240 25% 5%;
   --popover-foreground: 210 40% 98%;
 
   --primary: 180 100% 50%; /* Cyan Neon */

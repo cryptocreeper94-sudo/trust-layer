@@ -88,7 +88,7 @@ export default function InnovationHub() {
       description: "Real-time security ratings for every project with insurance eligibility",
       icon: Shield,
       gradient: "from-emerald-500 to-teal-600",
-      href: "/guardian-portal",
+      href: "/trust-shield",
       stats: "Trust verified",
       size: "large"
     },

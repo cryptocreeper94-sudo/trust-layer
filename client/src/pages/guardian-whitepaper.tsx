@@ -162,8 +162,12 @@ export default function GuardianWhitepaperPage() {
                   <h2 className="text-2xl font-bold text-white mb-2">Mission Statement</h2>
                   <p className="text-white/70 text-lg">
                     Guardian Security exists to bring enterprise-grade security certification
-                    to the decentralized world. We combine automated analysis, AI-powered detection,
-                    and expert human review to identify vulnerabilities before they can be exploited.
+                    to the decentralized world. We secure systems through our strict tripartite 
+                    architecture: The <span className="text-cyan-400 font-semibold">Trust Layer Hub</span> (dwtl.io), 
+                    the <span className="text-pink-400 font-semibold">TrustShield Scanner</span> (AI isolation), 
+                    and the air-gapped <span className="text-purple-400 font-semibold">Bridge Vault</span> microservice.
+                    We combine automated analysis, AI-powered detection, and expert human review 
+                    to identify vulnerabilities before they can be exploited.
                   </p>
                 </div>
               </div>

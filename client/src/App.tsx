@@ -230,7 +230,7 @@ const EcosystemMap = lazy(() => import("@/pages/ecosystem-map"));
 const SecurityPage = lazy(() => import("@/pages/security"));
 const GuardianCertification = lazy(() => import("@/pages/guardian-certification"));
 const GuardianRegistry = lazy(() => import("@/pages/guardian-registry"));
-const GuardianPortal = lazy(() => import("@/pages/guardian-portal"));
+const TrustShieldCockpit = lazy(() => import("@/pages/trustshield-cockpit"));
 const GuardianWhitepaper = lazy(() => import("@/pages/guardian-whitepaper"));
 const ExploreHub = lazy(() => import("@/pages/explore-hub"));
 const CommandCenter = lazy(() => import("@/pages/command-center"));
@@ -263,10 +263,9 @@ const Blog = lazy(() => import("@/pages/blog"));
 const BlogPost = lazy(() => import("@/pages/blog-post"));
 const BlogAdmin = lazy(() => import("@/pages/blog-admin"));
 const TrustLayer = lazy(() => import("@/pages/trust-layer"));
-const GuardianScanner = lazy(() => import("@/pages/guardian-scanner-detail"));
-const GuardianScannerDetail = lazy(() => import("@/pages/guardian-scanner-detail"));
-const GuardianAI = lazy(() => import("@/pages/guardian-ai"));
-const GuardianAIRegistry = lazy(() => import("@/pages/guardian-ai-registry"));
+const GuardianScanner = lazy(() => import("@/pages/guardian-scanner"));
+const GuardianScannerRegistry = lazy(() => import("@/pages/guardian-scanner-registry"));
+const GuardianScreenerDetail = lazy(() => import("@/pages/guardian-screener-detail"));
 const GuardianShield = lazy(() => import("@/pages/guardian-shield"));
 const AffiliateDashboard = lazy(() => import("@/pages/affiliate-dashboard"));
 const EcosystemCheckout = lazy(() => import("@/pages/ecosystem-checkout"));
@@ -407,7 +406,6 @@ function DWSCRouter() {
                 case "/academy": return Academy;
                 case "/the-void": return TheVoid;
                 case "/guardian-scanner": return GuardianScanner;
-                case "/guardian-ai": return GuardianAI;
                 case "/signal-chat": return SignalCore;
                 case "/domains": return Domains;
                 case "/veil/read": return VeilReader;
@@ -463,10 +461,14 @@ function DWSCRouter() {
         <Route path="/guardian" component={GuardianCertification} />
         <Route path="/guardian-certification" component={GuardianCertification} />
         <Route path="/guardian-registry" component={GuardianRegistry} />
-        <Route path="/guardian-portal" component={GuardianPortal} />
+        <Route path="/guardian-portal" component={TrustShieldCockpit} />
+        <Route path="/trust-shield" component={TrustShieldCockpit} />
+        <Route path="/trustshield-cockpit" component={TrustShieldCockpit} />
         <Route path="/guardian-whitepaper" component={GuardianWhitepaper} />
-        <Route path="/guardian-ai" component={GuardianAI} />
-        <Route path="/guardian-ai-registry" component={GuardianAIRegistry} />
+        <Route path="/guardian-scanner" component={GuardianScanner} />
+        <Route path="/guardian-scanner-registry" component={GuardianScannerRegistry} />
+        <Route path="/guardian-screener/:symbol" component={GuardianScreenerDetail} />
+        <Route path="/guardian-screener" component={GuardianScreenerDetail} />
         <Route path="/guardian-shield" component={GuardianShield} />
         <Route path="/explorer" component={Explorer} />
         <Route path="/doc-hub" component={DocHub} />
@@ -640,12 +642,12 @@ function TrustShieldRouter() {
       <ScrollToTop />
       <Switch>
         <Route path="/" component={GuardianAI} />
-        <Route path="/guardian-ai" component={GuardianAI} />
-        <Route path="/guardian-ai-registry" component={GuardianAIRegistry} />
+        <Route path="/guardian-scanner" component={GuardianScanner} />
+        <Route path="/guardian-scanner-registry" component={GuardianScannerRegistry} />
         <Route path="/guardian-shield" component={GuardianShield} />
         <Route path="/guardian-certification" component={GuardianCertification} />
         <Route path="/guardian-whitepaper" component={GuardianWhitepaper} />
-        <Route path="/guardian-portal" component={GuardianPortal} />
+        <Route path="/trust-shield" component={TrustShieldCockpit} />
         <Route path="/guardian-scanner" component={GuardianScanner} />
         
         <Route path="/login" component={Welcome} />
@@ -738,8 +740,8 @@ const TLID_SUBDOMAIN_ROUTES: Record<string, string> = {
   "signalchat": "/signal-chat",
   "chronochat": "/signal-chat",
   "guardianscanner": "/guardian-scanner",
-  "guardianscreener": "/guardian-ai",
-  "trustshield": "/guardian-scanner",
+  "guardianscreener": "/guardian-screener",
+  "trustshield": "/trust-shield",
   "academy": "/academy",
   "thevoid": "/the-void",
   "tlid": "/domains",

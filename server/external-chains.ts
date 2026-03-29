@@ -1,5 +1,4 @@
 import { Connection, PublicKey, Keypair, Transaction, SystemProgram, sendAndConfirmTransaction } from "@solana/web3.js";
-import { createHash, createHmac } from "crypto";
 
 const ETHEREUM_SEPOLIA_RPC = "https://ethereum-sepolia-rpc.publicnode.com";
 const SOLANA_DEVNET_RPC = process.env.HELIUS_API_KEY 
@@ -14,9 +13,6 @@ const WSIG_SOLANA_MINT = process.env.WSIG_SOLANA_ADDRESS || "1111111111111111111
 const WSIG_POLYGON_CONTRACT = process.env.WSIG_POLYGON_ADDRESS || "0x0000000000000000000000000000000000000000";
 const WSIG_ARBITRUM_CONTRACT = process.env.WSIG_ARBITRUM_ADDRESS || "0x0000000000000000000000000000000000000000";
 const WSIG_BASE_CONTRACT = process.env.WSIG_BASE_ADDRESS || "0x0000000000000000000000000000000000000000";
-
-const MINT_FUNCTION_SELECTOR = "0x156e29f6";
-const CHAIN_ID_SEPOLIA = 11155111;
 
 export type SupportedExternalChain = "ethereum" | "solana" | "polygon" | "arbitrum" | "base";
 
@@ -411,129 +407,61 @@ class ExternalChainsService {
     return addr !== "0x0000000000000000000000000000000000000000";
   }
 
-  private encodeUint256(value: string): string {
-    const bigVal = BigInt(value);
-    return bigVal.toString(16).padStart(64, '0');
-  }
-
-  private encodeAddress(addr: string): string {
-    return addr.replace('0x', '').toLowerCase().padStart(64, '0');
-  }
-
-  private encodeBytes32(str: string): string {
-    const hash = createHash('sha256').update(str).digest('hex');
-    return hash.padStart(64, '0').substring(0, 64);
-  }
-
-  async mintOnEthereum(to: string, amount: string, lockId: string): Promise<{
+  async mintWrappedToken(chain: SupportedExternalChain, to: string, amount: string, lockId: string): Promise<{
     success: boolean;
     txHash?: string;
     error?: string;
     isMock?: boolean;
   }> {
-    if (!this.isContractDeployed("ethereum")) {
-      console.warn("[External Chains] ⚠️ wSIG contract NOT DEPLOYED - using MOCK mint (testnet development mode)");
-      console.warn("[External Chains] ⚠️ No real tokens minted. Deploy contract and set WSIG_ETHEREUM_ADDRESS to enable real minting.");
+    const bridgeUrl = process.env.TRUST_LAYER_BRIDGE_URL;
+    const bridgeApiKey = process.env.BRIDGE_API_KEY;
+
+    if (!bridgeUrl || !bridgeApiKey) {
+      console.warn("[External Chains] ⚠️ TRUST_LAYER_BRIDGE_URL or BRIDGE_API_KEY missing - using MOCK fallback");
       return {
         success: true,
-        txHash: `0xMOCK_ETH_${lockId.substring(0, 8)}_${Date.now().toString(16)}`,
+        txHash: `0xMOCK_BRIDGE_MISSING_${lockId.substring(0, 8)}_${Date.now().toString(16)}`,
         isMock: true,
       };
     }
 
-    const privateKey = process.env.TREASURY_PRIVATE_KEY;
-    if (!privateKey) {
-      return { success: false, error: "TREASURY_PRIVATE_KEY not configured" };
-    }
-
     try {
-      console.log(`[External Chains] 🚀 LIVE TESTNET MINT: ${amount} wSIG to ${to} on Ethereum Sepolia`);
+      console.log(`[External Chains] 🚀 Calling Secure Bridge Service for ${amount} wSIG to ${to} on ${chain}`);
       console.log(`[External Chains] Lock ID: ${lockId}`);
-      console.log(`[External Chains] Contract: ${WSIG_ETHEREUM_CONTRACT}`);
 
-      const calldata = MINT_FUNCTION_SELECTOR + 
-        this.encodeAddress(to) +
-        this.encodeUint256(amount) +
-        this.encodeBytes32(lockId);
+      const endpoint = chain === "solana" ? "/mint/sol" : "/mint/evm";
 
-      const estimateResponse = await fetch(ETHEREUM_SEPOLIA_RPC, {
+      const response = await fetch(`${bridgeUrl}${endpoint}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "x-bridge-auth": bridgeApiKey
+        },
         body: JSON.stringify({
-          jsonrpc: "2.0",
-          id: 1,
-          method: "eth_estimateGas",
-          params: [{
-            to: WSIG_ETHEREUM_CONTRACT,
-            data: calldata,
-          }],
+          targetChain: chain,
+          toAddress: to,
+          amount: amount,
+          lockId: lockId
         }),
       });
 
-      const estimateData = await estimateResponse.json();
-      const gasLimit = estimateData.result || "0x30000";
-      
-      console.log(`[External Chains] Estimated gas: ${parseInt(gasLimit, 16)}`);
-      console.log(`[External Chains] ✅ Mint transaction prepared for broadcast`);
-      console.log(`[External Chains] ⏳ Actual signing requires ethers.js integration`);
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || "Bridge microservice rejected request");
+      }
+
+      console.log(`[External Chains] ✅ Bridge Executed Successfully. Hash: ${data.txHash}`);
 
       return {
         success: true,
-        txHash: `0xTESTNET_READY_${lockId.substring(0, 8)}_${Date.now().toString(16)}`,
+        txHash: data.txHash,
         isMock: false,
       };
     } catch (error: any) {
-      console.error(`[External Chains] Mint failed:`, error);
+      console.error(`[External Chains] Bridge Integration Failed:`, error);
       return { success: false, error: error.message };
     }
-  }
-
-  async mintOnSolana(to: string, amount: string, lockId: string): Promise<{
-    success: boolean;
-    txHash?: string;
-    error?: string;
-    isMock?: boolean;
-  }> {
-    if (!this.isContractDeployed("solana")) {
-      console.warn("[External Chains] ⚠️ wSIG token NOT DEPLOYED on Solana - using MOCK mint (testnet development mode)");
-      console.warn("[External Chains] ⚠️ No real tokens minted. Deploy SPL token and set WSIG_SOLANA_ADDRESS to enable real minting.");
-      return {
-        success: true,
-        txHash: `MOCK_SOL_${lockId.substring(0, 8)}_${Date.now().toString(36)}`,
-        isMock: true,
-      };
-    }
-
-    const privateKey = process.env.TREASURY_PRIVATE_KEY;
-    if (!privateKey) {
-      return { success: false, error: "TREASURY_PRIVATE_KEY not configured" };
-    }
-
-    try {
-      console.log(`[External Chains] Minting ${amount} wSIG to ${to} on Solana Devnet`);
-      console.log(`[External Chains] Lock ID: ${lockId}`);
-
-      return {
-        success: true,
-        txHash: `pending_real_mint_${lockId.substring(0, 16)}`,
-      };
-    } catch (error: any) {
-      return { success: false, error: error.message };
-    }
-  }
-
-  async mintWrappedToken(chain: "ethereum" | "solana", to: string, amount: string, lockId: string): Promise<{
-    success: boolean;
-    txHash?: string;
-    error?: string;
-    isMock?: boolean;
-  }> {
-    if (chain === "ethereum") {
-      return this.mintOnEthereum(to, amount, lockId);
-    } else if (chain === "solana") {
-      return this.mintOnSolana(to, amount, lockId);
-    }
-    return { success: false, error: `Unsupported chain: ${chain}` };
   }
 }
 

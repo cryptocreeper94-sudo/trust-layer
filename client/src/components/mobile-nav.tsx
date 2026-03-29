@@ -179,9 +179,9 @@ const navCategories = [
     label: "Security & Trust",
     icon: Shield,
     items: [
-      { href: "/guardian-ai", label: "Guardian AI", icon: Shield, badge: "New" },
+      { href: "/guardian-scanner", label: "Guardian Scanner", icon: Shield, badge: "New" },
       { href: "/guardian-certification", label: "Guardian Certification", icon: Shield },
-      { href: "/guardian-ai-registry", label: "AI Agent Registry", icon: Shield },
+      { href: "/guardian-scanner-registry", label: "Asset Registry", icon: Shield },
       { href: "/security", label: "Security Overview", icon: Lock },
     ]
   },
@@ -216,7 +216,7 @@ const navCategories = [
     icon: Globe,
     items: [
       { href: "/domains", label: "TLID.io - Domains", icon: Globe },
-      { href: "/guardian-ai", label: "TrustShield.tech", icon: Shield },
+      { href: "/trust-shield", label: "TrustShield.tech", icon: Shield },
       { href: "/arcade", label: "The Arcade", icon: Gamepad2 },
       { href: "/studio", label: "Trust Studio", icon: Sparkles },
       { href: "/academy", label: "Academy", icon: BookOpen },

@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/carousel";
 import { EcosystemDirectory } from "@/components/ecosystem-directory";
 import { GenesisHallmarkBadge } from "@/components/genesis-hallmark-badge";
+import { KenBurnsBackground } from "@/components/ken-burns-background";
 
 import hubTrading from "@/assets/generated_images/hub_trading_defi.jpg";
 import hubWallet from "@/assets/generated_images/hub_wallet_tokens.jpg";
@@ -244,12 +245,12 @@ const categories: Category[] = [
     cards: [
       { label: "Guardian Scanner", description: "Scan any token for risks", href: "/guardian-scanner", icon: <Scan className="size-5" />, image: hubGuardian, glowColor: "shadow-red-500/30", featured: false, badge: "AI" },
       { label: "Guardian Shield", description: "Continuous security monitoring", href: "/guardian-shield", icon: <Shield className="size-5" />, image: ccSecurity, glowColor: "shadow-cyan-500/30" },
-      { label: "Guardian AI Registry", description: "Certified AI agents", href: "/guardian-ai-registry", icon: <Bot className="size-5" />, image: hubAI, glowColor: "shadow-purple-500/30" },
-      { label: "Guardian Portal", description: "Security certification hub", href: "/guardian-portal", icon: <ShieldCheck className="size-5" />, image: hubIdentity, glowColor: "shadow-red-400/30" },
+      { label: "Guardian Scanner Registry", description: "Certified agents & assets", href: "/guardian-scanner-registry", icon: <Bot className="size-5" />, image: hubAI, glowColor: "shadow-purple-500/30" },
+      { label: "Trust Shield Cockpit", description: "Security & certification hub", href: "/trust-shield", icon: <ShieldCheck className="size-5" />, image: hubIdentity, glowColor: "shadow-red-400/30" },
       { label: "Guardian Registry", description: "Certified projects", href: "/guardian-registry", icon: <ScrollText className="size-5" />, image: hubSmartContract, glowColor: "shadow-rose-500/30" },
       { label: "Proof of Reserve", description: "On-chain reserve verification", href: "/proof-of-reserve", icon: <Lock className="size-5" />, image: ccBlockchain, glowColor: "shadow-emerald-500/30" },
       { label: "Security Center", description: "Account security settings", href: "/security", icon: <Shield className="size-5" />, image: ccSettings, glowColor: "shadow-teal-500/30" },
-      { label: "Guardian AI", description: "AI guardian certification system", href: "/guardian-ai", icon: <BrainCircuit className="size-5" />, image: hubEcosystem, glowColor: "shadow-cyan-500/30" },
+      { label: "Guardian Scanner", description: "High-end asset verification", href: "/guardian-scanner", icon: <BrainCircuit className="size-5" />, image: hubEcosystem, glowColor: "shadow-cyan-500/30" },
       { label: "Guardian Whitepaper", description: "Security framework whitepaper", href: "/guardian-whitepaper", icon: <FileText className="size-5" />, image: hubLearn, glowColor: "shadow-indigo-500/30" },
     ]
   },
@@ -392,10 +393,11 @@ function CategorySection({ category, catIndex }: { category: Category; catIndex:
 
   return (
     <motion.section
+      id={`category-${catIndex}`}
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: catIndex * 0.08, duration: 0.5 }}
-      className="mb-16"
+      className="mb-16 scroll-mt-32"
     >
       <div className="mb-7 px-1">
         <div className="flex items-center gap-4 mb-3">
@@ -573,7 +575,19 @@ export default function ExploreHub() {
   const totalFeatures = categories.reduce((sum, cat) => sum + cat.cards.length, 0);
 
   return (
-    <div className="min-h-screen pt-20 pb-12" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+    <div className="min-h-screen pt-20 pb-12 relative" style={{ background: "linear-gradient(180deg, #070b16, #0c1222, #070b16)" }}>
+      <KenBurnsBackground
+        images={[
+          hubEcosystem,
+          hubPresale,
+          hubWallet,
+          hubChronicles,
+          hubAI,
+          ccSettings
+        ]}
+        overlayOpacity={0.85}
+        duration={12000}
+      />
       <GlowOrb color="linear-gradient(135deg, #06b6d4, #3b82f6)" size={600} top="-5%" left="60%" />
       <GlowOrb color="linear-gradient(135deg, #8b5cf6, #ec4899)" size={500} top="30%" left="-10%" delay={3} />
       <GlowOrb color="linear-gradient(135deg, #f59e0b, #ef4444)" size={400} top="60%" left="80%" delay={5} />
@@ -614,6 +628,33 @@ export default function ExploreHub() {
         <PWAInstallBanner />
 
         <EcosystemDirectory compact defaultCollapsed className="mb-10" />
+
+        {/* Sticky Category Jump Links / TOC */}
+        <div className="sticky top-20 z-40 -mx-4 px-4 sm:mx-0 sm:px-0 mb-10 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+          <div className="flex items-center gap-2 pb-3 min-w-max">
+            {categories.map((cat, i) => (
+              <button
+                key={cat.title}
+                onClick={() => {
+                  const el = document.getElementById(`category-${i}`);
+                  if (el) {
+                    const y = el.getBoundingClientRect().top + window.scrollY - 100;
+                    window.scrollTo({ top: y, behavior: "smooth" });
+                  }
+                }}
+                className="whitespace-nowrap px-4 py-2 rounded-xl border border-white/5 bg-black/40 text-white/70 text-sm font-medium hover:bg-white/10 hover:border-cyan-500/30 hover:text-white transition-all backdrop-blur-xl shadow-lg"
+              >
+                <div className="flex items-center gap-2">
+                  <span className={`flex items-center justify-center w-5 h-5 rounded-md bg-gradient-to-br ${cat.gradient} shadow-lg shadow-white/5`}>
+                     {/* Scale down the icon inside */}
+                    <div className="scale-75 text-white">{cat.icon}</div>
+                  </span>
+                  {cat.title}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
 
         {filteredCategories.length === 0 ? (
           <div className="text-center py-20">

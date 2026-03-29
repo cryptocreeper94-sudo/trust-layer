@@ -567,6 +567,25 @@ console.log({
   fee: data.fee
 });`,
     },
+    {
+      title: "5. Generate 3D Asset (Waitlist/Beta)",
+      language: "typescript",
+      code: `// Request AI 3D generation via TrustGen microservice
+const gen = await fetch('https://trustgen.tlid.io/api/meshy/generate', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer dwc_your_api_key'
+  },
+  body: JSON.stringify({
+    prompt: 'cyberpunk hacker avatar with glowing jacket',
+    autoRig: true  // Automatically rig for Mixamo animations
+  })
+});
+
+const { id, status } = await gen.json();
+console.log('Generation Task ID:', id);`,
+    },
   ];
 
   if (!authenticated) {

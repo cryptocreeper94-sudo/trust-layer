@@ -146,7 +146,7 @@ const categories: Category[] = [
     cards: [
       { label: "Guardian Portal", description: "Security certification management", href: "/owner-admin/guardian", icon: <ShieldCheck className="size-5" />, image: ccSecurity, glowColor: "shadow-red-500/30", featured: false },
       { label: "Guardian Scanner", description: "AI-powered token security analysis", href: "/guardian-scanner", icon: <Search className="size-5" />, image: hubGuardianSentinel, glowColor: "shadow-cyan-500/30", badge: "AI" },
-      { label: "Guardian AI Registry", description: "Certified AI agent registry", href: "/guardian-ai-registry", icon: <Bot className="size-5" />, image: hubAiTools, glowColor: "shadow-purple-500/30" },
+      { label: "Guardian Scanner Registry", description: "Certified asset registry", href: "/guardian-scanner-registry", icon: <Bot className="size-5" />, image: hubAiTools, glowColor: "shadow-purple-500/30" },
       { label: "Guardian Shield", description: "Continuous security monitoring", href: "/guardian-shield", icon: <Shield className="size-5" />, image: hubIdentitySecurity, glowColor: "shadow-rose-500/30" },
       { label: "Guardian Certification", description: "Audit certification program", href: "/guardian-certification", icon: <ScrollText className="size-5" />, image: hubSmartContract, glowColor: "shadow-red-400/30" },
     ]

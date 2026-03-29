@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { ArrowRight, Code, Globe, Layers, Shield, Zap, Cpu, Network, Database, Heart, Sparkles, Activity, Server, CheckCircle2, Droplets, ArrowUpDown, ImageIcon, PieChart, History, Rocket, LineChart, Webhook, Palette, Trophy, Target, ChevronDown, ChevronLeft, ChevronRight, Gift, Search } from "lucide-react";
 import { InfoTooltip } from "@/components/info-tooltip";
+import { KenBurnsBackground } from "@/components/ken-burns-background";
 import heroBg from "@assets/trust_network_connecting_everything_1769800437573.png";
-// Hero slideshow videos
 const orbitVideo = "";
 const brewBoardVideo = "";
 const garageBotVideo = "";
@@ -688,9 +688,18 @@ export default function Home() {
       
 
       <section className="relative min-h-[85vh] flex items-center justify-center pt-20 md:pt-14 overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img src={heroBg} alt="" className="w-full h-full object-cover opacity-30" />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/80 to-background" />
+        <KenBurnsBackground
+          images={[
+            heroBg,
+            tradingImg,
+            launchpadImg,
+            earnImg,
+            devStudioImg,
+            toolsImg
+          ]}
+          overlayOpacity={0.5}
+        />
+        <div className="absolute inset-0 z-0 pointer-events-none">
           {/* Blockchain Network Lattice */}
           <svg className="absolute inset-0 w-full h-full opacity-40" preserveAspectRatio="xMidYMid slice">
             <defs>

@@ -273,6 +273,7 @@ function AuthorEarningsDashboard({ userId }: { userId: string }) {
 
 export default function TrustBook() {
   const [activeTab, setActiveTab] = useState('discover');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showSubmitForm, setShowSubmitForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -751,71 +752,72 @@ export default function TrustBook() {
           ) : (
             <div className="max-w-4xl mx-auto">
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-                <div className="lg:col-span-1">
-                  <GlassCard>
-                    <div className="p-4">
-                      <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-sm font-bold text-white">Writing Projects</h3>
-                        <Button size="sm" onClick={() => setShowNewSession(true)} className="h-8 px-3 gap-1 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-400 border border-indigo-500/30 text-xs rounded-lg" data-testid="button-new-project">
-                          <Plus className="w-3 h-3" /> New
-                        </Button>
-                      </div>
+                {sidebarOpen && (
+                  <div className="lg:col-span-1">
+                    <GlassCard>
+                      <div className="p-4">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="text-sm font-bold text-white">Writing Projects</h3>
+                          <Button size="sm" onClick={() => setShowNewSession(true)} className="h-8 px-3 gap-1 bg-indigo-500/20 hover:bg-indigo-500/30 text-indigo-400 border border-indigo-500/30 text-xs rounded-lg" data-testid="button-new-project">
+                            <Plus className="w-3 h-3" /> New
+                          </Button>
+                        </div>
 
-                      <AnimatePresence>
-                        {showNewSession && (
-                          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
-                            className="mb-4 p-3 rounded-xl bg-white/[0.03] border border-indigo-500/20 space-y-2">
-                            <input type="text" value={newSessionTitle} onChange={(e) => setNewSessionTitle(e.target.value)}
-                              placeholder="Book title..." className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-xs placeholder:text-white/20 focus:outline-none focus:border-indigo-500/50" data-testid="input-new-project-title" />
-                            <select value={newSessionCategory} onChange={(e) => setNewSessionCategory(e.target.value)}
-                              className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-indigo-500/50" data-testid="select-new-project-category">
-                              <option value="fiction" className="bg-slate-900">Fiction</option>
-                              <option value="nonfiction" className="bg-slate-900">Non-Fiction</option>
-                            </select>
-                            <select value={newSessionGenre} onChange={(e) => setNewSessionGenre(e.target.value)}
-                              className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-indigo-500/50" data-testid="select-new-project-genre">
-                              <option value="" className="bg-slate-900">Select genre...</option>
-                              {BOOK_CATEGORIES[newSessionCategory as keyof typeof BOOK_CATEGORIES]?.subcategories.map(sub => (
-                                <option key={sub} value={sub} className="bg-slate-900">{sub}</option>
-                              ))}
-                            </select>
-                            <div className="flex gap-2">
-                              <Button size="sm" onClick={createSession} disabled={!newSessionTitle.trim()} className="flex-1 h-8 text-xs bg-indigo-600 hover:bg-indigo-500" data-testid="button-create-project">Create</Button>
-                              <Button size="sm" variant="ghost" onClick={() => setShowNewSession(false)} className="h-8 text-xs text-white/40">Cancel</Button>
+                        <AnimatePresence>
+                          {showNewSession && (
+                            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+                              className="mb-4 p-3 rounded-xl bg-white/[0.03] border border-indigo-500/20 space-y-2">
+                              <input type="text" value={newSessionTitle} onChange={(e) => setNewSessionTitle(e.target.value)}
+                                placeholder="Book title..." className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-xs placeholder:text-white/20 focus:outline-none focus:border-indigo-500/50" data-testid="input-new-project-title" />
+                              <select value={newSessionCategory} onChange={(e) => setNewSessionCategory(e.target.value)}
+                                className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-indigo-500/50" data-testid="select-new-project-category">
+                                <option value="fiction" className="bg-slate-900">Fiction</option>
+                                <option value="nonfiction" className="bg-slate-900">Non-Fiction</option>
+                              </select>
+                              <select value={newSessionGenre} onChange={(e) => setNewSessionGenre(e.target.value)}
+                                className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-indigo-500/50" data-testid="select-new-project-genre">
+                                <option value="" className="bg-slate-900">Select genre...</option>
+                                {BOOK_CATEGORIES[newSessionCategory as keyof typeof BOOK_CATEGORIES]?.subcategories.map(sub => (
+                                  <option key={sub} value={sub} className="bg-slate-900">{sub}</option>
+                                ))}
+                              </select>
+                              <div className="flex gap-2">
+                                <Button size="sm" onClick={createSession} disabled={!newSessionTitle.trim()} className="flex-1 h-8 text-xs bg-indigo-600 hover:bg-indigo-500" data-testid="button-create-project">Create</Button>
+                                <Button size="sm" variant="ghost" onClick={() => setShowNewSession(false)} className="h-8 text-xs text-white/40">Cancel</Button>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+
+                        <div className="space-y-1 max-h-[400px] overflow-y-auto">
+                          {writingSessions.length === 0 ? (
+                            <div className="text-center py-6">
+                              <Pen className="w-6 h-6 text-slate-600 mx-auto mb-2" />
+                              <p className="text-[10px] text-white/30">No projects yet. Start your first book!</p>
                             </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-
-                      <div className="space-y-1 max-h-[400px] overflow-y-auto">
-                        {writingSessions.length === 0 ? (
-                          <div className="text-center py-6">
-                            <Pen className="w-6 h-6 text-slate-600 mx-auto mb-2" />
-                            <p className="text-[10px] text-white/30">No projects yet. Start your first book!</p>
-                          </div>
-                        ) : writingSessions.map((session: any) => (
-                          <button key={session.id} onClick={() => loadSession(session)}
-                            className={`w-full text-left p-3 rounded-xl text-sm transition-all ${
-                              activeSession?.id === session.id ? 'bg-indigo-500/15 border border-indigo-500/30 text-white' : 'text-white/50 hover:bg-white/[0.03] hover:text-white/70'
-                            }`} data-testid={`session-${session.id}`}>
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="text-xs font-medium truncate">{session.title}</span>
-                              <Badge className="text-[8px] bg-white/5 border-white/10 text-white/30 ml-2">{session.status}</Badge>
-                            </div>
-                            <span className="text-[10px] text-white/30">{session.genre || session.category || 'No genre'}</span>
-                          </button>
-                        ))}
+                          ) : writingSessions.map((session: any) => (
+                            <button key={session.id} onClick={() => loadSession(session)}
+                              className={`w-full text-left p-3 rounded-xl text-sm transition-all ${
+                                activeSession?.id === session.id ? 'bg-indigo-500/15 border border-indigo-500/30 text-white' : 'text-white/50 hover:bg-white/[0.03] hover:text-white/70'
+                              }`} data-testid={`session-${session.id}`}>
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="text-xs font-medium truncate">{session.title}</span>
+                                <Badge className="text-[8px] bg-white/5 border-white/10 text-white/30 ml-2">{session.status}</Badge>
+                              </div>
+                              <span className="text-[10px] text-white/30">{session.genre || session.category || 'No genre'}</span>
+                            </button>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                  </GlassCard>
-                </div>
-
-                <div className="lg:col-span-2">
+                    </GlassCard>
+                  </div>
+                )}
+                <div className={sidebarOpen ? "lg:col-span-2" : "col-span-1 lg:col-span-3"}>
                   <GlassCard glow>
                     <div className="flex flex-col h-[500px]">
                       {activeSession ? (
                         <>
-                          <div className="p-4 border-b border-white/5">
+                          <div className="p-4 border-b border-white/5 flex items-center justify-between">
                             <div className="flex items-center gap-3">
                               <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/20 flex items-center justify-center">
                                 <Bot className="w-4 h-4 text-indigo-400" />
@@ -825,6 +827,9 @@ export default function TrustBook() {
                                 <p className="text-[10px] text-white/30">{activeSession.genre || 'No genre set'} · {activeSession.status}</p>
                               </div>
                             </div>
+                            <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={() => setSidebarOpen(!sidebarOpen)}>
+                              <List className="h-4 w-4 text-white/60 hover:text-white" />
+                            </Button>
                           </div>
                           <div className="flex-1 overflow-y-auto p-4 space-y-4">
                             {chatMessages.length === 0 && (
@@ -839,6 +844,22 @@ export default function TrustBook() {
                                       {prompt}
                                     </button>
                                   ))}
+                                </div>
+                              </div>
+                            )}
+                            {chatMessages.length > 0 && !activeSession && (
+                              <div className="text-center py-8">
+                                 {/* Just a safety catch */}
+                              </div>
+                            )}
+                            {(!activeSession) && chatMessages.length === 0 && (
+                              <div className="text-center py-8">
+                                <Bot className="w-10 h-10 text-indigo-400/30 mx-auto mb-3" />
+                                <p className="text-sm text-white/40 mb-1">Hi! I'm your Book Author Agent.</p>
+                                <div className="flex justify-center mt-4">
+                                  <Button onClick={() => setSidebarOpen(true)} className="gap-2 bg-indigo-500/20 text-indigo-400">
+                                    <List className="w-4 h-4" /> Open Projects List
+                                  </Button>
                                 </div>
                               </div>
                             )}

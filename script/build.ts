@@ -94,12 +94,7 @@ async function buildAll() {
     build: {
       chunkSizeWarningLimit: 5000,
       minify: 'esbuild',
-      sourcemap: false,
-      rollupOptions: {
-        output: {
-          manualChunks: undefined,
-        },
-      },
+      sourcemap: false
     },
   });
 

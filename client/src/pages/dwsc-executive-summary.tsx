@@ -165,14 +165,14 @@ export default function DWSCExecutiveSummary() {
               </h2>
               <div className="space-y-4 text-white/80 leading-relaxed">
                 <p>
-                  <span className="text-purple-400 font-semibold">Beyond "cryptocurrency"</span> — Trust Layer is a 
+                  <span className="text-purple-400 font-semibold">Beyond speculative assets</span> — Trust Layer is a 
                   <span className="text-cyan-400 font-semibold"> Coordinated Trust Infrastructure</span> designed for real 
                   business operations. We provide verified identity, accountability, and transparent audit trails that 
                   enterprises need for trusted relationships.
                 </p>
                 <p>
                   <span className="text-pink-400 font-semibold">Signal (SIG)</span> is not a speculative asset — it's a 
-                  <span className="text-purple-400 font-semibold"> Trust Network Access Token</span>. Signal represents 
+                  <span className="text-purple-400 font-semibold"> Trust Network Access Property</span>. Signal represents 
                   acknowledgement and proof of participation in the trust network. The value is the infrastructure 
                   it unlocks, not speculation.
                 </p>
@@ -226,7 +226,7 @@ export default function DWSCExecutiveSummary() {
                   description: "ML-powered market intelligence platform. Pulse provides verified price predictions with transparent accuracy tracking. Strike Agent detects new opportunities with AI risk scoring.",
                   icon: Zap,
                   color: "purple",
-                  features: ["Price Predictions", "Risk Scoring", "Memecoin Sniper", "Win Rate Tracking"]
+                  features: ["Price Predictions", "Risk Scoring", "Asset Sniper", "Win Rate Tracking"]
                 },
                 {
                   title: "Chronicles",
@@ -301,12 +301,12 @@ export default function DWSCExecutiveSummary() {
               <div ref={carouselRef} className="flex gap-4 overflow-x-auto scrollbar-hide px-8 py-4 snap-x snap-mandatory touch-pan-x">
                 {[
                   { title: "Pulse AI", desc: "ML-powered market predictions with verified accuracy tracking. Fear & Greed index, multi-timeframe analysis.", img: pulseImg, href: "/pulse", domain: "dwsc.io" },
-                  { title: "Strike Agent", desc: "Solana memecoin sniper with AI risk scoring. Honeypot detection, liquidity analysis, Phantom integration.", img: strikeImg, href: "/strike-agent", domain: "strikeagent.io" },
-                  { title: "TrustShield.tech", desc: "World's first AI agent certification. Verify, certify, and protect autonomous AI systems. Free scanning tools and paid Guardian certification.", img: trustShieldImg, href: "/guardian-ai", domain: "trustshield.tech" },
-                  { title: "Signal Chat", desc: "Community platform with real-time messaging, channels, reactions, and Shells virtual currency.", img: chronochatImg, href: "/signal-chat", domain: "dwsc.io" },
+                  { title: "Strike Agent", desc: "Solana asset sniper with AI risk scoring. Honeypot detection, liquidity analysis, Phantom integration.", img: strikeImg, href: "/strike-agent", domain: "strikeagent.io" },
+                  { title: "TrustShield.tech", desc: "World's first AI agent and asset certification. Verify, certify, and protect autonomous systems. Free scanning tools and paid Guardian certification.", img: trustShieldImg, href: "/guardian-scanner", domain: "trustshield.tech" },
+                  { title: "Signal Chat", desc: "Community platform with real-time messaging, channels, reactions, and Shells virtual resources.", img: chronochatImg, href: "/signal-chat", domain: "dwsc.io" },
                   { title: "VedaSolus", desc: "Holistic wellness platform connecting practitioners of all traditions - Western, Eastern, Ayurvedic, energy healing.", img: vedasolusImg, href: "/ecosystem", domain: "vedasolus.io" },
                   { title: "Chronicles", desc: "10 verifiable historical eras. AI-powered parallel life simulation. Not a game - a life. YOUR legend.", img: chroniclesImg, href: "/chronicles", domain: "yourlegacy.io" },
-                  { title: "Signal Presale", desc: "Signal at $0.001 each. Tiered pricing through launch. Up to 25% early adopter bonus.", img: presaleImg, href: "/presale", domain: "dwsc.io" },
+                  { title: "Signal Genesis", desc: "Signal early allocation at $0.001 each. Tiered pricing through launch. Up to 25% early adopter bonus.", img: presaleImg, href: "/presale", domain: "dwsc.io" },
                   { title: "DEX & Swap", desc: "AMM-style decentralized exchange. Trade Signal with low fees and instant settlement on-chain.", img: dexImg, href: "/swap", domain: "dwsc.io" },
                   { title: "Liquid Staking", desc: "Stake SIG, receive stSIG. Earn rewards while maintaining full liquidity for DeFi.", img: liquidStakingImg, href: "/liquid-staking", domain: "dwsc.io" },
                   { title: "NFT Marketplace", desc: "Create, buy, sell NFTs. 2.5% transaction fees. Built-in rarity analyzer and collection tools.", img: nftImg, href: "/nft-marketplace", domain: "dwsc.io" },
@@ -652,14 +652,14 @@ export default function DWSCExecutiveSummary() {
                 },
                 {
                   title: "Shell Packages",
-                  source: "Virtual Currency",
+                  source: "Virtual Goods",
                   description: "Starter (100/$4.99), Popular (500/$19.99), Premium (1,200/$39.99), Ultimate (3,000/$79.99).",
                   icon: Sparkles
                 },
                 {
-                  title: "Signal Presale",
-                  source: "Blockchain",
-                  description: "Signal at $0.001 each. Community rewards capped at 1% of supply. TGE price $0.01 (10x).",
+                  title: "Signal Genesis",
+                  source: "Infrastructure",
+                  description: "Signal at $0.001 each. Community rewards capped at 1% of supply. AGE price $0.01 (10x).",
                   icon: Coins
                 },
                 {
@@ -735,7 +735,7 @@ export default function DWSCExecutiveSummary() {
                   title: "Foundation",
                   date: "Current",
                   status: "in_progress",
-                  blockchain: ["Testnet live", "Signal presale", "Bridge development"],
+                  blockchain: ["Testnet live", "Signal genesis allocation", "Isolated bridge development"],
                   chronicles: ["Website launch", "Community building", "Single-era sandbox"]
                 },
                 {

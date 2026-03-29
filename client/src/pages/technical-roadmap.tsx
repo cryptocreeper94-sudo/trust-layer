@@ -106,12 +106,18 @@ const roadmapData: RoadmapPhase[] = [
         details: ["Chain ID: 8453", "One-click chain addition", "Transaction signing"]
       },
       {
+        title: "dw-sso Platform Identity",
+        description: "Universal single-sign on across all Trust Layer domains",
+        status: "completed",
+        details: ["Cross-domain authentication", "Wallet bot integration", "Unified ecosystem presence"]
+      },
+      {
         title: "Multi-Wallet Support",
         description: "Phantom (Solana), WalletConnect, and native wallets",
         status: "completed"
       },
       {
-        title: "Cloud Wallet Backup",
+        title: "Cloud Identity Backup",
         description: "Encrypted seed phrase backup with Firebase",
         status: "completed"
       },
@@ -129,30 +135,35 @@ const roadmapData: RoadmapPhase[] = [
     icon: <Zap className="w-6 h-6" />,
     items: [
       {
-        title: "DEX / Token Swap",
-        description: "AMM-style decentralized exchange with liquidity pools",
+        title: "TrustShield Scanner",
+        description: "Dedicated enterprise-grade platform for AI & smart contract risk analysis",
         status: "completed"
       },
       {
-        title: "Staking & Liquid Staking",
-        description: "SIG staking with stSIG liquid staking tokens",
+        title: "DEX / Asset Swap",
+        description: "AMM-style decentralized exchange with liquidity protocols",
         status: "completed"
       },
       {
-        title: "NFT Marketplace",
-        description: "Create, buy, sell, and auction NFTs",
+        title: "Zero-Gas Staking",
+        description: "Database-native SIG compounding without transaction fees",
         status: "completed"
       },
       {
-        title: "Token Launchpad",
-        description: "Fair launch platform for new tokens",
+        title: "Digital Asset Marketplace",
+        description: "Create, buy, sell, and auction verified digital properties",
         status: "completed"
       },
       {
-        title: "Cross-Chain Bridge",
-        description: "Lock & mint bridge to Ethereum and Solana",
+        title: "Asset Launchpad",
+        description: "Fair launch platform for ecosystem generation",
+        status: "completed"
+      },
+      {
+        title: "Isolated Bridge Vault",
+        description: "Microservice-powered lock & mint bridge to Ethereum and Solana",
         status: "completed",
-        details: ["Ethereum Sepolia testnet", "Solana Devnet", "UUPS proxy contracts"]
+        details: ["Absolute isolation from frontend", "Express microservice firewall", "Treasury key lockdown"]
       }
     ]
   },
@@ -162,8 +173,8 @@ const roadmapData: RoadmapPhase[] = [
     icon: <Code className="w-6 h-6" />,
     items: [
       {
-        title: "Token Deployment Templates",
-        description: "Pre-built templates for ERC-20 style tokens",
+        title: "Digital Asset Templates",
+        description: "Pre-built templates for verified digital properties",
         status: "completed"
       },
       {
@@ -219,19 +230,19 @@ const roadmapData: RoadmapPhase[] = [
   },
   {
     phase: "Phase 6",
-    title: "Token Generation Event",
+    title: "Asset Generation Event",
     icon: <Rocket className="w-6 h-6" />,
     items: [
       {
-        title: "Presale Complete",
-        description: "Early adopter token distribution ready",
+        title: "Genesis Ready",
+        description: "Early adopter architecture fully deployed (August 23, 2026)",
         status: "completed"
       },
       {
-        title: "Airdrop Distribution",
-        description: "SIG airdrop to early supporters",
+        title: "Trust Allocation",
+        description: "SIG distribution to early ecosystem supporters",
         status: "planned",
-        eta: "At Launch"
+        eta: "Aug 23, 2026"
       },
       {
         title: "DEX Listing",
@@ -357,11 +368,11 @@ export default function TechnicalRoadmap() {
           className="mt-12 text-center"
         >
           <div className="bg-gradient-to-r from-cyan-500/10 via-purple-500/10 to-pink-500/10 border border-cyan-500/30 rounded-2xl p-8">
-            <h2 className="text-2xl font-bold text-white mb-4">Token Generation Event</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">Asset Generation Event (AGE)</h2>
             <p className="text-4xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent mb-2">
-              Coming Soon
+              August 23, 2026
             </p>
-            <p className="text-slate-400 mb-6">Mainnet launch with full token distribution</p>
+            <p className="text-slate-400 mb-6">Mainnet launch with full asset distribution</p>
             <div className="flex flex-wrap justify-center gap-4">
               <Link href="/presale">
                 <button className="px-6 py-3 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-xl font-semibold text-white hover:opacity-90 transition" data-testid="button-presale">
