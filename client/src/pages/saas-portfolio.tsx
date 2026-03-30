@@ -111,10 +111,11 @@ const ENTERPRISE_APPS: Product[] = [
     features: ["Table Reservations", "Online Ordering", "Menu Builder", "POS Integration", "Review Management", "Loyalty"]
   },
   {
-    id: "happyeats", name: "Happy Eats", tagline: "Food Delivery Platform",
+    id: "happyeats", name: "Happy Eats", tagline: "Food Delivery Platform — Franchise Ready",
     icon: <ShoppingBag className="w-6 h-6" />, gradient: "from-orange-700 to-red-800",
-    glowColor: "shadow-orange-500/20", status: "ready", category: "enterprise",
-    features: ["Order Management", "Driver Dispatch", "Menu Management", "Customer App", "Live Tracking", "Payments"]
+    glowColor: "shadow-orange-500/20", status: "live", category: "enterprise",
+    domain: "happy-eats.app", market: "$365B",
+    features: ["80/20 Revenue Split", "Stripe Connect Payouts", "Vendor Onboarding", "Driver Dispatch", "Zone-Based Delivery", "Menu Management", "Age Verification", "Franchise-Ready"]
   },
   {
     id: "trusthome", name: "Trust Home", tagline: "Real Estate Platform",
