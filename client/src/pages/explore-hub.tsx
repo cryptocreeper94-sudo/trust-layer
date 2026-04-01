@@ -344,18 +344,18 @@ function LaunchCardComponent({ card, index }: { card: LaunchCard; index: number 
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
           style={{ filter: "brightness(1.1)" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-black/20" />
       </div>
 
       {card.badge && (
         <div className="absolute top-3 right-3 z-20">
-          <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white rounded-full bg-gradient-to-r from-cyan-500 to-rose-500 shadow-lg">
+          <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white rounded-full bg-gradient-to-r from-cyan-500 to-rose-500 shadow-lg max-w-[100px] truncate inline-block">
             {card.badge}
           </span>
         </div>
       )}
 
-      <div className="relative z-10 h-full flex flex-col justify-end p-5">
+      <div className="relative z-30 h-full flex flex-col justify-end p-5 pt-12">
         <div className="flex items-center gap-3 mb-3">
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-white/15 to-white/5 border border-white/10 flex items-center justify-center shrink-0 backdrop-blur-sm shadow-lg">
             <span className="text-white">{card.icon}</span>

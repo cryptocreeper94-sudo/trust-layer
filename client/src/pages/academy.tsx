@@ -438,9 +438,12 @@ const stagger = {
 };
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: "easeOut" } },
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
+
+// Viewport config: trigger immediately when even 1px is visible
+const vpOnce = { once: true, amount: 0 as const };
 
 export default function AcademyPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -492,7 +495,6 @@ export default function AcademyPage() {
 
   return (
     <div className="min-h-screen bg-[#06060a] text-white overflow-x-hidden">
-      <SiteNav />
 
       <div className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
@@ -613,7 +615,7 @@ export default function AcademyPage() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={vpOnce}
             variants={stagger}
             className="grid grid-cols-2 md:grid-cols-4 gap-4"
           >
@@ -638,7 +640,7 @@ export default function AcademyPage() {
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              viewport={vpOnce}
               transition={{ duration: 0.8 }}
             >
               <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-cyan-500/10">
@@ -657,7 +659,7 @@ export default function AcademyPage() {
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              viewport={vpOnce}
               transition={{ duration: 0.8, delay: 0.2 }}
               className="space-y-6"
             >
@@ -702,7 +704,7 @@ export default function AcademyPage() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={vpOnce}
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
@@ -723,7 +725,7 @@ export default function AcademyPage() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={vpOnce}
             variants={stagger}
             className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto"
           >
@@ -763,7 +765,7 @@ export default function AcademyPage() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={vpOnce}
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
@@ -788,7 +790,7 @@ export default function AcademyPage() {
                 key={layer.layer}
                 initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+                viewport={vpOnce}
                 transition={{ duration: 0.7, delay: i * 0.1 }}
               >
                 <GlassCard glow className="hover:border-cyan-500/30 transition-all duration-300">
@@ -833,7 +835,7 @@ export default function AcademyPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={vpOnce}
             transition={{ duration: 0.6, delay: 0.4 }}
             className="mt-10 max-w-5xl mx-auto"
           >
@@ -862,7 +864,7 @@ export default function AcademyPage() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={vpOnce}
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
@@ -884,7 +886,7 @@ export default function AcademyPage() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={vpOnce}
             variants={stagger}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6"
           >
@@ -955,7 +957,7 @@ export default function AcademyPage() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={vpOnce}
             transition={{ duration: 0.8, delay: 0.3 }}
             className="mt-12"
           >
@@ -995,7 +997,7 @@ export default function AcademyPage() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={vpOnce}
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
@@ -1017,7 +1019,7 @@ export default function AcademyPage() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={vpOnce}
             variants={stagger}
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
           >
@@ -1058,7 +1060,7 @@ export default function AcademyPage() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={vpOnce}
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
@@ -1073,7 +1075,7 @@ export default function AcademyPage() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={vpOnce}
             variants={stagger}
             className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto"
           >
@@ -1113,7 +1115,7 @@ export default function AcademyPage() {
             <motion.div
               initial={{ opacity: 0, x: -40 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              viewport={vpOnce}
               transition={{ duration: 0.8 }}
               className="space-y-6"
             >
@@ -1142,7 +1144,7 @@ export default function AcademyPage() {
                     key={s.step}
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
+                    viewport={vpOnce}
                     transition={{ delay: i * 0.15 }}
                     className="group"
                   >
@@ -1169,7 +1171,7 @@ export default function AcademyPage() {
             <motion.div
               initial={{ opacity: 0, x: 40 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
+              viewport={vpOnce}
               transition={{ duration: 0.8, delay: 0.3 }}
             >
               <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-purple-500/10">
@@ -1197,7 +1199,7 @@ export default function AcademyPage() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={vpOnce}
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
@@ -1218,7 +1220,7 @@ export default function AcademyPage() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={vpOnce}
             variants={stagger}
             className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto"
           >
@@ -1293,7 +1295,7 @@ export default function AcademyPage() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={vpOnce}
               transition={{ duration: 0.8 }}
             >
               <Badge className="mb-4 bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
@@ -1336,7 +1338,7 @@ export default function AcademyPage() {
                     key={item.title}
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
+                    viewport={vpOnce}
                     transition={{ delay: i * 0.1 }}
                   >
                     <GlassCard className="hover:border-cyan-500/20 hover:shadow-2xl hover:shadow-cyan-500/5 transition-all duration-300">
@@ -1359,7 +1361,7 @@ export default function AcademyPage() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={vpOnce}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
               <Badge className="mb-4 bg-purple-500/20 text-purple-400 border-purple-500/30">
@@ -1391,7 +1393,7 @@ export default function AcademyPage() {
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+            viewport={vpOnce}
             transition={{ duration: 0.8 }}
           >
             <GlassCard glow className="shadow-2xl shadow-cyan-500/10 relative overflow-hidden">
@@ -1441,7 +1443,6 @@ export default function AcademyPage() {
         </div>
       </section>
 
-      <Footer />
     </div>
   );
 }
