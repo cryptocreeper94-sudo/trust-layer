@@ -191,7 +191,7 @@ function WhitepaperContent() {
               The compiler performs live, intent-aware security scanning at AST node creation time, producing tamper-evident security certificates — a capability we call "certified at birth." Voice input flows through a dedicated Transcription Cleanup Layer that normalizes speech artifacts before entering the same Tolerance Chain, making voice-to-code an architectural consequence of the language's design rather than a bolt-on feature.
             </p>
             <p className="text-white/70 text-sm leading-relaxed mt-3">
-              We formalize the concept of cognitive distance — the gap between developer intent and required syntactic expression — and demonstrate that Lume reduces it to near-zero for text input and approaching-zero for voice input. The language specification spans 13 milestones with 305 formally specified acceptance criteria, 366 passing tests, and a complete implementation from core syntax through a self-sustaining runtime.
+              We formalize the concept of cognitive distance — the gap between developer intent and required syntactic expression — and demonstrate that Lume reduces it to near-zero for text input and approaching-zero for voice input. The language specification spans 13 milestones with 305 formally specified acceptance criteria, 2,160 passing tests across 529 suites, and a complete implementation from core syntax through a self-sustaining runtime.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               {["programming languages", "natural language processing", "voice-to-code", "compiler security", "cognitive distance", "AI-native computation"].map(kw => (
@@ -626,9 +626,9 @@ function MasterSpecContent() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
                 { value: "13", label: "Milestones" },
-                { value: "366", label: "Tests" },
+                { value: "2,160", label: "Tests" },
                 { value: "305", label: "Acceptance Criteria" },
-                { value: "34+", label: "Pattern Library" },
+                { value: "154+", label: "Pattern Library" },
               ].map(s => (
                 <div key={s.label} className="text-center">
                   <p className="text-2xl font-display font-black bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">{s.value}</p>
@@ -912,9 +912,9 @@ if it fails 3 times, show "Service unavailable"
         headers={["Metric", "Value"]}
         rows={[
           ["Compiler milestones", "13"],
-          ["Test suite", "366 tests (and growing)"],
+          ["Test suite", "2,160 tests, 529 suites, 0 failures"],
           ["Acceptance criteria", "305 total"],
-          ["Pattern Library patterns", "34+ (Layer A)"],
+          ["Pattern Library patterns", "154+ (87 core + 67 domain)"],
           ["Supported languages", "10 (Milestone 8)"],
           ["Homophone pairs", "10"],
           ["Filler words stripped", "20"],
