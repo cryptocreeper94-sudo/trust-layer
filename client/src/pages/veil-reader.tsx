@@ -1584,7 +1584,7 @@ export default function VeilReader() {
         />
       </div>
 
-      <div className={`${(speechSupported || useAIVoice) ? 'pt-28' : 'pt-20'} pb-28 px-4 sm:px-6 md:px-8 relative z-10`}>
+      <div className={`${(speechSupported || useAIVoice) ? 'pt-28' : 'pt-20'} pb-28 px-3 sm:px-6 md:px-8 lg:px-12 relative z-10`}>
         {(chapterLoading || !chapter) ? (
           <div className="max-w-3xl mx-auto flex flex-col items-center justify-center py-20">
             <div className="relative w-14 h-14 mb-6">
@@ -1620,12 +1620,12 @@ export default function VeilReader() {
             </div>
           </div>
 
-          <GlassCard className="p-5 sm:p-8 md:p-10 lg:p-14 relative overflow-hidden" glow>
+          <GlassCard className="p-6 sm:p-8 md:p-12 lg:p-16 relative overflow-hidden" glow>
             <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-purple-500/[0.03] to-transparent rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-cyan-500/[0.02] to-transparent rounded-full blur-3xl pointer-events-none" />
             
-            <div className="relative z-10 prose prose-invert prose-lg max-w-none 
-              prose-p:text-slate-300 prose-p:leading-[1.95] prose-p:mb-7 prose-p:text-[16px] sm:prose-p:text-[17px]
+            <div className="relative z-10 prose prose-invert prose-lg max-w-prose mx-auto
+              prose-p:text-slate-300 prose-p:leading-[1.95] prose-p:mb-7 prose-p:text-[15px] sm:prose-p:text-[17px]
               prose-headings:text-white
               prose-h2:text-xl sm:prose-h2:text-2xl prose-h2:mt-12 sm:prose-h2:mt-14 prose-h2:mb-6 sm:prose-h2:mb-7 prose-h2:font-bold
               prose-h3:text-lg sm:prose-h3:text-xl prose-h3:mt-10 sm:prose-h3:mt-12 prose-h3:mb-4 sm:prose-h3:mb-5 prose-h3:text-purple-300
@@ -1633,7 +1633,7 @@ export default function VeilReader() {
               prose-em:text-purple-200/90
               prose-ul:text-slate-300 prose-ul:space-y-2
               prose-ol:text-slate-300 prose-ol:space-y-2
-              prose-li:text-slate-300 prose-li:leading-relaxed prose-li:text-[16px] sm:prose-li:text-[17px]
+              prose-li:text-slate-300 prose-li:leading-relaxed prose-li:text-[15px] sm:prose-li:text-[17px]
               prose-blockquote:border-l-2 prose-blockquote:border-l-purple-500/60 prose-blockquote:bg-purple-500/5 prose-blockquote:px-4 sm:prose-blockquote:px-5 prose-blockquote:py-3 prose-blockquote:rounded-r-xl
               prose-blockquote:text-slate-200 prose-blockquote:italic prose-blockquote:not-italic prose-blockquote:text-[16px] sm:prose-blockquote:text-[17px] prose-blockquote:backdrop-blur-sm prose-blockquote:border prose-blockquote:border-purple-500/10
               prose-hr:border-purple-500/20 prose-hr:my-10
