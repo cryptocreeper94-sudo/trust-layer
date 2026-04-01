@@ -189,6 +189,7 @@ const TrustBook = lazy(() => import("@/pages/trust-book"));
 const Veil = lazy(() => import("@/pages/veil"));
 const VeilReader = lazy(() => import("@/pages/veil-reader"));
 const VeilPrintVol2 = lazy(() => import("@/pages/veil-print-vol2"));
+const SpeakingCode = lazy(() => import("@/pages/speaking-code"));
 const TheVoid = lazy(() => import("@/pages/the-void"));
 const SignalChat = lazy(() => import("@/pages/signal-chat"));
 const CreatorProgram = lazy(() => import("@/pages/creator-program"));
@@ -412,6 +413,7 @@ function DWSCRouter() {
                 case "/domains": return Domains;
                 case "/veil/read": return VeilReader;
                 case "/veil": return Veil;
+                case "/speaking-code": return SpeakingCode;
                 case "/explore": return ExploreHub;
                 case "/trust-shield": return TrustShieldCockpit;
                 case "/ecosystem": return EcosystemMap;
@@ -613,6 +615,7 @@ function DWSCRouter() {
         <Route path="/veil" component={Veil} />
         <Route path="/veil/read" component={VeilReader} />
         <Route path="/veil/print/vol2" component={VeilPrintVol2} />
+        <Route path="/speaking-code" component={SpeakingCode} />
         <Route path="/the-void" component={TheVoid} />
         <Route path="/signal-chat" component={SignalChat} />
         <Route path="/creator-program" component={CreatorProgram} />
@@ -760,6 +763,7 @@ const TLID_SUBDOMAIN_ROUTES: Record<string, string> = {
   "trusthome": "/my-hub",
   "trustvault": "/wallet",
   "trustbook": "/trust-book",
+  "speakingcode": "/speaking-code",
   "launch": "/launch",
   "ecosystem": "/influencer",
   "saas": "/saas",

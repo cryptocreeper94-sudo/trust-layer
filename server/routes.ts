@@ -285,6 +285,7 @@ export async function registerRoutes(
     "trusthome": "/my-hub",
     "trustvault": "/wallet",
     "trustbook": "/trust-book",
+    "speakingcode": "/speaking-code",
     "launch": "/launch",
     "trusthub": "/explore",
   };
