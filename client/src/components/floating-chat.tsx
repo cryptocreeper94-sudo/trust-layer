@@ -4,7 +4,7 @@ import { MessageCircle, X, Minimize2, Maximize2, Send, Users, Loader2, Crown } f
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import type { Message, Channel } from '@shared/chat-types';
-import { useAuth } from '@/hooks/use-auth';
+import { useSimpleAuth } from '@/hooks/use-simple-auth';
 import { FoundersBadge } from './founders-badge';
 
 function useMiniChatWebSocket(channelId: string | null, onNewMessage: (msg: Message) => void) {
@@ -63,7 +63,7 @@ function useMiniChatWebSocket(channelId: string | null, onNewMessage: (msg: Mess
 }
 
 export function FloatingChat() {
-  const { user } = useAuth();
+  const { user } = useSimpleAuth();
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);

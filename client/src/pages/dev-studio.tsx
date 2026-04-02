@@ -19,7 +19,7 @@ const systemStats = [
 ];
 
 const ideFeatures = [
-  { title: "AI Agent Mode", desc: "GPT-4o autonomous coding agent", icon: Brain, live: true },
+  { title: "Intent Resolver", desc: "Deterministic English-to-Code compilation", icon: Brain, live: true },
   { title: "GitHub + Vercel", desc: "Push & deploy in one click", icon: Rocket, live: true },
   { title: "Command Palette", desc: "Ctrl+K to find any action", icon: Zap, live: true },
   { title: "TrustHub Provenance", desc: "Blockchain-verified code stamps", icon: Shield, live: true },
@@ -30,7 +30,7 @@ const ideFeatures = [
 ];
 
 const carouselSlides = [
-  { title: "Agent Mode", desc: "Describe a task and the AI builds it autonomously across your project" },
+  { title: "Intent Resolving", desc: "Describe your intent and the Lume compiler resolves it deterministically" },
   { title: "GitHub + Vercel", desc: "Connect your GitHub, select a repo, push code, and deploy to Vercel in one flow" },
   { title: "TrustHub Stamps", desc: "Blockchain-verified code provenance with every save" },
   { title: "Live Preview", desc: "Auto-refreshing preview panel with start/stop/restart controls" },
@@ -262,7 +262,7 @@ export default function DevStudio() {
               transition={{ delay: 0.2 }}
               className="text-sm text-muted-foreground mb-6 max-w-lg mx-auto"
             >
-              AI-powered cloud IDE with autonomous Agent Mode, GitHub integration, Vercel deploys, TrustHub blockchain provenance, and real CI/CD pipelines. All live now.
+              Deterministic cloud IDE with Lume Intent Resolution, GitHub integration, Vercel deploys, TrustHub blockchain provenance, and real CI/CD pipelines. All live now.
             </motion.p>
 
             <motion.div 
@@ -364,15 +364,15 @@ export default function DevStudio() {
               <div className="h-full p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <Brain className="w-4 h-4 text-purple-400" />
-                  <span className="text-xs font-bold text-white">AI Assistant</span>
+                  <span className="text-xs font-bold text-white">Lume English Mode</span>
                 </div>
                 <div className="space-y-2">
                   <div className="bg-white/5 rounded-lg px-3 py-2 text-[11px] text-white/60">
-                    "Add a transfer function with balance checks"
+                    "add a transfer function with balance checks"
                   </div>
                   <div className="bg-primary/10 rounded-lg px-3 py-2 text-[11px] text-primary border border-primary/20 flex items-center gap-2">
                     <Sparkles className="w-3 h-3" />
-                    Generating optimized code...
+                    Compiling intent to executable AST...
                   </div>
                 </div>
               </div>
@@ -418,7 +418,7 @@ export default function DevStudio() {
                   <Workflow className="w-10 h-10 text-primary mx-auto mb-4" />
                   <h2 className="text-xl md:text-2xl font-display font-bold mb-2">Start Building Now</h2>
                   <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
-                    DWSC Studio is live. Sign in and start building with AI Agent Mode, GitHub, Vercel, and TrustHub.
+                    DWSC Studio is live. Sign in and start building with Lume Intent Resolution, GitHub, Vercel, and TrustHub.
                   </p>
                   <div className="flex flex-wrap items-center justify-center gap-2">
                     <Link href="/studio">

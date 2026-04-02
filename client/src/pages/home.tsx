@@ -507,6 +507,7 @@ interface HeroSlide {
 }
 
 const heroSlides: HeroSlide[] = [
+  { title: "Lume", subtitle: "A deterministic, pure intent-resolving programming language natively governed by the Trust Layer ecosystem. 529 compiled test suites driving verifiable logic.", accent: "cyan", link: "https://lume-lang.org", gradient: "from-cyan-900/80 via-slate-900/60 to-slate-950/90" },
   { title: "ORBIT Staffing OS", subtitle: "100% automated flexible labor marketplace with GPS check-ins, smart matching, payroll, and blockchain compliance", accent: "cyan", link: "https://orbitstaffing.io", video: orbitVideo, gradient: "from-cyan-900/80 via-slate-900/60 to-slate-950/90" },
   { title: "TrustHome", subtitle: "Real estate agent platform with AI video walkthroughs, listing management, client CRM, and smart tools", accent: "emerald", link: "https://trusthome.tlid.io", video: trustHomeVideo, gradient: "from-emerald-900/80 via-slate-900/60 to-slate-950/90" },
   { title: "Trust Vault", subtitle: "Enterprise-grade digital asset protection with biometric security, encrypted storage, and blockchain custody", accent: "blue", link: "https://trustvault.studio", video: trustVaultVideo, gradient: "from-blue-900/80 via-slate-900/60 to-slate-950/90" },

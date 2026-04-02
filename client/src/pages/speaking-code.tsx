@@ -61,7 +61,7 @@ export default function SpeakingCode() {
         </motion.div>
 
         <motion.h1
-          className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6"
+          className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tight mb-6 break-words"
           initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.6 }}
         >
           Speaking{" "}
@@ -187,22 +187,32 @@ export default function SpeakingCode() {
       </section>
 
       {/* ── Who Is This For ── */}
-      <section className="relative z-10 px-6 py-16 max-w-4xl mx-auto">
-        <div className="grid md:grid-cols-3 gap-6">
+      <section className="relative z-10 px-4 sm:px-6 py-16 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[
-            { icon: "💡", title: "Non-Programmers", desc: "You have ideas but no way to build them. This book shows you how Lume bridges that gap." },
-            { icon: "🔧", title: "Developers", desc: "Tired of boilerplate? See how AI-as-syntax and self-healing functions change everything." },
-            { icon: "🏢", title: "Founders & Leaders", desc: "Understand why cognitive distance is the real bottleneck — and how Lume eliminates it." },
+            { image: "/speaking_code_non_programmer.png", title: "Non-Programmers", desc: "You have ideas but no way to build them. This book shows you how Lume bridges that gap." },
+            { image: "/speaking_code_developer.png", title: "Developers", desc: "Tired of boilerplate? See how deterministic natural-language and self-healing functions change everything." },
+            { image: "/speaking_code_founder.png", title: "Founders & Leaders", desc: "Understand why cognitive distance is the real bottleneck — and how Lume eliminates it." },
           ].map((item, i) => (
             <motion.div
               key={i} custom={i}
               initial="hidden" whileInView="visible"
-              viewport={{ once: true }} variants={fadeUp}
+              viewport={{ once: true, margin: "-40px" }} variants={fadeUp}
+              className="h-full"
             >
-              <GlassCard glow className="p-6 text-center h-full">
-                <div className="text-3xl mb-4">{item.icon}</div>
-                <h3 className="font-bold text-white/90 mb-2">{item.title}</h3>
-                <p className="text-sm text-white/50">{item.desc}</p>
+              <GlassCard glow className="overflow-hidden h-full flex flex-col group border border-cyan-500/20 hover:border-cyan-400/50 transition-colors w-full">
+                <div className="h-48 w-full overflow-hidden relative shrink-0 bg-slate-900">
+                  <img 
+                    src={item.image} 
+                    alt={item.title} 
+                    className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#07080f] via-[#07080f]/50 to-transparent" />
+                </div>
+                <div className="p-6 flex-1 flex flex-col text-center relative z-10 -mt-8">
+                  <h3 className="font-bold text-lg text-white/90 mb-3 drop-shadow-md">{item.title}</h3>
+                  <p className="text-sm text-white/60 leading-relaxed drop-shadow-sm">{item.desc}</p>
+                </div>
               </GlassCard>
             </motion.div>
           ))}

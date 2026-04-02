@@ -25812,6 +25812,8 @@ const APP_URL_MAP: Record<string, string> = {
   "through-the-veil": `${PORTAL_BASE}/veil/read`,
   "trust-book": `${PORTAL_BASE}/trust-book`,
   "signalcast": "https://signalcast.ad",
+  "lume": "https://lume-lang.org",
+  "lume-lang": "https://lume-lang.org",
 };
 
 async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
@@ -25879,6 +25881,19 @@ async function fetchEcosystemApps(): Promise<EcosystemApp[]> {
 
 function getLocalEcosystemApps(): EcosystemApp[] {
   return [
+    {
+      id: "lume",
+      name: "Lume",
+      category: "Language",
+      description: "A deterministic, pure intent-resolving programming language natively governed by the Trust Layer ecosystem. 529 compiled test suites. Features native English-mode syntax and optional LLM fallbacks.",
+      hook: "The Deterministic Language of the Trust Layer",
+      tags: ["Language", "Compiler", "Trust Layer", "Deterministic", "Code"],
+      gradient: "from-cyan-500 to-purple-600",
+      verified: true,
+      featured: true,
+      users: "Trust Layer Verified",
+      url: "https://lume-lang.org",
+    },
     {
       id: "trust-layer-hub",
       name: "Trust Layer Hub",
