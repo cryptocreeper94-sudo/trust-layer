@@ -1,7 +1,7 @@
-LUME: Eliminating Cognitive Distance — An AI-Native Programming Language with Natural Language Compilation, Voice Input, and Certified Security
+LUME: Eliminating Cognitive Distance — An Deterministic Natural-Language Programming Language with Natural Language Compilation, Voice Input, and Certified Security
 COMPLETE TECHNICAL BRIEF FOR ACADEMIC PAPER AUTHORSHIP
 1. ABSTRACT
-Lume is an AI-native programming language that accepts natural English as valid source code. Unlike all existing programming languages, Lume's compilation pipeline is architected to tolerate imprecise, informal, and ambiguous input — making it the first language where voice-to-code is architecturally natural rather than an external integration. The compiler further introduces a novel three-layer security model with live AST-level scanning that produces tamper-evident security certificates embedded in the compiled output — a paradigm we call "certified at birth." This document provides the full technical specification of the language, the voice-to-code pipeline, the security architecture, and the theoretical contributions — including the concept of cognitive distance and its relationship to the well-known psychological phenomenon of cognitive dissonance — suitable for academic publication.
+Lume is an deterministic natural-language programming language that accepts natural English as valid source code. Unlike all existing programming languages, Lume's compilation pipeline is architected to tolerate imprecise, informal, and ambiguous input — making it the first language where voice-to-code is architecturally natural rather than an external integration. The compiler further introduces a novel three-layer security model with live AST-level scanning that produces tamper-evident security certificates embedded in the compiled output — a paradigm we call "certified at birth." This document provides the full technical specification of the language, the voice-to-code pipeline, the security architecture, and the theoretical contributions — including the concept of cognitive distance and its relationship to the well-known psychological phenomenon of cognitive dissonance — suitable for academic publication.
 
 2. PROBLEM STATEMENT
 2.1 The Syntax Barrier and Cognitive Dissonance
@@ -435,8 +435,8 @@ Version: 0.8.0
 License: Open source
 14. TITLE OPTIONS
 Option	Title	Leads With
-A (broad)	"LUME: Eliminating Cognitive Distance — An AI-Native Programming Language with Natural Language Compilation, Voice Input, and Certified Security"	Full scope
+A (broad)	"LUME: Eliminating Cognitive Distance — An Deterministic Natural-Language Programming Language with Natural Language Compilation, Voice Input, and Certified Security"	Full scope
 B (punchy)	"LUME: The First Programming Language You Can Speak"	Voice-to-code
 C (academic)	"Cognitive Distance Minimization Through Intent-Resolving Compilation: The Lume Programming Language"	Theoretical contribution
-D (original + subtitle)	"LUME: Voice-to-Code in an AI-Native Programming Language — With Live Security Scanning and Certified-at-Birth Compilation"	Voice + security
+D (original + subtitle)	"LUME: Voice-to-Code in an Deterministic Natural-Language Programming Language — With Live Security Scanning and Certified-at-Birth Compilation"	Voice + security
 The choice depends on target audience. Voice-to-code gets attention. Cognitive distance gets academic respect. Security gets enterprise interest. Option A captures everything for a comprehensive submission.

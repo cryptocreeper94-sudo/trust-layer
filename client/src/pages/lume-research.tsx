@@ -175,7 +175,7 @@ function WhitepaperContent() {
           </span>
         </h1>
         <p className="text-white/50 text-sm mb-2">
-          An AI-Native Programming Language with Natural Language Compilation, Voice Input, and Certified Security
+          An Deterministic Natural-Language Programming Language with Natural Language Compilation, Voice Input, and Certified Security
         </p>
         <p className="text-white/40 text-xs font-mono mb-8">
           Authors: Jason (Trust Layer / DarkWave Systems Collective) · team@dwsc.io · lume-lang.com
@@ -185,7 +185,7 @@ function WhitepaperContent() {
           <div className="p-6">
             <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-wider mb-3">Abstract</h3>
             <p className="text-white/70 text-sm leading-relaxed">
-              We present Lume, an AI-native programming language whose compiler is architected from the ground up to accept imprecise, informal, and ambiguous natural language as valid source code. Unlike all existing programming languages, which require exact syntactic conformity, Lume's compilation pipeline employs a seven-layer Tolerance Chain that progressively resolves developer intent from plain English text — or spoken voice — into a typed Abstract Syntax Tree (AST), which then transpiles to certified JavaScript.
+              We present Lume, an deterministic natural-language programming language whose compiler is architected from the ground up to accept imprecise, informal, and ambiguous natural language as valid source code. Unlike all existing programming languages, which require exact syntactic conformity, Lume's compilation pipeline employs a seven-layer Tolerance Chain that progressively resolves developer intent from plain English text — or spoken voice — into a typed Abstract Syntax Tree (AST), which then transpiles to certified JavaScript.
             </p>
             <p className="text-white/70 text-sm leading-relaxed mt-3">
               The compiler performs live, intent-aware security scanning at AST node creation time, producing tamper-evident security certificates — a capability we call "certified at birth." Voice input flows through a dedicated Transcription Cleanup Layer that normalizes speech artifacts before entering the same Tolerance Chain, making voice-to-code an architectural consequence of the language's design rather than a bolt-on feature.
@@ -194,7 +194,7 @@ function WhitepaperContent() {
               We formalize the concept of cognitive distance — the gap between developer intent and required syntactic expression — and demonstrate that Lume reduces it to near-zero for text input and approaching-zero for voice input. The language specification spans 13 milestones with 305 formally specified acceptance criteria, 2,160 passing tests across 529 suites, and a complete implementation from core syntax through a self-sustaining runtime.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
-              {["programming languages", "natural language processing", "voice-to-code", "compiler security", "cognitive distance", "AI-native computation"].map(kw => (
+              {["programming languages", "natural language processing", "voice-to-code", "compiler security", "cognitive distance", "deterministic natural-language computation"].map(kw => (
                 <span key={kw} className="text-[10px] px-2 py-1 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 font-mono">{kw}</span>
               ))}
             </div>
@@ -311,7 +311,7 @@ function WhitepaperContent() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-6">
         {[
           { icon: BookOpen, title: "Readable", desc: "Human-first syntax. Code reads like intent." },
-          { icon: Sparkles, title: "AI-Native", desc: "AI is a native type. Model calls are syntax." },
+          { icon: Sparkles, title: "Deterministic Natural-Language", desc: "AI is a native type. Model calls are syntax." },
           { icon: Shield, title: "Safe", desc: "Errors are impossible to ignore." },
           { icon: Globe, title: "Interoperable", desc: "Compiles to JavaScript. Full ecosystem access." },
           { icon: Users, title: "Approachable", desc: "Gradual complexity. Beginners write real programs." },
@@ -588,7 +588,7 @@ let data = fetch "https://api.example.com" or fail with "Could not connect"`}
       <GlassCard glow className="mt-12">
         <div className="p-8 text-center">
           <p className="text-lg font-display font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-2">
-            Lume — The AI-Native Programming Language
+            Lume — The Deterministic Natural-Language Programming Language
           </p>
           <p className="text-white/50 text-sm">
             Built to make AI-powered software as natural as writing a sentence. The first programming language you can speak.
@@ -657,7 +657,7 @@ function MasterSpecContent() {
           { pain: "Async/Concurrency Mess", solution: "Concurrency is invisible by default; opt into control when needed" },
           { pain: "Ugly Error Handling", solution: "Errors are values (Result type), not exceptions — cannot be ignored" },
           { pain: "Code Doesn't Read Like English", solution: 'Natural syntax: "if user is adult and verified"' },
-          { pain: "No AI-Native Language", solution: "ask, think, generate are keywords — model calls are first-class" },
+          { pain: "No Deterministic Natural-Language Language", solution: "ask, think, generate are keywords — model calls are first-class" },
           { pain: "Config vs Code Split", solution: "Config is code — environment, settings, logic in unified syntax" },
           { pain: "Intent is Invisible", solution: "Intent blocks are first-class syntax — tests and docs inline" },
         ].map((p, i) => (
@@ -1003,7 +1003,7 @@ export default function LumeResearch() {
               </span>
             </h1>
             <p className="text-white/50 text-base sm:text-lg max-w-2xl leading-relaxed mb-8">
-              Academic papers and technical specifications for the Lume programming language — the world's first AI-native language with voice-to-code as a compiler feature.
+              Academic papers and technical specifications for the Lume programming language — the world's first deterministic natural-language language with voice-to-code as a compiler feature.
             </p>
 
             <div className="flex gap-2">

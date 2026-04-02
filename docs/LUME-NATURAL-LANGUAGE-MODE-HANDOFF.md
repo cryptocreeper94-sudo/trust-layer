@@ -12,7 +12,7 @@ Lume already compiles `.lume` files through the pipeline: **Lexer → Parser →
 
 **Milestones 1–6 (COMPLETE):**
 1. Core language & compiler
-2. AI-native keywords
+2. deterministic natural-language keywords
 3. Transpiler to JavaScript
 4. npm publish & CLI
 5. Lume Academy integration

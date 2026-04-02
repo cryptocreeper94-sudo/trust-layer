@@ -85,7 +85,7 @@ const courseCategories = [
   {
     id: "lume-foundations",
     title: "Lume Foundations",
-    description: "Master the world's first AI-native programming language. Natural language parsed directly into AST tokens.",
+    description: "Master the world's first deterministic natural-language programming language. Natural language parsed directly into AST tokens.",
     icon: Sparkles,
     color: "purple",
     courses: 9, hours: 18, level: "All Levels",
@@ -199,7 +199,7 @@ const certifications = [
     id: "cle",
     title: "Certified Lume Engineer",
     abbrev: "CLE",
-    description: "Validates advanced development skills including compiler engineering and AI-native programming.",
+    description: "Validates advanced development skills including compiler engineering and deterministic natural-language programming.",
     prereqs: ["Compiler Engineering", "Digital Architecture"],
     badge: "from-purple-500 to-purple-600",
   },
@@ -681,7 +681,7 @@ export default function AcademyPage() {
                 {[
                   { icon: Lock, label: "Verified credentials — permanently recorded, impossible to fake" },
                   { icon: Terminal, label: "Hands-on labs — build a compiler from scratch" },
-                  { icon: Bot, label: "Learn AI-native programming with Lume" },
+                  { icon: Bot, label: "Learn deterministic natural-language programming with Lume" },
                   { icon: TrendingUp, label: "Updated monthly with latest language & AI research" },
                 ].map((item) => (
                   <div key={item.label} className="flex items-center gap-3 group">
@@ -1330,7 +1330,7 @@ export default function AcademyPage() {
                   {
                     icon: TrendingUp,
                     title: "Always Current",
-                    desc: "Courses updated monthly to reflect the latest in AI-native programming, compilers, and language design.",
+                    desc: "Courses updated monthly to reflect the latest in deterministic natural-language programming, compilers, and language design.",
                     gradient: "from-purple-500 to-cyan-500",
                   },
                 ].map((item, i) => (

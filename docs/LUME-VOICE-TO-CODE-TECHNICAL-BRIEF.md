@@ -5,7 +5,7 @@ COMPLETE TECHNICAL BRIEF FOR ACADEMIC PAPER AUTHORSHIP
 1. ABSTRACT SUMMARY
 ================================================================================
 
-Lume is an AI-native programming language that accepts natural English as valid source code. Unlike all existing programming languages, Lume's compilation pipeline is architected to tolerate imprecise, informal, and ambiguous input — making it the first language where voice-to-code is architecturally natural rather than an external integration. This document provides the full technical specification of the language, the voice-to-code pipeline, the compiler architecture, and the theoretical contributions suitable for academic publication.
+Lume is an deterministic natural-language programming language that accepts natural English as valid source code. Unlike all existing programming languages, Lume's compilation pipeline is architected to tolerate imprecise, informal, and ambiguous input — making it the first language where voice-to-code is architecturally natural rather than an external integration. This document provides the full technical specification of the language, the voice-to-code pipeline, the compiler architecture, and the theoretical contributions suitable for academic publication.
 
 ================================================================================
 2. PROBLEM STATEMENT

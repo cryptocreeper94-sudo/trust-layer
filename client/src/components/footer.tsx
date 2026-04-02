@@ -163,7 +163,7 @@ export function Footer() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
             </span>
             <span>
-              Powered by <a href="https://lume-lang.com" target="_blank" rel="noopener noreferrer" className="text-cyan-400 font-semibold hover:text-cyan-300 transition-colors">Lume</a> — the AI-native programming language
+              Powered by <a href="https://lume-lang.com" target="_blank" rel="noopener noreferrer" className="text-cyan-400 font-semibold hover:text-cyan-300 transition-colors">Lume</a> — the deterministic natural-language programming language
             </span>
             <span className="text-white/20">·</span>
             <a href="https://dwsc.io" target="_blank" rel="noopener noreferrer" className="text-cyan-400/80 hover:text-cyan-300 transition-colors font-medium">DWSC.io</a>

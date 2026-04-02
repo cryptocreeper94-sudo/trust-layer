@@ -163,7 +163,7 @@ const AI_TOOLS: Product[] = [
     features: ["AI 3D Generation", "WebGL Viewport", "PBR Materials", "Animation Timeline", "Code Editor", "Asset Library"]
   },
   {
-    id: "lume", name: "Lume", tagline: "AI-Native Programming Language & Cloud Platform",
+    id: "lume", name: "Lume", tagline: "Deterministic Natural-Language Programming Language & Cloud Platform",
     icon: <Brain className="w-6 h-6" />, gradient: "from-teal-700 to-cyan-800",
     glowColor: "shadow-teal-500/20", status: "live", category: "ai",
     domain: "lume-lang.com", market: "$7.3B",

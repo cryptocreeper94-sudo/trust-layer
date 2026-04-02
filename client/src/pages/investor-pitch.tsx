@@ -35,7 +35,7 @@ const ecosystemProducts = [
   { name: "DarkWave Chronicles", desc: "3D life simulation across historical eras", icon: Gamepad2, category: "Gaming" },
   { name: "Trust Book", desc: "Premium ebook publishing with 70% author royalty", icon: BookOpen, category: "Publishing" },
   { name: "Signal Chat", desc: "Real-time encrypted messaging platform", icon: MessageSquare, category: "Communication" },
-  { name: "Lume Language", desc: "AI-native programming language with compiler", icon: Code, category: "Developer Tools" },
+  { name: "Lume Language", desc: "deterministic natural-language programming language with compiler", icon: Code, category: "Developer Tools" },
   { name: "TrustGen 3D", desc: "AI-powered 3D asset creation with provenance", icon: Palette, category: "Creative Tools" },
   { name: "Trust Layer Academy", desc: "15-track education platform with certifications", icon: GraduationCap, category: "Education" },
   { name: "The Arcade", desc: "Premium gaming destination with multiple titles", icon: Gamepad2, category: "Gaming" },
@@ -61,7 +61,7 @@ const milestones = [
   { date: "Completed", title: "Blockchain Live", desc: "Layer 1 producing blocks with BFT-PoA consensus", done: true },
   { date: "Completed", title: "Portal & DeFi", desc: "DEX, staking, bridge, NFT marketplace operational", done: true },
   { date: "Completed", title: "Guardian Suite", desc: "AI security scanner, screener, certification program", done: true },
-  { date: "Completed", title: "Lume Language", desc: "AI-native programming language published to npm", done: true },
+  { date: "Completed", title: "Lume Language", desc: "deterministic natural-language programming language published to npm", done: true },
   { date: "In Progress", title: "Ecosystem Expansion", desc: "35 products in development or deployed across domains", done: false },
   { date: "Aug 23, 2026", title: "Full Launch", desc: "All products live, mainnet public, Signal trading", done: false },
 ];
@@ -163,7 +163,7 @@ Key differentiators:
 - $0.001 average transaction cost
 - BFT Proof-of-Authority consensus (stake-weighted validators)
 - Built-in security scoring (Guardian Suite)
-- AI-native programming language (Lume)
+- deterministic natural-language programming language (Lume)
 - AI-powered 3D asset creation (TrustGen)
 - 15-track education platform (Trust Layer Academy)
 
@@ -235,7 +235,7 @@ Consensus:    BFT Proof-of-Authority (stake-weighted validators)
 Performance:  200,000+ TPS, 400ms block finality
 Cost:         $0.001 average transaction
 Security:     AES-256-GCM encryption, HMAC-SHA256, Helmet.js, rate limiting
-Language:     Lume — world's first AI-native programming language
+Language:     Lume — world's first deterministic natural-language programming language
               (ask, think, generate are native keywords; compiles to JavaScript)
 3D Engine:    TrustGen — AI-powered 3D model and animation generation
 Provenance:   Hallmark system (TL-XXXXXXXX) for on-chain audit trails
@@ -557,7 +557,7 @@ export default function InvestorPitch() {
                   { title: "Vertically Integrated", desc: "Own chain, own language, own products. No dependency on external infrastructure." },
                   { title: "Revenue From Day One", desc: "8 distinct revenue streams from subscriptions, fees, certifications, and marketplace commissions." },
                   { title: "Real Estate Ready", desc: "TrustHome provides blockchain-verified trust infrastructure for the $3.7 trillion real estate market." },
-                  { title: "AI-Native Technology", desc: "Lume is the first programming language where AI is a native keyword, not a library import." },
+                  { title: "Deterministic Natural-Language Technology", desc: "Lume is the first programming language where AI is a native keyword, not a library import." },
                   { title: "35 Products = 35 Revenue Channels", desc: "Diversified across DeFi, gaming, education, security, and enterprise — not a single-product bet." },
                 ].map((item) => (
                   <div key={item.title} className="flex items-start gap-3">

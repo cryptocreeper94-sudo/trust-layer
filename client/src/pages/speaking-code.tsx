@@ -74,7 +74,7 @@ export default function SpeakingCode() {
           className="text-lg md:text-xl text-white/50 max-w-2xl mx-auto mb-4 leading-relaxed"
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}
         >
-          How an AI-Native Language Made Programming Human Again
+          How an Deterministic Natural-Language Language Made Programming Human Again
         </motion.p>
 
         <motion.p

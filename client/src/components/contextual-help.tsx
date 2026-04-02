@@ -218,7 +218,7 @@ const helpSections: HelpSection[] = [
     entries: [
       {
         title: "About Trust Layer Academy",
-        content: "Learn programming from the ground up through 8 course tracks — from Programming Foundations to AI-Powered 3D Creation. Built around Lume, the world's first AI-native programming language.",
+        content: "Learn programming from the ground up through 8 course tracks — from Programming Foundations to AI-Powered 3D Creation. Built around Lume, the world's first deterministic natural-language programming language.",
         link: { label: "Visit Academy", href: "/academy" }
       },
       {
@@ -227,7 +227,7 @@ const helpSections: HelpSection[] = [
       },
       {
         title: "The Lume Language",
-        content: "Lume is an AI-native language where 'ask', 'think', and 'generate' are native keywords. It even accepts natural English as valid source code — you can literally speak your code into existence."
+        content: "Lume is an deterministic natural-language language where 'ask', 'think', and 'generate' are native keywords. It even accepts natural English as valid source code — you can literally speak your code into existence."
       }
     ]
   },

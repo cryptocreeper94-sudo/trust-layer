@@ -113,7 +113,7 @@ Education:   $400B — Trust Layer Academy, 15 tracks, 100+ courses
 TECHNOLOGY MOAT
 ----------------
 - Own blockchain: Layer 1 BFT-PoA, 200K+ TPS, 400ms finality
-- Own language: Lume — AI-native programming language (npm published)
+- Own language: Lume — deterministic natural-language programming language (npm published)
 - Own products: 35 products across DeFi, security, education, gaming, real estate
 
 SIGNAL PRESALE
@@ -651,7 +651,7 @@ export default function InvestorDataRoom() {
                 icon: Code,
                 title: "Own Language",
                 stats: "Lume • Published to npm",
-                desc: "The world's first AI-native programming language. Native 'ask', 'think', 'generate' keywords. Compiles to JavaScript. Full compiler and runtime.",
+                desc: "The world's first deterministic natural-language programming language. Native 'ask', 'think', 'generate' keywords. Compiles to JavaScript. Full compiler and runtime.",
                 img: communityImg,
               },
               {

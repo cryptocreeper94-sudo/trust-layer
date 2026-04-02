@@ -47,7 +47,7 @@
 | Repo | Domain | Purpose | Auth |
 |---|---|---|---|
 | **darkwavepulse** | [darkwavepulse.com](https://darkwavepulse.com) | AI crypto trading (Mastra agents, StrikeAgent) | Firebase + TL |
-| **lume** | [lume-lang.org](https://lume-lang.org) | AI-native programming language & playground | TL SSO |
+| **lume** | [lume-lang.org](https://lume-lang.org) | deterministic natural-language programming language & playground | TL SSO |
 | **trustgen-3d** | [trustgen.tlid.io](https://trustgen.tlid.io) | AI 3D asset generation | TL SSO |
 | **guardianscreener** | [guardianscreener.tlid.io](https://guardianscreener.tlid.io) | Crypto token security scanner | TL SSO |
 
