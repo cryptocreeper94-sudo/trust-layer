@@ -654,7 +654,7 @@ function TrustShieldRouter() {
     <Suspense fallback={<PageLoader />}>
       <ScrollToTop />
       <Switch>
-        <Route path="/" component={GuardianAI} />
+        <Route path="/" component={GuardianScanner} />
         <Route path="/guardian-scanner" component={GuardianScanner} />
         <Route path="/guardian-scanner-registry" component={GuardianScannerRegistry} />
         <Route path="/guardian-shield" component={GuardianShield} />
