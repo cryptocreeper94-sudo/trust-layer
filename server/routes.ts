@@ -897,6 +897,60 @@ export async function registerRoutes(
         }
       }
 
+      // =====================================================
+      // ECOSYSTEM WEBHOOK RELAY — Forward verified events to satellite apps
+      // Each app keeps a lightweight /api/webhooks/stripe-relay endpoint
+      // that receives pre-verified events (no signature check needed).
+      // Happy Eats stays independent — NOT relayed.
+      // =====================================================
+      const ECOSYSTEM_RELAY_MAP: Record<string, string> = {
+        trustgen: "https://trustgen.tlid.io/api/webhooks/stripe-relay",
+        trustbook: "https://trustbook.tlid.io/api/webhooks/stripe-relay",
+        darkwavestudios: "https://darkwavestudios.io/api/webhooks/stripe-relay",
+        garagebot: "https://garagebot.io/api/webhooks/stripe-relay",
+        paintpros: "https://paintpros.io/api/webhooks/stripe-relay",
+        brewandboard: "https://brewandboard.io/api/webhooks/stripe-relay",
+        lotopspro: "https://lotops.pro/api/webhooks/stripe-relay",
+        orbitstaffing: "https://orbitstaffing.io/api/webhooks/stripe-relay",
+        trustshield: "https://trustshield.tech/api/webhooks/stripe-relay",
+        verdara: "https://verdara.io/api/webhooks/stripe-relay",
+        arbora: "https://arbora.io/api/webhooks/stripe-relay",
+        trustvault: "https://trustvault.tlid.io/api/webhooks/stripe-relay",
+        theveil: "https://throughtheveil.tlid.io/api/webhooks/stripe-relay",
+        signalcast: "https://signalcast.io/api/webhooks/stripe-relay",
+      };
+
+      // Determine target_app from event metadata
+      const relayTargetApp = (() => {
+        if (event.type === "checkout.session.completed") {
+          return event.data?.object?.metadata?.target_app;
+        }
+        if (event.type?.startsWith("customer.subscription.")) {
+          return event.data?.object?.metadata?.target_app;
+        }
+        if (event.type?.startsWith("invoice.")) {
+          return event.data?.object?.metadata?.target_app;
+        }
+        return null;
+      })();
+
+      if (relayTargetApp && ECOSYSTEM_RELAY_MAP[relayTargetApp]) {
+        const relayUrl = ECOSYSTEM_RELAY_MAP[relayTargetApp];
+        console.log(`[Stripe Federal Relay] Forwarding ${event.type} to ${relayTargetApp} → ${relayUrl}`);
+        // Fire-and-forget relay — don't block Stripe response
+        fetch(relayUrl, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Relay-Secret": process.env.ECOSYSTEM_RELAY_SECRET || "tl-relay-2026",
+            "X-Relay-Source": "trust-layer-federal",
+          },
+          body: JSON.stringify(event),
+        }).catch((relayErr: any) => {
+          console.error(`[Stripe Federal Relay] Failed to relay to ${relayTargetApp}:`, relayErr.message);
+        });
+      }
+
       res.json({ received: true });
     } catch (error: any) {
       console.error("Stripe webhook error:", error);
