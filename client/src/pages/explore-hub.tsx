@@ -20,7 +20,6 @@ import {
   BrainCircuit, Scan, RefreshCw, Joystick,
   Download, X, Share, Smartphone, ExternalLink, ChevronDown
 } from "lucide-react";
-import { EcosystemDirectory } from "@/components/ecosystem-directory";
 import { GenesisHallmarkBadge } from "@/components/genesis-hallmark-badge";
 
 // ── Card accent colors ──
@@ -432,7 +431,7 @@ export default function ExploreHub() {
 
         <PWAInstallBanner />
 
-        <EcosystemDirectory compact defaultCollapsed className="mb-8" />
+
 
         {/* Category Jump Links */}
         <div className="sticky top-20 z-40 -mx-4 px-4 sm:mx-0 sm:px-0 mb-6 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
