@@ -74,7 +74,7 @@ export default function SpeakingCode() {
           className="text-lg md:text-xl text-white/50 max-w-2xl mx-auto mb-4 leading-relaxed"
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.6 }}
         >
-          How an Deterministic Natural-Language Language Made Programming Human Again
+          How a Deterministic Natural-Language Compiler Made Programming Human Again
         </motion.p>
 
         <motion.p
@@ -107,7 +107,7 @@ export default function SpeakingCode() {
           <Button
             size="lg"
             className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-white font-bold px-8 py-6 text-base rounded-xl shadow-lg shadow-cyan-500/20"
-            onClick={() => window.open("https://lume-lang.org/audiobook-reader.html", "_blank")}
+            onClick={() => window.open("https://trust-layer-1pji.onrender.com/trust-book/read/speaking-code", "_blank")}
           >
             📖 Read Now — Free
           </Button>
@@ -233,7 +233,7 @@ export default function SpeakingCode() {
             <Button
               size="lg"
               className="bg-gradient-to-r from-cyan-500 to-teal-500 hover:from-cyan-400 hover:to-teal-400 text-white font-bold px-8 rounded-xl"
-              onClick={() => window.open("https://lume-lang.org/audiobook-reader.html", "_blank")}
+              onClick={() => window.open("https://trust-layer-1pji.onrender.com/trust-book/read/speaking-code", "_blank")}
             >
               📖 Read Now
             </Button>
