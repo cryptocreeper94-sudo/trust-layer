@@ -92,13 +92,13 @@ export function Footer() {
   return (
     <>
       {/* Site Links Section - Above Footer */}
-      <section className="bg-slate-950/80 border-t border-white/5">
+      <section className="bg-card/80 border-t border-border">
         <div className="container mx-auto px-4 py-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {/* About */}
             <div>
-              <h4 className="font-bold text-white mb-4 text-sm">About DarkWave</h4>
-              <ul className="space-y-2 text-xs text-white/60">
+              <h4 className="font-bold text-foreground mb-4 text-sm">About DarkWave</h4>
+              <ul className="space-y-2 text-xs text-muted-foreground">
                 <li><Link href="/note" className="hover:text-cyan-400 transition-colors">Our Story</Link></li>
                 <li><Link href="/vision" className="hover:text-cyan-400 transition-colors">Vision</Link></li>
                 <li><Link href="/team" className="hover:text-cyan-400 transition-colors">Team</Link></li>
@@ -108,8 +108,8 @@ export function Footer() {
             
             {/* Ecosystem */}
             <div>
-              <h4 className="font-bold text-white mb-4 text-sm">Ecosystem</h4>
-              <ul className="space-y-2 text-xs text-white/60">
+              <h4 className="font-bold text-foreground mb-4 text-sm">Ecosystem</h4>
+              <ul className="space-y-2 text-xs text-muted-foreground">
                 <li><Link href="/token" className="hover:text-cyan-400 transition-colors">Signal</Link></li>
                 <li><Link href="/staking" className="hover:text-cyan-400 transition-colors">Staking</Link></li>
                 <li><Link href="/bridge" className="hover:text-cyan-400 transition-colors">Bridge</Link></li>
@@ -119,8 +119,8 @@ export function Footer() {
             
             {/* Resources */}
             <div>
-              <h4 className="font-bold text-white mb-4 text-sm">Resources</h4>
-              <ul className="space-y-2 text-xs text-white/60">
+              <h4 className="font-bold text-foreground mb-4 text-sm">Resources</h4>
+              <ul className="space-y-2 text-xs text-muted-foreground">
                 <li><Link href="/docs" className="hover:text-cyan-400 transition-colors">Documentation</Link></li>
                 <li><Link href="/api-docs" className="hover:text-cyan-400 transition-colors">API Docs</Link></li>
                 <li><Link href="/faq" className="hover:text-cyan-400 transition-colors">FAQ</Link></li>
@@ -132,7 +132,7 @@ export function Footer() {
             
             {/* Community */}
             <div>
-              <h4 className="font-bold text-white mb-4 text-sm">Community</h4>
+              <h4 className="font-bold text-foreground mb-4 text-sm">Community</h4>
               <div className="flex gap-3 mb-4">
                 {socialLinks.map((social) => (
                   <a
@@ -140,7 +140,7 @@ export function Footer() {
                     href={social.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-white/40 hover:text-cyan-400 transition-all duration-300 hover:scale-110"
+                    className="text-muted-foreground hover:text-cyan-400 transition-all duration-300 hover:scale-110"
                     data-testid={`link-social-${social.name.toLowerCase()}`}
                     title={social.name}
                   >
@@ -148,16 +148,16 @@ export function Footer() {
                   </a>
                 ))}
               </div>
-              <p className="text-xs text-white/40">Join our growing community</p>
+              <p className="text-xs text-muted-foreground">Join our growing community</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Lume Promotional Banner */}
-      <section className="border-t border-white/5 bg-gradient-to-r from-cyan-950/20 via-slate-950/50 to-teal-950/20">
+      <section className="border-t border-border bg-gradient-to-r from-cyan-950/20 via-card/50 to-teal-950/20">
         <div className="container mx-auto px-4 py-3">
-          <div className="flex items-center justify-center gap-3 text-xs text-white/70">
+          <div className="flex items-center justify-center gap-3 text-xs text-muted-foreground">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
@@ -172,13 +172,13 @@ export function Footer() {
       </section>
 
       {/* Legal Disclaimer Section - Pre-Footer */}
-      <section className="bg-slate-950 border-t border-white/5">
+      <section className="bg-card border-t border-border">
         <div className="container mx-auto px-4 py-8">
           <div className="max-w-4xl mx-auto">
-            <h4 className="text-xs font-bold text-white/60 uppercase tracking-wider mb-4 text-center">
+            <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-4 text-center">
               Important Legal Disclaimer
             </h4>
-            <div className="text-[10px] leading-relaxed text-white/40 space-y-3">
+            <div className="text-[10px] leading-relaxed text-muted-foreground/70 space-y-3">
               <p>
                 <strong className="text-white/60">DO YOUR OWN RESEARCH (DYOR):</strong> The information provided on this website is for general informational and educational purposes only. It does not constitute financial advice, investment advice, trading advice, or any other sort of advice, and you should not treat any of the website's content as such. DarkWave Studios, LLC does not recommend that any cryptocurrency or digital asset should be bought, sold, or held by you. Before making any financial decisions, you should conduct your own research and consult with a qualified financial advisor.
               </p>
@@ -203,29 +203,29 @@ export function Footer() {
       </section>
 
       {/* Clean Single-Line Footer */}
-      <footer className="bg-black border-t border-white/10">
+      <footer className="bg-card border-t border-border">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs text-white/50">
-            <span className="text-white/70">DarkWave Studios, LLC</span>
-            <span className="text-white/30">•</span>
+          <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-xs text-muted-foreground">
+            <span className="text-foreground/70">DarkWave Studios, LLC</span>
+            <span className="text-foreground/30">•</span>
             <span>© 2026</span>
-            <span className="text-white/30">•</span>
+            <span className="text-foreground/30">•</span>
             <Link href="/terms" className="hover:text-cyan-400 transition-colors" data-testid="link-terms">
               Terms
             </Link>
-            <span className="text-white/30">•</span>
+            <span className="text-foreground/30">•</span>
             <Link href="/privacy" className="hover:text-cyan-400 transition-colors" data-testid="link-privacy">
               Privacy
             </Link>
-            <span className="text-white/30">•</span>
+            <span className="text-foreground/30">•</span>
             <Link href="/explore" className="hover:text-cyan-400 transition-colors" data-testid="link-explore">
               Explore
             </Link>
-            <span className="text-white/30">•</span>
+            <span className="text-foreground/30">•</span>
             <a href="https://dwsc.io" target="_blank" rel="noopener noreferrer" className="text-cyan-400/70 hover:text-cyan-400 transition-colors">
               DWSC
             </a>
-            <span className="text-white/30">•</span>
+            <span className="text-foreground/30">•</span>
             <button onClick={openModal} className="text-white/30 hover:text-white/50 transition-colors" data-testid="link-team">
               Team
             </button>
@@ -234,8 +234,8 @@ export function Footer() {
       </footer>
 
       {showPinModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={() => setShowPinModal(false)}>
-          <div className="bg-[rgba(12,18,36,0.95)] border border-white/10 rounded-xl p-6 w-full max-w-xs" onClick={(e) => e.stopPropagation()}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/60 backdrop-blur-sm" onClick={() => setShowPinModal(false)}>
+          <div className="bg-card border border-border rounded-xl p-6 w-full max-w-xs" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-lg font-bold mb-4 text-center">Team Access</h3>
             <form onSubmit={handlePinSubmit}>
               <input

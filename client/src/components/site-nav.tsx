@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { MobileNav } from "@/components/mobile-nav";
 import { WalletButton } from "@/components/wallet-button";
 import { MemberBadge } from "@/components/member-badge";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { openGlobalSearch } from "@/components/global-search";
 import { useSimpleAuth } from "@/hooks/use-simple-auth";
 import signalEmblem from "@assets/darkwave_trust_layer_emblem_enhanced_1769161177418.png";
@@ -29,7 +30,7 @@ export function SiteNav() {
   const showBack = !isHome;
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-40 border-b border-white/5 bg-background/90 backdrop-blur-xl" data-site-nav>
+    <nav className="fixed top-0 left-0 right-0 z-40 border-b border-border/50 backdrop-blur-xl" style={{ background: 'var(--nav-bg)' }} data-site-nav>
       <div className="w-full px-3 sm:px-4 h-14 flex items-center justify-between">
         <div className="flex items-center gap-1 sm:gap-2">
           <MobileNav />
@@ -57,11 +58,12 @@ export function SiteNav() {
           {isAuthenticated && user?.id && (
             <MemberBadge userId={user.id.toString()} />
           )}
+          <ThemeToggle />
           <Button
             size="sm"
             variant="ghost"
             onClick={openGlobalSearch}
-            className="h-8 w-8 p-0 text-white/60 hover:text-white hover:bg-white/10"
+            className="h-8 w-8 p-0 text-foreground/60 hover:text-foreground hover:bg-foreground/10"
             data-testid="button-global-search-nav"
           >
             <Search className="w-4 h-4" />

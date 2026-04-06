@@ -21,8 +21,7 @@ export function GlassCard({
 }: GlassCardProps) {
   const baseStyles = `
     relative h-full overflow-hidden rounded-xl
-    bg-[rgba(12,18,36,0.65)] backdrop-blur-2xl
-    border border-white/[0.08]
+    backdrop-blur-2xl
     transition-all duration-300
   `;
 
@@ -30,18 +29,23 @@ export function GlassCard({
     ? 'shadow-[0_0_40px_rgba(0,255,255,0.15)]' 
     : 'shadow-lg shadow-black/20';
 
+  const themeStyle = {
+    background: 'var(--glass-bg)',
+    border: '1px solid var(--glass-border)',
+  };
+
   return (
     <motion.div
       whileHover={hover ? { scale: 1.02, y: -2 } : {}}
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
       className={`relative group ${className}`}
     >
-      <div className={`${baseStyles} ${glowStyles}`}>
+      <div className={`${baseStyles} ${glowStyles}`} style={themeStyle}>
         {locked && (
-          <div className="absolute inset-0 bg-black/30 backdrop-blur-[2px] z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 border border-white/10">
+          <div className="absolute inset-0 bg-background/30 backdrop-blur-[2px] z-10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-background/50 border border-border">
               <Lock className="w-3 h-3 text-primary" />
-              <span className="text-xs font-medium text-white/80">Coming Soon</span>
+              <span className="text-xs font-medium text-foreground/80">Coming Soon</span>
             </div>
           </div>
         )}

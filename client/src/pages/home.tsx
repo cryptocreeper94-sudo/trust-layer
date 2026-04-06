@@ -223,7 +223,7 @@ function BentoCell({ children, className = "", span = 1, glow, onClick }: { chil
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5 }}
       className={`group relative overflow-hidden rounded-2xl ${spanClass} ${className}`}
-      style={{ background: 'rgba(16, 16, 26, 0.72)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: glow ? `0 8px 32px rgba(0,0,0,0.4), 0 0 60px ${glow}` : '0 8px 32px rgba(0,0,0,0.4)' }}
+      style={{ background: 'var(--glass-bg)', backdropFilter: 'blur(20px)', border: '1px solid var(--glass-border)', boxShadow: glow ? `0 8px 32px rgba(0,0,0,0.15), 0 0 60px ${glow}` : '0 8px 32px rgba(0,0,0,0.15)' }}
       onClick={onClick}
     >
       {children}
@@ -269,7 +269,7 @@ function AppDrawerGrid({ apps }: { apps: EcosystemApp[] }) {
             <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden shadow-lg" style={{ background: `linear-gradient(135deg, ${gc.from}, ${gc.to})` }}>
               {img ? <img src={img} alt={app.name} className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-white/80 text-lg font-bold">{app.name.charAt(0)}</div>}
             </div>
-            <span className="text-[10px] text-white/60 text-center font-medium leading-tight truncate w-full">{app.name}</span>
+            <span className="text-[10px] text-foreground/60 text-center font-medium leading-tight truncate w-full">{app.name}</span>
           </motion.a>
         );
       })}
@@ -318,12 +318,13 @@ export default function Home() {
   const favoriteApps = apps.filter((app: EcosystemApp) => preferences.favorites.includes(app.id));
 
   return (
-    <div className="min-h-screen text-white overflow-x-hidden selection:bg-cyan-500/20 selection:text-cyan-300" style={{ background: '#06060a' }}>
+    <div className="min-h-screen text-foreground overflow-x-hidden selection:bg-cyan-500/20 selection:text-cyan-300 bg-background">
       <OnboardingTour />
       <SimpleLoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} />
 
       {/* ══════ FLOATING ORBS ══════ */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+      {/* Floating orbs — hidden in light mode */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden dark:block" style={{ display: document.documentElement.classList.contains('light') ? 'none' : undefined }}>
         <div className="absolute top-[15%] left-[5%] w-[600px] h-[600px] rounded-full bg-cyan-500/[0.03] blur-[150px] float-orb" />
         <div className="absolute top-[50%] right-[0%] w-[500px] h-[500px] rounded-full bg-purple-500/[0.025] blur-[130px] float-orb" style={{ animationDelay: '-5s' }} />
         <div className="absolute bottom-[10%] left-[30%] w-[400px] h-[400px] rounded-full bg-teal-500/[0.02] blur-[120px] float-orb" style={{ animationDelay: '-10s' }} />

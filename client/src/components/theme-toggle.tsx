@@ -52,24 +52,24 @@ export function ThemeToggle() {
           <Icon className="w-4 h-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-black/90 border-white/20 backdrop-blur-xl">
+      <DropdownMenuContent align="end" className="bg-card border-border backdrop-blur-xl">
         <DropdownMenuItem
           onClick={() => setTheme("dark")}
-          className="flex items-center gap-2 cursor-pointer hover:bg-white/10"
+          className="flex items-center gap-2 cursor-pointer hover:bg-muted"
         >
           <Moon className="w-4 h-4" />
           Dark
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme("light")}
-          className="flex items-center gap-2 cursor-pointer hover:bg-white/10"
+          className="flex items-center gap-2 cursor-pointer hover:bg-muted"
         >
           <Sun className="w-4 h-4" />
           Light
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => setTheme("system")}
-          className="flex items-center gap-2 cursor-pointer hover:bg-white/10"
+          className="flex items-center gap-2 cursor-pointer hover:bg-muted"
         >
           <Monitor className="w-4 h-4" />
           System
