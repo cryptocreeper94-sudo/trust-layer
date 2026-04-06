@@ -529,7 +529,7 @@ export default function InvestorDataRoom() {
                 highlight: false,
                 benefits: [
                   "Pre-launch SIG pricing before public listing",
-                  "Early access to all 35 ecosystem products",
+                  "Early access to all 38 ecosystem products",
                   "Pioneer Hallmark badge (on-chain, permanent)",
                   "Monthly investor newsletter with dev updates",
                   "Private Signal Chat investor channel access",

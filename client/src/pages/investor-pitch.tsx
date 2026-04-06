@@ -184,7 +184,7 @@ makes agent credentialing and transaction history trustworthy by default.
 
 --------------------------------------------------------------------------------
 
-35 ECOSYSTEM PRODUCTS
+38 ECOSYSTEM PRODUCTS
 ---------------------
 Infrastructure: Trust Layer Portal, Block Explorer, Validator Network, 
                 TLID Domains, Cross-Chain Bridge
