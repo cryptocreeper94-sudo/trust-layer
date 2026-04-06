@@ -191,7 +191,7 @@ function WhitepaperContent() {
               The compiler performs live, intent-aware security scanning at AST node creation time, producing tamper-evident security certificates — a capability we call "certified at birth." Voice input flows through a dedicated Transcription Cleanup Layer that normalizes speech artifacts before entering the same Tolerance Chain, making voice-to-code an architectural consequence of the language's design rather than a bolt-on feature.
             </p>
             <p className="text-white/70 text-sm leading-relaxed mt-3">
-              We formalize the concept of cognitive distance — the gap between developer intent and required syntactic expression — and demonstrate that Lume reduces it to near-zero for text input and approaching-zero for voice input. The language specification spans 13 milestones with 305 formally specified acceptance criteria, 2,160 passing tests across 529 suites, and a complete implementation from core syntax through a self-sustaining runtime.
+              We formalize the concept of cognitive distance — the gap between developer intent and required syntactic expression — and demonstrate that Lume reduces it to near-zero for text input and approaching-zero for voice input. The language specification spans 13 milestones with 305 formally specified acceptance criteria, 2,266 passing tests across 60 test files, and a complete implementation from core syntax through a self-sustaining runtime, deterministic inference rulebook, Ed25519 trust certificates, and synthetic organism runtime.
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               {["programming languages", "natural language processing", "voice-to-code", "compiler security", "cognitive distance", "deterministic natural-language computation"].map(kw => (
@@ -615,7 +615,7 @@ function MasterSpecContent() {
           </span>
         </h1>
         <p className="text-white/50 text-sm mb-2">
-          Complete Master Specification — Version 1.0
+          Complete Master Specification — Version 1.1.0
         </p>
         <p className="text-white/40 text-xs font-mono mb-8">
           Compiled from 8 source documents · 7,074 lines · 305 acceptance criteria · March 2026
@@ -625,10 +625,10 @@ function MasterSpecContent() {
           <div className="p-6">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
-                { value: "13", label: "Milestones" },
-                { value: "2,160", label: "Tests" },
+                { value: "13+", label: "Milestones" },
+                { value: "2,331", label: "Tests" },
                 { value: "305", label: "Acceptance Criteria" },
-                { value: "154+", label: "Pattern Library" },
+                { value: "179+", label: "Pattern Library" },
               ].map(s => (
                 <div key={s.label} className="text-center">
                   <p className="text-2xl font-display font-black bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">{s.value}</p>
@@ -791,13 +791,13 @@ while count is less than 10:
           ["4", "JS Interop & CLI", "COMPLETE", "use/expose, lume build/run/repl CLI."],
           ["5", "IDE Tooling & DX", "COMPLETE", "REPL, syntax highlighting, diagnostics."],
           ["6", "Self-Sustaining Runtime", "COMPLETE", "Monitor, heal, optimize, evolve."],
-          ["7", "English Mode", "SPEC COMPLETE", "Plain English as source code."],
-          ["8", "Multilingual Mode", "SPEC COMPLETE", "Any human language as input."],
-          ["9", "Voice-to-Code", "SPEC COMPLETE", "Spoken language as compiler input."],
-          ["10", "Visual Context", "SPEC COMPLETE", "UI element registry, spatial resolution."],
-          ["11", "Reverse Mode", "SPEC COMPLETE", "Code-to-language explanation."],
-          ["12", "Collaborative Intent", "SPEC COMPLETE", "Multi-developer AST-level diffing."],
-          ["13", "Zero-Dependency Runtime", "SPEC COMPLETE", "Standalone executables."],
+          ["7", "English Mode", "COMPLETE", "Plain English as source code. 114-pattern library."],
+          ["8", "Multilingual Mode", "COMPLETE", "10 human languages with auto-detection."],
+          ["9", "Voice-to-Code", "COMPLETE", "Spoken language as compiler input."],
+          ["10", "Visual Context", "COMPLETE", "UI element registry, app generator."],
+          ["11", "Reverse Mode", "COMPLETE", "Code-to-language explanation."],
+          ["12", "Collaborative Intent", "COMPLETE", "AST-level diffing and merge driver."],
+          ["13", "Zero-Dependency Runtime", "COMPLETE", "Standalone executables, 5 targets."],
         ]}
       />
 
@@ -912,9 +912,9 @@ if it fails 3 times, show "Service unavailable"
         headers={["Metric", "Value"]}
         rows={[
           ["Compiler milestones", "13"],
-          ["Test suite", "2,160 tests, 529 suites, 0 failures"],
+          ["Test suite", "2,331 tests, 62 test files, 0 failures"],
           ["Acceptance criteria", "305 total"],
-          ["Pattern Library patterns", "154+ (87 core + 67 domain)"],
+          ["Pattern Library patterns", "179+ (87 core + 67 domain)"],
           ["Supported languages", "10 (Milestone 8)"],
           ["Homophone pairs", "10"],
           ["Filler words stripped", "20"],
