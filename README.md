@@ -1,5 +1,7 @@
 # Trust Layer (dwtl.io)
 
+> 🔒 **Patent Pending:** The core deterministic governance capabilities (Lume-V) within this repository are protected under U.S. Provisional Patent Application **No. 64/032,339** (Filed April 7, 2026).
+
 The auth backbone and blockchain engine for the DarkWave ecosystem. Hosts the BFT-PoA **SIG chain**, SSO, Signal Chat, Guardian Scanner, Pulse AI predictions, and the ecosystem app registry.
 
 **Live:** [dwtl.io](https://dwtl.io) · **Domains:** `dwtl.io` · `tlid.io` (identity gateway) · `dwsc.io` (legacy redirect)
@@ -113,3 +115,4 @@ npm run start      # NODE_ENV=production node dist/index.cjs
 ```
 
 See `render.yaml` for the full Blueprint configuration.
+
