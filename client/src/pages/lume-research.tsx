@@ -148,6 +148,7 @@ const whitepaperSections = [
   { id: "wp-gaps", number: "8", title: "Gap Resolutions" },
   { id: "wp-advanced", number: "9", title: "Advanced Milestones" },
   { id: "wp-claims", number: "10", title: "Key Claims" },
+  { id: "wp-zenodo", number: "11", title: "30 Published Papers" },
 ];
 
 const specSections = [
@@ -585,16 +586,83 @@ let data = fetch "https://api.example.com" or fail with "Could not connect"`}
         ))}
       </div>
 
+      <SectionHeading number="11" title="Zenodo Publications — 30 Papers" id="wp-zenodo" />
+
+      <Paragraph>
+        The Lume ecosystem spans 30 peer-reviewable research publications on Zenodo with permanent DOIs, covering core infrastructure and 23 DAIGS (Deterministic AI Governance Systems) vertical substrates.
+      </Paragraph>
+
+      <div className="space-y-2 my-6">
+        <p className="text-[10px] uppercase tracking-widest text-cyan-400/60 font-mono mb-2">Core Infrastructure</p>
+        {[
+          { title: "Lume", sub: "Deterministic Natural-Language Programming", doi: "10.5281/zenodo.19382282" },
+          { title: "Lume‑V", sub: "Deterministic Cognition and Identity", doi: "10.5281/zenodo.19463416" },
+          { title: "Lume‑X", sub: "Canonicalization & Multi-Agent Compilation", doi: "10.5281/zenodo.19443968" },
+          { title: "Lume‑OS v2", sub: "Distributed Deterministic Runtime", doi: "10.5281/zenodo.19501104" },
+          { title: "Lume‑Ops v2", sub: "Deterministic Vascular Operational Mesh", doi: "10.5281/zenodo.19500230" },
+          { title: "DAIGS Master Taxonomy", sub: "Deterministic Autonomous Infrastructure Governance", doi: "10.5281/zenodo.19491785" },
+          { title: "DAIGS v2", sub: "Multi-Organism Governance for Planet-Scale Infrastructure", doi: "10.5281/zenodo.19501315" },
+        ].map((p, i) => (
+          <a key={i} href={`https://doi.org/${p.doi}`} target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-3 px-4 py-3 rounded-xl border border-white/10 bg-white/[0.02] hover:border-cyan-500/30 hover:bg-cyan-500/5 transition-all text-sm no-underline"
+          >
+            <span className="w-5 h-5 rounded-md bg-gradient-to-br from-cyan-500/20 to-purple-500/20 flex items-center justify-center text-[10px] font-bold text-cyan-400 flex-shrink-0">{i + 1}</span>
+            <div className="flex-1 min-w-0">
+              <span className="text-white font-semibold">{p.title}</span>
+              <span className="text-white/40 ml-2 text-xs hidden sm:inline">{p.sub}</span>
+            </div>
+            <ExternalLink className="w-3.5 h-3.5 text-white/30 flex-shrink-0" />
+          </a>
+        ))}
+      </div>
+
+      <div className="space-y-2 my-6">
+        <p className="text-[10px] uppercase tracking-widest text-purple-400/60 font-mono mb-2">DAIGS Vertical Substrates</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {[
+            { title: "Lume‑Med", sub: "Medical AI", doi: "10.5281/zenodo.19499466" },
+            { title: "Lume‑Fin", sub: "Finance", doi: "10.5281/zenodo.19488366" },
+            { title: "Lume‑Civ", sub: "Civic", doi: "10.5281/zenodo.19485506" },
+            { title: "Lume‑Food", sub: "Food Safety", doi: "10.5281/zenodo.19499846" },
+            { title: "Lume‑Ind", sub: "Industrial", doi: "10.5281/zenodo.19486295" },
+            { title: "Lume‑Agri", sub: "Agriculture", doi: "10.5281/zenodo.19485203" },
+            { title: "Lume‑Aero", sub: "Aerospace", doi: "10.5281/zenodo.19475426" },
+            { title: "Lume‑Space", sub: "Space", doi: "10.5281/zenodo.19484777" },
+            { title: "Lume‑Def", sub: "Defense", doi: "10.5281/zenodo.19475467" },
+            { title: "Lume‑Gov", sub: "Regulatory", doi: "10.5281/zenodo.19474511" },
+            { title: "Lume‑Energy", sub: "Energy", doi: "10.5281/zenodo.19475366" },
+            { title: "Lume‑Grid", sub: "Power Grid", doi: "10.5281/zenodo.19485366" },
+            { title: "Lume‑Hydro", sub: "Water", doi: "10.5281/zenodo.19486694" },
+            { title: "Lume‑Env", sub: "Environment", doi: "10.5281/zenodo.19485824" },
+            { title: "Lume‑Auto", sub: "Autonomous", doi: "10.5281/zenodo.19485588" },
+          ].map((p, i) => (
+            <a key={i} href={`https://doi.org/${p.doi}`} target="_blank" rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 bg-white/[0.02] hover:border-purple-500/30 hover:bg-purple-500/5 transition-all no-underline"
+            >
+              <span className="text-white font-semibold text-xs">{p.title}</span>
+              <span className="text-white/30 text-[10px]">{p.sub}</span>
+              <ExternalLink className="w-3 h-3 text-white/20 ml-auto flex-shrink-0" />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <div className="text-center my-6">
+        <span className="text-[10px] font-mono font-semibold text-red-400 px-3 py-1.5 rounded-full bg-red-500/10 border border-red-500/15">
+          Patent Pending — U.S. Pat. App. No. 64/032,339
+        </span>
+      </div>
+
       <GlassCard glow className="mt-12">
         <div className="p-8 text-center">
           <p className="text-lg font-display font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent mb-2">
             Lume — The Deterministic Natural-Language Programming Language
           </p>
           <p className="text-white/50 text-sm">
-            Built to make AI-powered software as natural as writing a sentence. The first programming language you can speak.
+            30 published papers. 23 industry verticals. The world's first deterministic governance framework.
           </p>
           <p className="text-white/30 text-xs font-mono mt-4">
-            Submitted for peer review · Correspondence: team@dwsc.io
+            All papers available on Zenodo with permanent DOIs · Correspondence: team@dwsc.io
           </p>
         </div>
       </GlassCard>
