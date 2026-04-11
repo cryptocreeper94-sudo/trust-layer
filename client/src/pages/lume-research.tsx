@@ -148,7 +148,7 @@ const whitepaperSections = [
   { id: "wp-gaps", number: "8", title: "Gap Resolutions" },
   { id: "wp-advanced", number: "9", title: "Advanced Milestones" },
   { id: "wp-claims", number: "10", title: "Key Claims" },
-  { id: "wp-zenodo", number: "11", title: "30 Published Papers" },
+  { id: "wp-zenodo", number: "11", title: "32 Published Papers" },
 ];
 
 const specSections = [
@@ -586,10 +586,10 @@ let data = fetch "https://api.example.com" or fail with "Could not connect"`}
         ))}
       </div>
 
-      <SectionHeading number="11" title="Zenodo Publications — 30 Papers" id="wp-zenodo" />
+      <SectionHeading number="11" title="Zenodo Publications — 32 Papers" id="wp-zenodo" />
 
       <Paragraph>
-        The Lume ecosystem spans 30 peer-reviewable research publications on Zenodo with permanent DOIs, covering core infrastructure and 23 DAIGS (Deterministic AI Governance Systems) vertical substrates.
+        The Lume ecosystem spans 32 peer-reviewable research publications on Zenodo with permanent DOIs, covering core infrastructure, governance engines, and 25+ DAIGS (Deterministic AI Governance Systems) vertical substrates. <a href="https://orcid.org/0009-0007-5214-649X" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300">ORCID: 0009-0007-5214-649X</a>
       </Paragraph>
 
       <div className="space-y-2 my-6">
@@ -602,6 +602,7 @@ let data = fetch "https://api.example.com" or fail with "Could not connect"`}
           { title: "Lume‑Ops v2", sub: "Deterministic Vascular Operational Mesh", doi: "10.5281/zenodo.19500230" },
           { title: "DAIGS Master Taxonomy", sub: "Deterministic Autonomous Infrastructure Governance", doi: "10.5281/zenodo.19491785" },
           { title: "DAIGS v2", sub: "Multi-Organism Governance for Planet-Scale Infrastructure", doi: "10.5281/zenodo.19501315" },
+          { title: "DAIGS‑Fusion", sub: "Deterministic Multi-Organism Governance for Fusion Plasma Control", doi: "10.5281/zenodo.19508902" },
         ].map((p, i) => (
           <a key={i} href={`https://doi.org/${p.doi}`} target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-3 px-4 py-3 rounded-xl border border-white/10 bg-white/[0.02] hover:border-cyan-500/30 hover:bg-cyan-500/5 transition-all text-sm no-underline"
@@ -635,6 +636,12 @@ let data = fetch "https://api.example.com" or fail with "Could not connect"`}
             { title: "Lume‑Hydro", sub: "Water", doi: "10.5281/zenodo.19486694" },
             { title: "Lume‑Env", sub: "Environment", doi: "10.5281/zenodo.19485824" },
             { title: "Lume‑Auto", sub: "Autonomous", doi: "10.5281/zenodo.19485588" },
+            { title: "Lume‑Com", sub: "Commercial", doi: "10.5281/zenodo.19508416" },
+            { title: "Lume‑Cyber", sub: "Cybersecurity", doi: "10.5281/zenodo.19508755" },
+            { title: "Lume‑Log", sub: "Logistics", doi: "10.5281/zenodo.19509313" },
+            { title: "Lume‑Ed", sub: "Education", doi: "10.5281/zenodo.19509634" },
+            { title: "Lume‑Legal", sub: "Legal", doi: "10.5281/zenodo.19509695" },
+            { title: "Unified Ecosystem", sub: "Synthetic Deterministic Organisms", doi: "10.5281/zenodo.19509861" },
           ].map((p, i) => (
             <a key={i} href={`https://doi.org/${p.doi}`} target="_blank" rel="noopener noreferrer"
               className="flex items-center gap-2 px-3 py-2 rounded-lg border border-white/10 bg-white/[0.02] hover:border-purple-500/30 hover:bg-purple-500/5 transition-all no-underline"
@@ -659,7 +666,7 @@ let data = fetch "https://api.example.com" or fail with "Could not connect"`}
             Lume — The Deterministic Natural-Language Programming Language
           </p>
           <p className="text-white/50 text-sm">
-            30 published papers. 23 industry verticals. The world's first deterministic governance framework.
+            32 published papers. 25+ industry verticals. The world's first deterministic governance framework.
           </p>
           <p className="text-white/30 text-xs font-mono mt-4">
             All papers available on Zenodo with permanent DOIs · Correspondence: team@dwsc.io
